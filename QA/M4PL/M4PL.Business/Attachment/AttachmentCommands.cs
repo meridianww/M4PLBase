@@ -99,7 +99,7 @@ namespace M4PL.Business.Attachment
 				}
 
 				documentData.DocumentHtml = sb.ToString();
-				documentData.DocumentName = string.Format("{0}.pdf", jobId);
+				documentData.DocumentName = string.Format("{0}pdf", jobId);
 			}
 
 			return documentData;
@@ -147,6 +147,47 @@ namespace M4PL.Business.Attachment
 			}
 
 			return documentData;
+		}
+
+		public DocumentData GetPODDocumentByJobId(long jobId)
+		{
+			DocumentData documentData = null;
+			List<Entities.Attachment> attachments = _commands.GetAttachmentsByJobId(ActiveUser, jobId);
+			if (attachments != null && attachments.Where(x => x.DocumentType.Equals("POD", StringComparison.OrdinalIgnoreCase)).Any())
+			{
+				documentData = new DocumentData();
+				List<byte[]> byteArrayList = null;
+				byte[] fileBytes = null;
+				var podFileAttachmentList = attachments.Where(x => x.DocumentType.Equals("POD", StringComparison.OrdinalIgnoreCase)).ToList();
+
+				byteArrayList = new List<byte[]>();
+				foreach (var fileAttachment in podFileAttachmentList)
+				{
+					fileBytes = GetFileByteArray(fileAttachment.AttData, fileAttachment.AttFileName);
+					if (fileBytes != null) { byteArrayList.Add(fileBytes); }
+				}
+
+				if (byteArrayList?.Count > 0)
+				{
+					documentData.DocumentContent = PdfHelper.CombindMultiplePdf(byteArrayList);
+					documentData.DocumentName = string.Format("{0}.pdf", jobId);
+				}
+			}
+
+			return documentData;
+		}
+
+		public DocumentStatus GetDocumentStatusByJobId(long jobId)
+		{
+			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent= false };
+			List<Entities.Attachment> attachments = _commands.GetAttachmentsByJobId(ActiveUser, jobId);
+			if (attachments != null && attachments.Count > 0)
+			{
+				documentStatus.IsAttachmentPresent = true;
+				documentStatus.IsPODPresent = attachments.Where(x => x.DocumentType.Equals("POD", StringComparison.OrdinalIgnoreCase)).Any();
+			}
+
+			return documentStatus;
 		}
 
 		/// <summary>
@@ -271,5 +312,21 @@ namespace M4PL.Business.Attachment
 			value.Replace("\"", "\"\""), "\"");
 		}
 
+		public byte[] GetFileByteArray(byte[] fileBytes, string fileName)
+		{
+			string fileExtension = Path.GetExtension(fileName);
+			var imageExtensionList = new string[] { ".JPG", ".PNG", ".GIF", ".WEBP", ".TIFF", ".PSD", ".RAW", ".BMP", ".HEIF", ".INDD", ".JPEG" };
+			bool isImageType = imageExtensionList.Where(x => x.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)).Any();
+			if (isImageType)
+			{
+				return PdfHelper.ConvertImageToPdf(fileBytes);
+			}
+			else if (fileExtension.Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+			{
+				return fileBytes;
+			}
+
+			return null;
+		}
 	}
 }

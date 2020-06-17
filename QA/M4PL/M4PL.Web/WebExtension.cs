@@ -1732,7 +1732,16 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Tracking")
+				if (mnu.MnuTitle == "POD")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (mnu.MnuTitle == "Tracking")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job)

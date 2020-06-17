@@ -2349,3 +2349,84 @@ M4PLCommon.Error = (function () {
         InitDisplayMessage: _initDisplayMessage,
     }
 })();
+
+M4PLCommon.DocumentStatus = (function () {
+    var _isPODAttachedForJob = function (jobId) {
+        var isPODUploaded = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isPODUploaded = response.documentStatus.IsPODPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isPODUploaded
+    };
+
+    var _isAttachmentPresentForJob = function (jobId) {
+        var isjobAttachmentPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isjobAttachmentPresent = response.documentStatus.IsAttachmentPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isjobAttachmentPresent
+    };
+
+    var _podMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobPODUploaded'
+        };
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
+    var _documentMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobDocumentPresent'
+        };
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
+    return {
+        IsPODAttachedForJob: _isPODAttachedForJob,
+        IsAttachmentPresentForJob: _isAttachmentPresentForJob,
+        PODMissingDisplayMessage: _podMissingDisplayMessage,
+        DocumentMissingDisplayMessage: _documentMissingDisplayMessage
+    }
+})();

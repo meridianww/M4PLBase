@@ -1304,7 +1304,29 @@ namespace M4PL.Web.Areas
 
         }
 
-        public FileResult DownloadTracking(string strRoute)
+		public ActionResult DownloadPOD(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+			try
+			{
+				var podDocument = _commonCommands.DownloadPOD(route.RecordId);
+
+				if (podDocument != null && !string.IsNullOrEmpty(podDocument.DocumentName))
+				{
+					string fileName = "POD_" + podDocument.DocumentName;
+					return File(podDocument.DocumentContent, "application/pdf", fileName);
+				}
+
+				return null;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
+		public FileResult DownloadTracking(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 

@@ -123,6 +123,20 @@ namespace M4PL.Web.Controllers
 					OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
 				}
 
+				if (displayMessage.Code.Equals(DbConstants.JobDocumentPresent))
+				{
+					displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.JobDocumentPresent));
+					var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
+					OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
+				}
+
+				if (displayMessage.Code.Equals(DbConstants.JobPODUploaded))
+				{
+					displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.JobPODUploaded));
+					var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
+					OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
+				}
+
 				if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
                 {
                     displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.WarningIgnoreChanges));

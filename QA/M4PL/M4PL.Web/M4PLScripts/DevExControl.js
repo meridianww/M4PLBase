@@ -165,7 +165,14 @@ DevExCtrl.Ribbon = function () {
                     if (route.RecordId == null || route.RecordId <= 0)
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     else
+                        var result = M4PLCommon.DocumentStatus.IsAttachmentPresentForJob(M4PLWindow.OrderId);
+                    if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.DocumentMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
                 case "WatchVideo":
                     window.open(window.location.href + "m4pltraining");
                     break;
@@ -175,6 +182,19 @@ DevExCtrl.Ribbon = function () {
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     else
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    break;
+                case "DownloadPOD":
+                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                    var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(M4PLWindow.OrderId);
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.PODMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
                     break;
                 case "DownloadTracking":
                     route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;

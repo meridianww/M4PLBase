@@ -71,5 +71,7 @@ namespace M4PL.Entities
         public const string UpdatePurchaseOrder = "UpdatePurchaseOrder";
         public const string ApplicationError = "00.00";
         public const string JobDocumentReport = "JobDocumentReport";
-    }
+		public const string JobPODUploaded = "JobPODUploaded";
+		public const string JobDocumentPresent = "JobDocumentPresent";
+	}
 }
