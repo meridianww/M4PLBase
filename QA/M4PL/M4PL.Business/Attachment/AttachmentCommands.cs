@@ -99,7 +99,7 @@ namespace M4PL.Business.Attachment
 				}
 
 				documentData.DocumentHtml = sb.ToString();
-				documentData.DocumentName = string.Format("{0}pdf", jobId);
+				documentData.DocumentName = string.Format("{0}.pdf", jobId);
 			}
 
 			return documentData;
