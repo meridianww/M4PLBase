@@ -5078,3 +5078,9 @@ div#btnCardRefresh {
 .driverAlert {
     width: 425px !important;
 }
+
+@-moz-document url-prefix() {
+    .jobFormViewPanel {
+         height : 570px !important;
+    }
+}

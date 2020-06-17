@@ -195,5 +195,7 @@ namespace M4PL.APIClient.Common
 		DocumentDataView DownloadTracking(long recordId);
 		DocumentDataView GetPriceCodeReportByJobId(long jobId);
 		DocumentDataView GetCostCodeReportByJobId(long jobId);
+		DocumentDataView DownloadPOD(long recordId);
+		DocumentStatusView GetDocumentStatusByJobId(long jobId);
 	}
 }

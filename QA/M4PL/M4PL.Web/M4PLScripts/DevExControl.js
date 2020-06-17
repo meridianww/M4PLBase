@@ -67,20 +67,49 @@ DevExCtrl.Ribbon = function () {
             return;
         }
 
-        if ((route.Action === "Copy") && route.RecordId && (route.RecordId > 0)) {
-            var dummy = document.createElement("input");
-            document.body.appendChild(dummy);
+        if ((route.Action === "Copy")) {
             var selectedText = M4PLCommon.Control.GetSelectedText();
-            dummy.setAttribute('value', selectedText);
-            dummy.select();
-            document.execCommand("copy");
             localStorage.setItem("CopiedText", selectedText);
-            document.body.removeChild(dummy);
+            navigator.clipboard.writeText(selectedText).then(function () {
+                /* clipboard successfully set */
+            }, function () {
+                /* clipboard write failed */
+            });
+            return;
+        }
+        if ((route.Action === "Cut")) {
+            if (M4PLCommon.FocusedControlName) {
+                var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
+                if (currentControl.GetText() != "") {
+                    var selectedText = M4PLCommon.Control.GetSelectedText();
+                    localStorage.setItem("CopiedText", selectedText);
+                    navigator.clipboard.writeText(selectedText).then(function () {
+                        /* clipboard successfully set */
+                    }, function () {
+                        /* clipboard write failed */
+                    });
+                    currentControl.SetText("");
+                }
+            }
             return;
         }
 
-        if ((route.Action === "Paste") && route.RecordId && (route.RecordId > 0) && M4PLCommon.FocusedControlName) {
-            M4PLCommon.Control.UpdateSelectedText();
+        if ((route.Action === "Paste")) {
+            var inputcontrol;
+            if (typeof window.prevFocus !== "undefined") {
+                inputcontrol = window.prevFocus;
+
+                if (inputcontrol != null && inputcontrol[0] != null) {
+                    var str = inputcontrol[0].id;
+                    var res = str.substring(0, str.lastIndexOf("_"));
+                    if (ASPxClientControl.GetControlCollection().GetByName(res) == null) {
+                        navigator.clipboard.readText().then(clipText => inputcontrol[0].value = clipText);
+                    }
+                    else {
+                        navigator.clipboard.readText().then(clipText => ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText));
+                    }
+                }
+            }
             return;
         }
 
@@ -161,21 +190,61 @@ DevExCtrl.Ribbon = function () {
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadAll":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        var result = M4PLCommon.DocumentStatus.IsAttachmentPresentForJob(M4PLWindow.OrderId);
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.DocumentMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
                 case "WatchVideo":
                     window.open(window.location.href + "m4pltraining");
                     break;
                 case "DownloadBOL":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    break;
+                case "DownloadPOD":
+                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                    var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(M4PLWindow.OrderId);
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.PODMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
                     break;
                 case "DownloadTracking":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadPriceReport":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadCostReport":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
 
                 default:
@@ -915,7 +984,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount(); i++) {
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1763,7 +1832,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

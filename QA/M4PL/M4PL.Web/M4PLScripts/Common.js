@@ -34,7 +34,7 @@ M4PLCommon.Common = function () {
     var init = function (p) {
         params = p;
     };
-
+      
     var _onCallbackError = function (s, e) {
         e.handled = true;
         var errorMessageFromServer = e.message;
@@ -660,31 +660,32 @@ M4PLCommon.Control = (function () {
     var _updateSelectedText = function () {
         if (M4PLCommon.FocusedControlName) {
             var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
+            navigator.clipboard.readText().then(clipText => document.getElementById(currentControl).innerText = clipText);
             //For TextBox
-            if (currentControl.GetChildElement('I')) {
-                var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
-                if (textComponent.selectionStart !== undefined) {
-                    // Standards Compliant Version 
-                    var startPos = textComponent.selectionStart;
-                    var endPos = textComponent.selectionEnd;
-                    var currentValue = textComponent.value;
-                    if (currentControl.GetText() != "")
-                        currentControl.SetText(textComponent.value.substring(0, startPos) + localStorage.getItem("CopiedText") + textComponent.value.substring(endPos, textComponent.value.length));
-                    else
-                        currentControl.SetText(localStorage.getItem("CopiedText"));
-                    textComponent.focus();
-                }
-                else if (document.selection !== undefined) {
-                    // IE Version
-                    textComponent.focus();
-                    var sel = document.selection.createRange();
-                }
-            }
-            //For RichTextBox
-            if (currentControl.selection && currentControl.document) {
-                currentControl.commands.insertText.execute(localStorage.getItem("CopiedText"));
-                currentControl.Focus();
-            }
+            //if (currentControl.GetChildElement('I')) {
+            //    var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
+            //    if (textComponent.selectionStart !== undefined) {
+            //        // Standards Compliant Version 
+            //        var startPos = textComponent.selectionStart;
+            //        var endPos = textComponent.selectionEnd;
+            //        var currentValue = textComponent.value;
+            //        if (currentControl.GetText() != "")
+            //            currentControl.SetText(textComponent.value.substring(0, startPos) + localStorage.getItem("CopiedText") + textComponent.value.substring(endPos, textComponent.value.length));
+            //        else
+            //            currentControl.SetText(localStorage.getItem("CopiedText"));
+            //        textComponent.focus();
+            //    }
+            //    else if (document.selection !== undefined) {
+            //        // IE Version
+            //        textComponent.focus();
+            //        var sel = document.selection.createRange();
+            //    }
+            //}
+            ////For RichTextBox
+            //if (currentControl.selection && currentControl.document) {
+            //    currentControl.commands.insertText.execute(localStorage.getItem("CopiedText"));
+            //    currentControl.Focus();
+            //}
         }
     }
 
@@ -1034,7 +1035,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1342,7 +1343,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -2332,7 +2333,101 @@ M4PLCommon.Error = (function () {
             }
         });
     };
+
+    var _initDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobDocumentReport'
+        };
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    }
+
     return {
         CheckServerError: _checkServerError,
+        InitDisplayMessage: _initDisplayMessage,
+    }
+})();
+
+M4PLCommon.DocumentStatus = (function () {
+    var _isPODAttachedForJob = function (jobId) {
+        var isPODUploaded = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isPODUploaded = response.documentStatus.IsPODPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isPODUploaded
+    };
+
+    var _isAttachmentPresentForJob = function (jobId) {
+        var isjobAttachmentPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isjobAttachmentPresent = response.documentStatus.IsAttachmentPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isjobAttachmentPresent
+    };
+
+    var _podMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobPODUploaded'
+        };
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
+    var _documentMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobDocumentPresent'
+        };
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
+    return {
+        IsPODAttachedForJob: _isPODAttachedForJob,
+        IsAttachmentPresentForJob: _isAttachmentPresentForJob,
+        PODMissingDisplayMessage: _podMissingDisplayMessage,
+        DocumentMissingDisplayMessage: _documentMissingDisplayMessage
     }
 })();

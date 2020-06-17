@@ -77,7 +77,7 @@ namespace M4PL.Web.Areas
 
         protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null, bool IsJobParentEntity = false)
         {
-            isGridSetting = route.Entity == EntitiesAlias.JobCard ? true : isGridSetting;
+            isGridSetting = (route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobCargo) ? true : isGridSetting;
 
             var columnSettings = //_commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
             BaseRoute.Entity == EntitiesAlias.JobAdvanceReport
@@ -1264,22 +1264,22 @@ namespace M4PL.Web.Areas
                             }
                         }
 
-						return File(ms.ToArray(), "application/zip", fileName + ".zip");
-					}
-				}
-				return null;
-                        }
-			catch (Exception)
-			{
-				return null;
-			}
+                        return File(ms.ToArray(), "application/zip", fileName + ".zip");
+                    }
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
         }
 
-        public FileResult DownloadBOL(string strRoute)
+        public ActionResult DownloadBOL(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
+            
             try
             {
                 var bolDocument = _commonCommands.DownloadBOL(route.RecordId);
@@ -1308,7 +1308,29 @@ namespace M4PL.Web.Areas
 
         }
 
-        public FileResult DownloadTracking(string strRoute)
+		public ActionResult DownloadPOD(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+			try
+			{
+				var podDocument = _commonCommands.DownloadPOD(route.RecordId);
+
+				if (podDocument != null && !string.IsNullOrEmpty(podDocument.DocumentName))
+				{
+					string fileName = "POD_" + podDocument.DocumentName;
+					return File(podDocument.DocumentContent, "application/pdf", fileName);
+				}
+
+				return null;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
+		public FileResult DownloadTracking(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
@@ -1331,12 +1353,12 @@ namespace M4PL.Web.Areas
                     }
                 }
 
-				return null;
-			}
-			catch (Exception)
-			{
-				return null;
-			}
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
         }
 
@@ -1353,12 +1375,12 @@ namespace M4PL.Web.Areas
                     return File(priceReportDocument.DocumentContent, "text/csv", fileName);
                 }
 
-				return null;
-			}
-			catch (Exception)
-			{
-				return null;
-			}
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
         }
 
@@ -1375,12 +1397,12 @@ namespace M4PL.Web.Areas
                     return File(priceReportDocument.DocumentContent, "text/csv", fileName);
                 }
 
-				return null;
-			}
-			catch (Exception)
-			{
-				return null;
-			}
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
         }
 
