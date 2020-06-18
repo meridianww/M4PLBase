@@ -9,7 +9,7 @@
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-ALTER PROCEDURE [dbo].[InsJobGateway] (
+CREATE PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -82,6 +82,7 @@ BEGIN TRY
 		,@IsDeliveryDayLightSaving BIT
 		,@jobDeliveryTimeZone NVARCHAR(15)
 		,@DeliveredTransitionStatusId INT = 0
+		,@WillCallTransitionStatusId INT = 0
 
 	SELECT TOP 1 @JobDeliveryTimeZone = JobDeliveryTimeZone
 	FROM [dbo].[JOBDL000Master]
@@ -148,12 +149,17 @@ BEGIN TRY
 
     SELECT @PODTransitionStatusId = Id 
 	FROM SYSTM000Ref_Options
-	WHERE SysLookupCode = 'TransitStatus'
+	WHERE SysLookupCode = 'TransitionStatus'
 		AND SysOptionName = 'POD Upload'
+
+   SELECT @WillCallTransitionStatusId = Id 
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'TransitionStatus'
+		AND SysOptionName = 'Will Call' 
 
     SELECT @DeliveredTransitionStatusId = Id 
 	FROM SYSTM000Ref_Options
-	WHERE SysLookupCode = 'TransitStatus'
+	WHERE SysLookupCode = 'TransitionStatus'
 		AND SysOptionName = 'Delivered'
 
 	IF (@statusId IS NULL)
@@ -468,7 +474,10 @@ BEGIN TRY
 		AND gateway.StatusId =@statusId
 	END
 
-		IF((@JobTransitionStatusId = @PODTransitionStatusId  OR @gwyGatewayCode = 'POD Upload')AND @gwyCompleted = 1)
+		IF(
+		((@JobTransitionStatusId = @PODTransitionStatusId  OR @gwyGatewayCode = 'POD Upload') OR 
+		(@JobTransitionStatusId = @WillCallTransitionStatusId OR @gwyGatewayCode = 'Will Call')) AND 
+		@gwyCompleted = 1)
 	BEGIN
 	UPDATE JOBDL000Master
 			SET 

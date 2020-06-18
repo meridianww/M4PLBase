@@ -55,12 +55,12 @@ namespace M4PL.Business
         /// <summary>
         /// PODTransitionStatusId
         /// </summary>
-        [ConfigurationProperty("PODTransitionStatusId")]
-        public long PODTransitionStatusId
-        {
+        [ConfigurationProperty("CompletedTransitionStatusId")]
+        public string CompletedTransitionStatusId
+		{
             get
             {
-                return (long)this["PODTransitionStatusId"];
+                return (string)this["CompletedTransitionStatusId"];
             }
         }
 
