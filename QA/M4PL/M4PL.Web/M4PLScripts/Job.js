@@ -351,11 +351,11 @@ M4PLJob.FormView = function () {
         }
     }
 
-    var _openJobFormViewByID = function (s, e, strRoute) {
+    var _openJobFormViewByID = function (s, e, jobId) {
         $.ajax({
             type: "GET",
             url: "/Common/UpdateJobReportFormViewRoute",
-            data: { 'jobId': parseInt(s.GetValue()) },
+            data: { 'jobId': jobId },
             success: function (data) {
                 if (data == true) {
                     window.open(e.htmlElement.baseURI, '_blank');
