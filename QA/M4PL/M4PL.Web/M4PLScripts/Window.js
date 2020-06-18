@@ -123,7 +123,8 @@ M4PLWindow.DataView = function () {
             }
 
             else if (route.Action == "Copy") {
-                var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
+                //var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
+                var selectedText = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName);
                 // s.GetRowValues(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName, OnGetRowValues);
                 // var selectedText = s.GetBatchDataCell(e.elementIndex, s.cellFocusHelper.focusedCellInfo.columnIndex).innerHTML;
                 localStorage.setItem("CopiedText", selectedText);
