@@ -63,6 +63,10 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         public ActionResult TreeCallback(string nodes = null, string selectedNode = null)
         {
+            if (Session["CurrentNode"] != null)
+            {
+                selectedNode = Session["CurrentNode"].ToString();
+            }
             var treeViewBase = new TreeViewBase();
             if (!string.IsNullOrWhiteSpace(nodes))
             {
@@ -89,7 +93,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeViewBase.EnableNodeClick = true;
 
             treeViewBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
-            treeViewBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
+            //treeViewBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
 
 
             treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.Program, Area = BaseRoute.Area };
@@ -135,9 +139,13 @@ namespace M4PL.Web.Areas.Program.Controllers
                 return null;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-            SetFormResult(route.RecordId, false, route.ParentRecordId);
+                SetFormResult(route.RecordId, false, route.ParentRecordId);
+            if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName) && SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ActionTreeView && SessionProvider.ActiveUser.LastRoute.Controller == "Program")
+            {
+                Session["CurrentNode"] = route.Filters.FieldName;
+            }
+           
             _formResult.Record.ParentId = route.ParentRecordId;
-
             if (_formResult.Record.PrgHierarchyLevel == 4)
                 return PartialView(MvcConstants.ViewTreeViewCallbackPartial, null);
             if (route.Filters != null && route.Filters.Value != null && long.Parse(route.Filters.Value) != 0)

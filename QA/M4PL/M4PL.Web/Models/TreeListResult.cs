@@ -18,6 +18,7 @@ namespace M4PL.Web.Models
     {
         public string KeyFieldName { get; set; }
         public string ParentFieldName { get; set; }
+        public string SelectedNode { get; set; }
         public MvcRoute CallBackRoute { get; set; }
         public MvcRoute DragAndDropRoute { get; set; }
         public MvcRoute MenuRouteCallBack { get; set; }
