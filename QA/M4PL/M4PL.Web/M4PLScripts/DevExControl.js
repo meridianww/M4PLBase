@@ -691,7 +691,7 @@ DevExCtrl.TreeView = function () {
                 route.Filters = {};
                 var nodeName = e.node.name.split('_');
                 route.RecordId = parseFloat(nodeName[(nodeName.length - 1)]);
-
+                route.Filters.FieldName = e.node.name;
                 var customerCode = _findCustomerCode(e.node.parent);
 
                 if (cplTreeView && !cplTreeView.InCallback()) {
@@ -849,6 +849,9 @@ DevExCtrl.TreeView = function () {
 
     var _programTreeViewInit = function (s, e) {
         _processNodes(s, s.GetRootNode());
+        if (s.GetSelectedNode() !== null && s.GetSelectedNode() != undefined) {
+            s.NodeClick.FireEvent(s, s.CreateNodeClickEventArgs(true, s.GetSelectedNode(), s.GetSelectedNode().GetHtmlElement(), MouseEvent));
+        }
     }
 
     var _processNodes = function (tree, node) {
@@ -860,16 +863,12 @@ DevExCtrl.TreeView = function () {
                 var handler = function (evt) {
                     tree.SetSelectedNode(node);
                     popupMenu.cpClickedNode = node;
-                    popupMenu.ShowAtElement(node.GetHtmlElement());
-
+                                        popupMenu.ShowAtElement(node.GetHtmlElement());
                     ASPxClientUtils.PreventEventAndBubble(evt);
                 };
                 ASPxClientUtils.AttachEventToElement(htmlElement, "contextmenu", handler);
             }
         }
-
-
-
         for (var i = 0; i < count; i++) {
             var childNode = node.GetNode(i);
             if (parseInt(childNode.name.split('_')[0]) !== 0) {
@@ -882,7 +881,7 @@ DevExCtrl.TreeView = function () {
                 }
             }
         }
-    }
+            }
 
     return {
         Init: init,
@@ -987,7 +986,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount(); i++) {
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1151,7 +1150,7 @@ DevExCtrl.TreeList = function () {
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
-
+                route.RecordId = M4PLWindow.OrderId;
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }
@@ -1439,6 +1438,12 @@ DevExCtrl.PopupControl = function () {
         }
 
         s.SetVisible(true);
+        if (s.cpDisplayMessage.Operations[0].SysRefName === "Ok") {
+            $("#btnOk").focus();
+        }
+        else if (s.cpDisplayMessage.Operations[0].SysRefName === "Save") {
+            $("#btnSave").focus();
+        }
     }
 
     var _shown = function (s, e) {
@@ -1835,7 +1840,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

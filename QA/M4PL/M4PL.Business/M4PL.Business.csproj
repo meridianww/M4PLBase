@@ -294,7 +294,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="M4PL.Business.config" />
+    <None Include="M4PL.Business.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -123,7 +123,8 @@ M4PLWindow.DataView = function () {
             }
 
             else if (route.Action == "Copy") {
-                var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
+                //var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
+                var selectedText = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName);
                 // s.GetRowValues(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName, OnGetRowValues);
                 // var selectedText = s.GetBatchDataCell(e.elementIndex, s.cellFocusHelper.focusedCellInfo.columnIndex).innerHTML;
                 localStorage.setItem("CopiedText", selectedText);
@@ -160,7 +161,8 @@ M4PLWindow.DataView = function () {
             else if (route.Action == "Cut") {
                 s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
                 if (!s.GetEditor(s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).readOnly) {
-                    var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
+                    var selectedText = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName);
+                    //var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
                     localStorage.setItem("CopiedText", selectedText);
                     if (selectedText != undefined && selectedText != null)
                         setClipboard(selectedText);
@@ -974,7 +976,7 @@ M4PLWindow.FormView = function () {
                                 window.clearInterval(formInterval);
                                 var route = JSON.parse(strRoute);
                                 if (route.Controller === "Program") {
-                                    _refreshProgramPage(response.record, strRoute, response.selectedNode, response.refreshContent, response.isActiveRecord);
+                                    //_refreshProgramPage(response.record, strRoute, response.selectedNode, response.refreshContent, response.isActiveRecord);
                                     if (response.displayMessage) {
                                         response.displayMessage.HeaderIcon = null;
                                         response.displayMessage.MessageTypeIcon = null;
@@ -1019,7 +1021,6 @@ M4PLWindow.FormView = function () {
                                     M4PLCommon.CheckHasChanges.RedirectToClickedItem();
                             }
                         }, 500);
-
                     }
                     else if (response.errMessages && response.errMessages.length > 0) {
                         for (var i = 0; i < response.errMessages.length; i++)

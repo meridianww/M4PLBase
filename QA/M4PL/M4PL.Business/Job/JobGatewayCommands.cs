@@ -13,6 +13,7 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.Job.JobGatewayCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
@@ -38,9 +39,9 @@ namespace M4PL.Business.Job
             get { return M4PBusinessContext.ComponentSettings.NavAPIPassword; }
         }
 
-        public long PODTransitionStatusId
+        public string PODTransitionStatusId
         {
-            get { return M4PBusinessContext.ComponentSettings.PODTransitionStatusId; }
+            get { return M4PBusinessContext.ComponentSettings.CompletedTransitionStatusId; }
         }
 
         /// <summary>
@@ -191,8 +192,10 @@ namespace M4PL.Business.Job
 
         public void PushDataToNav(long? jobId, string gatewayCode, bool gatewayStatus, int? JobTransitionStatusId)
         {
-            if (jobId != null && gatewayStatus && (string.Equals(gatewayCode, "POD Upload", StringComparison.OrdinalIgnoreCase)
-                    || PODTransitionStatusId == JobTransitionStatusId))
+			List<int> completedTransitionStatus = PODTransitionStatusId.Split(',').Select(int.Parse).ToList();
+
+			if (jobId != null && gatewayStatus && (string.Equals(gatewayCode, "POD Upload", StringComparison.OrdinalIgnoreCase)
+					|| string.Equals(gatewayCode, "Will Call", StringComparison.OrdinalIgnoreCase) || (JobTransitionStatusId.HasValue && completedTransitionStatus.Contains((int)JobTransitionStatusId))))
             {
                 var jobResult = _jobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
                 if (jobResult != null && jobResult.JobCompleted)
