@@ -975,7 +975,7 @@ M4PLWindow.FormView = function () {
                                 window.clearInterval(formInterval);
                                 var route = JSON.parse(strRoute);
                                 if (route.Controller === "Program") {
-                                    _refreshProgramPage(response.record, strRoute, response.selectedNode, response.refreshContent, response.isActiveRecord);
+                                    //_refreshProgramPage(response.record, strRoute, response.selectedNode, response.refreshContent, response.isActiveRecord);
                                     if (response.displayMessage) {
                                         response.displayMessage.HeaderIcon = null;
                                         response.displayMessage.MessageTypeIcon = null;
@@ -1020,7 +1020,6 @@ M4PLWindow.FormView = function () {
                                     M4PLCommon.CheckHasChanges.RedirectToClickedItem();
                             }
                         }, 500);
-
                     }
                     else if (response.errMessages && response.errMessages.length > 0) {
                         for (var i = 0; i < response.errMessages.length; i++)

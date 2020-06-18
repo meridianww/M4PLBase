@@ -1438,6 +1438,12 @@ DevExCtrl.PopupControl = function () {
         }
 
         s.SetVisible(true);
+        if (s.cpDisplayMessage.Operations[0].SysRefName === "Ok") {
+            $("#btnOk").focus();
+        }
+        else if (s.cpDisplayMessage.Operations[0].SysRefName === "Save") {
+            $("#btnSave").focus();
+        }
     }
 
     var _shown = function (s, e) {
