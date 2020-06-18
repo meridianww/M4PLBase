@@ -116,7 +116,10 @@ namespace M4PL.Web.Controllers
                 if (displayMessage.Code.Equals(DbConstants.NoAccess))
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.NoAccess);
 
-                if (displayMessage.Code.Equals(DbConstants.JobDocumentPresent))
+				if (displayMessage.Code.Equals(DbConstants.JobDocumentReport))
+					displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobDocumentReport);
+
+				if (displayMessage.Code.Equals(DbConstants.JobDocumentPresent))
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobDocumentPresent);
 
                 if (displayMessage.Code.Equals(DbConstants.JobPODUploaded))
