@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -205,7 +206,7 @@ namespace M4PL.DataAccess.Program
                 ,new Parameter("@OrgId", activeUser.OrganizationId)
                 ,new Parameter("@userId", activeUser.UserId)
                 ,new Parameter("@langCode", activeUser.LangCode)
-
+                ,new Parameter("@PacificDateTime", TimeUtility.GetPacificDateTime())
             };
             var result = false;
             await Task.Run(() =>

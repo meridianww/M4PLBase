@@ -11,7 +11,6 @@
 using M4PL.APIClient.Common;
 using M4PL.Entities;
 using M4PL.Entities.Support;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -105,6 +104,7 @@ namespace M4PL.Web.Controllers
 
         public ActionResult LogOut()
         {
+            UpdateAccessToken(null, false);
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
             var isLogOut = APIClient.Administration.AccountCommands.LogOut(SessionProvider.ActiveUser);
@@ -162,18 +162,18 @@ namespace M4PL.Web.Controllers
                 MnuExecuteProgram = "#",
                 MnuTableName = MvcConstants.M4PL_Defaultgroup,
 
-                Children = SessionProvider.ActiveUser.Roles.Select(r => new RibbonMenu
-                {
-                    MnuTitle = r.OrganizationName,
-                    MnuExecuteProgram = "#",
-                    MnuIconMedium = r.OrganizationImage,
-                    MnuTableName = MvcConstants.DefaultTruck,
-                    Route = new MvcRoute
-                    {
-                        Url = r.OrgStatusId == 1 ? Url.Action(MvcConstants.ActionSwitchOrganization, EntitiesAlias.Account.ToString(), new { orgId = r.OrganizationId }) : string.Empty
-                    },
-                    StatusId = r.OrgStatusId
-                }).ToList()
+                //Children = SessionProvider.ActiveUser.Roles.Select(r => new RibbonMenu
+                //{
+                //    MnuTitle = r.OrganizationName,
+                //    MnuExecuteProgram = "#",
+                //    MnuIconMedium = r.OrganizationImage,
+                //    MnuTableName = MvcConstants.DefaultTruck,
+                //    Route = new MvcRoute
+                //    {
+                //        Url = r.OrgStatusId == 1 ? Url.Action(MvcConstants.ActionSwitchOrganization, EntitiesAlias.Account.ToString(), new { orgId = r.OrganizationId }) : string.Empty
+                //    },
+                //    StatusId = r.OrgStatusId
+                //}).ToList()
 
             });
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace M4PL.Entities.XCBL
+﻿namespace M4PL.Entities.XCBL
 {
     public class Address
     {
@@ -25,8 +19,8 @@ namespace M4PL.Entities.XCBL
         public string AltContNumber { get; set; }
         public string StreetAddress3 { get; set; }
         public string StreetAddress4 { get; set; }
-		public string LocationID { get; set; }
-		public string LocationName { get; set; }
-		public string ContactEmail { get; set; }
-	}
+        public string LocationID { get; set; }
+        public string LocationName { get; set; }
+        public string ContactEmail { get; set; }
+    }
 }

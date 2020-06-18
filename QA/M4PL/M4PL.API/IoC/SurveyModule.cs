@@ -18,8 +18,8 @@ namespace M4PL.API.IoC
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<JobSurveyCommands>().As<IJobSurveyCommands>().InstancePerRequest();
-			builder.RegisterType<SurveyUserCommands>().As<ISurveyUserCommands>().InstancePerRequest();
-			base.Load(builder);
+            builder.RegisterType<SurveyUserCommands>().As<ISurveyUserCommands>().InstancePerRequest();
+            base.Load(builder);
         }
     }
 }

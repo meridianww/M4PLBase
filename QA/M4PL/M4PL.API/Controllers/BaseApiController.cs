@@ -12,10 +12,10 @@ using M4PL.API.Filters;
 using M4PL.API.Models;
 using M4PL.Business;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Newtonsoft.Json;
 using _commonCommands = M4PL.Business.Common.CommonCommands;
 
 namespace M4PL.API.Controllers
@@ -78,12 +78,12 @@ namespace M4PL.API.Controllers
             return BaseCommands.Get(id);
         }
 
-		/// <summary>
-		/// Post
-		/// </summary>
-		/// <param name="entity"></param>
-		/// <returns></returns>
-		[HttpPost]
+        /// <summary>
+        /// Post
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost]
         public virtual TEntity Post(TEntity entity)
         {
             BaseCommands.ActiveUser = ActiveUser;
@@ -134,11 +134,11 @@ namespace M4PL.API.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
 		[HttpPatch]
-		public virtual TEntity Patch(TEntity entity)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return BaseCommands.Patch(entity);
-		}
+        public virtual TEntity Patch(TEntity entity)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return BaseCommands.Patch(entity);
+        }
 
 
         #endregion Generic Rest Operation

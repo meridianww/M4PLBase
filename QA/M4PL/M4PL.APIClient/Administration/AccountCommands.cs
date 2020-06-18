@@ -12,7 +12,6 @@ using M4PL.Entities;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 
@@ -58,7 +57,7 @@ namespace M4PL.APIClient.Administration
             };
             var result = JsonConvert.DeserializeObject<ApiResult<int>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(request).Content).Results?.FirstOrDefault();
 
-			return result.HasValue ? (int)result : 0;
+            return result.HasValue ? (int)result : 0;
         }
 
         public static ActiveUser SwitchOrganization(Login login)

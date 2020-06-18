@@ -19,6 +19,7 @@
 
 @{
     ViewBag.Title = Model.PageName;
+    //Model.GridSetting.EnableClientSideExportAPI = true;
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -29,6 +30,8 @@
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.Height = 300;
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    //settings.Settings.VerticalScrollableHeight = 300;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
@@ -37,7 +40,7 @@
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.ControlStyle.CssClass = "gridfields-text-visible";
 
-    settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
+    //settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
     settings.SettingsCookies.Enabled = false;
     settings.SettingsCookies.StoreColumnsWidth = true;
     settings.SettingsCookies.StorePaging = true;
@@ -142,14 +145,16 @@
                 {
                     column.SetDataItemTemplateContent(container =>
                     {
-                        Html.DevExpress().HyperLink(hlSettings =>
+                        if (container != null && container.KeyValue != null)
                         {
-                            hlSettings.Name = "HyperLink_" + container.KeyValue;
-                            hlSettings.NavigateUrl = "javascript:void(0)";
-                            hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
-                            hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
-                        }).Render();
-
+                            Html.DevExpress().HyperLink(hlSettings =>
+                            {
+                                hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
+                                hlSettings.NavigateUrl = "javascript:void(0)";
+                                hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
+                                hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
+                            }).Render();
+                        }
                     });
                 }
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
@@ -226,6 +231,10 @@
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
                 {
+                    if(colSetting.ColTableName== "JobAdvanceReport" && colSetting.ColColumnName == "PackagingCode")
+                    {
+                        colSetting.DataType = "dropdown";
+                    }
                     column.SetFilterTemplateContent(lookup =>
                     {
                         var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);

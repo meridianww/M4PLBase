@@ -19,6 +19,7 @@ M4PLWindow.IsFromConfirmSaveClick = false;
 M4PLWindow.PopupDataViewHasChanges = {};
 M4PLWindow.DataViewsHaveChanges = {};
 M4PLWindow.SubDataViewsHaveChanges = {};
+M4PLWindow.OrderId = 0;
 
 M4PLWindow.CallBackPanel = function () {
     var params;
@@ -93,6 +94,13 @@ M4PLWindow.DataView = function () {
     }
 
     var _onContextMenu = function (s, e, pageIcon, chooseColumnActionName, copyActionName) {
+        function setClipboard(text) {
+            navigator.clipboard.writeText(text).then(function () {
+                /* clipboard successfully set */
+            }, function () {
+                /* clipboard write failed */
+            });
+        }
         var route = JSON.parse(e.item.name);
         var isDataView = false;
         isDataView = route.Action === "FormView" ? false : true
@@ -112,7 +120,60 @@ M4PLWindow.DataView = function () {
                     url: route.Area + "/" + route.Controller + "/" + route.Action + "?strRoute=" + JSON.stringify(route)
                         + "&gridName = '' &filterId = 0 &isJobParentEntity = false &isDataView=" + isDataView,
                 });
-            } else if (!M4PLCommon.CheckHasChanges.CheckDataChanges(s.name)) {
+            }
+
+            else if (route.Action == "Copy") {
+                var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
+                // s.GetRowValues(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName, OnGetRowValues);
+                // var selectedText = s.GetBatchDataCell(e.elementIndex, s.cellFocusHelper.focusedCellInfo.columnIndex).innerHTML;
+                localStorage.setItem("CopiedText", selectedText);
+                if (selectedText != undefined && selectedText != null)
+                    setClipboard(selectedText);
+
+                return;
+
+            }
+            else if (route.Action == "Paste") {
+                //var pasteValue = "";
+                //navigator.clipboard.readText().then(clipText => pasteValue = clipText);
+                //if (pasteValue != undefined && pasteValue != null ){
+                s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
+                if (!s.GetEditor(s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).readOnly)
+                    s.GetEditor(s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).SetValue(localStorage.getItem("CopiedText"));
+                    //s.batchEditApi.SetCellValue(e.elementIndex, s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName, localStorage.getItem("CopiedText"), null, true);
+                //}
+                //M4PLCommon.Control.UpdateSelectedText();
+                //var dummy = document.createElement("input");
+                //document.body.appendChild(dummy);
+                //var selectedText = s.GetBatchDataCell(e.elementIndex, s.cellFocusHelper.focusedCellInfo.columnIndex).innerHTML;
+                //dummy.setAttribute('value', selectedText);
+                //dummy.select();
+
+                //document.execCommand("copy");
+                //localStorage.setItem("CopiedText", selectedText);
+                //document.body.removeChild(dummy);
+                return;
+
+            }
+
+
+            else if (route.Action == "Cut") {
+                s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
+                if (!s.GetEditor(s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).readOnly) {
+                    var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
+                    localStorage.setItem("CopiedText", selectedText);
+                    if (selectedText != undefined && selectedText != null)
+                        setClipboard(selectedText);
+                    s.GetEditor(s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).SetValue("");
+                    //s.batchEditApi.SetCellValue(e.elementIndex, s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName, "", null, true);
+                }
+                return;
+              
+
+
+            }
+
+            else if (!M4PLCommon.CheckHasChanges.CheckDataChanges(s.name)) {
                 if ((route.IsPopup && route.IsPopup === true) || route.Action == chooseColumnActionName) {
                     if (route.Action == "ToggleFilter") {
                         DevExCtrl.Ribbon.OnFilterClicked(s, e, route, route.OwnerCbPanel, '');
@@ -279,7 +340,7 @@ M4PLWindow.DataView = function () {
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }
         M4PLCommon.Error.CheckServerError();
-    }   
+    }
 
     var _onComboBoxValueChanged = function (s, e, currentGridControl, nameFieldName) {
         if (ASPxClientControl.GetControlCollection().GetByName("ValFieldNameEdit_Filter") != null)
@@ -368,12 +429,27 @@ M4PLWindow.DataView = function () {
     var _onDetailRowCollapsing = function (s, e) {
         _allowBatchEdit[s.name] = true;
     }
-
+    
     var _onColumnResized = function (s, e) {
         if (!s.batchEditApi.HasChanges()) {
             s.PerformCallback();
         }
     }
+
+    function _onRowSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("Id", GetSelectedFieldValuesCallback);
+    }
+
+    function GetSelectedFieldValuesCallback(values) {
+    }
+
+    function _onGridFocusedRowChanged(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'Id', OnGetRowValues);
+    }
+
+    function OnGetRowValues(values) {
+        M4PLWindow.OrderId = values;
+    }    
 
     var _onMenuDriverBatchEditStartEditing = function (s, e, isReadOnly) {
 
@@ -706,6 +782,16 @@ M4PLWindow.DataView = function () {
                 }
             }
         }
+        //if (s.name == "JobGridView") {
+        //    for (var i = 0; e.menu.GetItem(i) != null; i++) {
+        //        var currentName = JSON.parse(e.menu.GetItem(i).name);
+        //        if (currentName) {
+        //            if ((currentName.Action == "Paste" || currentName.Action == "Cut") && s.batchEditApi.GetEditCellInfo() == null) {
+        //                e.menu.GetItem(i).SetEnabled(false);
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     return {
@@ -728,6 +814,8 @@ M4PLWindow.DataView = function () {
         OnDetailRowExpanding: _onDetailRowExpanding,
         OnDetailRowCollapsing: _onDetailRowCollapsing,
         OnColumnResized: _onColumnResized,
+        OnRowSelectionChanged: _onRowSelectionChanged,
+        OnGridFocusedRowChanged: _onGridFocusedRowChanged,
         ContextMenu: _contextMenu,
         MenuDriverBatchEditStartEditing: _onMenuDriverBatchEditStartEditing,
         MenuBatchEditEndEditing: _onMenuBatchEditEndEditing,
@@ -964,7 +1052,7 @@ M4PLWindow.FormView = function () {
         if (typeof AttachmentGridView !== "undefined" && ASPxClientUtils.IsExists(AttachmentGridView) && ASPxClientUtils.IsExists(pnlCreAttachment)) {
             attachmentGrid = ASPxClientControl.GetControlCollection().GetByName('AttachmentGridView');
             var totalRecords = attachmentGrid.GetVisibleRowsOnPage();
-            
+
 
         }
         var putOrPostData = $(form).serializeArray();
@@ -1760,7 +1848,7 @@ M4PLWindow.ChooseColumns = function () {
                     }
                 }
                 currentRoute.Action = actionToAssign;
-          
+
                 if (currentRoute.Controller == "SecurityByRole") {
 
                     currentRoute.Action = 'FormView';

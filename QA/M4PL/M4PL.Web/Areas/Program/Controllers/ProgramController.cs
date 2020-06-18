@@ -422,11 +422,11 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
         }
 
-        public async Task<JsonResult> CopyPPPModel(CopyPPPModel copyPPPModel, bool hasCheckboxesChecked)
+        public JsonResult CopyPPPModel(CopyPPPModel copyPPPModel, bool hasCheckboxesChecked)
         {
             if (hasCheckboxesChecked)
             {
-                var result = _programCommands.CopyPPPModel(copyPPPModel).Result;
+                var result = _programCommands.CopyPPPModel(copyPPPModel);
                 return Json(new { status = result, isNotValid = false }, JsonRequestBehavior.AllowGet);
             }
             else

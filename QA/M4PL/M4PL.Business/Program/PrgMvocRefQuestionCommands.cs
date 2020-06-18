@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgMvocRefQuestionCommands;
-using System;
 
 namespace M4PL.Business.Program
 {
@@ -83,9 +83,9 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public PrgMvocRefQuestion Patch(PrgMvocRefQuestion entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public PrgMvocRefQuestion Patch(PrgMvocRefQuestion entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

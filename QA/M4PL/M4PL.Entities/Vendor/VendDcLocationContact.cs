@@ -27,7 +27,7 @@ namespace M4PL.Entities.Vendor
         public string ContactMSTRIDName { get; set; }
 
         public int? ConTableTypeId { get; set; }
-       
+
 
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace M4PL.Entities.Vendor
         /// </value>
 
         public string ConFullName { get; set; }
-		public long? ConCompanyId { get; set; }
+        public long? ConCompanyId { get; set; }
 
         public string ConCompanyIdName { get; set; }
     }

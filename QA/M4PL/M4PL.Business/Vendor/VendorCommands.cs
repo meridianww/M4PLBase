@@ -11,8 +11,6 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Vendor.VendorCommands;
-using M4PL.Entities.Vendor;
-using System;
 
 namespace M4PL.Business.Vendor
 {
@@ -83,9 +81,9 @@ namespace M4PL.Business.Vendor
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public Entities.Vendor.Vendor Patch(Entities.Vendor.Vendor entity)
-		{
-			return _commands.Patch(ActiveUser, entity);
-		}
-	}
+        public Entities.Vendor.Vendor Patch(Entities.Vendor.Vendor entity)
+        {
+            return _commands.Patch(ActiveUser, entity);
+        }
+    }
 }

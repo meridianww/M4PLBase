@@ -32,37 +32,37 @@ namespace M4PL.DataAccess.Job
 {
     public class JobCommands : BaseCommands<Entities.Job.Job>
     {
-		public static DateTime DayLightSavingStartDate
-		{
-			get
-			{
-				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
-			}
-		}
+        public static DateTime DayLightSavingStartDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+            }
+        }
 
-		public static DateTime DayLightSavingEndDate
-		{
-			get
-			{
-				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
-			}
-		}
+        public static DateTime DayLightSavingEndDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+            }
+        }
 
-		public static bool IsDayLightSavingEnable
-		{
-			get
-			{
-				return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
-			}
-		}
+        public static bool IsDayLightSavingEnable
+        {
+            get
+            {
+                return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+            }
+        }
 
-		/// <summary>
-		/// Gets list of Job records
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="pagedDataInfo"></param>
-		/// <returns></returns>
-		public static IList<Entities.Job.Job> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        /// <summary>
+        /// Gets list of Job records
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
+        public static IList<Entities.Job.Job> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobView, EntitiesAlias.Job);
         }
@@ -76,16 +76,16 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job Get(ActiveUser activeUser, long id)
         {
-			var parameters = activeUser.GetRecordDefaultParams(id, false);
-			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
-			return result ?? new Entities.Job.Job();
+            var parameters = activeUser.GetRecordDefaultParams(id, false);
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+            return result ?? new Entities.Job.Job();
         }
 
         public static Entities.Job.Job GetJobByProgram(ActiveUser activeUser, long id, long parentId)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
-			parameters.Add(new Parameter("@parentId", parentId));
-			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+            parameters.Add(new Parameter("@parentId", parentId));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
             return result ?? new Entities.Job.Job();
         }
 
@@ -227,7 +227,7 @@ namespace M4PL.DataAccess.Job
         /// <param name="job"></param>
         /// <returns></returns>
 
-        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true, bool isServiceCall = false)
+        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, bool isManualUpdate = false)
         {
             Entities.Job.Job createdJobData = null;
             if (IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID))
@@ -236,8 +236,9 @@ namespace M4PL.DataAccess.Job
                 SetLatitudeAndLongitudeFromAddress(ref job);
                 var parameters = GetParameters(job);
                 parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-				parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
-				parameters.AddRange(activeUser.PostDefaultParams(job));
+                parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+                parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
+                parameters.AddRange(activeUser.PostDefaultParams(job));
                 createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
 
                 if (!isServiceCall && createdJobData?.Id > 0)
@@ -266,15 +267,15 @@ namespace M4PL.DataAccess.Job
         /// <returns></returns>
 
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
-            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, long customerId = 0)
+            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, long customerId = 0, bool isManualUpdate = false)
         {
             Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
-			bool isExistsRecord = true;
-			if((job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder) || (job.CustomerId != existingJobDetail.CustomerId))
-			{
-				isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
-			}
+            bool isExistsRecord = true;
+            if ((job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder) || (job.CustomerId != existingJobDetail.CustomerId))
+            {
+                isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
+            }
 
             if (isExistsRecord)
             {
@@ -293,8 +294,9 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
                 parameters.Add(new Parameter("@IsSellerTabEdited", job.IsSellerTabEdited));
                 parameters.Add(new Parameter("@IsPODTabEdited", job.IsPODTabEdited));
-				parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
-				parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
+                parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+                parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
+                parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
                 updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
                 if (existingJobDetail != null && updatedJobDetails != null)
@@ -356,6 +358,7 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
+            parameters.Add(new Parameter("@PacificTime", TimeUtility.GetPacificDateTime()));
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobDestination>(StoredProceduresConstant.GetJobDestination, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobDestination();
         }
@@ -402,8 +405,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                new Parameter("@enteredBy", activeUser.UserName),
                new Parameter("@userId", activeUser.UserId),
-			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
-			};
+               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+            };
 
             try
             {
@@ -472,7 +475,7 @@ namespace M4PL.DataAccess.Job
                         StatusId = 1
                     };
 
-                    Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo);
+                    Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo, isManualUpdate: true);
                     if (jobCreationResult == null || (jobCreationResult != null && jobCreationResult.Id <= 0))
                     {
                         _logger.Log(new Exception(), string.Format("Job creation is failed for JobCustomerSalesOrder : {0}, Requested json was: {1}", jobInfo.JobCustomerSalesOrder, JsonConvert.SerializeObject(jobInfo)), "There is some error occurred while creating the job.", Utilities.Logger.LogType.Error);
@@ -502,8 +505,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                new Parameter("@enteredBy", activeUser.UserName),
-			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
-		};
+               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+        };
 
             try
             {
@@ -520,11 +523,11 @@ namespace M4PL.DataAccess.Job
         public static bool IsJobNotDuplicate(string customerSalesOrderNo, long programId)
         {
             bool isJobDuplicate = false;
-			var parameters = new List<Parameter>
-			{
-			   new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo),
-			   new Parameter("@programId", programId)
-			};
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo),
+               new Parameter("@programId", programId)
+            };
 
             try
             {
@@ -620,6 +623,7 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
+            parameters.Add(new Parameter("@Pacifictime", TimeUtility.GetPacificDateTime()));
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobSeller>(StoredProceduresConstant.GetJobSeller, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobSeller();
         }
@@ -1130,9 +1134,9 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobServiceOrder", job.JobServiceOrder),
                new Parameter("@JobServiceActual", job.JobServiceActual),
                new Parameter("@IsJobVocSurvey", job.IsJobVocSurvey),
-               new Parameter("@ProFlags12", job.ProFlags12)
-
-            };
+               new Parameter("@ProFlags12", job.ProFlags12),
+			   new Parameter("@JobDriverAlert", job.JobDriverAlert)
+			};
 
             return parameters;
         }
@@ -1499,7 +1503,7 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate,bool includeNullableDeliveryDate, ActiveUser activeUser)
+        public static int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser)
         {
             int count = 0;
             List<Entities.Job.Job> updatedJobs = new List<Entities.Job.Job>();
@@ -1510,7 +1514,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@CustId",custId),
                new Parameter("@user", activeUser.UserName),
                new Parameter("@DeliveryDate",deliveryDate),
-               new Parameter("@IncludeNullableDeliveryDate",includeNullableDeliveryDate)
+               new Parameter("@IncludeNullableDeliveryDate",includeNullableDeliveryDate),
+               new Parameter("@DateEntered", TimeUtility.GetPacificDateTime())
             };
             try
             {

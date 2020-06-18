@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Contact;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Contact.ConReportCommands;
-using System;
 
 namespace M4PL.Business.Contact
 {
@@ -83,9 +83,9 @@ namespace M4PL.Business.Contact
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public ConReport Patch(ConReport entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public ConReport Patch(ConReport entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

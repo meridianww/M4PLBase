@@ -10,15 +10,10 @@
 
 using M4PL.Entities;
 using M4PL.Entities.Scanner;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.APIClient.ViewModels.Scanner
 {
-     public class ScrReportView : ScrReport
+    public class ScrReportView : ScrReport
     {
         public ScrReportView()
         {

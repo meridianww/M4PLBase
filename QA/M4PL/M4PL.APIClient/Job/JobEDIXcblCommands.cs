@@ -13,11 +13,11 @@ using M4PL.APIClient.ViewModels.Job;
 namespace M4PL.APIClient.Job
 {
     public class JobEDIXcblCommands : BaseCommands<JobEDIXcblView>, IJobEDIXcblCommands
-	{
-		/// <summary>
-		/// Route to call JobEDIXcbl
-		/// </summary>
-		public override string RouteSuffix
+    {
+        /// <summary>
+        /// Route to call JobEDIXcbl
+        /// </summary>
+        public override string RouteSuffix
         {
             get { return "JobEDIXcbl"; }
         }

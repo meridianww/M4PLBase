@@ -11,8 +11,6 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Customer.CustomerCommands;
-using M4PL.Entities.Customer;
-using System;
 
 namespace M4PL.Business.Customer
 {
@@ -83,10 +81,10 @@ namespace M4PL.Business.Customer
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public Entities.Customer.Customer Patch(Entities.Customer.Customer entity)
-		{
-			return _commands.Patch(ActiveUser, entity);
-		}
+        public Entities.Customer.Customer Patch(Entities.Customer.Customer entity)
+        {
+            return _commands.Patch(ActiveUser, entity);
+        }
 
         public List<Entities.Customer.Customer> GetActiveCutomers()
         {

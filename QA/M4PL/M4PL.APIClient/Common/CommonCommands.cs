@@ -10,6 +10,7 @@ Purpose:                                      Client to consume M4PL API called 
 
 using M4PL.APIClient.ViewModels.Attachment;
 using M4PL.APIClient.ViewModels.Contact;
+using M4PL.APIClient.ViewModels.Document;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.MasterTables;
@@ -941,7 +942,7 @@ namespace M4PL.APIClient.Common
         }
 
 
-        public List<AttachmentView> DownloadAll(long  jobId)
+        public List<AttachmentView> DownloadAll(long jobId)
         {
             var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetAttachmentsByJobId");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
@@ -949,5 +950,68 @@ namespace M4PL.APIClient.Common
             return response;
         }
 
-    }
+		public DocumentDataView DownloadTracking(long jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetTrackingDocumentByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+		
+		public DocumentDataView GetPriceCodeReportByJobId(long jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetPriceCodeReportByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
+		public DocumentDataView GetCostCodeReportByJobId(long jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetCostCodeReportByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
+		public DocumentDataView DownloadBOL(long jobId) 
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetBOLDocumentByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
+		public DocumentDataView DownloadPOD(long jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetPODDocumentByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
+		public DocumentStatusView GetDocumentStatusByJobId(long jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetDocumentStatusByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentStatusView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
+		public DocumentStatusView IsPriceCodeDataPresentForJob(long jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "IsPriceCodeDataPresentForJob");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentStatusView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
+		public DocumentStatusView IsCostCodeDataPresentForJob(long jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "IsCostCodeDataPresentForJob");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentStatusView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+	}
 }

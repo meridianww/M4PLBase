@@ -235,43 +235,43 @@ namespace M4PL.Utilities
                 : Regex.Replace(value.ToString(), @"([a-z])([A-Z])", @"$1 $2", RegexOptions.None);
         }
 
-		public static DateTime ToUniversalDateTime(this DateTime dateTime)
-		{
-			return TimeZone.CurrentTimeZone.ToUniversalTime(dateTime);
-		}
+        public static DateTime ToUniversalDateTime(this DateTime dateTime)
+        {
+            return TimeZone.CurrentTimeZone.ToUniversalTime(dateTime);
+        }
 
-		public static DateTime ToLocalDateTime(this DateTime utcDateTime)
-		{
-			return utcDateTime.ToLocalTime();
-		}
+        public static DateTime ToLocalDateTime(this DateTime utcDateTime)
+        {
+            return utcDateTime.ToLocalTime();
+        }
 
-		public static List<T> ConvertDataTableToModel<T>(DataTable dt)
-		{
-			List<T> data = new List<T>();
-			foreach (DataRow row in dt.Rows)
-			{
-				T item = GetItem<T>(row);
-				data.Add(item);
-			}
-			return data;
-		}
+        public static List<T> ConvertDataTableToModel<T>(DataTable dt)
+        {
+            List<T> data = new List<T>();
+            foreach (DataRow row in dt.Rows)
+            {
+                T item = GetItem<T>(row);
+                data.Add(item);
+            }
+            return data;
+        }
 
-		private static T GetItem<T>(DataRow dr)
-		{
-			Type temp = typeof(T);
-			T obj = Activator.CreateInstance<T>();
+        private static T GetItem<T>(DataRow dr)
+        {
+            Type temp = typeof(T);
+            T obj = Activator.CreateInstance<T>();
 
-			foreach (DataColumn column in dr.Table.Columns)
-			{
-				foreach (PropertyInfo pro in temp.GetProperties())
-				{
-					if (pro.Name == column.ColumnName)
-						pro.SetValue(obj, dr[column.ColumnName], null);
-					else
-						continue;
-				}
-			}
-			return obj;
-		}
-	}
+            foreach (DataColumn column in dr.Table.Columns)
+            {
+                foreach (PropertyInfo pro in temp.GetProperties())
+                {
+                    if (pro.Name == column.ColumnName)
+                        pro.SetValue(obj, dr[column.ColumnName], null);
+                    else
+                        continue;
+                }
+            }
+            return obj;
+        }
+    }
 }

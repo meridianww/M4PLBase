@@ -22,7 +22,7 @@ namespace M4PL.Business.Job
         JobDocReference PutWithSettings(SysSetting userSysSetting, JobDocReference jobDocReference);
 
         JobDocReference PostWithSettings(SysSetting userSysSetting, JobDocReference jobDocReference);
-		StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType);
+        StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType);
 
         long GetNextSequence();
 

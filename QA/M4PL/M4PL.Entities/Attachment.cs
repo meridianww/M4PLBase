@@ -27,5 +27,7 @@ namespace M4PL.Entities
         /// To update the Parent tables attachment count update
         /// </summary>
         public string PrimaryTableFieldName { get; set; }
-    }
+
+		public string DocumentType { get; set; }
+	}
 }

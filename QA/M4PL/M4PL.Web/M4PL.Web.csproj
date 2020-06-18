@@ -119,6 +119,12 @@
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itextsharp.xmlworker.5.5.13.1\lib\itextsharp.xmlworker.dll</HintPath>
+    </Reference>
     <Reference Include="M4PL.EF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\M4PL.DLLs\M4PL.EF.dll</HintPath>
@@ -402,6 +408,7 @@
     <Compile Include="WebUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Job\Views\JobAdvanceReport\WeightUnitTypeByJob.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\_JobGatewayAction.cshtml" />
     <Content Include="Areas\Organization\Views\AppDashboard\DataView.cshtml" />
     <Content Include="Areas\Organization\Views\Organization\DataView.cshtml" />
@@ -757,6 +764,8 @@
     <Content Include="Areas\Job\Views\JobXcblInfo\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobHistory\DataView.cshtml" />
     <Content Include="Views\Shared\_NextGatewayPartial.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\PackagingTypeByJob.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\CargoTitleByJob.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

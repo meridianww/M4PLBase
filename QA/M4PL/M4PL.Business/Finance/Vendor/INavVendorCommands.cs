@@ -12,11 +12,11 @@ using System.Collections.Generic;
 
 namespace M4PL.Business.Finance.Vendor
 {
-	/// <summary>
-	/// Provides the operations based on the Table name
-	/// </summary>
-	public interface INavVendorCommands : IBaseCommands<NavVendor>
-	{
-		IList<NavVendor> GetAllNavVendor();
-	}
+    /// <summary>
+    /// Provides the operations based on the Table name
+    /// </summary>
+    public interface INavVendorCommands : IBaseCommands<NavVendor>
+    {
+        IList<NavVendor> GetAllNavVendor();
+    }
 }

@@ -59,7 +59,7 @@ namespace M4PL.Web.Areas.Attachment.Controllers
                 int count = -1;
                 foreach (var item in attachmentView.Insert)
                 {
-                    item.AttPrimaryRecordID = Request.Form["docRefId"]!=null ? Convert.ToInt64(Request.Form["docRefId"]) : data.ParentId;
+                    item.AttPrimaryRecordID = Request.Form["docRefId"] != null ? Convert.ToInt64(Request.Form["docRefId"]) : data.ParentId;
                     item.AttTableName = parentEntity;
                     item.AttTypeId = 1;
                     item.PrimaryTableFieldName = primaryTableFieldName;
@@ -267,7 +267,7 @@ namespace M4PL.Web.Areas.Attachment.Controllers
                     this.Response.End();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

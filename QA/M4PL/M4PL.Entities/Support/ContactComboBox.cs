@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-/*Copyright(2016) Meridian Worldwide Transportation Group
+﻿/*Copyright(2016) Meridian Worldwide Transportation Group
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -11,7 +7,6 @@ Date Programmed:                              05/29/2018
 Program Name:                                 Contact Combobox
 Purpose:                                      Contains objects related to Contact Combobox
 ==========================================================================================================*/
-
 
 namespace M4PL.Entities.Support
 {

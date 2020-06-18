@@ -8,7 +8,6 @@
 //Purpose:                                      End point to interact with Contact module
 //====================================================================================================================================================*/
 
-using M4PL.API.Filters;
 using M4PL.Business.Contact;
 using M4PL.Entities.Contact;
 using System.Web.Http;

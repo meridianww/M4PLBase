@@ -17,7 +17,7 @@ namespace M4PL.Business.Survey
     {
         JobSurvey GetJobSurvey(ActiveUser activeUser, long id);
 
-		bool InsertJobSurvey(JobSurvey jobSurvey);
+        bool InsertJobSurvey(JobSurvey jobSurvey);
 
-	}
+    }
 }

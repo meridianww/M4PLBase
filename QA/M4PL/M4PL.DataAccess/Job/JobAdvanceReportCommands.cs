@@ -173,6 +173,45 @@ namespace M4PL.DataAccess.Job
                 var dateTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
                 return dateTypeRecord;
             }
+            else if (entity == "PackagingCode")
+            {
+                var packagingCodeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (packagingCodeRecord.Any())
+                {
+                    packagingCodeRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                    {
+                        PackagingCode = "ALL",
+                        Id = 0,
+                    });
+                }
+                return packagingCodeRecord;
+            }
+            else if (entity == "WeightUnit")
+            {
+                var weightUnitRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (weightUnitRecord.Any())
+                {
+                    weightUnitRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                    {
+                        WeightUnit = "ALL",
+                        Id = 0,
+                    });
+                }
+                return weightUnitRecord;
+            }
+            else if (entity == "CargoTitle")
+            {
+                var cargoTitleRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (cargoTitleRecord.Any())
+                {
+                    cargoTitleRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                    {
+                        CargoTitle = "ALL",
+                        Id = 0,
+                    });
+                }
+                return cargoTitleRecord;
+            }
             else
             {
                 return null;
@@ -206,6 +245,20 @@ namespace M4PL.DataAccess.Job
                 var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
                 parameters.Add(new Parameter("@scheduled", data.Scheduled));
                 parameters.Add(new Parameter("@orderType", data.OrderType));
+                parameters.Add(new Parameter("@IsManifest", data.Manifest));
+
+                //if (data.IsAddtionalFilter)
+                //{                  
+                //if (data.WeightUnit > 0)
+                //    parameters.Add(new Parameter("@WeightUnit", data.WeightUnit));
+                //parameters.Add(new Parameter("@JobPartsOrdered", data.JobPartsOrdered));
+                //if (data.PackagingCode > 0)
+                parameters.Add(new Parameter("@PackagingCode", data.PackagingCode));
+                if (data.CargoId.HasValue)
+                    parameters.Add(new Parameter("@CargoId", data.CargoId));
+                //if (data.CgoWeightUnitTypeId.HasValue)
+                //parameters.Add(new Parameter("@WeightUnit", data.CgoWeightUnitTypeId));
+                // }
 
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
                 {

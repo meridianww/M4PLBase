@@ -11,6 +11,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Program
@@ -138,6 +139,7 @@ namespace M4PL.DataAccess.Program
                ,new Parameter("@vendorIds",  programVendorMap.VendorIds)
                ,new Parameter("@enteredBy",activeUser.UserName)
                ,new Parameter("@assignedOn",programVendorMap.AssignedOn)
+               ,new Parameter("@dateEntered",TimeUtility.GetPacificDateTime())
             };
 
             var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.InsAssignUnassignBillableLocations, parameters, storedProcedure: true);

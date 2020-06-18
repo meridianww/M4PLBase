@@ -8,7 +8,6 @@
 //Purpose:                                      Contains Actions to render view on Customer's CustReport
 //====================================================================================================================================================*/
 
-using DevExpress.XtraPrinting;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Customer;
 using M4PL.APIClient.ViewModels.Customer;
@@ -17,7 +16,6 @@ using M4PL.Entities.Support;
 using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Customer.Controllers
@@ -82,7 +80,7 @@ namespace M4PL.Web.Areas.Customer.Controllers
                 using (System.IO.MemoryStream ms = new System.IO.MemoryStream(byteArray.Bytes))
                     _reportResult.Report.LoadLayoutFromXml(ms);
             }
-           
+
 
             return PartialView(MvcConstants.ViewReportViewer, _reportResult);
         }

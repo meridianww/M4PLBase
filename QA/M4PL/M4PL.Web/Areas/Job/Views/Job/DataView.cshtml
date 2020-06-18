@@ -31,6 +31,9 @@
         settings.Styles.Header.Wrap = DefaultBoolean.True;
         settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
         settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 300;
+        ////settings.Settings.VerticalScrollBarStyle = GridViewVerticalScrollBarStyle.VirtualSmooth;
         settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
         settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
@@ -38,7 +41,8 @@
         settings.SettingsBehavior.AllowEllipsisInText = true;
         settings.SettingsBehavior.AllowDragDrop = false;
         settings.ControlStyle.CssClass = "gridfields-text-visible";
-
+        ////settings.CommandColumn.Visible = true;
+        ////settings.CommandColumn.ShowSelectCheckbox = true;
         settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
         settings.SettingsCookies.Enabled = true;
         settings.SettingsCookies.StoreColumnsWidth = true;
@@ -98,7 +102,8 @@
         settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
         //settings.ClientSideEvents.ColumnMoving = "M4PLWindow.DataView.OnColumnChanged";
         settings.SettingsResizing.Visualization = ResizingMode.Live;
-
+        ////settings.ClientSideEvents.SelectionChanged = "M4PLWindow.DataView.OnRowSelectionChanged";
+        settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
         settings.SettingsPager.EnableAdaptivity = true;
         settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
         settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
@@ -522,9 +527,9 @@
 
     }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml();
 }
-else
+@*else
 {
     <div style="text-align:center">
         <h2><strong>Access Denied, please contact system administrator.</strong></h2>
     </div>
-}
+}*@

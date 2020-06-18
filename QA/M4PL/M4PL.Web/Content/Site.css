@@ -5074,3 +5074,17 @@ div#btnCardRefresh {
 .dxpc-headerContent {
     text-align: center;
 }
+
+.driverAlert {
+    width: 425px !important;
+    height : 21px !important;
+}
+
+@-moz-document url-prefix() {
+    .jobFormViewPanel {
+         height : 580px !important;
+    }
+    .driverAlertHeight {
+    height : 21px !important;
+   }
+}

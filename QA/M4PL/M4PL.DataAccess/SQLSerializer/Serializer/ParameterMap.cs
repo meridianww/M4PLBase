@@ -20,7 +20,7 @@ namespace M4PL.DataAccess.SQLSerializer.Serializer
             get { return this.ToParameterList(); }
         }
 
-        public static implicit operator Parameter[] (ParameterMap map)
+        public static implicit operator Parameter[](ParameterMap map)
         {
             if (map == null)
                 return null;

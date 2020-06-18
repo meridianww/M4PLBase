@@ -11,7 +11,6 @@ Purpose:                                      Contains generic CRUD operation pa
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -102,7 +101,7 @@ namespace M4PL.DataAccess
             if (record is BaseModel)
             {
                 parameters.Add(new Parameter("@changedBy", activeUser.UserName));
-                parameters.Add(new Parameter("@dateChanged", (record as BaseModel).DateChanged));
+                parameters.Add(new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()));
                 parameters.Add(new Parameter("@isFormView", (record as BaseModel).IsFormView));
             }
             return parameters;

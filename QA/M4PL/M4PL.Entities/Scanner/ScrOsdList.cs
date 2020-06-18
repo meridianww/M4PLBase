@@ -7,7 +7,6 @@ Date Programmed:                              10/10/2017
 Program Name:                                 ScrOsdList
 Purpose:                                      Contains objects related to ScrOsdList
 ==========================================================================================================*/
-using System.Text;
 
 namespace M4PL.Entities.Scanner
 {

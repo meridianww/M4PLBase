@@ -13,15 +13,11 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.DataAccess.Program
 {
-   public class PrgEdiConditionCommands : BaseCommands<PrgEdiCondition>
+    public class PrgEdiConditionCommands : BaseCommands<PrgEdiCondition>
     {
         public static IList<PrgEdiCondition> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
@@ -111,11 +107,11 @@ namespace M4PL.DataAccess.Program
                new Parameter("@perLogical", prgEdiCondition.PerLogical),
                new Parameter("@pecJobField2", prgEdiCondition.PecJobField2),
                new Parameter("@pecCondition2", prgEdiCondition.PecCondition2),
-             
+
             };
             return parameters;
         }
 
-      
+
     }
 }

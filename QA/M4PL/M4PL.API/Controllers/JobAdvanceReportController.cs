@@ -21,14 +21,14 @@ namespace M4PL.API.Controllers
     {
         private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
 
-		/// <summary>
-		/// Function to get Job's advance Report details
-		/// </summary>
-		/// <param name="jobAdvanceReportCommands"></param>
-		public JobAdvanceReportController(IJobAdvanceReportCommands jobAdvanceReportCommands)
+        /// <summary>
+        /// Function to get Job's advance Report details
+        /// </summary>
+        /// <param name="jobAdvanceReportCommands"></param>
+        public JobAdvanceReportController(IJobAdvanceReportCommands jobAdvanceReportCommands)
             : base(jobAdvanceReportCommands)
         {
-			_jobAdvanceReportCommands = jobAdvanceReportCommands;
+            _jobAdvanceReportCommands = jobAdvanceReportCommands;
         }
 
         /// <summary>

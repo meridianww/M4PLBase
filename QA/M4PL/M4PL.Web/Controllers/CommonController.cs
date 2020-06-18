@@ -13,22 +13,20 @@ using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.ViewModels;
 using M4PL.Entities;
+using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using M4PL.Web;
 using M4PL.Web.Models;
 using M4PL.Web.Providers;
 using M4PL_Apln.Models;
 using Newtonsoft.Json;
 using System;
-
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
-
-using M4PL.Web;
-using M4PL.Entities.Administration;
-using System.Configuration;
 
 namespace M4PL.Web.Controllers
 {
@@ -518,7 +516,22 @@ namespace M4PL.Web.Controllers
             return Json(new { status = true, lookupId = _commonCommands.GetLookupIdByName(lookupName) }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetContactType(string lookupName)
+		public ActionResult GetDocumentStatusByJobId(long jobId)
+		{
+			return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(jobId) }, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult IsPriceCodeDataPresentForJob(long jobId)
+		{
+			return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult IsCostCodeDataPresentForJob(long jobId)
+		{
+			return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult GetContactType(string lookupName)
         {
             return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
         }

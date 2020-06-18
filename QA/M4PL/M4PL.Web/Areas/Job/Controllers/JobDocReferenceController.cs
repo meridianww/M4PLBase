@@ -15,12 +15,12 @@ using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Web.Models;
+using M4PL.Web.Providers;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System;
-using M4PL.Web.Providers;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -283,11 +283,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             base.DataView(strRoute, currentGridName);
             if (selectedId > 0)
                 _gridResult.FocusedRowId = selectedId;
-            if (_gridResult.Records.Any(c => c.JobCompleted) || (_gridResult.Records.Count == 0 && _commonCommands.GetIsJobCompleted(route.ParentRecordId)))
-            {
-                _gridResult.Operations.Remove(OperationTypeEnum.New);
-                _gridResult.GridSetting.ContextMenu.Remove(_commonCommands.GetOperation(OperationTypeEnum.New));
-            }
             _gridResult.GridSetting.GridName = currentGridName;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }

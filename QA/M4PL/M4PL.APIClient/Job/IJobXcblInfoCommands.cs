@@ -9,14 +9,13 @@
 //====================================================================================================================================================*/
 
 using M4PL.APIClient.ViewModels.Job;
-using System.Collections.Generic;
 
 namespace M4PL.APIClient.Job
 {
-	/// <summary>
-	/// Performs basic CRUD operation on the JobEDIXcbl Entity
-	/// </summary>
-	public interface IJobXcblInfoCommands : IBaseCommands<JobXcblInfoView>
+    /// <summary>
+    /// Performs basic CRUD operation on the JobEDIXcbl Entity
+    /// </summary>
+    public interface IJobXcblInfoCommands : IBaseCommands<JobXcblInfoView>
     {
         JobXcblInfoView GetJobXcblInfo(long jobId, long gatewayId);
 

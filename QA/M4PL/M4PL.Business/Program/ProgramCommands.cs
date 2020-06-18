@@ -9,11 +9,11 @@ Purpose:                                      Contains commands to call DAL logi
 ===================================================================================================================*/
 
 using M4PL.Entities;
+using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.ProgramCommands;
-using System;
-using M4PL.Entities.Program;
 
 namespace M4PL.Business.Program
 {
@@ -105,7 +105,7 @@ namespace M4PL.Business.Program
 
         public IList<TreeModel> ProgramCopyTree(ActiveUser activeuser, long programId, long? parentId, bool isCustNode, bool isSource)
         {
-            return _commands.GetProgramCopyTree(activeuser,programId, parentId, isCustNode, isSource);
+            return _commands.GetProgramCopyTree(activeuser, programId, parentId, isCustNode, isSource);
         }
 
         public async System.Threading.Tasks.Task<bool> CopyPPPModel(CopyPPPModel copyPPPMopdel, ActiveUser activeUser)
@@ -113,10 +113,10 @@ namespace M4PL.Business.Program
             return await _commands.CopyPPPModel(copyPPPMopdel, activeUser);
         }
 
-		public Entities.Program.Program Patch(Entities.Program.Program entity)
-		{
-			throw new NotImplementedException();
-		}
+        public Entities.Program.Program Patch(Entities.Program.Program entity)
+        {
+            throw new NotImplementedException();
+        }
 
         public List<Entities.Program.Program> GetProgramsByCustomer(long custId)
         {

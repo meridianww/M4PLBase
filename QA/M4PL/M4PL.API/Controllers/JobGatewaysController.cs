@@ -35,7 +35,7 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("GatewayWithParent")]
-        public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor, bool is3PlAction)
+        public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction)
         {
             _jobGatewayCommands.ActiveUser = ActiveUser;
             return _jobGatewayCommands.GetGatewayWithParent(id, parentId, entityFor, is3PlAction);

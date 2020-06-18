@@ -8,7 +8,6 @@
 //Purpose:                                      Contains Actions to render view on Job page
 //====================================================================================================================================================*/
 
-using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
@@ -21,7 +20,6 @@ using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using System.Web.Mvc;
@@ -111,6 +109,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
 
+            #region next/previous
             CommonIds maxMinFormData = null;
             maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
             if (maxMinFormData != null)
@@ -127,8 +126,12 @@ namespace M4PL.Web.Areas.Job.Controllers
                     SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
                 }
             }
+            #endregion
+
             _formResult.SessionProvider = SessionProvider;
             _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+
+            #region Job Card
             SessionProvider.ActiveUser.LastRoute.RecordId = 1;
             if (SessionProvider.ActiveUser.LastRoute.IsPBSReport)
             {
@@ -141,6 +144,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 SessionProvider.ActiveUser.LastRoute = route;
             }
+            #endregion
 
             _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
             _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);

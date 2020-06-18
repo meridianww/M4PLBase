@@ -8,58 +8,52 @@ Program Name:                                 NavPurchaseOrderCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavPurchaseOrderCommands
 =============================================================================================================*/
 using M4PL.Entities.Finance.PurchaseOrder;
+using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4PL.Entities.Support;
-using System.Net;
-using System.IO;
-using _commands = M4PL.DataAccess.Finance.NavPurchaseOrderCommands;
 
 namespace M4PL.Business.Finance.PurchaseOrder
 {
-	public class NavPurchaseOrderCommands : BaseCommands<NavPurchaseOrder>, INavPurchaseOrderCommands
-	{
-		public int Delete(long id)
-		{
-			throw new NotImplementedException();
-		}
+    public class NavPurchaseOrderCommands : BaseCommands<NavPurchaseOrder>, INavPurchaseOrderCommands
+    {
+        public int Delete(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+        {
+            throw new NotImplementedException();
+        }
 
-		public NavPurchaseOrder Get(long id)
-		{
-			throw new NotImplementedException();
-		}
+        public NavPurchaseOrder Get(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<NavPurchaseOrder> GetPagedData(PagedDataInfo pagedDataInfo)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<NavPurchaseOrder> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            throw new NotImplementedException();
+        }
 
-		public NavPurchaseOrder Patch(NavPurchaseOrder entity)
-		{
-			throw new NotImplementedException();
-		}
+        public NavPurchaseOrder Patch(NavPurchaseOrder entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public NavPurchaseOrder Post(NavPurchaseOrder entity)
-		{
-			throw new NotImplementedException();
-		}
+        public NavPurchaseOrder Post(NavPurchaseOrder entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public NavPurchaseOrder Put(NavPurchaseOrder entity)
-		{
-			throw new NotImplementedException();
-		}
+        public NavPurchaseOrder Put(NavPurchaseOrder entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public NavPurchaseOrder CreatePurchaseOrderForNAV(long jobId)
-		{
-			return new NavPurchaseOrder();
-		}
-	}
+        public NavPurchaseOrder CreatePurchaseOrderForNAV(long jobId)
+        {
+            return new NavPurchaseOrder();
+        }
+    }
 }

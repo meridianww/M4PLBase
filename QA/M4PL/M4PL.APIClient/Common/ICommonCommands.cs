@@ -10,6 +10,7 @@ Purpose:                                      Set of rules for CommonCommands
 
 using M4PL.APIClient.ViewModels.Attachment;
 using M4PL.APIClient.ViewModels.Contact;
+using M4PL.APIClient.ViewModels.Document;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
@@ -67,7 +68,7 @@ namespace M4PL.APIClient.Common
         /// </summary>
         /// <param name="compId"></param>
         /// <returns>CompanyCorpAddress</returns>
-        CompanyCorpAddress GetCompCorpAddress( int compId);
+        CompanyCorpAddress GetCompCorpAddress(int compId);
 
         /// <summary>
         /// Route to call Page Information
@@ -190,5 +191,13 @@ namespace M4PL.APIClient.Common
         JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
 
         List<AttachmentView> DownloadAll(long jobId);
-    }
+		DocumentDataView DownloadBOL(long recordId);
+		DocumentDataView DownloadTracking(long recordId);
+		DocumentDataView GetPriceCodeReportByJobId(long jobId);
+		DocumentDataView GetCostCodeReportByJobId(long jobId);
+		DocumentDataView DownloadPOD(long recordId);
+		DocumentStatusView GetDocumentStatusByJobId(long jobId);
+		DocumentStatusView IsPriceCodeDataPresentForJob(long jobId);
+		DocumentStatusView IsCostCodeDataPresentForJob(long jobId);
+	}
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4PL.Entities.Job;
+﻿using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
+using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobHistoryCommands;
 
 namespace M4PL.Business.Job

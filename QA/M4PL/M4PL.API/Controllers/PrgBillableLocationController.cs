@@ -18,7 +18,7 @@ using System.Web.Http;
 namespace M4PL.API.Controllers
 {
     [RoutePrefix("api/PrgBillableLocation")]
-    public class PrgBillableLocationController :  BaseApiController<PrgBillableLocation>
+    public class PrgBillableLocationController : BaseApiController<PrgBillableLocation>
     {
         private readonly IPrgBillableLocationCommands _prgBillableLocationCommands;
         public PrgBillableLocationController(IPrgBillableLocationCommands prgBillableLocationCommands)

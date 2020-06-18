@@ -17,7 +17,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Common

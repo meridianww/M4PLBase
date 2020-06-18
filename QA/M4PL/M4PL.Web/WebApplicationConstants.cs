@@ -129,11 +129,12 @@ namespace M4PL.Web
         public const string IsSysAdmin = "IsSysAdmin";
         public const string IsReadOnly = "IsReadOnly";
         public const string ClientEnabled = "ClientEnabled";
-		public const string SysLookupId = "SysLookupId";
-		public const string ReadOnlyRelationalEntity = "ReadOnlyRelationalEntity";
+        public const string SysLookupId = "SysLookupId";
+        public const string ReadOnlyRelationalEntity = "ReadOnlyRelationalEntity";
         public const string StrDropdownViewModel = "strDropDownViewModel";
         public const string OldSysLookupId = "OldLookupId";
         public const string UserTheme = "UserTheme";
+        public const string AuthTokenCookie = "Aideaujeton";
 
 
         #region Mask Formats And DevEx properties

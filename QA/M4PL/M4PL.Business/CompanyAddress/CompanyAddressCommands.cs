@@ -8,48 +8,47 @@
 //Purpose:                                     Contains commands to call DAL logic for M4PL.DAL.CompanyAddress.CompanyAddressCommands
 //====================================================================================================================================================*/
 
+using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
-using M4PL.Entities.CompanyAddress;
-using M4PL.Entities.Support;
 
 namespace M4PL.Business.CompanyAddress
 {
-	public class CompanyAddressCommands : BaseCommands<Entities.CompanyAddress.CompanyAddress>, ICompanyAddressCommands
-	{
-		public int Delete(long id)
-		{
-			throw new NotImplementedException();
-		}
+    public class CompanyAddressCommands : BaseCommands<Entities.CompanyAddress.CompanyAddress>, ICompanyAddressCommands
+    {
+        public int Delete(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+        {
+            throw new NotImplementedException();
+        }
 
-		public Entities.CompanyAddress.CompanyAddress Get(long id)
-		{
-			throw new NotImplementedException();
-		}
+        public Entities.CompanyAddress.CompanyAddress Get(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<Entities.CompanyAddress.CompanyAddress> GetPagedData(PagedDataInfo pagedDataInfo)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<Entities.CompanyAddress.CompanyAddress> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            throw new NotImplementedException();
+        }
 
-		public Entities.CompanyAddress.CompanyAddress Post(Entities.CompanyAddress.CompanyAddress entity)
-		{
-			throw new NotImplementedException();
-		}
+        public Entities.CompanyAddress.CompanyAddress Post(Entities.CompanyAddress.CompanyAddress entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public Entities.CompanyAddress.CompanyAddress Put(Entities.CompanyAddress.CompanyAddress entity)
-		{
-			throw new NotImplementedException();
-		}
+        public Entities.CompanyAddress.CompanyAddress Put(Entities.CompanyAddress.CompanyAddress entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public Entities.CompanyAddress.CompanyAddress Patch(Entities.CompanyAddress.CompanyAddress entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public Entities.CompanyAddress.CompanyAddress Patch(Entities.CompanyAddress.CompanyAddress entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

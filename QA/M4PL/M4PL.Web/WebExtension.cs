@@ -23,7 +23,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -164,6 +163,16 @@ namespace M4PL.Web
             reportResult.SessionProvider = sessionProvider;
             reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
             reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
+
+            //foreach (var colSetting in reportResult.ColumnSettings)
+            //    if (colSetting.ColLookupId > 0)
+            //    {
+            //        reportResult.ComboBoxProvider = reportResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
+            //        if (reportResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
+            //            reportResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
+            //        else
+            //            reportResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+            //    }
             return reportView;
         }
 
@@ -1564,8 +1573,8 @@ namespace M4PL.Web
                         {
                             mnu.StatusId = route.Entity == EntitiesAlias.Job
                             && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-                            && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity
-                            && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "Form View") ? 1 : 3;
+                            && !sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity
+                            && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New" || mnu.MnuTitle == "Form View") ? 1 : 3;
                             if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job
                             || route.Entity == EntitiesAlias.PrgEdiHeader)
                             {
@@ -1693,12 +1702,95 @@ namespace M4PL.Web
 
                 if (mnu.MnuTitle == "Download All")
                 {
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+                if (mnu.MnuTitle == "DataSheet View")
+                {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0 && route.Action != "DataView")
                     {
                         mnu.StatusId = 1;
                     }
+                }
 
+                if (mnu.MnuTitle == "BOL")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
+
+				if (mnu.MnuTitle == "POD")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (mnu.MnuTitle == "Tracking")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
+
+                if (mnu.MnuTitle == "Price Code")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                        if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                      || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                         (childSecurity == null ||
+                         (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit
+                         )))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+                }
+
+                if (mnu.MnuTitle == "Cost Code")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;
+                        if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                        || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                           (childSecurity == null ||
+                           (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All
+                           )))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
                 }
 
                 if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
@@ -2295,8 +2387,14 @@ namespace M4PL.Web
             List<string> insContractNumbers = new List<string>();
             List<string> feedBack = new List<string>();
 
-            var recordGroupByLocation = record.GroupBy(t => t.LocationCode);
-            foreach (var reco in recordGroupByLocation)
+            var recordGroupByCustomer = record.GroupBy(c => new
+            {
+                c.CustCode,
+                c.LocationCode
+            });
+
+            //var recordGroupByLocation = record.GroupBy(t => t.LocationCode);
+            foreach (var reco in recordGroupByCustomer)
             {
                 var overallScoreTotal = 0;
                 var overallScoreCount = 0;
@@ -2437,36 +2535,33 @@ namespace M4PL.Web
                         row = new XRTableRow();
                     }
 
-
-
                     row = new XRTableRow();
                     xrtable.Rows.Add(row);
+                    #region overralScoreAvg
+                    row = new XRTableRow();
+                    XRTableCell cellAvg = new XRTableCell();
+                    cellAvg.HeightF = 100f;
+                    cellAvg.WidthF = 4f;
+                    cellAvg.Text = "Total Count: " + Convert.ToString(overallScoreCount);
+                    cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                    cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+                    row.Cells.Add(cellAvg);
+
+                    cellAvg = new XRTableCell();
+                    cellAvg.WidthF = 5f;
+                    cellAvg.Text = "Avg. Scrore: " + Convert.ToString(overallScoreTotal / overallScoreCount);
+                    cellAvg.BackColor = Color.White;
+                    cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                    cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+                    row.Cells.Add(cellAvg);
+
+                    cellAvg = new XRTableCell();
+                    cellAvg.WidthF = 2f;
+                    row.Cells.Add(cellAvg);
+                    #endregion
                 }
-                #region overralScoreAvg
-                row = new XRTableRow();
-                XRTableCell cellAvg = new XRTableCell();
-                cellAvg.HeightF = 100f;
-                cellAvg.WidthF = 4f;
-                cellAvg.Text = "Total Count: " + Convert.ToString(overallScoreCount);
-                cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
-                cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-                row.Cells.Add(cellAvg);
-
-                cellAvg = new XRTableCell();
-                cellAvg.WidthF = 5f;
-                cellAvg.Text = "Avg. Scrore: " + Convert.ToString(overallScoreTotal / overallScoreCount);
-                cellAvg.BackColor = Color.White;
-                cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
-                cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-                row.Cells.Add(cellAvg);
-
-                cellAvg = new XRTableCell();
-                cellAvg.WidthF = 2f;
-                row.Cells.Add(cellAvg);
-
                 xrtable.Rows.Add(row);
                 row = new XRTableRow();
-                #endregion
             }
 
             xrtable.EndInit();
@@ -2754,6 +2849,13 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%')", jobAdvanceReportRequest.Search);
+            //if (jobAdvanceReportRequest.IsAddtionalFilter)
+            //{
+            //    where += jobAdvanceReportRequest.WeightUnit > 0 ?
+            //        string.Format(" AND JobAdvanceReport.JobWeightUnitTypeId = {0}", jobAdvanceReportRequest.WeightUnit) : "";
+            //    where += jobAdvanceReportRequest.JobPartsOrdered >0 ?
+            //        string.Format(" AND JobAdvanceReport.JobPartsOrdered = {0}", jobAdvanceReportRequest.JobPartsOrdered) : "";
+            //}
             return where;
         }
 

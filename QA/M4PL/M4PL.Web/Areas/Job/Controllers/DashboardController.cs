@@ -8,8 +8,6 @@
 //Purpose:                                      Contains Actions to render view on Jobs's Dashboard page
 //====================================================================================================================================================*/
 
-using System;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers

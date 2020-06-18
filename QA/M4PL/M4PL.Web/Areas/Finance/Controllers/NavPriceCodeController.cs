@@ -8,12 +8,10 @@
 //Purpose:                                      Contains Actions to render view on Nav Price Code over the Pages in the system
 //====================================================================================================================================================*/
 
-using M4PL.APIClient.Finance;
 using M4PL.APIClient.Common;
+using M4PL.APIClient.Finance;
 using M4PL.APIClient.ViewModels.Finance;
 using M4PL.Entities;
-using M4PL.Entities.Support;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -42,11 +40,11 @@ namespace M4PL.Web.Areas.Finance.Controllers
             var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
             var route = SessionProvider.ActiveUser.LastRoute;
             if (navpriceCodeViewList == null)
-			{
-				displayMessage.Description = "No record found from Dynamic Nav to sync data for price code.";
-			}
+            {
+                displayMessage.Description = "No record found from Dynamic Nav to sync data for price code.";
+            }
 
-			return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
+            return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
         }
     }
 }
