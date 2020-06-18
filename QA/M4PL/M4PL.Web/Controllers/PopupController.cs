@@ -122,8 +122,14 @@ namespace M4PL.Web.Controllers
                 if (displayMessage.Code.Equals(DbConstants.JobPODUploaded))
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobPODUploaded);
 
+				if (displayMessage.Code.Equals(DbConstants.JobPriceCodeMissing))
+					displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobPriceCodeMissing);
 
-                if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
+				if (displayMessage.Code.Equals(DbConstants.JobCostCodeMissing))
+					displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobCostCodeMissing);
+
+
+				if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
                 {
                     displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.WarningIgnoreChanges));
 

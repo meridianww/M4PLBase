@@ -1748,7 +1748,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "Price Code")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job)
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
                     {
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                         var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
@@ -1772,7 +1772,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "Cost Code")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job)
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
                     {
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                         var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;

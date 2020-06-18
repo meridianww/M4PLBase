@@ -31,5 +31,7 @@ namespace M4PL.Business.Attachment
 		DocumentData GetCostCodeReportDocumentByJobId(long jobId);
 		DocumentData GetPODDocumentByJobId(long jobId);
 		DocumentStatus GetDocumentStatusByJobId(long jobId);
+		DocumentStatus IsPriceCodeDataPresentForJob(long jobId);
+		DocumentStatus IsCostCodeDataPresentForJob(long jobId);
 	}
 }

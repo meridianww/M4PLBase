@@ -75,12 +75,26 @@ namespace M4PL.API.Controllers
 		{
 			return _attachmentCommands.GetPODDocumentByJobId(jobId);
 		}
-
+		
 		[HttpGet]
 		[Route("GetDocumentStatusByJobId")]
 		public Entities.Document.DocumentStatus GetDocumentStatusByJobId(long jobId)
 		{
 			return _attachmentCommands.GetDocumentStatusByJobId(jobId);
+		}
+
+		[HttpGet]
+		[Route("IsPriceCodeDataPresentForJob")]
+		public Entities.Document.DocumentStatus IsPriceCodeDataPresentForJob(long jobId)
+		{
+			return _attachmentCommands.IsPriceCodeDataPresentForJob(jobId);
+		}
+
+		[HttpGet]
+		[Route("IsCostCodeDataPresentForJob")]
+		public Entities.Document.DocumentStatus IsCostCodeDataPresentForJob(long jobId)
+		{
+			return _attachmentCommands.IsCostCodeDataPresentForJob(jobId);
 		}
 
 		/// <summary>

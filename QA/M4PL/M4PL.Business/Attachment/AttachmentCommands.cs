@@ -149,6 +149,30 @@ namespace M4PL.Business.Attachment
 			return documentData;
 		}
 
+		public DocumentStatus IsPriceCodeDataPresentForJob(long jobId)
+		{
+			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
+			var priceCodeData = _commands.GetJobPriceReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			if (priceCodeData != null && priceCodeData.Count > 0)
+			{
+				documentStatus.IsAttachmentPresent = true;
+			}
+
+			return documentStatus;
+		}
+
+		public DocumentStatus IsCostCodeDataPresentForJob(long jobId)
+		{
+			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
+			var costCodeData = _commands.GetJobCostReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			if (costCodeData != null && costCodeData.Count > 0)
+			{
+				documentStatus.IsAttachmentPresent = true;
+			}
+
+			return documentStatus;
+		}
+
 		public DocumentData GetPODDocumentByJobId(long jobId)
 		{
 			DocumentData documentData = null;
