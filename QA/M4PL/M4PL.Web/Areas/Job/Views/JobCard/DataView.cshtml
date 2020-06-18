@@ -29,6 +29,10 @@
     {
         cardResponse = (M4PL.Entities.Job.JobCardRequest)TempData["CardTtile"];
     }
+    if (!Model.SessionProvider.ActiveUser.IsSysAdmin)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
+    }
 }
 @Html.DevExpress().GridView(settings =>
 {
@@ -69,7 +73,7 @@
                 {
                     if (cardResponse != null)
                     {
-                        ViewContext.Writer.Write("<div class='job-card-title-grid'>" + cardResponse.CardType  + " - " + cardResponse.CardName +"  " + "</div>");
+                        ViewContext.Writer.Write("<div class='job-card-title-grid'>" + cardResponse.CardType + " - " + cardResponse.CardName + "  " + "</div>");
                     }
                     else
                     {
@@ -158,7 +162,7 @@
                     column.SortOrder = colState.SortOrder;
                 };
 
-                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobCard && colSetting.ColColumnName == "Id")
+                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobCard && colSetting.ColColumnName == "JobCustomerSalesOrder")
                 {
                     column.SetDataItemTemplateContent(container =>
                     {
@@ -166,8 +170,8 @@
                         {
                             hlSettings.Name = "HyperLink_" + container.KeyValue;
                             hlSettings.NavigateUrl = "javascript:void(0)";
-                            hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
-                            hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
+                            hlSettings.Properties.Text = Convert.ToString(container.Text);
+                            hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0});}}", container.KeyValue);
                         }).Render();
 
                     });
@@ -524,7 +528,7 @@
     {
         settings.HtmlDataCellPrepared = (s, e) =>
         {
-            if(e.DataColumn.FieldName == "JobOriginDateTimePlanned")
+            if (e.DataColumn.FieldName == "JobOriginDateTimePlanned")
             {
                 if (e.GetValue("JobColorCode") != null)
                 {
