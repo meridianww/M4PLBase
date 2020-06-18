@@ -2405,6 +2405,56 @@ M4PLCommon.DocumentStatus = (function () {
         return isjobAttachmentPresent
     };
 
+    var _isPriceCodeDataPresentForJob = function (jobId) {
+        var isPriceCodeDataPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/IsPriceCodeDataPresentForJob?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isPriceCodeDataPresent = response.documentStatus.IsAttachmentPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isPriceCodeDataPresent
+    };
+
+    var _isCostCodeDataPresentForJob = function (jobId) {
+        var isCostCodeDataPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/IsCostCodeDataPresentForJob?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isCostCodeDataPresent = response.documentStatus.IsAttachmentPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isCostCodeDataPresent
+    };
+
     var _podMissingDisplayMessage = function (title, text) {
         var displaymessage =
         {
@@ -2427,11 +2477,39 @@ M4PLCommon.DocumentStatus = (function () {
         DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
     };
 
+    var _jobPriceCodeMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobPriceCodeMissing'
+        };
+
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
+    var _jobCostCodeMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobCostCodeMissing'
+        };
+
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
     return {
         IsPODAttachedForJob: _isPODAttachedForJob,
         IsAttachmentPresentForJob: _isAttachmentPresentForJob,
+        IsPriceCodeDataPresentForJob: _isPriceCodeDataPresentForJob,
+        IsCostCodeDataPresentForJob: _isCostCodeDataPresentForJob,
         PODMissingDisplayMessage: _podMissingDisplayMessage,
-        DocumentMissingDisplayMessage: _documentMissingDisplayMessage
+        DocumentMissingDisplayMessage: _documentMissingDisplayMessage,
+        JobPriceCodeMissingDisplayMessage: _jobPriceCodeMissingDisplayMessage,
+        JobCostCodeMissingDisplayMessage: _jobCostCodeMissingDisplayMessage
     }
 })();
 

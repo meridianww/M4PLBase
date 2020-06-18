@@ -521,6 +521,16 @@ namespace M4PL.Web.Controllers
 			return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(jobId) }, JsonRequestBehavior.AllowGet);
 		}
 
+		public ActionResult IsPriceCodeDataPresentForJob(long jobId)
+		{
+			return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult IsCostCodeDataPresentForJob(long jobId)
+		{
+			return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+		}
+
 		public ActionResult GetContactType(string lookupName)
         {
             return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);

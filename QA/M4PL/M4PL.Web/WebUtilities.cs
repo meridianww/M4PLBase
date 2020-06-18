@@ -767,7 +767,9 @@ namespace M4PL.Web
             settings.Styles.Header.Wrap = DefaultBoolean.True;
             settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
-            settings.Settings.ShowFilterRow = gridResult.GridSetting.ShowFilterRow;
+			settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+			//settings.Settings.VerticalScrollableHeight = 300;
+			settings.Settings.ShowFilterRow = gridResult.GridSetting.ShowFilterRow;
             settings.Settings.ShowFilterRowMenu = gridResult.GridSetting.ShowFilterRow;
             settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
             settings.SettingsBehavior.AllowFocusedRow = true;

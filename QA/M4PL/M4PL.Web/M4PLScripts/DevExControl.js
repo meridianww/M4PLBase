@@ -233,20 +233,23 @@ DevExCtrl.Ribbon = function () {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadPriceReport":
-                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
-                    else
+                    var result = M4PLCommon.DocumentStatus.IsPriceCodeDataPresentForJob(route.RecordId);
+                    if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobPriceCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
                     break;
                 case "DownloadCostReport":
-                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
-                    else
+                    var result = M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJob(route.RecordId);
+                    if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobCostCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
                     break;
-
                 default:
                     if (route.Action === "Create" && (route.Controller === "OrgRefRole")) {
                         switch (route.Action) {

@@ -74,5 +74,7 @@ namespace M4PL.Entities
 		public const string JobPODUploaded = "JobPODUploaded";
 		public const string JobDocumentPresent = "JobDocumentPresent";
         public const string NoAccess = "NoAccess";
-    }
+		public const string JobPriceCodeMissing = "JobPriceCodeMissing";
+		public const string JobCostCodeMissing = "JobCostCodeMissing";
+	}
 }
