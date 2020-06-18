@@ -160,7 +160,8 @@ M4PLWindow.DataView = function () {
             else if (route.Action == "Cut") {
                 s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
                 if (!s.GetEditor(s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).readOnly) {
-                    var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
+                    var selectedText = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName);
+                    //var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
                     localStorage.setItem("CopiedText", selectedText);
                     if (selectedText != undefined && selectedText != null)
                         setClipboard(selectedText);
