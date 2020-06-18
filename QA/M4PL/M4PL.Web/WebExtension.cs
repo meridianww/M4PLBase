@@ -1921,6 +1921,7 @@ namespace M4PL.Web
                 //viewData[WebApplicationConstants.ClearFilterManually] = true;
                 sessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter = false;
                 sessionProvider.ViewPagedDataSession[route.Entity].Filters = null;
+                gridResult.FocusedRowId = route.RecordId;
             }
 
             //Added: AppPanelRoute in Session becuase while doing AppPanel callback needed strRoute otherwise AppPanel was always redirecting to default first Page(for operations like ToggleFilter)
