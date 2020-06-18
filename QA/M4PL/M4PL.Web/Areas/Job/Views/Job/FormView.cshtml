@@ -63,7 +63,7 @@
 }
 
 @if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity)
-                            && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
+                                        && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
 {
     <div class='col-lg-12 col-md-12 col-sm-12 form-group' style='padding-bottom: 0px;height:45px;background-color:#808080;color:#ffffff;line-height:45px;font-weight:bold;font-size:18px;'>
         <div class='col-lg-6 col-md-10 col-sm-6 form-group'>
@@ -100,7 +100,6 @@ else
            {
                settings.Name = "pnlJobDetail";
                settings.Width = Unit.Percentage(100);
-               settings.Height = Unit.Pixel(550);
                settings.AllowCollapsingByHeaderClick = true;
                settings.ShowCollapseButton = true;
                settings.HeaderText = "Job Detail";
@@ -112,7 +111,7 @@ else
                    ViewContext.Writer.Write(Html.Hidden("CustomerId", Model.Record.CustomerId).ToHtmlString());
                    //ViewContext.Writer.Write(Html.Hidden("ProgramID", Model.Record.ParentId).ToHtmlString());
 
-                   ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding jobFormViewPanel'>");
+                   ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
 
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
                    //ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>" + Html.EditorFor(m => m.Record.ProgramIDName, new { ParentColumnName = "ProgramID" }).ToHtmlString() + "</div>");
@@ -182,7 +181,8 @@ else
                    ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobServiceActual).ToHtmlString() + "</div>");
                    ViewContext.Writer.Write("</div>");
 
-                   ViewContext.Writer.Write("<div class='form-row-group driverAlert' style='height:21px !important;'>" + Html.EditorFor(m => m.Record.JobDriverAlert, "MultilineText").ToHtmlString() + "</div>");
+
+                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, "MultilineText").ToHtmlString() + "</div>");
 
 
                    //ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
@@ -607,8 +607,8 @@ else
                    settings.ClientVisible = (Model.Record.Id > 0) ? true : false;
                    settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
                    settings.ClientSideEvents.Click = string.Format("function(s, e,strRoute) {{M4PLJob.FormView.JobHistoryPopUpClick(s, e, {0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record.Id.GetJobHistoryRoute(Model.Record.ParentId)));
-                    //settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.ShowHistory].Icon);
-                    }).GetHtml()
+                   //settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.ShowHistory].Icon);
+               }).GetHtml()
                 </div>
             </div>
         }
@@ -628,5 +628,5 @@ else
             M4PLCommon.DocumentStatus.DocumentMissingDisplayMessage("Invalid", "The job you are trying to search does not exist, please contact system administrator", 2,"NoAccess");
         })
     </script>
-  //  @Html.Action("DisplayMessageControl", "Popup", new { Area = string.Empty, strDisplayMessage = Newtonsoft.Json.JsonConvert.SerializeObject(displayMessage) })
+    //  @Html.Action("DisplayMessageControl", "Popup", new { Area = string.Empty, strDisplayMessage = Newtonsoft.Json.JsonConvert.SerializeObject(displayMessage) })
 }
