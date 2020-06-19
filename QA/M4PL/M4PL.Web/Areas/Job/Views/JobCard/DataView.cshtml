@@ -122,6 +122,7 @@
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
+    settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
 
     //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
@@ -171,7 +172,7 @@
                             hlSettings.Name = "HyperLink_" + container.KeyValue;
                             hlSettings.NavigateUrl = "javascript:void(0)";
                             hlSettings.Properties.Text = Convert.ToString(container.Text);
-                            hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0});}}", container.KeyValue);
+                            hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId, entityFor){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0}, '{1}');}}", container.KeyValue, EntitiesAlias.JobCard.ToString());
                         }).Render();
 
                     });
