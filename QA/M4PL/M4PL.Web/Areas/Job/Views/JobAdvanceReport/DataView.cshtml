@@ -100,6 +100,7 @@
     settings.SettingsPager.EnableAdaptivity = true;
     settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
     settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
+    settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
     settings.SettingsPager.FirstPageButton.Visible = true;
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
@@ -158,7 +159,7 @@
                                 hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
                                 hlSettings.NavigateUrl = "javascript:void(0)";
                                 hlSettings.Properties.Text = Convert.ToString(container.Text);
-                                hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0});}}", container.KeyValue);
+                                hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId, entityFor){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0}, '{1}');}}", container.KeyValue, EntitiesAlias.JobAdvanceReport.ToString());
                             }).Render();
                         }
                     });

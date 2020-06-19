@@ -182,7 +182,7 @@ settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
                                     hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
                                     hlSettings.NavigateUrl = "javascript:void(0)";
                                     hlSettings.Properties.Text = Convert.ToString(container.Text);
-                                    hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0});}}", container.KeyValue);
+                                    hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId, entityFor){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0}, '{1}');}}", container.KeyValue, EntitiesAlias.Job.ToString());
                                 }).Render();
                             }
                         });

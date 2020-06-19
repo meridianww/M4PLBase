@@ -1703,16 +1703,17 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "Download All")
                 {
 					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job)
+					if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
 					{
 						mnu.StatusId = 1;
 					}
 				}
 
-                if (mnu.MnuTitle == "DataSheet View")
+                if (mnu.MnuTitle == "Data Grid")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0 && route.Action != "DataView")
+                    if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    && route.RecordId > 0 && route.Action != "DataView")
                     {
                         mnu.StatusId = 1;
                     }
@@ -1721,7 +1722,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "BOL")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job)
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
                     {
                         mnu.StatusId = 1;
                     }
@@ -1730,7 +1731,7 @@ namespace M4PL.Web
 				if (mnu.MnuTitle == "POD")
 				{
 					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job)
+					if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
 					{
 						mnu.StatusId = 1;
 					}
@@ -1739,7 +1740,7 @@ namespace M4PL.Web
 				if (mnu.MnuTitle == "Tracking")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job)
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
                     {
                         mnu.StatusId = 1;
                     }
@@ -1748,7 +1749,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "Price Code")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
                     {
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                         var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
@@ -1772,7 +1773,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "Cost Code")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
                     {
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                         var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;
@@ -1781,7 +1782,7 @@ namespace M4PL.Web
                            currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                            currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
                            currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
-                           (childSecurity == null ||
+                           ((currentSecurity.UserSubSecurities ==null && childSecurity == null) ||
                            (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                            childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                            childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
