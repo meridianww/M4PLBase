@@ -1758,11 +1758,11 @@ namespace M4PL.Web
                          currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                          currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
                          currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
-                         (childSecurity == null ||
-                         (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                         ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                         (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                          childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                          childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
-                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit)
                          )))
                         {
                             mnu.StatusId = 1;
@@ -1782,11 +1782,11 @@ namespace M4PL.Web
                            currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                            currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
                            currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
-                           ((currentSecurity.UserSubSecurities ==null && childSecurity == null) ||
-                           (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                           ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                           (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                            childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                            childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
-                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All)
                            )))
                         {
                             mnu.StatusId = 1;

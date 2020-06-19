@@ -1221,8 +1221,7 @@ M4PLCommon.VocReport = (function () {
         M4PLCommon.IsIgnoreCardGridClick = true;
         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback())
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId });
-        //DevExCtrl.Ribbon.DoCallBack(route);
-
+        DevExCtrl.Ribbon.DoCallBack(route);
     }
     var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
