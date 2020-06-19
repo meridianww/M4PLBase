@@ -142,5 +142,6 @@ namespace M4PL.Entities.Support
 
         //public bool IsDataView { get; set; }
 
+        public bool IsJobParentEntityUpdated { get; set; }
     }
 }

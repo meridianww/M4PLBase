@@ -190,7 +190,7 @@ DevExCtrl.Ribbon = function () {
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadAll":
-                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    route = _onJobReportClick(route);
                     if (route.RecordId == null || route.RecordId <= 0)
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     else
@@ -206,14 +206,14 @@ DevExCtrl.Ribbon = function () {
                     window.open(window.location.href + "m4pltraining");
                     break;
                 case "DownloadBOL":
-                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    route = _onJobReportClick(route);
                     if (route.RecordId == null || route.RecordId <= 0)
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     else
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadPOD":
-                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    route = _onJobReportClick(route);
                     if (route.RecordId == null || route.RecordId <= 0)
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     else
@@ -226,13 +226,14 @@ DevExCtrl.Ribbon = function () {
                     }
                     break;
                 case "DownloadTracking":
-                    route.RecordId = M4PLWindow.OrderId != null && M4PLWindow.OrderId > 0 ? M4PLWindow.OrderId : route.RecordId;
+                    route = _onJobReportClick(route);
                     if (route.RecordId == null || route.RecordId <= 0)
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     else
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadPriceReport":
+                    route = _onJobReportClick(route);
                     var result = M4PLCommon.DocumentStatus.IsPriceCodeDataPresentForJob(route.RecordId);
                     if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
@@ -242,6 +243,7 @@ DevExCtrl.Ribbon = function () {
                     }
                     break;
                 case "DownloadCostReport":
+                    route = _onJobReportClick(route);
                     var result = M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJob(route.RecordId);
                     if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
@@ -329,11 +331,35 @@ DevExCtrl.Ribbon = function () {
         });
     }
 
+    var _onJobReportClick = function (route)
+    {
+        var gridCtrl = null;
+        if (ASPxClientControl.GetControlCollection().GetByName("JobGridView") != null) {
+            gridCtrl = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+        }
+        else if (ASPxClientControl.GetControlCollection().GetByName("JobAdvanceReportGridView") != null) {
+            gridCtrl = ASPxClientControl.GetControlCollection().GetByName("JobAdvanceReportGridView");
+        }
+        else if (ASPxClientControl.GetControlCollection().GetByName("JobCardGridView") != null) {
+            gridCtrl = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
+        }
+
+        if (gridCtrl != null) {
+            var selectedIndex = gridCtrl.GetFocusedRowIndex();
+            if (selectedIndex >= 0) {
+                var ketValue = gridCtrl.GetItemKey(selectedIndex)
+                route.RecordId = ketValue != null && ketValue > 0 ? ketValue : route.RecordId;
+            }
+        }
+
+        return route;
+    }
+
     return {
         init: init,
         OnCommandExecuted: _onCommandExecuted,
         OnFilterClicked: _onFilterClicked,
-        DoCallBack: _doCallBack,
+        DoCallBack: _doCallBack
     }
 }();
 
@@ -1149,8 +1175,9 @@ DevExCtrl.TreeList = function () {
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
-                route.RecordId = M4PLWindow.OrderId;
-                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
+                route.IsJobParentEntityUpdated = true;
+                route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
+                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack : true });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }
             else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
@@ -1159,9 +1186,8 @@ DevExCtrl.TreeList = function () {
                     isJobParentEntity = true;
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
-
                 }
-
+                route.IsJobParentEntityUpdated = true;
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }

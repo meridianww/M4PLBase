@@ -76,7 +76,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
-
+            if (route.IsJobParentEntityUpdated)
+            {
+                SessionProvider.IsJobParentEntity =  isJobParentEntity;
+            }
             SetGridResult(route, gridName, false, true, null, isJobParentEntity);
             if (SessionProvider.ViewPagedDataSession.Count > 0 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = isJobParentEntity;
@@ -138,7 +141,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ActiveUser.ReportRoute.ParentEntity == EntitiesAlias.JobCard))
             {
                 route.OwnerCbPanel = "pnlJobDetail";
-                SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;
+				SessionProvider.ActiveUser.ReportRoute.RecordId = SessionProvider.ActiveUser.LastRoute.RecordId;
+				SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;
                 SessionProvider.ActiveUser.ReportRoute = null;
                 route.IsPBSReport = true;
             }
