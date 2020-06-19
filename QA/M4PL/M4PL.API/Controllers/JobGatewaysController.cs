@@ -141,5 +141,13 @@ namespace M4PL.API.Controllers
             BaseCommands.ActiveUser = ActiveUser;
             return _jobGatewayCommands.PostContactCard(contact);
         }
+        
+        [HttpGet]
+        [Route("UploadPODGateway")]
+        public bool InsJobGatewayPODIfPODDocExistsByJobId(long jobId)
+        {
+            _jobGatewayCommands.ActiveUser = ActiveUser;
+            return _jobGatewayCommands.InsJobGatewayPODIfPODDocExistsByJobId(jobId);
+        }
     }
 }
