@@ -444,14 +444,14 @@ M4PLWindow.DataView = function () {
 
     function GetSelectedFieldValuesCallback(values) {
     }
-
+    
     function _onGridFocusedRowChanged(s, e) {
         s.GetRowValues(s.GetFocusedRowIndex(), 'Id', OnGetRowValues);
     }
 
     function OnGetRowValues(values) {
         M4PLWindow.OrderId = values;
-    }    
+    }
 
     var _onMenuDriverBatchEditStartEditing = function (s, e, isReadOnly) {
 

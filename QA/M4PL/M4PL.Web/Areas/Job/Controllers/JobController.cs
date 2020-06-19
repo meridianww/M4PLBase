@@ -141,7 +141,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ActiveUser.ReportRoute.ParentEntity == EntitiesAlias.JobCard))
             {
                 route.OwnerCbPanel = "pnlJobDetail";
-                SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;
+				SessionProvider.ActiveUser.ReportRoute.RecordId = SessionProvider.ActiveUser.LastRoute.RecordId;
+				SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;
                 SessionProvider.ActiveUser.ReportRoute = null;
                 route.IsPBSReport = true;
             }
