@@ -202,7 +202,24 @@ namespace M4PL.Web.Areas.Program.Controllers
         public ActionResult TabViewCallBack(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            return PartialView(MvcConstants.ViewPageControlPartial, route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Program));
+
+            var pageControlResult = route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Program);
+
+            if (route.TabIndex == 0 && route.RecordId == 0)
+            {
+                int index = 0;
+                foreach (var pageInfo in pageControlResult.PageInfos)
+                {
+                    if (Enum.IsDefined(typeof(EntitiesAlias), pageInfo.TabTableName) && pageInfo.Route.Entity.Equals(route.Entity))
+                    {
+                        pageControlResult.SelectedTabIndex = index;
+                        break;
+                    }
+                    index++;
+                }
+            }
+
+            return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);            
         }
 
         public override ActionResult AddOrEdit(ProgramView entityView)

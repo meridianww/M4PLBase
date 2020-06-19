@@ -1512,6 +1512,10 @@ namespace M4PL.Web
             ribbonMenu.Children.ToList().ForEach(mnu =>
             {
                 mnu.StatusId = 1;
+                //if(route.Controller == EntitiesAlias.JobCard.ToString() && route.Action == "DataView")
+                //{
+                //    mnu.StatusId = 3;
+                //}
                 if (string.IsNullOrEmpty(mnu.MnuTableName) && mnu.MnuModuleId == 0 && index == 0) // File Ribbon
                 {
                     mnu.Route = new MvcRoute
@@ -1758,7 +1762,7 @@ namespace M4PL.Web
                          currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                          currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
                          currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
-                         ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                         ((childSecurity == null && currentSecurity.UserSubSecurities == null) ||
                          (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                          childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                          childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
@@ -1794,15 +1798,18 @@ namespace M4PL.Web
                     }
                 }
 
-                if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
+                if (route.Entity == EntitiesAlias.Job 
+                && (sessionProvider.ViewPagedDataSession.Count() > 0
                 && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && (sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobCardEntity
                 || sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity))
                 && route.Action == "FormView" && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
-                if ((route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.Organization) && mnu.MnuTitle == "New")
+                if ((route.Entity == EntitiesAlias.JobAdvanceReport 
+                    || route.Entity == EntitiesAlias.Organization)
+                    && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
-                if (route.Entity == EntitiesAlias.JobReport)
+                if (route.Entity == EntitiesAlias.JobReport || route.Entity == EntitiesAlias.JobCard)
                     mnu.StatusId = 3;
 
                 if (mnu.Children.Count > 0)
