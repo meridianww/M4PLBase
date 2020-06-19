@@ -131,7 +131,7 @@ namespace M4PL.DataAccess.Common
 
         public static bool GetIsFieldUnique(UniqueValidation uniqueValidation, ActiveUser activeUser)
         {
-            if (uniqueValidation.FieldName.Equals("JobCustomerSalesOrder", StringComparison.OrdinalIgnoreCase) && uniqueValidation.Entity == EntitiesAlias.Job)
+            if (uniqueValidation.FieldName.Equals("JobCustomerSalesOrder", StringComparison.OrdinalIgnoreCase) && uniqueValidation.Entity == EntitiesAlias.Job && uniqueValidation.RecordId == 0)
             {
                 return Job.JobCommands.IsJobNotDuplicate(uniqueValidation.FieldValue, (long)uniqueValidation.ParentId);
             }

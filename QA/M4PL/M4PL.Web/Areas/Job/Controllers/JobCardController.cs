@@ -253,71 +253,69 @@ namespace M4PL.Web.Areas.Job.Controllers
         #endregion Paging
         public override ActionResult RibbonMenu(string strRoute)
         {
-            if (_commonCommands == null)
-            {
-                _commonCommands = new CommonCommands();
-                _commonCommands.ActiveUser = SessionProvider.ActiveUser;
-            }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            route.OwnerCbPanel = WebApplicationConstants.RibbonCbPanel;
-
-            var ribbonMenus = _commonCommands.GetRibbonMenus().ToList();
-
-            if (WebGlobalVariables.ModuleMenus.Count == 0)
-                WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
-
-            var mainModuleRibbons = (from mnu in WebGlobalVariables.ModuleMenus
-                                     join sec in SessionProvider.UserSecurities on mnu.MnuModuleId equals sec.SecMainModuleId
-                                     where mnu.MnuBreakDownStructure.StartsWith("01")
-                                     select mnu.SetRibbonMenu()).ToList();
-
-            SessionProvider.UserSecurities.ToList().ForEach(sec => mainModuleRibbons.GetNotAccessibleMenus(sec).ForEach(nmnu => mainModuleRibbons.FirstOrDefault(mnu => mnu.MnuModuleId == sec.SecMainModuleId).Children.Remove(nmnu)));
-
-            //Comment this line if want to show on ribbon if it has no operations to perform
-            mainModuleRibbons.RemoveAll(mnu => mnu.Children.Count == 0);
-            //mainModuleRibbons.ForEach(m =>
-            //{
-            //    if (m.StatusId == 1) m.StatusId = 3;
-            //});
-
-
-            ribbonMenus.AddRange(mainModuleRibbons);
-            ViewData[MvcConstants.LastActiveTabRoute] = route;
-            ribbonMenus.ForEach(r => r.RibbonRoute(route, ribbonMenus.IndexOf(r), new MvcRoute { Entity = EntitiesAlias.JobCard, Area = EntitiesAlias.Job.ToString() }, _commonCommands, SessionProvider));
-            ribbonMenus.ForEach(m =>
+            if (route.Action != "CardView")
+                return base.RibbonMenu(strRoute);
+            else
             {
-                if (m.MnuTitle == "File")
+                if (_commonCommands == null)
                 {
-                    foreach (var ch in m.Children)
-                    {
-                        if (ch.MnuTitle == "Records" && ch.Children.Any() &&
-                        ch.Route != null && ch.Route.Area == "Job" &&
-                        ch.Route.Controller == "JobCard" && route.Action == "DataView" && SessionProvider.IsCardEditMode)
-                        {
+                    _commonCommands = new CommonCommands();
+                    _commonCommands.ActiveUser = SessionProvider.ActiveUser;
+                }
 
-                            if (ch.Children != null && ch.Children.Any(obj => obj.Route != null &&
-                            obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
+                route.OwnerCbPanel = WebApplicationConstants.RibbonCbPanel;
+
+                var ribbonMenus = _commonCommands.GetRibbonMenus().ToList();
+
+                if (WebGlobalVariables.ModuleMenus.Count == 0)
+                    WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
+
+                var mainModuleRibbons = (from mnu in WebGlobalVariables.ModuleMenus
+                                         join sec in SessionProvider.UserSecurities on mnu.MnuModuleId equals sec.SecMainModuleId
+                                         where mnu.MnuBreakDownStructure.StartsWith("01")
+                                         select mnu.SetRibbonMenu()).ToList();
+
+                SessionProvider.UserSecurities.ToList().ForEach(sec => mainModuleRibbons.GetNotAccessibleMenus(sec).ForEach(nmnu => mainModuleRibbons.FirstOrDefault(mnu => mnu.MnuModuleId == sec.SecMainModuleId).Children.Remove(nmnu)));
+
+                ribbonMenus.AddRange(mainModuleRibbons);
+                ViewData[MvcConstants.LastActiveTabRoute] = route;
+                ribbonMenus.ForEach(r => r.RibbonRoute(route, ribbonMenus.IndexOf(r), new MvcRoute { Entity = EntitiesAlias.JobCard, Area = EntitiesAlias.Job.ToString() }, _commonCommands, SessionProvider));
+                ribbonMenus.ForEach(m =>
+                {
+                    if (m.MnuTitle == "File")
+                    {
+                        foreach (var ch in m.Children)
+                        {
+                            if (ch.MnuTitle == "Records" && ch.Children.Any() &&
+                            ch.Route != null && ch.Route.Area == "Job" &&
+                            ch.Route.Controller == "JobCard" && route.Action == "DataView" && SessionProvider.IsCardEditMode)
                             {
-                                ch.StatusId = 1;
-                                ch.Children.Where(obj => obj.MnuTitle == "New").FirstOrDefault().StatusId = 3;
-                                ch.Children.Where(obj => obj.MnuTitle == "Refresh All").FirstOrDefault().StatusId = 1;
-                                ch.Children.Where(obj => obj.MnuTitle == "Save").FirstOrDefault().StatusId = 1;
+
+                                if (ch.Children != null && ch.Children.Any(obj => obj.Route != null &&
+                                obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
+                                {
+                                    ch.StatusId = 1;
+                                    ch.Children.Where(obj => obj.MnuTitle == "New").FirstOrDefault().StatusId = 3;
+                                    ch.Children.Where(obj => obj.MnuTitle == "Refresh All").FirstOrDefault().StatusId = 1;
+                                    ch.Children.Where(obj => obj.MnuTitle == "Save").FirstOrDefault().StatusId = 1;
+                                }
+                                else
+                                    ch.StatusId = 3;
                             }
                             else
                                 ch.StatusId = 3;
                         }
-                        else
-                            ch.StatusId = 3;
                     }
-                }
-            });
+                });
 
-            if (route.Action == "DataView" && !SessionProvider.IsCardEditMode)
-            {
-                SessionProvider.IsCardEditMode = true;
+                if (route.Action == "DataView" && !SessionProvider.IsCardEditMode)
+                {
+                    SessionProvider.IsCardEditMode = true;
+                }
+                ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+                return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
             }
-            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-            return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
         }
     }
 }

@@ -37,6 +37,7 @@
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
+    settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
     settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
     settings.Styles.Header.Wrap = DefaultBoolean.True;
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
@@ -122,7 +123,7 @@
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
-    settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
+    ////settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
 
     //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();

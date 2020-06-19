@@ -352,22 +352,23 @@ M4PLJob.FormView = function () {
     }
 
     var _openJobFormViewByID = function (s, e, jobId, entityFor) {
-        $.ajax({
-            type: "GET",
-            url: "/Common/UpdateJobReportFormViewRoute",
-            data: { 'jobId': jobId, 'entityFor': entityFor },
-            success: function (data) {
-                if (data == true) {
-                    window.open(e.htmlElement.baseURI, '_blank');
-                }
-                else {
-                    alert("Job Report expecting Job ID");
-                }
-            },
-            error: function () {
+        window.open(window.location.origin + "?jobId=" + jobId)
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/Common/UpdateJobReportFormViewRoute",
+        //    data: { 'jobId': jobId, 'entityFor': entityFor },
+        //    success: function (data) {
+        //        if (data == true) {
+        //            window.open(e.htmlElement.baseURI, '_blank');
+        //        }
+        //        else {
+        //            alert("Job Report expecting Job ID");
+        //        }
+        //    },
+        //    error: function () {
 
-            }
-        });
+        //    }
+        //});
     };
 
     var _jobHistoryPopUpClick = function (s, e, strRoute) {
