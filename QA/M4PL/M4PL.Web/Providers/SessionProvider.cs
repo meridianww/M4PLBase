@@ -106,5 +106,7 @@ namespace M4PL.Web.Providers
         public object CardTileData { get; set; }
 
         public bool IsCardEditMode { get; set; }
+
+        public bool IsJobParentEntity { get; set; }
     }
 }

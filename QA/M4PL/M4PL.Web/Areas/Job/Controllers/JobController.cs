@@ -76,7 +76,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
-
+            if (route.IsJobParentEntityUpdated)
+            {
+                SessionProvider.IsJobParentEntity =  isJobParentEntity;
+            }
             SetGridResult(route, gridName, false, true, null, isJobParentEntity);
             if (SessionProvider.ViewPagedDataSession.Count > 0 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = isJobParentEntity;

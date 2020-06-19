@@ -1150,8 +1150,9 @@ DevExCtrl.TreeList = function () {
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
-                route.RecordId = M4PLWindow.OrderId;
-                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
+                route.IsJobParentEntityUpdated = true;
+                route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
+                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack : true });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }
             else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
@@ -1160,9 +1161,8 @@ DevExCtrl.TreeList = function () {
                     isJobParentEntity = true;
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
-
                 }
-
+                route.IsJobParentEntityUpdated = true;
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }
