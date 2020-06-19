@@ -154,15 +154,12 @@ namespace M4PL.Web.Areas.Job.Controllers
                     case JobDocReferenceType.Document:
                     default:
                         pageControlResult.SelectedTabIndex = 0;
-                        pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocumentDataView;
                         break;
                     case JobDocReferenceType.POD:
                         pageControlResult.SelectedTabIndex = 1;
-                        pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocDeliveryPodDataView;
                         break;
                     case JobDocReferenceType.Damaged:
                         pageControlResult.SelectedTabIndex = 2;
-                        pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocDamagedDataView;
                         break;
                 }
 

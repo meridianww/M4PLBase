@@ -589,7 +589,6 @@ DevExCtrl.ComboBox = function () {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         rprtVwrRoute.RecordId = customerId || 0;
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-
     };
 
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {

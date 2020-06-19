@@ -87,6 +87,7 @@ namespace M4PL.Business.Job
                 JdrTitle = jobDocumentAttachment.DocumentTitle,
                 DocTypeId = documentOption.Id,
                 StatusId = 1,
+				JdrAttachment = jobDocumentAttachment.AttchmentData != null ? jobDocumentAttachment.AttchmentData.Count : 0,
                 EnteredBy = ActiveUser.UserName,
                 DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                 Id = _commands.GetNextSequence()

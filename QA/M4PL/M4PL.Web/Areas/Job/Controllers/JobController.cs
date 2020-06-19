@@ -135,8 +135,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
 
             #region Job Card
-            SessionProvider.ActiveUser.LastRoute.RecordId = 1;
-            if (SessionProvider.ActiveUser.LastRoute.IsPBSReport)
+            //SessionProvider.ActiveUser.LastRoute.RecordId = 1;
+            if (SessionProvider.ActiveUser.LastRoute.IsPBSReport && SessionProvider.ActiveUser.ReportRoute != null 
+                && (SessionProvider.ActiveUser.ReportRoute.ParentEntity == EntitiesAlias.JobAdvanceReport ||
+                SessionProvider.ActiveUser.ReportRoute.ParentEntity == EntitiesAlias.JobCard))
             {
                 route.OwnerCbPanel = "pnlJobDetail";
                 SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;

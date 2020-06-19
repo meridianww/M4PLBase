@@ -1095,7 +1095,7 @@ namespace M4PL.Web.Controllers
             SessionProvider.ActiveUser.PreferredLocation = result;
             return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult UpdateJobReportFormViewRoute(long jobId)
+        public JsonResult UpdateJobReportFormViewRoute(long jobId, EntitiesAlias entityFor)
         {
             if (SessionProvider != null && SessionProvider.ActiveUser != null && jobId > 0)
             {
@@ -1103,6 +1103,7 @@ namespace M4PL.Web.Controllers
                 var jobFormViewRoute = new MvcRoute(SessionProvider.ActiveUser.CurrentRoute, "FormView", 0, 0, "OwnerCbPanel");
                 jobFormViewRoute.Entity = EntitiesAlias.Job;
                 jobFormViewRoute.Area = EntitiesAlias.Job.ToString();
+                jobFormViewRoute.ParentEntity = entityFor;
                 jobFormViewRoute.ParentRecordId = 0;
                 jobFormViewRoute.RecordId = jobId;
                 jobFormViewRoute.IsPBSReport = true; //// job advance report redirection

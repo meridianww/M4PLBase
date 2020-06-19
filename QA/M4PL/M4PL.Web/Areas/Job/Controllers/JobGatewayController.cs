@@ -744,7 +744,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Gateways Operation in ContextMenu
             AddGatewayInGatewayContextMenu(route);
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
-            ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
+            ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId)?.ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
 
