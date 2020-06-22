@@ -516,6 +516,7 @@ namespace M4PL.DataAccess
         public const string GetCargoDropDown = "dbo.GetCargoDropDown";
         public const string GetExceptionDropDown = "dbo.GetExceptionDropDown";
         public const string GetExceptionStatusDropDown = "dbo.GetExceptionStatusDropDown";
+        public const string InsJobGatewayPODIfPODDocExistsByJobId = "dbo.InsJobGatewayPODIfPODDocExistsByJobId";
         /* Job Cost Sheet */
         public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
         public const string GetJobCostSheet = "dbo.GetJobCostSheet";

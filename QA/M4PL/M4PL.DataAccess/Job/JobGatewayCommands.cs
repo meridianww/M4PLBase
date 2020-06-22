@@ -426,5 +426,17 @@ namespace M4PL.DataAccess.Job
            };
             return parameters;
         }
+
+        public static JobGateway InsJobGatewayPODIfPODDocExistsByJobId(ActiveUser activeuser, long jobId)
+        {
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@jobId", jobId),
+              new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
+              new Parameter("@enteredBy", activeuser.UserName)
+        };
+            var result = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.InsJobGatewayPODIfPODDocExistsByJobId, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
     }
 }
