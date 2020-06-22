@@ -65,7 +65,7 @@ namespace M4PL.DataAccess.Common
 
 			var userSecurityCollection = sets.GetSet<UserSecurity>("UserSecurity");
 			var subSecurityList = sets.GetSet<UserSubSecurity>("UserSubSecurity");
-			if (userSecurityList?.Count > 0)
+			if (userSecurityCollection?.Count > 0)
 			{
 				userSecurityList = userSecurityCollection.ToList();
 				foreach (var userSecurity in userSecurityList)
