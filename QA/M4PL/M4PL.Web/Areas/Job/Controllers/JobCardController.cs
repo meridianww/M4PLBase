@@ -277,6 +277,12 @@ namespace M4PL.Web.Areas.Job.Controllers
                                          select mnu.SetRibbonMenu()).ToList();
 
                 SessionProvider.UserSecurities.ToList().ForEach(sec => mainModuleRibbons.GetNotAccessibleMenus(sec).ForEach(nmnu => mainModuleRibbons.FirstOrDefault(mnu => mnu.MnuModuleId == sec.SecMainModuleId).Children.Remove(nmnu)));
+                //Comment this line if want to show on ribbon if it has no operations to perform
+                mainModuleRibbons.RemoveAll(mnu => mnu.Children.Count == 0);
+                //mainModuleRibbons.ForEach(m =>
+                //{
+                //    if (m.StatusId == 1) m.StatusId = 3;
+                //});
 
                 ribbonMenus.AddRange(mainModuleRibbons);
                 ViewData[MvcConstants.LastActiveTabRoute] = route;
