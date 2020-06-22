@@ -1426,7 +1426,8 @@ namespace M4PL.Web
             {
                 // M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
 
-                var allActions = _commonCommands.GetJobAction(route.ParentRecordId);
+                var allActions = _commonCommands.GetJobAction(
+                    route.Entity == EntitiesAlias.Job ? _gridResult.FocusedRowId : route.ParentRecordId);
                 //if (route.ParentRecordId != 0)
                 //{
                 //    ContactAction.PgdGatewayCode = "Add Contact";

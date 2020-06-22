@@ -758,23 +758,21 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
+            string entityFor = null;
             if (!route.IsEdit)
             {
                 route.RecordId = 0;
                 if (route.Action == "GatewayActionFormView" ||
                     (route.Action == "FormView" && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
-                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
-                        = JobGatewayType.Action.ToString();
+                    entityFor = JobGatewayType.Action.ToString();
                 else
                 {
-                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
-                   = JobGatewayType.Gateway.ToString();
+                    entityFor = JobGatewayType.Gateway.ToString();
                 }
             }
 
-            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId,
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor,
-                route.Filters != null && route.Filters.FieldName.Contains("3PL") ? true : false) ?? new JobGatewayView();
+            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, entityFor, route.Filters != null && route.Filters.FieldName.Contains("3PL") ? true : false) ?? new JobGatewayView();
+
             if (route.Filters != null && !(bool)Session["isEdit"])
             {
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
@@ -1070,7 +1068,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 routeToAssign.Action = MvcConstants.ActionForm;
                 routeToAssign.IsPopup = true;
                 routeToAssign.RecordId = 0;
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor = JobGatewayType.Gateway.ToString();
+                //SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor = JobGatewayType.Gateway.ToString();
 
                 if (allGateways.Count > 0)
                 {
