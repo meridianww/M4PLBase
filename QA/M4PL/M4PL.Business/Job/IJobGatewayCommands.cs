@@ -29,5 +29,6 @@ namespace M4PL.Business.Job
         JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle);
         IList<JobGatewayDetails> GetJobGateway(long jobId);
         Entities.Contact.Contact PostContactCard(Entities.Contact.Contact contact);
+        bool InsJobGatewayPODIfPODDocExistsByJobId(long jobId);
     }
 }

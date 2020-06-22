@@ -122,6 +122,17 @@ namespace M4PL.Business.Job
             return gateway;
         }
 
+        public bool InsJobGatewayPODIfPODDocExistsByJobId(long jobId)
+        {
+            var gateway = _commands.InsJobGatewayPODIfPODDocExistsByJobId(ActiveUser, jobId);
+            if(gateway!=null)
+            {
+                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, gateway.GwyCompleted, 0);
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Deletes a specific jobgateways record based on the userid
         /// </summary>
@@ -234,5 +245,7 @@ namespace M4PL.Business.Job
                 }
             }
         }
+
+       
     }
 }
