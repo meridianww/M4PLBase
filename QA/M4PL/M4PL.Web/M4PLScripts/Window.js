@@ -440,8 +440,14 @@ M4PLWindow.DataView = function () {
 
     function _onRowSelectionChanged(s, e) {
         var selectedRowCount = s.GetSelectedRowCount();
+        //if (s.lastMultiSelectIndex > 0
+        //    && s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobGatewayStatus')
+        //    != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobGatewayStatus')) {
+        //    //TODO: show warning message to user that job status is miss match
+        //    console.log("Job Gateway status is diffent.");
+        //}
         if (selectedRowCount <= 1 && selectedRowCount >= 0) {
-            var selectedJobId = s.GetItemKey(s.GetFocusedRowIndex());
+            var selectedJobId = selectedRowCount == 0 ? 0 : s.GetItemKey(s.GetFocusedRowIndex());
             var callbackUrl = s.callbackUrl;
             if (callbackUrl != undefined && callbackUrl != "") {
                 var callbackUri = new URL(callbackUrl, window.location.origin);
