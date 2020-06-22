@@ -101,8 +101,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
             else
             {
-                var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Actions);
-                _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                {
+                    var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                    if (actionsContextMenu != null)
+                        _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+                }
             }
             if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);

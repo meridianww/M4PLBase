@@ -456,13 +456,16 @@ M4PLWindow.DataView = function () {
                     var route = JSON.parse(urlParams.getAll('strRoute'));
                     route.RecordId = selectedJobId;
                     s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
+                    DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                     s.GetSelectedFieldValues("Id", GetSelectedFieldValuesCallback);
+                    s.Refresh();
                 }
             }
         }
     }
 
     function GetSelectedFieldValuesCallback(values) {
+        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
     }
 
     function _onGridFocusedRowChanged(s, e) {
