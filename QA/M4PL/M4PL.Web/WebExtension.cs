@@ -2237,7 +2237,7 @@ namespace M4PL.Web
                 return userSetting.Value;
             return string.Empty;
         }
-        public static void UpdateActiveUserSettings(this ICommonCommands _commonCommands, SessionProvider sessionProvider)
+        public static SysSetting UpdateActiveUserSettings(this ICommonCommands _commonCommands)
         {
             IList<RefSetting> sysRefSettings = _commonCommands.GetSystemSetting().Settings;
             SysSetting userSettings = _commonCommands.GetUserSysSettings();
@@ -2260,10 +2260,12 @@ namespace M4PL.Web
                         userSetting.Value = setting.Value;
                 }
             }
-            sessionProvider.UserSettings = userSettings;
+
             SysSetting copySysSetting = new SysSetting { Settings = userSettings.Settings };
             _commonCommands.UpdateUserSystemSettings(copySysSetting);
-        }
+
+			return userSettings;
+		}
 
         public static M4PL.APIClient.ViewModels.Job.JobGatewayView JobGatewayActionFormSetting(this M4PL.APIClient.ViewModels.Job.JobGatewayView jobGatewayView, WebUtilities.JobGatewayActions actionEnumToCompare, out List<string> escapeRequiredFields)
         {
