@@ -43,9 +43,9 @@ namespace M4PL.API.Filters
                     Enum.TryParse(controllerNameToCompare, out currentEntity);
                 }
 
-                //if (currentEntity != EntitiesAlias.Common)
-                //    isAuthorized = TrackUserSecurity(Business.Common.CommonCommands.GetUserPageOptnLevelAndPermission(currentUser.UserId,
-                //        currentUser.OrganizationId, currentUser.RoleId, currentEntity), currentMethod, HttpContext.Current.Request.HttpMethod);
+                if (currentEntity != EntitiesAlias.Common)
+                    isAuthorized = TrackUserSecurity(Business.Common.CommonCommands.GetUserPageOptnLevelAndPermission(currentUser.UserId,
+                        currentUser.OrganizationId, currentUser.RoleId, currentEntity), currentMethod, HttpContext.Current.Request.HttpMethod);
             }
 
             return isAuthorized;
