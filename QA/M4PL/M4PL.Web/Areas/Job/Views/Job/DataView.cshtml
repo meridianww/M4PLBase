@@ -49,8 +49,8 @@
         settings.SettingsBehavior.AllowEllipsisInText = true;
         settings.SettingsBehavior.AllowDragDrop = false;
         settings.ControlStyle.CssClass = "gridfields-text-visible";
-        ////settings.CommandColumn.Visible = true;
-        ////settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
         settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
         settings.SettingsCookies.Enabled = true;
         settings.SettingsCookies.StoreColumnsWidth = true;
@@ -110,7 +110,7 @@
         settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
         //settings.ClientSideEvents.ColumnMoving = "M4PLWindow.DataView.OnColumnChanged";
         settings.SettingsResizing.Visualization = ResizingMode.Live;
-        ////settings.ClientSideEvents.SelectionChanged = "M4PLWindow.DataView.OnRowSelectionChanged";
+        settings.ClientSideEvents.SelectionChanged = "M4PLWindow.DataView.OnRowSelectionChanged";
         ////settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
         settings.SettingsPager.EnableAdaptivity = true;
         settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
