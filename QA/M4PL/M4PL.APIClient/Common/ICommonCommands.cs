@@ -115,14 +115,6 @@ namespace M4PL.APIClient.Common
         /// <returns></returns>
         IList<UserSecurity> GetRefRoleSecurities(ActiveUser activeUser);
 
-        /// <summary>
-        /// Route to call User SubSecurities
-        /// </summary>
-        /// <param name="secByRoleId"></param>
-        /// <param name="mainModuleId"></param>
-        /// <returns></returns>
-        IList<UserSubSecurity> GetUserSubSecurities(long secByRoleId);
-
         UserColumnSettings GetUserColumnSettings(EntitiesAlias entity);
 
         SysSetting GetUserSysSettings();

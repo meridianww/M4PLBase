@@ -21,8 +21,8 @@ using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Common
 {
-    public static class CommonCommands
-    {
+    public static class CommonCommands 
+	{
         public static object JsonConvert { get; private set; }
 
         /// <summary>
@@ -50,15 +50,35 @@ namespace M4PL.DataAccess.Common
 
         public static IList<UserSecurity> GetUserSecurities(ActiveUser activeUser)
         {
-            var parameters = new[]
+			IList<UserSecurity> userSecurityList = new List<UserSecurity>();
+			var parameters = new[]
             {
                 new Parameter("@userId", activeUser.UserId),
                 new Parameter("@orgId", activeUser.OrganizationId),
                 new Parameter("@roleId", activeUser.RoleId),
             };
-            return SqlSerializer.Default.DeserializeMultiRecords<UserSecurity>(StoredProceduresConstant.GetUserSecurities, parameters,
-                storedProcedure: true);
-        }
+
+			SetCollection sets = new SetCollection();
+			sets.AddSet<UserSecurity>("UserSecurity");
+			sets.AddSet<UserSubSecurity>("UserSubSecurity");
+			SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetUserSecurities, parameters.ToArray(), storedProcedure: true);
+
+			var userSecurityCollection = sets.GetSet<UserSecurity>("UserSecurity");
+			var subSecurityList = sets.GetSet<UserSubSecurity>("UserSubSecurity");
+			if (userSecurityList?.Count > 0)
+			{
+				userSecurityList = userSecurityCollection.ToList();
+				foreach (var userSecurity in userSecurityList)
+				{
+					if (userSecurity.Id > 0 && subSecurityList != null && subSecurityList.Count > 0)
+					{
+						userSecurity.UserSubSecurities = subSecurityList.Where(x => x.SecByRoleId == userSecurity.Id).Any() ? subSecurityList.Where(x => x.SecByRoleId == userSecurity.Id).ToList() : null;
+					}
+				}
+			}
+
+			return userSecurityList;
+		}
 
         /// <summary>
         /// Gets list of Ref role securities
@@ -75,27 +95,6 @@ namespace M4PL.DataAccess.Common
                 new Parameter("@roleId", activeUser.RoleId),
             };
             return SqlSerializer.Default.DeserializeMultiRecords<UserSecurity>(StoredProceduresConstant.GetRefRoleSecurities, parameters,
-                storedProcedure: true);
-        }
-
-        /// <summary>
-        /// Gers lists of UserSubSecurities
-        /// </summary>
-        /// <param name="secByRoleId"></param>
-        /// <param name="mainModuleId"></param>
-        /// <param name="activeUser"></param>
-        /// <returns></returns>
-
-        public static IList<UserSubSecurity> GetUserSubSecurities(long secByRoleId, ActiveUser activeUser)
-        {
-            var parameters = new[]
-            {
-                new Parameter("@userId", activeUser.UserId),
-                new Parameter("@secByRoleId", secByRoleId),
-                new Parameter("@orgId", activeUser.OrganizationId),
-                new Parameter("@roleId", activeUser.RoleId),
-            };
-            return SqlSerializer.Default.DeserializeMultiRecords<UserSubSecurity>(StoredProceduresConstant.GetUserSubSecurities, parameters,
                 storedProcedure: true);
         }
 

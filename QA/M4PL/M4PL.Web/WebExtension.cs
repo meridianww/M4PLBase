@@ -1855,9 +1855,6 @@ namespace M4PL.Web
             var customerSecurityByRole = currentSessionProvider.UserSecurities.FirstOrDefault(x => x.SecMainModuleId.ToEnum<MainModule>() == currentModule);
             if (customerSecurityByRole.Id > 0)
             {
-                if (customerSecurityByRole.UserSubSecurities.Count == 0)
-                    customerSecurityByRole.UserSubSecurities = _commonCommands.GetUserSubSecurities(customerSecurityByRole.Id);
-
                 foreach (var subSecurity in customerSecurityByRole.UserSubSecurities)
                 {
                     if ((subSecurity.SubsMenuOptionLevelId.ToEnum<MenuOptionLevelEnum>() < MenuOptionLevelEnum.Screens) || (subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess))

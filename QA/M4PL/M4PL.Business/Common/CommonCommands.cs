@@ -224,19 +224,6 @@ namespace M4PL.Business.Common
             return _commands.GetUserSysSettings(ActiveUser);
         }
 
-        /// <summary>
-        /// Gets user subsecurities
-        /// </summary>
-        /// <param name="secByRoleId"></param>
-        /// <param name="mainModuleId"></param>
-        /// <returns></returns>
-
-        public static IList<UserSubSecurity> GetUserSubSecurities(long secByRoleId)
-        {
-            return _commands.GetUserSubSecurities(secByRoleId, ActiveUser);
-        }
-
-
         public static UserColumnSettings InsAndUpdChooseColumn(UserColumnSettings userColumnSettings)
         {
             return _commands.InsAndUpdChooseColumn(ActiveUser, userColumnSettings);

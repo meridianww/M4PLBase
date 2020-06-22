@@ -295,20 +295,6 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<UserSecurity>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(activeUser)).Content).Results;
         }
 
-        /// <summary>
-        ///  Route to call User SubSecurities
-        /// </summary>
-        /// <param name="secByRoleId"></param>
-        /// <param name="mainModuleId"></param>
-        /// <returns></returns>
-
-        public IList<UserSubSecurity> GetUserSubSecurities(long secByRoleId)
-        {
-            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserSubSecurities");
-            return JsonConvert.DeserializeObject<ApiResult<UserSubSecurity>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)
-                .AddParameter("secByRoleId", secByRoleId)).Content).Results;
-        }
-
         public IList<LeftMenu> GetModuleMenus()
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ModuleMenus");

@@ -72,18 +72,6 @@ namespace M4PL.Web.Controllers
             }
             _commonCommands.UpdateActiveUserSettings(SessionProvider);
             SessionProvider.UserSecurities = _commonCommands.GetUserSecurities(SessionProvider.ActiveUser);
-
-            ///Non admin
-            if(SessionProvider != null && SessionProvider.ActiveUser != null && !SessionProvider.ActiveUser.IsSysAdmin)
-            {
-                List<Task> taskProcess = new List<Task>();
-                foreach (var item in SessionProvider.UserSecurities)
-                {
-                    taskProcess.Add(Task.Factory.StartNew(() => item.UserSubSecurities = _commonCommands.GetUserSubSecurities(item.Id)));
-                }
-                Task.WaitAll(taskProcess.ToArray());
-            } 
-
             SessionProvider.ActiveUser.PreferredLocation = SessionProvider.ActiveUser.ConTypeId == (int)ContactType.Employee
                 ? _commonCommands.GetPreferedLocations(SessionProvider.ActiveUser.ConTypeId) : null;
             if (login.JobId > 0)

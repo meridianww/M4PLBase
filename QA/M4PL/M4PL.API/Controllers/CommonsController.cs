@@ -247,15 +247,6 @@ namespace M4PL.API.Controllers
             return _command.GetRefRoleSecurities(activeUser).AsQueryable();
         }
 
-        [HttpGet]
-        [CustomQueryable]
-        [Route("UserSubSecurities")]
-        public IQueryable<UserSubSecurity> GetUserSubSecurities(long secByRoleId)
-        {
-            _command.ActiveUser = ActiveUser;
-            return _command.GetUserSubSecurities(secByRoleId).AsQueryable();
-        }
-
         [HttpPost]
         [CustomQueryable]
         [Route("InsAndUpdChooseColumn")]
