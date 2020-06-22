@@ -39,7 +39,10 @@ namespace M4PL.Web.Controllers
         public ActionResult Login(Login login)
         {
             ViewBag.Menus = GetMenus();
-            SessionProvider.ActiveUser = APIClient.Administration.AccountCommands.GetActiveUser(login);
+			IList<PreferredLocation> preferredLocations = null;
+			IList<UserSecurity> userSecurities = null;
+			SysSetting userSettings = null;
+			SessionProvider.ActiveUser = APIClient.Administration.AccountCommands.GetActiveUser(login);
             if (SessionProvider.ActiveUser.UserId == 0 && string.IsNullOrEmpty(SessionProvider.ActiveUser.SystemMessage))
             {
                 _commonCommands.ActiveUser = new ActiveUser { LangCode = "EN" };
@@ -57,36 +60,50 @@ namespace M4PL.Web.Controllers
             activeUser.ConTypeId = _commonCommands.GetUserContactType();
             SessionProvider.ActiveUser = activeUser;
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
-            if (WebGlobalVariables.Themes.Count == 0)
-            {
-                var dropDownData = new M4PL.Entities.Support.DropDownInfo
-                {
-                    Entity = EntitiesAlias.Lookup,
-                    EntityFor = EntitiesAlias.Theme,
-                };
-                var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
-                foreach (var li in (dynamic)list)
-                {
-                    WebGlobalVariables.Themes.Add(li.SysRefName);
-                }
-            }
-            _commonCommands.UpdateActiveUserSettings(SessionProvider);
-            SessionProvider.UserSecurities = _commonCommands.GetUserSecurities(SessionProvider.ActiveUser);
+			Task[] tasks = new Task[4];
+			tasks[0] = Task.Factory.StartNew(() =>
+			{
+				if (WebGlobalVariables.Themes.Count == 0)
+				{
+					var dropDownData = new DropDownInfo
+					{
+						Entity = EntitiesAlias.Lookup,
+						EntityFor = EntitiesAlias.Theme,
+					};
 
-            ///Non admin
-            if(SessionProvider != null && SessionProvider.ActiveUser != null && !SessionProvider.ActiveUser.IsSysAdmin)
-            {
-                List<Task> taskProcess = new List<Task>();
-                foreach (var item in SessionProvider.UserSecurities)
-                {
-                    taskProcess.Add(Task.Factory.StartNew(() => item.UserSubSecurities = _commonCommands.GetUserSubSecurities(item.Id)));
-                }
-                Task.WaitAll(taskProcess.ToArray());
-            } 
+					var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+					foreach (var li in (dynamic)list)
+					{
+						WebGlobalVariables.Themes.Add(li.SysRefName);
+					}
+				}
+			});
 
-            SessionProvider.ActiveUser.PreferredLocation = SessionProvider.ActiveUser.ConTypeId == (int)ContactType.Employee
-                ? _commonCommands.GetPreferedLocations(SessionProvider.ActiveUser.ConTypeId) : null;
-            if (login.JobId > 0)
+			tasks[1] = Task.Factory.StartNew(() =>
+			{
+				userSettings = _commonCommands.UpdateActiveUserSettings();
+			});
+
+			tasks[2] = Task.Factory.StartNew(() =>
+			{
+				userSecurities = _commonCommands.GetUserSecurities(activeUser);
+			});
+
+			tasks[3] = Task.Factory.StartNew(() =>
+			{
+				if (SessionProvider.ActiveUser.ConTypeId == (int)ContactType.Employee)
+				{
+					preferredLocations = _commonCommands.GetPreferedLocations(activeUser.ConTypeId);
+				}
+			});
+
+			Task.WaitAll(tasks);
+
+			SessionProvider.ActiveUser.PreferredLocation = preferredLocations;
+			SessionProvider.UserSecurities = userSecurities;
+			SessionProvider.UserSettings = userSettings;
+
+			if (login.JobId > 0)
                 return RedirectToAction(MvcConstants.ActionIndex, "MvcBase", new { jobId = login.JobId, tabName = login.TabName });
             return RedirectToAction(MvcConstants.ActionIndex, "MvcBase");
         }

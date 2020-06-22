@@ -33,7 +33,6 @@ namespace M4PL.DataAccess
         public const string GetDataForChangeHistory = "dbo.GetDataForChangeHistory";
 
         public const string GetUserSecurities = "dbo.GetUserSecurities";
-        public const string GetUserSubSecurities = "dbo.GetUserSubSecurities";
         public const string GetComboBoxContacts = "dbo.GetComboBoxContacts";
         public const string GetComboBoxContact = "dbo.GetContactCombobox";
         public const string GetSelectedFieldsByTable = "dbo.GetSelectedFieldsByTable";

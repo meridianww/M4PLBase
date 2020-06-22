@@ -1855,9 +1855,6 @@ namespace M4PL.Web
             var customerSecurityByRole = currentSessionProvider.UserSecurities.FirstOrDefault(x => x.SecMainModuleId.ToEnum<MainModule>() == currentModule);
             if (customerSecurityByRole.Id > 0)
             {
-                if (customerSecurityByRole.UserSubSecurities.Count == 0)
-                    customerSecurityByRole.UserSubSecurities = _commonCommands.GetUserSubSecurities(customerSecurityByRole.Id);
-
                 foreach (var subSecurity in customerSecurityByRole.UserSubSecurities)
                 {
                     if ((subSecurity.SubsMenuOptionLevelId.ToEnum<MenuOptionLevelEnum>() < MenuOptionLevelEnum.Screens) || (subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess))
@@ -2240,7 +2237,7 @@ namespace M4PL.Web
                 return userSetting.Value;
             return string.Empty;
         }
-        public static void UpdateActiveUserSettings(this ICommonCommands _commonCommands, SessionProvider sessionProvider)
+        public static SysSetting UpdateActiveUserSettings(this ICommonCommands _commonCommands)
         {
             IList<RefSetting> sysRefSettings = _commonCommands.GetSystemSetting().Settings;
             SysSetting userSettings = _commonCommands.GetUserSysSettings();
@@ -2263,10 +2260,12 @@ namespace M4PL.Web
                         userSetting.Value = setting.Value;
                 }
             }
-            sessionProvider.UserSettings = userSettings;
+
             SysSetting copySysSetting = new SysSetting { Settings = userSettings.Settings };
             _commonCommands.UpdateUserSystemSettings(copySysSetting);
-        }
+
+			return userSettings;
+		}
 
         public static M4PL.APIClient.ViewModels.Job.JobGatewayView JobGatewayActionFormSetting(this M4PL.APIClient.ViewModels.Job.JobGatewayView jobGatewayView, WebUtilities.JobGatewayActions actionEnumToCompare, out List<string> escapeRequiredFields)
         {
