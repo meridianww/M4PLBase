@@ -30,7 +30,7 @@ using System.Web.Routing;
 
 namespace M4PL.Web.Controllers
 {
-    public class CommonController : MvcBaseController
+    public class CommonController : MvcBaseController 
     {
         public CommonController(ICommonCommands commonCommands)
         {
@@ -516,22 +516,22 @@ namespace M4PL.Web.Controllers
             return Json(new { status = true, lookupId = _commonCommands.GetLookupIdByName(lookupName) }, JsonRequestBehavior.AllowGet);
         }
 
-		public ActionResult GetDocumentStatusByJobId(long jobId)
-		{
-			return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(jobId) }, JsonRequestBehavior.AllowGet);
-		}
+        public ActionResult GetDocumentStatusByJobId(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(jobId) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public ActionResult IsPriceCodeDataPresentForJob(long jobId)
-		{
-			return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
-		}
+        public ActionResult IsPriceCodeDataPresentForJob(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public ActionResult IsCostCodeDataPresentForJob(long jobId)
-		{
-			return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
-		}
+        public ActionResult IsCostCodeDataPresentForJob(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public ActionResult GetContactType(string lookupName)
+        public ActionResult GetContactType(string lookupName)
         {
             return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
         }

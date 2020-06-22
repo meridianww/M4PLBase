@@ -346,15 +346,15 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
-        public static IList<JobAction> GetJobAction(ActiveUser activeUser, long jobId)
-        {
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@jobId", jobId)
-            };
-            var result = SqlSerializer.Default.DeserializeMultiRecords<JobAction>(StoredProceduresConstant.GetJobActions, parameters.ToArray(), storedProcedure: true);
-            return result;
-        }
+        //public static IList<JobAction> GetJobAction(ActiveUser activeUser, long jobId)
+        //{
+        //    var parameters = new List<Parameter>
+        //    {
+        //       new Parameter("@jobId", jobId)
+        //    };
+        //    var result = SqlSerializer.Default.DeserializeMultiRecords<JobAction>(StoredProceduresConstant.GetJobActions, parameters.ToArray(), storedProcedure: true);
+        //    return result;
+        //}
         public static JobActionCode JobActionCodeByTitle(ActiveUser activeUser, long jobId, string gwyTitle)
         {
             var parameters = new List<Parameter>

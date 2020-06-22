@@ -80,7 +80,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 SessionProvider.IsJobParentEntity =  isJobParentEntity;
             }
-            SetGridResult(route, gridName, false, true, null, isJobParentEntity);
+            SetGridResult(route, gridName, false, true, null, isJobParentEntity);           
+
             if (SessionProvider.ViewPagedDataSession.Count > 0 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = isJobParentEntity;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
@@ -95,6 +96,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
             }
+            //To Add Actions Operation in ContextMenu
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
             if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);

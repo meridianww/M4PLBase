@@ -165,10 +165,10 @@ namespace M4PL.Business.Job
             return _commands.PutJobGatewayComplete(ActiveUser, jobGateway);
         }
 
-        public IList<JobAction> GetJobAction(long jobId)
-        {
-            return _commands.GetJobAction(ActiveUser, jobId);
-        }
+        //public IList<JobAction> GetJobAction(long jobId)
+        //{
+        //    return _commands.GetJobAction(ActiveUser, jobId);
+        //}
 
         public JobGateway PutJobAction(JobGateway jobGateway)
         {

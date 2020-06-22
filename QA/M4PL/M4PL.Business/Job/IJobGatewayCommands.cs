@@ -22,7 +22,7 @@ namespace M4PL.Business.Job
         JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction);
         JobGatewayComplete GetJobGatewayComplete(long id, long parentId);
         JobGatewayComplete PutJobGatewayComplete(JobGatewayComplete jobGateway);
-        IList<JobAction> GetJobAction(long jobId);
+        //IList<JobAction> GetJobAction(long jobId);
         JobGateway PutJobAction(JobGateway jobGateway);
         JobGateway PutWithSettings(SysSetting userSysSetting, JobGateway jobGateway);
         JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway);

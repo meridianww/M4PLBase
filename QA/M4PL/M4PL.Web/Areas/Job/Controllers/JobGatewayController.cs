@@ -29,7 +29,6 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobGatewayController : BaseController<JobGatewayView>
     {
         private readonly IJobGatewayCommands _jobGatewayCommands;
-
         /// <summary>
         /// Interacts with the interfaces to get the Job's gateway details and renders to the page
         /// Gets the page related information on the cache basis
@@ -312,7 +311,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult.GridSetting.GridName = gridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
 
-            AddActionsInActionContextMenu(route);//To Add Actions Operation in ContextMenu
+            //AddActionsInActionContextMenu(route);//To Add Actions Operation in ContextMenu
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.JobGateway);
             //To Add Gateways Operation in ContextMenu
             AddGatewayInGatewayContextMenu(route);
 
@@ -518,7 +518,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _gridResult.GridSetting.ContextMenu.Remove(_commonCommands.GetOperation(OperationTypeEnum.New));
             }
             //To Add Actions Operation in ContextMenu
-            AddActionsInActionContextMenu(route);
+            //AddActionsInActionContextMenu(route);
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.JobGateway);
             //To Add Gateways Operation in ContextMenu
             AddGatewayInGatewayContextMenu(route);
 
@@ -560,7 +561,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             //To Add Actions Operation in ContextMenu
-            AddActionsInActionContextMenu(route);
+            //AddActionsInActionContextMenu(route);
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.JobGateway);
             //To Add Gateways Operation in ContextMenu
             AddGatewayInGatewayContextMenu(route);
             _gridResult.GridSetting.GridName = currentGridName;
@@ -569,109 +571,109 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
 
-        private void AddActionsInActionContextMenu(MvcRoute currentRoute)
-        {
-            var route = currentRoute;
-            var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Actions);
+        //private void AddActionsInActionContextMenu(MvcRoute currentRoute)
+        //{
+        //    var route = currentRoute;
+        //    var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Actions);
 
-            var actionContextMenuAvailable = false;
-            var actionContextMenuIndex = -1;
+        //    var actionContextMenuAvailable = false;
+        //    var actionContextMenuIndex = -1;
 
-            if (_gridResult.GridSetting.ContextMenu.Count > 0)
-            {
-                for (var i = 0; i < _gridResult.GridSetting.ContextMenu.Count; i++)
-                {
-                    if (_gridResult.GridSetting.ContextMenu[i].SysRefName.EqualsOrdIgnoreCase(actionsContextMenu.SysRefName))
-                    {
-                        actionContextMenuAvailable = true;
-                        actionContextMenuIndex = i;
-                        break;
-                    }
-                }
-            }
+        //    if (_gridResult.GridSetting.ContextMenu.Count > 0)
+        //    {
+        //        for (var i = 0; i < _gridResult.GridSetting.ContextMenu.Count; i++)
+        //        {
+        //            if (_gridResult.GridSetting.ContextMenu[i].SysRefName.EqualsOrdIgnoreCase(actionsContextMenu.SysRefName))
+        //            {
+        //                actionContextMenuAvailable = true;
+        //                actionContextMenuIndex = i;
+        //                break;
+        //            }
+        //        }
+        //    }
 
-            if (actionContextMenuAvailable)
-            {
-                // M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
+        //    if (actionContextMenuAvailable)
+        //    {
+        //        // M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
 
-                var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
-                //if (route.ParentRecordId != 0)
-                //{
-                //    ContactAction.PgdGatewayCode = "Add Contact";
-                //    ContactAction.PgdGatewayTitle = "Driver";
-                //    ContactAction.ProgramId = allActions.FirstOrDefault()?.ProgramId ?? 0;
-                //}
-                //allActions.Add(ContactAction);
-                _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
+        //        var allActions = _commonCommands.GetJobAction(route.ParentRecordId);
+        //        //if (route.ParentRecordId != 0)
+        //        //{
+        //        //    ContactAction.PgdGatewayCode = "Add Contact";
+        //        //    ContactAction.PgdGatewayTitle = "Driver";
+        //        //    ContactAction.ProgramId = allActions.FirstOrDefault()?.ProgramId ?? 0;
+        //        //}
+        //        //allActions.Add(ContactAction);
+        //        _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
 
-                var routeToAssign = new MvcRoute(currentRoute);
-                routeToAssign.Entity = EntitiesAlias.JobGateway;
-                routeToAssign.Action = MvcConstants.ActionGatewayActionForm;
-                routeToAssign.IsPopup = true;
-                routeToAssign.RecordId = 0;
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor = JobGatewayType.Action.ToString();
+        //        var routeToAssign = new MvcRoute(currentRoute);
+        //        routeToAssign.Entity = EntitiesAlias.JobGateway;
+        //        routeToAssign.Action = MvcConstants.ActionGatewayActionForm;
+        //        routeToAssign.IsPopup = true;
+        //        routeToAssign.RecordId = 0;
+        //        SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor = JobGatewayType.Action.ToString();
 
-                if (allActions.Count > 0)
-                {
-                    var groupedActions = allActions.GroupBy(x => x.GatewayCode);
+        //        if (allActions.Count > 0)
+        //        {
+        //            var groupedActions = allActions.GroupBy(x => x.GatewayCode);
 
-                    foreach (var singleApptCode in groupedActions)
-                    {
-                        var newOperation = new Operation();
-                        newOperation.LangName = singleApptCode.First().GatewayCode;
+        //            foreach (var singleApptCode in groupedActions)
+        //            {
+        //                var newOperation = new Operation();
+        //                newOperation.LangName = singleApptCode.First().GatewayCode;
 
-                        foreach (var singleReasonCode in singleApptCode)
-                        {
-                            routeToAssign.Filters = new Entities.Support.Filter();
-                            routeToAssign.Filters.FieldName = singleReasonCode.GatewayCode;
+        //                foreach (var singleReasonCode in singleApptCode)
+        //                {
+        //                    routeToAssign.Filters = new Entities.Support.Filter();
+        //                    routeToAssign.Filters.FieldName = singleReasonCode.GatewayCode;
 
-                            var newChildOperation = new Operation();
-                            var newRoute = new MvcRoute(routeToAssign);
-                            newChildOperation.LangName = singleReasonCode.PgdGatewayTitle;
-                            newRoute.Filters = new Entities.Support.Filter();
-                            newRoute.Filters.FieldName = singleReasonCode.GatewayCode;
-                            newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
-                            #region Add Contact
-                            //if (singleReasonCode.GatewayCode == "Add Contact")
-                            //{
-                            //    var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
-                            //    contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
-                            //    contactRoute.IsPopup = true;
-                            //    contactRoute.RecordId = 0;
-                            //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
-                            //        = M4PL.Entities.EntitiesAlias.Contact.ToString();
-                            //    contactRoute.OwnerCbPanel = "pnlJobDetail";
-                            //    contactRoute.CompanyId = newRoute.CompanyId;
-                            //    contactRoute.ParentEntity = EntitiesAlias.Job;
-                            //    if (route.Filters != null)
-                            //    {
-                            //        var isValidCode = _commonCommands.IsValidJobSiteCode(Convert.ToString(route.Filters.FieldName), Convert.ToInt64(newRoute.Url));
-                            //        if (string.IsNullOrEmpty(isValidCode))
-                            //        {
-                            //            contactRoute.Filters = new Entities.Support.Filter();
-                            //            contactRoute.Filters = route.Filters;
-                            //            contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
-                            //            //contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
-                            //        }
-                            //    }
+        //                    var newChildOperation = new Operation();
+        //                    var newRoute = new MvcRoute(routeToAssign);
+        //                    newChildOperation.LangName = singleReasonCode.PgdGatewayTitle;
+        //                    newRoute.Filters = new Entities.Support.Filter();
+        //                    newRoute.Filters.FieldName = singleReasonCode.GatewayCode;
+        //                    newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
+        //                    #region Add Contact
+        //                    //if (singleReasonCode.GatewayCode == "Add Contact")
+        //                    //{
+        //                    //    var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
+        //                    //    contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
+        //                    //    contactRoute.IsPopup = true;
+        //                    //    contactRoute.RecordId = 0;
+        //                    //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
+        //                    //        = M4PL.Entities.EntitiesAlias.Contact.ToString();
+        //                    //    contactRoute.OwnerCbPanel = "pnlJobDetail";
+        //                    //    contactRoute.CompanyId = newRoute.CompanyId;
+        //                    //    contactRoute.ParentEntity = EntitiesAlias.Job;
+        //                    //    if (route.Filters != null)
+        //                    //    {
+        //                    //        var isValidCode = _commonCommands.IsValidJobSiteCode(Convert.ToString(route.Filters.FieldName), Convert.ToInt64(newRoute.Url));
+        //                    //        if (string.IsNullOrEmpty(isValidCode))
+        //                    //        {
+        //                    //            contactRoute.Filters = new Entities.Support.Filter();
+        //                    //            contactRoute.Filters = route.Filters;
+        //                    //            contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
+        //                    //            //contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
+        //                    //        }
+        //                    //    }
 
-                            //    contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
-                            //    if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
-                            //        contactRoute.ParentRecordId = ContactAction.ProgramId;
-                            //    newChildOperation.Route = contactRoute;
+        //                    //    contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
+        //                    //    if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
+        //                    //        contactRoute.ParentRecordId = ContactAction.ProgramId;
+        //                    //    newChildOperation.Route = contactRoute;
 
-                            //}
-                            //else
-                            #endregion
-                            newChildOperation.Route = newRoute;
-                            newOperation.ChildOperations.Add(newChildOperation);
+        //                    //}
+        //                    //else
+        //                    #endregion
+        //                    newChildOperation.Route = newRoute;
+        //                    newOperation.ChildOperations.Add(newChildOperation);
 
-                        }
-                        _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
-                    }
-                }
-            }
-        }
+        //                }
+        //                _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
+        //            }
+        //        }
+        //    }
+        //}
 
         public PartialViewResult JobGatewayLog(string strRoute, long selectedId = 0)
         {
@@ -704,9 +706,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _gridResult.GridSetting.ContextMenu.Remove(_commonCommands.GetOperation(OperationTypeEnum.New));
             }
             //To Add Actions Operation in ContextMenu
-            AddActionsInActionContextMenu(route);
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.JobGateway);
             //To Add Gateways Operation in ContextMenu
-            // AddGatewayInGatewayContextMenu(route);
+            AddGatewayInGatewayContextMenu(route);
             _gridResult.GridSetting.GridName = currentGridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
@@ -740,7 +742,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _gridResult.GridSetting.ContextMenu.Remove(_commonCommands.GetOperation(OperationTypeEnum.New));
             }
             //To Add Actions Operation in ContextMenu
-            AddActionsInActionContextMenu(route);
+            //AddActionsInActionContextMenu(route);
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.JobGateway);
             //To Add Gateways Operation in ContextMenu
             AddGatewayInGatewayContextMenu(route);
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();

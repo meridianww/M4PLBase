@@ -49,12 +49,12 @@ namespace M4PL.APIClient.Job
             return JsonConvert.DeserializeObject<ApiResult<JobGatewayComplete>>(
                 RestClient.Execute(HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "GatewayComplete"), ActiveUser).AddObject(jobGateway)).Content).Results?.FirstOrDefault();
         }
-        public IList<JobAction> GetJobAction(long jobId)
-        {
-            var content = RestClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddParameter("jobId", jobId)).Content;
-            var apiResult = JsonConvert.DeserializeObject<ApiResult<JobAction>>(content);
-            return apiResult.Results;
-        }
+        //public IList<JobAction> GetJobAction(long jobId)
+        //{
+        //    var content = RestClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddParameter("jobId", jobId)).Content;
+        //    var apiResult = JsonConvert.DeserializeObject<ApiResult<JobAction>>(content);
+        //    return apiResult.Results;
+        //}
         public JobGatewayView PutJobAction(JobGatewayView jobGatewayView)
         {
             return JsonConvert.DeserializeObject<ApiResult<JobGatewayView>>(

@@ -23,7 +23,7 @@ namespace M4PL.APIClient.Job
         JobGatewayView GetGatewayWithParent(long id, long parentId, string entityFor = null, bool is3PlAction = false);
         JobGatewayComplete GetJobGatewayComplete(long id, long parentId);
         JobGatewayComplete PutJobGatewayComplete(JobGatewayComplete jobGateway);
-        IList<JobAction> GetJobAction(long jobId);
+        //IList<JobAction> GetJobAction(long jobId);
         JobGatewayView PutJobAction(JobGatewayView jobGatewayView);
         JobGatewayView PutWithSettings(JobGatewayView jobGatewayView);
         JobGatewayView PostWithSettings(JobGatewayView jobGatewayView);

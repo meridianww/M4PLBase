@@ -13,6 +13,7 @@ using M4PL.APIClient.ViewModels.Contact;
 using M4PL.APIClient.ViewModels.Document;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 
@@ -199,5 +200,6 @@ namespace M4PL.APIClient.Common
 		DocumentStatusView GetDocumentStatusByJobId(long jobId);
 		DocumentStatusView IsPriceCodeDataPresentForJob(long jobId);
 		DocumentStatusView IsCostCodeDataPresentForJob(long jobId);
-	}
+        IList<JobAction> GetJobAction(long jobId);
+    }
 }

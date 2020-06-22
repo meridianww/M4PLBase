@@ -423,6 +423,28 @@
                     var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
                     command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
                     command.Enabled = true;
+                    command.Items.Clear();
+                    if (contexMenu.ChildOperations.Count > 0)
+                    {
+                        foreach (var childContextMenu in contexMenu.ChildOperations)
+                        {
+                            var childCommand = e.CreateItem(childContextMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(childContextMenu.Route));
+                            childCommand.Image.Url = WebExtension.ConvertByteToString(childContextMenu.Icon);
+                            childCommand.Enabled = true;
+                            childCommand.Items.Clear();
+                            foreach (var subChildContextMenu in childContextMenu.ChildOperations)
+                            {
+                                var subChildCommand = e.CreateItem(subChildContextMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(subChildContextMenu.Route));
+                                subChildCommand.Image.Url = WebExtension.ConvertByteToString(subChildContextMenu.Icon);
+                                if (subChildContextMenu.LangName == "Driver" && subChildContextMenu.Route.Filters == null)
+                                    subChildCommand.Enabled = false;
+                                else
+                                    subChildCommand.Enabled = true;
+                                childCommand.Items.Add(subChildCommand);
+                            }
+                            command.Items.Add(childCommand);
+                        }
+                    }
                     e.Items.Add(command);
                 }
             }
