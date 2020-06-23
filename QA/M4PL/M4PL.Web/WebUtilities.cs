@@ -261,12 +261,7 @@ namespace M4PL.Web
                     gridViewSetting.ContextMenu.Add(editOperation);
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
                         gridViewSetting.ContextMenu.Add(copyOperation);
-                    if (route.Entity == EntitiesAlias.Job)
-                    {
-                        gridViewSetting.ContextMenu.Add(Copy);
-                        gridViewSetting.ContextMenu.Add(Cut);
-                        gridViewSetting.ContextMenu.Add(Paste);
-                    }
+
                     if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
@@ -403,6 +398,11 @@ namespace M4PL.Web
             }
             else if (!hasRecords && route.Action == "JobGatewayActions")
                 toggleOperation.Route.Action = MvcConstants.ActionToggleFilter;
+
+            gridViewSetting.ContextMenu.Add(Copy);
+            gridViewSetting.ContextMenu.Add(Cut);
+            gridViewSetting.ContextMenu.Add(Paste);
+
             return gridViewSetting;
         }
 
@@ -767,9 +767,9 @@ namespace M4PL.Web
             settings.Styles.Header.Wrap = DefaultBoolean.True;
             settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
-			settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
-			//settings.Settings.VerticalScrollableHeight = 300;
-			settings.Settings.ShowFilterRow = gridResult.GridSetting.ShowFilterRow;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+            //settings.Settings.VerticalScrollableHeight = 300;
+            settings.Settings.ShowFilterRow = gridResult.GridSetting.ShowFilterRow;
             settings.Settings.ShowFilterRowMenu = gridResult.GridSetting.ShowFilterRow;
             settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
             settings.SettingsBehavior.AllowFocusedRow = true;
