@@ -71,13 +71,13 @@ namespace M4PL.Business.Job
 			string docType = string.Empty;
 			SystemReference documentOption = null;
 			List<SystemReference> systemOptionList = DataAccess.Administration.SystemReferenceCommands.GetSystemRefrenceList();
-			if (jobDocumentAttachment != null && !string.IsNullOrEmpty(jobDocumentAttachment.DocumentCode))
+			if (jobDocumentAttachment != null)
 			{
-				if (jobDocumentAttachment.DocumentCode.ToUpper().Contains("POD"))
+				if (!string.IsNullOrEmpty(jobDocumentAttachment.DocumentCode) && jobDocumentAttachment.DocumentCode.ToUpper().Contains("POD"))
 				{
 					documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("POD", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
 				}
-				else if(jobDocumentAttachment.DocumentCode.ToUpper().Contains("DAM"))
+				else if(!string.IsNullOrEmpty(jobDocumentAttachment.DocumentCode) && jobDocumentAttachment.DocumentCode.ToUpper().Contains("DAM"))
 				{
 					documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("Damaged", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
 				}
