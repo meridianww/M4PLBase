@@ -57,49 +57,50 @@ namespace M4PL.Web.Controllers
 
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             var activeUser = SessionProvider.ActiveUser;
-            activeUser.ConTypeId = _commonCommands.GetUserContactType();
+            var contactTypeId = 0;
+            List<Task> tasks = new List<Task>
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    if (WebGlobalVariables.Themes.Count == 0)
+                    {
+                        var dropDownData = new DropDownInfo
+                        {
+                            Entity = EntitiesAlias.Lookup,
+                            EntityFor = EntitiesAlias.Theme,
+                        };
+
+                        var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+                        foreach (var li in (dynamic)list)
+                        {
+                            WebGlobalVariables.Themes.Add(li.SysRefName);
+                        }
+                    }
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    contactTypeId = _commonCommands.GetUserContactType();
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    userSettings = _commonCommands.UpdateActiveUserSettings();
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    userSecurities = _commonCommands.GetUserSecurities(activeUser);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    preferredLocations = _commonCommands.GetPreferedLocations(activeUser.ConTypeId);
+                })
+            };
+
+            Task.WaitAll(tasks.ToArray());
+
+            activeUser.ConTypeId = contactTypeId;
             SessionProvider.ActiveUser = activeUser;
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
-			Task[] tasks = new Task[4];
-			tasks[0] = Task.Factory.StartNew(() =>
-			{
-				if (WebGlobalVariables.Themes.Count == 0)
-				{
-					var dropDownData = new DropDownInfo
-					{
-						Entity = EntitiesAlias.Lookup,
-						EntityFor = EntitiesAlias.Theme,
-					};
-
-					var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
-					foreach (var li in (dynamic)list)
-					{
-						WebGlobalVariables.Themes.Add(li.SysRefName);
-					}
-				}
-			});
-
-			tasks[1] = Task.Factory.StartNew(() =>
-			{
-				userSettings = _commonCommands.UpdateActiveUserSettings();
-			});
-
-			tasks[2] = Task.Factory.StartNew(() =>
-			{
-				userSecurities = _commonCommands.GetUserSecurities(activeUser);
-			});
-
-			tasks[3] = Task.Factory.StartNew(() =>
-			{
-				if (SessionProvider.ActiveUser.ConTypeId == (int)ContactType.Employee)
-				{
-					preferredLocations = _commonCommands.GetPreferedLocations(activeUser.ConTypeId);
-				}
-			});
-
-			Task.WaitAll(tasks);
-
-			SessionProvider.ActiveUser.PreferredLocation = preferredLocations;
+            SessionProvider.ActiveUser.PreferredLocation = preferredLocations;
 			SessionProvider.UserSecurities = userSecurities;
 			SessionProvider.UserSettings = userSettings;
 
