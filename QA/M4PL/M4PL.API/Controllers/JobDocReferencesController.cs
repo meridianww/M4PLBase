@@ -59,10 +59,10 @@ namespace M4PL.API.Controllers
 
         [HttpPost]
         [Route("InsertJobDocument")]
-        public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType)
+        public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId)
         {
             _jobDocReferenceCommands.ActiveUser = ActiveUser;
-            return _jobDocReferenceCommands.InsertJobDocumentData(jobDocumentAttachment, jobId, documentType);
+            return _jobDocReferenceCommands.InsertJobDocumentData(jobDocumentAttachment, jobId);
         }
 
         [HttpGet]
