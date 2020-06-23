@@ -291,7 +291,7 @@ namespace M4PL.Web.Areas
         public virtual Dictionary<long, string> BatchUpdate(MVCxGridViewBatchUpdateValues<TView, long> batchEdit, MvcRoute route, string gridName)
         {
 
-            var columnSettings = WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(route.Entity), SessionProvider);
+            var columnSettings = WebUtilities.GetUserColumnSettings(_commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, true), SessionProvider);
             var batchError = new Dictionary<long, string>();
             foreach (var item in batchEdit.Insert)
             {
