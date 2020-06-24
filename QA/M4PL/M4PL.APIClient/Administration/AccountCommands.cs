@@ -39,6 +39,7 @@ namespace M4PL.APIClient.Administration
                     var tokenRequest = HttpRestClient.RestRequest(Method.GET, "Account/ActiveUser");
                     tokenRequest.AddHeader("Authorization", "bearer " + token.AccessToken);
                     activeUser = JsonConvert.DeserializeObject<ApiResult<ActiveUser>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(tokenRequest).Content).Results?.FirstOrDefault();
+                    activeUser.UserSecurity = token.UserSecurity;
                     activeUser.AuthToken = token.AccessToken;
                 }
             return activeUser;

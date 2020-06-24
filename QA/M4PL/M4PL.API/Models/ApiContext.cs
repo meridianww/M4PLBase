@@ -403,6 +403,8 @@ namespace M4PL.API.Models
             }
         }
 
+        public IList<UserSecurity> UserSecurities { get; set; }
+
         /// <summary>
         /// Gets my custom property.
         /// </summary>

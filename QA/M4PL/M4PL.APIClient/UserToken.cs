@@ -8,7 +8,9 @@
 //Purpose:                                      Represents UserToken Details
 //====================================================================================================================================================*/
 
+using M4PL.Entities.Support;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace M4PL.APIClient
 {
@@ -94,5 +96,11 @@ namespace M4PL.APIClient
         /// </value>
         [JsonProperty("systemMessage")]
         public virtual string SystemMessage { get; set; }
+
+        /// <summary>
+        /// UserSecurity
+        /// </summary>
+        [JsonProperty("userSecurity")]
+        public IList<UserSecurity> UserSecurity { get; set; }
     }
 }

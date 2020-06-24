@@ -194,5 +194,7 @@ namespace M4PL.Entities.Support
         /// Only use for Employee type as per current requirement
         /// </summary>
         public IList<PreferredLocation> PreferredLocation { get; set; }
+
+        public IList<UserSecurity> UserSecurity { get; set; }
     }
 }

@@ -392,6 +392,8 @@
     <Compile Include="Models\ApiContext.cs" />
     <Compile Include="Models\ErrorLog.cs" />
     <Compile Include="Models\GlobalExceptionFilter.cs" />
+    <Compile Include="Models\M4PLApiPrincipal.cs" />
+    <Compile Include="Models\M4PLToken.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\SecureString.cs" />
     <Compile Include="Models\SwaggerConfiguration.cs" />

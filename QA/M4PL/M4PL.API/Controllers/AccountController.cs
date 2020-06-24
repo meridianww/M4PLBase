@@ -9,9 +9,11 @@
 //====================================================================================================================================================*/
 
 using M4PL.API.Models;
+using M4PL.APIClient;
 using M4PL.Entities.Support;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using Newtonsoft.Json;
 using Orbit.WebApi.Core;
 using Orbit.WebApi.Core.Filters;
 using Orbit.WebApi.Extensions.Authentication;
@@ -174,7 +176,9 @@ namespace M4PL.API.Controllers
                 var tokenServiceResponse = await Authenticate(loginModel);
                 if (tokenServiceResponse.IsSuccessStatusCode)
                 {
-                    var accessToken = await tokenServiceResponse.Content.ReadAsAsync<Token>();
+                    var accessToken = await tokenServiceResponse.Content.ReadAsAsync<M4PLToken>();
+
+                    var accessTokenObject = accessToken;
 
                     HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, accessToken);
                     response.SetAuthentication(accessToken.AccessToken, loginModel.RememberMe, DateTimeOffset.Parse(accessToken.Expires));
@@ -294,7 +298,12 @@ namespace M4PL.API.Controllers
             var tokenServiceResponse = await Authenticate(model);
             if (tokenServiceResponse.IsSuccessStatusCode)
             {
-                var accessToken = await tokenServiceResponse.Content.ReadAsAsync<Token>();
+                var accessToken = await tokenServiceResponse.Content.ReadAsAsync<M4PLToken>();
+                Orbit.WebApi.Security.UserManager userManager = new Orbit.WebApi.Security.UserManager();
+                var userIdentity = userManager.FindUserByUserId(userManager.FindUserIdByUsername(accessToken.Username));
+                accessToken.UserSecurity = _command.GetUserSecurities(
+                    new ActiveUser() { UserId = userIdentity.UserId, RoleId = userIdentity.RoleId, OrganizationId = userIdentity.OrganizationId });
+                
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, accessToken);
                 return response;
             }
@@ -430,8 +439,8 @@ namespace M4PL.API.Controllers
                 Roles = ApiContext.Roles,
                 IsSysAdmin = ApiContext.IsSysAdmin,
                 IsAuthenticated = ApiContext.IsAuthenticated,
-                SystemMessage = ApiContext.SystemMessage
-
+                SystemMessage = ApiContext.SystemMessage,
+                //UserSecurity = ApiContext.us
             };
             _command.ActiveUser = activeUser;
 
