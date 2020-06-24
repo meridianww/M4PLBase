@@ -9,6 +9,7 @@ Purpose:                                      Contains objects related to JobGat
 ==========================================================================================================*/
 
 using System;
+using System.Collections.Generic;
 
 namespace M4PL.Entities.Job
 {
@@ -131,5 +132,6 @@ namespace M4PL.Entities.Job
         public int? JobTransitionStatusId { get; set; }
         public int DeliveryUTCValue { get; set; }
         public int OriginUTCValue { get; set; }
+        public string[] JobIds { get; set; }
     }
 }

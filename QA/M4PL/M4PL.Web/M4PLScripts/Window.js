@@ -1081,9 +1081,13 @@ M4PLWindow.FormView = function () {
         var putOrPostData = $(form).serializeArray();
         if (currentRoute.PreviousRecordId != null && currentRoute.PreviousRecordId != 0
             && currentRoute.PreviousRecordId != undefined && currentRoute.Action == "ContactCardFormView" && currentRoute.EntityName === "Contact") {
-
             putOrPostData.push({ name: "JobId", value: currentRoute.PreviousRecordId });
+        }
+        if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway" && currentRoute.Action == "GatewayActionFormView") {
 
+            var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+            if (s != null && s != undefined)
+                putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });
         }
         if (currentRoute.Controller == "JobXcblInfo" && currentRoute.Action == "FormView") {
             putOrPostData.push({ name: "IsAccepted", value: isNewContactCard })
