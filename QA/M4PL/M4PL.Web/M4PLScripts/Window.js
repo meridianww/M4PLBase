@@ -212,7 +212,6 @@ M4PLWindow.DataView = function () {
         }
     }
 
-
     var _onBatchEditStartEditing = function (s, e, isReadOnly, disableEditor, fieldToCheck, hiddenFieldName) {
         isReadOnly = (isReadOnly === undefined) ? false : (isReadOnly == 'True') ? true : false;
         e.cancel = (!isReadOnly) ? !_allowBatchEdit[s.name] : isReadOnly;

@@ -148,7 +148,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 messages.RemoveAt(0);
 
-            if ((jobGatewayView.CustomerId == jobGatewayView.CustomerId) && (jobGatewayView.CurrentAction.ToLower() == "exception"
+            if (jobGatewayView.CustomerId > 0 && (jobGatewayView.CustomerId == jobGatewayView.CustomerId) && (jobGatewayView.CurrentAction.ToLower() == "exception"
                || jobGatewayView.CurrentAction.ToLower() == "reschedule"
                || jobGatewayView.CurrentAction.ToLower() == "canceled"))
             {
@@ -254,30 +254,43 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 MvcRoute resRoute = null;
 
-                if (jobGatewayView.JobID > 0)
+                if (jobGatewayView.IsGatewayCalled)
                 {
                     var resultRoute = SessionProvider.ActiveUser.LastRoute;
                     resultRoute.Entity = EntitiesAlias.Job;
                     resultRoute.ParentEntity = EntitiesAlias.Program;
-                    resultRoute.Action = "FormView";
-                    resultRoute.RecordId = jobGatewayView.JobID ?? 0;
+                    resultRoute.Action = "DataView";
+                    resultRoute.RecordId = 0;
                     resultRoute.ParentRecordId = result.ProgramID ?? 0;
-                    resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
-                                               ? WebApplicationConstants.AppCbPanel
-                                               : "JobDataViewCbPanel";
-
-                    resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
+                    resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
+                    resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionDataView);
                     resRoute.Url = resRoute.ParentRecordId.ToString();
                 }
+                else
+                {
+                    if (jobGatewayView.JobID > 0)
+                    {
+                        var resultRoute = SessionProvider.ActiveUser.LastRoute;
+                        resultRoute.Entity = EntitiesAlias.Job;
+                        resultRoute.ParentEntity = EntitiesAlias.Program;
+                        resultRoute.Action = "FormView";
+                        resultRoute.RecordId = jobGatewayView.JobID ?? 0;
+                        resultRoute.ParentRecordId = result.ProgramID ?? 0;
+                        resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
+                                                   ? WebApplicationConstants.AppCbPanel
+                                                   : "JobDataViewCbPanel";
 
-                route.RecordId = result.Id;
-                route.Url = jobGatewayView.JobID.ToString();
-                route.Entity = EntitiesAlias.JobGateway;
-                route.SetParent(EntitiesAlias.Job, result.ParentId);
+                        resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
+                        resRoute.Url = resRoute.ParentRecordId.ToString();
+                    }
+                    route.RecordId = result.Id;
+                    route.Url = jobGatewayView.JobID.ToString();
+                    route.Entity = EntitiesAlias.JobGateway;
+                    route.SetParent(EntitiesAlias.Job, result.ParentId);
+                }
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
                 return SuccessMessageForInsertOrUpdate(result.Id, route, byteArray, false, 0, null, resRoute);
             }
-
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }
 
@@ -757,10 +770,23 @@ namespace M4PL.Web.Areas.Job.Controllers
             Session["isEdit"] = route.IsEdit;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            else
+            {
+                var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+                sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+                sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+                var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
+                viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
+                SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+            }
+
             _formResult.SessionProvider = SessionProvider;
+
             string entityFor = null;
             if (!route.IsEdit)
             {
+                if (route.IsPBSReport)
+                    route.ParentRecordId = route.RecordId;
                 route.RecordId = 0;
                 if (route.Action == "GatewayActionFormView" ||
                     (route.Action == "FormView" && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
@@ -770,7 +796,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                     entityFor = JobGatewayType.Gateway.ToString();
                 }
             }
-
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, entityFor, route.Filters != null && route.Filters.FieldName.Contains("3PL") ? true : false) ?? new JobGatewayView();
 
             if (route.Filters != null && !(bool)Session["isEdit"])
@@ -1006,6 +1031,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             FormView(strRoute);
+            _formResult.Record.IsGatewayCalled = route.IsPBSReport;
             _formResult.Record.IsAction = true;
             _formResult.Record.GwyCompleted = true;
             if (route.Filters != null)

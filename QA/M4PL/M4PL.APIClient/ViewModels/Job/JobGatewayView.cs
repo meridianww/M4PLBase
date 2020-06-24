@@ -18,5 +18,6 @@ namespace M4PL.APIClient.ViewModels.Job
         public string CurrentAction { get; set; }
         public bool IsAction { get; set; }
         public bool IsEditOperation { get; set; }
+        public bool IsGatewayCalled { get; set; }
     }
 }

@@ -44,7 +44,7 @@
             }
             Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColIsReadOnly = false;
         }
-        var result = Model.Record.CurrentAction.Contains("3PL") ? "ThreePL" : Model.Record.CurrentAction;        
+        var result = Model.Record.CurrentAction.Contains("3PL") ? "ThreePL" : Model.Record.CurrentAction;
         var actionToCompare = Regex.Replace(result, @"\s+", "");
         actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
@@ -128,6 +128,7 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ProgramID, new { Name = "ProgramID" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsSpecificCustomer, new { Name = "IsSpecificCustomer" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.StatusCode, new { Name = "StatusCode" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsGatewayCalled, new { Name = "IsGatewayCalled" }).ToHtmlString());
         #endregion
 
         if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Canceled)
@@ -151,14 +152,16 @@
             Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColIsReadOnly = false;
         }
         ViewContext.Writer.Write("<div class='row no-margin'>");
-        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding schedul-details'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPerson).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPhone).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyEmail).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPreferredMethod, new { GwyPreferredMethod = Model.Record.GwyPreferredMethod }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyTitle).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("</div>");
-
+        if (!Model.Record.IsGatewayCalled)
+        {
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding schedul-details'>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPerson).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPhone).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyEmail).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPreferredMethod, new { GwyPreferredMethod = Model.Record.GwyPreferredMethod }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyTitle).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("</div>");
+        }
         if (actionEnumToCompare == WebUtilities.JobGatewayActions.Canceled)
         {
             ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");

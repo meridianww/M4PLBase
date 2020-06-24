@@ -1441,7 +1441,8 @@ namespace M4PL.Web
                 routeToAssign.Entity = EntitiesAlias.JobGateway;
                 routeToAssign.Action = MvcConstants.ActionGatewayActionForm;
                 routeToAssign.IsPopup = true;
-                routeToAssign.RecordId = 0;
+                routeToAssign.RecordId = _gridResult.FocusedRowId;
+                routeToAssign.IsPBSReport = currentRoute.Entity != EntitiesAlias.JobGateway;
                 //SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor = JobGatewayType.Action.ToString();
 
                 if (allActions.Count > 0)
