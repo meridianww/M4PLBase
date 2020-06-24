@@ -81,6 +81,10 @@ namespace M4PL.Business.Job
 				{
 					documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("Damaged", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
 				}
+				else if (!string.IsNullOrEmpty(jobDocumentAttachment.DocumentCode) && jobDocumentAttachment.DocumentCode.ToUpper().Contains("SIGNATURE"))
+				{
+					documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("Signature", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
+				}
 				else
 				{
 					documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("Image", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
