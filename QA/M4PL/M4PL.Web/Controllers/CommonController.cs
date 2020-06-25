@@ -375,7 +375,7 @@ namespace M4PL.Web.Controllers
                 });
             }
 
-            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => x.DeepCopy()).ToList();
+            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && (defaultRoute.Entity == EntitiesAlias.JobCargo ? true : !GetPrimaryKeyColumns().Contains(c.ColColumnName))).Select(x => x.DeepCopy()).ToList();
             ViewData[MvcConstants.DefaultGroupByColumns] = columnSettingsFromColumnAlias.Where(x => x.ColIsGroupBy).Select(x => x.ColColumnName).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
@@ -516,22 +516,22 @@ namespace M4PL.Web.Controllers
             return Json(new { status = true, lookupId = _commonCommands.GetLookupIdByName(lookupName) }, JsonRequestBehavior.AllowGet);
         }
 
-		public ActionResult GetDocumentStatusByJobId(long jobId)
-		{
-			return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(jobId) }, JsonRequestBehavior.AllowGet);
-		}
+        public ActionResult GetDocumentStatusByJobId(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(jobId) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public ActionResult IsPriceCodeDataPresentForJob(long jobId)
-		{
-			return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
-		}
+        public ActionResult IsPriceCodeDataPresentForJob(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public ActionResult IsCostCodeDataPresentForJob(long jobId)
-		{
-			return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
-		}
+        public ActionResult IsCostCodeDataPresentForJob(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public ActionResult GetContactType(string lookupName)
+        public ActionResult GetContactType(string lookupName)
         {
             return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
         }
