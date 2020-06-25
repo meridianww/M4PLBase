@@ -61,7 +61,12 @@ namespace M4PL.Business.Job
             return _attachmentCommand.GetJobAttachment(orderNumber);
         }
 
-        public byte[] GetFileByteArray(byte[] fileBytes, string fileName)
+		public IList<JobAttachment> GetJobAttachmentByInvoiceNumber(string jobSalesInvoiceNumber)
+		{
+			return _attachmentCommand.GetJobAttachmentByInvoiceNumber(jobSalesInvoiceNumber);
+		}
+
+		public byte[] GetFileByteArray(byte[] fileBytes, string fileName)
         {
             string fileExtension = Path.GetExtension(fileName);
             var imageExtensionList = new string[] { ".JPG", ".PNG", ".GIF", ".WEBP", ".TIFF", ".PSD", ".RAW", ".BMP", ".HEIF", ".INDD", ".JPEG" };

@@ -31,5 +31,20 @@ namespace M4PL.DataAccess.Job
 
             return jobAttachmentList;
         }
-    }
+
+		public static IList<JobAttachment> GetJobAttachmentByInvoiceNumber(string jobSalesInvoiceNumber)
+		{
+			List<JobAttachment> jobAttachmentList = null;
+			try
+			{
+				jobAttachmentList = SqlSerializer.Default.DeserializeMultiRecords<JobAttachment>(StoredProceduresConstant.GetJobAttachmentByInvoiceNumber, new Parameter("@invoiceNumber", jobSalesInvoiceNumber), storedProcedure: true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error while getting the attachment list for a job by Invoice Number.", "GetJobAttachment", Utilities.Logger.LogType.Error);
+			}
+
+			return jobAttachmentList;
+		}
+	}
 }
