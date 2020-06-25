@@ -199,7 +199,7 @@ DevExCtrl.Ribbon = function () {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     }
                     else {
-                        M4PLCommon.DocumentStatus.DocumentMissingDisplayMessage("Business Rule", "Please select specific any row", 2, 'JobDocumentPresent');
+                        M4PLCommon.DocumentStatus.DisplayMessage("Business Rule", "Please select specific any row", 2, 'JobDocumentPresent');
                     }
                     break;
                 case "WatchVideo":

@@ -20,6 +20,7 @@ M4PLWindow.PopupDataViewHasChanges = {};
 M4PLWindow.DataViewsHaveChanges = {};
 M4PLWindow.SubDataViewsHaveChanges = {};
 M4PLWindow.OrderId = 0;
+M4PLWindow.JobIsScheduled = false;
 
 M4PLWindow.CallBackPanel = function () {
     var params;
@@ -439,12 +440,16 @@ M4PLWindow.DataView = function () {
 
     function _onRowSelectionChanged(s, e) {
         var selectedRowCount = s.GetSelectedRowCount();
-        //if (s.lastMultiSelectIndex > 0
-        //    && s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobGatewayStatus')
-        //    != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobGatewayStatus')) {
-        //    //TODO: show warning message to user that job status is miss match
-        //    console.log("Job Gateway status is diffent.");
-        //}
+        if (selectedRowCount == 1 && e.isSelected)
+            M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
+        else if (selectedRowCount != 0 && M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule')) {
+            s.SelectRows(s.GetFocusedRowIndex(), false);
+            if (s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule'))
+                M4PLCommon.DocumentStatus.DisplayMessage("Warning", "Selected job is already scheduled", 2, "JobExistSchedule");
+            else
+                M4PLCommon.DocumentStatus.DisplayMessage("Warning", "Job is not Scheduled Yet", 2, "JobExistSchedule");
+            return;
+        }
         if (selectedRowCount <= 1 && selectedRowCount >= 0) {
             var selectedJobId = selectedRowCount == 0 ? 0 : s.GetItemKey(s.GetFocusedRowIndex());
             var callbackUrl = s.callbackUrl;

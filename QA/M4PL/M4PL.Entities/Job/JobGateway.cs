@@ -133,5 +133,6 @@ namespace M4PL.Entities.Job
         public int DeliveryUTCValue { get; set; }
         public int OriginUTCValue { get; set; }
         public string[] JobIds { get; set; }
+        public List<long> ChekedJobIds { get; set; }
     }
 }

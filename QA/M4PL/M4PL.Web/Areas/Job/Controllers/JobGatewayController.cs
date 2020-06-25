@@ -183,7 +183,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (messages.Any())
                     return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
             }
-
+           
             JobGatewayView jobGatewayViewAction = new JobGatewayView();
 
             jobGatewayViewAction.Id = jobGatewayView.Id;
@@ -210,6 +210,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyExceptionTitleId = jobGatewayView.GwyExceptionTitleId;
             jobGatewayViewAction.GwyExceptionStatusId = jobGatewayView.GwyExceptionStatusId;
             jobGatewayViewAction.GwyAddtionalComment = jobGatewayView.GwyAddtionalComment;
+            jobGatewayViewAction.JobIds = jobGatewayView.JobIds;
             if (jobGatewayView.GwyGatewayCode.Contains("XCBL"))
                 jobGatewayViewAction.GwyCompleted = false;
             else

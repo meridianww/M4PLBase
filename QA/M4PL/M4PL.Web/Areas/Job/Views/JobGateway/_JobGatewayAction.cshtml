@@ -234,7 +234,10 @@
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyLwrDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = false, DefaultTime = Model.Record.GwyLwrDate, IsEditable = isEdit }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyUprDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = Model.Record.GwyUprDate, IsEditable = isEdit }).ToHtmlString() + "</div>");
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              if (!Model.Record.IsGatewayCalled)
+                                              {
+                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              }
                                           });
                                       });
                                   });
@@ -297,17 +300,29 @@
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Schedule Date";
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Schedule Date";
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
                                                }
                                                else
                                                {
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Reschedule Date";
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Reschedule Date";
-                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   if (!Model.Record.IsGatewayCalled)
+                                                   {
+                                                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   }
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                                }
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               if (!Model.Record.IsGatewayCalled)
+                                               {
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
+                                               else
+                                               {
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
+
                                            });
                                        });
                                    });
@@ -362,8 +377,14 @@
                                               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPCurrent, new { Name = "GwyDDPCurrent" }).ToHtmlString());
                                               //ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.DateComment, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
-
+                                              if (!Model.Record.IsGatewayCalled)
+                                              {
+                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                              }
+                                              else
+                                              {
+                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-17 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                              }
                                           });
                                       });
                                   });
@@ -413,9 +434,17 @@
                                                Model.Record.StatusCode = string.Empty;
                                                Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColAliasName = "Arrival Date";
                                                ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+
+                                               if (!Model.Record.IsGatewayCalled)
+                                               {
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
+                                               else
+                                               {
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
                                            });
                                        });
                                    });
@@ -478,10 +507,15 @@
 
     if (actionEnumToCompare == WebUtilities.JobGatewayActions.EMail)
     {
-        @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
+        if (!Model.Record.IsGatewayCalled)
+        {
+          @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
+        }
     }
-
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
+    if (!Model.Record.IsGatewayCalled)
+    {
+        @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
+    }
 }
 <input type="hidden" name="gvVisibleIndex" id="gvVisibleIndex" />
 <input type="hidden" name="hf" id="hf" />
