@@ -569,5 +569,8 @@ namespace M4PL.Entities.Job
 
 		public string JobDriverAlert { get; set; }
 
+		public string JobSalesInvoiceNumber { get; set; }
+
+		public string JobPurchaseInvoiceNumber { get; set; }
 	}
 }
