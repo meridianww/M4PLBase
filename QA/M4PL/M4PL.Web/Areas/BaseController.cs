@@ -718,7 +718,7 @@ namespace M4PL.Web.Areas
                 });
             }
 
-            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => (APIClient.ViewModels.ColumnSetting)x.Clone()).ToList();
+            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && (route.Entity == EntitiesAlias.JobCargo ? true : !GetPrimaryKeyColumns().Contains(c.ColColumnName))).Select(x => (APIClient.ViewModels.ColumnSetting)x.Clone()).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
 
@@ -1279,7 +1279,7 @@ namespace M4PL.Web.Areas
         public ActionResult DownloadBOL(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            
+
             try
             {
                 var bolDocument = _commonCommands.DownloadBOL(route.RecordId);
@@ -1308,29 +1308,29 @@ namespace M4PL.Web.Areas
 
         }
 
-		public ActionResult DownloadPOD(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+        public ActionResult DownloadPOD(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
-			try
-			{
-				var podDocument = _commonCommands.DownloadPOD(route.RecordId);
+            try
+            {
+                var podDocument = _commonCommands.DownloadPOD(route.RecordId);
 
-				if (podDocument != null && !string.IsNullOrEmpty(podDocument.DocumentName))
-				{
-					string fileName = "POD_" + podDocument.DocumentName;
-					return File(podDocument.DocumentContent, "application/pdf", fileName);
-				}
+                if (podDocument != null && !string.IsNullOrEmpty(podDocument.DocumentName))
+                {
+                    string fileName = "POD_" + podDocument.DocumentName;
+                    return File(podDocument.DocumentContent, "application/pdf", fileName);
+                }
 
-				return null;
-			}
-			catch (Exception)
-			{
-				return null;
-			}
-		}
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
-		public FileResult DownloadTracking(string strRoute)
+        public FileResult DownloadTracking(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
