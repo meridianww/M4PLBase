@@ -111,7 +111,7 @@
             settings.SetDetailRowTemplateContent(c =>
             {
                 childRoute.ParentRecordId = Convert.ToInt64(DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName));
-                childRoute.Filters = new M4PL.Entities.Support.Filter { Value = DataBinder.Eval(c.DataItem, "VdcLocationCode").ToString() };
+                childRoute.Filters = new M4PL.Entities.Support.Filter { Value = DataBinder.Eval(c.DataItem, "VdcLocationCode").ToString() , FieldName = "VdcLocationCode" };
                 childRoute.Url = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute);
                 var msg = WebUtilities.ShouldRenderDetailGrid(c.DataItem, ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands, ref childRoute);
                 if (string.IsNullOrEmpty(msg))
