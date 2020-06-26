@@ -193,6 +193,7 @@ namespace M4PL.Business.XCBL
                             if (processingJobDetail?.Id > 0)
                             {
                                 InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
+                                _jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit");
                                 List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
                                 if (jobCargos != null && jobCargos.Count > 0)
                                 {

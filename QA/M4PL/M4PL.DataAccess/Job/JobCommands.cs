@@ -173,6 +173,24 @@ namespace M4PL.DataAccess.Job
             return jobGateway;
         }
 
+
+        public static void CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
+        { 
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@JobID", jobId),
+                new Parameter("@ProgramID", programId),
+                new Parameter("@GwyGatewayCode", gatewayCode),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
+                new Parameter("@userId", activeUser.UserId)
+            };
+
+             SqlSerializer.Default.Execute(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBLForElectrolux, parameters.ToArray(), storedProcedure: true);
+
+        }
+
+
         public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
         {
             try
