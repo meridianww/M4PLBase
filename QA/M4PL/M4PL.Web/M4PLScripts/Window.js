@@ -1158,7 +1158,9 @@ M4PLWindow.FormView = function () {
                                                 if (ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel))
                                                     ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(resultRoute) });
                                             }
-                                            ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
+                                            else {
+                                                ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
+                                            }
                                         } else {
                                             ownerCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route), selectedId: response.route.RecordId, strDropDownViewModel: (!strDropDownViewModel) ? null : JSON.stringify(strDropDownViewModel) });
                                         }
