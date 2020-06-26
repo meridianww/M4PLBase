@@ -302,7 +302,9 @@ namespace M4PL.DataAccess.Job
             Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
             bool isExistsRecord = true;
-            if ((job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder) || (job.CustomerId != existingJobDetail.CustomerId))
+
+            //In case of UI update don't consider the customerId check
+            if ((job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder) || (!isManualUpdate ? (job.CustomerId != existingJobDetail.CustomerId) : false))
             {
                 isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
             }
