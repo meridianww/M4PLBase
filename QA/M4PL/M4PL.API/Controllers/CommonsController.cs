@@ -12,6 +12,7 @@ using M4PL.API.Filters;
 using M4PL.API.Models;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -524,6 +525,15 @@ namespace M4PL.API.Controllers
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetCompCorpAddress(compId);
+        }
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("JobAction")]
+        public IQueryable<JobAction> GetJobAction(long jobId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetJobAction(jobId).AsQueryable();
         }
     }
 

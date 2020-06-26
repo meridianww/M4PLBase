@@ -92,7 +92,25 @@ namespace M4PL.Business.Job
         /// <returns></returns>
         public JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
-            var gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+            var gateway = new JobGateway();
+            if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
+            {
+                List<Task> tasks = new List<Task>();
+                foreach (var item in jobGateway.JobIds[0].Split(','))
+                {
+                    tasks.Add(Task.Factory.StartNew(() =>
+                    {
+                        gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, 
+                            M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
+                    }));
+                }
+                Task.WaitAll(tasks.ToArray());
+            }
+            else
+            {
+                gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+            }
+
             PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
             return gateway;
         }
@@ -125,7 +143,7 @@ namespace M4PL.Business.Job
         public bool InsJobGatewayPODIfPODDocExistsByJobId(long jobId)
         {
             var gateway = _commands.InsJobGatewayPODIfPODDocExistsByJobId(ActiveUser, jobId);
-            if(gateway!=null)
+            if (gateway != null)
             {
                 PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, gateway.GwyCompleted, 0);
                 return true;
@@ -165,10 +183,10 @@ namespace M4PL.Business.Job
             return _commands.PutJobGatewayComplete(ActiveUser, jobGateway);
         }
 
-        public IList<JobAction> GetJobAction(long jobId)
-        {
-            return _commands.GetJobAction(ActiveUser, jobId);
-        }
+        //public IList<JobAction> GetJobAction(long jobId)
+        //{
+        //    return _commands.GetJobAction(ActiveUser, jobId);
+        //}
 
         public JobGateway PutJobAction(JobGateway jobGateway)
         {
@@ -203,10 +221,10 @@ namespace M4PL.Business.Job
 
         public void PushDataToNav(long? jobId, string gatewayCode, bool gatewayStatus, int? JobTransitionStatusId)
         {
-			List<int> completedTransitionStatus = PODTransitionStatusId.Split(',').Select(int.Parse).ToList();
+            List<int> completedTransitionStatus = PODTransitionStatusId.Split(',').Select(int.Parse).ToList();
 
-			if (jobId != null && gatewayStatus && (string.Equals(gatewayCode, "POD Upload", StringComparison.OrdinalIgnoreCase)
-					|| string.Equals(gatewayCode, "Will Call", StringComparison.OrdinalIgnoreCase) || (JobTransitionStatusId.HasValue && completedTransitionStatus.Contains((int)JobTransitionStatusId))))
+            if (jobId != null && gatewayStatus && (string.Equals(gatewayCode, "POD Upload", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(gatewayCode, "Will Call", StringComparison.OrdinalIgnoreCase) || (JobTransitionStatusId.HasValue && completedTransitionStatus.Contains((int)JobTransitionStatusId))))
             {
                 var jobResult = _jobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
                 if (jobResult != null && jobResult.JobCompleted)
@@ -246,6 +264,6 @@ namespace M4PL.Business.Job
             }
         }
 
-       
+
     }
 }

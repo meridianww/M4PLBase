@@ -12,6 +12,7 @@ using M4PL.DataAccess.Logger;
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
@@ -1142,6 +1143,16 @@ namespace M4PL.DataAccess.Common
             }
 
             return changeHistoryDataList;
+        }
+
+        public static IList<JobAction> GetJobAction(ActiveUser activeUser, long jobId)
+        {
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@jobId", jobId)
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobAction>(StoredProceduresConstant.GetJobActions, parameters.ToArray(), storedProcedure: true);
+            return result;
         }
     }
 }

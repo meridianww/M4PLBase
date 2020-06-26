@@ -560,17 +560,14 @@ namespace M4PL.Entities.Job
         public bool IsJobVocSurvey { get; set; }
         public string ProFlags12 { get; set; }
         public long CustomerId { get; set; }
-
         public int? JobTransitionStatusId { get; set; }
-
         public bool IsSellerTabEdited { get; set; }
-
         public bool IsPODTabEdited { get; set; }
-
 		public string JobDriverAlert { get; set; }
 
 		public string JobSalesInvoiceNumber { get; set; }
 
 		public string JobPurchaseInvoiceNumber { get; set; }
-	}
+        public bool JobIsSchedule { get; set; }
+    }
 }

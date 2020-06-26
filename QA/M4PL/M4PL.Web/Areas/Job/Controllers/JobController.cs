@@ -68,7 +68,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if (route.ParentRecordId != 0)
                 Session["ListNode"] = route.ParentRecordId.ToString();
-            _gridResult.FocusedRowId = route.RecordId;
+            if (!isJobParentEntity)
+                _gridResult.FocusedRowId = route.RecordId;
             if (route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common
@@ -78,9 +79,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.ParentRecordId = 0;
             if (route.IsJobParentEntityUpdated)
             {
-                SessionProvider.IsJobParentEntity =  isJobParentEntity;
+                SessionProvider.IsJobParentEntity = isJobParentEntity;
             }
             SetGridResult(route, gridName, false, true, null, isJobParentEntity);
+
             if (SessionProvider.ViewPagedDataSession.Count > 0 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = isJobParentEntity;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
@@ -94,6 +96,19 @@ namespace M4PL.Web.Areas.Job.Controllers
             && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+            }
+            //To Add Actions Operation in ContextMenu
+            if (_gridResult.FocusedRowId > 0)
+                WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            else
+            {
+                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                {
+                    var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                    if (actionsContextMenu != null)
+                        _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+                }
             }
             if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
@@ -136,13 +151,13 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             #region Job Card
             //SessionProvider.ActiveUser.LastRoute.RecordId = 1;
-            if (SessionProvider.ActiveUser.LastRoute.IsPBSReport && SessionProvider.ActiveUser.ReportRoute != null 
+            if (SessionProvider.ActiveUser.LastRoute.IsPBSReport && SessionProvider.ActiveUser.ReportRoute != null
                 && (SessionProvider.ActiveUser.ReportRoute.ParentEntity == EntitiesAlias.JobAdvanceReport ||
                 SessionProvider.ActiveUser.ReportRoute.ParentEntity == EntitiesAlias.JobCard))
             {
                 route.OwnerCbPanel = "pnlJobDetail";
-				SessionProvider.ActiveUser.ReportRoute.RecordId = SessionProvider.ActiveUser.LastRoute.RecordId;
-				SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;
+                SessionProvider.ActiveUser.ReportRoute.RecordId = SessionProvider.ActiveUser.LastRoute.RecordId;
+                SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;
                 SessionProvider.ActiveUser.ReportRoute = null;
                 route.IsPBSReport = true;
             }
@@ -418,13 +433,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
         }
 
-        public ActionResult TreeListCallBack(string strRoute )
+        public ActionResult TreeListCallBack(string strRoute)
         {
 
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             //SessionProvider.ActiveUser.LastRoute = route;
             SessionProvider.ActiveUser.CurrentRoute = null;
-           
+
             var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
             if (Session["ListNode"] != null)
                 treeListResult.SelectedNode = (string)Session["ListNode"];
@@ -627,6 +642,121 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ViewPODBaseFormView, formResult);
         }
         #endregion TabView
+
+        #region Filtering & Sorting
+
+        public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
+        {
+            var filters = new Dictionary<string, string>();
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _gridResult.FocusedRowId = route.RecordId;
+            var whereCondition = string.Empty;
+
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+            sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+            sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+
+            if (sessionInfo.Filters == null)
+                sessionInfo.Filters = new Dictionary<string, string>();
+            if (string.IsNullOrEmpty(filteringState.FilterExpression) && (filteringState.ModifiedColumns.Count > 0))
+                route.Filters = null;
+
+            //used to reset page index of the grid when Filter applied and pageing is opted
+            ViewData[WebApplicationConstants.ViewDataFilterPageNo] = sessionInfo.PagedDataInfo.PageNumber;
+            sessionInfo.PagedDataInfo.WhereCondition = filteringState.BuildGridFilterWhereCondition(route.Entity, ref filters, _commonCommands);
+
+            if (sessionInfo.Filters != null && filters.Count > 0 && sessionInfo.Filters.Count != filters.Count)//Have to search from starting if setup filter means from page 1
+                sessionInfo.PagedDataInfo.PageNumber = 1;
+            sessionInfo.Filters = filters;
+            sessionInfo.GridViewFilteringState = filteringState;
+            SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
+            _gridResult.SessionProvider = SessionProvider;
+            SetGridResult(route, gridName);
+            //To Add Actions Operation in ContextMenu
+            if (_gridResult.FocusedRowId > 0)
+                WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            else
+            {
+                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                {
+                    var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                    if (actionsContextMenu != null)
+                        _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+                }
+            }
+            Session["costJobCodeActions"] = null;
+            Session["priceJobCodeActions"] = null;
+
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+        public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _gridResult.FocusedRowId = route.RecordId;
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+            sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+            sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+            sessionInfo.PagedDataInfo.OrderBy = column.BuildGridSortCondition(reset, route.Entity, _commonCommands);
+            sessionInfo.GridViewColumnState = column;
+            sessionInfo.GridViewColumnStateReset = reset;
+            SetGridResult(route, gridName);
+            //To Add Actions Operation in ContextMenu
+            if (_gridResult.FocusedRowId > 0)
+                WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            else
+            {
+                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                {
+                    var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                    if (actionsContextMenu != null)
+                        _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+                }
+            }
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+
+        #endregion Filtering & Sorting
+
+        #region Paging
+
+        public override PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
+        {
+            if (TempData["RowHashes"] != null)
+                TempData.Keep();
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _gridResult.FocusedRowId = route.RecordId;
+            var currentPageSize = GetorSetUserGridPageSize();
+            GetorSetUserGridPageSize(pager.PageSize);
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+            sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+            sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+            sessionInfo.PagedDataInfo.PageNumber = pager.PageIndex + 1;
+            sessionInfo.PagedDataInfo.PageSize = pager.PageSize;
+            var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
+            viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
+            SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+            _gridResult.SessionProvider = SessionProvider;
+            SetGridResult(route, gridName, (currentPageSize != pager.PageSize));
+            _gridResult.GridViewModel.ApplyPagingState(pager);
+            //To Add Actions Operation in ContextMenu
+            if (_gridResult.FocusedRowId > 0)
+                WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            else
+            {
+                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                {
+                    var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                    if (actionsContextMenu != null)
+                        _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+                }
+            }
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+
+        #endregion Paging
 
         //public ActionResult ImportOrder(string strRoute)
         //{

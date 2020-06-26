@@ -232,8 +232,10 @@ namespace M4PL.Web
             }
             if (!gridViewSetting.ShowNewButton && !(currentPermission < Permission.AddEdit) && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
             {
-                if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation
-                    && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization
+                if (route.Entity != EntitiesAlias.PrgVendLocation
+                    && route.Entity != EntitiesAlias.PrgCostLocation
+                    && route.Entity != EntitiesAlias.PrgBillableLocation
+                    && route.Entity != EntitiesAlias.Organization
                     && route.Entity != EntitiesAlias.OrgRolesResp
                     && route.Entity != EntitiesAlias.JobHistory
                     && !(route.Entity == EntitiesAlias.Job
@@ -261,18 +263,32 @@ namespace M4PL.Web
                     gridViewSetting.ContextMenu.Add(editOperation);
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
                         gridViewSetting.ContextMenu.Add(copyOperation);
-
+                    if (route.Entity == EntitiesAlias.Job)
+                    {
+                        //gridViewSetting.ContextMenu.Add(Copy);
+                        //gridViewSetting.ContextMenu.Add(Cut);
+                        //gridViewSetting.ContextMenu.Add(Paste);
+                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                    }
                     if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                         gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
                     }
                 }
-                else if (!hasRecords && (route.Entity == EntitiesAlias.JobGateway) && !gridViewSetting.IsJobCardEntity)
+                else if (!hasRecords && !gridViewSetting.IsJobCardEntity)
                 {
-                    gridViewSetting.ContextMenu.Add(actionsContextMenu);
-                    gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                    if (route.Entity == EntitiesAlias.JobGateway)
+                    {
+                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                        gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                    }
+                    if (route.Entity == EntitiesAlias.Job)
+                    {
+                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                    }
                 }
+
 
                 if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
                 {
@@ -1388,6 +1404,112 @@ namespace M4PL.Web
             SecurityByRoleView,
             SubSecurityByRoleView,
             SystemMessageView
+        }
+
+        public static void AddActionsInActionContextMenu<TView>(MvcRoute currentRoute, ICommonCommands _commonCommands, GridResult<TView> _gridResult, EntitiesAlias entitiyAlias)
+        {
+            var route = currentRoute;
+            var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Actions);
+
+            var actionContextMenuAvailable = false;
+            var actionContextMenuIndex = -1;
+
+            if (_gridResult.GridSetting.ContextMenu.Count > 0)
+            {
+                for (var i = 0; i < _gridResult.GridSetting.ContextMenu.Count; i++)
+                {
+                    if (_gridResult.GridSetting.ContextMenu[i].SysRefName.EqualsOrdIgnoreCase(actionsContextMenu.SysRefName))
+                    {
+                        actionContextMenuAvailable = true;
+                        actionContextMenuIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            if (actionContextMenuAvailable)
+            {
+                // M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
+
+                var allActions = _commonCommands.GetJobAction(
+                    route.Entity == EntitiesAlias.Job ? _gridResult.FocusedRowId : route.ParentRecordId);
+                //if (route.ParentRecordId != 0)
+                //{
+                //    ContactAction.PgdGatewayCode = "Add Contact";
+                //    ContactAction.PgdGatewayTitle = "Driver";
+                //    ContactAction.ProgramId = allActions.FirstOrDefault()?.ProgramId ?? 0;
+                //}
+                //allActions.Add(ContactAction);
+                _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
+
+                var routeToAssign = new MvcRoute(currentRoute);
+                routeToAssign.Entity = EntitiesAlias.JobGateway;
+                routeToAssign.Action = MvcConstants.ActionGatewayActionForm;
+                routeToAssign.IsPopup = true;
+                routeToAssign.RecordId = _gridResult.FocusedRowId;
+                routeToAssign.IsPBSReport = currentRoute.Entity != EntitiesAlias.JobGateway;
+                //SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor = JobGatewayType.Action.ToString();
+
+                if (allActions.Count > 0)
+                {
+                    var groupedActions = allActions.GroupBy(x => x.GatewayCode);
+
+                    foreach (var singleApptCode in groupedActions)
+                    {
+                        var newOperation = new Operation();
+                        newOperation.LangName = singleApptCode.First().GatewayCode;
+
+                        foreach (var singleReasonCode in singleApptCode)
+                        {
+                            routeToAssign.Filters = new Entities.Support.Filter();
+                            routeToAssign.Filters.FieldName = singleReasonCode.GatewayCode;
+
+                            var newChildOperation = new Operation();
+                            var newRoute = new MvcRoute(routeToAssign);
+                            newChildOperation.LangName = singleReasonCode.PgdGatewayTitle;
+                            newRoute.Filters = new Entities.Support.Filter();
+                            newRoute.Filters.FieldName = singleReasonCode.GatewayCode;
+                            newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
+                            #region Add Contact
+                            //if (singleReasonCode.GatewayCode == "Add Contact")
+                            //{
+                            //    var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
+                            //    contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
+                            //    contactRoute.IsPopup = true;
+                            //    contactRoute.RecordId = 0;
+                            //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
+                            //        = M4PL.Entities.EntitiesAlias.Contact.ToString();
+                            //    contactRoute.OwnerCbPanel = "pnlJobDetail";
+                            //    contactRoute.CompanyId = newRoute.CompanyId;
+                            //    contactRoute.ParentEntity = EntitiesAlias.Job;
+                            //    if (route.Filters != null)
+                            //    {
+                            //        var isValidCode = _commonCommands.IsValidJobSiteCode(Convert.ToString(route.Filters.FieldName), Convert.ToInt64(newRoute.Url));
+                            //        if (string.IsNullOrEmpty(isValidCode))
+                            //        {
+                            //            contactRoute.Filters = new Entities.Support.Filter();
+                            //            contactRoute.Filters = route.Filters;
+                            //            contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
+                            //            //contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
+                            //        }
+                            //    }
+
+                            //    contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
+                            //    if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
+                            //        contactRoute.ParentRecordId = ContactAction.ProgramId;
+                            //    newChildOperation.Route = contactRoute;
+
+                            //}
+                            //else
+                            #endregion
+                            newChildOperation.Route = newRoute;
+                            newOperation.ChildOperations.Add(newChildOperation);
+
+                        }
+                        _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
+                    }
+                }
+            }
         }
     }
 }

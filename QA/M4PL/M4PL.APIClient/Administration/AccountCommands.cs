@@ -27,9 +27,18 @@ namespace M4PL.APIClient.Administration
         public static ActiveUser GetActiveUser(Login login)
         {
             var activeUser = new ActiveUser();
-            var token = JsonConvert.DeserializeObject<ApiResult<UserToken>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(
+            var result = new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(
                   HttpRestClient.RestRequest(Method.POST, "Account/Login")
-                      .AddObject(login)).Content).Results?.FirstOrDefault();
+                      .AddObject(login)).Content;
+            UserToken token = null;
+
+            try
+            {
+                token = JsonConvert.DeserializeObject<ApiResult<UserToken>>(result).Results?.FirstOrDefault();
+            }
+            catch (System.Exception)
+            {
+            }
 
             if (token != null)
                 if (!string.IsNullOrEmpty(token.SystemMessage))

@@ -20,6 +20,7 @@ M4PLWindow.PopupDataViewHasChanges = {};
 M4PLWindow.DataViewsHaveChanges = {};
 M4PLWindow.SubDataViewsHaveChanges = {};
 M4PLWindow.OrderId = 0;
+M4PLWindow.JobIsScheduled = false;
 
 M4PLWindow.CallBackPanel = function () {
     var params;
@@ -196,7 +197,6 @@ M4PLWindow.DataView = function () {
 
         }
     }
-
 
     var _onBatchEditStartEditing = function (s, e, isReadOnly, disableEditor, fieldToCheck, hiddenFieldName) {
         isReadOnly = (isReadOnly === undefined) ? false : (isReadOnly == 'True') ? true : false;
@@ -424,10 +424,42 @@ M4PLWindow.DataView = function () {
     }
 
     function _onRowSelectionChanged(s, e) {
-        s.GetSelectedFieldValues("Id", GetSelectedFieldValuesCallback);
+        var isLoadingPanelShow = true;
+        var selectedRowCount = s.GetSelectedRowCount();
+        if (selectedRowCount == 1 && e.isSelected)
+            M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
+        else if (selectedRowCount != 0 && M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule')) {
+            s.SelectRows(s.GetFocusedRowIndex(), false);
+            isLoadingPanelShow = false;
+            if (s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule'))
+                M4PLCommon.DocumentStatus.DisplayMessage("Warning", "Selected job is already scheduled", 2, "JobExistSchedule");
+            else
+                M4PLCommon.DocumentStatus.DisplayMessage("Warning", "Job is not Scheduled Yet", 2, "JobExistSchedule");
+            return;
+        }
+        if (selectedRowCount <= 1 && selectedRowCount >= 0) {
+            var selectedJobId = selectedRowCount == 0 ? 0 : s.GetItemKey(s.GetFocusedRowIndex());
+            var callbackUrl = s.callbackUrl;
+            if (callbackUrl != undefined && callbackUrl != "") {
+                var callbackUri = new URL(callbackUrl, window.location.origin);
+                var urlParams = new URLSearchParams(callbackUri.search);
+                if (urlParams.has('strRoute')) {
+                    var route = JSON.parse(urlParams.getAll('strRoute'));
+                    route.RecordId = selectedJobId;
+                    s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
+                    if (isLoadingPanelShow)
+                        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+                    //s.GetSelectedFieldValues("Id", GetSelectedFieldValuesCallback);
+                    s.Refresh();
+                    if (isLoadingPanelShow)
+                        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            }
+        }
     }
 
     function GetSelectedFieldValuesCallback(values) {
+        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
     }
 
     function _onGridFocusedRowChanged(s, e) {
@@ -1044,9 +1076,13 @@ M4PLWindow.FormView = function () {
         var putOrPostData = $(form).serializeArray();
         if (currentRoute.PreviousRecordId != null && currentRoute.PreviousRecordId != 0
             && currentRoute.PreviousRecordId != undefined && currentRoute.Action == "ContactCardFormView" && currentRoute.EntityName === "Contact") {
-
             putOrPostData.push({ name: "JobId", value: currentRoute.PreviousRecordId });
+        }
+        if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway" && currentRoute.Action == "GatewayActionFormView") {
 
+            var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+            if (s != null && s != undefined)
+                putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });
         }
         if (currentRoute.Controller == "JobXcblInfo" && currentRoute.Action == "FormView") {
             putOrPostData.push({ name: "IsAccepted", value: isNewContactCard })
@@ -1122,7 +1158,9 @@ M4PLWindow.FormView = function () {
                                                 if (ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel))
                                                     ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(resultRoute) });
                                             }
-                                            ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
+                                            else {
+                                                ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
+                                            }
                                         } else {
                                             ownerCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route), selectedId: response.route.RecordId, strDropDownViewModel: (!strDropDownViewModel) ? null : JSON.stringify(strDropDownViewModel) });
                                         }
@@ -1250,7 +1288,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1289,7 +1327,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1367,7 +1405,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1406,7 +1444,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1440,7 +1478,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1479,7 +1517,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {

@@ -85,9 +85,10 @@ namespace M4PL.Web.Controllers
             DisplayMessage displayMessage = null;
             if (!string.IsNullOrWhiteSpace(strDisplayMessage))
                 displayMessage = JsonConvert.DeserializeObject<DisplayMessage>(strDisplayMessage);
+            var description = string.Empty;
             if (displayMessage != null)
             {
-
+                description = displayMessage.Description;
                 if (!string.IsNullOrWhiteSpace(displayMessage.MessageType) && displayMessage.MessageType.ToEnum<MessageTypeEnum>() > 0)
                 {
                     var disMessage = _commonCommands.GetDisplayMessageByCode(displayMessage.MessageType.ToEnum<MessageTypeEnum>(), displayMessage.Code);
@@ -116,23 +117,22 @@ namespace M4PL.Web.Controllers
                 if (displayMessage.Code.Equals(DbConstants.NoAccess))
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.NoAccess);
 
-				if (displayMessage.Code.Equals(DbConstants.JobDocumentReport))
-					displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobDocumentReport);
+                if (displayMessage.Code.Equals(DbConstants.JobDocumentReport))
+                    displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobDocumentReport);
 
-				if (displayMessage.Code.Equals(DbConstants.JobDocumentPresent))
+                if (displayMessage.Code.Equals(DbConstants.JobDocumentPresent))
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobDocumentPresent);
 
                 if (displayMessage.Code.Equals(DbConstants.JobPODUploaded))
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobPODUploaded);
 
-				if (displayMessage.Code.Equals(DbConstants.JobPriceCodeMissing))
-					displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobPriceCodeMissing);
+                if (displayMessage.Code.Equals(DbConstants.JobPriceCodeMissing))
+                    displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobPriceCodeMissing);
 
-				if (displayMessage.Code.Equals(DbConstants.JobCostCodeMissing))
-					displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobCostCodeMissing);
+                if (displayMessage.Code.Equals(DbConstants.JobCostCodeMissing))
+                    displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobCostCodeMissing);
 
-
-				if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
+                if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
                 {
                     displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.WarningIgnoreChanges));
 
@@ -148,6 +148,12 @@ namespace M4PL.Web.Controllers
                     ViewData[WebApplicationConstants.EntityImage] = displayMessage.MessageTypeIcon.ConvertByteToString();
                 }
 
+                if (displayMessage.Code.Equals(DbConstants.JobExistSchedule))
+                {
+                    displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobExistSchedule);
+                    displayMessage.Description = !string.IsNullOrEmpty(description) ? description 
+                                                 : displayMessage.Description;
+                }
             }
             return PartialView(MvcConstants.ViewDisplayPopupControl, displayMessage);
         }

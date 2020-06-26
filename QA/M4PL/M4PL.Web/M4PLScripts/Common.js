@@ -2467,7 +2467,7 @@ M4PLCommon.DocumentStatus = (function () {
         DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
     };
 
-    var _documentMissingDisplayMessage = function (title, text, messageType, code) {
+    var _displayMessage = function (title, text, messageType, code) {
         var displaymessage =
         {
             ScreenTitle: title,
@@ -2501,14 +2501,14 @@ M4PLCommon.DocumentStatus = (function () {
 
         DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
     };
-
+    
     return {
         IsPODAttachedForJob: _isPODAttachedForJob,
         IsAttachmentPresentForJob: _isAttachmentPresentForJob,
         IsPriceCodeDataPresentForJob: _isPriceCodeDataPresentForJob,
         IsCostCodeDataPresentForJob: _isCostCodeDataPresentForJob,
         PODMissingDisplayMessage: _podMissingDisplayMessage,
-        DocumentMissingDisplayMessage: _documentMissingDisplayMessage,
+        DisplayMessage: _displayMessage,
         JobPriceCodeMissingDisplayMessage: _jobPriceCodeMissingDisplayMessage,
         JobCostCodeMissingDisplayMessage: _jobCostCodeMissingDisplayMessage
     }

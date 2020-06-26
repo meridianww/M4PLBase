@@ -13,6 +13,7 @@ using M4PL.APIClient.ViewModels.Contact;
 using M4PL.APIClient.ViewModels.Document;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Job;
 using M4PL.Entities.MasterTables;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
@@ -999,5 +1000,11 @@ namespace M4PL.APIClient.Common
 			var response = JsonConvert.DeserializeObject<ApiResult<DocumentStatusView>>(content).Results.FirstOrDefault();
 			return response;
 		}
-	}
+        public IList<JobAction> GetJobAction(long jobId)
+        {
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddParameter("jobId", jobId)).Content;
+            var apiResult = JsonConvert.DeserializeObject<ApiResult<JobAction>>(content);
+            return apiResult.Results;
+        }
+    }
 }

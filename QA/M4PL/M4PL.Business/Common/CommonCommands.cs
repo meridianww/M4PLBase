@@ -12,6 +12,7 @@ using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.SalesOrderDimension;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
@@ -415,6 +416,11 @@ namespace M4PL.Business.Common
         public static CompanyCorpAddress GetCompCorpAddress(int compId)
         {
             return _commands.GetCompCorpAddress(compId);
+        }
+
+        public static IList<JobAction> GetJobAction(long jobId)
+        {
+            return _commands.GetJobAction(ActiveUser, jobId);
         }
     }
 }

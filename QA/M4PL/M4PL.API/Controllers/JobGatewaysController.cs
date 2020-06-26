@@ -59,14 +59,14 @@ namespace M4PL.API.Controllers
             return _jobGatewayCommands.PutJobGatewayComplete(jobGateway);
         }
 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("JobAction")]
-        public IQueryable<JobAction> GetJobAction(long jobId)
-        {
-            _jobGatewayCommands.ActiveUser = ActiveUser;
-            return _jobGatewayCommands.GetJobAction(jobId).AsQueryable();
-        }
+        //[CustomAuthorize]
+        //[HttpGet]
+        //[Route("JobAction")]
+        //public IQueryable<JobAction> GetJobAction(long jobId)
+        //{
+        //    _jobGatewayCommands.ActiveUser = ActiveUser;
+        //    return _jobGatewayCommands.GetJobAction(jobId).AsQueryable();
+        //}
 
         [CustomAuthorize]
         [HttpPut]

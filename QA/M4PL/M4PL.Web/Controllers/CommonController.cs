@@ -30,7 +30,7 @@ using System.Web.Routing;
 
 namespace M4PL.Web.Controllers
 {
-    public class CommonController : MvcBaseController
+    public class CommonController : MvcBaseController 
     {
         public CommonController(ICommonCommands commonCommands)
         {

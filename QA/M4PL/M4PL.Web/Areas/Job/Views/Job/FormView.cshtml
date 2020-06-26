@@ -628,7 +628,7 @@ else
     //};
     <script>
         $(document).ready(function () {
-            M4PLCommon.DocumentStatus.DocumentMissingDisplayMessage("Invalid", "The job you are trying to search does not exist, please contact system administrator", 2,"NoAccess");
+            M4PLCommon.DocumentStatus.DisplayMessage("Invalid", "The job you are trying to search does not exist, please contact system administrator", 2,"NoAccess");
         })
     </script>
     //  @Html.Action("DisplayMessageControl", "Popup", new { Area = string.Empty, strDisplayMessage = Newtonsoft.Json.JsonConvert.SerializeObject(displayMessage) })
