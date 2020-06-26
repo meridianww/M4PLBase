@@ -265,9 +265,9 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(copyOperation);
                     if (route.Entity == EntitiesAlias.Job)
                     {
-                        gridViewSetting.ContextMenu.Add(Copy);
-                        gridViewSetting.ContextMenu.Add(Cut);
-                        gridViewSetting.ContextMenu.Add(Paste);
+                        //gridViewSetting.ContextMenu.Add(Copy);
+                        //gridViewSetting.ContextMenu.Add(Cut);
+                        //gridViewSetting.ContextMenu.Add(Paste);
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                     }
                     if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
