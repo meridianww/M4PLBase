@@ -20,7 +20,9 @@ namespace M4PL.Business.Job
     {
         IList<JobAttachment> GetJobAttachment(string orderNumber);
 
-        byte[] GetFileByteArray(byte[] fileBytes, string fileName);
+		IList<JobAttachment> GetJobAttachmentByInvoiceNumber(string jobSalesInvoiceNumber);
+
+		byte[] GetFileByteArray(byte[] fileBytes, string fileName);
 
         byte[] GetCombindFileByteArray(List<byte[]> pdfFiles);
     }

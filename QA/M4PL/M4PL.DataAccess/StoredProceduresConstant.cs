@@ -500,9 +500,10 @@ namespace M4PL.DataAccess
 
         /* Job Attachment */
         public const string GetJobAttachmentList = "dbo.GetJobAttachmentList";
+		public const string GetJobAttachmentByInvoiceNumber = "dbo.GetJobAttachmentByInvoiceNumber";
 
-        /* Job Gateway */
-        public const string GetJobGatewayView = "dbo.GetJobGatewayView";
+		/* Job Gateway */
+		public const string GetJobGatewayView = "dbo.GetJobGatewayView";
         public const string GetJobGateway = "dbo.GetJobGateway";
         public const string InsertJobGateway = "dbo.InsJobGateway";
         public const string UpdateJobGateway = "dbo.UpdJobGateway";

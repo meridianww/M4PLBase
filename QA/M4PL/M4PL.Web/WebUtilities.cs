@@ -414,6 +414,11 @@ namespace M4PL.Web
             }
             else if (!hasRecords && route.Action == "JobGatewayActions")
                 toggleOperation.Route.Action = MvcConstants.ActionToggleFilter;
+
+            gridViewSetting.ContextMenu.Add(Copy);
+            gridViewSetting.ContextMenu.Add(Cut);
+            gridViewSetting.ContextMenu.Add(Paste);
+
             return gridViewSetting;
         }
 

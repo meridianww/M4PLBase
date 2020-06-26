@@ -564,6 +564,11 @@ namespace M4PL.Entities.Job
         public bool IsSellerTabEdited { get; set; }
         public bool IsPODTabEdited { get; set; }
 		public string JobDriverAlert { get; set; }
+
+		public string JobSalesInvoiceNumber { get; set; }
+
+		public string JobPurchaseInvoiceNumber { get; set; }
+	}
         public bool JobIsSchedule { get; set; }
     }
 }

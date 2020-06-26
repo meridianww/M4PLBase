@@ -203,7 +203,7 @@ DevExCtrl.Ribbon = function () {
                     }
                     break;
                 case "WatchVideo":
-                    window.open(window.location.href + "m4pltraining");
+                    window.open(window.location.origin + "/m4pltraining");
                     break;
                 case "DownloadBOL":
                     route = _onJobReportClick(route);

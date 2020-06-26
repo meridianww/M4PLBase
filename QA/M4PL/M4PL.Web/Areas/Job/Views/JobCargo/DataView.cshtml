@@ -168,8 +168,7 @@
             });
 
         }
-        if (colSetting.ColIsVisible && !colSetting.ColColumnName.Equals(WebUtilities.GetKeyFieldName(Model.GridSetting.CallBackRoute.Entity, settings.KeyFieldName), StringComparison.OrdinalIgnoreCase)
-        && !colSetting.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
+        if (colSetting.ColIsVisible && !colSetting.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
         && !colSetting.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
         {
             settings.Columns.Add(column =>

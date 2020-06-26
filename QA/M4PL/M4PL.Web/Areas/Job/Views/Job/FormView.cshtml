@@ -151,6 +151,9 @@ else
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobServiceMode).ToHtmlString() + "</div>");
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobChannel).ToHtmlString() + "</div>");
 
+                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobSalesInvoiceNumber).ToHtmlString() + "</div>");
+                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobPurchaseInvoiceNumber).ToHtmlString() + "</div>");
+
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
                    ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobTotalWeight).ToHtmlString() + "</div>");
                    ViewContext.Writer.Write("<div class='custom-float-right col-fixed-12'>" + Html.EditorFor(m => m.Record.JobWeightUnitTypeId, new { JobWeightUnitTypeId = Model.Record.JobWeightUnitTypeId }).ToHtmlString() + "</div>");

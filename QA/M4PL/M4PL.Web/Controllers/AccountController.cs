@@ -101,10 +101,10 @@ namespace M4PL.Web.Controllers
             SessionProvider.ActiveUser = activeUser;
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             SessionProvider.ActiveUser.PreferredLocation = preferredLocations;
-			SessionProvider.UserSecurities = userSecurities;
-			SessionProvider.UserSettings = userSettings;
+            SessionProvider.UserSecurities = userSecurities;
+            SessionProvider.UserSettings = userSettings;
 
-			if (login.JobId > 0)
+            if (login.JobId > 0)
                 return RedirectToAction(MvcConstants.ActionIndex, "MvcBase", new { jobId = login.JobId, tabName = login.TabName });
             return RedirectToAction(MvcConstants.ActionIndex, "MvcBase");
         }

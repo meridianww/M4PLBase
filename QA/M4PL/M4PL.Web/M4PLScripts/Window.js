@@ -81,7 +81,8 @@ M4PLWindow.DataView = function () {
         if (s.cpCustomerDefaultActiveFilter && s.cpCustomerDefaultActiveFilter.length > 0 && s.name === 'JobGridView') {
             s.ApplyFilter(s.cpCustomerDefaultActiveFilter);
         }
-
+        else if (s.GetFilterRowMenu() !== undefined && s.GetFilterRowMenu() !== "undefined" && s.name != 'JobGridView')
+            s.ApplyFilter("[StatusId] == 1");
 
         ASPxClientUtils.AttachEventToElement(document, "scroll", function (evt) {
             if (s.GetFilterRowMenu() !== undefined && s.GetFilterRowMenu() !== "undefined")
@@ -126,8 +127,6 @@ M4PLWindow.DataView = function () {
             else if (route.Action == "Copy") {
                 //var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
                 var selectedText = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName);
-                // s.GetRowValues(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName, OnGetRowValues);
-                // var selectedText = s.GetBatchDataCell(e.elementIndex, s.cellFocusHelper.focusedCellInfo.columnIndex).innerHTML;
                 localStorage.setItem("CopiedText", selectedText);
                 if (selectedText != undefined && selectedText != null)
                     setClipboard(selectedText);
@@ -136,24 +135,10 @@ M4PLWindow.DataView = function () {
 
             }
             else if (route.Action == "Paste") {
-                //var pasteValue = "";
-                //navigator.clipboard.readText().then(clipText => pasteValue = clipText);
-                //if (pasteValue != undefined && pasteValue != null ){
                 s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
                 if (!s.GetEditor(s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).readOnly)
-                    s.GetEditor(s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).SetValue(localStorage.getItem("CopiedText"));
-                //s.batchEditApi.SetCellValue(e.elementIndex, s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName, localStorage.getItem("CopiedText"), null, true);
-                //}
-                //M4PLCommon.Control.UpdateSelectedText();
-                //var dummy = document.createElement("input");
-                //document.body.appendChild(dummy);
-                //var selectedText = s.GetBatchDataCell(e.elementIndex, s.cellFocusHelper.focusedCellInfo.columnIndex).innerHTML;
-                //dummy.setAttribute('value', selectedText);
-                //dummy.select();
+                    navigator.clipboard.readText().then(clipText => s.GetEditor(s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).SetValue(clipText));
 
-                //document.execCommand("copy");
-                //localStorage.setItem("CopiedText", selectedText);
-                //document.body.removeChild(dummy);
                 return;
 
             }

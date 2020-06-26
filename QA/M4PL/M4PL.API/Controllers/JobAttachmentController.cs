@@ -78,10 +78,10 @@ namespace M4PL.API.Controllers
 
         [HttpGet]
         [Route("DownloadPdfAttachment")]
-        public HttpResponseMessage DownloadPdfAttachment(string orderNumber)
+        public HttpResponseMessage DownloadPdfAttachment(string invoiceNumber)
         {
             HttpResponseMessage response = Request.CreateResponse();
-            IList<JobAttachment> fileAttachmentList = _jobAttachmentCommands.GetJobAttachment(orderNumber);
+            IList<JobAttachment> fileAttachmentList = _jobAttachmentCommands.GetJobAttachmentByInvoiceNumber(invoiceNumber);
             byte[] finalBytes = null;
             List<byte[]> byteArrayList = null;
             byte[] fileBytes = null;
@@ -103,7 +103,7 @@ namespace M4PL.API.Controllers
                 response.Content = new StreamContent(streamSample);
                 response.StatusCode = HttpStatusCode.OK;
                 response.Content.Headers.ContentLength = streamSample.Length;
-                response.Content.Headers.Add("Content-Disposition", "attachment; filename=" + orderNumber.Replace(" ", string.Empty) + ".pdf");
+                response.Content.Headers.Add("Content-Disposition", "attachment; filename=" + invoiceNumber.Replace(" ", string.Empty) + ".pdf");
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
                 return response;
             }
