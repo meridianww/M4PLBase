@@ -68,7 +68,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if (route.ParentRecordId != 0)
                 Session["ListNode"] = route.ParentRecordId.ToString();
-            _gridResult.FocusedRowId = route.RecordId;
+            if (!isJobParentEntity)
+                _gridResult.FocusedRowId = route.RecordId;
             if (route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common
@@ -650,7 +651,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _gridResult.FocusedRowId = route.RecordId;
             var whereCondition = string.Empty;
-           
+
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
@@ -663,7 +664,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //used to reset page index of the grid when Filter applied and pageing is opted
             ViewData[WebApplicationConstants.ViewDataFilterPageNo] = sessionInfo.PagedDataInfo.PageNumber;
             sessionInfo.PagedDataInfo.WhereCondition = filteringState.BuildGridFilterWhereCondition(route.Entity, ref filters, _commonCommands);
-            
+
             if (sessionInfo.Filters != null && filters.Count > 0 && sessionInfo.Filters.Count != filters.Count)//Have to search from starting if setup filter means from page 1
                 sessionInfo.PagedDataInfo.PageNumber = 1;
             sessionInfo.Filters = filters;
@@ -720,7 +721,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region Paging
 
-        public override  PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
+        public override PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
         {
             if (TempData["RowHashes"] != null)
                 TempData.Keep();

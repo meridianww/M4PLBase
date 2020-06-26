@@ -484,6 +484,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult TabView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            route.RecordId = 0;
             var pageControlResult = new PageControlResult
             {
                 PageInfos = _commonCommands.GetPageInfos(EntitiesAlias.JobGateway),

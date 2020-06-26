@@ -42,16 +42,19 @@
         settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
         settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
         settings.Settings.VerticalScrollableHeight = 350;
-////settings.Settings.VerticalScrollBarStyle = GridViewVerticalScrollBarStyle.VirtualSmooth;
-settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
+        //settings.Settings.VerticalScrollBarStyle = GridViewVerticalScrollBarStyle.VirtualSmooth;
+        settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
         settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+
         settings.SettingsBehavior.AllowFocusedRow = true;
         settings.SettingsBehavior.AllowEllipsisInText = true;
         settings.SettingsBehavior.AllowDragDrop = false;
         settings.ControlStyle.CssClass = "gridfields-text-visible";
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.ShowSelectCheckbox = true;
+        if (!Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].PagedDataInfo.IsJobParentEntity)
+        { settings.CommandColumn.ShowSelectCheckbox = true; }
+
         settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
         settings.SettingsCookies.Enabled = true;
         settings.SettingsCookies.StoreColumnsWidth = true;
@@ -252,10 +255,10 @@ settings.SettingsPager.EnableAdaptivity = true;
                     else if (colSetting.DataType.Equals(SQLDataTypes.bit.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         column.EditorProperties().CheckBox(chckBx =>
-                            {
-                                if (column.ReadOnly)
-                                    column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
-                            });
+                        {
+                            if (column.ReadOnly)
+                                column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
+                        });
                     }
                     else if (colSetting.DataType.Equals(SQLDataTypes.datetime2.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
