@@ -217,12 +217,12 @@ namespace M4PL.APIClient.Common
             return CoreCache.ConditionalOperators[ActiveUser.LangCode];
         }
 
-        public SysSetting GetSystemSetting(bool forceUpdate = false)
+        public SysSetting GetSystemSetting(bool forceUpdate = false, ActiveUser activeUser = null)
         {
             if (!CoreCache.SysSettings.ContainsKey(ActiveUser.LangCode))
                 CoreCache.SysSettings.GetOrAdd(ActiveUser.LangCode, new SysSetting());
             if (CoreCache.SysSettings[ActiveUser.LangCode].Id == 0 || forceUpdate)
-                CoreCache.SysSettings[ActiveUser.LangCode] = GetSystemSettingsFromApi(forceUpdate);
+                CoreCache.SysSettings[ActiveUser.LangCode] = GetSystemSettingsFromApi(forceUpdate, activeUser:activeUser);
             return CoreCache.SysSettings[ActiveUser.LangCode];
         }
 
@@ -282,7 +282,7 @@ namespace M4PL.APIClient.Common
         public IList<UserSecurity> GetUserSecurities(ActiveUser activeUser)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserSecurities");
-            return JsonConvert.DeserializeObject<ApiResult<UserSecurity>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(activeUser)).Content).Results;
+            return JsonConvert.DeserializeObject<ApiResult<UserSecurity>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, activeUser ?? ActiveUser).AddObject(activeUser ?? ActiveUser)).Content).Results;
         }
 
         /// <summary>
@@ -311,12 +311,12 @@ namespace M4PL.APIClient.Common
             return userColumnSettings;
         }
 
-        public SysSetting GetUserSysSettings()
+        public SysSetting GetUserSysSettings(ActiveUser activeUser = null)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserSysSettings");
             var userSysSetting = JsonConvert.DeserializeObject<ApiResult<SysSetting>>(
               _restClient.Execute(
-                  HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)).Content).Results.FirstOrDefault();
+                  HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, activeUser ?? ActiveUser)).Content).Results.FirstOrDefault();
             return userSysSetting;
         }
 
@@ -495,10 +495,10 @@ namespace M4PL.APIClient.Common
             return result;
         }
 
-        public object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo)
+        public object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo, ActiveUser activeUser = null)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "PagedSelectedFields");
-            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(dropDownDataInfo)).Content;
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, activeUser ?? ActiveUser).AddObject(dropDownDataInfo)).Content;
             content = content.Replace("[[", "[").Replace("]]", "]");
             switch (dropDownDataInfo.Entity)
             {
@@ -682,10 +682,10 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<TreeListModel>>(content).Results;
         }
 
-        public SysSetting GetSystemSettingsFromApi(bool forceUpdate = false)
+        public SysSetting GetSystemSettingsFromApi(bool forceUpdate = false, ActiveUser activeUser = null)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "SysSettings");
-            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("forceUpdate", forceUpdate)).Content;
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, activeUser ?? ActiveUser).AddParameter("forceUpdate", forceUpdate)).Content;
             var sysSetting = JsonConvert.DeserializeObject<ApiResult<SysSetting>>(content).Results.FirstOrDefault();
 
             if (!string.IsNullOrEmpty(sysSetting.SysJsonSetting))
@@ -732,11 +732,11 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<Role>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)).Content).Results;
         }
 
-        public void UpdateUserSystemSettings(SysSetting userSystemSettings)
+        public void UpdateUserSystemSettings(SysSetting userSystemSettings, ActiveUser activeUser = null)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserSystemSettings");
             userSystemSettings.SysJsonSetting = JsonConvert.SerializeObject(userSystemSettings.Settings, Formatting.None);
-            _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(userSystemSettings));
+            _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, activeUser ?? ActiveUser).AddObject(userSystemSettings));
         }
 
 
@@ -749,19 +749,19 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<IList<PreferredLocation>>>(content).Results.FirstOrDefault();
         }
 
-        public IList<PreferredLocation> GetPreferedLocations(int contTypeId)
+        public IList<PreferredLocation> GetPreferedLocations(ActiveUser activeUser)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPreferedLocations");
-            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)
-                .AddParameter("contTypeId", contTypeId)).Content;
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, activeUser ?? ActiveUser)
+                .AddParameter("contTypeId", activeUser.ConTypeId)).Content;
             var result = JsonConvert.DeserializeObject<ApiResult<IList<PreferredLocation>>>(content).Results.FirstOrDefault();
             return result;
         }
 
-        public int GetUserContactType()
+        public int GetUserContactType(ActiveUser activeUser = null)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetUserContactType");
-            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)).Content;
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, activeUser ?? ActiveUser)).Content;
             return JsonConvert.DeserializeObject<ApiResult<int>>(content).Results.FirstOrDefault();
         }
 

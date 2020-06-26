@@ -2237,10 +2237,10 @@ namespace M4PL.Web
                 return userSetting.Value;
             return string.Empty;
         }
-        public static SysSetting UpdateActiveUserSettings(this ICommonCommands _commonCommands)
+        public static SysSetting UpdateActiveUserSettings(this ICommonCommands _commonCommands, ActiveUser activeUser = null)
         {
-            IList<RefSetting> sysRefSettings = _commonCommands.GetSystemSetting().Settings;
-            SysSetting userSettings = _commonCommands.GetUserSysSettings();
+            IList<RefSetting> sysRefSettings = _commonCommands.GetSystemSetting(activeUser: activeUser).Settings;
+            SysSetting userSettings = _commonCommands.GetUserSysSettings(activeUser: activeUser);
             if (!string.IsNullOrEmpty(userSettings.SysJsonSetting) && (userSettings.Settings == null || !userSettings.Settings.Any()))
                 userSettings.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSettings.SysJsonSetting);
             else
@@ -2262,7 +2262,7 @@ namespace M4PL.Web
             }
 
             SysSetting copySysSetting = new SysSetting { Settings = userSettings.Settings };
-            _commonCommands.UpdateUserSystemSettings(copySysSetting);
+            _commonCommands.UpdateUserSystemSettings(copySysSetting, activeUser);
 
 			return userSettings;
 		}

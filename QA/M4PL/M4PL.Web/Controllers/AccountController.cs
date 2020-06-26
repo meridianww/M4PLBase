@@ -70,7 +70,7 @@ namespace M4PL.Web.Controllers
                             EntityFor = EntitiesAlias.Theme,
                         };
 
-                        var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+                        var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(), activeUser);
                         foreach (var li in (dynamic)list)
                         {
                             WebGlobalVariables.Themes.Add(li.SysRefName);
@@ -79,11 +79,11 @@ namespace M4PL.Web.Controllers
                 }),
                 Task.Factory.StartNew(() =>
                 {
-                    contactTypeId = _commonCommands.GetUserContactType();
+                    contactTypeId = _commonCommands.GetUserContactType(activeUser);
                 }),
                 Task.Factory.StartNew(() =>
                 {
-                    userSettings = _commonCommands.UpdateActiveUserSettings();
+                    userSettings = _commonCommands.UpdateActiveUserSettings(activeUser);
                 }),
                 Task.Factory.StartNew(() =>
                 {
@@ -91,7 +91,7 @@ namespace M4PL.Web.Controllers
                 }),
                 Task.Factory.StartNew(() =>
                 {
-                    preferredLocations = _commonCommands.GetPreferedLocations(activeUser.ConTypeId);
+                    preferredLocations = _commonCommands.GetPreferedLocations(activeUser);
                 })
             };
 

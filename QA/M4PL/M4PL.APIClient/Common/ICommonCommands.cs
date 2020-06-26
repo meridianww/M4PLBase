@@ -88,7 +88,7 @@ namespace M4PL.APIClient.Common
 
         void ReloadCacheForAllEntites();
 
-        SysSetting GetSystemSetting(bool forceUpdate = false);
+        SysSetting GetSystemSetting(bool forceUpdate = false, ActiveUser activeUser = null);
 
         #endregion Cached Results
 
@@ -118,7 +118,7 @@ namespace M4PL.APIClient.Common
 
         UserColumnSettings GetUserColumnSettings(EntitiesAlias entity);
 
-        SysSetting GetUserSysSettings();
+        SysSetting GetUserSysSettings(ActiveUser activeUser = null);
 
         bool GetIsFieldUnique(UniqueValidation uniqueValidation);
 
@@ -136,7 +136,7 @@ namespace M4PL.APIClient.Common
 
         bool CheckRecordUsed(string allRecordIds, EntitiesAlias entity);
 
-        object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo);
+        object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo, ActiveUser activeUser = null);
         object GetProgramDescendants(DropDownInfo dropDownDataInfo);
 
         ByteArray GetByteArrayByIdAndEntity(ByteArray byteArray);
@@ -165,12 +165,12 @@ namespace M4PL.APIClient.Common
 
         IList<Role> GetOrganizationRoleDetails();
 
-        void UpdateUserSystemSettings(SysSetting userSystemSettings);
+        void UpdateUserSystemSettings(SysSetting userSystemSettings, ActiveUser activeUser = null);
         IList<PreferredLocation> AddorEditPreferedLocations(string locations, int ContTypeId);
 
-        IList<PreferredLocation> GetPreferedLocations(int contTypeId);
+        IList<PreferredLocation> GetPreferedLocations(ActiveUser activeUser);
 
-        int GetUserContactType();
+        int GetUserContactType(ActiveUser activeUser = null);
 
         IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo);
         dynamic GetDeleteInfoRecords(PagedDataInfo pagedDataInfo);
