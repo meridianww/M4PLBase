@@ -93,14 +93,13 @@ namespace M4PL.Web.Areas
             if ((route.Action == MvcConstants.ActionGridView || route.Action == MvcConstants.ActionGridPagingView || route.Action == MvcConstants.ActionDataView) && route.Entity == EntitiesAlias.Job)
                 currentPagedDataInfo.IsJobParentEntity = IsJobParentEntity || SessionProvider.IsJobParentEntity;
             if (route.Entity == EntitiesAlias.Job && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
-
                 currentPagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
-            if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
-                && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
-            {
-                if (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition) || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1)
-                    currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
-            }
+            //if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
+            //    && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
+            //{
+            else if (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition) || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1)
+                currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
+            // }
             //currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
             if (route.Entity == EntitiesAlias.JobHistory)
             {
@@ -179,7 +178,7 @@ namespace M4PL.Web.Areas
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            if (route.Filters != null && (route.Filters.FieldName == "ChildGridRoute" || route.Filters.FieldName == "CdcLocationCode" || route.Filters.FieldName == "VdcLocationCode") )
+            if (route.Filters != null && (route.Filters.FieldName == "ChildGridRoute" || route.Filters.FieldName == "CdcLocationCode" || route.Filters.FieldName == "VdcLocationCode"))
                 gridName = "";
             bool isGridSetting = route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard ? true : false;//User for temporaryly for job
             _gridResult.FocusedRowId = route.RecordId;
