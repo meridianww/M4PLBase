@@ -11,6 +11,7 @@ Purpose:                                      Contains commands to perform CRUD 
 using DevExpress.XtraRichEdit;
 using M4PL.DataAccess.Common;
 using M4PL.DataAccess.SQLSerializer.Serializer;
+using M4PL.DataAccess.XCBL;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
@@ -172,6 +173,35 @@ namespace M4PL.DataAccess.Job
             }
             return jobGateway;
         }
+
+
+        public static bool CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser activeUser, long jobId, long programId, string gatewayCode, long customerId)
+        {
+            try
+            {
+                var parameters = new List<Parameter>
+            {
+                new Parameter("@JobID", jobId),
+                new Parameter("@ProgramID", programId),
+                new Parameter("@GwyGatewayCode", gatewayCode),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
+                new Parameter("@userId", activeUser.UserId)
+            };
+
+                var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBLForElectrolux, parameters.ToArray(), storedProcedure: true);
+                if (result && string.Equals(gatewayCode, "In Transit", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
+                }
+                return result;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
 
         public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
         {
@@ -1135,8 +1165,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobServiceActual", job.JobServiceActual),
                new Parameter("@IsJobVocSurvey", job.IsJobVocSurvey),
                new Parameter("@ProFlags12", job.ProFlags12),
-			   new Parameter("@JobDriverAlert", job.JobDriverAlert)
-			};
+               new Parameter("@JobDriverAlert", job.JobDriverAlert)
+            };
 
             return parameters;
         }
