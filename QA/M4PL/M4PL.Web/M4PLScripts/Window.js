@@ -424,11 +424,13 @@ M4PLWindow.DataView = function () {
     }
 
     function _onRowSelectionChanged(s, e) {
+        var isLoadingPanelShow = true;
         var selectedRowCount = s.GetSelectedRowCount();
         if (selectedRowCount == 1 && e.isSelected)
             M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
         else if (selectedRowCount != 0 && M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule')) {
             s.SelectRows(s.GetFocusedRowIndex(), false);
+            isLoadingPanelShow = false;
             if (s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule'))
                 M4PLCommon.DocumentStatus.DisplayMessage("Warning", "Selected job is already scheduled", 2, "JobExistSchedule");
             else
@@ -445,9 +447,12 @@ M4PLWindow.DataView = function () {
                     var route = JSON.parse(urlParams.getAll('strRoute'));
                     route.RecordId = selectedJobId;
                     s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
-                    DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
-                    s.GetSelectedFieldValues("Id", GetSelectedFieldValuesCallback);
+                    if (isLoadingPanelShow)
+                        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+                    //s.GetSelectedFieldValues("Id", GetSelectedFieldValuesCallback);
                     s.Refresh();
+                    if (isLoadingPanelShow)
+                        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                 }
             }
         }

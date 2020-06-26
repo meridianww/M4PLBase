@@ -109,12 +109,13 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
-        public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway, long customerId)
+        public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway, 
+            long customerId, long? jobId = null)
         {
             JobGateway result = null;
             try
             {
-                var parameters = GetParameters(jobGateway, userSysSetting);
+                var parameters = GetParameters(jobGateway, userSysSetting, jobId);
                 parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
                 parameters.Add(new Parameter("@statusCode", jobGateway.StatusCode));
                 parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
@@ -206,11 +207,11 @@ namespace M4PL.DataAccess.Job
         /// </summary>
         /// <param name="jobGateway"></param>
         /// <returns></returns>
-        private static List<Parameter> GetParameters(JobGateway jobGateway, SysSetting userSysSetting = null)
+        private static List<Parameter> GetParameters(JobGateway jobGateway, SysSetting userSysSetting = null, long? jobId = null)
         {
             var parameters = new List<Parameter>
             {
-               new Parameter("@jobId", jobGateway.JobID),
+               new Parameter("@jobId", jobId ?? jobGateway.JobID),
                new Parameter("@programId", jobGateway.ProgramID),
                new Parameter("@gwyGatewaySortOrder", jobGateway.GwyGatewaySortOrder),
                new Parameter("@gwyGatewayCode", jobGateway.GwyGatewayCode),

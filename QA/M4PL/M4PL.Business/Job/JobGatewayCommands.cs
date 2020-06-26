@@ -95,16 +95,16 @@ namespace M4PL.Business.Job
             var gateway = new JobGateway();
             if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
             {
-                //List<Task> tasks = new List<Task>();
+                List<Task> tasks = new List<Task>();
                 foreach (var item in jobGateway.JobIds[0].Split(','))
                 {
-                    jobGateway.JobID = Convert.ToInt64(item);
-                    //tasks.Add(Task.Factory.StartNew(() =>
-                    //{
-                    gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
-                    //}));
+                    tasks.Add(Task.Factory.StartNew(() =>
+                    {
+                        gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, 
+                            M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
+                    }));
                 }
-                //Task.WaitAll(tasks.ToArray());
+                Task.WaitAll(tasks.ToArray());
             }
             else
             {
