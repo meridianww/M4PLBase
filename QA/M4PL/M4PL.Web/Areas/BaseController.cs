@@ -92,7 +92,7 @@ namespace M4PL.Web.Areas
             var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
             if ((route.Action == MvcConstants.ActionGridView || route.Action == MvcConstants.ActionGridPagingView || route.Action == MvcConstants.ActionDataView) && route.Entity == EntitiesAlias.Job)
                 currentPagedDataInfo.IsJobParentEntity = IsJobParentEntity || SessionProvider.IsJobParentEntity;
-            if (route.Entity == EntitiesAlias.Job && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
+            if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
                 currentPagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
             //if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
             //    && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
