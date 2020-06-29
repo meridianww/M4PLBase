@@ -179,7 +179,7 @@ namespace M4PL.DataAccess.Job
 
                 return SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.GetSequenceForEntity, parameters.ToArray(), storedProcedure: true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return 0;
             }

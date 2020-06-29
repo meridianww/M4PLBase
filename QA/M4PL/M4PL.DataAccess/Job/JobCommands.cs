@@ -196,7 +196,7 @@ namespace M4PL.DataAccess.Job
                 }
                 return result;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return false;
             }
@@ -1465,7 +1465,7 @@ namespace M4PL.DataAccess.Job
                 var result = SqlSerializer.Default.DeserializeMultiRecords<CustomEntity>(StoredProceduresConstant.GetCustomEntityIdByEntityName, parameters, false, storedProcedure: true);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -1554,7 +1554,7 @@ namespace M4PL.DataAccess.Job
                 count = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
                 return count;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return count;
             }
@@ -1570,7 +1570,7 @@ namespace M4PL.DataAccess.Job
             {
                 return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetActiveJobByProgram, parameters, storedProcedure: true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
