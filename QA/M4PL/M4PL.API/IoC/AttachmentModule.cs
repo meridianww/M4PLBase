@@ -13,8 +13,15 @@ using M4PL.Business.Attachment;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// Attachment Module
+    /// </summary>
     public class AttachmentModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<AttachmentCommands>().As<IAttachmentCommands>().InstancePerRequest();
