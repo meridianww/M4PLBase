@@ -8,6 +8,7 @@ using M4PL.Entities.XCBL.Electrolux.OrderRequest;
 using M4PL.Entities.XCBL.Electrolux.OrderResponse;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
@@ -31,13 +32,15 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Insert XCBL Summary Header
+        ///The requested information such as Header, Address, UDF, CustomAttribute, Line Detail will be inserted into respective xcbl tables and in future it will be used for mannually accepting changes.
+        /// For Shipping Schedule Request.It will compare the fields with existing job.If there the a change in fields, action Codes Mapped in the Decision Maker will be Added to the Job.
+        /// If the Added Gateway/Action is Marked as complete based on the settings from Program the new values will be Updated in Job else On completion of Gateway/Action new values will be updated.
         /// </summary>
-        /// <param name="xCBLToM4PLRequisitionRequest"></param>
-        /// <returns></returns>
+        /// <param name="xCBLToM4PLRequest"></param>
+        /// <returns>Inserted Xcbl Summary Header Id</returns>
         [CustomAuthorize]
         [HttpPost]
-        [Route("XCBLSummaryHeader")]
+        [Route("XCBLSummaryHeader"), ResponseType(typeof(long))]
         public long InsertXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequest)
         {
             BaseCommands.ActiveUser = ActiveUser;
@@ -45,13 +48,18 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Process Electrolux Order Request
+        ///Request will be validated
+        ///The requested information such as Header, Address, UDF, CustomAttribute, Line Detail will be inserted into respective xcbl tables 
+        ///and in future it will be used for mannually accepting changes.
+        ///If request is of type Order and if type of the action is ADD, new job will be created  along with Cargo and its price and cost will be inserted.If action is DELETE then Job will be cancelled.
+        ///If the request is of type ASN and the ACTION is of type ADD then requested Job will be updated with the details also price and cost details also updated. If the Action is of type DELTE then nothing will happen.
+        ///For the ASN request if the Gateway status in In Production In Transit gateway will be added automatically.
         /// </summary>
         /// <param name="electroluxOrderDetails">electroluxOrderDetails</param>
-        /// <returns></returns>
+        /// <returns>Order response with Job Id and Status Code and message</returns>
         [CustomAuthorize]
         [HttpPost]
-        [Route("Electrolux/OrderRequest")]
+        [Route("Electrolux/OrderRequest"), ResponseType(typeof(OrderResponse))]
         public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
         {
             _xcblCommands.ActiveUser = ActiveUser;
@@ -89,7 +97,7 @@ namespace M4PL.API.Controllers
             _xcblCommands.ActiveUser = ActiveUser;
             return _xcblCommands.UpdateDeliveryUpdateProcessingLog(deliveryUpdateProcessingData);
         }
-
+      
         [CustomAuthorize]
         [HttpGet]
         [Route("Electrolux/GetDeliveryUpdateModel")]
