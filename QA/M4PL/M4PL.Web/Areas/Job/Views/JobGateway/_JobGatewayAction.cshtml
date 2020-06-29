@@ -130,6 +130,7 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsSpecificCustomer, new { Name = "IsSpecificCustomer" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.StatusCode, new { Name = "StatusCode" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsGatewayCalled, new { Name = "IsGatewayCalled" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyTitle, new { Name = "GwyTitle" }).ToHtmlString());
         #endregion
 
         if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Canceled)
