@@ -65,33 +65,13 @@ namespace M4PL.Business.Job
             return _commands.PostWithSettings(ActiveUser, userSysSetting, jobDocReference);
         }
 
-        public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId)
+        public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment,long jobId, string documentType)
         {
             StatusModel result = new StatusModel();
 			string docType = string.Empty;
-			SystemReference documentOption = null;
 			List<SystemReference> systemOptionList = DataAccess.Administration.SystemReferenceCommands.GetSystemRefrenceList();
-			if (jobDocumentAttachment != null)
-			{
-				if (!string.IsNullOrEmpty(jobDocumentAttachment.DocumentCode) && jobDocumentAttachment.DocumentCode.ToUpper().Contains("POD"))
-				{
-					documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("POD", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
-				}
-				else if(!string.IsNullOrEmpty(jobDocumentAttachment.DocumentCode) && jobDocumentAttachment.DocumentCode.ToUpper().Contains("DAM"))
-				{
-					documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("Damaged", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
-				}
-				else if (!string.IsNullOrEmpty(jobDocumentAttachment.DocumentCode) && jobDocumentAttachment.DocumentCode.ToUpper().Contains("SIGNATURE"))
-				{
-					documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("Signature", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
-				}
-				else
-				{
-					documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("Image", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
-				}
-			}
-
-            if (documentOption == null)
+			SystemReference documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals(documentType, StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
+			if (documentOption == null)
             {
                 return new StatusModel()
                 {

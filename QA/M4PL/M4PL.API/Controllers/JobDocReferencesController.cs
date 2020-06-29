@@ -66,15 +66,16 @@ namespace M4PL.API.Controllers
 		/// name title etc.
 		/// </param>
 		/// <param name="jobId">Request parameter refer to the M4PL JobId.</param>
+		/// <param name="documentType">documentType</param>
 		/// <returns>API response json contains the status and other related information, if status is Success and AdditionalDetail property is 
 		/// blank it means request processed successfully without any issue else status will be error and failure details will be provided under property 
 		/// AdditionalDetail.</returns>
 		[HttpPost]
 		[Route("InsertJobDocument"), ResponseType(typeof(StatusModel))]
-		public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId)
+		public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType)
         {
             _jobDocReferenceCommands.ActiveUser = ActiveUser;
-            return _jobDocReferenceCommands.InsertJobDocumentData(jobDocumentAttachment, jobId);
+            return _jobDocReferenceCommands.InsertJobDocumentData(jobDocumentAttachment, jobId, documentType);
         }
 
         [HttpGet]
