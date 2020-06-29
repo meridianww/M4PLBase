@@ -230,7 +230,8 @@ namespace M4PL.Web
                 default:
                     break;
             }
-            if (!gridViewSetting.ShowNewButton && !(currentPermission < Permission.AddEdit) && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
+            //!(currentPermission < Permission.AddEdit) &&
+            if (!gridViewSetting.ShowNewButton &&  route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
             {
                 if (route.Entity != EntitiesAlias.PrgVendLocation
                     && route.Entity != EntitiesAlias.PrgCostLocation

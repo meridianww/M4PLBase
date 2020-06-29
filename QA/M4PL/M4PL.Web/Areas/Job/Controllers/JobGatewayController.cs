@@ -183,7 +183,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (messages.Any())
                     return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
             }
-           
+
             JobGatewayView jobGatewayViewAction = new JobGatewayView();
 
             jobGatewayViewAction.Id = jobGatewayView.Id;
@@ -812,9 +812,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null
                 ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
 
-            _formResult.Permission = _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && Session["isEdit"] != null
-           ? ((bool)Session["isEdit"] == true ? Permission.ReadOnly : _formResult.Permission)
-           : _formResult.Permission;
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
 
@@ -998,7 +995,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
             var formResult = new FormResult<JobGatewayComplete>();
-            formResult.Permission = _formResult.Permission;
+            //formResult.Permission = _formResult.Permission;
             formResult.CallBackRoute = route;
             formResult.SessionProvider = SessionProvider;
             formResult.FormId = "GatewayComplete" + formResult.FormId;
@@ -1048,9 +1045,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.DateCancelled = Utilities.TimeUtility.GetPacificDateTime();
                 _formResult.Record.CancelOrder = true;
             }
-
+            _formResult.Permission = _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && Session["isEdit"] != null
+                                   && (bool)Session["isEdit"] == true ? Permission.ReadOnly : Permission.All;
             var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
-            _formResult.Record.GwyGatewayACD = DateTime.UtcNow.AddHours(result.UTCValue);
+            _formResult.Record.GwyGatewayACD = _formResult.Record.DateComment = DateTime.UtcNow.AddHours(result.UTCValue);
             _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
             _formResult.Record.StatusCode = string.IsNullOrEmpty(result.PgdShipApptmtReasonCode)

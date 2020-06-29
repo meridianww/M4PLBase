@@ -23,7 +23,8 @@
     attachmentRoute.SetParent(EntitiesAlias.JobGateway, Model.Record.Id);
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var actionEnumToCompare = WebUtilities.JobGatewayActions.NotAction;
-    var isEdit = Model.Permission == Permission.ReadOnly ? false : true;
+    //var isEdit = Model.Permission == Permission.ReadOnly ? false : true;
+    var isEdit = Session["isEdit"] != null ? (bool)Session["isEdit"] : true; 
     Model.Record.GwyGatewaySortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.GwyGatewaySortOrder;
 
     if ((bool)Session["isEdit"])
@@ -312,7 +313,7 @@
                                                }
                                                if (!Model.Record.IsGatewayCalled)
                                                {
-                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
+                                                   //ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
                                                }
@@ -439,7 +440,7 @@
 
                                                if (!Model.Record.IsGatewayCalled)
                                                {
-                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
+                                                   //ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
                                                }
