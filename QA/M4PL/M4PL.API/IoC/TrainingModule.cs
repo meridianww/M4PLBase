@@ -3,6 +3,9 @@ using M4PL.Business.Training;
 
 namespace M4PL.API.IoC
 {
+	/// <summary>
+	/// Training Module
+	/// </summary>
 	public class TrainingModule : Module
 	{
 		/// <summary>

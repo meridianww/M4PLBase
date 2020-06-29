@@ -8,14 +8,16 @@ Program Name:                                 IJobCargoCommands
 Purpose:                                      Set of rules for JobCargoCommands
 =============================================================================================================*/
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 
 namespace M4PL.Business.Job
 {
-    /// <summary>
-    /// Performs basic CRUD operation on the JobCargo Entity
-    /// </summary>
-    public interface IJobCargoCommands : IBaseCommands<JobCargo>
-    {
-    }
+	/// <summary>
+	/// Performs basic CRUD operation on the JobCargo Entity
+	/// </summary>
+	public interface IJobCargoCommands : IBaseCommands<JobCargo>
+	{
+		StatusModel CreateCargoException(JobCargoException jobCargoException, long cargoId);
+	}
 }

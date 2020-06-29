@@ -13,8 +13,15 @@ using M4PL.Business.Survey;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// Survey Module
+    /// </summary>
     public class SurveyModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<JobSurveyCommands>().As<IJobSurveyCommands>().InstancePerRequest();

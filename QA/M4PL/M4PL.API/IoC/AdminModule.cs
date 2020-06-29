@@ -14,8 +14,15 @@ using M4PL.Business.Common;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// Admin Module
+    /// </summary>
     public class AdminModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ColumnAliasCommands>().As<IColumnAliasCommands>().InstancePerRequest();

@@ -19,8 +19,15 @@ using M4PL.Business.Finance.Vendor;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// Finance Module
+    /// </summary>
     public class FinanceModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<AppDashboardCommands>().As<IAppDashboardCommands>().InstancePerRequest();

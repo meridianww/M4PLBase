@@ -92,7 +92,7 @@ namespace M4PL.DataAccess.Job
                 SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdateJobFomXCBL, parameters.ToArray(), storedProcedure: true);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -167,7 +167,7 @@ namespace M4PL.DataAccess.Job
                    };
                 return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetJobGatewayCode, parameters.ToArray(), storedProcedure: true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return string.Empty;
             }
@@ -202,7 +202,7 @@ namespace M4PL.DataAccess.Job
                 SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdatexCBLRejected, parameters.ToArray(), storedProcedure: true);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

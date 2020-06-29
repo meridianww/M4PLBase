@@ -427,7 +427,7 @@ namespace M4PL.Business.Finance.SalesOrder
                     }
                 }
             }
-            catch (Exception exp)
+            catch (Exception)
             {
                 //_logger.Log(exp, string.Format("Error is occuring while Getting the DimensionValue: Request Url is: {0}", serviceCall), "Get the DimensionValue List From NAV.", LogType.Error);
             }

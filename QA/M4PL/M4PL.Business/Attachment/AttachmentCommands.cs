@@ -12,8 +12,6 @@ using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Attachment.AttachmentCommands;
-using M4PL.Entities;
-using System;
 using M4PL.Entities.Document;
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using System.IO;
