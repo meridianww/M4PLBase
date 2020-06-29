@@ -8,7 +8,9 @@
 //Purpose:                                      End point to interact with Act Role module
 //====================================================================================================================================================*/
 
+using M4PL.API.Filters;
 using M4PL.Business.Job;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using System.Web.Http;
 
@@ -28,5 +30,20 @@ namespace M4PL.API.Controllers
         {
             _jobCargoCommands = jobCargoCommands;
         }
-    }
+
+		/// <summary>
+		/// Create Cargo Exception For a Particular Job Cargo
+		/// </summary>
+		/// <param name="jobCargoException">jobCargoException</param>
+		/// <param name="cargoId">cargoId</param>
+		/// <returns>StatusModel</returns>
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("CreateCargoException")]
+		public StatusModel CreateCargoException(JobCargoException jobCargoException, long cargoId)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCargoCommands.CreateCargoException(jobCargoException, cargoId);
+		}
+	}
 }

@@ -248,7 +248,7 @@ namespace M4PL.DataAccess.Job
                 var result = SqlSerializer.Default.DeserializeMultiRecords<CustomEntity>(StoredProceduresConstant.GetCustomEntityIdByEntityName, parameters, false, storedProcedure: true);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;

@@ -1375,6 +1375,11 @@ namespace M4PL.Web
                     && route.Action != "ImportOrder")
                     allNavMenus.Add(saveMenu);
 
+                if (allNavMenus != null && !allNavMenus.Any(x => x.IconID == "actions_save_16x16devav") && route.Action.EqualsOrdIgnoreCase("GatewayActionFormView"))
+                {
+                    allNavMenus.Add(saveMenu);
+                }
+
                 if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                     && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)
                     && currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel
@@ -2339,6 +2344,7 @@ namespace M4PL.Web
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateEmail ?? jobGatewayView.DateEmail;
                     escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPCurrent.ToString(),
                                             JobGatewayColumns.GwyDDPNew.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
                                             JobGatewayColumns.GwyLwrDate.ToString(),

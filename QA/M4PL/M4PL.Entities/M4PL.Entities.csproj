@@ -102,6 +102,8 @@
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
     <Compile Include="Job\BatchJobDetail.cs" />
+    <Compile Include="Job\JobCargoException.cs" />
+    <Compile Include="Job\JobExceptionDetail.cs" />
     <Compile Include="Job\JobActionCode.cs" />
     <Compile Include="Job\JobAdvanceReport.cs" />
     <Compile Include="Job\JobAdvanceReportFilter.cs" />
