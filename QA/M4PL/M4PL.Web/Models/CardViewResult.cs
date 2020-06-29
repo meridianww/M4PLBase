@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using M4PL.Entities;
-using M4PL.Entities.Support;
-using M4PL.Web.Providers;
+﻿using M4PL.Entities.Support;
+using System.Collections.Generic;
 
 namespace M4PL.Web.Models
 {

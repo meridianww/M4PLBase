@@ -10,8 +10,10 @@ Purpose:                                      Set of rules for CommonCommands
 
 using M4PL.APIClient.ViewModels.Attachment;
 using M4PL.APIClient.ViewModels.Contact;
+using M4PL.APIClient.ViewModels.Document;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 
@@ -67,7 +69,7 @@ namespace M4PL.APIClient.Common
         /// </summary>
         /// <param name="compId"></param>
         /// <returns>CompanyCorpAddress</returns>
-        CompanyCorpAddress GetCompCorpAddress( int compId);
+        CompanyCorpAddress GetCompCorpAddress(int compId);
 
         /// <summary>
         /// Route to call Page Information
@@ -86,7 +88,7 @@ namespace M4PL.APIClient.Common
 
         void ReloadCacheForAllEntites();
 
-        SysSetting GetSystemSetting(bool forceUpdate = false);
+        SysSetting GetSystemSetting(bool forceUpdate = false, ActiveUser activeUser = null);
 
         #endregion Cached Results
 
@@ -114,17 +116,9 @@ namespace M4PL.APIClient.Common
         /// <returns></returns>
         IList<UserSecurity> GetRefRoleSecurities(ActiveUser activeUser);
 
-        /// <summary>
-        /// Route to call User SubSecurities
-        /// </summary>
-        /// <param name="secByRoleId"></param>
-        /// <param name="mainModuleId"></param>
-        /// <returns></returns>
-        IList<UserSubSecurity> GetUserSubSecurities(long secByRoleId);
-
         UserColumnSettings GetUserColumnSettings(EntitiesAlias entity);
 
-        SysSetting GetUserSysSettings();
+        SysSetting GetUserSysSettings(ActiveUser activeUser = null);
 
         bool GetIsFieldUnique(UniqueValidation uniqueValidation);
 
@@ -142,7 +136,7 @@ namespace M4PL.APIClient.Common
 
         bool CheckRecordUsed(string allRecordIds, EntitiesAlias entity);
 
-        object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo);
+        object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo, ActiveUser activeUser = null);
         object GetProgramDescendants(DropDownInfo dropDownDataInfo);
 
         ByteArray GetByteArrayByIdAndEntity(ByteArray byteArray);
@@ -171,12 +165,12 @@ namespace M4PL.APIClient.Common
 
         IList<Role> GetOrganizationRoleDetails();
 
-        void UpdateUserSystemSettings(SysSetting userSystemSettings);
+        void UpdateUserSystemSettings(SysSetting userSystemSettings, ActiveUser activeUser = null);
         IList<PreferredLocation> AddorEditPreferedLocations(string locations, int ContTypeId);
 
-        IList<PreferredLocation> GetPreferedLocations(int contTypeId);
+        IList<PreferredLocation> GetPreferedLocations(ActiveUser activeUser);
 
-        int GetUserContactType();
+        int GetUserContactType(ActiveUser activeUser = null);
 
         IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo);
         dynamic GetDeleteInfoRecords(PagedDataInfo pagedDataInfo);
@@ -190,5 +184,14 @@ namespace M4PL.APIClient.Common
         JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
 
         List<AttachmentView> DownloadAll(long jobId);
+		DocumentDataView DownloadBOL(long recordId);
+		DocumentDataView DownloadTracking(long recordId);
+		DocumentDataView GetPriceCodeReportByJobId(long jobId);
+		DocumentDataView GetCostCodeReportByJobId(long jobId);
+		DocumentDataView DownloadPOD(long recordId);
+		DocumentStatusView GetDocumentStatusByJobId(long jobId);
+		DocumentStatusView IsPriceCodeDataPresentForJob(long jobId);
+		DocumentStatusView IsCostCodeDataPresentForJob(long jobId);
+        IList<JobAction> GetJobAction(long jobId);
     }
 }

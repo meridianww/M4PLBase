@@ -725,6 +725,10 @@ label {
     width: 405px;
 }
 
+.col-fixed-57 {
+    width: 420px;
+}
+
 .col-fixed-60 {
     width: 446px;
 }
@@ -5074,3 +5078,15 @@ div#btnCardRefresh {
 .dxpc-headerContent {
     text-align: center;
 }
+
+.driverAlert { 
+     width: 425px !important; 
+     height : 21px !important; 
+ } 
+
+@-moz-document url-prefix() {
+     #JobDriverAlert_I{
+		 height : 21px !important;
+	 }
+}
+

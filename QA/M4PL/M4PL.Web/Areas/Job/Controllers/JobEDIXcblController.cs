@@ -22,13 +22,13 @@ namespace M4PL.Web.Areas.Job.Controllers
 {
     public class JobEDIXcblController : BaseController<JobEDIXcblView>
     {
-		/// <summary>
-		/// Interacts with the interfaces to get the Jobs EDIXcbl details and renders to the page
-		/// Gets the page related information on the cache basis
-		/// </summary>
-		/// <param name="jobEDIXcblCommands"></param>
-		/// <param name="commonCommands"></param>
-		public JobEDIXcblController(IJobEDIXcblCommands jobEDIXcblCommands, ICommonCommands commonCommands)
+        /// <summary>
+        /// Interacts with the interfaces to get the Jobs EDIXcbl details and renders to the page
+        /// Gets the page related information on the cache basis
+        /// </summary>
+        /// <param name="jobEDIXcblCommands"></param>
+        /// <param name="commonCommands"></param>
+        public JobEDIXcblController(IJobEDIXcblCommands jobEDIXcblCommands, ICommonCommands commonCommands)
             : base(jobEDIXcblCommands)
         {
             _commonCommands = commonCommands;

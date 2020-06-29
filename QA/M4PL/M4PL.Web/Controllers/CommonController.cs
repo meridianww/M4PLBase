@@ -13,26 +13,24 @@ using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.ViewModels;
 using M4PL.Entities;
+using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using M4PL.Web;
 using M4PL.Web.Models;
 using M4PL.Web.Providers;
 using M4PL_Apln.Models;
 using Newtonsoft.Json;
 using System;
-
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-using M4PL.Web;
-using M4PL.Entities.Administration;
-using System.Configuration;
-
 namespace M4PL.Web.Controllers
 {
-    public class CommonController : MvcBaseController
+    public class CommonController : MvcBaseController 
     {
         public CommonController(ICommonCommands commonCommands)
         {
@@ -377,7 +375,7 @@ namespace M4PL.Web.Controllers
                 });
             }
 
-            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => x.DeepCopy()).ToList();
+            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && (defaultRoute.Entity == EntitiesAlias.JobCargo ? true : !GetPrimaryKeyColumns().Contains(c.ColColumnName))).Select(x => x.DeepCopy()).ToList();
             ViewData[MvcConstants.DefaultGroupByColumns] = columnSettingsFromColumnAlias.Where(x => x.ColIsGroupBy).Select(x => x.ColColumnName).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
@@ -516,6 +514,21 @@ namespace M4PL.Web.Controllers
         public ActionResult GetLookupIdByName(string lookupName)
         {
             return Json(new { status = true, lookupId = _commonCommands.GetLookupIdByName(lookupName) }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetDocumentStatusByJobId(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(jobId) }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult IsPriceCodeDataPresentForJob(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult IsCostCodeDataPresentForJob(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetContactType(string lookupName)
@@ -1082,7 +1095,7 @@ namespace M4PL.Web.Controllers
             SessionProvider.ActiveUser.PreferredLocation = result;
             return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult UpdateJobReportFormViewRoute(long jobId)
+        public JsonResult UpdateJobReportFormViewRoute(long jobId, EntitiesAlias entityFor)
         {
             if (SessionProvider != null && SessionProvider.ActiveUser != null && jobId > 0)
             {
@@ -1090,6 +1103,7 @@ namespace M4PL.Web.Controllers
                 var jobFormViewRoute = new MvcRoute(SessionProvider.ActiveUser.CurrentRoute, "FormView", 0, 0, "OwnerCbPanel");
                 jobFormViewRoute.Entity = EntitiesAlias.Job;
                 jobFormViewRoute.Area = EntitiesAlias.Job.ToString();
+                jobFormViewRoute.ParentEntity = entityFor;
                 jobFormViewRoute.ParentRecordId = 0;
                 jobFormViewRoute.RecordId = jobId;
                 jobFormViewRoute.IsPBSReport = true; //// job advance report redirection

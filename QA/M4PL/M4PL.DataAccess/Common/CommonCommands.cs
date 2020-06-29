@@ -12,18 +12,18 @@ using M4PL.DataAccess.Logger;
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Common
 {
-    public static class CommonCommands
-    {
+    public static class CommonCommands 
+	{
         public static object JsonConvert { get; private set; }
 
         /// <summary>
@@ -51,15 +51,35 @@ namespace M4PL.DataAccess.Common
 
         public static IList<UserSecurity> GetUserSecurities(ActiveUser activeUser)
         {
-            var parameters = new[]
+			IList<UserSecurity> userSecurityList = new List<UserSecurity>();
+			var parameters = new[]
             {
                 new Parameter("@userId", activeUser.UserId),
                 new Parameter("@orgId", activeUser.OrganizationId),
                 new Parameter("@roleId", activeUser.RoleId),
             };
-            return SqlSerializer.Default.DeserializeMultiRecords<UserSecurity>(StoredProceduresConstant.GetUserSecurities, parameters,
-                storedProcedure: true);
-        }
+
+			SetCollection sets = new SetCollection();
+			sets.AddSet<UserSecurity>("UserSecurity");
+			sets.AddSet<UserSubSecurity>("UserSubSecurity");
+			SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetUserSecurities, parameters.ToArray(), storedProcedure: true);
+
+			var userSecurityCollection = sets.GetSet<UserSecurity>("UserSecurity");
+			var subSecurityList = sets.GetSet<UserSubSecurity>("UserSubSecurity");
+			if (userSecurityCollection?.Count > 0)
+			{
+				userSecurityList = userSecurityCollection.ToList();
+				foreach (var userSecurity in userSecurityList)
+				{
+					if (userSecurity.Id > 0 && subSecurityList != null && subSecurityList.Count > 0)
+					{
+						userSecurity.UserSubSecurities = subSecurityList.Where(x => x.SecByRoleId == userSecurity.Id).Any() ? subSecurityList.Where(x => x.SecByRoleId == userSecurity.Id).ToList() : null;
+					}
+				}
+			}
+
+			return userSecurityList;
+		}
 
         /// <summary>
         /// Gets list of Ref role securities
@@ -76,27 +96,6 @@ namespace M4PL.DataAccess.Common
                 new Parameter("@roleId", activeUser.RoleId),
             };
             return SqlSerializer.Default.DeserializeMultiRecords<UserSecurity>(StoredProceduresConstant.GetRefRoleSecurities, parameters,
-                storedProcedure: true);
-        }
-
-        /// <summary>
-        /// Gers lists of UserSubSecurities
-        /// </summary>
-        /// <param name="secByRoleId"></param>
-        /// <param name="mainModuleId"></param>
-        /// <param name="activeUser"></param>
-        /// <returns></returns>
-
-        public static IList<UserSubSecurity> GetUserSubSecurities(long secByRoleId, ActiveUser activeUser)
-        {
-            var parameters = new[]
-            {
-                new Parameter("@userId", activeUser.UserId),
-                new Parameter("@secByRoleId", secByRoleId),
-                new Parameter("@orgId", activeUser.OrganizationId),
-                new Parameter("@roleId", activeUser.RoleId),
-            };
-            return SqlSerializer.Default.DeserializeMultiRecords<UserSubSecurity>(StoredProceduresConstant.GetUserSubSecurities, parameters,
                 storedProcedure: true);
         }
 
@@ -132,7 +131,7 @@ namespace M4PL.DataAccess.Common
 
         public static bool GetIsFieldUnique(UniqueValidation uniqueValidation, ActiveUser activeUser)
         {
-            if (uniqueValidation.FieldName.Equals("JobCustomerSalesOrder", StringComparison.OrdinalIgnoreCase) && uniqueValidation.Entity == EntitiesAlias.Job)
+            if (uniqueValidation.FieldName.Equals("JobCustomerSalesOrder", StringComparison.OrdinalIgnoreCase) && uniqueValidation.Entity == EntitiesAlias.Job && uniqueValidation.RecordId == 0)
             {
                 return Job.JobCommands.IsJobNotDuplicate(uniqueValidation.FieldValue, (long)uniqueValidation.ParentId);
             }
@@ -1144,6 +1143,16 @@ namespace M4PL.DataAccess.Common
             }
 
             return changeHistoryDataList;
+        }
+
+        public static IList<JobAction> GetJobAction(ActiveUser activeUser, long jobId)
+        {
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@jobId", jobId)
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobAction>(StoredProceduresConstant.GetJobActions, parameters.ToArray(), storedProcedure: true);
+            return result;
         }
     }
 }

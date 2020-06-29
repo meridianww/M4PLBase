@@ -13,15 +13,17 @@ using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
-	/// <summary>
-	/// Performs basis CRUD operation on the JobAttachment Entity
-	/// </summary>
-	public interface IJobAttachmentCommands : IBaseCommands<JobAttachment>
+    /// <summary>
+    /// Performs basis CRUD operation on the JobAttachment Entity
+    /// </summary>
+    public interface IJobAttachmentCommands : IBaseCommands<JobAttachment>
     {
-		IList<JobAttachment> GetJobAttachment(string orderNumber);
+        IList<JobAttachment> GetJobAttachment(string orderNumber);
+
+		IList<JobAttachment> GetJobAttachmentByInvoiceNumber(string jobSalesInvoiceNumber);
 
 		byte[] GetFileByteArray(byte[] fileBytes, string fileName);
 
-		byte[] GetCombindFileByteArray(List<byte[]> pdfFiles);
-	}
+        byte[] GetCombindFileByteArray(List<byte[]> pdfFiles);
+    }
 }

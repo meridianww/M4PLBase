@@ -1,0 +1,1 @@
+update [SYSTM000ColumnsAlias]  set IsGridColumn = 1 , ColIsVisible = 1 ,ColIsReadOnly = 1 where ColTableName = 'JobCargo' AND ColAliasName = 'ID' AND  ColColumnName = 'Id'

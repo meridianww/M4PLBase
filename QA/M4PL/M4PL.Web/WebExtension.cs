@@ -23,7 +23,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -164,6 +163,16 @@ namespace M4PL.Web
             reportResult.SessionProvider = sessionProvider;
             reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
             reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
+
+            //foreach (var colSetting in reportResult.ColumnSettings)
+            //    if (colSetting.ColLookupId > 0)
+            //    {
+            //        reportResult.ComboBoxProvider = reportResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
+            //        if (reportResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
+            //            reportResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
+            //        else
+            //            reportResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+            //    }
             return reportView;
         }
 
@@ -233,7 +242,8 @@ namespace M4PL.Web
                     var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && x.RefTableName.ToUpper() == refTableName);
                     gridResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
                 }
-                if (tableRef.SysRefName == EntitiesAlias.JobAdvanceReport.ToString())
+                if (tableRef.SysRefName == EntitiesAlias.JobAdvanceReport.ToString()
+                 || tableRef.SysRefName == EntitiesAlias.JobCard.ToString())
                 {
                     gridResult.Permission = Permission.ReadOnly;
                 }
@@ -1503,6 +1513,7 @@ namespace M4PL.Web
             ribbonMenu.Children.ToList().ForEach(mnu =>
             {
                 mnu.StatusId = 1;
+
                 if (string.IsNullOrEmpty(mnu.MnuTableName) && mnu.MnuModuleId == 0 && index == 0) // File Ribbon
                 {
                     mnu.Route = new MvcRoute
@@ -1520,7 +1531,8 @@ namespace M4PL.Web
                     };
 
                     if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
-                       mnu.Route != null && mnu.Route.Area == "Job" && (mnu.Route.Controller == "Job" || mnu.Route.Entity == EntitiesAlias.JobAdvanceReport))
+                       mnu.Route != null && mnu.Route.Area == "Job"
+                       && (mnu.Route.Controller == "Job" || mnu.Route.Entity == EntitiesAlias.JobAdvanceReport || mnu.Route.Entity == EntitiesAlias.JobCard))
                     {
                         if (mnu.Children != null && mnu.Children.Any(obj => obj.Route != null && obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
                         {
@@ -1552,7 +1564,8 @@ namespace M4PL.Web
                             ((mnu.MnuTitle == "Save" || mnu.MnuTitle == "Refresh All") &&
                             route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) &&
                             sessionProvider.ActiveUser.LastRoute.Action == "Report" &&
-                            sessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.JobAdvanceReport &&
+                            (sessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.JobAdvanceReport
+                            || sessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.JobCard) &&
                             (sessionProvider.ActiveUser.CurrentRoute != null &&
                             (sessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm &&
                             sessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job))))
@@ -1564,8 +1577,8 @@ namespace M4PL.Web
                         {
                             mnu.StatusId = route.Entity == EntitiesAlias.Job
                             && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-                            && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity
-                            && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "Form View") ? 1 : 3;
+                            && !sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity
+                            && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New" || mnu.MnuTitle == "Form View") ? 1 : 3;
                             if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job
                             || route.Entity == EntitiesAlias.PrgEdiHeader)
                             {
@@ -1681,6 +1694,14 @@ namespace M4PL.Web
                     };
                 }
 
+                string cointainResult = "File,Form View,Grid View,Paste,Cut,Copy,Clear Filter,Ascending,Descending,Remove Sort,Choose Columns,Advanced,Toggle Filter,Refresh All,New,Save,Find,Replace,Go To,Select,Create Excel,Create Email,Create PDF,Alias Columns,System Settings,Change Session,Themes,Notepad,Calculator,Download Executor,Paste Record";
+                if (route.Controller == EntitiesAlias.JobCard.ToString()
+                && route.Action == "DataView"
+                && cointainResult.Contains(mnu.MnuTitle.ToString()))
+                {
+                    mnu.StatusId = 3;
+                }
+
                 if (mnu.MnuTitle == "Create/Update Order in NAV")
                 {
                     mnu.StatusId = 3;
@@ -1694,20 +1715,108 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "Download All")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
                     {
                         mnu.StatusId = 1;
                     }
-
                 }
 
-                if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
+                if (mnu.MnuTitle == "Data Grid")
+                {
+                    mnu.StatusId = 3;
+                    if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    && route.RecordId > 0 && route.Action != "DataView")
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
+
+                if (mnu.MnuTitle == "BOL")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
+
+                if (mnu.MnuTitle == "POD")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
+
+                if (mnu.MnuTitle == "Tracking")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
+
+                if (mnu.MnuTitle == "Price Code")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                        if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                      || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                         ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                         (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit)
+                         )))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+                }
+
+                if (mnu.MnuTitle == "Cost Code")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;
+                        if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                        || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                           ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                           (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All)
+                           )))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+                }
+
+                if (route.Entity == EntitiesAlias.Job
+                && (sessionProvider.ViewPagedDataSession.Count() > 0
                 && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && (sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobCardEntity
                 || sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity))
                 && route.Action == "FormView" && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
-                if ((route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.Organization) && mnu.MnuTitle == "New")
+                if ((route.Entity == EntitiesAlias.JobCard
+                    || route.Entity == EntitiesAlias.JobAdvanceReport
+                    || route.Entity == EntitiesAlias.Organization)
+                    && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
                 if (route.Entity == EntitiesAlias.JobReport)
                     mnu.StatusId = 3;
@@ -1746,9 +1855,6 @@ namespace M4PL.Web
             var customerSecurityByRole = currentSessionProvider.UserSecurities.FirstOrDefault(x => x.SecMainModuleId.ToEnum<MainModule>() == currentModule);
             if (customerSecurityByRole.Id > 0)
             {
-                if (customerSecurityByRole.UserSubSecurities.Count == 0)
-                    customerSecurityByRole.UserSubSecurities = _commonCommands.GetUserSubSecurities(customerSecurityByRole.Id);
-
                 foreach (var subSecurity in customerSecurityByRole.UserSubSecurities)
                 {
                     if ((subSecurity.SubsMenuOptionLevelId.ToEnum<MenuOptionLevelEnum>() < MenuOptionLevelEnum.Screens) || (subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess))
@@ -1829,6 +1935,7 @@ namespace M4PL.Web
                 //viewData[WebApplicationConstants.ClearFilterManually] = true;
                 sessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter = false;
                 sessionProvider.ViewPagedDataSession[route.Entity].Filters = null;
+                gridResult.FocusedRowId = route.RecordId;
             }
 
             //Added: AppPanelRoute in Session becuase while doing AppPanel callback needed strRoute otherwise AppPanel was always redirecting to default first Page(for operations like ToggleFilter)
@@ -2130,10 +2237,10 @@ namespace M4PL.Web
                 return userSetting.Value;
             return string.Empty;
         }
-        public static void UpdateActiveUserSettings(this ICommonCommands _commonCommands, SessionProvider sessionProvider)
+        public static SysSetting UpdateActiveUserSettings(this ICommonCommands _commonCommands, ActiveUser activeUser = null)
         {
-            IList<RefSetting> sysRefSettings = _commonCommands.GetSystemSetting().Settings;
-            SysSetting userSettings = _commonCommands.GetUserSysSettings();
+            IList<RefSetting> sysRefSettings = _commonCommands.GetSystemSetting(activeUser: activeUser).Settings;
+            SysSetting userSettings = _commonCommands.GetUserSysSettings(activeUser: activeUser);
             if (!string.IsNullOrEmpty(userSettings.SysJsonSetting) && (userSettings.Settings == null || !userSettings.Settings.Any()))
                 userSettings.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSettings.SysJsonSetting);
             else
@@ -2153,10 +2260,12 @@ namespace M4PL.Web
                         userSetting.Value = setting.Value;
                 }
             }
-            sessionProvider.UserSettings = userSettings;
+
             SysSetting copySysSetting = new SysSetting { Settings = userSettings.Settings };
-            _commonCommands.UpdateUserSystemSettings(copySysSetting);
-        }
+            _commonCommands.UpdateUserSystemSettings(copySysSetting, activeUser);
+
+			return userSettings;
+		}
 
         public static M4PL.APIClient.ViewModels.Job.JobGatewayView JobGatewayActionFormSetting(this M4PL.APIClient.ViewModels.Job.JobGatewayView jobGatewayView, WebUtilities.JobGatewayActions actionEnumToCompare, out List<string> escapeRequiredFields)
         {
@@ -2757,6 +2866,13 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%')", jobAdvanceReportRequest.Search);
+            //if (jobAdvanceReportRequest.IsAddtionalFilter)
+            //{
+            //    where += jobAdvanceReportRequest.WeightUnit > 0 ?
+            //        string.Format(" AND JobAdvanceReport.JobWeightUnitTypeId = {0}", jobAdvanceReportRequest.WeightUnit) : "";
+            //    where += jobAdvanceReportRequest.JobPartsOrdered >0 ?
+            //        string.Format(" AND JobAdvanceReport.JobPartsOrdered = {0}", jobAdvanceReportRequest.JobPartsOrdered) : "";
+            //}
             return where;
         }
 

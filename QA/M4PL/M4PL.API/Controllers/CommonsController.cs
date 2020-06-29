@@ -12,7 +12,7 @@ using M4PL.API.Filters;
 using M4PL.API.Models;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
-using M4PL.Entities.Finance;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -248,15 +248,6 @@ namespace M4PL.API.Controllers
             return _command.GetRefRoleSecurities(activeUser).AsQueryable();
         }
 
-        [HttpGet]
-        [CustomQueryable]
-        [Route("UserSubSecurities")]
-        public IQueryable<UserSubSecurity> GetUserSubSecurities(long secByRoleId)
-        {
-            _command.ActiveUser = ActiveUser;
-            return _command.GetUserSubSecurities(secByRoleId).AsQueryable();
-        }
-
         [HttpPost]
         [CustomQueryable]
         [Route("InsAndUpdChooseColumn")]
@@ -319,7 +310,7 @@ namespace M4PL.API.Controllers
 
         [HttpGet]
         [Route("AddorEditPreferedLocations")]
-        public IList<PreferredLocation> AddorEditPreferedLocations(string locations ,int contTypeId)
+        public IList<PreferredLocation> AddorEditPreferedLocations(string locations, int contTypeId)
         {
             _command.ActiveUser = ActiveUser;
             return _command.AddorEditPreferedLocations(locations, contTypeId);
@@ -327,7 +318,7 @@ namespace M4PL.API.Controllers
 
         [HttpGet]
         [Route("GetPreferedLocations")]
-        public IList<PreferredLocation> GetPreferedLocations( int contTypeId)
+        public IList<PreferredLocation> GetPreferedLocations(int contTypeId)
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetPreferedLocations(contTypeId);
@@ -391,23 +382,23 @@ namespace M4PL.API.Controllers
             return _command.GetCustPPPTree(ActiveUser, ActiveUser.OrganizationId, custId, parentId).AsQueryable(); ;
         }
 
-		[HttpGet]
-		[Route("UpdateLineNumberForJobCostSheet")]
-		public virtual bool UpdateLineNumberForJobCostSheet(long? jobId)
-		{
-			_command.ActiveUser = ActiveUser;
-			return _command.UpdateLineNumberForJobCostSheet(ActiveUser, ActiveUser.OrganizationId, jobId); ;
-		}
+        [HttpGet]
+        [Route("UpdateLineNumberForJobCostSheet")]
+        public virtual bool UpdateLineNumberForJobCostSheet(long? jobId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.UpdateLineNumberForJobCostSheet(ActiveUser, ActiveUser.OrganizationId, jobId); ;
+        }
 
-		[HttpGet]
-		[Route("UpdateLineNumberForJobBillableSheet")]
-		public virtual bool UpdateLineNumberForJobBillableSheet(long? jobId)
-		{
-			_command.ActiveUser = ActiveUser;
-			return _command.UpdateLineNumberForJobBillableSheet(ActiveUser, ActiveUser.OrganizationId, jobId); ;
-		}
+        [HttpGet]
+        [Route("UpdateLineNumberForJobBillableSheet")]
+        public virtual bool UpdateLineNumberForJobBillableSheet(long? jobId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.UpdateLineNumberForJobBillableSheet(ActiveUser, ActiveUser.OrganizationId, jobId); ;
+        }
 
-		[HttpPost]
+        [HttpPost]
         [CustomQueryable]
         [Route("ErrorLog")]
         public Entities.ErrorLog GetOrInsErrorLog(Entities.ErrorLog errorLog)
@@ -520,13 +511,13 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetMaxMinRecordsByEntity(entity, RecordID, ActiveUser.OrganizationId, ID);
         }
-		[HttpGet]
-		[Route("GetGatewayTypeByJobID")]
-		public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
-		{
-			_command.ActiveUser = ActiveUser;
-			return _command.GetGatewayTypeByJobID(jobGatewayateId);
-		}
+        [HttpGet]
+        [Route("GetGatewayTypeByJobID")]
+        public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetGatewayTypeByJobID(jobGatewayateId);
+        }
 
         [HttpGet]
         [Route("GetCompCorpAddress")]
@@ -534,6 +525,15 @@ namespace M4PL.API.Controllers
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetCompCorpAddress(compId);
+        }
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("JobAction")]
+        public IQueryable<JobAction> GetJobAction(long jobId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetJobAction(jobId).AsQueryable();
         }
     }
 

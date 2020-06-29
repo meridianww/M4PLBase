@@ -1,8 +1,8 @@
+using M4PL.API.Areas.HelpPage.ModelDescriptions;
+using M4PL.API.Areas.HelpPage.Models;
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using M4PL.API.Areas.HelpPage.ModelDescriptions;
-using M4PL.API.Areas.HelpPage.Models;
 
 namespace M4PL.API.Areas.HelpPage.Controllers
 {

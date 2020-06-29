@@ -42,37 +42,37 @@ namespace M4PL.DataAccess.Program
             return Get(activeUser, id, StoredProceduresConstant.GetProgramCostRate);
         }
 
-		public static List<PrgCostRate> GetProgramCostRate(ActiveUser activeUser, long programId, string locationCode, long jobId)
-		{
-			List<PrgCostRate> result = null;
-			try
-			{
-				var parameters = new List<Parameter>
-				{
-			       new Parameter("@programId", programId),
-			       new Parameter("@userId", activeUser.UserId),
-				   new Parameter("@locationCode", locationCode),
-				   new Parameter("@jobId", jobId)
-				};
+        public static List<PrgCostRate> GetProgramCostRate(ActiveUser activeUser, long programId, string locationCode, long jobId)
+        {
+            List<PrgCostRate> result = null;
+            try
+            {
+                var parameters = new List<Parameter>
+                {
+                   new Parameter("@programId", programId),
+                   new Parameter("@userId", activeUser.UserId),
+                   new Parameter("@locationCode", locationCode),
+                   new Parameter("@jobId", jobId)
+                };
 
-				result = SqlSerializer.Default.DeserializeMultiRecords<PrgCostRate>(StoredProceduresConstant.GetCostCodeListByProgramId, parameters.ToArray(), dateTimeAsUtc: false, storedProcedure: true);
-			}
-			catch (Exception exp)
-			{
-				Logger.ErrorLogger.Log(exp, "Error occuring while getting data for Program Cost Rate for a Program", "GetProgramCostRate", Utilities.Logger.LogType.Error);
-			}
+                result = SqlSerializer.Default.DeserializeMultiRecords<PrgCostRate>(StoredProceduresConstant.GetCostCodeListByProgramId, parameters.ToArray(), dateTimeAsUtc: false, storedProcedure: true);
+            }
+            catch (Exception exp)
+            {
+                Logger.ErrorLogger.Log(exp, "Error occuring while getting data for Program Cost Rate for a Program", "GetProgramCostRate", Utilities.Logger.LogType.Error);
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// Creates a new SystemMessageCode record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="prgCostRate"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Creates a new SystemMessageCode record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="prgCostRate"></param>
+        /// <returns></returns>
 
-		public static PrgCostRate Post(ActiveUser activeUser, PrgCostRate prgCostRate)
+        public static PrgCostRate Post(ActiveUser activeUser, PrgCostRate prgCostRate)
         {
             var parameters = GetParameters(prgCostRate);
             // parameters.Add(new Parameter("@langCode", prgCostRate.LangCode));
@@ -152,8 +152,8 @@ namespace M4PL.DataAccess.Program
                new Parameter("@pcrLogic05", prgCostRate.PcrLogic05),
                new Parameter("@statusId", prgCostRate.StatusId),
                new Parameter("@pcrCustomerId", prgCostRate.PcrCustomerID),
-			   new Parameter("@pcrElectronicBilling", prgCostRate.PcrElectronicBilling),
-			};
+               new Parameter("@pcrElectronicBilling", prgCostRate.PcrElectronicBilling),
+            };
 
             return parameters;
         }

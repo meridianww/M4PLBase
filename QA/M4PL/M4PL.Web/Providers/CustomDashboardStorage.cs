@@ -28,7 +28,7 @@ namespace M4PL.Web.Providers
         {
             get
             {
-                return SessionProvider.Instance; 
+                return SessionProvider.Instance;
             }
         }
 
@@ -50,7 +50,7 @@ namespace M4PL.Web.Providers
         }
 
         public XDocument LoadDashboard(string dashboardID)
-        {            
+        {
             if (string.IsNullOrWhiteSpace(dashboardID))
             {
                 var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.AppDashboard, ParentId = _mainModuleId };

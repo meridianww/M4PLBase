@@ -264,6 +264,7 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
+    <Compile Include="Controllers\TrainingController.cs" />
     <Compile Include="Controllers\JobAdvanceReportController.cs" />
     <Compile Include="Controllers\JobAttachmentController.cs" />
     <Compile Include="Controllers\JobBillableSheetsController.cs" />
@@ -385,6 +386,7 @@
     <Compile Include="IoC\OrganizationModule.cs" />
     <Compile Include="IoC\ProgramModule.cs" />
     <Compile Include="IoC\ScannerModule.cs" />
+    <Compile Include="IoC\TrainingModule.cs" />
     <Compile Include="IoC\VendorModule.cs" />
     <Compile Include="IoC\XcblModule.cs" />
     <Compile Include="Models\ApiContext.cs" />

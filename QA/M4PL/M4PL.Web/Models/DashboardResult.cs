@@ -8,7 +8,6 @@
 //Purpose:                                      Represents description for Dashboard results of the system
 //====================================================================================================================================================*/
 
-using DevExpress.DashboardWeb.Mvc;
 using M4PL.Entities.Support;
 
 namespace M4PL.Web.Models

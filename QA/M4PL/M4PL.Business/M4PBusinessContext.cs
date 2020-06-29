@@ -10,8 +10,8 @@ using M4PL.Utilities;
 
 namespace M4PL.Business
 {
-	public class M4PBusinessContext : ComponentConfiguration<M4PBusinessConfiguration>
-	{
-	}
+    public class M4PBusinessContext : ComponentConfiguration<M4PBusinessConfiguration>
+    {
+    }
 }
 

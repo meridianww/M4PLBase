@@ -9,9 +9,9 @@ Purpose:                                      Contains commands to call DAL logi
 ===================================================================================================================*/
 using M4PL.Entities.Organization;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Organization.OrgReportCommands;
-using System;
 
 namespace M4PL.Business.Organization
 {
@@ -82,9 +82,9 @@ namespace M4PL.Business.Organization
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public OrgReport Patch(OrgReport entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public OrgReport Patch(OrgReport entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -63,6 +63,10 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         public ActionResult TreeCallback(string nodes = null, string selectedNode = null)
         {
+            if (Session["CurrentNode"] != null)
+            {
+                selectedNode = Session["CurrentNode"].ToString();
+            }
             var treeViewBase = new TreeViewBase();
             if (!string.IsNullOrWhiteSpace(nodes))
             {
@@ -89,7 +93,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeViewBase.EnableNodeClick = true;
 
             treeViewBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
-            treeViewBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
+            //treeViewBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
 
 
             treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.Program, Area = BaseRoute.Area };
@@ -106,18 +110,18 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(MvcConstants.ViewTreeViewPanelCallbackPartial);
         }
 
-		#region RichEdit
+        #region RichEdit
 
-		public ActionResult RichEditDescription(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgDescription.ToString());
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditDescription(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgDescription.ToString());
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		public ActionResult RichEditNotes(string strRoute)
+        public ActionResult RichEditNotes(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgNotes.ToString());
@@ -135,9 +139,13 @@ namespace M4PL.Web.Areas.Program.Controllers
                 return null;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-            SetFormResult(route.RecordId, false, route.ParentRecordId);
+                SetFormResult(route.RecordId, false, route.ParentRecordId);
+            if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName) && SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ActionTreeView && SessionProvider.ActiveUser.LastRoute.Controller == "Program")
+            {
+                Session["CurrentNode"] = route.Filters.FieldName;
+            }
+           
             _formResult.Record.ParentId = route.ParentRecordId;
-            
             if (_formResult.Record.PrgHierarchyLevel == 4)
                 return PartialView(MvcConstants.ViewTreeViewCallbackPartial, null);
             if (route.Filters != null && route.Filters.Value != null && long.Parse(route.Filters.Value) != 0)
@@ -176,7 +184,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 {
                     _formResult.ComboBoxProvider = _formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
                     if (!_formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
-                      _formResult.ComboBoxProvider.Add(colSetting.ColLookupId, _commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+                        _formResult.ComboBoxProvider.Add(colSetting.ColLookupId, _commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
                 }
         }
 
@@ -194,7 +202,24 @@ namespace M4PL.Web.Areas.Program.Controllers
         public ActionResult TabViewCallBack(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            return PartialView(MvcConstants.ViewPageControlPartial, route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Program));
+
+            var pageControlResult = route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Program);
+
+            if (route.TabIndex == 0 && route.RecordId == 0)
+            {
+                int index = 0;
+                foreach (var pageInfo in pageControlResult.PageInfos)
+                {
+                    if (Enum.IsDefined(typeof(EntitiesAlias), pageInfo.TabTableName) && pageInfo.Route.Entity.Equals(route.Entity))
+                    {
+                        pageControlResult.SelectedTabIndex = index;
+                        break;
+                    }
+                    index++;
+                }
+            }
+
+            return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);            
         }
 
         public override ActionResult AddOrEdit(ProgramView entityView)
@@ -216,8 +241,8 @@ namespace M4PL.Web.Areas.Program.Controllers
             else if (!string.IsNullOrEmpty(entityView.PrgPhaseTitle))
                 entityView.PrgProgramTitle = entityView.PrgPhaseTitle;
 
-			entityView.PrgRollUpBillingJobFieldId = entityView.PrgRollUpBilling ? entityView.PrgRollUpBillingJobFieldId : null;
-			var viewModel = entityView as SysRefModel;
+            entityView.PrgRollUpBillingJobFieldId = entityView.PrgRollUpBilling ? entityView.PrgRollUpBillingJobFieldId : null;
+            var viewModel = entityView as SysRefModel;
             var messages = ProgramValidation(entityView);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
@@ -414,11 +439,11 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
         }
 
-        public async Task<JsonResult> CopyPPPModel(CopyPPPModel copyPPPModel, bool hasCheckboxesChecked)
+        public JsonResult CopyPPPModel(CopyPPPModel copyPPPModel, bool hasCheckboxesChecked)
         {
             if (hasCheckboxesChecked)
             {
-                var result = _programCommands.CopyPPPModel(copyPPPModel).Result;
+                var result = _programCommands.CopyPPPModel(copyPPPModel);
                 return Json(new { status = result, isNotValid = false }, JsonRequestBehavior.AllowGet);
             }
             else

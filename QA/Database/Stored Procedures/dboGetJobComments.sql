@@ -17,7 +17,7 @@ BEGIN
    SELECT Id, 
    GwyComment,
    GwyGatewayCode
-   from JOBDL020Gateways where JobId = 127111
+   from JOBDL020Gateways where JobId = @JobId
    AND GwyGatewayCode = 'Comment' AND GwyGatewayTitle = 'Shipping Instruction'
    
 END

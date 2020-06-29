@@ -1,0 +1,56 @@
+﻿@using M4PL.Web.Providers
+@model M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
+
+
+@Html.DevExpress().CallbackPanel(setings =>
+{
+    setings.Name = "PackagingTypeByJobCbPanel";
+    setings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
+    setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "PackagingTypeByJob", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+
+    setings.SetContent(() =>
+    {
+        @Html.DevExpress().Label(
+                       settings =>
+                       {
+                           settings.Name = "lblPackagingCode";
+                           settings.Text = "Packaging Code";
+                           settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
+                       }).GetHtml();
+
+        @Html.DevExpress().GridLookup(settings =>
+        {
+            settings.Name = "PackagingTypeByJobCbPanelClosed";
+            settings.ControlStyle.CssClass = "custom-cb-panel-child-container";
+            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "PackagingTypeByJob", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+
+            settings.KeyFieldName = "PackagingCode";
+            settings.Columns.Add("PackagingCode").Settings.AllowAutoFilter = DefaultBoolean.False;
+
+            settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Single;
+            settings.Properties.TextFormatString = "{0}";
+            settings.Properties.MultiTextSeparator = ", ";
+            settings.Properties.Height = 30;
+            settings.Properties.Width =System.Web.UI.WebControls.Unit.Percentage(100);
+            settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
+            settings.GridViewProperties.SettingsPager.EnableAdaptivity = true;
+            settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.GridViewProperties.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+            settings.Properties.AllowUserInput = false;
+            settings.DataBound = (sender, e) =>
+            {
+                Model.Record.JobStatusIdName = "Active";
+                var gridLookup = (MVCxGridLookup)sender;
+                gridLookup.GridView.Selection.SelectRowByKey(Model.Record.PackagingCode);
+            };
+        }).BindList(ViewData["PackagingTypes"]).Bind(Model.Record.PackagingCode).GetHtml();
+    });
+
+}).GetHtml()
+
+
+
+
+
+

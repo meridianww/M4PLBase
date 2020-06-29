@@ -10,17 +10,17 @@ Purpose:                                      Contains objects related to JobOrd
 
 namespace M4PL.Entities.Finance.JobOrderMapping
 {
-	public class JobOrderItemMapping
-	{
-		public long JobOrderItemMappingId { get; set; }
-		public long JobId { get; set; }
-		public string EntityName { get; set; }
-		public int LineNumber { get; set; }
+    public class JobOrderItemMapping
+    {
+        public long JobOrderItemMappingId { get; set; }
+        public long JobId { get; set; }
+        public string EntityName { get; set; }
+        public int LineNumber { get; set; }
 
-		public long M4PLItemId { get; set; }
+        public long M4PLItemId { get; set; }
 
-		public string Document_Number { get; set; }
+        public string Document_Number { get; set; }
 
-		public bool IsElectronicInvoiced { get; set; }
-	}
+        public bool IsElectronicInvoiced { get; set; }
+    }
 }

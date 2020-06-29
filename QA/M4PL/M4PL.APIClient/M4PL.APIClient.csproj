@@ -274,6 +274,8 @@
     <Compile Include="ViewModels\Administration\ValidationView.cs" />
     <Compile Include="ViewModels\CompanyAddress\CompanyAddressView.cs" />
     <Compile Include="ViewModels\Customer\CustDcLocationContactView.cs" />
+    <Compile Include="ViewModels\Document\DocumentStatusView.cs" />
+    <Compile Include="ViewModels\Document\DocumentView.cs" />
     <Compile Include="ViewModels\DropDownEditViewModel.cs" />
     <Compile Include="ViewModels\Finance\NavCostCodeView.cs" />
     <Compile Include="ViewModels\Finance\NavCustomerView.cs" />

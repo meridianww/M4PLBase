@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Support;
 using M4PL.Entities.Vendor;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Vendor.VendFinancialCalendarCommands;
-using System;
 
 namespace M4PL.Business.Vendor
 {
@@ -83,9 +83,9 @@ namespace M4PL.Business.Vendor
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public VendFinancialCalendar Patch(VendFinancialCalendar entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public VendFinancialCalendar Patch(VendFinancialCalendar entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

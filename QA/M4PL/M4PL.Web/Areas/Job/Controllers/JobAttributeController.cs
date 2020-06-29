@@ -84,37 +84,37 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region RichEdit
 
-		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.AjbAttributeDescription.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.AjbAttributeDescription.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.AjbAttributeDescription.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.AjbAttributeDescription.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.AjbAttributeComments.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.AjbAttributeComments.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.AjbAttributeComments.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.AjbAttributeComments.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		#endregion RichEdit
+        #endregion RichEdit
 
-		public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             base.DataView(strRoute);
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);

@@ -25,6 +25,8 @@
     settings.Styles.Header.Wrap = DefaultBoolean.True;
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    //settings.Settings.VerticalScrollableHeight = 300;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
@@ -99,6 +101,10 @@
             settings.SetDetailRowTemplateContent(c =>
             {
                 childRoute.ParentRecordId = DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName).ToLong();
+                childRoute.Filters = new M4PL.Entities.Support.Filter
+                {
+                    FieldName = "ChildGridRoute"
+                };
                 var msg = WebUtilities.ShouldRenderDetailGrid(c.DataItem, ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands, ref childRoute);
                 if (string.IsNullOrEmpty(msg))
                 {

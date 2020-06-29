@@ -8,10 +8,9 @@ Program Name:                                 JobDocReferenceCommands
 Purpose:                                      Client to consume M4PL API called JobDocReferenceController
 =================================================================================================================*/
 
-using System;
 using M4PL.APIClient.ViewModels.Job;
-using Newtonsoft.Json;
 using M4PL.Entities;
+using Newtonsoft.Json;
 using RestSharp;
 using System.Linq;
 

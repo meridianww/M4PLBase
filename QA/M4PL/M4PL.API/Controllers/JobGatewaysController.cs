@@ -35,7 +35,7 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("GatewayWithParent")]
-        public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor, bool is3PlAction)
+        public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction)
         {
             _jobGatewayCommands.ActiveUser = ActiveUser;
             return _jobGatewayCommands.GetGatewayWithParent(id, parentId, entityFor, is3PlAction);
@@ -59,14 +59,14 @@ namespace M4PL.API.Controllers
             return _jobGatewayCommands.PutJobGatewayComplete(jobGateway);
         }
 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("JobAction")]
-        public IQueryable<JobAction> GetJobAction(long jobId)
-        {
-            _jobGatewayCommands.ActiveUser = ActiveUser;
-            return _jobGatewayCommands.GetJobAction(jobId).AsQueryable();
-        }
+        //[CustomAuthorize]
+        //[HttpGet]
+        //[Route("JobAction")]
+        //public IQueryable<JobAction> GetJobAction(long jobId)
+        //{
+        //    _jobGatewayCommands.ActiveUser = ActiveUser;
+        //    return _jobGatewayCommands.GetJobAction(jobId).AsQueryable();
+        //}
 
         [CustomAuthorize]
         [HttpPut]
@@ -140,6 +140,14 @@ namespace M4PL.API.Controllers
         {
             BaseCommands.ActiveUser = ActiveUser;
             return _jobGatewayCommands.PostContactCard(contact);
+        }
+        
+        [HttpGet]
+        [Route("UploadPODGateway")]
+        public bool InsJobGatewayPODIfPODDocExistsByJobId(long jobId)
+        {
+            _jobGatewayCommands.ActiveUser = ActiveUser;
+            return _jobGatewayCommands.InsJobGatewayPODIfPODDocExistsByJobId(jobId);
         }
     }
 }

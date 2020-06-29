@@ -19,15 +19,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Text.RegularExpressions;
-using M4PL.Utilities;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
     public class JobCostSheetController : BaseController<JobCostSheetView>
     {
         private readonly IJobCostSheetCommands _jobCostSheetCommands;
-        private bool _jobCostLoad = true;
+        //private bool _jobCostLoad = true;
 
         public JobCostSheetController(IJobCostSheetCommands JobCostSheetCommands, ICommonCommands commonCommands)
             : base(JobCostSheetCommands)
@@ -77,14 +75,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) 
-                ? _jobCostSheetCommands.GetJobCostCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId) 
+            _formResult.Record = route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value)
+                ? _jobCostSheetCommands.GetJobCostCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId)
                 : _jobCostSheetCommands.Get(route.RecordId);
 
-			if (_formResult.Record != null)
-			{
-				_formResult.Record.CstQuantity = _formResult.Record.CstQuantity > 0 ? _formResult.Record.CstQuantity : 1;
-			}
+            if (_formResult.Record != null)
+            {
+                _formResult.Record.CstQuantity = _formResult.Record.CstQuantity > 0 ? _formResult.Record.CstQuantity : 1;
+            }
 
             _formResult.SetupFormResult(_commonCommands, route);
             if (_formResult.Record is SysRefModel)

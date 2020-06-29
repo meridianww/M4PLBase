@@ -50,7 +50,7 @@ namespace M4PL.Web
             containerBuilder.RegisterModule(new VendorModule());
             containerBuilder.RegisterModule(new ScannerModule());
             containerBuilder.RegisterModule(new AttachmentModule());
-			containerBuilder.RegisterModule(new FinanceModule());
-		}
+            containerBuilder.RegisterModule(new FinanceModule());
+        }
     }
 }

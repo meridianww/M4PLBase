@@ -85,23 +85,23 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #region RichEdit
 
-		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VocDescription.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.VocDescription.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VocDescription.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.VocDescription.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		#endregion RichEdit
+        #endregion RichEdit
 
-		public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
             long expandRowId;

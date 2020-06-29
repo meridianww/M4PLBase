@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
@@ -201,22 +201,22 @@ namespace M4PL.Utilities
             return dtIds;
         }
 
-		public static string GetXMLFromObject(object objectData)
-		{
-			StringWriter stringWriter = new StringWriter();
-			XmlTextWriter textWriter = null;
-			XmlSerializer serializer = new XmlSerializer(objectData.GetType());
-			textWriter = new XmlTextWriter(stringWriter);
-			serializer.Serialize(textWriter, objectData);
-			stringWriter.Close();
-			if (textWriter != null)
-			{
-				textWriter.Close();
-			}
+        public static string GetXMLFromObject(object objectData)
+        {
+            StringWriter stringWriter = new StringWriter();
+            XmlTextWriter textWriter = null;
+            XmlSerializer serializer = new XmlSerializer(objectData.GetType());
+            textWriter = new XmlTextWriter(stringWriter);
+            serializer.Serialize(textWriter, objectData);
+            stringWriter.Close();
+            if (textWriter != null)
+            {
+                textWriter.Close();
+            }
 
-			return stringWriter.ToString();
-		}
+            return stringWriter.ToString();
+        }
 
-		#endregion Public Method
-	}
+        #endregion Public Method
+    }
 }

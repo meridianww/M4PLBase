@@ -12,8 +12,7 @@ using M4PL.Business.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using System.Web.Http;
-using _commonCommands = M4PL.Business.Common.CommonCommands;
-
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
@@ -58,13 +57,25 @@ namespace M4PL.API.Controllers
             return _jobDocReferenceCommands.PutWithSettings(UpdateActiveUserSettings(), jobDocReference);
         }
 
+		/// <summary>
+		/// This API is used to save the documents with respect to a Job. As per business logic there should be a document code present in the request, 
+		/// if document code is contains POD then application will contains the document type as POD, if code is contains DAM then API consider the document 
+		/// type as Damaged, if code contains signature then document type will be signature otherwise by default document type will be considered as Image.
+		/// </summary>
+		/// <param name="jobDocumentAttachment">Request parameter where consumer needs to pass the details related to document like attachment byte array code, 
+		/// name title etc.
+		/// </param>
+		/// <param name="jobId">Request parameter refer to the M4PL JobId.</param>
+		/// <returns>API response json contains the status and other related information, if status is Success and AdditionalDetail property is 
+		/// blank it means request processed successfully without any issue else status will be error and failure details will be provided under property 
+		/// AdditionalDetail.</returns>
 		[HttpPost]
-		[Route("InsertJobDocument")]
-		public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType)
-		{
-			_jobDocReferenceCommands.ActiveUser = ActiveUser;
-			return _jobDocReferenceCommands.InsertJobDocumentData(jobDocumentAttachment, jobId, documentType);
-		}
+		[Route("InsertJobDocument"), ResponseType(typeof(StatusModel))]
+		public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId)
+        {
+            _jobDocReferenceCommands.ActiveUser = ActiveUser;
+            return _jobDocReferenceCommands.InsertJobDocumentData(jobDocumentAttachment, jobId);
+        }
 
         [HttpGet]
         [Route("GetNextSequence")]

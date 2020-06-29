@@ -11,9 +11,9 @@
 using M4PL.APIClient.Common;
 using M4PL.Entities;
 using M4PL.Entities.Support;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Controllers
@@ -39,7 +39,10 @@ namespace M4PL.Web.Controllers
         public ActionResult Login(Login login)
         {
             ViewBag.Menus = GetMenus();
-            SessionProvider.ActiveUser = APIClient.Administration.AccountCommands.GetActiveUser(login);
+			IList<PreferredLocation> preferredLocations = null;
+			IList<UserSecurity> userSecurities = null;
+			SysSetting userSettings = null;
+			SessionProvider.ActiveUser = APIClient.Administration.AccountCommands.GetActiveUser(login);
             if (SessionProvider.ActiveUser.UserId == 0 && string.IsNullOrEmpty(SessionProvider.ActiveUser.SystemMessage))
             {
                 _commonCommands.ActiveUser = new ActiveUser { LangCode = "EN" };
@@ -54,26 +57,53 @@ namespace M4PL.Web.Controllers
 
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             var activeUser = SessionProvider.ActiveUser;
-            activeUser.ConTypeId = _commonCommands.GetUserContactType();
+            var contactTypeId = 0;
+            List<Task> tasks = new List<Task>
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    if (WebGlobalVariables.Themes.Count == 0)
+                    {
+                        var dropDownData = new DropDownInfo
+                        {
+                            Entity = EntitiesAlias.Lookup,
+                            EntityFor = EntitiesAlias.Theme,
+                        };
+
+                        var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(), activeUser);
+                        foreach (var li in (dynamic)list)
+                        {
+                            WebGlobalVariables.Themes.Add(li.SysRefName);
+                        }
+                    }
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    contactTypeId = _commonCommands.GetUserContactType(activeUser);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    userSettings = _commonCommands.UpdateActiveUserSettings(activeUser);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    userSecurities = _commonCommands.GetUserSecurities(activeUser);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    preferredLocations = _commonCommands.GetPreferedLocations(activeUser);
+                })
+            };
+
+            Task.WaitAll(tasks.ToArray());
+
+            activeUser.ConTypeId = contactTypeId;
             SessionProvider.ActiveUser = activeUser;
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
-            if (WebGlobalVariables.Themes.Count == 0)
-            {
-                var dropDownData = new M4PL.Entities.Support.DropDownInfo
-                {
-                    Entity = EntitiesAlias.Lookup,
-                    EntityFor = EntitiesAlias.Theme,
-                };
-                var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
-                foreach (var li in (dynamic)list)
-                {
-                    WebGlobalVariables.Themes.Add(li.SysRefName);
-                }
-            }
-            _commonCommands.UpdateActiveUserSettings(SessionProvider);
-            SessionProvider.UserSecurities = _commonCommands.GetUserSecurities(SessionProvider.ActiveUser);
-            SessionProvider.ActiveUser.PreferredLocation = SessionProvider.ActiveUser.ConTypeId == (int)ContactType.Employee
-                ? _commonCommands.GetPreferedLocations(SessionProvider.ActiveUser.ConTypeId) : null;
+            SessionProvider.ActiveUser.PreferredLocation = preferredLocations;
+            SessionProvider.UserSecurities = userSecurities;
+            SessionProvider.UserSettings = userSettings;
+
             if (login.JobId > 0)
                 return RedirectToAction(MvcConstants.ActionIndex, "MvcBase", new { jobId = login.JobId, tabName = login.TabName });
             return RedirectToAction(MvcConstants.ActionIndex, "MvcBase");
@@ -105,6 +135,7 @@ namespace M4PL.Web.Controllers
 
         public ActionResult LogOut()
         {
+            UpdateAccessToken(null, false);
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
             var isLogOut = APIClient.Administration.AccountCommands.LogOut(SessionProvider.ActiveUser);
@@ -162,18 +193,18 @@ namespace M4PL.Web.Controllers
                 MnuExecuteProgram = "#",
                 MnuTableName = MvcConstants.M4PL_Defaultgroup,
 
-                Children = SessionProvider.ActiveUser.Roles.Select(r => new RibbonMenu
-                {
-                    MnuTitle = r.OrganizationName,
-                    MnuExecuteProgram = "#",
-                    MnuIconMedium = r.OrganizationImage,
-                    MnuTableName = MvcConstants.DefaultTruck,
-                    Route = new MvcRoute
-                    {
-                        Url = r.OrgStatusId == 1 ? Url.Action(MvcConstants.ActionSwitchOrganization, EntitiesAlias.Account.ToString(), new { orgId = r.OrganizationId }) : string.Empty
-                    },
-                    StatusId = r.OrgStatusId
-                }).ToList()
+                //Children = SessionProvider.ActiveUser.Roles.Select(r => new RibbonMenu
+                //{
+                //    MnuTitle = r.OrganizationName,
+                //    MnuExecuteProgram = "#",
+                //    MnuIconMedium = r.OrganizationImage,
+                //    MnuTableName = MvcConstants.DefaultTruck,
+                //    Route = new MvcRoute
+                //    {
+                //        Url = r.OrgStatusId == 1 ? Url.Action(MvcConstants.ActionSwitchOrganization, EntitiesAlias.Account.ToString(), new { orgId = r.OrganizationId }) : string.Empty
+                //    },
+                //    StatusId = r.OrgStatusId
+                //}).ToList()
 
             });
 

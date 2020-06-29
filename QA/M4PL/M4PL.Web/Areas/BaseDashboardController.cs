@@ -126,7 +126,7 @@ namespace M4PL.Web.Areas
                     ErrStackTrace = WebApplicationConstants.NotFoundError,
                     ErrAdditionalMessage = JsonConvert.SerializeObject(route)
                 };
-                  var mvcPageAction = SessionProvider.MvcPageAction;
+                var mvcPageAction = SessionProvider.MvcPageAction;
                 mvcPageAction.Add(_commonCommands.GetOrInsErrorLog(errorLog).Id, MvcConstants.ActionNotFound);
                 SessionProvider.MvcPageAction = mvcPageAction;
                 route = new MvcRoute(EntitiesAlias.Common, SessionProvider.MvcPageAction.FirstOrDefault().Value, string.Empty);

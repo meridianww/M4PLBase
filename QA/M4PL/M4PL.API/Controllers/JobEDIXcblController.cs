@@ -20,36 +20,36 @@ namespace M4PL.API.Controllers
     {
         private readonly IJobEDIXcblCommands _jobEDIXcblCommands;
 
-		/// <summary>
-		/// Function to get Job's Cargo details
-		/// </summary>
-		/// <param name="jobEDIXcblCommands">jobEDIXcblCommands</param>
-		public JobEDIXcblController(IJobEDIXcblCommands jobEDIXcblCommands)
+        /// <summary>
+        /// Function to get Job's Cargo details
+        /// </summary>
+        /// <param name="jobEDIXcblCommands">jobEDIXcblCommands</param>
+        public JobEDIXcblController(IJobEDIXcblCommands jobEDIXcblCommands)
             : base(jobEDIXcblCommands)
         {
             _jobEDIXcblCommands = jobEDIXcblCommands;
         }
 
-		[CustomAuthorize]
-		[HttpPost]
-		[Route("ElectronicTransaction")]
-		public long JobAddElectronicTransaction(JobEDIXcbl jobEDIXcbl)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			JobEDIXcbl updatedJobEDIXcbl = _jobEDIXcblCommands.Post(jobEDIXcbl);
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("ElectronicTransaction")]
+        public long JobAddElectronicTransaction(JobEDIXcbl jobEDIXcbl)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            JobEDIXcbl updatedJobEDIXcbl = _jobEDIXcblCommands.Post(jobEDIXcbl);
 
-			return updatedJobEDIXcbl != null ? updatedJobEDIXcbl.Id : 0;
-		}
+            return updatedJobEDIXcbl != null ? updatedJobEDIXcbl.Id : 0;
+        }
 
-		[CustomAuthorize]
-		[HttpPut]
-		[Route("ElectronicTransaction")]
-		public long JobUpdateElectronicTransaction(JobEDIXcbl jobEDIXcbl)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			JobEDIXcbl updatedJobEDIXcbl = _jobEDIXcblCommands.Put(jobEDIXcbl);
+        [CustomAuthorize]
+        [HttpPut]
+        [Route("ElectronicTransaction")]
+        public long JobUpdateElectronicTransaction(JobEDIXcbl jobEDIXcbl)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            JobEDIXcbl updatedJobEDIXcbl = _jobEDIXcblCommands.Put(jobEDIXcbl);
 
-			return updatedJobEDIXcbl != null ? updatedJobEDIXcbl.Id : 0;
-		}
-	}
+            return updatedJobEDIXcbl != null ? updatedJobEDIXcbl.Id : 0;
+        }
+    }
 }

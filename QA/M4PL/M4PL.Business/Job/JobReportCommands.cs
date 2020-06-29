@@ -9,9 +9,9 @@ Purpose:                                      Contains commands to call DAL logi
 ===================================================================================================================*/
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobReportCommands;
-using System;
 
 namespace M4PL.Business.Job
 {
@@ -82,10 +82,10 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public JobReport Patch(JobReport entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobReport Patch(JobReport entity)
+        {
+            throw new NotImplementedException();
+        }
         public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
         {
             return _commands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);

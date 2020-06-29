@@ -9,7 +9,6 @@
 //====================================================================================================================================================*/
 
 using M4PL.APIClient.Common;
-using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
@@ -158,9 +157,16 @@ namespace M4PL.Web.Controllers
         {
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
             {
+                UpdateAccessToken(null, false);
                 if (jobId > 0)
+                {
                     return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty, jobId = jobId, tabName = tabName });
+                }                    
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
+            }
+            else
+            {
+                UpdateAccessToken(SessionProvider.ActiveUser, true);
             }
             if (SessionProvider.MvcPageAction != null && SessionProvider.MvcPageAction.Count > 0 && SessionProvider.MvcPageAction.FirstOrDefault().Key > 0)
             {
@@ -207,7 +213,13 @@ namespace M4PL.Web.Controllers
             }
             SessionProvider.MvcPageAction.Clear();
             //End
+            if (route.Action != MvcConstants.ActionTreeView && route.Controller != "Program" && (Session["TreeViewLayoutData"] != null || Session["CurrentNode"] != null))
+            {
+                Session["CurrentNode"] = null;
+                Session["TreeViewLayoutData"] = null;
+            }
             SessionProvider.ActiveUser.LastRoute = route;
+
             //if (DevExpress.Web.Mvc.DevExpressHelper.IsCallback)
             //    System.Threading.Thread.Sleep(100);
 
@@ -864,6 +876,16 @@ namespace M4PL.Web.Controllers
                 CommonColumns.DateChanged.ToString(),
                 CommonColumns.ChangedBy.ToString()
             };
+        }
+
+
+        protected void UpdateAccessToken(ActiveUser activeUser, bool status)
+        {
+            var authTokenCookie = HttpContext.Response?.Cookies;
+            if (authTokenCookie[WebApplicationConstants.AuthTokenCookie] != null)
+                authTokenCookie.Remove(WebApplicationConstants.AuthTokenCookie);
+            if (status  && activeUser != null)
+                authTokenCookie.Add(new HttpCookie(WebApplicationConstants.AuthTokenCookie, activeUser.AuthToken));
         }
 
     }

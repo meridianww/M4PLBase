@@ -145,13 +145,13 @@ namespace M4PL.Entities.Support
         /// </value>
         public string RoleCode { get; set; }
 
-		/// <summary>
-		/// Gets or sets the last acccess datetime.
-		/// </summary>
-		/// <value>
-		/// The LastAccessDateTime.
-		/// </value>
-		public DateTime LastAccessDateTime { get; set; }
+        /// <summary>
+        /// Gets or sets the last acccess datetime.
+        /// </summary>
+        /// <value>
+        /// The LastAccessDateTime.
+        /// </value>
+        public DateTime LastAccessDateTime { get; set; }
 
         /// <summary>
         ///  Gets or sets the SysSetting
@@ -180,10 +180,10 @@ namespace M4PL.Entities.Support
         /// </summary>
         public MvcRoute CopiedRecord { get; set; }
 
-		/// <summary>
-		/// Maintain the Current route for refresh the page.
-		/// </summary>
-		public MvcRoute CurrentRoute { get; set; }
+        /// <summary>
+        /// Maintain the Current route for refresh the page.
+        /// </summary>
+        public MvcRoute CurrentRoute { get; set; }
 
         /// <summary>
 		/// Maintain the Report route for refresh the page.

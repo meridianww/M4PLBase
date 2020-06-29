@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Program
@@ -132,9 +133,9 @@ namespace M4PL.DataAccess.Program
                new Parameter("@parentId", parentId),
                  new Parameter("@programId", programId),
                new Parameter("@isChild", isChild),
-			   new Parameter("@userId", activeUser.UserId),
-			   new Parameter("@roleId", activeUser.RoleId)
-			};
+               new Parameter("@userId", activeUser.UserId),
+               new Parameter("@roleId", activeUser.RoleId)
+            };
 
             var result = SqlSerializer.Default.DeserializeMultiRecords<TreeModel>(StoredProceduresConstant.GetAssignUnassignProgram, parameters, storedProcedure: true);
             return result;
@@ -151,6 +152,7 @@ namespace M4PL.DataAccess.Program
                ,new Parameter("@vendorIds",  programVendorMap.VendorIds)
                ,new Parameter("@enteredBy",activeUser.UserName)
                ,new Parameter("@assignedOn",programVendorMap.AssignedOn)
+               ,new Parameter("@dateEntered",TimeUtility.GetPacificDateTime())
             };
 
             var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.InsertAssignUnassignProgram, parameters, storedProcedure: true);

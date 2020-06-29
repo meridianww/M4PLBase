@@ -53,7 +53,7 @@ namespace M4PL.APIClient.Contact
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(RestClient.Execute(
                  HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "CheckContactLoggedIn"), ActiveUser).AddParameter("contactId", contactId)).Content).Results?.FirstOrDefault();
 
-			return result.HasValue ? (bool)result : false;
-		}
+            return result.HasValue ? (bool)result : false;
+        }
     }
 }

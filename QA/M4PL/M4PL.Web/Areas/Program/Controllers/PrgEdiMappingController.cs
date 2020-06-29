@@ -145,7 +145,12 @@ namespace M4PL.Web.Areas.Program.Controllers
                             });
                         }
                     }
-                    p.BindList(_commonCommands.GetColumnSettings(entity.ToEnum<EntitiesAlias>()));
+                    var list = _commonCommands.GetColumnSettings(entity.ToEnum<EntitiesAlias>()).Distinct();
+                    if (entity.ToEnum<EntitiesAlias>() == EntitiesAlias.JobCargo)
+                    {
+                        list = list.GroupBy(x => x.ColColumnName).Select(y => y.First());
+                    }
+                    p.BindList(list);
                 });
             }
             return null;

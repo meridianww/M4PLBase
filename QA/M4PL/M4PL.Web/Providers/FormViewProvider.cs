@@ -234,7 +234,7 @@ namespace M4PL.Web.Providers
                 ParentEntity = viewResult.CallBackRoute != null ? viewResult.CallBackRoute.ParentEntity : EntitiesAlias.Contact,
                 ControlAction = maxLengthField,
             };
-        }       
+        }
         #endregion Long DropDown
 
         #region String DropDown
@@ -545,7 +545,7 @@ namespace M4PL.Web.Providers
         {
             return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionCode, fieldName, viewResult, "JgeTitle", parentId, gatewayAction);
         }
-        public static DropDownViewModel GetExStatusCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0,string gatewayAction = null)
+        public static DropDownViewModel GetExStatusCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, string gatewayAction = null)
         {
             return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionStatusCode, fieldName, viewResult, "ExStatusDescription", parentId, gatewayAction);
         }

@@ -19,7 +19,7 @@ namespace M4PL.APIClient.Program
     /// </summary>
     public interface IPrgEdiHeaderCommands : IBaseCommands<PrgEdiHeaderView>
     {
-       IList<TreeModel> EdiTree(long? parentId, bool model);
-       int GetProgramLevel(long? programId);
+        IList<TreeModel> EdiTree(long? parentId, bool model);
+        int GetProgramLevel(long? programId);
     }
 }

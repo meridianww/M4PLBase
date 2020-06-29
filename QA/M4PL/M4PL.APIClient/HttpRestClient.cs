@@ -8,9 +8,9 @@
 //Purpose:                                      Represents HttpRestClient Details
 //====================================================================================================================================================*/
 
-using System;
 using M4PL.Entities.Support;
 using RestSharp;
+using System;
 
 namespace M4PL.APIClient
 {

@@ -8,9 +8,9 @@
 //Purpose:                                      Contains Actions to render view on Nav Customer over the Pages in the system
 //====================================================================================================================================================*/
 
- 
-using M4PL.APIClient.Finance;
+
 using M4PL.APIClient.Common;
+using M4PL.APIClient.Finance;
 using M4PL.APIClient.ViewModels.Finance;
 using M4PL.Entities;
 using M4PL.Entities.Support;
@@ -19,7 +19,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc; 
+using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Finance.Controllers
 {

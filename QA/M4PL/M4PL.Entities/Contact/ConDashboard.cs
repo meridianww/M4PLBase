@@ -7,8 +7,6 @@ Date Programmed:                              10/10/2017
 Program Name:                                 ConDashboard
 Purpose:                                      Contains objects related to ConDashboard
 ==========================================================================================================*/
-using System;
-using System.Linq;
 
 namespace M4PL.Entities.Contact
 {

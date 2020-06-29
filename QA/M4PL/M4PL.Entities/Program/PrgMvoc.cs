@@ -77,9 +77,9 @@ namespace M4PL.Entities.Program
         /// </value>
         public DateTime? VocDateClose { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets VocAllStar
-		/// </summary>
-		public bool VocAllStar { get; set; }
-	}
+        /// <summary>
+        /// Gets Or Sets VocAllStar
+        /// </summary>
+        public bool VocAllStar { get; set; }
+    }
 }

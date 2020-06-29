@@ -13,19 +13,19 @@ using M4PL.APIClient.Finance;
 
 namespace M4PL.Web.IoC
 {
-	public class FinanceModule : Module
-	{
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.RegisterType<CommonCommands>().As<ICommonCommands>().InstancePerRequest();
-			builder.RegisterType<AppDashboardCommands>().As<IAppDashboardCommands>().InstancePerRequest();
-			builder.RegisterType<NavCustomerCommands>().As<INavCustomerCommands>().InstancePerRequest();
-			builder.RegisterType<NavVendorCommands>().As<INavVendorCommands>().InstancePerRequest();
-			builder.RegisterType<NavCostCodeCommands>().As<INavCostCodeCommands>().InstancePerRequest();
-			builder.RegisterType<NavPriceCodeCommands>().As<INavPriceCodeCommands>().InstancePerRequest();
-			builder.RegisterType<NavSalesOrderCommands>().As<INavSalesOrderCommands>().InstancePerRequest();
-			builder.RegisterType<NavPurchaseOrderCommands>().As<INavPurchaseOrderCommands>().InstancePerRequest();
-			base.Load(builder);
-		}
-	}
+    public class FinanceModule : Module
+    {
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<CommonCommands>().As<ICommonCommands>().InstancePerRequest();
+            builder.RegisterType<AppDashboardCommands>().As<IAppDashboardCommands>().InstancePerRequest();
+            builder.RegisterType<NavCustomerCommands>().As<INavCustomerCommands>().InstancePerRequest();
+            builder.RegisterType<NavVendorCommands>().As<INavVendorCommands>().InstancePerRequest();
+            builder.RegisterType<NavCostCodeCommands>().As<INavCostCodeCommands>().InstancePerRequest();
+            builder.RegisterType<NavPriceCodeCommands>().As<INavPriceCodeCommands>().InstancePerRequest();
+            builder.RegisterType<NavSalesOrderCommands>().As<INavSalesOrderCommands>().InstancePerRequest();
+            builder.RegisterType<NavPurchaseOrderCommands>().As<INavPurchaseOrderCommands>().InstancePerRequest();
+            base.Load(builder);
+        }
+    }
 }
