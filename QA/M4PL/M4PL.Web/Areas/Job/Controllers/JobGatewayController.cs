@@ -737,7 +737,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
-                sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+                sessionInfo.PagedDataInfo.RecordId = 0;
                 sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
                 var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
                 viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
