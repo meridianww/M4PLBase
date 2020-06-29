@@ -744,7 +744,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession = viewPagedDataSession;
             }
             else
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.RecordId = 0;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
+            }                
 
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = null;
 
