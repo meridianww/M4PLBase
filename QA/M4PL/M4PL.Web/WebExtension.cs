@@ -229,7 +229,7 @@ namespace M4PL.Web
                 {
                     gridResult.Permission = Permission.ReadOnly;
                 }
-                else if (security.UserSubSecurities.Count == 0)
+                else if (security?.UserSubSecurities?.Count == null || security.UserSubSecurities.Count == 0)
                 {
                     gridResult.Permission = security.SecMenuAccessLevelId.ToEnum<Permission>();
                 }
@@ -279,7 +279,7 @@ namespace M4PL.Web
                 {
                     formResult.Permission = Permission.ReadOnly;
                 }
-                else if (security.UserSubSecurities.Count == 0)
+                else if (security?.UserSubSecurities?.Count == null || security.UserSubSecurities.Count == 0)
                 {
                     formResult.Permission = security.SecMenuAccessLevelId.ToEnum<Permission>();
                 }
@@ -308,7 +308,7 @@ namespace M4PL.Web
                 {
                     reportResult.Permission = Permission.ReadOnly;
                 }
-                else if (security.UserSubSecurities.Count == 0)
+                else if (security?.UserSubSecurities?.Count == null || security.UserSubSecurities.Count == 0)
                 {
                     reportResult.Permission = security.SecMenuAccessLevelId.ToEnum<Permission>();
                 }
@@ -341,7 +341,7 @@ namespace M4PL.Web
                 {
                     reportResult.Permission = Permission.EditAll;
                 }
-                else if (security.UserSubSecurities.Count == 0)
+                else if (security?.UserSubSecurities?.Count == null || security.UserSubSecurities.Count == 0)
                 {
                     reportResult.Permission = security.SecMenuAccessLevelId.ToEnum<Permission>();
                 }
@@ -375,7 +375,7 @@ namespace M4PL.Web
                 {
                     dashboardResult.Permission = Permission.ReadOnly;
                 }
-                else if (security.UserSubSecurities.Count == 0)
+                else if (security?.UserSubSecurities?.Count == null || security.UserSubSecurities.Count == 0)
                 {
                     dashboardResult.Permission = security.SecMenuAccessLevelId.ToEnum<Permission>();
                 }
@@ -1763,21 +1763,26 @@ namespace M4PL.Web
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
                     {
-                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
-                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
-                        if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
-                      || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
-                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
-                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
-                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
-                         ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
-                         (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
-                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
-                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
-                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit)
-                         )))
+                        if (sessionProvider.UserSecurities != null)
                         {
-                            mnu.StatusId = 1;
+                            var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                            UserSubSecurity childSecurity = null;
+                            if (currentSecurity.UserSubSecurities != null)
+                                childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                            if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                          || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                             ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                             (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit)
+                             )))
+                            {
+                                mnu.StatusId = 1;
+                            }
                         }
                     }
                 }
@@ -1787,21 +1792,26 @@ namespace M4PL.Web
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
                     {
-                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
-                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;
-                        if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
-                        || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
-                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
-                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
-                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
-                           ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
-                           (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
-                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
-                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
-                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All)
-                           )))
+                        if (sessionProvider.UserSecurities != null)
                         {
-                            mnu.StatusId = 1;
+                            var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                            UserSubSecurity childSecurity = null;
+                            if (currentSecurity.UserSubSecurities != null)
+                                childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;
+                            if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                            || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                               currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                               currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                               currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                               ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                               (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                               childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                               childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                               childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All)
+                               )))
+                            {
+                                mnu.StatusId = 1;
+                            }
                         }
                     }
                 }
@@ -2264,8 +2274,8 @@ namespace M4PL.Web
             SysSetting copySysSetting = new SysSetting { Settings = userSettings.Settings };
             _commonCommands.UpdateUserSystemSettings(copySysSetting, activeUser);
 
-			return userSettings;
-		}
+            return userSettings;
+        }
 
         public static M4PL.APIClient.ViewModels.Job.JobGatewayView JobGatewayActionFormSetting(this M4PL.APIClient.ViewModels.Job.JobGatewayView jobGatewayView, WebUtilities.JobGatewayActions actionEnumToCompare, out List<string> escapeRequiredFields)
         {
