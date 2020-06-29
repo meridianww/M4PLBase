@@ -14,8 +14,15 @@ using M4PL.Business.Contact;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// Contact Module
+    /// </summary>
     public class ContactModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ContactCommands>().As<IContactCommands>().InstancePerRequest();

@@ -20,8 +20,17 @@ using System.Web.Http;
 
 namespace M4PL.API.Handlers
 {
+    /// <summary>
+    /// Metadata Handler
+    /// </summary>
     public class MetadataHandler : DelegatingHandler
     {
+        /// <summary>
+        /// Send Async
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
