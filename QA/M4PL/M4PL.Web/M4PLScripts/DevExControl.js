@@ -331,8 +331,7 @@ DevExCtrl.Ribbon = function () {
         });
     }
 
-    var _onJobReportClick = function (route)
-    {
+    var _onJobReportClick = function (route) {
         var gridCtrl = null;
         if (ASPxClientControl.GetControlCollection().GetByName("JobGridView") != null) {
             gridCtrl = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
@@ -888,7 +887,7 @@ DevExCtrl.TreeView = function () {
                 var handler = function (evt) {
                     tree.SetSelectedNode(node);
                     popupMenu.cpClickedNode = node;
-                                        popupMenu.ShowAtElement(node.GetHtmlElement());
+                    popupMenu.ShowAtElement(node.GetHtmlElement());
                     ASPxClientUtils.PreventEventAndBubble(evt);
                 };
                 ASPxClientUtils.AttachEventToElement(htmlElement, "contextmenu", handler);
@@ -906,7 +905,7 @@ DevExCtrl.TreeView = function () {
                 }
             }
         }
-            }
+    }
 
     return {
         Init: init,
@@ -1177,7 +1176,7 @@ DevExCtrl.TreeList = function () {
                 }
                 route.IsJobParentEntityUpdated = true;
                 route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
-                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack : true });
+                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack: true });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }
             else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
@@ -1200,10 +1199,29 @@ DevExCtrl.TreeList = function () {
     var _onNodeDisable = function (s, e) {
 
     }
-
+    var _init = function (s, e, contentCbPanel, contentCbPanelRoute) {
+        var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
+        if (s.cpIsJobParent) {
+            isJobParentEntity = s.cpIsJobParent;
+        }
+        if (contentCbPanelRoute) {
+            var route = JSON.parse(contentCbPanelRoute);
+            if (route.ParentRecordId && route.EntityName == 'Job' && (route.Action == "DataView" || route.Action == "FormView" && route.ParentRecordId > 0)) {
+                if (contentCbPanel && contentCbPanelRoute && !contentCbPanel.InCallback()) {
+                    if (route.EntityName == 'Job' && isJobParentEntity) {
+                        IsDataView = route.Action === "DataView" ? true : false
+                        route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
+                    }
+                    contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
+                    DevExCtrl.Ribbon.DoCallBack(route);
+                }
+            }
+        }
+    }
     return {
         OnNodeClick: _onNodeClick,
-        OnNodeDisable: _onNodeDisable
+        OnNodeDisable: _onNodeDisable,
+        Init: _init
     };
 }();
 

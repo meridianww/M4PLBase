@@ -67,9 +67,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if (route.ParentRecordId != 0)
-                Session["ListNode"] = route.ParentRecordId.ToString();
-            if (!isJobParentEntity)
-                _gridResult.FocusedRowId = route.RecordId;
+            {
+                Session["IsJobParent"] = isJobParentEntity;
+                Session["JobNode"] = route.ParentRecordId.ToString();
+            }
+            _gridResult.FocusedRowId = route.RecordId;
             if (route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common
@@ -90,6 +92,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _gridResult.IsAccessPermission = true;
             else
                 _gridResult.IsAccessPermission = _jobCommands.GetIsJobDataViewPermission(route.ParentRecordId);
+            SessionProvider.ActiveUser.CurrentRoute = route;
             //SessionProvider.ActiveUser.LastRoute = route;
             if (SessionProvider.ViewPagedDataSession.Count() > 0
             && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
@@ -163,7 +166,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             else
             {
-                SessionProvider.ActiveUser.LastRoute = route;
+              //  SessionProvider.ActiveUser.LastRoute = route;
             }
             #endregion
 
@@ -429,20 +432,31 @@ namespace M4PL.Web.Areas.Job.Controllers
             treeSplitterControl.ContentRoute = WebUtilities.EmptyResult(treeSplitterControl.ContentRoute);
             treeSplitterControl.SecondPaneControlName = string.Concat(route.Entity, WebApplicationConstants.Form);
             //SessionProvider.ActiveUser.LastRoute = route;
-            SessionProvider.ActiveUser.CurrentRoute = null;
+            // SessionProvider.ActiveUser.CurrentRoute = null;
             return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
         }
 
         public ActionResult TreeListCallBack(string strRoute)
         {
+            if (SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ActionTreeView && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
+            {
+                if (SessionProvider.ActiveUser.CurrentRoute != null)
+                {
+                    if ((SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionDataView || SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm) && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
+                    {
+                        ViewData["CurrentRoute"] = SessionProvider.ActiveUser.CurrentRoute;
+                        ViewData["IsJobParent"] = Session["IsJobParent"] != null ? Session["IsJobParent"] : null;
+                    }
 
+                }
+            }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             //SessionProvider.ActiveUser.LastRoute = route;
             SessionProvider.ActiveUser.CurrentRoute = null;
 
             var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
-            if (Session["ListNode"] != null)
-                treeListResult.SelectedNode = (string)Session["ListNode"];
+            if (Session["JobNode"] != null)
+                treeListResult.SelectedNode = (string)Session["JobNode"];
             return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
         }
 

@@ -26,6 +26,7 @@
         settings.KeyFieldName = "Route";
         settings.ParentFieldName = Model.ParentFieldName;
         settings.Settings.ShowColumnHeaders = false;
+        settings.ClientSideEvents.Init = "function(s,e,contentCbPanel,contentCbPanelRoute){DevExCtrl.TreeList.Init(s,e," + contentCbPanel + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["CurrentRoute"] != null ? ViewData["CurrentRoute"] as M4PL.Entities.Support.MvcRoute : new M4PL.Entities.Support.MvcRoute()) + "');}";
         settings.SettingsBehavior.AllowFocusedNode = true;
         settings.ClientLayout = (sender, e) =>
         {
@@ -63,6 +64,10 @@
             }
         };
         settings.Columns.Clear();
+        settings.CustomJSProperties = (s, e) =>
+        {
+            e.Properties["cpIsJobParent"] = ViewData["IsJobParent"];
+        };
 
         settings.Columns.Add(
             column =>
