@@ -1154,5 +1154,29 @@ namespace M4PL.DataAccess.Common
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobAction>(StoredProceduresConstant.GetJobActions, parameters.ToArray(), storedProcedure: true);
             return result;
         }
-    }
+
+		public static JobExceptionDetail GetJobExceptionDetail()
+		{
+			JobExceptionDetail jobExceptionDetail = new JobExceptionDetail();
+			SetCollection sets = new SetCollection();
+			sets.AddSet<JobExceptionInfo>("JobExceptionInfo");
+			sets.AddSet<JobInstallStatus>("JobInstallStatus");
+			SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetJobExceptionDetail, parameter: null, storedProcedure: true);
+
+			var jobExceptionInfo = sets.GetSet<JobExceptionInfo>("JobExceptionInfo");
+			var jobInstallStatus = sets.GetSet<JobInstallStatus>("JobInstallStatus");
+
+			if (jobExceptionInfo != null && jobExceptionInfo.Count() > 0)
+			{
+				jobExceptionDetail.JobExceptionInfo = jobExceptionInfo.ToList();
+			}
+
+			if (jobInstallStatus != null && jobInstallStatus.Count() > 0)
+			{
+				jobExceptionDetail.JobInstallStatus = jobInstallStatus.ToList();
+			}
+
+			return jobExceptionDetail;
+		}
+	}
 }

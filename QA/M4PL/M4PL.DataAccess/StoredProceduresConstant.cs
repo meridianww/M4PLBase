@@ -472,9 +472,10 @@ namespace M4PL.DataAccess
         public const string InsertJobCargo = "dbo.InsJobCargo";
         public const string UpdateJobCargo = "dbo.UpdJobCargo";
         public const string GetCargoListForJob = "dbo.GetCargoListForJob";
+		public const string InsertCargoException = "dbo.InsertCargoException";
 
-        /* Job EDIXcbl */
-        public const string GetJobEDIXcblView = "dbo.GetJobEDIXcblView";
+		/* Job EDIXcbl */
+		public const string GetJobEDIXcblView = "dbo.GetJobEDIXcblView";
         public const string GetJobEDIXcbl = "dbo.GetJobEDIXcbl";
         public const string InsertJobEDIXcbl = "dbo.InsJobEDIXcbl";
         public const string UpdateJobEDIXcbl = "dbo.UpdJobEDIXcbl";
@@ -518,8 +519,9 @@ namespace M4PL.DataAccess
         public const string GetExceptionDropDown = "dbo.GetExceptionDropDown";
         public const string GetExceptionStatusDropDown = "dbo.GetExceptionStatusDropDown";
         public const string InsJobGatewayPODIfPODDocExistsByJobId = "dbo.InsJobGatewayPODIfPODDocExistsByJobId";
-        /* Job Cost Sheet */
-        public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
+		public const string GetJobExceptionDetail = "dbo.GetJobExceptionDetail";
+		/* Job Cost Sheet */
+		public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
         public const string GetJobCostSheet = "dbo.GetJobCostSheet";
         public const string InsertJobCostSheet = "dbo.InsJobCostSheet";
         public const string UpdateJobCostSheet = "dbo.UpdJobCostSheet";
