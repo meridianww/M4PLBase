@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ContactCommands
 Purpose:                                      Client to consume M4PL API called ContactController
@@ -14,7 +14,7 @@ using M4PL.Entities;
 //All Rights Reserved Worldwide
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              04/04/2017
 //Program Name:                                 ContactCommands
 //Purpose:                                      Contains Actions to render view on Customer's Business Term page
