@@ -21,6 +21,7 @@ using Orbit.WebApi.Extensions.Validation;
 using Orbit.WebApi.Security.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
@@ -36,6 +37,7 @@ namespace M4PL.API.Controllers
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
+
         /// <summary>
         /// Gets this instance.
         /// </summary>
@@ -379,7 +381,8 @@ namespace M4PL.API.Controllers
         {
             // Ugly hack: I use a server-side HTTP POST because I cannot directly invoke the service (it is deeply hidden in the OAuthAuthorizationServerHandler class)
             HttpRequest request = HttpContext.Current.Request;
-            string tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + "/Token";
+            string tokenServiceUrl = ConfigurationManager.AppSettings["TokenURL"];
+
             using (var client = new HttpClient())
             {
                 var requestParams = new List<KeyValuePair<string, string>>
@@ -408,6 +411,7 @@ namespace M4PL.API.Controllers
                 var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
                 return await client.PostAsync(tokenServiceUrl, requestParamsFormUrlEncoded);
             }
+
         }
 
         [HttpGet]
