@@ -1,8 +1,15 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+******************************************************************************/
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 Window.js
 //Purpose:                                      For implementing M4PLWindow client side logic throughout the application
@@ -97,11 +104,12 @@ M4PLWindow.DataView = function () {
 
     var _onContextMenu = function (s, e, pageIcon, chooseColumnActionName, copyActionName) {
         function setClipboard(text) {
-            navigator.clipboard.writeText(text).then(function () {
-                /* clipboard successfully set */
-            }, function () {
-                /* clipboard write failed */
-            });
+            localStorage.setItem("CopiedText", text);
+            //navigator.clipboard.writeText(text).then(function () {
+            //    /* clipboard successfully set */
+            //}, function () {
+            //    /* clipboard write failed */
+            //});
         }
         var route = JSON.parse(e.item.name);
         var isDataView = false;
@@ -136,8 +144,10 @@ M4PLWindow.DataView = function () {
             }
             else if (route.Action == "Paste") {
                 s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
-                if (!s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).readOnly)
-                    navigator.clipboard.readText().then(clipText => s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText));
+                var clipText = localStorage.getItem("CopiedText");
+                if (!s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).readOnly && clipText != undefined)
+                    s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText)
+                    //navigator.clipboard.readText().then(clipText => s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText));
 
                 return;
 
