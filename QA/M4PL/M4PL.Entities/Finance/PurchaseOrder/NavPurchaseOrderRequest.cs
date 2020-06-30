@@ -15,7 +15,8 @@ namespace M4PL.Entities.Finance.PurchaseOrder
         public string Buy_from_Vendor_No { get; set; }
         public string M4PL_Job_ID { get; set; }
         public string Vendor_Invoice_No { get; set; }
-        public string Order_Date { get; set; }
+		public string External_Document_No { get; set; }
+		public string Order_Date { get; set; }
         public string Vendor_Order_No { get; set; }
         public string Received_Date { get; set; }
         public string Shortcut_Dimension_1_Code { get; set; }

@@ -45,7 +45,8 @@ namespace M4PL.Entities.Finance.PurchaseOrder
         public string Due_Date { get; set; }
         public string Shipment_Date { get; set; }
         public string Vendor_Invoice_No { get; set; }
-        public string Purchaser_Code { get; set; }
+		public string External_Document_No { get; set; }
+		public string Purchaser_Code { get; set; }
         public int No_of_Archived_Versions { get; set; }
         public string Posting_Description { get; set; }
         public string Order_Date { get; set; }
