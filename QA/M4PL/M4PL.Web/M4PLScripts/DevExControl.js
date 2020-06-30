@@ -1170,6 +1170,7 @@ DevExCtrl.TreeList = function () {
         var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             var route = JSON.parse(contentCbPanelRoute);
+            route.IsJobParentEntityUpdated = false;
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 if (e.nodeKey.indexOf("_") == -1) {
                     route.ParentRecordId = e.nodeKey;
@@ -1178,10 +1179,10 @@ DevExCtrl.TreeList = function () {
                 if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     isJobParentEntity = true;
+                    route.IsJobParentEntityUpdated = true;
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
-                route.IsJobParentEntityUpdated = true;
                 route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack: true });
                 DevExCtrl.Ribbon.DoCallBack(route);
@@ -1190,10 +1191,11 @@ DevExCtrl.TreeList = function () {
                 if (e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     isJobParentEntity = true;
+                    route.IsJobParentEntityUpdated = true;
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
-                route.IsJobParentEntityUpdated = true;
+                
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }

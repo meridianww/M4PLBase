@@ -1542,6 +1542,7 @@ namespace M4PL.Web
                         OwnerCbPanel = route.OwnerCbPanel,
                         EntityName = baseRoute.Entity == EntitiesAlias.Common ? baseRoute.Entity.ToString()
                         : commonCommands.Tables[baseRoute.Entity].TblLangName,
+                        IsJobParentEntityUpdated = route.IsJobParentEntityUpdated,
                     };
 
                     if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
@@ -1591,7 +1592,7 @@ namespace M4PL.Web
                         {
                             mnu.StatusId = route.Entity == EntitiesAlias.Job
                             && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-                            && !sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity
+                            //&& !sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity
                             && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New" || mnu.MnuTitle == "Form View") ? 1 : 3;
                             if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job
                             || route.Entity == EntitiesAlias.PrgEdiHeader)
@@ -1690,9 +1691,13 @@ namespace M4PL.Web
                             else
                                 mnu.StatusId = 3;
                         }
-                        else if ((currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) && (route.Action == "TreeView" && route.Entity == EntitiesAlias.Program))
+                        if ((currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) && (route.Action == "TreeView"))
                         {
                             mnu.StatusId = 1;
+                            if(route.IsJobParentEntityUpdated && mnu.MnuTitle == "New")
+                            {
+                                mnu.StatusId = 3;
+                            }
                         }
                     }
 
@@ -1877,7 +1882,7 @@ namespace M4PL.Web
             };
 
             var customerSecurityByRole = currentSessionProvider.UserSecurities.FirstOrDefault(x => x.SecMainModuleId.ToEnum<MainModule>() == currentModule);
-            if (customerSecurityByRole.Id > 0)
+            if (customerSecurityByRole.Id > 0 && customerSecurityByRole.UserSubSecurities != null)
             {
                 foreach (var subSecurity in customerSecurityByRole.UserSubSecurities)
                 {
