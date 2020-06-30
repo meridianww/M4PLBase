@@ -145,50 +145,36 @@ M4PLJob.FormView = function () {
     var marker;
 
     var _mapLoad = function (s, e, deliveryFullAddress) {
+        var mapOptions = {
+            center: null,
+            zoom: 15,
+            mapTypeId: null
+        };
         position[0] = ASPxClientControl.GetControlCollection().GetByName("JobLatitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLatitude").GetValue() : 0;
         position[1] = ASPxClientControl.GetControlCollection().GetByName("JobLongitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLongitude").GetValue() : 0;
+        $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyC__gkF-_5NnFeTyedm7stvTKkmJu5mHI8&callback=', function (data, textStatus, jqxhr) {
+            mapOptions.center = new google.maps.LatLng(position[0], position[1]);
+            mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
 
-        var mapOptions = {
+            var contentString = '<strong>Delivery Address: </strong><p>' + deliveryFullAddress + '</p>';
+            var infoWindow = new google.maps.InfoWindow();
+            infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            var map = new google.maps.Map(document.getElementById("divDestinationMap"), mapOptions);
 
-            //center: new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude),
-            center: new google.maps.LatLng(position[0], position[1]),
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        var contentString = '<strong>Delivery Address: </strong><p>' + deliveryFullAddress + '</p>';
-
-
-        var infoWindow = new google.maps.InfoWindow();
-        infowindow = new google.maps.InfoWindow({
-            content: contentString
+            var myLatlng = new google.maps.LatLng(position[0], position[1]);
+            marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+            });
+            marker.addListener('click', function () {
+                infowindow.open(map, marker);
+                var result = [event.latLng.lat(), event.latLng.lng()];
+                transition(result);
+            });
         });
-        var map = new google.maps.Map(document.getElementById("divDestinationMap"), mapOptions);
-
-        // var data = markers[i]
-        var myLatlng = new google.maps.LatLng(position[0], position[1]); //new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude);
-        marker = new google.maps.Marker({
-            position: myLatlng,
-            map: map,
-            //title: data.title
-        });
-
-        //google.maps.event.addListener(marker, "click", function (event) {
-        //    //infoWindow.setContent(data.description);
-        //    infoWindow.open(map, marker);
-        //    var result = [event.latLng.lat(), event.latLng.lng()];
-        //    transition(result)
-        //});
-
-        marker.addListener('click', function () {
-            infowindow.open(map, marker);
-            var result = [event.latLng.lat(), event.latLng.lng()];
-            transition(result);
-        });
-
-
     }
-    //google.maps.event.addDomListener(window, 'load', _mapLoad);
     var transition = function (result) {
         i = 0;
         deltaLat = (result[0] - position[0]) / numDeltas;

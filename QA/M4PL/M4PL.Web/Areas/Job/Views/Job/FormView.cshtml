@@ -619,17 +619,9 @@ else
 }
 else
 {
-    //var displayMessage = new M4PL.Entities.Support.DisplayMessage()
-    //{
-    //    ScreenTitle = "Invalid",
-    //    Description = "The job you are trying to search does not exist, please contact system administrator",
-    //    MessageType = MessageTypeEnum.Warning.ToString(),
-    //    Code = "NoAccess"
-    //};
     <script>
         $(document).ready(function () {
             M4PLCommon.DocumentStatus.DisplayMessage("Invalid", "The job you are trying to search does not exist, please contact system administrator", 2,"NoAccess");
         })
     </script>
-    //  @Html.Action("DisplayMessageControl", "Popup", new { Area = string.Empty, strDisplayMessage = Newtonsoft.Json.JsonConvert.SerializeObject(displayMessage) })
 }

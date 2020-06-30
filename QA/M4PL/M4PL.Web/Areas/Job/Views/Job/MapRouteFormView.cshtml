@@ -1,5 +1,5 @@
 ﻿@*Copyright (2018) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Job Map Route
     //Programmer:                                   Kirty Anurag
@@ -11,10 +11,10 @@
 @using System.Web.UI.WebControls
 
 @model  M4PL.Web.Models.FormResult<M4PL.Entities.Job.JobMapRoute>
-@{
+@{    
     ViewBag.Title = Model.PageName;
     ViewBag.ModelData = Model.Record;
-} 
+}
 <div class="col-sm-12 col-md-12 col-lg-12 no-padding">
     @Html.DevExpress().RoundPanel(settings =>
 {
@@ -50,3 +50,4 @@
     });
 }).GetHtml()
 </div>
+

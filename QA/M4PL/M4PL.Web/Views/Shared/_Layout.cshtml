@@ -3,17 +3,12 @@
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
-    //Date Programmed:                              13/10/2017
+    //Date Programmed:                              13/10/2020
     //Program Name:                                 _Layout
     //Purpose:                                      Provides view for the layout over the entire system
     //====================================================================================================================================================*@
 
 @using M4PL.Web;
-@{
-    string MapAuthUrl = System.Configuration.ConfigurationManager.AppSettings["GoogleMapAuthURL"];
-    string MapAuthKey = System.Configuration.ConfigurationManager.AppSettings["GoogleMapAuthKey"];
-    string MapSource = string.Concat(MapAuthUrl + MapAuthKey + "&callback=");
-}
 
 <!DOCTYPE html>
 <html>
@@ -23,18 +18,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <title>@ViewBag.Title</title>
 
-
-
-    @Scripts.Render("~/bundles/jquery" + WebUtilities.GetBundlingVersion())  @*standards to render JQuery before any third party JS as they override some jquery to support*@
+    @Scripts.Render("~/bundles/jquery" + WebUtilities.GetBundlingVersion())  
     @Scripts.Render("~/bundles/modernizr" + WebUtilities.GetBundlingVersion())
     @Scripts.Render("~/bundles/unobtrusive" + WebUtilities.GetBundlingVersion())
     @Scripts.Render("~/bundles/bootstrap" + WebUtilities.GetBundlingVersion())
     @Scripts.Render("~/bundles/M4PLWindow" + WebUtilities.GetBundlingVersion())
-
-    @*<script src="~/Scripts/knockout-3.5.1.js"></script>*@
-    @*<script async defer src="@MapSource" type="text/javascript"></script>*@
-
-
+    
     @Html.DevExpress().GetStyleSheets(
             new StyleSheet { ExtensionSuite = ExtensionSuite.Icons },
             new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
@@ -65,7 +54,6 @@
 
     @Styles.Render("~/Content/css" + WebUtilities.GetBundlingVersion())
     <link href="~/Content/font-awesome-4.6.1/css/font-awesome.css" rel="stylesheet" />
-    @*<link rel="stylesheet" href="http://openlayers.org/en/v3.18.2/css/ol.css" type="text/css">*@
     <script type="text/javascript">
         $(document).ready(function (e) {
             var d = new Date()
