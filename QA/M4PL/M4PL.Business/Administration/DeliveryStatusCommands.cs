@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              06/06/2018
 Program Name:                                 DeliveryStatusCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Administration.DeliveryStatusCommands

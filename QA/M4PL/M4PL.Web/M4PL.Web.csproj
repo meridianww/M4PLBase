@@ -766,6 +766,7 @@
     <Content Include="Views\Shared\_NextGatewayPartial.cshtml" />
     <Content Include="Areas\Job\Views\JobAdvanceReport\PackagingTypeByJob.cshtml" />
     <Content Include="Areas\Job\Views\JobAdvanceReport\CargoTitleByJob.cshtml" />
+    <Content Include="M4PL.Web.licenseheader" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

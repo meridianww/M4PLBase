@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Vendor Title:                                Meridian 4th Party Logistics(M4PL)
-Vendormer:                                   Akhil
+Vendormer:                                   Kirty Anurag
 Date Vendormed:                              10/10/2017
 Vendor Name:                                 IVendorCommands
 Purpose:                                      Set of rules for VendorCommands
