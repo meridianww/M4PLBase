@@ -70,11 +70,11 @@ DevExCtrl.Ribbon = function () {
         if ((route.Action === "Copy")) {
             var selectedText = M4PLCommon.Control.GetSelectedText();
             localStorage.setItem("CopiedText", selectedText);
-            navigator.clipboard.writeText(selectedText).then(function () {
-                /* clipboard successfully set */
-            }, function () {
-                /* clipboard write failed */
-            });
+            //navigator.clipboard.writeText(selectedText).then(function () {
+            //    /* clipboard successfully set */
+            //}, function () {
+            //    /* clipboard write failed */
+            //});
             return;
         }
         if ((route.Action === "Cut")) {
@@ -83,11 +83,11 @@ DevExCtrl.Ribbon = function () {
                 if (currentControl.GetText() != "") {
                     var selectedText = M4PLCommon.Control.GetSelectedText();
                     localStorage.setItem("CopiedText", selectedText);
-                    navigator.clipboard.writeText(selectedText).then(function () {
-                        /* clipboard successfully set */
-                    }, function () {
-                        /* clipboard write failed */
-                    });
+                    //navigator.clipboard.writeText(selectedText).then(function () {
+                    //    /* clipboard successfully set */
+                    //}, function () {
+                    //    /* clipboard write failed */
+                    //});
                     currentControl.SetText("");
                 }
             }
@@ -102,11 +102,14 @@ DevExCtrl.Ribbon = function () {
                 if (inputcontrol != null && inputcontrol[0] != null) {
                     var str = inputcontrol[0].id;
                     var res = str.substring(0, str.lastIndexOf("_"));
-                    if (ASPxClientControl.GetControlCollection().GetByName(res) == null) {
-                        navigator.clipboard.readText().then(clipText => inputcontrol[0].value = clipText);
+                    var clipText = localStorage.getItem("CopiedText");
+                    if (ASPxClientControl.GetControlCollection().GetByName(res) == null && clipText != undefined) {
+                        inputcontrol[0].value = clipText;
+                        //navigator.clipboard.readText().then(clipText => inputcontrol[0].value = clipText);
                     }
                     else {
-                        navigator.clipboard.readText().then(clipText => ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText));
+                        ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText)
+                        //navigator.clipboard.readText().then(clipText => ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText));
                     }
                 }
             }

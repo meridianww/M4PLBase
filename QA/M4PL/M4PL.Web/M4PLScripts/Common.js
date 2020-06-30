@@ -664,9 +664,11 @@ M4PLCommon.Control = (function () {
     }
 
     var _updateSelectedText = function () {
+        var clipText = localStorage.getItem("CopiedText");
         if (M4PLCommon.FocusedControlName) {
             var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
-            navigator.clipboard.readText().then(clipText => document.getElementById(currentControl).innerText = clipText);
+            document.getElementById(currentControl).innerText = clipText
+            //navigator.clipboard.readText().then(clipText => document.getElementById(currentControl).innerText = clipText);
             //For TextBox
             //if (currentControl.GetChildElement('I')) {
             //    var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));

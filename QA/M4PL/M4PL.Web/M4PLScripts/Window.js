@@ -97,11 +97,12 @@ M4PLWindow.DataView = function () {
 
     var _onContextMenu = function (s, e, pageIcon, chooseColumnActionName, copyActionName) {
         function setClipboard(text) {
-            navigator.clipboard.writeText(text).then(function () {
-                /* clipboard successfully set */
-            }, function () {
-                /* clipboard write failed */
-            });
+            localStorage.setItem("CopiedText", text);
+            //navigator.clipboard.writeText(text).then(function () {
+            //    /* clipboard successfully set */
+            //}, function () {
+            //    /* clipboard write failed */
+            //});
         }
         var route = JSON.parse(e.item.name);
         var isDataView = false;
@@ -136,8 +137,10 @@ M4PLWindow.DataView = function () {
             }
             else if (route.Action == "Paste") {
                 s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
-                if (!s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).readOnly)
-                    navigator.clipboard.readText().then(clipText => s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText));
+                var clipText = localStorage.getItem("CopiedText");
+                if (!s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).readOnly && clipText != undefined)
+                    s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText)
+                    //navigator.clipboard.readText().then(clipText => s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText));
 
                 return;
 
