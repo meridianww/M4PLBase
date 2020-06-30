@@ -36,7 +36,7 @@ namespace M4PL.API.Controllers
         /// For Shipping Schedule Request.It will compare the fields with existing job.If there the a change in fields, action Codes Mapped in the Decision Maker will be Added to the Job.
         /// If the Added Gateway/Action is Marked as complete based on the settings from Program the new values will be Updated in Job else On completion of Gateway/Action new values will be updated.
         /// </summary>
-        /// <param name="xCBLToM4PLRequest"></param>
+        /// <param name="xCBLToM4PLRequest">The request may be type of either Shipping schedule or Requisition</param>
         /// <returns>Inserted Xcbl Summary Header Id</returns>
         [CustomAuthorize]
         [HttpPost]
@@ -55,7 +55,7 @@ namespace M4PL.API.Controllers
         ///If the request is of type ASN and the ACTION is of type ADD then requested Job will be updated with the details also price and cost details also updated. If the Action is of type DELTE then nothing will happen.
         ///For the ASN request if the Gateway status in In Production In Transit gateway will be added automatically.
         /// </summary>
-        /// <param name="electroluxOrderDetails">electroluxOrderDetails</param>
+        /// <param name="electroluxOrderDetails">Electrolux Order details request may be either type of Order or ASN. Order is to create new order and ASN is to update existing Order.</param>
         /// <returns>Order response with Job Id and Status Code and message</returns>
         [CustomAuthorize]
         [HttpPost]
@@ -66,14 +66,16 @@ namespace M4PL.API.Controllers
             return _xcblCommands.ProcessElectroluxOrderRequest(electroluxOrderDetails);
         }
 
+
         /// <summary>
-        /// Process Electrolux Order Delivery Update
+        /// The changes made in M4PL will be sent to Electrolux for the supplied job Id. 
+        /// The url for the Electrolux endpoint is configurable. Then delivery update will be inserted into EDI table.
         /// </summary>
-        /// <param name="deliveryUpdate">deliveryUpdate</param>
-        /// <returns></returns>
+        /// <param name="deliveryUpdate">Model which contains delivery update to an order.</param>
+        /// <returns>Response returned from Electrolux</returns>
         [CustomAuthorize]
         [HttpPost]
-        [Route("Electrolux/OrderDeliveryUpdate")]
+        [Route("Electrolux/OrderDeliveryUpdate"), ResponseType(typeof(DeliveryUpdateResponse))]
         public DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId)
         {
             _xcblCommands.ActiveUser = ActiveUser;
