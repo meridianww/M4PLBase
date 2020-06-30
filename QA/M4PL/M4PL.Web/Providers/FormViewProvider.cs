@@ -513,9 +513,11 @@ namespace M4PL.Web.Providers
             get
             {
                 return new Dictionary<EntitiesAlias, string[]>
-                {
+                {   
                     //{ EntitiesAlias.CustDcLocation, new string[] { "CdcContactMSTRID" } },
                     //{ EntitiesAlias.VendDcLocation, new string[] { "VdcContactMSTRID" } },
+                    { EntitiesAlias.CustContact, new string[] { "ContactMSTRID" } },
+                    { EntitiesAlias.VendContact, new string[] { "ContactMSTRID" } },
                 };
             }
         }
