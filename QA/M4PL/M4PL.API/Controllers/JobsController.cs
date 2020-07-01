@@ -74,6 +74,12 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJobDestination(id, parentId);
         }
 
+        /// <summary>
+        /// Get the Origin , Delivery Site POC2 details , Origin and Delivery Address by Job Id and if job id is zero Pickup and Delivery Time Information from Parent will be returned
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <param name="parentId">Program Id</param>
+        /// <returns>Site POC 2 and Origin and Delivery Address</returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("Poc")]
@@ -83,9 +89,15 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJob2ndPoc(id, parentId);
         }
 
+        /// <summary>
+        /// Get the Job Seller and Ship From information by job id and if the job Id is zero, Pickup and Delivery Time Information from Parent will be returned
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <param name="parentId">Program Id</param>
+        /// <returns>Returns Job Seller and ShipFrom details</returns>
         [CustomAuthorize]
         [HttpGet]
-        [Route("Seller")]
+        [Route("Seller"), ResponseType(typeof(JobSeller))]
         public JobSeller GetJobSeller(long id, long parentId)
         {
             _jobCommands.ActiveUser = ActiveUser;
