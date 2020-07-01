@@ -1579,8 +1579,7 @@ namespace M4PL.Web
                             ((mnu.MnuTitle == "Save" || mnu.MnuTitle == "Refresh All") &&
                             route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) &&
                             sessionProvider.ActiveUser.LastRoute.Action == "Report" &&
-                            (sessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.JobAdvanceReport
-                            || sessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.JobCard) &&
+                            (sessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.JobCard) &&
                             (sessionProvider.ActiveUser.CurrentRoute != null &&
                             (sessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm &&
                             sessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job))))
