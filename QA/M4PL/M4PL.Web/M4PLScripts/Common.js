@@ -1,12 +1,26 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+******************************************************************************/
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 Commom.js
 //Purpose:                                      For implementing common client side logic throughout the application
 //====================================================================================================================================================*/
+
+$(document).ready(function () {
+    $(document).keypress(function (e) {
+        if (e.keyCode == 13)
+            M4PLCommon.DisplayMessage.DefaultClientOk();
+    });
+});
 
 $(function () {
     M4PLCommon.ContactCombobox.init();
@@ -172,6 +186,7 @@ M4PLCommon.RichEdit = function () {
 
     var _onEndCallBack = function (s, e) {
         M4PLCommon.CurrentByteArrayCount -= 1;
+        M4PLCommon.Error.CheckServerError();
     }
 
     return {
@@ -198,6 +213,13 @@ M4PLCommon.ContactCombobox = function () {
         }
         if (ownerCbPanel && !ownerCbPanel.InCallback())
             ownerCbPanel.PerformCallback({ strDropDownViewModel: JSON.stringify(dropDownViewModel) });
+        if (dropDownViewModel != null
+            && dropDownViewModel.ControlAction != null
+            && dropDownViewModel.ControlAction === "SysOrgRefRoleId"
+            && (ASPxClientControl.GetControlCollection().GetByName(dropDownViewModel.ControlAction) != null)) {
+            var ctrlControlAction = ASPxClientControl.GetControlCollection().GetByName(dropDownViewModel.ControlAction);
+            ctrlControlAction.PerformCallback({ 'selectedId': 0, 'selectedCountry': '', 'contactId': s.GetValue() });
+        }
     }
 
     var _onAddClick = function (ownerCbPanel, dropDownViewModel, contactRoute) {
@@ -376,6 +398,7 @@ M4PLCommon.Attachment = function () {
         if (ownerCbPanel && isPopup && (isPopup === 'True') && ASPxClientControl.GetControlCollection().GetByName(ownerCbPanel) && !ASPxClientControl.GetControlCollection().GetByName(ownerCbPanel).InCallback()) {
             ASPxClientControl.GetControlCollection().GetByName(ownerCbPanel).PerformCallback();
         }
+        M4PLCommon.Error.CheckServerError();
     }
 
     var _onInit = function (s, e) {
@@ -626,7 +649,10 @@ M4PLCommon.Control = (function () {
                     // Standards Compliant Version 
                     var startPos = textComponent.selectionStart;
                     var endPos = textComponent.selectionEnd;
-                    selectedText = textComponent.value.substring(startPos, endPos);
+                    if (startPos == endPos)
+                        selectedText = textComponent.value;
+                    else
+                        selectedText = textComponent.value.substring(startPos, endPos);
                 }
                 else if (document.selection !== undefined) {
                     // IE Version
@@ -645,33 +671,36 @@ M4PLCommon.Control = (function () {
     }
 
     var _updateSelectedText = function () {
+        var clipText = localStorage.getItem("CopiedText");
         if (M4PLCommon.FocusedControlName) {
             var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
+            document.getElementById(currentControl).innerText = clipText
+            //navigator.clipboard.readText().then(clipText => document.getElementById(currentControl).innerText = clipText);
             //For TextBox
-            if (currentControl.GetChildElement('I')) {
-                var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
-                if (textComponent.selectionStart !== undefined) {
-                    // Standards Compliant Version 
-                    var startPos = textComponent.selectionStart;
-                    var endPos = textComponent.selectionEnd;
-                    var currentValue = textComponent.value;
-                    if (currentControl.GetText() != "")
-                        currentControl.SetText(textComponent.value.substring(0, startPos) + localStorage.getItem("CopiedText") + textComponent.value.substring(endPos, textComponent.value.length));
-                    else
-                        currentControl.SetText(localStorage.getItem("CopiedText"));
-                    textComponent.focus();
-                }
-                else if (document.selection !== undefined) {
-                    // IE Version
-                    textComponent.focus();
-                    var sel = document.selection.createRange();
-                }
-            }
-            //For RichTextBox
-            if (currentControl.selection && currentControl.document) {
-                currentControl.commands.insertText.execute(localStorage.getItem("CopiedText"));
-                currentControl.Focus();
-            }
+            //if (currentControl.GetChildElement('I')) {
+            //    var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
+            //    if (textComponent.selectionStart !== undefined) {
+            //        // Standards Compliant Version 
+            //        var startPos = textComponent.selectionStart;
+            //        var endPos = textComponent.selectionEnd;
+            //        var currentValue = textComponent.value;
+            //        if (currentControl.GetText() != "")
+            //            currentControl.SetText(textComponent.value.substring(0, startPos) + localStorage.getItem("CopiedText") + textComponent.value.substring(endPos, textComponent.value.length));
+            //        else
+            //            currentControl.SetText(localStorage.getItem("CopiedText"));
+            //        textComponent.focus();
+            //    }
+            //    else if (document.selection !== undefined) {
+            //        // IE Version
+            //        textComponent.focus();
+            //        var sel = document.selection.createRange();
+            //    }
+            //}
+            ////For RichTextBox
+            //if (currentControl.selection && currentControl.document) {
+            //    currentControl.commands.insertText.execute(localStorage.getItem("CopiedText"));
+            //    currentControl.Focus();
+            //}
         }
     }
 
@@ -947,8 +976,7 @@ M4PLCommon.CheckHasChanges = (function () {
                                 if (ASPxClientControl.GetControlCollection().GetByName("pageControl"))
                                     route.TabIndex = ASPxClientControl.GetControlCollection().GetByName("pageControl").activeTabIndex;
 
-                                if (response.route && response.route.RecordId > 0 && response.route.Url === "UserHeaderCbPanel" && ASPxClientControl.GetControlCollection().GetByName(response.route.Url) && !ASPxClientControl.GetControlCollection().GetByName(response.route.Url).In
-                                    ())////refresh header and using in ContentLayout
+                                if (response.route && response.route.RecordId > 0 && response.route.Url === "UserHeaderCbPanel" && ASPxClientControl.GetControlCollection().GetByName(response.route.Url) && !ASPxClientControl.GetControlCollection().GetByName(response.route.Url).InCallback())////refresh header and using in ContentLayout
                                     ASPxClientControl.GetControlCollection().GetByName(response.route.Url).PerformCallback();
                                 if (!isFromConfirmSave)
                                     AppCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
@@ -1159,102 +1187,10 @@ M4PLCommon.VocReport = (function () {
 
     var _defaultSelectedCustomer = function (s, e, timeOut, cardVwrRoute) {
         if (cardVwrRoute != null && cardVwrRoute != undefined && cardVwrRoute.CompanyId > 0)
-            console.log('Radha');
+            console.log('');
         else
             s.SetSelectedIndex(0);
         _addAutoRefresh(s, e, timeOut, cardVwrRoute);
-    }
-
-    var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
-        if ($('.errorMessages') != undefined) {
-            $('.errorMessages').html('');
-        }
-        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-        var programCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
-        var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
-        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
-        var brandCtrl = ASPxClientControl.GetControlCollection().GetByName('BrandByCustomerProgramCbPanelClosed');
-        var gatewayCtrl = ASPxClientControl.GetControlCollection().GetByName('GatewayStatusIdByCustomerProgramCbPanelClosed');
-        var serviceModeCtrl = ASPxClientControl.GetControlCollection().GetByName('ServiceModeByCustomerCbPanelforClosed');
-        var productTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ProductTypeByCustomerCbPanelforClosed');
-        var scheduleTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ScheduleByCustomerProgramCbPanelClosed');
-        var orderTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('OrderTypeByCustomerProgramCbPanelClosed');
-        var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
-        var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
-        var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
-        //var modeCtrl = ASPxClientControl.GetControlCollection().GetByName('Mode');
-        var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
-        var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
-        var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
-
-
-        rprtVwrRoute.CustomerId = customerCtrl.GetValue();
-
-        if (programCtrl != null) {
-            if (programCtrl.GetValue() != null && programCtrl != undefined && programCtrl.GetValue() != "ALL") {
-                var programCheckCtrl = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
-                if (programCheckCtrl != null) {
-                    var selctedItems = programCheckCtrl.GetSelectedItems();
-                    var item = [];
-                    for (var i = 0; i < selctedItems.length; i++) {
-                        item.push(parseInt(selctedItems[i].value));
-                    }
-                    rprtVwrRoute.ProgramId = item;
-                }
-            }
-        }
-
-        if (originCtrl != null)
-            if (originCtrl.GetValue() != null && originCtrl.GetValue() != undefined)
-                rprtVwrRoute.Origin = originCtrl.GetValue().split(',').map(String);//resetVal(originCtrl.GetValue(), checkListBoxOriginByCustomerCbPanelforClosed);
-        if (destinationCtrl != null)
-            if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined)
-                rprtVwrRoute.Destination = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
-        if (brandCtrl != null)
-            if (brandCtrl.GetValue() != null && brandCtrl.GetValue() != undefined)
-                rprtVwrRoute.Brand = brandCtrl.GetValue().split(',').map(String);//resetVal(brandCtrl.GetValue(), checkListBoxBrandByCustomerProgramCbPanelClosed);
-        if (gatewayCtrl != null)
-            if (gatewayCtrl.GetValue() != null && gatewayCtrl.GetValue() != undefined)
-                rprtVwrRoute.GatewayTitle = gatewayCtrl.GetValue().split(',').map(String);//resetVal(gatewayCtrl.GetValue(), checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed);
-        if (serviceModeCtrl != null)
-            if (serviceModeCtrl.GetValue() != null && serviceModeCtrl.GetValue() != undefined)
-                rprtVwrRoute.ServiceMode = serviceModeCtrl.GetValue().split(',').map(String);//resetVal(serviceModeCtrl.GetValue(), checkListBoxServiceModeByCustomerCbPanelforClosed);
-        if (productTypeCtrl != null)
-            if (productTypeCtrl.GetValue() != null && productTypeCtrl.GetValue() != undefined)
-                rprtVwrRoute.ProductType = productTypeCtrl.GetValue().split(',').map(String);//resetVal(productTypeCtrl.GetValue(), checkListBoxProductTypeByCustomerCbPanelforClosed);
-
-        if (dateTypeCtrl != null)
-            rprtVwrRoute.DateTypeName = dateTypeCtrl.GetText();
-
-        if (scheduleTypeCtrl != null)
-            rprtVwrRoute.Scheduled = scheduleTypeCtrl.GetText();
-        if (orderTypeCtrl != null)
-            rprtVwrRoute.OrderType = orderTypeCtrl.GetText();
-        if (jobChannelCtrl != null)
-            if (jobChannelCtrl.GetValue() != null && jobChannelCtrl.GetValue() != undefined)
-                rprtVwrRoute.Channel = jobChannelCtrl.GetValue().split(',').map(String);//resetVal(jobChannelCtrl.GetValue(), checkListBoxJobChannelByProgramCustomerCbPanelforClosed);
-        //if (modeCtrl != null)
-        //    rprtVwrRoute.Mode = modeCtrl.GetValue();
-        if (jobStatusCtrl != null)
-            rprtVwrRoute.JobStatus = jobStatusCtrl.GetText();
-        if (searchCtrl != null)
-            rprtVwrRoute.Search = searchCtrl.GetValue();
-        rprtVwrRoute.StartDate = startDateCtrl.GetValue();
-        rprtVwrRoute.EndDate = endDateCtrl.GetValue();
-        rprtVwrRoute.IsFormRequest = true;
-        var IsFormValidate = true;
-        if ((startDateCtrl.GetValue() != "" && endDateCtrl.GetValue() != "" && startDateCtrl.GetValue() != null && endDateCtrl.GetValue() != null) && new Date(startDateCtrl.GetValue()) > new Date(endDateCtrl.GetValue())) {
-            if ($('.errorMessages') != undefined) {
-                $('.errorMessages').append('<p>* End date should be greater than start date.</p>');
-            }
-            IsFormValidate = false;
-        }
-        if (IsFormValidate) {
-            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-        } else {
-            return false;
-        }
-
     }
 
     var _getJobCardByFilter = function (s, e, cardVwrCtrl, cardVwrRoute) {
@@ -1293,12 +1229,13 @@ M4PLCommon.VocReport = (function () {
 
         var dashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-        route.CustomerId = customerCtrl.GetValue();
+        route.CompanyId = customerCtrl.GetValue();
         M4PLCommon.IsIgnoreCardGridClick = true;
         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback())
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId });
-        //DevExCtrl.Ribbon.DoCallBack(route);
-
+        //route.Action = "RibbonMenu";
+        //route.Entity = "Common";
+        DevExCtrl.Ribbon.DoCallBack(route);
     }
     var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
@@ -1368,7 +1305,6 @@ M4PLCommon.VocReport = (function () {
         DefaultSelectedLocation: _defaultSelectedLocation,
         PbsCheckBoxEventChange: _pbsCheckBoxEventChange,
         DefaultSelectedCustomer: _defaultSelectedCustomer,
-        GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter,
         OnCardDataViewClick: _onCardDataViewClick,
         OnClickCardTileRefresh: _onClickCardTileRefresh,
         GetJobCardByFilter: _getJobCardByFilter
@@ -1376,6 +1312,18 @@ M4PLCommon.VocReport = (function () {
 })();
 
 M4PLCommon.AdvancedReport = (function () {
+
+    var _init = function () {
+        $(".isAdditional").hide();
+    }
+    //var _isExtrafieldCheckBoxEventChange = function (s, e) {
+    //    if (s.GetValue()) {
+    //        $(".isAdditional").show();
+    //    }
+    //    else {
+    //        $(".isAdditional").hide();
+    //    }
+    //};
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
 
@@ -1448,7 +1396,6 @@ M4PLCommon.AdvancedReport = (function () {
     var _defaultDateTypeCustomer = function (s, e) {
         //s.SetSelectedIndex(0);
     }
-
     var _onBrokerInit = function (s, e) {
         var g = ProductTypeByCustomerCbPanelforClosed;
         var originClose = g.CloseDropDownByDocumentOrWindowEvent;
@@ -1458,7 +1405,6 @@ M4PLCommon.AdvancedReport = (function () {
             originClose.call(g, firstArg);
         }
     }
-
     var _productTypeOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
@@ -1474,7 +1420,6 @@ M4PLCommon.AdvancedReport = (function () {
         }
 
     }
-
     var _productTypeOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
@@ -1489,7 +1434,6 @@ M4PLCommon.AdvancedReport = (function () {
             }
         }
     }
-
     var _brandOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
@@ -1504,7 +1448,6 @@ M4PLCommon.AdvancedReport = (function () {
             }
         }
     }
-
     var _destinationOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
@@ -1519,7 +1462,6 @@ M4PLCommon.AdvancedReport = (function () {
             }
         }
     }
-
     var _gatewayStatusOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
@@ -1534,7 +1476,6 @@ M4PLCommon.AdvancedReport = (function () {
             }
         }
     }
-
     var _orginOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
@@ -1549,7 +1490,6 @@ M4PLCommon.AdvancedReport = (function () {
             }
         }
     }
-
     var _programOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
@@ -1564,8 +1504,6 @@ M4PLCommon.AdvancedReport = (function () {
             }
         }
     }
-
-
     var _serviceModeOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
@@ -1580,7 +1518,6 @@ M4PLCommon.AdvancedReport = (function () {
             }
         }
     }
-
     var _channelOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
@@ -1595,7 +1532,6 @@ M4PLCommon.AdvancedReport = (function () {
             }
         }
     }
-
     var _dateType_OnClickViewSelected = function (s, e) {
         s.GetRowValues(s.GetFocusedRowIndex(), "DateTypeName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);
     }
@@ -1608,12 +1544,124 @@ M4PLCommon.AdvancedReport = (function () {
     var _schedule_OnClickViewSelected = function (s, e) {
         s.GetRowValues(s.GetFocusedRowIndex(), "ScheduledName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);
     }
-
     var _getSelectedFieldValuesCallbackSinble = function (values) {
         return values;
     }
 
+    var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        if ($('.errorMessages') != undefined) {
+            $('.errorMessages').html('');
+        }
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        var programCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
+        var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
+        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+        var brandCtrl = ASPxClientControl.GetControlCollection().GetByName('BrandByCustomerProgramCbPanelClosed');
+        var gatewayCtrl = ASPxClientControl.GetControlCollection().GetByName('GatewayStatusIdByCustomerProgramCbPanelClosed');
+        var serviceModeCtrl = ASPxClientControl.GetControlCollection().GetByName('ServiceModeByCustomerCbPanelforClosed');
+        var productTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ProductTypeByCustomerCbPanelforClosed');
+        var scheduleTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ScheduleByCustomerProgramCbPanelClosed');
+        var orderTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('OrderTypeByCustomerProgramCbPanelClosed');
+        var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+        var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+        var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
+        //var modeCtrl = ASPxClientControl.GetControlCollection().GetByName('Mode');
+        var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
+        var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
+        var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
+
+        //var isEnabledAddtionalfieldCtrl = ASPxClientControl.GetControlCollection().GetByName('IsEnabledAddtionalfield');
+        //var jobPartsOrderedCtrl = ASPxClientControl.GetControlCollection().GetByName('JobPartsOrdered');
+        //var weightUnitTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('CgoWeightUnitTypeId');
+        var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('PackagingTypeByJobCbPanelClosed');
+        var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
+
+        rprtVwrRoute.CustomerId = customerCtrl.GetValue();
+
+        if (programCtrl != null) {
+            if (programCtrl.GetValue() != null && programCtrl != undefined && programCtrl.GetValue() != "ALL") {
+                var programCheckCtrl = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
+                if (programCheckCtrl != null) {
+                    var selctedItems = programCheckCtrl.GetSelectedItems();
+                    var item = [];
+                    for (var i = 0; i < selctedItems.length; i++) {
+                        item.push(parseInt(selctedItems[i].value));
+                    }
+                    rprtVwrRoute.ProgramId = item;
+                }
+            }
+        }
+
+        if (originCtrl != null)
+            if (originCtrl.GetValue() != null && originCtrl.GetValue() != undefined)
+                rprtVwrRoute.Origin = originCtrl.GetValue().split(',').map(String);//resetVal(originCtrl.GetValue(), checkListBoxOriginByCustomerCbPanelforClosed);
+        if (destinationCtrl != null)
+            if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined)
+                rprtVwrRoute.Destination = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
+        if (brandCtrl != null)
+            if (brandCtrl.GetValue() != null && brandCtrl.GetValue() != undefined)
+                rprtVwrRoute.Brand = brandCtrl.GetValue().split(',').map(String);//resetVal(brandCtrl.GetValue(), checkListBoxBrandByCustomerProgramCbPanelClosed);
+        if (gatewayCtrl != null)
+            if (gatewayCtrl.GetValue() != null && gatewayCtrl.GetValue() != undefined)
+                rprtVwrRoute.GatewayTitle = gatewayCtrl.GetValue().split(',').map(String);//resetVal(gatewayCtrl.GetValue(), checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed);
+        if (serviceModeCtrl != null)
+            if (serviceModeCtrl.GetValue() != null && serviceModeCtrl.GetValue() != undefined)
+                rprtVwrRoute.ServiceMode = serviceModeCtrl.GetValue().split(',').map(String);//resetVal(serviceModeCtrl.GetValue(), checkListBoxServiceModeByCustomerCbPanelforClosed);
+        if (productTypeCtrl != null)
+            if (productTypeCtrl.GetValue() != null && productTypeCtrl.GetValue() != undefined)
+                rprtVwrRoute.ProductType = productTypeCtrl.GetValue().split(',').map(String);//resetVal(productTypeCtrl.GetValue(), checkListBoxProductTypeByCustomerCbPanelforClosed);
+
+        if (dateTypeCtrl != null)
+            rprtVwrRoute.DateTypeName = dateTypeCtrl.GetText();
+
+        if (scheduleTypeCtrl != null)
+            rprtVwrRoute.Scheduled = scheduleTypeCtrl.GetText();
+        if (orderTypeCtrl != null)
+            rprtVwrRoute.OrderType = orderTypeCtrl.GetText();
+        if (jobChannelCtrl != null)
+            if (jobChannelCtrl.GetValue() != null && jobChannelCtrl.GetValue() != undefined)
+                rprtVwrRoute.Channel = jobChannelCtrl.GetValue().split(',').map(String);//resetVal(jobChannelCtrl.GetValue(), checkListBoxJobChannelByProgramCustomerCbPanelforClosed);
+        //if (modeCtrl != null)
+        //    rprtVwrRoute.Mode = modeCtrl.GetValue();
+        if (jobStatusCtrl != null)
+            rprtVwrRoute.JobStatus = jobStatusCtrl.GetText();
+        if (searchCtrl != null)
+            rprtVwrRoute.Search = searchCtrl.GetValue();
+        rprtVwrRoute.StartDate = startDateCtrl.GetValue();
+        rprtVwrRoute.EndDate = endDateCtrl.GetValue();
+        rprtVwrRoute.IsFormRequest = true;
+        //if (isEnabledAddtionalfieldCtrl != null && isEnabledAddtionalfieldCtrl && isEnabledAddtionalfieldCtrl.GetValue()) {
+        //    rprtVwrRoute.IsAddtionalFilter = isEnabledAddtionalfieldCtrl.GetValue();
+        //if (jobPartsOrderedCtrl != null)
+        //    rprtVwrRoute.JobPartsOrdered = jobPartsOrderedCtrl.GetText();
+        //if (weightUnitTypeCtrl != null)
+        //    rprtVwrRoute.CgoWeightUnitTypeId = weightUnitTypeCtrl.GetValue();
+        if (packagingTypeCtrl != null)
+            rprtVwrRoute.PackagingCode = packagingTypeCtrl.GetText();
+        if (cargoTitleCtrl != null)
+            rprtVwrRoute.CargoId = cargoTitleCtrl.GetValue();
+        // }
+        var IsFormValidate = true;
+        if ((startDateCtrl.GetValue() != "" && endDateCtrl.GetValue() != "" && startDateCtrl.GetValue() != null && endDateCtrl.GetValue() != null) && new Date(startDateCtrl.GetValue()) > new Date(endDateCtrl.GetValue())) {
+            if ($('.errorMessages') != undefined) {
+                $('.errorMessages').append('<p>* End date should be greater than start date.</p>');
+            }
+            IsFormValidate = false;
+        }
+
+        var manifestCtrl = ASPxClientControl.GetControlCollection().GetByName('Manifest');
+        rprtVwrRoute.Manifest = manifestCtrl != null && manifestCtrl != undefined ? manifestCtrl.GetValue() : false;
+
+        if (IsFormValidate) {
+            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        } else {
+            return false;
+        }
+
+    }
+
     return {
+        Init: _init,
         DefaultSelectedCustomer: _defaultSelectedCustomer,
         DefaultSelectedProgram: _defaultSelectedProgram,
         DefaultSelectedDestination: _defaultSelectedDestination,
@@ -1636,7 +1684,9 @@ M4PLCommon.AdvancedReport = (function () {
         GetSelectedFieldValuesCallbackSinble: _getSelectedFieldValuesCallbackSinble,
         JobStatus_OnClickViewSelected: _jobStatus_OnClickViewSelected,
         OrderType_OnClickViewSelected: _orderType_OnClickViewSelected,
-        Schedule_OnClickViewSelected: _schedule_OnClickViewSelected
+        Schedule_OnClickViewSelected: _schedule_OnClickViewSelected,
+        //IsExtrafieldCheckBoxEventChange: _isExtrafieldCheckBoxEventChange,
+        GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter,
     }
 })();
 
@@ -1977,7 +2027,20 @@ M4PLCommon.DropDownMultiSelect = (function () {
         }
         return actualValues;
     }
-
+    var _onVocLocationInit = function (s, e) {
+        var element = s.GetMainElement();
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxCustomerLocationCbPanelClosed');
+        while (element != null && element.tagName != "BODY") {
+            if (element.tagName == "DIV") {
+                ASPxClientUtils.AttachEventToElement(element, "scroll",
+                    function (event) {
+                        if (event.target != checkListBox.scrollDivElement)
+                            s.HideDropDown();
+                    });
+            }
+            element = element.parentNode;
+        }
+    }
     return {
         UpdateTextOrigin: _updateTextOrigin,
         UpdateTextOriginDefault: _updateTextOriginDefault,
@@ -2008,14 +2071,33 @@ M4PLCommon.DropDownMultiSelect = (function () {
         UpdateTextLocation: _updateTextLocation,
         UpdateTextLocationDefault: _updateTextLocationDefault,
         SynchronizeListBoxValuesLocation: _synchronizeListBoxValuesLocation,
+        OnVocLocationInit: _onVocLocationInit
     }
 })();
+
 M4PLCommon.DropDownEdit = (function () {
     var textSeparator = ",";
     function _onListBoxSelectionChanged(s, args) {
         _updateText(s);
-
     }
+
+    var _initDestinationListBox = function (s, e, selectedLocation) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('vdcPrefLocationsListBox');
+        if (checkListBox != null) {
+            if (selectedLocation !== null && selectedLocation !== undefined && selectedLocation.length > 0 && selectedLocation[0] != 'ALL') {
+                checkListBox.SelectValues(selectedLocation);
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            //if (selectedItems && selectedItems.length == 0) {
+            //    checkListBox.SelectAll();
+            //    selectedItems = checkListBox.GetSelectedItems();
+            //}
+            var VdcPrefLocations = ASPxClientControl.GetControlCollection().GetByName("vdcPrefLocations");
+            if (VdcPrefLocations != null)
+                VdcPrefLocations.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
     var _updateText = function (listBox) {
         var selectedItems = listBox.GetSelectedItems();
 
@@ -2045,14 +2127,13 @@ M4PLCommon.DropDownEdit = (function () {
                 data: { "selectedItems": _getSelectedItemsValue(selectedItems) },
                 success: function (response) {
                     if (response.status && response.status === true) {
-                        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                         var locations = response.locations;
 
                         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
                         if (locations !== null && locations !== undefined && locations.length > 0) {
-                            var res = locations.split(",");
+                            var res = locations.map(t => t.PPPVendorLocationCode);//locations.split(",");
                             checkListBox.UnselectAll();
-                            checkListBox.SelectValues(res);
+                            checkListBox.SelectValues($.unique(res));
                         }
                         else {
                             checkListBox.SelectAll();
@@ -2073,19 +2154,16 @@ M4PLCommon.DropDownEdit = (function () {
                                     if (dest !== null && dest !== undefined && dest.length > 0)
                                         route.Location = dest;
                                 }
-
                                 JobCardViewTileCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
                                 JobCardViewTileCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+
+                                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                             }
                         }
                     }
                 }
-
             });
-
-
         }
-
     }
     var _getSelectedItemsValue = function (items) {
         var texts = [];
@@ -2093,10 +2171,15 @@ M4PLCommon.DropDownEdit = (function () {
             texts.push(items[i].value);
         return texts.join(textSeparator);
     }
-    var _getSelectedItemsText = function (items) {
+    var _getSelectedItemsText = function (items, listBox) {
         var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
         for (var i = 0; i < items.length; i++)
             texts.push(items[i].text);
+        //}
         return texts.join(textSeparator);
     }
     var _getValuesByTexts = function (checkListControl, texts) {
@@ -2110,9 +2193,354 @@ M4PLCommon.DropDownEdit = (function () {
         return actualValues;
     }
     return {
+        InitDestinationListBox: _initDestinationListBox,
         OnListBoxSelectionChanged: _onListBoxSelectionChanged,
         SynchronizeListBoxValues: _synchronizeListBoxValues,
         CloseUp: _closeUp
     }
 
+})();
+
+M4PLCommon.PrgGateway = (function () {
+    var textSeparator = ",";
+    function _onListBoxSelectionChanged(s, args) {
+        _updateText(s);
+    }
+
+    var _initNextGatewayListBox = function (s, e, selectedNextGateway) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('MappingIdListBox');
+        if (checkListBox != null) {
+            if (selectedNextGateway !== null && selectedNextGateway !== undefined && selectedNextGateway.length > 0 && selectedNextGateway[0] != 'ALL') {
+                checkListBox.SelectValues(selectedNextGateway);
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            //if (selectedItems && selectedItems.length == 0) {
+            //    checkListBox.SelectAll();
+            //    selectedItems = checkListBox.GetSelectedItems();
+            //}
+            var NextGateway = ASPxClientControl.GetControlCollection().GetByName("MappingId");
+            if (NextGateway != null)
+                NextGateway.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
+    var _updateText = function (listBox) {
+        var selectedItems = listBox.GetSelectedItems();
+
+        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
+        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
+        dropDownControl.SetText(_getSelectedItemsText(selectedItems));
+
+    }
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
+        checkListControl.ownerName = dropDown.name;
+
+        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
+        checkListControl.SelectValues(values);
+        _updateText(checkListControl);
+    }
+    var _closeUp = function (s, e) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
+        checkListControl.ownerName = s.name;
+
+        if (checkListControl != null) {
+            var selectedItems = checkListControl.GetSelectedItems();
+        }
+    }
+    var _getSelectedItemsValue = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+    var _getSelectedItemsText = function (items, listBox) {
+        var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        //}
+        return texts.join(textSeparator);
+    }
+    var _getValuesByTexts = function (checkListControl, texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListControl.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+    var _onOrdertypedChange = function (s, e, programId) {
+        var orderType = s.GetValue();
+        var shipmentType = ASPxClientControl.GetControlCollection().GetByName("PgdShipmentType_popup").GetValue();
+        var mappingctrl = ASPxClientControl.GetControlCollection().GetByName("MappingIdCbPanel");
+        var gatewayType = ASPxClientControl.GetControlCollection().GetByName("GatewayTypeId_popup").GetValue();
+        if (mappingctrl != null) {
+            mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
+        }
+    }
+    var _onShipmenttypedChange = function (s, e, programId) {
+        var shipmentType = s.GetValue();
+        var orderType = ASPxClientControl.GetControlCollection().GetByName("PgdOrderType_popup").GetValue();
+        var mappingctrl = ASPxClientControl.GetControlCollection().GetByName("MappingIdCbPanel");
+        var gatewayType = ASPxClientControl.GetControlCollection().GetByName("GatewayTypeId_popup").GetValue();
+
+        if (mappingctrl != null) {
+            mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
+        }
+    }
+    var _onGatewayTypeIdChange = function (s, e, programId) {
+        var gatewayType = s.GetValue();
+        var orderType = ASPxClientControl.GetControlCollection().GetByName("PgdOrderType_popup").GetValue();
+        var mappingctrl = ASPxClientControl.GetControlCollection().GetByName("MappingIdCbPanel");
+        var shipmentType = ASPxClientControl.GetControlCollection().GetByName("PgdShipmentType_popup").GetValue();
+
+        if (mappingctrl != null) {
+            mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
+        }
+    }
+
+    return {
+        InitNextGatewayListBox: _initNextGatewayListBox,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        CloseUp: _closeUp,
+        OnOrdertypedChange: _onOrdertypedChange,
+        OnShipmenttypedChange: _onShipmenttypedChange,
+        OnGatewayTypeIdChange: _onGatewayTypeIdChange,
+    }
+})();
+
+M4PLCommon.CardView = (function () {
+    var _init = function (s, e) {
+        $.each($("#CardView tbody td table tbody td div"), function (key, value) {
+            if (value != "" && value != undefined && value.innerText != "" && value.innerText.includes("Card Type:")) {
+                var valueCardType = value.innerText.replace('Card Type: ', '');
+                value.innerText = valueCardType;
+            }
+        });
+    };
+
+    return {
+        Init: _init
+    }
+})();
+
+M4PLCommon.Error = (function () {
+    var _checkServerError = function () {
+        $.ajax({
+            type: "GET",
+            async: false,
+            cache: false,
+            url: "/Common/GetErrorMessageRoute",
+            success: function (response) {
+                if (response != "") {
+                    DisplayMessageControl.PerformCallback({ 'strDisplayMessage': JSON.stringify(response) })
+                    response = "";
+                }
+            },
+            error: function (err) {
+                console.log("error", err);
+            }
+        });
+    };
+
+    var _initDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobDocumentReport'
+        };
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    }
+
+    return {
+        CheckServerError: _checkServerError,
+        InitDisplayMessage: _initDisplayMessage,
+    }
+})();
+
+M4PLCommon.DocumentStatus = (function () {
+    var _isPODAttachedForJob = function (jobId) {
+        var isPODUploaded = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isPODUploaded = response.documentStatus.IsPODPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isPODUploaded
+    };
+
+    var _isAttachmentPresentForJob = function (jobId) {
+        var isjobAttachmentPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isjobAttachmentPresent = response.documentStatus.IsAttachmentPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isjobAttachmentPresent
+    };
+
+    var _isPriceCodeDataPresentForJob = function (jobId) {
+        var isPriceCodeDataPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/IsPriceCodeDataPresentForJob?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isPriceCodeDataPresent = response.documentStatus.IsAttachmentPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isPriceCodeDataPresent
+    };
+
+    var _isCostCodeDataPresentForJob = function (jobId) {
+        var isCostCodeDataPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/IsCostCodeDataPresentForJob?jobId=" + jobId,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isCostCodeDataPresent = response.documentStatus.IsAttachmentPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isCostCodeDataPresent
+    };
+
+    var _podMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobPODUploaded'
+        };
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
+    var _displayMessage = function (title, text, messageType, code) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: messageType,
+            Code: code
+        };
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
+    var _jobPriceCodeMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobPriceCodeMissing'
+        };
+
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
+    var _jobCostCodeMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobCostCodeMissing'
+        };
+
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
+    return {
+        IsPODAttachedForJob: _isPODAttachedForJob,
+        IsAttachmentPresentForJob: _isAttachmentPresentForJob,
+        IsPriceCodeDataPresentForJob: _isPriceCodeDataPresentForJob,
+        IsCostCodeDataPresentForJob: _isCostCodeDataPresentForJob,
+        PODMissingDisplayMessage: _podMissingDisplayMessage,
+        DisplayMessage: _displayMessage,
+        JobPriceCodeMissingDisplayMessage: _jobPriceCodeMissingDisplayMessage,
+        JobCostCodeMissingDisplayMessage: _jobCostCodeMissingDisplayMessage
+    }
+})();
+
+M4PLCommon.DisplayMessage = (function () {
+
+    var _defaultClientOk = function () {
+        var okCtrl = ASPxClientControl.GetControlCollection().GetByName("btnOk");
+        if (okCtrl != undefined && okCtrl != null) {
+            okCtrl.DoClick();
+        }
+
+        var saveCtrl = ASPxClientControl.GetControlCollection().GetByName("btnSave");
+        if (saveCtrl != undefined && saveCtrl != null) {
+            saveCtrl.DoClick();
+        }
+    };
+
+    return {
+        DefaultClientOk: _defaultClientOk
+    }
 })();

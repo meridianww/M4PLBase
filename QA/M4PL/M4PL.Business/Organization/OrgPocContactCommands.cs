@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 OrgPocContactCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Organization.OrgPocContactCommands
@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Organization;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Organization.OrgPocContactCommands;
-using System;
 
 namespace M4PL.Business.Organization
 {
@@ -83,14 +83,9 @@ namespace M4PL.Business.Organization
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<OrgPocContact> Get()
+        public OrgPocContact Patch(OrgPocContact entity)
         {
             throw new NotImplementedException();
         }
-
-		public OrgPocContact Patch(OrgPocContact entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

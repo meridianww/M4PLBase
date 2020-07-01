@@ -2,16 +2,16 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              09/25/2018
 Program Name:                                 VendDcLocationContactCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Vendor.VendDcLocationContactCommands
 ===================================================================================================================*/
-using M4PL.Entities.Vendor;
 using M4PL.Entities.Support;
+using M4PL.Entities.Vendor;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Vendor.VendDcLocationContactCommands;
-using System;
 
 namespace M4PL.Business.Vendor
 {
@@ -94,14 +94,9 @@ namespace M4PL.Business.Vendor
             return _commands.Get(activeuser, id, parentId);
         }
 
-        public IList<VendDcLocationContact> Get()
+        public VendDcLocationContact Patch(VendDcLocationContact entity)
         {
             throw new NotImplementedException();
         }
-
-		public VendDcLocationContact Patch(VendDcLocationContact entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

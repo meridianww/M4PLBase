@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ProgramCommands
 Purpose:                                      Client to consume M4PL API called ProgramControllers
@@ -57,7 +57,7 @@ namespace M4PL.APIClient.Program
 
             return JsonConvert.DeserializeObject<ApiResult<ProgramView>>(
             _restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/GetProgram", ActiveUser).AddParameter("parentId", parentId).AddParameter("id", id)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/GetProgram", ActiveUser).AddParameter("parentId", parentId).AddParameter("id", id)).Content).Results?.FirstOrDefault();
         }
 
         public IList<TreeModel> ProgramTree(long? parentId, bool isCustNode)
@@ -81,17 +81,17 @@ namespace M4PL.APIClient.Program
 
         }
 
-        public async System.Threading.Tasks.Task<bool> CopyPPPModel(CopyPPPModel copyPPPModel)
+        public bool CopyPPPModel(CopyPPPModel copyPPPModel)
         {
             string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
             RestClient _restClient = new RestClient(new Uri(_baseUri));
-            
+
             var route = string.Format("{0}/{1}", RouteSuffix, "CopyPPPModel");
 
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
-               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(copyPPPModel)).Content).Results.FirstOrDefault();
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(copyPPPModel)).Content).Results?.FirstOrDefault();
 
-            return result;
+            return result.HasValue ? (bool)result : false;
         }
     }
 }

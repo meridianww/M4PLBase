@@ -119,6 +119,12 @@
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itextsharp.xmlworker.5.5.13.1\lib\itextsharp.xmlworker.dll</HintPath>
+    </Reference>
     <Reference Include="M4PL.EF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\M4PL.DLLs\M4PL.EF.dll</HintPath>
@@ -132,6 +138,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -401,6 +408,7 @@
     <Compile Include="WebUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Job\Views\JobAdvanceReport\WeightUnitTypeByJob.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\_JobGatewayAction.cshtml" />
     <Content Include="Areas\Organization\Views\AppDashboard\DataView.cshtml" />
     <Content Include="Areas\Organization\Views\Organization\DataView.cshtml" />
@@ -755,6 +763,10 @@
     <Content Include="Areas\Job\Views\Job\ImportOrder.cshtml" />
     <Content Include="Areas\Job\Views\JobXcblInfo\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobHistory\DataView.cshtml" />
+    <Content Include="Views\Shared\_NextGatewayPartial.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\PackagingTypeByJob.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\CargoTitleByJob.cshtml" />
+    <Content Include="M4PL.Web.licenseheader" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -999,7 +1011,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56126</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
@@ -1021,6 +1033,7 @@
   </Target> -->
   <Import Project="$(MSBuildExtensionPackPath)" Condition="Exists('$(MSBuildExtensionPackPath)')" />
   <Target Name="BeforeBuild" Condition="Exists('$(MSBuildExtensionPackPath)')">
+    <TransformXml Source="Web.config" Transform="Web.$(Configuration).config" Destination="Web.config" />
     <ItemGroup>
       <AssemblyInfoFiles Include="**\AssemblyInfo.*" />
     </ItemGroup>

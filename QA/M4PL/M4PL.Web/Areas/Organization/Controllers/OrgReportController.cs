@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 OrgReportController
 //Purpose:                                      Contains Actions to render view on Organization's OrgReport page
@@ -16,7 +25,6 @@ using M4PL.Entities.Support;
 using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Organization.Controllers
@@ -45,7 +53,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
             if (reportView != null && reportView.Id > 0)
             {
-                _reportResult.Record = new OrgReportView(reportView);                
+                _reportResult.Record = new OrgReportView(reportView);
                 return PartialView(MvcConstants.ViewReport, _reportResult);
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));

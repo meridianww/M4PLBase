@@ -1,8 +1,8 @@
 ﻿@*Copyright (2018) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Job Destination
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              25/01/2018
     //Program Name:                                 Job Destination Form View
     //Purpose:                                      Provides view for Job Destination
@@ -187,12 +187,15 @@
        settings.SetContent(() =>
        {
            ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
+
            ViewContext.Writer.Write("<div class='form-row-group job-site-name' >");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOC2).ToHtmlString());
            ViewContext.Writer.Write("</div>");
+
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobPreferredMethod, new { JobPreferredMethod = Model.Record.JobPreferredMethod }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
+
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCPhone2, new { MakeSkypeCall = true }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
@@ -201,6 +204,11 @@
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCEmail2).ToHtmlString());
            ViewContext.Writer.Write("</div>");
+
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.IsJobVocSurvey).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+
            ViewContext.Writer.Write("</div>");
 
        });

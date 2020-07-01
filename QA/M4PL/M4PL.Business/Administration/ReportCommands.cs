@@ -2,16 +2,16 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ReportCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Administration.ReportCommands
 ===================================================================================================================*/
 using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Administration.ReportCommands;
-using System;
 
 namespace M4PL.Business.Administration
 {
@@ -82,14 +82,9 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<Report> Get()
+        public Report Patch(Report entity)
         {
             throw new NotImplementedException();
         }
-
-		public Report Patch(Report entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

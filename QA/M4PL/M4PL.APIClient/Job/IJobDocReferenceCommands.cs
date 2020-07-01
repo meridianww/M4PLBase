@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IJobDocReferenceCommands
 Purpose:                                      Set of rules for JobDocReferenceCommands
@@ -19,5 +19,6 @@ namespace M4PL.APIClient.Job
     {
         JobDocReferenceView PutWithSettings(JobDocReferenceView jobDocReferenceView);
         JobDocReferenceView PostWithSettings(JobDocReferenceView jobDocReferenceView);
+        long GetNextSequence();
     }
 }

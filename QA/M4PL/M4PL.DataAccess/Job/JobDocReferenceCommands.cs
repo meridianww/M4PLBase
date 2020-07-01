@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobDocReferenceCommands
 Purpose:                                      Contains commands to perform CRUD on JobDocReference
@@ -13,6 +13,7 @@ using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -55,6 +56,7 @@ namespace M4PL.DataAccess.Job
             var parameters = GetParameters(jobDocReference);
             // parameters.Add(new Parameter("@langCode", jobDocReference.LangCode));
             parameters.AddRange(activeUser.PostDefaultParams(jobDocReference));
+            parameters.Add(new Parameter("@DocRefId", jobDocReference.Id));
             return Post(activeUser, parameters, StoredProceduresConstant.InsertJobDocReference);
         }
 
@@ -62,7 +64,9 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = GetParameters(jobDocReference, userSysSetting);
             parameters.AddRange(activeUser.PostDefaultParams(jobDocReference));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJobDocReference);
+            parameters.Add(new Parameter("@DocRefId", jobDocReference.Id));
+            var result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobDocReference);
+            return result;
         }
 
         /// <summary>
@@ -162,5 +166,24 @@ namespace M4PL.DataAccess.Job
 
             return parameters;
         }
+
+        public static long GetNextSequence()
+        {
+            try
+            {
+                var parameters = new List<Parameter>
+            {
+               new Parameter("@Entity", "DocumentReference")
+            };
+
+
+                return SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.GetSequenceForEntity, parameters.ToArray(), storedProcedure: true);
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
     }
 }

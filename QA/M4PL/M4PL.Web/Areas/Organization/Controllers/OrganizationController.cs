@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 Organization
 //Purpose:                                      Contains Actions to render view on Organization page
@@ -14,7 +23,6 @@ using M4PL.APIClient.Organization;
 using M4PL.APIClient.ViewModels.Organization;
 using M4PL.Entities;
 using M4PL.Entities.Support;
-using M4PL.Utilities;
 using M4PL.Web.Interfaces;
 using M4PL.Web.Models;
 using Newtonsoft.Json;
@@ -88,48 +96,48 @@ namespace M4PL.Web.Areas.Organization.Controllers
             return ErrorMessageForInsertOrUpdate(organizationView.Id, route);
         }
 
-		public override ActionResult FormView(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-			_formResult.SessionProvider = SessionProvider;
-			route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
-			SessionProvider.ViewPagedDataSession[EntitiesAlias.Organization].OpenedTabs = null;
-			_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new OrganizationView();
-			route.CompanyId = _formResult.Record != null ? _formResult.Record.CompanyId : 0;
-			BaseRoute.CompanyId = route.CompanyId;
-			SessionProvider.ActiveUser.LastRoute.CompanyId = route.CompanyId;
-			_formResult.SetupFormResult(_commonCommands, route);
+        public override ActionResult FormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            _formResult.SessionProvider = SessionProvider;
+            route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
+            SessionProvider.ViewPagedDataSession[EntitiesAlias.Organization].OpenedTabs = null;
+            _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new OrganizationView();
+            route.CompanyId = _formResult.Record != null ? _formResult.Record.CompanyId : 0;
+            BaseRoute.CompanyId = route.CompanyId;
+            SessionProvider.ActiveUser.LastRoute.CompanyId = route.CompanyId;
+            _formResult.SetupFormResult(_commonCommands, route);
             _formResult.Record.ArbRecordId = _formResult.Record.Id == 0 ? new Random().Next(-1000, 0) : _formResult.Record.Id;
             return PartialView(_formResult);
-		}
+        }
 
-		#region Tab View
+        #region Tab View
 
-		public ActionResult TabViewCallBack(string strRoute)
+        public ActionResult TabViewCallBack(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return PartialView(MvcConstants.ViewPageControlPartial, route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Organization));
         }
 
-		public virtual PartialViewResult AddressFormView(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			_formResult.Record = _currentEntityCommands.Get(route.RecordId);
-			_formResult.ColumnSettings = WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(route.Entity), SessionProvider);
-			_formResult.SessionProvider = SessionProvider;
-			return PartialView(_formResult);
-		}
+        public virtual PartialViewResult AddressFormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _formResult.Record = _currentEntityCommands.Get(route.RecordId);
+            _formResult.ColumnSettings = WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(route.Entity), SessionProvider);
+            _formResult.SessionProvider = SessionProvider;
+            return PartialView(_formResult);
+        }
 
-		public ActionResult RichEditDescription(string strRoute)
+        public ActionResult RichEditDescription(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             long newDocumentId;
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.OrgDescription.ToString());
             if (route.RecordId == 0 && route.Filters != null && route.Filters.FieldName.Equals("ArbRecordId") && long.TryParse(route.Filters.Value, out newDocumentId))
             {
-                 byteArray = route.GetVarbinaryByteArray(newDocumentId,ByteArrayFields.OrgDescription.ToString());
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.OrgDescription.ToString());
             }
             if (route.RecordId > 0)
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;

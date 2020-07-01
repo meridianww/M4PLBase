@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ActiveUser
 Purpose:                                      Contains objects related to ActiveUser
@@ -145,13 +145,13 @@ namespace M4PL.Entities.Support
         /// </value>
         public string RoleCode { get; set; }
 
-		/// <summary>
-		/// Gets or sets the last acccess datetime.
-		/// </summary>
-		/// <value>
-		/// The LastAccessDateTime.
-		/// </value>
-		public DateTime LastAccessDateTime { get; set; }
+        /// <summary>
+        /// Gets or sets the last acccess datetime.
+        /// </summary>
+        /// <value>
+        /// The LastAccessDateTime.
+        /// </value>
+        public DateTime LastAccessDateTime { get; set; }
 
         /// <summary>
         ///  Gets or sets the SysSetting
@@ -180,14 +180,19 @@ namespace M4PL.Entities.Support
         /// </summary>
         public MvcRoute CopiedRecord { get; set; }
 
-		/// <summary>
-		/// Maintain the Current route for refresh the page.
-		/// </summary>
-		public MvcRoute CurrentRoute { get; set; }
+        /// <summary>
+        /// Maintain the Current route for refresh the page.
+        /// </summary>
+        public MvcRoute CurrentRoute { get; set; }
 
         /// <summary>
 		/// Maintain the Report route for refresh the page.
 		/// </summary>
 		public MvcRoute ReportRoute { get; set; }
+
+        /// <summary>
+        /// Only use for Employee type as per current requirement
+        /// </summary>
+        public IList<PreferredLocation> PreferredLocation { get; set; }
     }
 }

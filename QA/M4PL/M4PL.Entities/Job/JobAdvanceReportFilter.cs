@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace M4PL.Entities.Job
+﻿namespace M4PL.Entities.Job
 {
     public class JobAdvanceReportFilter : BaseReportModel
     {
@@ -37,5 +31,8 @@ namespace M4PL.Entities.Job
         public string ProductType { get; set; }
         public string JobChannel { get; set; }
         public string DateTypeName { get; set; }
+        public string PackagingCode { get; set; }
+        public string WeightUnit { get; set; }
+        public string CargoTitle { get; set; }
     }
 }

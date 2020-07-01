@@ -12,10 +12,10 @@ using M4PL.APIClient.ViewModels.Job;
 
 namespace M4PL.APIClient.Job
 {
-	/// <summary>
-	/// Performs basic CRUD operation on the JobEDIXcbl Entity
-	/// </summary>
-	public interface IJobEDIXcblCommands : IBaseCommands<JobEDIXcblView>
+    /// <summary>
+    /// Performs basic CRUD operation on the JobEDIXcbl Entity
+    /// </summary>
+    public interface IJobEDIXcblCommands : IBaseCommands<JobEDIXcblView>
     {
     }
 }

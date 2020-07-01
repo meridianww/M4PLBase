@@ -2,13 +2,11 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 CustContact
 Purpose:                                      Contains objects related to CustContact
 ==========================================================================================================*/
-
-using System;
 
 namespace M4PL.Entities.Customer
 {
@@ -87,5 +85,5 @@ namespace M4PL.Entities.Customer
         public string ConBusinessCountryIdName { get; set; }
 
         public string ConBusinessFullAddress { get; set; }
-	}
+    }
 }

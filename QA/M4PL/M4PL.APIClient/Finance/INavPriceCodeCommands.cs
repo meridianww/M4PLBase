@@ -9,15 +9,12 @@ Purpose:                                      Set of rules for NavPriceCodeComma
 =============================================================================================================*/
 
 using M4PL.APIClient.ViewModels.Finance;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.APIClient.Finance
 {
-	public interface INavPriceCodeCommands : IBaseCommands<NavPriceCodeView>
-	{
-	}
+    public interface INavPriceCodeCommands : IBaseCommands<NavPriceCodeView>
+    {
+        IList<NavPriceCodeView> GetAllPriceCode();
+    }
 }

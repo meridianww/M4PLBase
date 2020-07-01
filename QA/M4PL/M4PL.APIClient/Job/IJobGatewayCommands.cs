@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IJobGatewayCommands
 Purpose:                                      Set of rules for JobGatewayCommands
@@ -20,11 +20,11 @@ namespace M4PL.APIClient.Job
     /// </summary>
     public interface IJobGatewayCommands : IBaseCommands<JobGatewayView>
     {
-        JobGatewayView GetGatewayWithParent(long id, long parentId, string entityFor = null);
+        JobGatewayView GetGatewayWithParent(long id, long parentId, string entityFor = null, bool is3PlAction = false);
         JobGatewayComplete GetJobGatewayComplete(long id, long parentId);
         JobGatewayComplete PutJobGatewayComplete(JobGatewayComplete jobGateway);
-        IList<JobAction> GetJobAction(long jobId);
-		JobGatewayView PutJobAction(JobGatewayView jobGatewayView);
+        //IList<JobAction> GetJobAction(long jobId);
+        JobGatewayView PutJobAction(JobGatewayView jobGatewayView);
         JobGatewayView PutWithSettings(JobGatewayView jobGatewayView);
         JobGatewayView PostWithSettings(JobGatewayView jobGatewayView);
         JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle);

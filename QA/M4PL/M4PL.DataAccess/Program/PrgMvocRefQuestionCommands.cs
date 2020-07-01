@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 PrgMvocRefQuestion
 Purpose:                                      Contains commands to perform CRUD on PrgMvocRefQuestion
@@ -118,8 +118,8 @@ namespace M4PL.DataAccess.Program
                new Parameter("@queType_RangeAnswer", prgMvocRefQuestion.QueType_RangeAnswer),
                new Parameter("@queType_RangeDefault", prgMvocRefQuestion.QueType_RangeDefault),
                new Parameter("@statusId", prgMvocRefQuestion.StatusId),
-			   new Parameter("@queDescriptionText", prgMvocRefQuestion.QueDescriptionText),
-			};
+               new Parameter("@queDescriptionText", prgMvocRefQuestion.QueDescriptionText),
+            };
             return parameters;
         }
     }

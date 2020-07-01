@@ -2,15 +2,13 @@
 //All Rights Reserved Worldwide
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              13/10/2017
 //Program Name:                                 CustDashboardView
 //Purpose:                                      Represents CustDashboard Details
 //====================================================================================================================================================*/
 
 using M4PL.Entities.Customer;
-using System;
-using System.Linq;
 
 namespace M4PL.APIClient.ViewModels.Customer
 {

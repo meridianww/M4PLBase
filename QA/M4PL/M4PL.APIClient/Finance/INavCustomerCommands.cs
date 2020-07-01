@@ -13,10 +13,11 @@ using System.Collections.Generic;
 
 namespace M4PL.APIClient.Finance
 {
-	/// <summary>
-	/// Performs basic CRUD operation on the Nav Customer Entity
-	/// </summary>
-	public interface INavCustomerCommands : IBaseCommands<NavCustomerView>
-	{
+    /// <summary>
+    /// Performs basic CRUD operation on the Nav Customer Entity
+    /// </summary>
+    public interface INavCustomerCommands : IBaseCommands<NavCustomerView>
+    {
+        IList<NavCustomerView> GetAllNavCustomer();
     }
 }

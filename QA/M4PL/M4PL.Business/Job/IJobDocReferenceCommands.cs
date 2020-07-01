@@ -2,12 +2,13 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IJobDocReferenceCommands
 Purpose:                                      Set of rules for JobDocReferenceCommands
 =============================================================================================================*/
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 
@@ -21,5 +22,9 @@ namespace M4PL.Business.Job
         JobDocReference PutWithSettings(SysSetting userSysSetting, JobDocReference jobDocReference);
 
         JobDocReference PostWithSettings(SysSetting userSysSetting, JobDocReference jobDocReference);
+		StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType);
+
+		long GetNextSequence();
+
     }
 }

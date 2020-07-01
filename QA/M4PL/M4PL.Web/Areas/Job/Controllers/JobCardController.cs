@@ -1,4 +1,14 @@
-﻿using M4PL.APIClient.Common;
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+using DevExpress.Web.Mvc;
+using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
@@ -8,9 +18,8 @@ using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
-using DevExpress.Web.Mvc;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -50,12 +59,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Location = route.Location;
 
             List<string> prefLocation = new List<string>();
-            string result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
-                ? _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
-            if (!string.IsNullOrEmpty(result) && TempData["Destinations"] == null && route.Location == null)
+            var result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
+                && SessionProvider.ActiveUser.PreferredLocation != null
+                ? SessionProvider.ActiveUser.PreferredLocation : null;
+            // _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
+            if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/ && TempData["Destinations"] == null && route.Location == null)
             {
                 _reportResult.ReportRoute.Location = new List<string>();
-                prefLocation = result.Split(',').ToList();
+                prefLocation = result.Select(t => t.PPPVendorLocationCode).ToList();
 
                 var ExistingDestination = (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"];
                 foreach (string item in prefLocation)
@@ -74,6 +85,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
             var record = _jobCardCommands.GetCardTileData(route.RecordId, destinationSiteWhereCondition);
+            TempData["JobCardCustomerId"] = route.RecordId;
             if (record != null)
             {
                 _reportResult.Records = record.GetCardViewViews(route.RecordId);
@@ -99,6 +111,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (filterId > 0)
             {
                 jobCardRequest.DashboardCategoryRelationId = filterId;
+                if (route.CompanyId != 0)
+                    jobCardRequest.CustomerId = route.CompanyId;
                 var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
                 if (recordData != null && recordData.Count > 0)
                 {
@@ -141,11 +155,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             cancelRoute.OwnerCbPanel = "AppCbPanel";
             cancelRoute.EntityName = "JobCard";
             cancelRoute.Url = string.Empty;
-            //cancelRoute.CompanyId = route.CustomerId;
+            cancelRoute.CompanyId = TempData["JobCardCustomerId"] != null ? (long)TempData["JobCardCustomerId"] : route.CompanyId;
+            TempData.Keep("JobCardCustomerId");
             cancelRoute.Location = route.Location;
             //cancelRoute.Filters.Value = null;
             TempData["BackUrl"] = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
-            TempData.Keep();
             SessionProvider.IsCardEditMode = false;
             if (_gridResult.SessionProvider == null)
                 _gridResult.SessionProvider = SessionProvider;
@@ -173,7 +187,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Area = "Job";
             _reportResult.ReportRoute.RecordId = 0;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
-            ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(id, "Destination");     
+            ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(id, "Destination");
             return PartialView("DestinationPartialView", _reportResult);
         }
 
@@ -182,6 +196,8 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
         {
             long filterId = 0;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
             if (TempData["CardTtile"] != null && filterId == 0)
                 filterId = ((JobCardRequest)TempData["CardTtile"]).DashboardCategoryRelationId;
             //TempData["CardTtile"] = null;
@@ -196,7 +212,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["BackUrl"] = TempData["BackUrl"];
             TempData.Keep();
             base.GridFilteringView(filteringState, strRoute, gridName);
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
@@ -247,71 +262,75 @@ namespace M4PL.Web.Areas.Job.Controllers
         #endregion Paging
         public override ActionResult RibbonMenu(string strRoute)
         {
-            if (_commonCommands == null)
-            {
-                _commonCommands = new CommonCommands();
-                _commonCommands.ActiveUser = SessionProvider.ActiveUser;
-            }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            route.OwnerCbPanel = WebApplicationConstants.RibbonCbPanel;
-
-            var ribbonMenus = _commonCommands.GetRibbonMenus().ToList();
-
-            if (WebGlobalVariables.ModuleMenus.Count == 0)
-                WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
-
-            var mainModuleRibbons = (from mnu in WebGlobalVariables.ModuleMenus
-                                     join sec in SessionProvider.UserSecurities on mnu.MnuModuleId equals sec.SecMainModuleId
-                                     where mnu.MnuBreakDownStructure.StartsWith("01")
-                                     select mnu.SetRibbonMenu()).ToList();
-
-            SessionProvider.UserSecurities.ToList().ForEach(sec => mainModuleRibbons.GetNotAccessibleMenus(sec).ForEach(nmnu => mainModuleRibbons.FirstOrDefault(mnu => mnu.MnuModuleId == sec.SecMainModuleId).Children.Remove(nmnu)));
-
-            //Comment this line if want to show on ribbon if it has no operations to perform
-            mainModuleRibbons.RemoveAll(mnu => mnu.Children.Count == 0);
-            //mainModuleRibbons.ForEach(m =>
-            //{
-            //    if (m.StatusId == 1) m.StatusId = 3;
-            //});
-
-
-            ribbonMenus.AddRange(mainModuleRibbons);
-            ViewData[MvcConstants.LastActiveTabRoute] = route;
-            ribbonMenus.ForEach(r => r.RibbonRoute(route, ribbonMenus.IndexOf(r), new MvcRoute { Entity = EntitiesAlias.JobCard, Area = EntitiesAlias.Job.ToString() }, _commonCommands, SessionProvider));
-            ribbonMenus.ForEach(m =>
+            if (route.Action != "CardView")
+                return base.RibbonMenu(strRoute);
+            else
             {
-                if (m.MnuTitle == "File")
+                if (_commonCommands == null)
                 {
-                    foreach (var ch in m.Children)
-                    {
-                        if (ch.MnuTitle == "Records" && ch.Children.Any() &&
-                        ch.Route != null && ch.Route.Area == "Job" &&
-                        ch.Route.Controller == "JobCard" && route.Action == "DataView" && SessionProvider.IsCardEditMode)
-                        {
+                    _commonCommands = new CommonCommands();
+                    _commonCommands.ActiveUser = SessionProvider.ActiveUser;
+                }
 
-                            if (ch.Children != null && ch.Children.Any(obj => obj.Route != null &&
-                            obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
+                route.OwnerCbPanel = WebApplicationConstants.RibbonCbPanel;
+
+                var ribbonMenus = _commonCommands.GetRibbonMenus().ToList();
+
+                if (WebGlobalVariables.ModuleMenus.Count == 0)
+                    WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
+
+                var mainModuleRibbons = (from mnu in WebGlobalVariables.ModuleMenus
+                                         join sec in SessionProvider.UserSecurities on mnu.MnuModuleId equals sec.SecMainModuleId
+                                         where mnu.MnuBreakDownStructure.StartsWith("01")
+                                         select mnu.SetRibbonMenu()).ToList();
+
+                SessionProvider.UserSecurities.ToList().ForEach(sec => mainModuleRibbons.GetNotAccessibleMenus(sec).ForEach(nmnu => mainModuleRibbons.FirstOrDefault(mnu => mnu.MnuModuleId == sec.SecMainModuleId).Children.Remove(nmnu)));
+                //Comment this line if want to show on ribbon if it has no operations to perform
+                mainModuleRibbons.RemoveAll(mnu => mnu.Children.Count == 0);
+                //mainModuleRibbons.ForEach(m =>
+                //{
+                //    if (m.StatusId == 1) m.StatusId = 3;
+                //});
+
+                ribbonMenus.AddRange(mainModuleRibbons);
+                ViewData[MvcConstants.LastActiveTabRoute] = route;
+                ribbonMenus.ForEach(r => r.RibbonRoute(route, ribbonMenus.IndexOf(r), new MvcRoute { Entity = EntitiesAlias.JobCard, Area = EntitiesAlias.Job.ToString() }, _commonCommands, SessionProvider));
+                ribbonMenus.ForEach(m =>
+                {
+                    if (m.MnuTitle == "File")
+                    {
+                        foreach (var ch in m.Children)
+                        {
+                            if (ch.MnuTitle == "Records" && ch.Children.Any() &&
+                            ch.Route != null && ch.Route.Area == "Job" &&
+                            ch.Route.Controller == "JobCard" && route.Action == "DataView" && SessionProvider.IsCardEditMode)
                             {
-                                ch.StatusId = 1;
-                                ch.Children.Where(obj => obj.MnuTitle == "New").FirstOrDefault().StatusId = 3;
-                                ch.Children.Where(obj => obj.MnuTitle == "Refresh All").FirstOrDefault().StatusId = 1;
-                                ch.Children.Where(obj => obj.MnuTitle == "Save").FirstOrDefault().StatusId = 1;
+
+                                if (ch.Children != null && ch.Children.Any(obj => obj.Route != null &&
+                                obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
+                                {
+                                    ch.StatusId = 1;
+                                    ch.Children.Where(obj => obj.MnuTitle == "New").FirstOrDefault().StatusId = 3;
+                                    ch.Children.Where(obj => obj.MnuTitle == "Refresh All").FirstOrDefault().StatusId = 1;
+                                    ch.Children.Where(obj => obj.MnuTitle == "Save").FirstOrDefault().StatusId = 1;
+                                }
+                                else
+                                    ch.StatusId = 3;
                             }
                             else
                                 ch.StatusId = 3;
                         }
-                        else
-                            ch.StatusId = 3;
                     }
-                }
-            });
+                });
 
-            if (route.Action == "DataView" && !SessionProvider.IsCardEditMode)
-            {
-                SessionProvider.IsCardEditMode = true;
+                if (route.Action == "DataView" && !SessionProvider.IsCardEditMode)
+                {
+                    SessionProvider.IsCardEditMode = true;
+                }
+                ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+                return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
             }
-            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-            return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
         }
     }
 }

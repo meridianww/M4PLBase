@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 JobReportController
 //Purpose:                                      Contains Actions to render view on JobReport page
@@ -30,22 +39,18 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobReportController : BaseController<JobReportView>
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
-        protected ReportResult<JobAdvanceReportFilterView> _advanceReportResult = new ReportResult<JobAdvanceReportFilterView>();
         private readonly IJobReportCommands _jobReportCommands;
-        private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
         /// <summary>
         /// Interacts with the interfaces to get the Job details from the system and renders to the page
         /// Gets the page related information on the cache basis
         /// </summary>
         /// <param name="jobReportCommands"></param>
         /// <param name="commonCommands"></param>
-        public JobReportController(IJobReportCommands jobReportCommands, ICommonCommands commonCommands, IJobAdvanceReportCommands jobAdvanceReportCommands)
+        public JobReportController(IJobReportCommands jobReportCommands, ICommonCommands commonCommands)
             : base(jobReportCommands)
         {
             _commonCommands = commonCommands;
             _jobReportCommands = jobReportCommands;
-            _jobAdvanceReportCommands = jobAdvanceReportCommands;
-            _jobAdvanceReportCommands.ActiveUser = _jobReportCommands.ActiveUser;
         }
 
         //Advance custom report for job
@@ -62,8 +67,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
-                _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
-                _reportResult.Record.EndDate = DateTime.UtcNow;
+                _reportResult.Record.StartDate = Utilities.TimeUtility.GetPacificDateTime().AddDays(-1);
+                _reportResult.Record.EndDate = Utilities.TimeUtility.GetPacificDateTime();
                 ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
                 return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
             }
@@ -87,8 +92,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["Locations"] = _jobReportCommands.GetDropDownDataForLocation(0, "Location");
                 _reportResult.ReportRoute.Action = "VocReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
-                _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
-                _reportResult.Record.EndDate = DateTime.UtcNow;
+                _reportResult.Record.StartDate = Utilities.TimeUtility.GetPacificDateTime().AddDays(-1);
+                _reportResult.Record.EndDate = Utilities.TimeUtility.GetPacificDateTime();
                 return PartialView(MvcConstants.ViewVocReport, _reportResult);
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
@@ -185,7 +190,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     detailBand.Controls.Add(table);
                     _reportResult.Report.Band.Controls.Add(detailBand);
 
-                    DateTime dt = DateTime.UtcNow;
+                    DateTime dt = Utilities.TimeUtility.GetPacificDateTime();
                     ReportFooterBand reportFooter = new ReportFooterBand();
                     _reportResult.Report.Bands.Add(reportFooter);
                     reportFooter.Controls.Add(new XRLabel()
@@ -261,7 +266,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     detailBand.Controls.Add(table);
                     report.Band.Controls.Add(detailBand);
 
-                    DateTime dt = DateTime.UtcNow;
+                    DateTime dt = Utilities.TimeUtility.GetPacificDateTime();
                     ReportFooterBand reportFooter = new ReportFooterBand();
                     report.Bands.Add(reportFooter);
                     reportFooter.Controls.Add(new XRLabel()

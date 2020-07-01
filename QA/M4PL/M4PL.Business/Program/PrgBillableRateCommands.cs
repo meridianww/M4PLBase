@@ -2,16 +2,16 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 {Class name} like PrgBillableRateCommands
 Purpose:                                      Contains commands to call DAL logic for {Namespace:Class name} like M4PL.DAL.Program.PrgBillableRateCommands
 ===================================================================================================================*/
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgBillableRateCommands;
-using System;
 
 namespace M4PL.Business.Program
 {
@@ -82,14 +82,9 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgBillableRate> Get()
+        public PrgBillableRate Patch(PrgBillableRate entity)
         {
             throw new NotImplementedException();
         }
-
-		public PrgBillableRate Patch(PrgBillableRate entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

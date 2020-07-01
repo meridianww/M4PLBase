@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Mvc Base Controller
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 MvcBase
 //Purpose:                                      Contains Actions to handle and maintain generic data required for a page
@@ -10,6 +19,7 @@
 
 using M4PL.APIClient.Common;
 using M4PL.Entities;
+using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using M4PL.Web.Providers;
@@ -100,16 +110,12 @@ namespace M4PL.Web.Controllers
                 jobFormRoute.RecordId = jobId;
                 Session["SpecialJobId"] = true;
                 if (!string.IsNullOrEmpty(tabName))
-                    Session["tabName"] = tabName;
+                    Session["tabName"] = tabName.ToLower() == "all" ? JobDocReferenceType.Document.ToString() : tabName;
                 return jobFormRoute;
             }
 
             if (SessionProvider.ActiveUser.LastRoute != null && SessionProvider.MvcPageAction.Count == 0)
                 return SessionProvider.ActiveUser.LastRoute;
-
-
-
-
 
             if ((WebGlobalVariables.ModuleMenus.Count == 0) || (SessionProvider.ActiveUser.LastRoute == null))
                 WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
@@ -160,9 +166,16 @@ namespace M4PL.Web.Controllers
         {
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
             {
+                UpdateAccessToken(null, false);
                 if (jobId > 0)
+                {
                     return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty, jobId = jobId, tabName = tabName });
+                }                    
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
+            }
+            else
+            {
+                UpdateAccessToken(SessionProvider.ActiveUser, true);
             }
             if (SessionProvider.MvcPageAction != null && SessionProvider.MvcPageAction.Count > 0 && SessionProvider.MvcPageAction.FirstOrDefault().Key > 0)
             {
@@ -209,7 +222,13 @@ namespace M4PL.Web.Controllers
             }
             SessionProvider.MvcPageAction.Clear();
             //End
+            if (route.Action != MvcConstants.ActionTreeView && route.Controller != "Program" && (Session["TreeViewLayoutData"] != null || Session["CurrentNode"] != null))
+            {
+                Session["CurrentNode"] = null;
+                Session["TreeViewLayoutData"] = null;
+            }
             SessionProvider.ActiveUser.LastRoute = route;
+
             //if (DevExpress.Web.Mvc.DevExpressHelper.IsCallback)
             //    System.Threading.Thread.Sleep(100);
 
@@ -432,7 +451,25 @@ namespace M4PL.Web.Controllers
             uniqueProps.ForEach(uni =>
             {
                 var fieldValue = props[propNames.IndexOf(uni.ColColumnName)].GetValue(viewRecord);
-                var uniqueValModel = new UniqueValidation { Entity = entity, FieldName = uni.ColColumnName, FieldValue = fieldValue != null ? fieldValue.ToString() : string.Empty, RecordId = recordId, ParentFilter = viewRecord.GetParentFilter(props, entity), ParentId = parentId };
+                UniqueValidation uniqueValModel = null;
+                if (entity == EntitiesAlias.PrgRefGatewayDefault && uni.ColColumnName == "PgdGatewayDefaultForJob")
+                {
+                    var prgRefGatewayDefault = viewRecord as PrgRefGatewayDefault;
+                    uniqueValModel = new UniqueValidation
+                    {
+                        Entity = entity,
+                        FieldName = uni.ColColumnName,
+                        FieldValue = string.Format(" AND PgdShipmentType={0} AND PgdOrderType = {1} AND PgdProgramID = {2} AND GatewayTypeId ={3}  AND ID != {4}", "'" + prgRefGatewayDefault.PgdShipmentType + "'", "'" + prgRefGatewayDefault.PgdOrderType + "'", prgRefGatewayDefault.PgdProgramID, prgRefGatewayDefault.GatewayTypeId, recordId),
+                        RecordId = recordId,
+                        ParentFilter = viewRecord.GetParentFilter(props, entity),
+                        ParentId = parentId,
+                        isValidate = prgRefGatewayDefault.PgdGatewayDefaultForJob.HasValue ? (bool)prgRefGatewayDefault.PgdGatewayDefaultForJob : false
+                    };
+                }
+                else
+                {
+                    uniqueValModel = new UniqueValidation { Entity = entity, FieldName = uni.ColColumnName, FieldValue = fieldValue != null ? fieldValue.ToString() : string.Empty, RecordId = recordId, ParentFilter = viewRecord.GetParentFilter(props, entity), ParentId = parentId };
+                }
                 if (FormViewProvider.CompositUniqueCondition.ContainsKey(entity))
                     uniqueValModel.ParentFilter += viewRecord.GetCompositUniqueFilter(props, entity);
                 if (!_commonCommands.GetIsFieldUnique(uniqueValModel))
@@ -473,48 +510,6 @@ namespace M4PL.Web.Controllers
 
             foreach (var errMsg in errorMessages)
                 ModelState.UpdateModelError(errMsg.Key, errMsg.Value);
-
-            //if (!isFormView && !isNewRecord)
-            //{
-            //    var allInvisibleColumns = new List<string>();
-            //    var userColumnSettings = _commonCommands.GetUserColumnSettings(entity);
-            //    if (userColumnSettings != null)
-            //        allInvisibleColumns = userColumnSettings.ColNotVisible.SplitComma().ToList();
-            //    var allFields = columnSettings.Where(col => propNames.Contains(col.ColColumnName) && props[propNames.IndexOf(col.ColColumnName)].GetValue(viewRecord) == null).ToList();
-            //    allFields.ForEach(field =>
-            //    {
-            //        if (((userColumnSettings != null) && (allInvisibleColumns.Count > 0)) ? ((allInvisibleColumns.IndexOf(field.ColColumnName) >= 0) || (!columnSettings.Where(col => col.ColColumnName == field.ColColumnName).FirstOrDefault().IsRequired)) : columnSettings.Where(col => col.ColColumnName == field.ColColumnName).FirstOrDefault().ColIsVisible)
-            //        {
-            //            if (!field.DataType.EqualsOrdIgnoreCase(SQLDataTypes.Name.ToString()))
-            //            {
-            //                var currentDataType = SQLDataTypes.nvarchar;
-            //                Enum.TryParse(field.DataType, true, out currentDataType);
-
-            //                Type propertyType = props[propNames.IndexOf(field.ColColumnName)].PropertyType;
-            //                var targetType = IsNullableType(propertyType) ? Nullable.GetUnderlyingType(propertyType) : propertyType;
-
-            //                switch (currentDataType)
-            //                {
-            //                    case SQLDataTypes.bigint:
-            //                    case SQLDataTypes.Int:
-            //                    case SQLDataTypes.dropdown:
-            //                        props[propNames.IndexOf(field.ColColumnName)].SetValue(viewRecord, Convert.ChangeType(-100, targetType), null);
-            //                        break;
-            //                    case SQLDataTypes.Decimal:
-            //                        props[propNames.IndexOf(field.ColColumnName)].SetValue(viewRecord, Convert.ChangeType(-100.00, targetType), null);
-            //                        break;
-            //                    case SQLDataTypes.nvarchar:
-            //                    case SQLDataTypes.varchar:
-            //                        props[propNames.IndexOf(field.ColColumnName)].SetValue(viewRecord, WebApplicationConstants.M4PLSeparator);
-            //                        break;
-            //                    case SQLDataTypes.datetime2:
-            //                        props[propNames.IndexOf(field.ColColumnName)].SetValue(viewRecord, Convert.ToDateTime(WebApplicationConstants.DummyDate));
-            //                        break;
-            //                }
-            //            }
-            //        }
-            //    });
-            //}
 
             return errorMessages.Select(err => err.Value).ToList();
         }
@@ -890,6 +885,16 @@ namespace M4PL.Web.Controllers
                 CommonColumns.DateChanged.ToString(),
                 CommonColumns.ChangedBy.ToString()
             };
+        }
+
+
+        protected void UpdateAccessToken(ActiveUser activeUser, bool status)
+        {
+            var authTokenCookie = HttpContext.Response?.Cookies;
+            if (authTokenCookie[WebApplicationConstants.AuthTokenCookie] != null)
+                authTokenCookie.Remove(WebApplicationConstants.AuthTokenCookie);
+            if (status  && activeUser != null)
+                authTokenCookie.Add(new HttpCookie(WebApplicationConstants.AuthTokenCookie, activeUser.AuthToken));
         }
 
     }

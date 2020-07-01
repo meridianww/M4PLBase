@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              09/25/2018
 //Program Name:                                 CustDcLocationContact
 //Purpose:                                      Contains Actions to render view on Customer's DC Location Contact page
@@ -15,8 +24,6 @@ using M4PL.APIClient.ViewModels.Customer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -57,13 +64,13 @@ namespace M4PL.Web.Areas.Customer.Controllers
 
             var result = custDcLocationContactView.Id > 0 ? base.UpdateForm(custDcLocationContactView) : base.SaveForm(custDcLocationContactView);
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId).SetParent(EntitiesAlias.Customer, custDcLocationContactView.ParentId, true);
-			if (result is SysRefModel)
+            if (result is SysRefModel)
             {
                 route.RecordId = result.ContactMSTRID.Value;
                 route.Url = custDcLocationContactView.ConPrimaryRecordId.ToString();
                 route.Entity = EntitiesAlias.CustDcLocation;
                 route.SetParent(EntitiesAlias.Customer, result.ParentId);
-				route.CompanyId = result.ConCompanyId;
+                route.CompanyId = result.ConCompanyId;
                 return SuccessMessageForInsertOrUpdate(custDcLocationContactView.Id, route);
             }
             return ErrorMessageForInsertOrUpdate(custDcLocationContactView.Id, route);
@@ -75,9 +82,9 @@ namespace M4PL.Web.Areas.Customer.Controllers
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             custDcLocationContactView.Insert.ForEach(c => { c.ConPrimaryRecordId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             custDcLocationContactView.Update.ForEach(c => { c.ConPrimaryRecordId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-			route.Url = route.ParentRecordId.ToString();
-			var batchError = BatchUpdate(custDcLocationContactView, route, gridName);
-			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+            route.Url = route.ParentRecordId.ToString();
+            var batchError = BatchUpdate(custDcLocationContactView, route, gridName);
+            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
                 var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
 
@@ -92,15 +99,15 @@ namespace M4PL.Web.Areas.Customer.Controllers
 
         public override ActionResult FormView(string strRoute)
         {
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-			_formResult.SessionProvider = SessionProvider;
-			route.CompanyId = route.CompanyId.HasValue && route.CompanyId > 0 ? route.CompanyId : SessionProvider.ActiveUser.LastRoute.CompanyId;
-			_formResult.Record = _customerDCLocationContactCommands.Get(route.RecordId, route.ParentRecordId);
-			_formResult.SetupFormResult(_commonCommands, route);
-			return PartialView(_formResult);
-		}
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            _formResult.SessionProvider = SessionProvider;
+            route.CompanyId = route.CompanyId.HasValue && route.CompanyId > 0 ? route.CompanyId : SessionProvider.ActiveUser.LastRoute.CompanyId;
+            _formResult.Record = _customerDCLocationContactCommands.Get(route.RecordId, route.ParentRecordId);
+            _formResult.SetupFormResult(_commonCommands, route);
+            return PartialView(_formResult);
+        }
 
         #endregion 
     }

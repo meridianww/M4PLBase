@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 CustomerCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Customer
@@ -11,8 +11,6 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Customer.CustomerCommands;
-using M4PL.Entities.Customer;
-using System;
 
 namespace M4PL.Business.Customer
 {
@@ -83,14 +81,15 @@ namespace M4PL.Business.Customer
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<Entities.Customer.Customer> Get()
+        public Entities.Customer.Customer Patch(Entities.Customer.Customer entity)
         {
-            throw new NotImplementedException();
+            return _commands.Patch(ActiveUser, entity);
         }
 
-		public Entities.Customer.Customer Patch(Entities.Customer.Customer entity)
-		{
-			return _commands.Patch(ActiveUser, entity);
-		}
-	}
+        public List<Entities.Customer.Customer> GetActiveCutomers()
+        {
+            return _commands.GetActiveCutomers();
+        }
+
+    }
 }

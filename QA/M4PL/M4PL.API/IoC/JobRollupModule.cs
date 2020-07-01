@@ -1,18 +1,30 @@
-﻿using Autofac;
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+using Autofac;
 using M4PL.Business.JobRollup;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace M4PL.API.IoC
 {
-	public class JobRollupModule : Module
-	{
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.RegisterType<JobRollupCommands>().As<IJobRollupCommands>().InstancePerRequest();
-			base.Load(builder);
-		}
-	}
+    /// <summary>
+    /// JobRollup Module
+    /// </summary>
+    public class JobRollupModule : Module
+    {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<JobRollupCommands>().As<IJobRollupCommands>().InstancePerRequest();
+            base.Load(builder);
+        }
+    }
 }

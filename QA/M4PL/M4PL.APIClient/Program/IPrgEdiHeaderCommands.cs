@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IPrgEdiHeaderCommands
 Purpose:                                      Set of rules for PrgEdiHeaderCommands
@@ -19,7 +19,7 @@ namespace M4PL.APIClient.Program
     /// </summary>
     public interface IPrgEdiHeaderCommands : IBaseCommands<PrgEdiHeaderView>
     {
-       IList<TreeModel> EdiTree(long? parentId, bool model);
-       int GetProgramLevel(long? programId);
+        IList<TreeModel> EdiTree(long? parentId, bool model);
+        int GetProgramLevel(long? programId);
     }
 }

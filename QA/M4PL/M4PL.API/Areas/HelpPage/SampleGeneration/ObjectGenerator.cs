@@ -1,12 +1,11 @@
-/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
-//====================================================================================================================================================
-//Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
-//Date Programmed:                              10/13/2017
-//Program Name:                                 HelpPageSampleGenerator
-//Purpose:                                      Represents the instances for the objects
-//====================================================================================================================================================*/
+#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
 
 using System;
 using System.Collections;
@@ -420,11 +419,11 @@ namespace M4PL.API.Areas.HelpPage
                     { typeof(DateTimeOffset), index => new DateTimeOffset(DateTime.Now) },
                     { typeof(DBNull), index => DBNull.Value },
                     { typeof(Decimal), index => (Decimal)index },
-                    { typeof(Double), index => (index + 0.1) },
+                    { typeof(Double), index => (Double)(index + 0.1) },
                     { typeof(Guid), index => Guid.NewGuid() },
                     { typeof(Int16), index => (Int16)(index % Int16.MaxValue) },
                     { typeof(Int32), index => (Int32)(index % Int32.MaxValue) },
-                    { typeof(Int64), index => index },
+                    { typeof(Int64), index => (Int64)index },
                     { typeof(Object), index => new object() },
                     { typeof(SByte), index => (SByte)64 },
                     { typeof(Single), index => (Single)(index + 0.1) },

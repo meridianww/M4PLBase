@@ -2,7 +2,7 @@
 //All Rights Reserved Worldwide
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              13/10/2017
 //Program Name:                                 BaseCommands
 //Purpose:                                      Represents BaseCommands Details
@@ -58,14 +58,6 @@ namespace M4PL.APIClient
             return result;
         }
 
-        public virtual IList<TView> Get()
-        {
-            var result = JsonConvert.DeserializeObject<ApiResult<TView>>(
-                restClient.Execute(
-                    HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix, ActiveUser)).Content).Results;
-            return result;
-        }
-
         public virtual TView Post(TView entity)
         {
             var result = JsonConvert.DeserializeObject<ApiResult<TView>>(restClient.Execute(
@@ -98,12 +90,12 @@ namespace M4PL.APIClient
             return result;
         }
 
-		public virtual TView Patch(TView entity)
-		{
-			var result = JsonConvert.DeserializeObject<ApiResult<TView>>(
-				 restClient.Execute(
-				HttpRestClient.RestAuthRequest(Method.PATCH, RouteSuffix, ActiveUser).AddObject(entity)).Content).Results.FirstOrDefault();
-			return result;
-		}
-	}
+        public virtual TView Patch(TView entity)
+        {
+            var result = JsonConvert.DeserializeObject<ApiResult<TView>>(
+                 restClient.Execute(
+                HttpRestClient.RestAuthRequest(Method.PATCH, RouteSuffix, ActiveUser).AddObject(entity)).Content).Results.FirstOrDefault();
+            return result;
+        }
+    }
 }

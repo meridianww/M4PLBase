@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              09/25/2018
 Program Name:                                 VendDcLocationContactCommands
 Purpose:                                      Client to consume M4PL API called VendDcLocationContactController
@@ -35,7 +35,7 @@ namespace M4PL.APIClient.Vendor
 
             return JsonConvert.DeserializeObject<ApiResult<VendDcLocationContactView>>(
             _restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/GetVendDcLocationContact", ActiveUser).AddParameter("parentId", parentId).AddParameter("id", id)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/GetVendDcLocationContact", ActiveUser).AddParameter("parentId", parentId).AddParameter("id", id)).Content).Results?.FirstOrDefault();
         }
     }
 }

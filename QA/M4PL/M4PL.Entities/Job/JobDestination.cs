@@ -2,13 +2,11 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobDestination
 Purpose:                                      Contains objects related to Job Delivery
 ==========================================================================================================*/
-
-using System;
 
 namespace M4PL.Entities.Job
 {
@@ -62,5 +60,7 @@ namespace M4PL.Entities.Job
         public string JobDeliverySitePOCEmail2 { get; set; }
         public int? JobPreferredMethod { get; set; }
         public string JobPreferredMethodName { get; set; }
+
+        public bool IsJobVocSurvey { get; set; }
     }
 }

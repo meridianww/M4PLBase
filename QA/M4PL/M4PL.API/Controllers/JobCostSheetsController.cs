@@ -1,12 +1,11 @@
-﻿/*Copyright (2019) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
-//====================================================================================================================================================
-//Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Nikhil
-//Date Programmed:                              25/07/2019
-//Program Name:                                 JobCostSheets
-//Purpose:                                      End point to interact with Job CostSheets module
-//====================================================================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
 
 using M4PL.API.Filters;
 using M4PL.Business.Job;
@@ -28,21 +27,21 @@ namespace M4PL.API.Controllers
             _jobRefCostSheetsCommands = jobCostSheetsCommands;
         }
 
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("JobCostCodeAction")]
-		public IQueryable<JobCostCodeAction> GetJobCostCodeAction(long jobId)
-		{
-			_jobRefCostSheetsCommands.ActiveUser = ActiveUser;
-			return _jobRefCostSheetsCommands.GetJobCostCodeAction(jobId).AsQueryable();
-		}
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("JobCostCodeAction")]
+        public IQueryable<JobCostCodeAction> GetJobCostCodeAction(long jobId)
+        {
+            _jobRefCostSheetsCommands.ActiveUser = ActiveUser;
+            return _jobRefCostSheetsCommands.GetJobCostCodeAction(jobId).AsQueryable();
+        }
 
-		[HttpGet]
-		[Route("JobCostCodeByProgram")]
-		public JobCostSheet JobCostCodeByProgram(long id, long jobId)
-		{
-			_jobRefCostSheetsCommands.ActiveUser = ActiveUser;
-			return _jobRefCostSheetsCommands.JobCostCodeByProgram(id, jobId);
-		}
-	}
+        [HttpGet]
+        [Route("JobCostCodeByProgram")]
+        public JobCostSheet JobCostCodeByProgram(long id, long jobId)
+        {
+            _jobRefCostSheetsCommands.ActiveUser = ActiveUser;
+            return _jobRefCostSheetsCommands.JobCostCodeByProgram(id, jobId);
+        }
+    }
 }

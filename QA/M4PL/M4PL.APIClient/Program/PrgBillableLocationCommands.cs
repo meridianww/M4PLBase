@@ -9,12 +9,12 @@ Purpose:                                       Client to consume M4PL API called
 =============================================================================================================*/
 using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
+using M4PL.Entities.Support;
+using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using RestSharp;
-using Newtonsoft.Json;
-using M4PL.Entities.Support;
 using System.Linq;
 
 namespace M4PL.APIClient.Program
@@ -45,9 +45,9 @@ namespace M4PL.APIClient.Program
             var route = string.Format("{0}/{1}?assign={2}&parentId={3}", RouteSuffix, "MapVendorPriceLocations", assign, parentId);
 
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
-               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(ids)).Content).Results.FirstOrDefault();
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(ids)).Content).Results?.FirstOrDefault();
 
-            return result;
+            return result.HasValue ? (bool)result : false;
         }
 
         public bool MapVendorBillableLocations(ProgramVendorMap programVendorMap)
@@ -57,9 +57,9 @@ namespace M4PL.APIClient.Program
             var route = string.Format("{0}/{1}", RouteSuffix, "MapVendorBillableLocations");
 
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
-               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(programVendorMap)).Content).Results.FirstOrDefault();
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(programVendorMap)).Content).Results?.FirstOrDefault();
 
-            return result;
+            return result.HasValue ? (bool)result : false;
         }
     }
 }

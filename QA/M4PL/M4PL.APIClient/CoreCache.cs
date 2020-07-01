@@ -2,14 +2,13 @@
 //All Rights Reserved Worldwide
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              13/10/2017
 //Program Name:                                 CoreCache
 //Purpose:                                      Represents CoreCache Details
 //====================================================================================================================================================*/
 
 using M4PL.Entities;
-using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

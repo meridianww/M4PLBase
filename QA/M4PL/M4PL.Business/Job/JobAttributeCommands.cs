@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobAttributeCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobAttributeCommands
@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobAttributeCommands;
-using System;
 
 namespace M4PL.Business.Job
 {
@@ -83,14 +83,9 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<JobAttribute> Get()
+        public JobAttribute Patch(JobAttribute entity)
         {
             throw new NotImplementedException();
         }
-
-		public JobAttribute Patch(JobAttribute entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 Attachment
 Purpose:                                      Contains objects related to Attachment
@@ -27,5 +27,7 @@ namespace M4PL.Entities
         /// To update the Parent tables attachment count update
         /// </summary>
         public string PrimaryTableFieldName { get; set; }
-    }
+
+		public string DocumentType { get; set; }
+	}
 }

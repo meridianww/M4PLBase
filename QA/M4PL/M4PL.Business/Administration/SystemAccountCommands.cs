@@ -11,10 +11,10 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using _commands = M4PL.DataAccess.Administration.SystemAccountCommands;
-using System;
 
 namespace M4PL.Business.Administration
 {
@@ -87,11 +87,6 @@ namespace M4PL.Business.Administration
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
-        }
-
-        public IList<SystemAccount> Get()
-        {
-            throw new NotImplementedException();
         }
 
         public SystemAccount Patch(SystemAccount entity)

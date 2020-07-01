@@ -8,15 +8,12 @@ Program Name:                                 INavCostCodeCommands
 Purpose:                                      Set of rules for NavCostCodeCommands
 =============================================================================================================*/
 using M4PL.APIClient.ViewModels.Finance;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.APIClient.Finance
 {
-	public interface INavCostCodeCommands : IBaseCommands<NavCostCodeView>
-	{
-	}
+    public interface INavCostCodeCommands : IBaseCommands<NavCostCodeView>
+    {
+        IList<NavCostCodeView> GetAllCostCode();
+    }
 }

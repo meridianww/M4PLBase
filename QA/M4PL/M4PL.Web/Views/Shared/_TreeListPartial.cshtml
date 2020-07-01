@@ -1,8 +1,8 @@
 ﻿@*Copyright (2018) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                               Tree list partial
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              17/01/2018
     //Program Name:                                 _TreeListPartial
     //Purpose:                                      Provides tree list for entity
@@ -17,6 +17,7 @@
     {
         settings.Name = "TreeList";
         settings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = Model.CallBackRoute.Action, Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) };
+        settings.SettingsCookies.StoreExpandedNodes = true;
         settings.Width = System.Web.UI.WebControls.Unit.Percentage(95);
         settings.SettingsBehavior.AllowDragDrop = Model.TreeListSettings.AllowDragDrop;
         settings.AutoGenerateColumns = false;
@@ -25,15 +26,52 @@
         settings.KeyFieldName = "Route";
         settings.ParentFieldName = Model.ParentFieldName;
         settings.Settings.ShowColumnHeaders = false;
+        settings.ClientSideEvents.Init = "function(s,e,contentCbPanel,contentCbPanelRoute){DevExCtrl.TreeList.Init(s,e," + contentCbPanel + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["CurrentRoute"] != null ? ViewData["CurrentRoute"] as M4PL.Entities.Support.MvcRoute : new M4PL.Entities.Support.MvcRoute()) + "');}";
         settings.SettingsBehavior.AllowFocusedNode = true;
-
-
+        settings.ClientLayout = (sender, e) =>
+        {
+            if (e.LayoutMode == ClientLayoutMode.Saving)
+                Session["TreeListLayoutData"] = e.LayoutData;
+            else
+                e.LayoutData = (string)Session["TreeListLayoutData"];
+        };
         settings.ClientSideEvents.NodeClick = "function(s,e,contentCbPanel,contentCbPanelRoute){DevExCtrl.TreeList.OnNodeClick(s,e," + contentCbPanel + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.ContentRouteCallBack) + "');}";
         settings.PreRender = (source, e) =>
         {
             ASPxTreeList treeList = (ASPxTreeList)source;
+            TreeListNodeIterator iterator = treeList.CreateNodeIterator();
+            TreeListNode node = iterator.Current;
+
+            while (node != null)
+            {
+                if (node != treeList.RootNode)
+                {
+                    if (node.Key.IndexOf("_") == -1)
+                    {
+                        if (Model.SelectedNode == node.Key)
+                        {
+                            node.Selected = true;
+                            node.Focus();
+                        }
+                    }
+                    else
+                    {
+                        var key = node.Key.Split('_');
+                        if (Model.SelectedNode == key[1])
+                        {
+                            node.Selected = true;
+                            node.Focus();
+                        }
+                    }
+                }
+                node = iterator.GetNext();
+            }
         };
         settings.Columns.Clear();
+        settings.CustomJSProperties = (s, e) =>
+        {
+            e.Properties["cpIsJobParent"] = ViewData["IsJobParent"];
+        };
 
         settings.Columns.Add(
             column =>

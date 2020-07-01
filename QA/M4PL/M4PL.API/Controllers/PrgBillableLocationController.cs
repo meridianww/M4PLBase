@@ -1,12 +1,12 @@
-﻿/*Copyright(2019) Meridian Worldwide Transportation Group
-All Rights Reserved Worldwide
-=============================================================================================================
-Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Nikhil
-Date Programmed:                              24/07/2019
-Program Name:                                 PrgBillableLocation
-Purpose:                                      End point to interact with PrgBillableLocation module
-=============================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
 using M4PL.API.Filters;
 using M4PL.Business.Program;
 using M4PL.Entities;
@@ -18,7 +18,7 @@ using System.Web.Http;
 namespace M4PL.API.Controllers
 {
     [RoutePrefix("api/PrgBillableLocation")]
-    public class PrgBillableLocationController :  BaseApiController<PrgBillableLocation>
+    public class PrgBillableLocationController : BaseApiController<PrgBillableLocation>
     {
         private readonly IPrgBillableLocationCommands _prgBillableLocationCommands;
         public PrgBillableLocationController(IPrgBillableLocationCommands prgBillableLocationCommands)

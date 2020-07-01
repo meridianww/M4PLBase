@@ -1,9 +1,18 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
 
-//All Rights Reserved Worldwide
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 BaseDashboardController
 //Purpose:                                      Contains Actions related to navigation, dataview and Formview
@@ -126,7 +135,7 @@ namespace M4PL.Web.Areas
                     ErrStackTrace = WebApplicationConstants.NotFoundError,
                     ErrAdditionalMessage = JsonConvert.SerializeObject(route)
                 };
-                  var mvcPageAction = SessionProvider.MvcPageAction;
+                var mvcPageAction = SessionProvider.MvcPageAction;
                 mvcPageAction.Add(_commonCommands.GetOrInsErrorLog(errorLog).Id, MvcConstants.ActionNotFound);
                 SessionProvider.MvcPageAction = mvcPageAction;
                 route = new MvcRoute(EntitiesAlias.Common, SessionProvider.MvcPageAction.FirstOrDefault().Value, string.Empty);

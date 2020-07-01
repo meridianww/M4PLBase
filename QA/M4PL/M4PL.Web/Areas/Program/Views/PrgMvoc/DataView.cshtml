@@ -1,5 +1,5 @@
 ﻿@*Copyright (2019) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Nikhil
@@ -32,6 +32,8 @@
     settings.Styles.Header.Wrap = DefaultBoolean.True;
     //settings.Width = System.Web.UI.WebControls.Unit.Percentage(200);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    //settings.Settings.VerticalScrollableHeight = 300;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
@@ -121,6 +123,10 @@
             {
                 childRoute.ParentRecordId = (long)DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName);
                 childRoute.Url = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute);
+                childRoute.Filters = new M4PL.Entities.Support.Filter
+                {
+                    FieldName = "ChildGridRoute"
+                };
                 var msg = WebUtilities.ShouldRenderDetailGrid(c.DataItem, ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands, ref childRoute);
                 if (string.IsNullOrEmpty(msg))
                 {
@@ -282,7 +288,7 @@
                         ViewContext.Writer.Write(Html.DevExpress().ComboBox(cs =>
                         {
                             cs.Name = "Filter" + Model.GridSetting.CallBackRoute.Controller + colSetting.ColColumnName;
-                            cs.Width = 230;// System.Web.UI.WebControls.Unit.Percentage(100);
+                            cs.Width = System.Web.UI.WebControls.Unit.Percentage(100);
                             cs.Properties.ClientInstanceName = colSetting.ColColumnName;
                             cs.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
                             cs.Properties.TextField = "LangName";

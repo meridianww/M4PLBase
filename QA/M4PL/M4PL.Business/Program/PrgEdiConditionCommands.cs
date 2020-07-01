@@ -15,7 +15,7 @@ using _commands = M4PL.DataAccess.Program.PrgEdiConditionCommands;
 
 namespace M4PL.Business.Program
 {
-    public class PrgEdiConditionCommands: BaseCommands<PrgEdiCondition>, IPrgEdiConditionCommands
+    public class PrgEdiConditionCommands : BaseCommands<PrgEdiCondition>, IPrgEdiConditionCommands
     {
         public IList<PrgEdiCondition> GetPagedData(PagedDataInfo pagedDataInfo)
         {
@@ -75,11 +75,6 @@ namespace M4PL.Business.Program
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
-        }
-
-        public IList<PrgEdiCondition> Get()
-        {
-            throw new NotImplementedException();
         }
 
         public PrgEdiCondition Patch(PrgEdiCondition entity)

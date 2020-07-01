@@ -7,19 +7,16 @@ Date Programmed:                              24/07/2019
 Program Name:                                 PrgCostLocationCommands
 Purpose:                                      Contains commands to call DAL logic
 =============================================================================================================*/
+using M4PL.Entities;
 using M4PL.Entities.Program;
+using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgCostLocationCommands;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4PL.Entities.Support;
-using M4PL.Entities;
 
 namespace M4PL.Business.Program
 {
-   public class PrgCostLocationCommands : BaseCommands<PrgCostLocation>,IPrgCostLocationCommands
+    public class PrgCostLocationCommands : BaseCommands<PrgCostLocation>, IPrgCostLocationCommands
     {
         /// <summary>
         /// Gets list of prgvendlocation data
@@ -86,26 +83,20 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-     
-        public IList<PrgCostLocation> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<TreeModel> CostLocationTree(long orgId, bool isAssignedCostLocation, long programId, long? parentId, bool isChild)
         {
             return _commands.CostLocationTree(orgId, isAssignedCostLocation, programId, parentId, isChild);
         }
 
-		public bool MapVendorCostLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap)
-		{
-			return _commands.MapVendorCostLocations(activeUser, programVendorMap);
-		}
+        public bool MapVendorCostLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap)
+        {
+            return _commands.MapVendorCostLocations(activeUser, programVendorMap);
+        }
 
-		public PrgCostLocation Patch(PrgCostLocation entity)
-		{
-			throw new NotImplementedException();
-		}
+        public PrgCostLocation Patch(PrgCostLocation entity)
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

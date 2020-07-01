@@ -1,8 +1,8 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              13/10/2017
     //Program Name:                                 _RichEditPartial
     //Purpose:                                      Provides view for RichEdit
@@ -36,6 +36,7 @@
         richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is REROpenCommand);
         richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERSaveAsCommand);
         richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERSaveCommand);
+        richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERNewCommand);
         richEdit.RibbonTabs[0].Groups[0].Items.Insert(1, new RibbonButtonItem
         {
             Size = RibbonItemSize.Large,

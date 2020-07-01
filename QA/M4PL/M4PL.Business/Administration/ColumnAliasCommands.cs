@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ColumnAliasCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Administration.ColumnAliasCommands
@@ -98,14 +98,9 @@ namespace M4PL.Business.Administration
             return _commands.Get(ActiveUser, id);
         }
 
-        public IList<ColumnAlias> Get()
+        public ColumnAlias Patch(ColumnAlias entity)
         {
             throw new NotImplementedException();
         }
-
-		public ColumnAlias Patch(ColumnAlias entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

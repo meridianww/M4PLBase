@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              09/25/2018
 Program Name:                                 VendDcLocationContact
 Purpose:                                      Contains objects related to VendDcLocationContact
@@ -27,7 +27,7 @@ namespace M4PL.Entities.Vendor
         public string ContactMSTRIDName { get; set; }
 
         public int? ConTableTypeId { get; set; }
-       
+
 
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace M4PL.Entities.Vendor
         /// </value>
 
         public string ConFullName { get; set; }
-		public long? ConCompanyId { get; set; }
+        public long? ConCompanyId { get; set; }
 
         public string ConCompanyIdName { get; set; }
     }

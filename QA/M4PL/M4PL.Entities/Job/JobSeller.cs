@@ -2,13 +2,11 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobSeller
 Purpose:                                      Contains objects related to Job Seller
 ==========================================================================================================*/
-
-using System;
 
 namespace M4PL.Entities.Job
 {
@@ -25,27 +23,27 @@ namespace M4PL.Entities.Job
         public string JobSellerSiteName { get; set; }
         public string JobSellerStreetAddress { get; set; }
         public string JobSellerStreetAddress2 { get; set; }
-		public string JobSellerStreetAddress3 { get; set; }
-		public string JobSellerStreetAddress4 { get; set; }
-		public string JobSellerCity { get; set; }
+        public string JobSellerStreetAddress3 { get; set; }
+        public string JobSellerStreetAddress4 { get; set; }
+        public string JobSellerCity { get; set; }
         public string JobSellerState { get; set; }
         public string JobSellerPostalCode { get; set; }
         public string JobSellerCountry { get; set; }
 
-		public string JobShipFromSiteName { get; set; }
-		public string JobShipFromStreetAddress { get; set; }
-		public string JobShipFromStreetAddress2 { get; set; }
-		public string JobShipFromStreetAddress3 { get; set; }
-		public string JobShipFromStreetAddress4 { get; set; }
-		public string JobShipFromCity { get; set; }
-		public string JobShipFromState { get; set; }
-		public string JobShipFromPostalCode { get; set; }
-		public string JobShipFromCountry { get; set; }
-		public string JobShipFromSitePOC { get; set; }
-		public string JobShipFromSitePOCPhone { get; set; }
-		public string JobShipFromSitePOCEmail { get; set; }
-		public string JobShipFromSitePOC2 { get; set; }
-		public string JobShipFromSitePOCPhone2 { get; set; }
-		public string JobShipFromSitePOCEmail2 { get; set; }
-	}
+        public string JobShipFromSiteName { get; set; }
+        public string JobShipFromStreetAddress { get; set; }
+        public string JobShipFromStreetAddress2 { get; set; }
+        public string JobShipFromStreetAddress3 { get; set; }
+        public string JobShipFromStreetAddress4 { get; set; }
+        public string JobShipFromCity { get; set; }
+        public string JobShipFromState { get; set; }
+        public string JobShipFromPostalCode { get; set; }
+        public string JobShipFromCountry { get; set; }
+        public string JobShipFromSitePOC { get; set; }
+        public string JobShipFromSitePOCPhone { get; set; }
+        public string JobShipFromSitePOCEmail { get; set; }
+        public string JobShipFromSitePOC2 { get; set; }
+        public string JobShipFromSitePOCPhone2 { get; set; }
+        public string JobShipFromSitePOCEmail2 { get; set; }
+    }
 }

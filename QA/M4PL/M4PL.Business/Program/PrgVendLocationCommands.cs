@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 PrgVendLocationComments
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Program.PrgVendLocationCommands
@@ -11,9 +11,9 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgVendLocationComments;
-using System;
 
 namespace M4PL.Business.Program
 {
@@ -94,14 +94,9 @@ namespace M4PL.Business.Program
             return _commands.MapVendorLocations(activeUser, programVendorMap);
         }
 
-        public IList<PrgVendLocation> Get()
+        public PrgVendLocation Patch(PrgVendLocation entity)
         {
             throw new NotImplementedException();
         }
-
-		public PrgVendLocation Patch(PrgVendLocation entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

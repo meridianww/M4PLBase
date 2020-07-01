@@ -1,4 +1,13 @@
-﻿/*All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+/*All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
 Programmer:                                   Nikhil
@@ -17,9 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Text.RegularExpressions;
-using M4PL.Utilities;
-using M4PL.Web.Models;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -74,10 +80,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = TempData["jobCodeActions"] != null && (bool)TempData["IsPriceCodeAction"] 
-                && route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) 
-                ? _jobBillableSheetCommands.GetJobPriceCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId) 
+            _formResult.Record = route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value)
+                ? _jobBillableSheetCommands.GetJobPriceCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId)
                 : _jobBillableSheetCommands.Get(route.RecordId);
+            if (_formResult.Record != null)
+            {
+                _formResult.Record.PrcQuantity = _formResult.Record.PrcQuantity > 0 ? _formResult.Record.PrcQuantity : 1;
+            }
+
             _formResult.SetupFormResult(_commonCommands, route);
             if (_formResult.Record is SysRefModel)
             {

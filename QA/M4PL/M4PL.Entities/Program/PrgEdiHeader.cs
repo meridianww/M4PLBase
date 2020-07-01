@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 PrgEdiHeader
 Purpose:                                      Contains objects related to PrgEdiHeader
@@ -165,14 +165,15 @@ namespace M4PL.Entities.Program
         public string UDF08 { get; set; }
         public string UDF09 { get; set; }
         public string UDF10 { get; set; }
-		public string PehInOutFolder { get; set; }
-		public string PehArchiveFolder { get; set; }
-		public string PehProcessFolder { get; set; }
-		public string PehFtpServerUrl { get; set; }
-		public string PehFtpUsername { get; set; }
+        public string PehInOutFolder { get; set; }
+        public string PehArchiveFolder { get; set; }
+        public string PehProcessFolder { get; set; }
+        public string PehFtpServerUrl { get; set; }
+        public string PehFtpUsername { get; set; }
         [DataType(DataType.Password)]
-        [Display(Name ="FTP Password")]
-		public string PehFtpPassword { get; set; }
-		public string PehFtpPort { get; set; }
+        [Display(Name = "FTP Password")]
+        public string PehFtpPassword { get; set; }
+        public string PehFtpPort { get; set; }
+		public bool IsSFTPUsed { get; set; }
 	}
 }

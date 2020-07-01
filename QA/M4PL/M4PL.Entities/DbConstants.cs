@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 SystemMessagesConstant
 Purpose:                                      Contains objects related to SystemMessagesConstant
@@ -59,15 +59,23 @@ namespace M4PL.Entities
         public const string InfoNoReport = "07.08";
 
         public const string AppStaticTextUploadNewDoc = "08.01";
-		public const string NavVendor = "NavVendor";
-		public const string NavCustomer = "NavCustomer";
-		public const string NavCostCode = "NavCostCode";
-		public const string NavPriceCode = "NavPriceCode";
-		public const string CreateSalesOrder = "CreateSalesOrder";
-		public const string SalesOrderExists = "SalesOrderExists";
-		public const string SalesOrderCreationFailure = "SalesOrderCreationFailure";
-		public const string UpdateSalesOrder = "UpdateSalesOrder";
-		public const string CreatePurchaseOrder = "CreatePurchaseOrder";
-		public const string UpdatePurchaseOrder = "UpdatePurchaseOrder";
-	}
+        public const string NavVendor = "NavVendor";
+        public const string NavCustomer = "NavCustomer";
+        public const string NavCostCode = "NavCostCode";
+        public const string NavPriceCode = "NavPriceCode";
+        public const string CreateSalesOrder = "CreateSalesOrder";
+        public const string SalesOrderExists = "SalesOrderExists";
+        public const string SalesOrderCreationFailure = "SalesOrderCreationFailure";
+        public const string UpdateSalesOrder = "UpdateSalesOrder";
+        public const string CreatePurchaseOrder = "CreatePurchaseOrder";
+        public const string UpdatePurchaseOrder = "UpdatePurchaseOrder";
+        public const string ApplicationError = "00.00";
+        public const string JobDocumentReport = "JobDocumentReport";
+		public const string JobPODUploaded = "JobPODUploaded";
+		public const string JobDocumentPresent = "JobDocumentPresent";
+        public const string NoAccess = "NoAccess";
+		public const string JobPriceCodeMissing = "JobPriceCodeMissing";
+		public const string JobCostCodeMissing = "JobCostCodeMissing";
+        public const string JobExistSchedule = "JobExistSchedule";
+    }
 }

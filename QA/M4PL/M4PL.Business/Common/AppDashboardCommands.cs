@@ -2,16 +2,16 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 AppDashboardCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Common.AppDashboardCommands
 ===================================================================================================================*/
 using M4PL.Entities;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.AppDashboardCommands;
-using System;
 
 namespace M4PL.Business.Common
 {
@@ -82,14 +82,9 @@ namespace M4PL.Business.Common
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<AppDashboard> Get()
+        public AppDashboard Patch(AppDashboard entity)
         {
             throw new NotImplementedException();
         }
-
-		public AppDashboard Patch(AppDashboard entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

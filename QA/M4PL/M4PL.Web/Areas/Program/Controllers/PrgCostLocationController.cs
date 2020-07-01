@@ -1,12 +1,11 @@
-﻿/*Copyright (2019) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
-//====================================================================================================================================================
-//Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Nikhil
-//Date Programmed:                              23/07/2019
-//Program Name:                                 PrgCostLocation
-//Purpose:                                      Contains Actions to render view on Program's Cost location Vendor 
-//====================================================================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
 
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
@@ -15,11 +14,9 @@ using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Program.Controllers
@@ -71,7 +68,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(_formResult);
         }
 
-    
+
 
         public ActionResult UnassignedCostLocationTreeCallback(long parentId)
         {
@@ -119,23 +116,23 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
         }
 
-		public async Task<JsonResult> AssignCostVendorsMapping(bool assign, long parentId, List<PrgCostLocationView> ids)
-		{
-			var vendors = ids.Where(c => c.Id == 0).Select(c => c.PclVendorID).ToList();
-			var locations = ids.Where(c => c.Id > 0).Select(c => c.Id).ToList();
-			var programVendorMap = new ProgramVendorMap()
-			{
-				Assign = assign,
-				ParentId = parentId,
-				LocationIds = string.Join(",", locations),
-				VendorIds = string.Join(",", vendors),
-				AssignedOn = System.DateTime.UtcNow
-			};
+        public async Task<JsonResult> AssignCostVendorsMapping(bool assign, long parentId, List<PrgCostLocationView> ids)
+        {
+            var vendors = ids.Where(c => c.Id == 0).Select(c => c.PclVendorID).ToList();
+            var locations = ids.Where(c => c.Id > 0).Select(c => c.Id).ToList();
+            var programVendorMap = new ProgramVendorMap()
+            {
+                Assign = assign,
+                ParentId = parentId,
+                LocationIds = string.Join(",", locations),
+                VendorIds = string.Join(",", vendors),
+                AssignedOn = Utilities.TimeUtility.GetPacificDateTime()
+            };
 
-			var result = await _prgCostLocatioCommands.MapVendorCostLocations(programVendorMap);
+            var result = await _prgCostLocatioCommands.MapVendorCostLocations(programVendorMap);
 
-			return Json(false, JsonRequestBehavior.AllowGet);
-		}
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
 
-	}
+    }
 }

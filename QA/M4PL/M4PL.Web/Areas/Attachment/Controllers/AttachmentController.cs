@@ -1,5 +1,14 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
 //Programmer:                                   Janardana
@@ -56,9 +65,10 @@ namespace M4PL.Web.Areas.Attachment.Controllers
 
             if (!string.IsNullOrWhiteSpace(parentEntity))
             {
+                int count = -1;
                 foreach (var item in attachmentView.Insert)
                 {
-                    item.AttPrimaryRecordID = data.ParentId;
+                    item.AttPrimaryRecordID = Request.Form["docRefId"] != null ? Convert.ToInt64(Request.Form["docRefId"]) : data.ParentId;
                     item.AttTableName = parentEntity;
                     item.AttTypeId = 1;
                     item.PrimaryTableFieldName = primaryTableFieldName;
@@ -68,18 +78,19 @@ namespace M4PL.Web.Areas.Attachment.Controllers
                     {
                         var record = _currentEntityCommands.Post(item);
                         if (record.Id > 0)
-                            _commonCommands.SaveBytes(new ByteArray { Id = record.Id, FieldName = ByteArrayFields.AttData.ToString(), Type = Entities.SQLDataTypes.varbinary, Entity = EntitiesAlias.Attachment }, WebUtilities.Files[visibleIndex]);
+                            _commonCommands.SaveBytes(new ByteArray { Id = record.Id, FieldName = ByteArrayFields.AttData.ToString(), Type = Entities.SQLDataTypes.varbinary, Entity = EntitiesAlias.Attachment }, WebUtilities.Files[count]);
                     }
                     else
                     {
                         attachmentView.SetErrorText(item, string.Join(",", messages));
                         batchError.Add(-100, "ModelInValid");
                     }
+                    count--;
                 }
 
                 foreach (var item in attachmentView.Update)
                 {
-                    item.AttPrimaryRecordID = data.ParentId;
+                    item.AttPrimaryRecordID = Request.Form["docRefId"] != null ? Convert.ToInt64(Request.Form["docRefId"]) : data.ParentId;
                     item.AttTableName = parentEntity;
                     item.AttTypeId = 1;
                     var messages = ValidateMessages(item, route.Entity, true, false);
@@ -265,7 +276,7 @@ namespace M4PL.Web.Areas.Attachment.Controllers
                     this.Response.End();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

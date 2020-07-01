@@ -11,11 +11,7 @@ Purpose:                                      Set of rules for IPrgBillableLocat
 using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.APIClient.Program
 {

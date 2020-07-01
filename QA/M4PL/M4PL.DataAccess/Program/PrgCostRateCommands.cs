@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 PrgCostRateCommands
 Purpose:                                      Contains commands to perform CRUD on PrgCostRate
@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Program
@@ -39,6 +40,29 @@ namespace M4PL.DataAccess.Program
         public static PrgCostRate Get(ActiveUser activeUser, long id)
         {
             return Get(activeUser, id, StoredProceduresConstant.GetProgramCostRate);
+        }
+
+        public static List<PrgCostRate> GetProgramCostRate(ActiveUser activeUser, long programId, string locationCode, long jobId)
+        {
+            List<PrgCostRate> result = null;
+            try
+            {
+                var parameters = new List<Parameter>
+                {
+                   new Parameter("@programId", programId),
+                   new Parameter("@userId", activeUser.UserId),
+                   new Parameter("@locationCode", locationCode),
+                   new Parameter("@jobId", jobId)
+                };
+
+                result = SqlSerializer.Default.DeserializeMultiRecords<PrgCostRate>(StoredProceduresConstant.GetCostCodeListByProgramId, parameters.ToArray(), dateTimeAsUtc: false, storedProcedure: true);
+            }
+            catch (Exception exp)
+            {
+                Logger.ErrorLogger.Log(exp, "Error occuring while getting data for Program Cost Rate for a Program", "GetProgramCostRate", Utilities.Logger.LogType.Error);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -128,8 +152,8 @@ namespace M4PL.DataAccess.Program
                new Parameter("@pcrLogic05", prgCostRate.PcrLogic05),
                new Parameter("@statusId", prgCostRate.StatusId),
                new Parameter("@pcrCustomerId", prgCostRate.PcrCustomerID),
-			   new Parameter("@pcrElectronicBilling", prgCostRate.PcrElectronicBilling),
-			};
+               new Parameter("@pcrElectronicBilling", prgCostRate.PcrElectronicBilling),
+            };
 
             return parameters;
         }

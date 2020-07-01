@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 {Class name} like PrgEdiHeaderCommands
 Purpose:                                      Contains commands to call DAL logic for {Namespace:Class name} like M4PL.DAL.Program.PrgEdiHeaderCommands
@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgEdiHeaderComments;
-using System;
 
 namespace M4PL.Business.Program
 {
@@ -88,19 +88,14 @@ namespace M4PL.Business.Program
             return _commands.GetEdiTree(id, parentId, model);
         }
 
-        public IList<PrgEdiHeader> Get()
+        public PrgEdiHeader Patch(PrgEdiHeader entity)
         {
             throw new NotImplementedException();
         }
 
-		public PrgEdiHeader Patch(PrgEdiHeader entity)
-		{
-			throw new NotImplementedException();
-		}
-
         public int GetProgramLevel(long id, long? programId)
         {
-            return _commands.GetProgramLevel(id, programId );
+            return _commands.GetProgramLevel(id, programId);
         }
     }
 }

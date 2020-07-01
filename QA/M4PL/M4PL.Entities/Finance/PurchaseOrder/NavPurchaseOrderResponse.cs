@@ -11,12 +11,12 @@ using Newtonsoft.Json;
 
 namespace M4PL.Entities.Finance.PurchaseOrder
 {
-	public class NavPurchaseOrderResponse
-	{
-		[JsonProperty("@odata.context")]
-		public string ContextData { get; set; }
+    public class NavPurchaseOrderResponse
+    {
+        [JsonProperty("@odata.context")]
+        public string ContextData { get; set; }
 
-		[JsonProperty("value")]
-		public NavPurchaseOrder NavPurchaseOrder { get; set; }
-	}
+        [JsonProperty("value")]
+        public NavPurchaseOrder NavPurchaseOrder { get; set; }
+    }
 }

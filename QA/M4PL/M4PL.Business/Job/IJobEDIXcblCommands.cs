@@ -12,10 +12,10 @@ using M4PL.Entities.Job;
 
 namespace M4PL.Business.Job
 {
-	/// <summary>
-	/// Performs basic CRUD operation on the JobEDIXcbl Entity
-	/// </summary>
-	public interface IJobEDIXcblCommands : IBaseCommands<JobEDIXcbl>
+    /// <summary>
+    /// Performs basic CRUD operation on the JobEDIXcbl Entity
+    /// </summary>
+    public interface IJobEDIXcblCommands : IBaseCommands<JobEDIXcbl>
     {
     }
 }

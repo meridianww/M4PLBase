@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 BaseCommands
 Purpose:                                      Contains generic CRUD operation parameters
@@ -11,7 +11,6 @@ Purpose:                                      Contains generic CRUD operation pa
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -85,7 +84,7 @@ namespace M4PL.DataAccess
             if (record is BaseModel)
             {
                 parameters.Add(new Parameter("@enteredBy", activeUser.UserName));
-                parameters.Add(new Parameter("@dateEntered", DateTime.UtcNow));
+                parameters.Add(new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()));
             }
             return parameters;
         }
@@ -102,7 +101,7 @@ namespace M4PL.DataAccess
             if (record is BaseModel)
             {
                 parameters.Add(new Parameter("@changedBy", activeUser.UserName));
-                parameters.Add(new Parameter("@dateChanged", (record as BaseModel).DateChanged));
+                parameters.Add(new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()));
                 parameters.Add(new Parameter("@isFormView", (record as BaseModel).IsFormView));
             }
             return parameters;

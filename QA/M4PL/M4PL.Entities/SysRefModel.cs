@@ -2,13 +2,11 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 SysRefModel
 Purpose:                                      Contains objects related to SysRefModel
 ==========================================================================================================*/
-
-using System;
 
 namespace M4PL.Entities
 {
@@ -29,6 +27,6 @@ namespace M4PL.Entities
         public bool IsFormView { get; set; }
         public object KeyValue { get; set; }
         public int DataCount { get; set; }
-        public long CompanyId { get; set; } 
-	}
+        public long CompanyId { get; set; }
+    }
 }

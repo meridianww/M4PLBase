@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Janardana
@@ -18,9 +18,16 @@
     var contactDropDownModel = Model.Record.SysUserContactID.GetValueOrDefault().GetContactDropDown("SysUserContactID", Model);
     contactDropDownModel.ParentEntity = EntitiesAlias.SystemAccount;
     contactDropDownModel.EntityFor = EntitiesAlias.SystemAccount;
+    contactDropDownModel.ControlAction = "SysOrgRefRoleId";
+
+
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
-    var roleCodeDropDownViewModel = Model.Record.SysOrgRefRoleId.GetValueOrDefault().GetOrgRefRoleDropDown("SysOrgRefRoleId", Model.ColumnSettings.FirstOrDefault("SysOrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("SysOrgRefRoleId").IsRequired, Model.IsPopUp, Model.Permission);
+    var roleCodeDropDownViewModel = Model.Record.SysOrgRefRoleId.GetValueOrDefault().GetOrgRefRoleDropDown("SysOrgRefRoleId",
+        Model.ColumnSettings.FirstOrDefault("SysOrgRefRoleId").ColAliasName,
+        Model.ColumnSettings.FirstOrDefault("SysOrgRefRoleId").IsRequired, Model.IsPopUp, Model.Permission,Model.Record.SysUserContactID ?? 0);
     var sysColumn = Model.ColumnSettings.FirstOrDefault("SysPassword");
+    roleCodeDropDownViewModel.EntityFor = EntitiesAlias.SystemAccount;
+
 }
 
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
@@ -111,7 +118,7 @@
     });
 }).GetHtml()
 
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
     if (!Model.IsPopUp)
     {
         <div class="form-btns-block">

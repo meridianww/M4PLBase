@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 MessageTypeCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Administration.MessageTypeCommands
@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Administration.MessageTypeCommands;
-using System;
 
 namespace M4PL.Business.Administration
 {
@@ -105,14 +105,9 @@ namespace M4PL.Business.Administration
             return _commands.GetBySysMsgType(ActiveUser, sysMsgType);
         }
 
-        public IList<MessageType> Get()
+        public MessageType Patch(MessageType entity)
         {
             throw new NotImplementedException();
         }
-
-		public MessageType Patch(MessageType entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

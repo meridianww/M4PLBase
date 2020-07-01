@@ -91,6 +91,7 @@
     <Compile Include="GenericCommands.cs" />
     <Compile Include="JobRollup\JobRollupCommands.cs" />
     <Compile Include="Job\JobAdvanceReportCommands.cs" />
+    <Compile Include="Job\JobAttachmentCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobHistoryCommands.cs" />
     <Compile Include="Job\JobXcblInfoCommands.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="StoredProceduresConstant.cs" />
     <Compile Include="Survey\SurveyUserCommands.cs" />
     <Compile Include="Survey\JobSurveyCommands.cs" />
+    <Compile Include="Training\TrainingCommands.cs" />
     <Compile Include="Vendor\VendDcLocationContactCommands.cs" />
     <Compile Include="Vendor\VendReportCommands.cs" />
     <Compile Include="Vendor\VendBusinessTermCommands.cs" />

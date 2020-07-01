@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 PrgBillableRate
 Purpose:                                      Contains objects related to PrgBillableRate
@@ -17,13 +17,13 @@ namespace M4PL.Entities.Program
     /// </summary>
     public class PrgBillableRate : BaseModel
     {
-		/// <summary>
-		/// Gets or sets the progra, identifier.
-		/// </summary>
-		/// <value>
-		/// The ProgramLocationId.
-		/// </value>
-		public long? ProgramLocationId { get; set; }
+        /// <summary>
+        /// Gets or sets the progra, identifier.
+        /// </summary>
+        /// <value>
+        /// The ProgramLocationId.
+        /// </value>
+        public long? ProgramLocationId { get; set; }
 
         public string ProgramLocationIdName { get; set; }
 
@@ -205,6 +205,8 @@ namespace M4PL.Entities.Program
 
         public string PbrVendLocationIDName { get; set; }
 
-		public bool PbrElectronicBilling { get; set; }
-	}
+        public bool PbrElectronicBilling { get; set; }
+
+        public bool IsDefault { get; set; }
+    }
 }

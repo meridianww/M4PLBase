@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 CommonCommands
 Purpose:                                      Contains commands to call DAL logic for like M4PL.DAL.Common.CommonCommands
@@ -12,10 +12,10 @@ using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.SalesOrderDimension;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
-using System;
 
 namespace M4PL.Business.Common
 {
@@ -49,7 +49,12 @@ namespace M4PL.Business.Common
         /// <returns></returns>
         public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
         {
-            return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
+            string lan = string.Empty;
+            if (ActiveUser == null)
+                lan = "EN";
+            else
+                lan = ActiveUser.LangCode;
+            return CoreCache.GetNavSalesOrderDimensionValues(lan, forceUpdate);
         }
 
         /// <summary>
@@ -220,19 +225,6 @@ namespace M4PL.Business.Common
             return _commands.GetUserSysSettings(ActiveUser);
         }
 
-        /// <summary>
-        /// Gets user subsecurities
-        /// </summary>
-        /// <param name="secByRoleId"></param>
-        /// <param name="mainModuleId"></param>
-        /// <returns></returns>
-
-        public static IList<UserSubSecurity> GetUserSubSecurities(long secByRoleId)
-        {
-            return _commands.GetUserSubSecurities(secByRoleId, ActiveUser);
-        }
-
-
         public static UserColumnSettings InsAndUpdChooseColumn(UserColumnSettings userColumnSettings)
         {
             return _commands.InsAndUpdChooseColumn(ActiveUser, userColumnSettings);
@@ -257,12 +249,12 @@ namespace M4PL.Business.Common
             return _commands.SaveBytes(byteArray, ActiveUser);
         }
 
-        public static string AddorEditPreferedLocations(string locations, int contTypeId)
+        public static IList<PreferredLocation> AddorEditPreferedLocations(string locations, int contTypeId)
         {
-            return _commands.AddorEditPreferedLocations(locations , contTypeId,ActiveUser);
+            return _commands.AddorEditPreferedLocations(locations, contTypeId, ActiveUser);
         }
 
-        public static string GetPreferedLocations(int contTypeId)
+        public static IList<PreferredLocation> GetPreferedLocations(int contTypeId)
         {
             return _commands.GetPreferedLocations(ActiveUser, contTypeId);
         }
@@ -378,17 +370,17 @@ namespace M4PL.Business.Common
             _commands.UpdateUserSystemSettings(ActiveUser, userSystemSettings);
         }
 
-		public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long organizationId, long? jobId)
-		{
-			return _commands.UpdateLineNumberForJobCostSheet(ActiveUser, jobId);
-		}
+        public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long organizationId, long? jobId)
+        {
+            return _commands.UpdateLineNumberForJobCostSheet(ActiveUser, jobId);
+        }
 
-		public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long organizationId, long? jobId)
-		{
-			return _commands.UpdateLineNumberForJobBillableSheet(ActiveUser, jobId);
-		}
+        public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long organizationId, long? jobId)
+        {
+            return _commands.UpdateLineNumberForJobBillableSheet(ActiveUser, jobId);
+        }
 
-		public static IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
+        public static IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
         {
             return _commands.GetDeleteInfoModules(ActiveUser, pagedDataInfo);
         }
@@ -416,14 +408,19 @@ namespace M4PL.Business.Common
         {
             return _commands.GetMaxMinRecordsByEntity(Entity, RecordID, OrganizationId, ID);
         }
-		public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
-		{
-			return _commands.GetGatewayTypeByJobID(jobGatewayateId);
-		}
+        public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+        {
+            return _commands.GetGatewayTypeByJobID(jobGatewayateId);
+        }
 
         public static CompanyCorpAddress GetCompCorpAddress(int compId)
         {
             return _commands.GetCompCorpAddress(compId);
+        }
+
+        public static IList<JobAction> GetJobAction(long jobId)
+        {
+            return _commands.GetJobAction(ActiveUser, jobId);
         }
     }
 }

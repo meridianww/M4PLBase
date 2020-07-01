@@ -1,8 +1,8 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              13/10/2017
     //Program Name:                                 _TreeViewPartial
     //Purpose:                                      Provides view for TreeView
@@ -33,7 +33,13 @@
             settings.CallbackRouteValues = new { Controller = Model.Controller, Action = Model.Action, Area = Model.Area, ParentId = Model.ParentId, RecordId = Model.RecordId };
         if (Model.EnableNodeClick)
             settings.ClientSideEvents.NodeClick = "function(s,e) { DevExCtrl.TreeView.NodeClick(s,e);}";
-
+        settings.ClientLayout = (sender, e) =>
+        {
+            if (e.LayoutMode == ClientLayoutMode.Saving)
+                Session["TreeViewLayoutData"] = e.LayoutData;
+            else
+                e.LayoutData = (string)Session["TreeViewLayoutData"];
+        };
         settings.PreRender = (source, e) =>
         {
             ASPxTreeView treeView = (ASPxTreeView)source;

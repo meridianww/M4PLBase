@@ -1,12 +1,12 @@
-﻿/*Copyright(2016) Meridian Worldwide Transportation Group
-All Rights Reserved Worldwide
-==========================================================================================================
-Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
-Date Programmed:                              10/10/2017
-Program Name:                                 AutofacConfig
-Purpose:                                      Contains the Configuration related to AutoFac
-==========================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
 using Autofac;
 using Autofac.Integration.Mvc;
 using M4PL.Web.IoC;
@@ -50,7 +50,7 @@ namespace M4PL.Web
             containerBuilder.RegisterModule(new VendorModule());
             containerBuilder.RegisterModule(new ScannerModule());
             containerBuilder.RegisterModule(new AttachmentModule());
-			containerBuilder.RegisterModule(new FinanceModule());
-		}
+            containerBuilder.RegisterModule(new FinanceModule());
+        }
     }
 }

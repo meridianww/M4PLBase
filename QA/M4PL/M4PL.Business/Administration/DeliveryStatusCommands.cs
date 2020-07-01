@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              06/06/2018
 Program Name:                                 DeliveryStatusCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Administration.DeliveryStatusCommands
@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Administration.DeliveryStatusCommands;
-using System;
 
 namespace M4PL.Business.Administration
 {
@@ -83,14 +83,9 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<DeliveryStatus> Get()
+        public DeliveryStatus Patch(DeliveryStatus entity)
         {
             throw new NotImplementedException();
         }
-
-		public DeliveryStatus Patch(DeliveryStatus entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

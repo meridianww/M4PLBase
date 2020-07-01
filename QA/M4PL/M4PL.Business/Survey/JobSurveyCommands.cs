@@ -33,22 +33,17 @@ namespace M4PL.Business.Survey
             throw new NotImplementedException();
         }
 
-        public IList<JobSurvey> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         public JobSurvey GetJobSurvey(ActiveUser activeUser, long id)
         {
             return _commands.GetJobSurvey(activeUser, id);
         }
 
-		public bool InsertJobSurvey(JobSurvey jobSurvey)
-		{
-			return _commands.InsertJobSurvey(jobSurvey);
-		}
+        public bool InsertJobSurvey(JobSurvey jobSurvey)
+        {
+            return _commands.InsertJobSurvey(jobSurvey);
+        }
 
-		public IList<JobSurvey> GetPagedData(PagedDataInfo pagedDataInfo)
+        public IList<JobSurvey> GetPagedData(PagedDataInfo pagedDataInfo)
         {
             throw new NotImplementedException();
         }

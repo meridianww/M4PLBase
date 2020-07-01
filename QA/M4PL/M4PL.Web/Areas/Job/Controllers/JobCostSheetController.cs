@@ -1,12 +1,11 @@
-﻿/*Copyright (2019) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
-//====================================================================================================================================================
-//Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Nikhil
-//Date Programmed:                              25/07/2019
-//Program Name:                                 JobCostSheet
-//Purpose:                                      Contains Actions to render view on Job's  Cost Sheet page
-//====================================================================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
 
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
@@ -19,15 +18,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Text.RegularExpressions;
-using M4PL.Utilities;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
     public class JobCostSheetController : BaseController<JobCostSheetView>
     {
         private readonly IJobCostSheetCommands _jobCostSheetCommands;
-        private bool _jobCostLoad = true;
+        //private bool _jobCostLoad = true;
 
         public JobCostSheetController(IJobCostSheetCommands JobCostSheetCommands, ICommonCommands commonCommands)
             : base(JobCostSheetCommands)
@@ -77,10 +74,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = TempData["IsCostCodeAction"] != null && (bool)TempData["IsCostCodeAction"]
-                && route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) 
-                ? _jobCostSheetCommands.GetJobCostCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId) 
+            _formResult.Record = route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value)
+                ? _jobCostSheetCommands.GetJobCostCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId)
                 : _jobCostSheetCommands.Get(route.RecordId);
+
+            if (_formResult.Record != null)
+            {
+                _formResult.Record.CstQuantity = _formResult.Record.CstQuantity > 0 ? _formResult.Record.CstQuantity : 1;
+            }
+
             _formResult.SetupFormResult(_commonCommands, route);
             if (_formResult.Record is SysRefModel)
             {

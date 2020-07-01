@@ -1,8 +1,8 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              13/10/2017
     //Program Name:                                 _EnteredChangedPartial
     //Purpose:                                      Provides view for Entered and Changed section
@@ -29,7 +29,7 @@
     }
     settings.Collapsed = true;
     //settings.ControlStyle.CssClass = "form-layout";
-    settings.Enabled = (Model.ParentRecordId > 0);
+    settings.Enabled = true;
     settings.CallbackRouteValues = new { Action = "DataViewRoundPanel", Controller = Model.Controller, Area = Model.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
 
    

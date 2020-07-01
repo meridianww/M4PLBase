@@ -9,12 +9,12 @@ Purpose:                                      Contains commands to perform CRUD 
 =============================================================================================================*/
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
-using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
-using System.Collections.Generic;
-using System;
 using M4PL.Entities.XCBL;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
@@ -22,6 +22,30 @@ namespace M4PL.DataAccess.Job
 {
     public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>
     {
+        public static DateTime DayLightSavingStartDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+            }
+        }
+
+        public static DateTime DayLightSavingEndDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+            }
+        }
+
+        public static bool IsDayLightSavingEnable
+        {
+            get
+            {
+                return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+            }
+        }
+
         public static JobXcblInfo GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
         {
             return new JobXcblInfo
@@ -68,7 +92,7 @@ namespace M4PL.DataAccess.Job
                 SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdateJobFomXCBL, parameters.ToArray(), storedProcedure: true);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -133,6 +157,22 @@ namespace M4PL.DataAccess.Job
             }
         }
 
+        public static string GetJobGatewayCode(long gatewayId)
+        {
+            try
+            {
+                var parameters = new List<Parameter>
+                   {
+                       new Parameter("@Id", gatewayId)
+                   };
+                return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetJobGatewayCode, parameters.ToArray(), storedProcedure: true);
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+
         public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
         {
             var parameters = new List<Parameter>
@@ -143,14 +183,9 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job GetJobById(ActiveUser activeUser, long id)
         {
-            return Get(activeUser, id, StoredProceduresConstant.GetJob);
-        }
-
-        public static Entities.Job.Job Get(ActiveUser activeUser, long id, string storedProcName, bool langCode = false)
-        {
-            var parameters = activeUser.GetRecordDefaultParams(id, langCode);
+            var parameters = activeUser.GetRecordDefaultParams(id, false);
             parameters.Add(new Parameter("@parentId", 0));
-            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(storedProcName, parameters.ToArray(), storedProcedure: true);
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
             return result ?? new Entities.Job.Job();
         }
 
@@ -161,12 +196,13 @@ namespace M4PL.DataAccess.Job
                 var parameters = new List<Parameter>
                    {
                        new Parameter("@ChangedByName", activeUser.UserName),
-                       new Parameter("@gatewayId",gatewayId)
+                       new Parameter("@gatewayId",gatewayId),
+                       new Parameter("@User",activeUser.UserName)
                    };
                 SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdatexCBLRejected, parameters.ToArray(), storedProcedure: true);
-               return true;
+                return true;
             }
-            catch(Exception ex)
+            catch (Exception)
             {
                 return false;
             }

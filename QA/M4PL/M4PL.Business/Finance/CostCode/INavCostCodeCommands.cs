@@ -9,15 +9,12 @@ Purpose:                                      Set of rules for NavCostCodeComman
 ===============================================================================================================*/
 
 using M4PL.Entities.Finance.CostCode;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.Business.Finance.CostCode
 {
-	public interface INavCostCodeCommands : IBaseCommands<NavCostCode>
-	{
-	}
+    public interface INavCostCodeCommands : IBaseCommands<NavCostCode>
+    {
+        IList<NavCostCode> GetAllCostCode();
+    }
 }

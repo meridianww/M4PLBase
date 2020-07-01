@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobCommands
 Purpose:                                      Contains commands to perform CRUD on Job
@@ -11,13 +11,17 @@ Purpose:                                      Contains commands to perform CRUD 
 using DevExpress.XtraRichEdit;
 using M4PL.DataAccess.Common;
 using M4PL.DataAccess.SQLSerializer.Serializer;
+using M4PL.DataAccess.XCBL;
 using M4PL.Entities;
+using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
+using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -29,6 +33,30 @@ namespace M4PL.DataAccess.Job
 {
     public class JobCommands : BaseCommands<Entities.Job.Job>
     {
+        public static DateTime DayLightSavingStartDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+            }
+        }
+
+        public static DateTime DayLightSavingEndDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+            }
+        }
+
+        public static bool IsDayLightSavingEnable
+        {
+            get
+            {
+                return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+            }
+        }
+
         /// <summary>
         /// Gets list of Job records
         /// </summary>
@@ -49,7 +77,9 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job Get(ActiveUser activeUser, long id)
         {
-            return Get(activeUser, id, StoredProceduresConstant.GetJob);
+            var parameters = activeUser.GetRecordDefaultParams(id, false);
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+            return result ?? new Entities.Job.Job();
         }
 
         public static Entities.Job.Job GetJobByProgram(ActiveUser activeUser, long id, long parentId)
@@ -60,14 +90,15 @@ namespace M4PL.DataAccess.Job
             return result ?? new Entities.Job.Job();
         }
 
-        public static Entities.Job.Job GetJobByCustomerSalesOrder(ActiveUser activeUser, string jobSalesOrderNumber)
+        public static Entities.Job.Job GetJobByCustomerSalesOrder(ActiveUser activeUser, string jobSalesOrderNumber, long customerId)
         {
             var parameters = new List<Parameter>
             {
                 new Parameter("@userId", activeUser.UserId),
                 new Parameter("@roleId", activeUser.RoleId),
                 new Parameter("@JobCustomerSalesOrder", jobSalesOrderNumber),
-                new Parameter("@orgId", activeUser.OrganizationId)
+                new Parameter("@orgId", activeUser.OrganizationId),
+                new Parameter("@customerId", customerId)
             };
 
             var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobByCustomerSalesOrder, parameters.ToArray(), storedProcedure: true);
@@ -108,18 +139,20 @@ namespace M4PL.DataAccess.Job
             }
 
 
-                var parameters = new List<Parameter>
+            var parameters = new List<Parameter>
             {
                 new Parameter("@JobID", jobId),
                 new Parameter("@ProgramID", programId),
                 new Parameter("@GwyGatewayCode", gatewayCode),
                 new Parameter("@enteredBy", activeUser.UserName),
-                new Parameter("@dateEntered", DateTime.UtcNow),
+                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                 new Parameter("@userId", activeUser.UserId)
             };
 
             var jobGateway = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
-            if (jobGateway != null && jobGateway.Id > 0 && saveDocument)
+            if (jobGateway != null && jobGateway.Id > 0 && saveDocument
+                && string.Equals(gatewayCode, "Comment", StringComparison.InvariantCultureIgnoreCase)
+                && !string.IsNullOrEmpty(shippingInstruction))
             {
                 RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
                 richEditDocumentServer.Document.AppendHtmlText(shippingInstruction);
@@ -141,6 +174,35 @@ namespace M4PL.DataAccess.Job
             return jobGateway;
         }
 
+
+        public static bool CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser activeUser, long jobId, long programId, string gatewayCode, long customerId)
+        {
+            try
+            {
+                var parameters = new List<Parameter>
+            {
+                new Parameter("@JobID", jobId),
+                new Parameter("@ProgramID", programId),
+                new Parameter("@GwyGatewayCode", gatewayCode),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
+                new Parameter("@userId", activeUser.UserId)
+            };
+
+                var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBLForElectrolux, parameters.ToArray(), storedProcedure: true);
+                if (result && string.Equals(gatewayCode, "In Transit", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
+                }
+                return result;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+        }
+
+
         public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
         {
             try
@@ -149,7 +211,7 @@ namespace M4PL.DataAccess.Job
             {
                 new Parameter("@JobID", job.Id),
                 new Parameter("@ProgramID", job.ProgramID),
-                new Parameter("@dateEntered", DateTime.UtcNow),
+                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                 new Parameter("@enteredBy", activeUser.UserName),
                 new Parameter("@userId", activeUser.UserId)
                 };
@@ -182,7 +244,7 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@ProgramID", programId),
                 new Parameter("@GwyGatewayCode", gatewayCode),
                 new Parameter("@ChangedBy", activeUser.UserName),
-                new Parameter("@DateChanged", DateTime.UtcNow)
+                new Parameter("@DateChanged", Utilities.TimeUtility.GetPacificDateTime())
             };
 
             SqlSerializer.Default.Execute(StoredProceduresConstant.ArchiveJobGatewayForXcBL, parameters.ToArray(), storedProcedure: true);
@@ -195,17 +257,33 @@ namespace M4PL.DataAccess.Job
         /// <param name="job"></param>
         /// <returns></returns>
 
-        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true)
+        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, bool isManualUpdate = false)
         {
             Entities.Job.Job createdJobData = null;
-            if (!IsJobAlreadyExists(job.JobCustomerSalesOrder))
+            if (IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID))
             {
                 CalculateJobMileage(ref job);
                 SetLatitudeAndLongitudeFromAddress(ref job);
                 var parameters = GetParameters(job);
                 parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+                parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+                parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
                 parameters.AddRange(activeUser.PostDefaultParams(job));
                 createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+
+                if (!isServiceCall && createdJobData?.Id > 0)
+                {
+                    Task.Run(() =>
+                    {
+                        List<SystemReference> systemOptionList = !isRelatedAttributeUpdate ? Administration.SystemReferenceCommands.GetSystemRefrenceList() : null;
+                        int serviceId = !isRelatedAttributeUpdate ? (int)systemOptionList?.
+                            Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+                            Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+                            FirstOrDefault().Id : 0;
+
+                        InsertCostPriceCodesForOrder((long)createdJobData.Id, (long)createdJobData.ProgramID, createdJobData?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false, createdJobData.JobQtyActual);
+                    });
+                }
             }
 
             return createdJobData;
@@ -219,32 +297,61 @@ namespace M4PL.DataAccess.Job
         /// <returns></returns>
 
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
-            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true)
+            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, long customerId = 0, bool isManualUpdate = false)
         {
-            Entities.Job.Job updatedJObDetails = null;
+            Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
-            var mapRoute = GetJobMapRoute(activeUser, job.Id);
-            CalculateJobMileage(ref job, mapRoute);
-            //Calculate Latitude and Longitude only if its is updated by the user.
-            if (!isLatLongUpdatedFromXCBL)
+            bool isExistsRecord = true;
+
+            //In case of UI update don't consider the customerId check
+            if ((job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder) || (!isManualUpdate ? (job.CustomerId != existingJobDetail.CustomerId) : false))
             {
-                if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
-                    && (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
-                        || mapRoute.isAddressUpdated)
-                    SetLatitudeAndLongitudeFromAddress(ref job);
+                isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
             }
 
-            var parameters = GetParameters(job);
-            parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-            parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
-            updatedJObDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
-
-            if (existingJobDetail != null && updatedJObDetails != null)
+            if (isExistsRecord)
             {
-                CommonCommands.SaveChangeHistory(updatedJObDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
+                var mapRoute = GetJobMapRoute(activeUser, job.Id);
+                CalculateJobMileage(ref job, mapRoute);
+                //Calculate Latitude and Longitude only if its is updated by the user.
+                if (!isLatLongUpdatedFromXCBL)
+                {
+                    if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
+                        && (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
+                            || mapRoute.isAddressUpdated)
+                        SetLatitudeAndLongitudeFromAddress(ref job);
+                }
+
+                var parameters = GetParameters(job);
+                parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+                parameters.Add(new Parameter("@IsSellerTabEdited", job.IsSellerTabEdited));
+                parameters.Add(new Parameter("@IsPODTabEdited", job.IsPODTabEdited));
+                parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+                parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
+                parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
+                updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
+
+                if (existingJobDetail != null && updatedJobDetails != null)
+                {
+                    CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
+                }
+
+                if (!isServiceCall && ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID)))
+                {
+                    Task.Run(() =>
+                    {
+                        List<SystemReference> systemOptionList = !isRelatedAttributeUpdate ? Administration.SystemReferenceCommands.GetSystemRefrenceList() : null;
+                        int serviceId = !isRelatedAttributeUpdate ? (int)systemOptionList?.
+                            Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+                            Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+                            FirstOrDefault().Id : 0;
+
+                        InsertCostPriceCodesForOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser, customerId == updatedJobDetails.CustomerId ? true : false, updatedJobDetails?.JobQtyActual);
+                    });
+                }
             }
 
-            return updatedJObDetails;
+            return updatedJobDetails;
         }
 
         /// <summary>
@@ -283,6 +390,7 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
+            parameters.Add(new Parameter("@PacificTime", TimeUtility.GetPacificDateTime()));
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobDestination>(StoredProceduresConstant.GetJobDestination, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobDestination();
         }
@@ -295,7 +403,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@id", jobId),
                new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@dateEntered", DateTime.UtcNow)
+               new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime())
             };
 
             try
@@ -326,9 +434,10 @@ namespace M4PL.DataAccess.Job
             {
                new Parameter("@JobId", comment.JobId),
                new Parameter("@GatewayTitle", comment.JobGatewayTitle),
-               new Parameter("@dateEntered", DateTime.UtcNow),
+               new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                new Parameter("@enteredBy", activeUser.UserName),
                new Parameter("@userId", activeUser.UserId),
+               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
             };
 
             try
@@ -366,7 +475,7 @@ namespace M4PL.DataAccess.Job
         {
             foreach (var currentJob in batchJobDetail)
             {
-                if (!IsJobAlreadyExists(currentJob.OrderNumber))
+                if (!IsJobNotDuplicate(currentJob.OrderNumber, jobProgramId))
                 {
                     Entities.Job.Job jobInfo = new Entities.Job.Job()
                     {
@@ -382,7 +491,7 @@ namespace M4PL.DataAccess.Job
                         JobDeliveryCity = currentJob.City,
                         JobDeliveryState = currentJob.State,
                         JobDeliveryPostalCode = currentJob.Zip,
-                        JobQtyOrdered = !string.IsNullOrEmpty(currentJob.Cabinets) ? Convert.ToDecimal(currentJob.Cabinets) : (decimal?)null,
+                        JobQtyOrdered = !string.IsNullOrEmpty(currentJob.Cabinets) ? Convert.ToInt32(currentJob.Cabinets) : (int?)null,
                         JobPartsOrdered = !string.IsNullOrEmpty(currentJob.Parts) ? Convert.ToInt32(currentJob.Parts) : (int?)null,
                         JobTotalCubes = !string.IsNullOrEmpty(currentJob.TotCubes) ? Convert.ToInt32(currentJob.TotCubes) : (int?)null,
                         JobServiceMode = currentJob.ServiceMode,
@@ -398,7 +507,7 @@ namespace M4PL.DataAccess.Job
                         StatusId = 1
                     };
 
-                    Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo);
+                    Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo, isManualUpdate: true);
                     if (jobCreationResult == null || (jobCreationResult != null && jobCreationResult.Id <= 0))
                     {
                         _logger.Log(new Exception(), string.Format("Job creation is failed for JobCustomerSalesOrder : {0}, Requested json was: {1}", jobInfo.JobCustomerSalesOrder, JsonConvert.SerializeObject(jobInfo)), "There is some error occurred while creating the job.", Utilities.Logger.LogType.Error);
@@ -418,18 +527,18 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
+        public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string gatewayStatusCode)
         {
             long insertedGatewayId = 0;
             var parameters = new List<Parameter>
             {
                new Parameter("@JobId", jobId),
-               new Parameter("@GwyShipApptmtReasonCode", shippingAppointmentReasonCode),
-               new Parameter("@GwyShipStatusReasonCode", shippingStatusReasonCode),
+               new Parameter("@gatewayStatusCode", gatewayStatusCode),
                new Parameter("@userId", activeUser.UserId),
-               new Parameter("@dateEntered", DateTime.UtcNow),
-               new Parameter("@enteredBy", activeUser.UserName)
-            };
+               new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
+               new Parameter("@enteredBy", activeUser.UserName),
+               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+        };
 
             try
             {
@@ -443,19 +552,83 @@ namespace M4PL.DataAccess.Job
             return insertedGatewayId > 0 ? true : false;
         }
 
-        public static bool IsJobAlreadyExists(string customerSalesOrderNo)
+        public static bool IsJobNotDuplicate(string customerSalesOrderNo, long programId)
         {
-            bool isJobAlreadyPresent = true;
+            bool isJobDuplicate = false;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo),
+               new Parameter("@programId", programId)
+            };
+
             try
             {
-                isJobAlreadyPresent = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CheckJobDuplication, new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo), false, true);
+                isJobDuplicate = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CheckJobDuplication, parameters.ToArray(), false, true);
             }
             catch (Exception exp)
             {
                 _logger.Log(exp, "Error occuring in method IsJobAlreadyExists", "IsJobAlreadyExists", Utilities.Logger.LogType.Error);
             }
 
-            return isJobAlreadyPresent;
+            return isJobDuplicate;
+        }
+
+        public static bool GetJobDeliveryChargeRemovalRequired(long jobId, long customerId)
+        {
+            bool isDeliveryChargeRemovalRequired = false;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@JobId", jobId),
+               new Parameter("@customerId", customerId)
+            };
+
+            try
+            {
+                isDeliveryChargeRemovalRequired = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetJobDeliveryChargeRemovalRequired, parameters.ToArray(), false, true);
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Error occuring in method GetJobDeliveryChargeRemovalRequired", "GetJobDeliveryChargeRemovalRequired", Utilities.Logger.LogType.Error);
+            }
+
+            return isDeliveryChargeRemovalRequired;
+        }
+
+        public static bool UpdateJobPriceOrCostCodeStatus(long jobId, int statusId)
+        {
+            bool isDefaultChargeUpdate = false;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@JobId", jobId),
+               new Parameter("@StatusId", statusId)
+            };
+
+            try
+            {
+                SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobPriceOrCostCodeStatus, parameters.ToArray(), true);
+                isDefaultChargeUpdate = true;
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Error occuring in method UpdateJobPriceOrCostCodeStatus", "UpdateJobPriceOrCostCodeStatus", Utilities.Logger.LogType.Error);
+            }
+
+            return isDefaultChargeUpdate;
+        }
+
+        public static bool IsJobCancelled(long jobId)
+        {
+            bool isJobCanceled = false;
+            try
+            {
+                isJobCanceled = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CheckJobCancellation, new Parameter("@JobId", jobId), false, true);
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Error occuring in method IsJobCancelled", "IsJobCancelled", Utilities.Logger.LogType.Error);
+            }
+
+            return isJobCanceled;
         }
 
         /// <summary>
@@ -482,6 +655,7 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
+            parameters.Add(new Parameter("@Pacifictime", TimeUtility.GetPacificDateTime()));
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobSeller>(StoredProceduresConstant.GetJobSeller, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobSeller();
         }
@@ -613,6 +787,234 @@ namespace M4PL.DataAccess.Job
             }
 
             return result;
+        }
+        public static void InsertCostPriceCodesForOrder(long jobId, long programId, string locationCode, int serviceId, ActiveUser activeUser, bool isElectroluxOrder, int? quantity)
+        {
+            List<JobBillableSheet> jobBillableSheetList = null;
+            List<JobCostSheet> jobCostSheetList = null;
+            List<JobCargo> jobCargoList = null;
+            List<PrgBillableRate> programBillableRate = Program.PrgBillableRateCommands.GetProgramBillableRate(activeUser, programId, locationCode, jobId);
+            List<PrgCostRate> programCostRate = Program.PrgCostRateCommands.GetProgramCostRate(activeUser, programId, locationCode, jobId);
+
+            if (isElectroluxOrder)
+            {
+                jobCargoList = JobCargoCommands.GetCargoListForJob(activeUser, jobId);
+                jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForElectroluxOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser, programBillableRate, quantity);
+                jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForElectroluxOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser, programCostRate, quantity);
+            }
+            else
+            {
+                jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForOrder(jobId, activeUser, programBillableRate, quantity);
+                jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForOrder(jobId, activeUser, programCostRate, quantity);
+            }
+
+            jobBillableSheetList = jobBillableSheetList == null ? new List<JobBillableSheet>() : jobBillableSheetList;
+            jobCostSheetList = jobCostSheetList == null ? new List<JobCostSheet>() : jobCostSheetList;
+            programBillableRate = programBillableRate == null ? new List<PrgBillableRate>() : programBillableRate;
+            programCostRate = programCostRate == null ? new List<PrgCostRate>() : programCostRate;
+            UpdateMissingCostCodeData(jobBillableSheetList, jobCostSheetList, programBillableRate, programCostRate);
+            JobBillableSheetCommands.InsertJobBillableSheetData(jobBillableSheetList, jobId);
+            JobCostSheetCommands.InsertJobCostSheetData(jobCostSheetList, jobId);
+        }
+
+        private static void UpdateMissingCostCodeData(List<JobBillableSheet> jobBillableSheetList, List<JobCostSheet> jobCostSheetList, List<PrgBillableRate> prgBillableRate, List<PrgCostRate> programCostRate)
+        {
+            #region Cost Rate Missing But Billable Rate Present
+
+            if (jobBillableSheetList?.Count > 0 && jobCostSheetList?.Count == 0)
+            {
+                if (programCostRate?.Count == 0)
+                {
+                    jobCostSheetList.AddRange(jobBillableSheetList.Select(billableItem => new JobCostSheet()
+                    {
+                        ItemNumber = billableItem.ItemNumber,
+                        JobID = billableItem.JobID,
+                        CstLineItem = billableItem.ItemNumber.ToString(),
+                        CstChargeID = 0,
+                        CstChargeCode = billableItem.PrcChargeCode,
+                        CstTitle = billableItem.PrcTitle,
+                        CstUnitId = billableItem.PrcUnitId,
+                        ChargeTypeId = billableItem.ChargeTypeId,
+                        StatusId = billableItem.StatusId,
+                        CstQuantity = 1,
+                        CstRate = decimal.Zero,
+                        CstElectronicBilling = billableItem.PrcElectronicBilling,
+                        DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+                        EnteredBy = billableItem.EnteredBy
+
+                    }));
+                }
+                else
+                {
+                    jobCostSheetList.AddRange(jobBillableSheetList.Select(billableItem => new JobCostSheet()
+                    {
+                        ItemNumber = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().ItemNumber : billableItem.ItemNumber,
+                        JobID = billableItem.JobID,
+                        CstLineItem = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().ItemNumber?.ToString() : billableItem.ItemNumber.ToString(),
+                        CstChargeID = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().Id : 0,
+                        CstChargeCode = billableItem.PrcChargeCode,
+                        CstTitle = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrTitle : billableItem.PrcTitle,
+                        CstUnitId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateUnitTypeId : billableItem.PrcUnitId,
+                        ChargeTypeId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateTypeId : billableItem.ChargeTypeId,
+                        StatusId = billableItem.StatusId,
+                        CstQuantity = 1,
+                        CstRate = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrCostRate : decimal.Zero,
+                        CstElectronicBilling = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrElectronicBilling : billableItem.PrcElectronicBilling,
+                        DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+                        EnteredBy = billableItem.EnteredBy
+
+                    }));
+                }
+            }
+            #endregion
+            #region Billable Rate Missing But Cost Rate Present
+            else if (jobBillableSheetList?.Count == 0 && jobCostSheetList?.Count > 0)
+            {
+                if (prgBillableRate?.Count == 0)
+                {
+                    jobBillableSheetList.AddRange(jobCostSheetList.Select(costItem => new JobBillableSheet()
+                    {
+                        ItemNumber = costItem.ItemNumber,
+                        JobID = costItem.JobID,
+                        PrcLineItem = costItem.ItemNumber.ToString(),
+                        PrcChargeID = 0,
+                        PrcChargeCode = costItem.CstChargeCode,
+                        PrcTitle = costItem.CstTitle,
+                        PrcUnitId = costItem.CstUnitId,
+                        ChargeTypeId = costItem.ChargeTypeId,
+                        StatusId = costItem.StatusId,
+                        PrcRate = decimal.Zero,
+                        PrcQuantity = 1,
+                        PrcElectronicBilling = costItem.CstElectronicBilling,
+                        DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+                        EnteredBy = costItem.EnteredBy
+
+                    }));
+                }
+                else
+                {
+                    jobBillableSheetList.AddRange(jobCostSheetList.Select(costItem => new JobBillableSheet()
+                    {
+                        ItemNumber = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().ItemNumber : costItem.ItemNumber,
+                        JobID = costItem.JobID,
+                        PrcLineItem = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().ItemNumber.ToString() : costItem.ItemNumber.ToString(),
+                        PrcChargeID = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().Id : 0,
+                        PrcChargeCode = costItem.CstChargeCode,
+                        PrcTitle = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrTitle : costItem.CstTitle,
+                        PrcUnitId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateUnitTypeId : costItem.CstUnitId,
+                        ChargeTypeId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateTypeId : costItem.ChargeTypeId,
+                        PrcRate = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrBillablePrice : decimal.Zero,
+                        StatusId = costItem.StatusId,
+                        PrcQuantity = 1,
+                        PrcElectronicBilling = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrElectronicBilling : costItem.CstElectronicBilling,
+                        DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+                        EnteredBy = costItem.EnteredBy
+
+                    }));
+                }
+            }
+
+            #endregion
+            #region Both Billable and Cost Charge Present
+
+            else if (jobBillableSheetList?.Count > 0 && jobCostSheetList?.Count > 0)
+            {
+                var billableResult = jobBillableSheetList.Where(p => jobCostSheetList.All(p2 => p2.CstChargeCode != p.PrcChargeCode))?.ToList();
+                var costResult = jobCostSheetList.Where(p => jobBillableSheetList.All(p2 => p2.PrcChargeCode != p.CstChargeCode))?.ToList();
+                if (costResult?.Count > 0)
+                {
+                    if (prgBillableRate?.Count == 0)
+                    {
+                        jobBillableSheetList.AddRange(costResult.Select(costItem => new JobBillableSheet()
+                        {
+                            ItemNumber = costItem.ItemNumber,
+                            JobID = costItem.JobID,
+                            PrcLineItem = costItem.ItemNumber.ToString(),
+                            PrcChargeID = 0,
+                            PrcChargeCode = costItem.CstChargeCode,
+                            PrcTitle = costItem.CstTitle,
+                            PrcUnitId = costItem.CstUnitId,
+                            ChargeTypeId = costItem.ChargeTypeId,
+                            StatusId = costItem.StatusId,
+                            PrcQuantity = 1,
+                            PrcRate = decimal.Zero,
+                            PrcElectronicBilling = costItem.CstElectronicBilling,
+                            DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+                            EnteredBy = costItem.EnteredBy
+
+                        }));
+                    }
+                    else
+                    {
+                        jobBillableSheetList.AddRange(costResult.Select(costItem => new JobBillableSheet()
+                        {
+                            ItemNumber = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().ItemNumber : costItem.ItemNumber,
+                            JobID = costItem.JobID,
+                            PrcLineItem = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().ItemNumber.ToString() : costItem.ItemNumber.ToString(),
+                            PrcChargeID = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().Id : 0,
+                            PrcChargeCode = costItem.CstChargeCode,
+                            PrcTitle = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrTitle : costItem.CstTitle,
+                            PrcUnitId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateUnitTypeId : costItem.CstUnitId,
+                            ChargeTypeId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateTypeId : costItem.ChargeTypeId,
+                            PrcRate = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrBillablePrice : decimal.Zero,
+                            StatusId = costItem.StatusId,
+                            PrcQuantity = 1,
+                            PrcElectronicBilling = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrElectronicBilling : costItem.CstElectronicBilling,
+                            DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+                            EnteredBy = costItem.EnteredBy
+
+                        }));
+                    }
+                }
+
+                if (billableResult?.Count > 0)
+                {
+                    if (programCostRate?.Count == 0)
+                    {
+                        jobCostSheetList.AddRange(billableResult.Select(billableItem => new JobCostSheet()
+                        {
+                            ItemNumber = billableItem.ItemNumber,
+                            JobID = billableItem.JobID,
+                            CstLineItem = billableItem.ItemNumber.ToString(),
+                            CstChargeID = 0,
+                            CstChargeCode = billableItem.PrcChargeCode,
+                            CstTitle = billableItem.PrcTitle,
+                            CstUnitId = billableItem.PrcUnitId,
+                            ChargeTypeId = billableItem.ChargeTypeId,
+                            StatusId = billableItem.StatusId,
+                            CstRate = decimal.Zero,
+                            CstQuantity = 1,
+                            CstElectronicBilling = billableItem.PrcElectronicBilling,
+                            DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+                            EnteredBy = billableItem.EnteredBy
+
+                        }));
+                    }
+                    else
+                    {
+                        jobCostSheetList.AddRange(billableResult.Select(billableItem => new JobCostSheet()
+                        {
+                            ItemNumber = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().ItemNumber : billableItem.ItemNumber,
+                            JobID = billableItem.JobID,
+                            CstLineItem = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().ItemNumber?.ToString() : billableItem.ItemNumber.ToString(),
+                            CstChargeID = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().Id : 0,
+                            CstChargeCode = billableItem.PrcChargeCode,
+                            CstTitle = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrTitle : billableItem.PrcTitle,
+                            CstUnitId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateUnitTypeId : billableItem.PrcUnitId,
+                            ChargeTypeId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateTypeId : billableItem.ChargeTypeId,
+                            CstRate = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrCostRate : decimal.Zero,
+                            StatusId = billableItem.StatusId,
+                            CstQuantity = 1,
+                            CstElectronicBilling = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrElectronicBilling : billableItem.PrcElectronicBilling,
+                            DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+                            EnteredBy = billableItem.EnteredBy
+
+                        }));
+                    }
+                }
+            }
+
+            #endregion
         }
 
         /// <summary>
@@ -762,8 +1164,10 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobPreferredMethod", job.JobPreferredMethod),
                new Parameter("@JobMileage", job.JobMileage),
                new Parameter("@JobServiceOrder", job.JobServiceOrder),
-               new Parameter("@JobServiceActual", job.JobServiceActual)
-
+               new Parameter("@JobServiceActual", job.JobServiceActual),
+               new Parameter("@IsJobVocSurvey", job.IsJobVocSurvey),
+               new Parameter("@ProFlags12", job.ProFlags12),
+               new Parameter("@JobDriverAlert", job.JobDriverAlert)
             };
 
             return parameters;
@@ -1061,7 +1465,7 @@ namespace M4PL.DataAccess.Job
                 var result = SqlSerializer.Default.DeserializeMultiRecords<CustomEntity>(StoredProceduresConstant.GetCustomEntityIdByEntityName, parameters, false, storedProcedure: true);
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -1096,6 +1500,8 @@ namespace M4PL.DataAccess.Job
                 jobCargoUTT.Columns.Add("CgoCubes");
                 jobCargoUTT.Columns.Add("CgoQtyUnits");
                 jobCargoUTT.Columns.Add("CgoQTYOrdered");
+                jobCargoUTT.Columns.Add("CgoPackagingTypeId");
+                jobCargoUTT.Columns.Add("CgoQtyUnitsId");
                 jobCargoUTT.Columns.Add("StatusId");
                 jobCargoUTT.Columns.Add("EnteredBy");
                 jobCargoUTT.Columns.Add("DateEntered");
@@ -1116,14 +1522,57 @@ namespace M4PL.DataAccess.Job
                     row["CgoCubes"] = jobCargo.CgoCubes;
                     row["CgoQtyUnits"] = jobCargo.CgoQtyUnitsIdName;
                     row["CgoQTYOrdered"] = jobCargo.CgoQtyOrdered;
+                    row["CgoPackagingTypeId"] = jobCargo.CgoPackagingTypeId;
+                    row["CgoQtyUnitsId"] = jobCargo.CgoQtyUnitsId;
                     row["StatusId"] = jobCargo.StatusId;
                     row["EnteredBy"] = activeUser.UserName;
-                    row["DateEntered"] = DateTime.UtcNow;
+                    row["DateEntered"] = Utilities.TimeUtility.GetPacificDateTime();
                     jobCargoUTT.Rows.Add(row);
                     jobCargoUTT.AcceptChanges();
                 }
 
                 return jobCargoUTT;
+            }
+        }
+
+        public static int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser)
+        {
+            int count = 0;
+            List<Entities.Job.Job> updatedJobs = new List<Entities.Job.Job>();
+            var parameters = new[]
+            {
+               new Parameter("@JobId",jobId),
+               new Parameter("@ProgramId",programId),
+               new Parameter("@CustId",custId),
+               new Parameter("@user", activeUser.UserName),
+               new Parameter("@DeliveryDate",deliveryDate),
+               new Parameter("@IncludeNullableDeliveryDate",includeNullableDeliveryDate),
+               new Parameter("@DateEntered", TimeUtility.GetPacificDateTime())
+            };
+            try
+            {
+                count = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
+                return count;
+            }
+            catch (Exception)
+            {
+                return count;
+            }
+        }
+
+        public static List<Entities.Job.Job> GetActiveJobByProgramId(long programId)
+        {
+            var parameters = new[]
+            {
+               new Parameter("@ProgramId",programId),
+            };
+            try
+            {
+                return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetActiveJobByProgram, parameters, storedProcedure: true);
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

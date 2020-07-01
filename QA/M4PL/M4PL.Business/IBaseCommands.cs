@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IBaseCommands
 Purpose:
@@ -21,15 +21,13 @@ namespace M4PL.Business
 
         TEntity Get(long id);
 
-        IList<TEntity> Get();
-
         TEntity Post(TEntity entity);
 
         TEntity Put(TEntity entity);
 
-		TEntity Patch(TEntity entity);
+        TEntity Patch(TEntity entity);
 
-		int Delete(long id);
+        int Delete(long id);
 
         IList<IdRefLangName> Delete(List<long> ids, int statusId);
     }

@@ -1,5 +1,14 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
 //Programmer:                                   Prashant Aggarwal
@@ -11,7 +20,6 @@
 using M4PL.API.Filters;
 using M4PL.Business.Job;
 using M4PL.Entities.Job;
-using System.Collections.Generic;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -24,23 +32,23 @@ namespace M4PL.API.Controllers
     {
         private readonly IJobXcblInfoCommands _jobXcblInfoCommands;
 
-		/// <summary>
-		/// Function to get Job's Cargo details
-		/// </summary>
-		/// <param name="jobXcblInfoCommands">jobXcblInfoCommands</param>
-		public JobXcblInfosController(IJobXcblInfoCommands jobXcblInfoCommands)
+        /// <summary>
+        /// Function to get Job's Cargo details
+        /// </summary>
+        /// <param name="jobXcblInfoCommands">jobXcblInfoCommands</param>
+        public JobXcblInfosController(IJobXcblInfoCommands jobXcblInfoCommands)
             : base(jobXcblInfoCommands)
         {
-			_jobXcblInfoCommands = jobXcblInfoCommands;
+            _jobXcblInfoCommands = jobXcblInfoCommands;
         }
 
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("GetJobXcblInfo")]
-		public JobXcblInfo GetJobXcblInfo(long jobId, long gatewayId)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gatewayId);
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetJobXcblInfo")]
+        public JobXcblInfo GetJobXcblInfo(long jobId, long gatewayId)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gatewayId);
         }
 
         [CustomAuthorize]

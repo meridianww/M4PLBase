@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 Contact
 Purpose:                                      Contains objects related to Contact
@@ -297,23 +297,23 @@ namespace M4PL.Entities.Contact
 
         public int? ConTypeId { get; set; }
 
-		/// <summary>
-		/// Gets or sets the type of contact identifier.
-		/// </summary>
-		/// <value>
-		/// The ConTypeIdName identifier.
-		/// </value>
+        /// <summary>
+        /// Gets or sets the type of contact identifier.
+        /// </summary>
+        /// <value>
+        /// The ConTypeIdName identifier.
+        /// </value>
 
-		public string ConTypeIdName { get; set; }
+        public string ConTypeIdName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the contact's fullname.
-		/// </summary>
-		/// <value>
-		/// The ConFullName.
-		/// </value>
+        /// <summary>
+        /// Gets or sets the contact's fullname.
+        /// </summary>
+        /// <value>
+        /// The ConFullName.
+        /// </value>
 
-		public string ConFullName { get; set; }
+        public string ConFullName { get; set; }
 
         /// <summary>
         /// Gets or sets the contact's display name.
@@ -333,26 +333,26 @@ namespace M4PL.Entities.Contact
 
         public string ConOutlookId { get; set; }
 
-        public string BusinessAddress { get; set; }       
-        
+        public string BusinessAddress { get; set; }
+
         public int? ConUDF01 { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets ConCompanyId
-		/// </summary>
-		public long? ConCompanyId { get; set; }
+        /// <summary>
+        /// Gets Or Sets ConCompanyId
+        /// </summary>
+        public long? ConCompanyId { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets ConCompanyIdName
-		/// </summary>
-		public string ConCompanyIdName { get; set; }
+        /// <summary>
+        /// Gets Or Sets ConCompanyIdName
+        /// </summary>
+        public string ConCompanyIdName { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets CompanyType
-		/// </summary>
-		public string CompanyType { get; set; }
+        /// <summary>
+        /// Gets Or Sets CompanyType
+        /// </summary>
+        public string CompanyType { get; set; }
 
         public string JobSiteCode { get; set; }
-      
+
     }
 }

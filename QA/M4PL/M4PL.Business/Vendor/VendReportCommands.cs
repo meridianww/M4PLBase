@@ -2,16 +2,16 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 VendReportCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Vendor.VendReportCommands
 ===================================================================================================================*/
 using M4PL.Entities.Support;
 using M4PL.Entities.Vendor;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Vendor.VendReportCommands;
-using System;
 
 namespace M4PL.Business.Vendor
 {
@@ -82,14 +82,9 @@ namespace M4PL.Business.Vendor
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<VendReport> Get()
+        public VendReport Patch(VendReport entity)
         {
             throw new NotImplementedException();
         }
-
-		public VendReport Patch(VendReport entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

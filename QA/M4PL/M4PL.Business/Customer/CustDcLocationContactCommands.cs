@@ -2,16 +2,16 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              09/25/2018
 Program Name:                                 CustDcLocationContactCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Customer.CustDcLocationContactCommands
 ===================================================================================================================*/
 using M4PL.Entities.Customer;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Customer.CustDcLocationContactCommands;
-using System;
 
 namespace M4PL.Business.Customer
 {
@@ -94,14 +94,9 @@ namespace M4PL.Business.Customer
             return _commands.Get(activeuser, id, parentId);
         }
 
-        public IList<CustDcLocationContact> Get()
+        public CustDcLocationContact Patch(CustDcLocationContact entity)
         {
             throw new NotImplementedException();
         }
-
-		public CustDcLocationContact Patch(CustDcLocationContact entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

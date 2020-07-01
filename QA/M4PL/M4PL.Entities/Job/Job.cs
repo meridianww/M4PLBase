@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 Job
 Purpose:                                      Contains objects related to Job
@@ -492,7 +492,7 @@ namespace M4PL.Entities.Job
         public string JobSignText { get; set; }
         public string JobSignLatitude { get; set; }
         public string JobSignLongitude { get; set; }
-        public decimal? JobQtyOrdered { get; set; }
+        public int? JobQtyOrdered { get; set; }
         public int? JobQtyActual { get; set; }
         public int? JobQtyUnitTypeId { get; set; }
         public string JobQtyUnitTypeIdName { get; set; }
@@ -557,5 +557,17 @@ namespace M4PL.Entities.Job
         public int? JobServiceOrder { get; set; }
         public int? JobServiceActual { get; set; }
         public bool JobIsHavingPermission { get; set; }
+        public bool IsJobVocSurvey { get; set; }
+        public string ProFlags12 { get; set; }
+        public long CustomerId { get; set; }
+        public int? JobTransitionStatusId { get; set; }
+        public bool IsSellerTabEdited { get; set; }
+        public bool IsPODTabEdited { get; set; }
+		public string JobDriverAlert { get; set; }
+
+		public string JobSalesInvoiceNumber { get; set; }
+
+		public string JobPurchaseInvoiceNumber { get; set; }
+        public bool JobIsSchedule { get; set; }
     }
 }

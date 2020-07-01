@@ -2,14 +2,13 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IPrgRoleCommands
 Purpose:                                      Set of rules for PrgRoleCommands
 =============================================================================================================*/
 
 using M4PL.APIClient.ViewModels.Program;
-using M4PL.Entities.Program;
 
 namespace M4PL.APIClient.Program
 {
@@ -17,6 +16,6 @@ namespace M4PL.APIClient.Program
     /// Performs basic CRUD operation on the ProgramRole Entity
     /// </summary>
     public interface IPrgRoleCommands : IBaseCommands<ProgramRoleView>
-    {       
+    {
     }
 }

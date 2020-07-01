@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 Program
 Purpose:                                      Contains objects related to Program
@@ -216,11 +216,13 @@ namespace M4PL.Entities.Program
 
         public bool PckDay { get; set; }
 
-		public bool PrgRollUpBilling { get; set; }
-		public long? PrgRollUpBillingJobFieldId { get; set; }
-		public string PrgRollUpBillingJobFieldIdName { get; set; }
-		public bool PrgElectronicInvoice { get; set; }
+        public bool PrgRollUpBilling { get; set; }
+        public long? PrgRollUpBillingJobFieldId { get; set; }
+        public string PrgRollUpBillingJobFieldIdName { get; set; }
+        public bool PrgElectronicInvoice { get; set; }
 
         public bool PrgIsHavingPermission { get; set; }
-	}
+
+        public string PrgCustomerCode { get; set; }
+    }
 }

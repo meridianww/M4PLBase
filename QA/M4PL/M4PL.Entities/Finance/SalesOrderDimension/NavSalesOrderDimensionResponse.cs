@@ -12,12 +12,12 @@ using System.Collections.Generic;
 
 namespace M4PL.Entities.Finance.SalesOrderDimension
 {
-	public class NavSalesOrderDimensionResponse
-	{
-		[JsonProperty("@odata.context")]
-		public string ContextData { get; set; }
+    public class NavSalesOrderDimensionResponse
+    {
+        [JsonProperty("@odata.context")]
+        public string ContextData { get; set; }
 
-		[JsonProperty("value")]
-		public List<NavSalesOrderDimensionValues> NavSalesOrderDimensionValues { get; set; }
-	}
+        [JsonProperty("value")]
+        public List<NavSalesOrderDimensionValues> NavSalesOrderDimensionValues { get; set; }
+    }
 }

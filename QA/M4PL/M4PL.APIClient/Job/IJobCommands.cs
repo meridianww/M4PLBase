@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IJobCommands
 Purpose:                                      Set of rules for JobCommands
@@ -12,7 +12,6 @@ using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace M4PL.APIClient.Job
 {
@@ -41,10 +40,10 @@ namespace M4PL.APIClient.Job
 
         JobView GetJobByProgram(long id, long parentId);
 
-        IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId,bool isNullFIlter= false);
+        IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false);
         bool GetIsJobDataViewPermission(long recordId);
 
-		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
+        bool CreateJobFromCSVImport(JobCSVData jobCSVData);
 
         List<ChangeHistoryData> GetChangeHistory(long jobId);
     }

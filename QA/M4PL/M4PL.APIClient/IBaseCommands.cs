@@ -2,7 +2,7 @@
 //All Rights Reserved Worldwide
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              13/10/2017
 //Program Name:                                 IBaseCommands
 //Purpose:                                      Set the rules for BaseCommands
@@ -23,16 +23,14 @@ namespace M4PL.APIClient
 
         TView Get(long id);
 
-        IList<TView> Get();
-
         TView Post(TView entity);
 
         TView Put(TView entity);
 
         TView Delete(long id);
 
-		TView Patch(TView entity);
+        TView Patch(TView entity);
 
-		IList<IdRefLangName> Delete(List<long> ids, int statusId);
+        IList<IdRefLangName> Delete(List<long> ids, int statusId);
     }
 }

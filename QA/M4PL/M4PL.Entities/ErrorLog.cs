@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Error Log
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              02/10/2018
 Program Name:                                 Error log
 Purpose:                                      Contains objects related to Error log

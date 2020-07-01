@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 JobGateways
 //Purpose:                                      End point to interact with Job Gateways module
@@ -35,10 +44,10 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("GatewayWithParent")]
-        public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor)
+        public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction)
         {
             _jobGatewayCommands.ActiveUser = ActiveUser;
-            return _jobGatewayCommands.GetGatewayWithParent(id, parentId, entityFor);
+            return _jobGatewayCommands.GetGatewayWithParent(id, parentId, entityFor, is3PlAction);
         }
 
         [CustomAuthorize]
@@ -59,14 +68,14 @@ namespace M4PL.API.Controllers
             return _jobGatewayCommands.PutJobGatewayComplete(jobGateway);
         }
 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("JobAction")]
-        public IQueryable<JobAction> GetJobAction(long jobId)
-        {
-            _jobGatewayCommands.ActiveUser = ActiveUser;
-            return _jobGatewayCommands.GetJobAction(jobId).AsQueryable();
-        }
+        //[CustomAuthorize]
+        //[HttpGet]
+        //[Route("JobAction")]
+        //public IQueryable<JobAction> GetJobAction(long jobId)
+        //{
+        //    _jobGatewayCommands.ActiveUser = ActiveUser;
+        //    return _jobGatewayCommands.GetJobAction(jobId).AsQueryable();
+        //}
 
         [CustomAuthorize]
         [HttpPut]
@@ -140,6 +149,14 @@ namespace M4PL.API.Controllers
         {
             BaseCommands.ActiveUser = ActiveUser;
             return _jobGatewayCommands.PostContactCard(contact);
+        }
+        
+        [HttpGet]
+        [Route("UploadPODGateway")]
+        public bool InsJobGatewayPODIfPODDocExistsByJobId(long jobId)
+        {
+            _jobGatewayCommands.ActiveUser = ActiveUser;
+            return _jobGatewayCommands.InsJobGatewayPODIfPODDocExistsByJobId(jobId);
         }
     }
 }

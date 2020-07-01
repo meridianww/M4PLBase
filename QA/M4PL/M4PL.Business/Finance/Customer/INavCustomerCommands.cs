@@ -8,13 +8,15 @@ Program Name:                                 INavCustomerCommands
 Purpose:                                      Set of rules for NavCustomerCommands
 ===============================================================================================================*/
 using M4PL.Entities.Finance.Customer;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Finance.Customer
 {
-	/// <summary>
-	/// Provides the operations based on the Table name
-	/// </summary>
-	public interface INavCustomerCommands : IBaseCommands<NavCustomer>
-	{
-	}
+    /// <summary>
+    /// Provides the operations based on the Table name
+    /// </summary>
+    public interface INavCustomerCommands : IBaseCommands<NavCustomer>
+    {
+        IList<NavCustomer> GetAllNavCustomer();
+    }
 }

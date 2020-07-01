@@ -2,22 +2,48 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobGatewayCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobGatewayCommands
 ===================================================================================================================*/
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
-using System.Collections.Generic;
-using _commands = M4PL.DataAccess.Job.JobGatewayCommands;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using _commands = M4PL.DataAccess.Job.JobGatewayCommands;
+using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 
 namespace M4PL.Business.Job
 {
     public class JobGatewayCommands : BaseCommands<JobGateway>, IJobGatewayCommands
     {
+
+
+        public string NavAPIUrl
+        {
+            get { return M4PBusinessContext.ComponentSettings.NavAPIUrl; }
+        }
+
+        public string NavAPIUserName
+        {
+            get { return M4PBusinessContext.ComponentSettings.NavAPIUserName; }
+        }
+
+        public string NavAPIPassword
+        {
+            get { return M4PBusinessContext.ComponentSettings.NavAPIPassword; }
+        }
+
+        public string PODTransitionStatusId
+        {
+            get { return M4PBusinessContext.ComponentSettings.CompletedTransitionStatusId; }
+        }
+
         /// <summary>
         /// Get list of jobgateways data
         /// </summary>
@@ -39,10 +65,10 @@ namespace M4PL.Business.Job
             return _commands.Get(ActiveUser, id);
         }
 
-        public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor)
+        public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction)
         {
-            var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor);
-            result.ElectroluxProgramID = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor, is3PlAction);
+            result.IsSpecificCustomer = result.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
             return result;
         }
 
@@ -54,7 +80,9 @@ namespace M4PL.Business.Job
 
         public JobGateway Post(JobGateway jobGateway)
         {
-            return _commands.Post(ActiveUser, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+            var gateway = _commands.Post(ActiveUser, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+            PushDataToNav(gateway.JobID, jobGateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
+            return gateway;
         }
 
         /// <summary>
@@ -64,7 +92,27 @@ namespace M4PL.Business.Job
         /// <returns></returns>
         public JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
-            return _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+            var gateway = new JobGateway();
+            if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
+            {
+                List<Task> tasks = new List<Task>();
+                foreach (var item in jobGateway.JobIds[0].Split(','))
+                {
+                    tasks.Add(Task.Factory.StartNew(() =>
+                    {
+                        gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, 
+                            M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
+                    }));
+                }
+                Task.WaitAll(tasks.ToArray());
+            }
+            else
+            {
+                gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+            }
+
+            PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
+            return gateway;
         }
 
         /// <summary>
@@ -75,7 +123,9 @@ namespace M4PL.Business.Job
 
         public JobGateway Put(JobGateway jobGateway)
         {
-            return _commands.Put(ActiveUser, jobGateway);
+            var gateway = _commands.Put(ActiveUser, jobGateway);
+            PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
+            return gateway;
         }
 
         /// <summary>
@@ -85,7 +135,20 @@ namespace M4PL.Business.Job
         /// <returns></returns>
         public JobGateway PutWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
-            return _commands.PutWithSettings(ActiveUser, userSysSetting, jobGateway);
+            var gateway = _commands.PutWithSettings(ActiveUser, userSysSetting, jobGateway);
+            PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
+            return gateway;
+        }
+
+        public bool InsJobGatewayPODIfPODDocExistsByJobId(long jobId)
+        {
+            var gateway = _commands.InsJobGatewayPODIfPODDocExistsByJobId(ActiveUser, jobId);
+            if (gateway != null)
+            {
+                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, gateway.GwyCompleted, 0);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -120,25 +183,20 @@ namespace M4PL.Business.Job
             return _commands.PutJobGatewayComplete(ActiveUser, jobGateway);
         }
 
-        public IList<JobAction> GetJobAction(long jobId)
-        {
-            return _commands.GetJobAction(ActiveUser, jobId);
-        }
+        //public IList<JobAction> GetJobAction(long jobId)
+        //{
+        //    return _commands.GetJobAction(ActiveUser, jobId);
+        //}
 
         public JobGateway PutJobAction(JobGateway jobGateway)
         {
             return _commands.PutJobAction(ActiveUser, jobGateway);
         }
 
-        public IList<JobGateway> Get()
+        public JobGateway Patch(JobGateway entity)
         {
             throw new NotImplementedException();
         }
-
-		public JobGateway Patch(JobGateway entity)
-		{
-			throw new NotImplementedException();
-		}
 
         public JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle)
         {
@@ -159,5 +217,53 @@ namespace M4PL.Business.Job
         {
             return _commands.PostContactCard(ActiveUser, contact);
         }
+
+
+        public void PushDataToNav(long? jobId, string gatewayCode, bool gatewayStatus, int? JobTransitionStatusId)
+        {
+            List<int> completedTransitionStatus = PODTransitionStatusId.Split(',').Select(int.Parse).ToList();
+
+            if (jobId != null && gatewayStatus && (string.Equals(gatewayCode, "POD Upload", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(gatewayCode, "Will Call", StringComparison.OrdinalIgnoreCase) || (JobTransitionStatusId.HasValue && completedTransitionStatus.Contains((int)JobTransitionStatusId))))
+            {
+                var jobResult = _jobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
+                if (jobResult != null && jobResult.JobCompleted)
+                {
+                    Task.Run(() =>
+                    {
+                        bool isDeliveryChargeRemovalRequired = false;
+                        if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
+                        {
+                            isDeliveryChargeRemovalRequired = false;
+                        }
+                        else
+                        {
+                            isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                        }
+
+                        if (isDeliveryChargeRemovalRequired)
+                        {
+                            _jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Delete);
+                        }
+
+                        try
+                        {
+                            JobRollupHelper.StartJobRollUpProcess(jobResult, ActiveUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+                        }
+                        catch (Exception exp)
+                        {
+                            DataAccess.Logger.ErrorLogger.Log(exp, "Error while creating Order in NAV after job Completion.", "StartJobRollUpProcess", Utilities.Logger.LogType.Error);
+                        }
+
+                        if (isDeliveryChargeRemovalRequired)
+                        {
+                            _jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Active);
+                        }
+                    });
+                }
+            }
+        }
+
+
     }
 }

@@ -1,12 +1,11 @@
-﻿/*Copyright (2019) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
-//====================================================================================================================================================
-//Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Nikhil
-//Date Programmed:                              23/07/2019
-//Program Name:                                 ProgramBillableLocation
-//Purpose:                                      Contains Actions to render view on Program's Billable location  
-//====================================================================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
 
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
@@ -15,10 +14,8 @@ using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Program.Controllers
@@ -124,7 +121,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 ParentId = parentId,
                 LocationIds = string.Join(",", locations),
                 VendorIds = string.Join(",", vendors),
-                AssignedOn = System.DateTime.UtcNow
+                AssignedOn = Utilities.TimeUtility.GetPacificDateTime()
             };
 
             var result = _prgBillableLocationCommands.MapVendorBillableLocations(programVendorMap);

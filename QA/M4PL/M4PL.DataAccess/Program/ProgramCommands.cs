@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ProgramCommands
 Purpose:                                      Contains commands to perform CRUD on Program
@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -142,10 +143,10 @@ namespace M4PL.DataAccess.Program
                new Parameter("@prgDeliveryTimeDefault", program.PrgDeliveryTimeDefault),
                new Parameter("@prgPickUpTimeDefault", program.PrgPickUpTimeDefault),
                new Parameter("@parentId", program.ParentId),
-			   new Parameter("@prgRollUpBilling", program.PrgRollUpBilling),
-			   new Parameter("@prgRollUpBillingJobFieldId", program.PrgRollUpBillingJobFieldId),
-			   new Parameter("@prgElectronicInvoice", program.PrgElectronicInvoice),
-			};
+               new Parameter("@prgRollUpBilling", program.PrgRollUpBilling),
+               new Parameter("@prgRollUpBillingJobFieldId", program.PrgRollUpBillingJobFieldId),
+               new Parameter("@prgElectronicInvoice", program.PrgElectronicInvoice),
+            };
             return parameters;
         }
 
@@ -156,11 +157,11 @@ namespace M4PL.DataAccess.Program
                 new Parameter("@orgId", orgId)
                 ,new Parameter("@parentId", parentId)
                 ,new Parameter("@isCustNode", isCustNode)
-				,new Parameter("@entity", EntitiesAlias.Program.ToString()),
-				 new Parameter("@userId", activeUser.UserId),
-			    new Parameter("@roleId", activeUser.RoleId)
+                ,new Parameter("@entity", EntitiesAlias.Program.ToString()),
+                 new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId)
 
-			};
+            };
             var result = SqlSerializer.Default.DeserializeMultiRecords<TreeModel>(StoredProceduresConstant.GetProgramTreeViewData, parameters, storedProcedure: true);
             return result;
         }
@@ -205,7 +206,7 @@ namespace M4PL.DataAccess.Program
                 ,new Parameter("@OrgId", activeUser.OrganizationId)
                 ,new Parameter("@userId", activeUser.UserId)
                 ,new Parameter("@langCode", activeUser.LangCode)
-
+                ,new Parameter("@PacificDateTime", TimeUtility.GetPacificDateTime())
             };
             var result = false;
             await Task.Run(() =>
@@ -253,5 +254,17 @@ namespace M4PL.DataAccess.Program
                 return dtCopyPPPModel;
             }
         }
+
+        public static List<Entities.Program.Program> GetProgramsByCustomer(long custId)
+        {
+            var parameters = new[]
+        {
+                new Parameter("@CustId", custId)
+
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.Program>(StoredProceduresConstant.GetProgramsByCustomer, parameters, storedProcedure: true);
+            return result;
+        }
+
     }
 }

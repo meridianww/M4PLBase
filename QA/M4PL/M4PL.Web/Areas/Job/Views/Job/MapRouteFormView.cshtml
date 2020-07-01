@@ -1,8 +1,8 @@
 ﻿@*Copyright (2018) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+
     //====================================================================================================================================================
     //Program Title:                                Job Map Route
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              25/01/2018
     //Program Name:                                 Job Map Route Form View
     //Purpose:                                      Provides view for Job Map Route
@@ -11,10 +11,10 @@
 @using System.Web.UI.WebControls
 
 @model  M4PL.Web.Models.FormResult<M4PL.Entities.Job.JobMapRoute>
-@{
+@{    
     ViewBag.Title = Model.PageName;
     ViewBag.ModelData = Model.Record;
-} 
+}
 <div class="col-sm-12 col-md-12 col-lg-12 no-padding">
     @Html.DevExpress().RoundPanel(settings =>
 {
@@ -50,3 +50,4 @@
     });
 }).GetHtml()
 </div>
+

@@ -1,8 +1,8 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              13/10/2017
     //Program Name:                                 VendDcLocationView
     //Purpose:                                      Provides grid view for the VendDcLocation
@@ -24,6 +24,8 @@
     settings.Styles.Header.Wrap = DefaultBoolean.True;
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    //settings.Settings.VerticalScrollableHeight = 300;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
@@ -109,7 +111,7 @@
             settings.SetDetailRowTemplateContent(c =>
             {
                 childRoute.ParentRecordId = Convert.ToInt64(DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName));
-                childRoute.Filters = new M4PL.Entities.Support.Filter { Value = DataBinder.Eval(c.DataItem, "VdcLocationCode").ToString() };
+                childRoute.Filters = new M4PL.Entities.Support.Filter { Value = DataBinder.Eval(c.DataItem, "VdcLocationCode").ToString() , FieldName = "VdcLocationCode" };
                 childRoute.Url = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute);
                 var msg = WebUtilities.ShouldRenderDetailGrid(c.DataItem, ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands, ref childRoute);
                 if (string.IsNullOrEmpty(msg))
@@ -247,7 +249,7 @@
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
                 {
-                   column.SetFilterTemplateContent(lookup =>
+                    column.SetFilterTemplateContent(lookup =>
                     {
                         var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
                         if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
@@ -270,7 +272,7 @@
                             cs.Properties.ClientInstanceName = colSetting.ColColumnName;
                             cs.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
                             cs.Properties.TextField = "LangName";
-                            
+
                             cs.Properties.ValueField = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                             cs.Properties.ValueType = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
                             cs.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{M4PLWindow.DataView.OnComboBoxValueChanged(s, e, {0}, '{1}'); }}", Model.GridSetting.GridName, column.FieldName);

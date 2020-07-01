@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 BaseCommands
 Purpose:
@@ -21,12 +21,12 @@ namespace M4PL.DataAccess
         public static IList<TEntity> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo, string storedProcName, EntitiesAlias entitiesAlias, bool langCode = false)
         {
             var parameters = pagedDataInfo.PagedDataDefaultParams(activeUser, entitiesAlias, langCode);
-			if(entitiesAlias == EntitiesAlias.Job && pagedDataInfo.IsJobParentEntity)
-			{
-				storedProcName = StoredProceduresConstant.GetJobByCustomerView;
-			}
+            if (entitiesAlias == EntitiesAlias.Job && pagedDataInfo.IsJobParentEntity)
+            {
+                storedProcName = StoredProceduresConstant.GetJobByCustomerView;
+            }
 
-			var results = SqlSerializer.Default.DeserializeMultiRecords<TEntity>(storedProcName, parameters.ToArray(), storedProcedure: true);
+            var results = SqlSerializer.Default.DeserializeMultiRecords<TEntity>(storedProcName, parameters.ToArray(), storedProcedure: true);
             if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
                 pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
             else pagedDataInfo.TotalCount = 0;
@@ -66,11 +66,11 @@ namespace M4PL.DataAccess
             return result;
         }
 
-		public static TEntity Patch(ActiveUser activeUser, List<Parameter> entityParams, string storedProcName)
-		{
-			var result = SqlSerializer.Default.DeserializeSingleRecord<TEntity>(storedProcName, entityParams.ToArray(), storedProcedure: true);
-			return result;
-		}
+        public static TEntity Patch(ActiveUser activeUser, List<Parameter> entityParams, string storedProcName)
+        {
+            var result = SqlSerializer.Default.DeserializeSingleRecord<TEntity>(storedProcName, entityParams.ToArray(), storedProcedure: true);
+            return result;
+        }
 
         public static SetCollection GetSetCollection(SetCollection sets, ActiveUser activeUser, List<Parameter> entityParams, string storedProcName)
         {
@@ -79,14 +79,14 @@ namespace M4PL.DataAccess
             return sets;
         }
 
-		public static bool ExecuteScaler(string storedProcName, List<Parameter> parameters)
-		{
-			bool result = SqlSerializer.Default.ExecuteScalar<bool>(storedProcName, parameters.ToArray(), false, true);
+        public static bool ExecuteScaler(string storedProcName, List<Parameter> parameters)
+        {
+            bool result = SqlSerializer.Default.ExecuteScalar<bool>(storedProcName, parameters.ToArray(), false, true);
 
-			return result;
-		}
+            return result;
+        }
 
-		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, EntitiesAlias entity, int statusId, ReservedKeysEnum fieldName)
+        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, EntitiesAlias entity, int statusId, ReservedKeysEnum fieldName)
         {
             var parameters = new[]
             {

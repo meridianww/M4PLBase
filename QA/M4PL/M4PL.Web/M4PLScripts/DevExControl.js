@@ -1,8 +1,12 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+******************************************************************************/
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 DevExCtrl.js
 //Purpose:                                      For implementing DevExCtrl client side logic throughout the application
@@ -67,20 +71,52 @@ DevExCtrl.Ribbon = function () {
             return;
         }
 
-        if ((route.Action === "Copy") && route.RecordId && (route.RecordId > 0)) {
-            var dummy = document.createElement("input");
-            document.body.appendChild(dummy);
+        if ((route.Action === "Copy")) {
             var selectedText = M4PLCommon.Control.GetSelectedText();
-            dummy.setAttribute('value', selectedText);
-            dummy.select();
-            document.execCommand("copy");
             localStorage.setItem("CopiedText", selectedText);
-            document.body.removeChild(dummy);
+            //navigator.clipboard.writeText(selectedText).then(function () {
+            //    /* clipboard successfully set */
+            //}, function () {
+            //    /* clipboard write failed */
+            //});
+            return;
+        }
+        if ((route.Action === "Cut")) {
+            if (M4PLCommon.FocusedControlName) {
+                var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
+                if (currentControl.GetText() != "") {
+                    var selectedText = M4PLCommon.Control.GetSelectedText();
+                    localStorage.setItem("CopiedText", selectedText);
+                    //navigator.clipboard.writeText(selectedText).then(function () {
+                    //    /* clipboard successfully set */
+                    //}, function () {
+                    //    /* clipboard write failed */
+                    //});
+                    currentControl.SetText("");
+                }
+            }
             return;
         }
 
-        if ((route.Action === "Paste") && route.RecordId && (route.RecordId > 0) && M4PLCommon.FocusedControlName) {
-            M4PLCommon.Control.UpdateSelectedText();
+        if ((route.Action === "Paste")) {
+            var inputcontrol;
+            if (typeof window.prevFocus !== "undefined") {
+                inputcontrol = window.prevFocus;
+
+                if (inputcontrol != null && inputcontrol[0] != null) {
+                    var str = inputcontrol[0].id;
+                    var res = str.substring(0, str.lastIndexOf("_"));
+                    var clipText = localStorage.getItem("CopiedText");
+                    if (ASPxClientControl.GetControlCollection().GetByName(res) == null && clipText != undefined) {
+                        inputcontrol[0].value = clipText;
+                        //navigator.clipboard.readText().then(clipText => inputcontrol[0].value = clipText);
+                    }
+                    else {
+                        ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText)
+                        //navigator.clipboard.readText().then(clipText => ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText));
+                    }
+                }
+            }
             return;
         }
 
@@ -160,6 +196,69 @@ DevExCtrl.Ribbon = function () {
                 case "ExportPdf":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
+                case "DownloadAll":
+                    route = _onJobReportClick(route);
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        var result = M4PLCommon.DocumentStatus.IsAttachmentPresentForJob(route.RecordId);
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.DisplayMessage("Business Rule", "Please select specific any row", 2, 'JobDocumentPresent');
+                    }
+                    break;
+                case "WatchVideo":
+                    window.open(window.location.origin + "/m4pltraining");
+                    break;
+                case "DownloadBOL":
+                    route = _onJobReportClick(route);
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    break;
+                case "DownloadPOD":
+                    route = _onJobReportClick(route);
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(route.RecordId);
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.PODMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
+                case "DownloadTracking":
+                    route = _onJobReportClick(route);
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    break;
+                case "DownloadPriceReport":
+                    route = _onJobReportClick(route);
+                    var result = M4PLCommon.DocumentStatus.IsPriceCodeDataPresentForJob(route.RecordId);
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobPriceCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
+                case "DownloadCostReport":
+                    route = _onJobReportClick(route);
+                    var result = M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJob(route.RecordId);
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobCostCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
                 default:
                     if (route.Action === "Create" && (route.Controller === "OrgRefRole")) {
                         switch (route.Action) {
@@ -186,6 +285,7 @@ DevExCtrl.Ribbon = function () {
             route.OwnerCbPanel = "RibbonCbPanel";
             RibbonCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
         }
+        M4PLCommon.Error.CheckServerError();
     }
 
     var _onFilterClicked = function (s, e, route, ownerCbPanel, gridNameSuffix) {
@@ -238,11 +338,34 @@ DevExCtrl.Ribbon = function () {
         });
     }
 
+    var _onJobReportClick = function (route) {
+        var gridCtrl = null;
+        if (ASPxClientControl.GetControlCollection().GetByName("JobGridView") != null) {
+            gridCtrl = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+        }
+        else if (ASPxClientControl.GetControlCollection().GetByName("JobAdvanceReportGridView") != null) {
+            gridCtrl = ASPxClientControl.GetControlCollection().GetByName("JobAdvanceReportGridView");
+        }
+        else if (ASPxClientControl.GetControlCollection().GetByName("JobCardGridView") != null) {
+            gridCtrl = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
+        }
+
+        if (gridCtrl != null) {
+            var selectedIndex = gridCtrl.GetFocusedRowIndex();
+            if (selectedIndex >= 0) {
+                var ketValue = gridCtrl.GetItemKey(selectedIndex)
+                route.RecordId = ketValue != null && ketValue > 0 ? ketValue : route.RecordId;
+            }
+        }
+
+        return route;
+    }
+
     return {
         init: init,
         OnCommandExecuted: _onCommandExecuted,
         OnFilterClicked: _onFilterClicked,
-        DoCallBack: _doCallBack,
+        DoCallBack: _doCallBack
     }
 }();
 
@@ -498,7 +621,6 @@ DevExCtrl.ComboBox = function () {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         rprtVwrRoute.RecordId = customerId || 0;
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-
     };
 
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {
@@ -600,7 +722,7 @@ DevExCtrl.TreeView = function () {
                 route.Filters = {};
                 var nodeName = e.node.name.split('_');
                 route.RecordId = parseFloat(nodeName[(nodeName.length - 1)]);
-
+                route.Filters.FieldName = e.node.name;
                 var customerCode = _findCustomerCode(e.node.parent);
 
                 if (cplTreeView && !cplTreeView.InCallback()) {
@@ -758,6 +880,9 @@ DevExCtrl.TreeView = function () {
 
     var _programTreeViewInit = function (s, e) {
         _processNodes(s, s.GetRootNode());
+        if (s.GetSelectedNode() !== null && s.GetSelectedNode() != undefined) {
+            s.NodeClick.FireEvent(s, s.CreateNodeClickEventArgs(true, s.GetSelectedNode(), s.GetSelectedNode().GetHtmlElement(), MouseEvent));
+        }
     }
 
     var _processNodes = function (tree, node) {
@@ -770,15 +895,11 @@ DevExCtrl.TreeView = function () {
                     tree.SetSelectedNode(node);
                     popupMenu.cpClickedNode = node;
                     popupMenu.ShowAtElement(node.GetHtmlElement());
-
                     ASPxClientUtils.PreventEventAndBubble(evt);
                 };
                 ASPxClientUtils.AttachEventToElement(htmlElement, "contextmenu", handler);
             }
         }
-
-
-
         for (var i = 0; i < count; i++) {
             var childNode = node.GetNode(i);
             if (parseInt(childNode.name.split('_')[0]) !== 0) {
@@ -896,7 +1017,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount(); i++) {
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1049,29 +1170,32 @@ DevExCtrl.TreeList = function () {
         var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             var route = JSON.parse(contentCbPanelRoute);
+            route.IsJobParentEntityUpdated = false;
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 if (e.nodeKey.indexOf("_") == -1) {
                     route.ParentRecordId = e.nodeKey;
+                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
                 if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     isJobParentEntity = true;
+                    route.IsJobParentEntityUpdated = true;
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
-
-                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
+                route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
+                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack: true });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }
             else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
                 if (e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     isJobParentEntity = true;
+                    route.IsJobParentEntityUpdated = true;
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
-
                 }
-
+                
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }
@@ -1084,10 +1208,29 @@ DevExCtrl.TreeList = function () {
     var _onNodeDisable = function (s, e) {
 
     }
-
+    var _init = function (s, e, contentCbPanel, contentCbPanelRoute) {
+        var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
+        if (s.cpIsJobParent) {
+            isJobParentEntity = s.cpIsJobParent;
+        }
+        if (contentCbPanelRoute) {
+            var route = JSON.parse(contentCbPanelRoute);
+            if (route.ParentRecordId && route.EntityName == 'Job' && (route.Action == "DataView" || route.Action == "FormView" && route.ParentRecordId > 0)) {
+                if (contentCbPanel && contentCbPanelRoute && !contentCbPanel.InCallback()) {
+                    if (route.EntityName == 'Job' && isJobParentEntity) {
+                        IsDataView = route.Action === "DataView" ? true : false
+                        route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
+                    }
+                    contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
+                    DevExCtrl.Ribbon.DoCallBack(route);
+                }
+            }
+        }
+    }
     return {
         OnNodeClick: _onNodeClick,
-        OnNodeDisable: _onNodeDisable
+        OnNodeDisable: _onNodeDisable,
+        Init: _init
     };
 }();
 
@@ -1347,6 +1490,12 @@ DevExCtrl.PopupControl = function () {
         }
 
         s.SetVisible(true);
+        if (s.cpDisplayMessage.Operations[0].SysRefName === "Ok") {
+            $("#btnOk").focus();
+        }
+        else if (s.cpDisplayMessage.Operations[0].SysRefName === "Save") {
+            $("#btnSave").focus();
+        }
     }
 
     var _shown = function (s, e) {
@@ -1743,7 +1892,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

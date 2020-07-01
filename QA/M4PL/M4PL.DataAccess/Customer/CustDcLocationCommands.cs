@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 CustDcLocationCommands
 Purpose:                                      Contains commands to perform CRUD on CustDcLocation
@@ -109,7 +109,7 @@ namespace M4PL.DataAccess.Customer
         {
             var parameters = new List<Parameter>
            {
- 
+
                new Parameter("@conOrgId", custDcLocation.OrganizationId),
                new Parameter("@cdcCustomerId", custDcLocation.CdcCustomerID),
                new Parameter("@cdcItemNumber", custDcLocation.CdcItemNumber),

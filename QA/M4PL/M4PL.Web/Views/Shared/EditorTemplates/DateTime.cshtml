@@ -1,8 +1,8 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              13/10/2017
     //Program Name:                                 ValidationFormView
     //Purpose:                                      Provides view for Datetime fields
@@ -76,11 +76,11 @@
 
        if (columnSetting.ColColumnName.ToLower() == "gwyddpnew")
        {
-           var v = ((M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>)viewResult).Record.DefaultTime;
+           var defaultTime = ((M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>)viewResult).Record.DefaultTime;
 
-           if (v != null)
+           if (defaultTime != null)
            {
-               settings.Properties.ClientSideEvents.DropDown = string.Format("function(s, e){{ DevExCtrl.DateEdit.Data_DropDown(s,e, '{0}'); }}", v);
+               settings.Properties.ClientSideEvents.DropDown = string.Format("function(s, e){{ DevExCtrl.DateEdit.Data_DropDown(s,e, '{0}'); }}", defaultTime);
                settings.Properties.TimeSectionProperties.TimeEditProperties.AllowUserInput = false;
                settings.Properties.TimeSectionProperties.TimeEditProperties.SpinButtons.Enabled = false;
            }

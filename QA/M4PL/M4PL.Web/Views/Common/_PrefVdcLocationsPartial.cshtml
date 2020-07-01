@@ -9,7 +9,7 @@
             listBoxSettings.Name = "vdcPrefLocationsListBox";
             listBoxSettings.ControlStyle.Border.BorderWidth = 0;
             listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
-            listBoxSettings.Properties.ValueField = "VdcLocationCode";
+            listBoxSettings.Properties.ValueField = "Id";
             listBoxSettings.Properties.TextField = "VdcLocationCode";
 
             listBoxSettings.Properties.ValueType = typeof(string);
@@ -18,23 +18,23 @@
             listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
             listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
             listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownEdit.OnListBoxSelectionChanged";
-            //  listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownEdit.InitDestinationListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.selectedLocations));
+            listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownEdit.InitDestinationListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
             if (ViewData["DCLocationlist"] != null)
             {
                 foreach (var item in (IList<M4PL.APIClient.ViewModels.Vendor.VendDcLocationView>)ViewData["DCLocationlist"])
                 {
-                    listBoxSettings.Properties.Items.Add(item.VdcLocationCode, item.VdcLocationCode);
+                    listBoxSettings.Properties.Items.Add(item.VdcLocationCode, item.Id.ToString());
                 }
             }
 
-            if (Model.selectedLocations.Length != 0)
+            if (Model.SelectedDropDownStringArray.Length != 0)
             {
                 listBoxSettings.Init = (sender, e) =>
                 {
                     MVCxListBox cbl = (MVCxListBox)sender;
                     foreach (ListEditItem item in cbl.Items)
                     {
-                        item.Selected = Model.selectedLocations.Contains((string)item.Value);
+                        item.Selected = Model.SelectedDropDownStringArray.Contains((string)item.Value);
                     }
                 };
             }

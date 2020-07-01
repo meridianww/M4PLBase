@@ -45,10 +45,6 @@ namespace M4PL.Business.Signature
         {
             throw new NotImplementedException();
         }
-        public IList<JobSignature> Get()
-        {
-            throw new NotImplementedException();
-        }        
         public IList<JobSignature> GetPagedData(PagedDataInfo pagedDataInfo)
         {
             throw new NotImplementedException();

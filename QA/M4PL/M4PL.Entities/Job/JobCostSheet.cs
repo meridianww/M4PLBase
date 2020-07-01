@@ -134,7 +134,7 @@ namespace M4PL.Entities.Job
         /// </value>
         public double? CstMarkupPercent { get; set; }
 
-      
+
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
@@ -143,6 +143,8 @@ namespace M4PL.Entities.Job
         /// </value>
         public byte[] CstComments { get; set; }
 
-		public bool CstElectronicBilling { get; set; }
-	}
+        public bool CstElectronicBilling { get; set; }
+
+        public bool IsProblem { get; set; }
+    }
 }

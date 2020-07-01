@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 CustDocReferenceCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Customer.CustDocReferenceCommands
@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Customer;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Customer.CustDocReferenceCommands;
-using System;
 
 namespace M4PL.Business.Customer
 {
@@ -83,14 +83,9 @@ namespace M4PL.Business.Customer
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<CustDocReference> Get()
+        public CustDocReference Patch(CustDocReference entity)
         {
             throw new NotImplementedException();
         }
-
-		public CustDocReference Patch(CustDocReference entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

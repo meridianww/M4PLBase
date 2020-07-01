@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 JobDocReference
 //Purpose:                                      Contains Actions to render view on Job's Document Reference page
@@ -15,12 +24,12 @@ using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Web.Models;
+using M4PL.Web.Providers;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System;
-using M4PL.Web.Providers;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -48,7 +57,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new JobDocReferenceView();
+            _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : GetNextSequence();
             _formResult.SetupFormResult(_commonCommands, route);
 
             if (route.EntityName == EntitiesAlias.POD.ToString())
@@ -59,6 +68,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView(_formResult);
         }
+
+        private JobDocReferenceView GetNextSequence()
+        {
+            long Id = _jobDocReferenceCommands.GetNextSequence();
+            return new JobDocReferenceView() { Id = Id, IsNew = true };
+        }
+
         public override ActionResult AddOrEdit(JobDocReferenceView jobDocReferenceView)
         {
             jobDocReferenceView.IsFormView = true;
@@ -73,7 +89,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var result = jobDocReferenceView.Id > 0 ? _jobDocReferenceCommands.PutWithSettings(jobDocReferenceView) : _jobDocReferenceCommands.PostWithSettings(jobDocReferenceView);
+            var result = !jobDocReferenceView.IsNew ? _jobDocReferenceCommands.PutWithSettings(jobDocReferenceView) : _jobDocReferenceCommands.PostWithSettings(jobDocReferenceView);
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)
@@ -147,15 +163,12 @@ namespace M4PL.Web.Areas.Job.Controllers
                     case JobDocReferenceType.Document:
                     default:
                         pageControlResult.SelectedTabIndex = 0;
-                        pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocumentDataView;
                         break;
                     case JobDocReferenceType.POD:
                         pageControlResult.SelectedTabIndex = 1;
-                        pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocDeliveryPodDataView;
                         break;
                     case JobDocReferenceType.Damaged:
                         pageControlResult.SelectedTabIndex = 2;
-                        pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocDamagedDataView;
                         break;
                 }
 
@@ -242,8 +255,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.POD);
 
-            var currentGridName = string.Format("DocDeliveryPod_{0}", WebUtilities.GetGridName(route));
-            base.DataView(strRoute, currentGridName);
+            var currentGridName = WebUtilities.GetGridName(route);
+            base.DataView(strRoute, WebUtilities.GetGridName(route));
             if (selectedId > 0)
                 _gridResult.FocusedRowId = selectedId;
             if (_gridResult.Records.Any(c => c.JobCompleted) || (_gridResult.Records.Count == 0 && _commonCommands.GetIsJobCompleted(route.ParentRecordId)))
@@ -271,16 +284,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.Document);
-            var currentGridName = string.Format("DocumentPod_{0}", WebUtilities.GetGridName(route));
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = null;// string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.Document);
+            var currentGridName = WebUtilities.GetGridName(route);
             base.DataView(strRoute, currentGridName);
             if (selectedId > 0)
                 _gridResult.FocusedRowId = selectedId;
-            if (_gridResult.Records.Any(c => c.JobCompleted) || (_gridResult.Records.Count == 0 && _commonCommands.GetIsJobCompleted(route.ParentRecordId)))
-            {
-                _gridResult.Operations.Remove(OperationTypeEnum.New);
-                _gridResult.GridSetting.ContextMenu.Remove(_commonCommands.GetOperation(OperationTypeEnum.New));
-            }
             _gridResult.GridSetting.GridName = currentGridName;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
@@ -301,7 +309,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.Damaged);
-            var currentGridName = string.Format("DocDamagedDataView_{0}", WebUtilities.GetGridName(route));
+            var currentGridName = WebUtilities.GetGridName(route);
             base.DataView(strRoute, currentGridName);
             if (selectedId > 0)
                 _gridResult.FocusedRowId = selectedId;

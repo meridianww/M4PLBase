@@ -1,0 +1,1 @@
+update JOBDL000Master set  JobIsSchedule = 0 where JobIsSchedule IS NULL 

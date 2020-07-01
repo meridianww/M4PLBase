@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 OrgRefRole
 Purpose:                                      Contains objects related to OrgRefRole
@@ -36,10 +36,10 @@ namespace M4PL.Entities.Organization
 
         public byte[] OrgComments { get; set; }
 
-     
+
         public bool PrxJobDefaultAnalyst { get; set; }
         public bool PrxJobDefaultResponsible { get; set; }
-        
+
 
         public bool PrxJobGWDefaultAnalyst { get; set; }
 

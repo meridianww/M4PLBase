@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 ProgramRefGatewayDefault
 //Purpose:                                      Contains Actions to render view on Program's Ref Gateway Default page
@@ -17,6 +26,7 @@ using M4PL.Entities.Support;
 using M4PL.Web.Models;
 using M4PL.Web.Providers;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -50,7 +60,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             var byteArray = new List<ByteArray> {
                 descriptionByteArray, commentByteArray
             };
-            var messages = ValidateMessages(prgRefGatewayDefaultView);
+            var messages = ValidateMessages(prgRefGatewayDefaultView, EntitiesAlias.PrgRefGatewayDefault, parentId: prgRefGatewayDefaultView.PgdProgramID);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
@@ -168,42 +178,42 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #region RichEdit
 
-		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayDescription.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PgdGatewayDescription.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
-
-		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayComment.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PgdGatewayComment.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
-
-		#endregion RichEdit
-
-
-		#region  Copy Paste Feature
-
-		public PartialViewResult CopyTo(string strRoute)
+        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
         {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);            
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayDescription.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PgdGatewayDescription.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
+
+        public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayComment.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PgdGatewayComment.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
+
+        #endregion RichEdit
+
+
+        #region  Copy Paste Feature
+
+        public PartialViewResult CopyTo(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CopyPasteModel copyPaste = new CopyPasteModel();
             copyPaste.SourceRoute = new MvcRoute(route, "ProgramDefaultGateways");
             copyPaste.DestinationRoute = new MvcRoute(route, "PPPTree");
@@ -275,5 +285,32 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #endregion
 
+        public PartialViewResult NextGatewayPartial(string selectedItems, long programId = 0, string shipmentType = "", string orderType = "", string gatewayType = "")
+        {
+            var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
+            if (!string.IsNullOrEmpty(selectedItems))
+                DropDownEditViewModel.SelectedDropDownStringArray = selectedItems.Split(',');
+            else
+                DropDownEditViewModel.SelectedDropDownStringArray = new string[] { };
+
+            shipmentType = !string.IsNullOrEmpty(shipmentType) ? shipmentType : "Cross-Dock Shipment";
+            orderType = !string.IsNullOrEmpty(orderType) ? orderType : "Original";
+            gatewayType = !string.IsNullOrEmpty(gatewayType) ? gatewayType : "0";
+
+            if (Convert.ToInt32(gatewayType) != (int)JobGatewayType.Gateway)
+                gatewayType = "0";
+
+            string resultCondition = " AND PrgRefGatewayDefault.PgdShipmentType = '" + shipmentType + "' AND PrgRefGatewayDefault.PgdOrderType = '" + orderType + "' AND PrgRefGatewayDefault.GatewayTypeId = " + gatewayType;
+            var NextGatewydropDownData = new M4PL.Entities.Support.DropDownInfo
+            {
+                PageSize = 500,
+                Entity = EntitiesAlias.PrgRefGatewayDefault,
+                EntityFor = EntitiesAlias.Program,
+                ParentId = programId,
+                WhereConditionExtention = resultCondition,
+            };
+            ViewData["AvailableGateways"] = _commonCommands.GetPagedSelectedFieldsByTable(NextGatewydropDownData.Query());
+            return PartialView("_NextGatewayPartial", DropDownEditViewModel);
+        }
     }
 }

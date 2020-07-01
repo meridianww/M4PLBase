@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ContactCommands
 Purpose:                                      Contains commands to perform CRUD on Contact
@@ -49,7 +49,7 @@ namespace M4PL.DataAccess.Contact
 
         public static Entities.Contact.Contact Post(ActiveUser activeUser, Entities.Contact.Contact contact)
         {
-            var parameters = GetParameters(contact,activeUser.OrganizationId.ToString());
+            var parameters = GetParameters(contact, activeUser.OrganizationId.ToString());
             parameters.Add(new Parameter("@jobId", contact.JobId));
             parameters.AddRange(activeUser.PostDefaultParams(contact));
             return Post(activeUser, parameters, StoredProceduresConstant.InsertContact);
@@ -129,7 +129,7 @@ namespace M4PL.DataAccess.Contact
         /// <param name="contact"></param>
         /// <returns></returns>
 
-        private static List<Parameter> GetParameters(Entities.Contact.Contact contact,string conOrgId)
+        private static List<Parameter> GetParameters(Entities.Contact.Contact contact, string conOrgId)
         {
             var parameters = new List<Parameter>
            {
@@ -170,7 +170,7 @@ namespace M4PL.DataAccess.Contact
                new Parameter("@conCompanyId", contact.ConCompanyId),
                new Parameter("@jobSiteCode", contact.JobSiteCode),
                new Parameter("@parentId", contact.ParentId)
-               
+
 
            };
             return parameters;

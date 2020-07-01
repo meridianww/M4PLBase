@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 VendDcLocationContactCommands
 Purpose:                                      Contains commands to perform CRUD on VendDcLocationContact
@@ -76,18 +76,18 @@ namespace M4PL.DataAccess.Vendor
         /// <returns></returns>
         public static VendDcLocationContact Put(ActiveUser activeUser, VendDcLocationContact vendDcLocationContact)
         {
-			List<Parameter> parameters = null;
-			string spName = string.Empty;
-			if (vendDcLocationContact.IsFormView)
-			{
-				parameters = GetParameters(vendDcLocationContact);
-				spName = StoredProceduresConstant.UpdateVendDcLocationContact;
-			}
-			else
-			{
-				parameters = GetParameterForBatchEdit(vendDcLocationContact);
-				spName = StoredProceduresConstant.BatchUpdateVendDcLocationContact;
-			}
+            List<Parameter> parameters = null;
+            string spName = string.Empty;
+            if (vendDcLocationContact.IsFormView)
+            {
+                parameters = GetParameters(vendDcLocationContact);
+                spName = StoredProceduresConstant.UpdateVendDcLocationContact;
+            }
+            else
+            {
+                parameters = GetParameterForBatchEdit(vendDcLocationContact);
+                spName = StoredProceduresConstant.BatchUpdateVendDcLocationContact;
+            }
 
             parameters.AddRange(activeUser.PutDefaultParams(vendDcLocationContact.Id, vendDcLocationContact));
             return Put(activeUser, parameters, spName);
@@ -130,44 +130,44 @@ namespace M4PL.DataAccess.Vendor
                new Parameter("@conContactMSTRID", vendDcLocationContact.ContactMSTRID),
                new Parameter("@conCodeId", vendDcLocationContact.ConCodeId),
                new Parameter("@statusId", vendDcLocationContact.StatusId),
-			   new Parameter("@conOrgId", 1),
-			   new Parameter("@conContactTitle", vendDcLocationContact.ConTitle)
-		   };
+               new Parameter("@conOrgId", 1),
+               new Parameter("@conContactTitle", vendDcLocationContact.ConTitle)
+           };
             return parameters;
         }
 
-		/// <summary>
-		/// Gets list of parameters required for the Customer DcLocation Contact Module
-		/// </summary>
-		/// <param name="vendDcLocationContact"></param>
-		/// <returns></returns>
-		private static List<Parameter> GetParameterForBatchEdit(VendDcLocationContact vendDcLocationContact)
-		{
-			var parameters = new List<Parameter>
-		   {
-			   new Parameter("@conVendDcLocationId", vendDcLocationContact.ConPrimaryRecordId),
-			   new Parameter("@conItemNumber", vendDcLocationContact.ConItemNumber),
-			   new Parameter("@conContactMSTRID", vendDcLocationContact.ContactMSTRID),
-			   new Parameter("@conCodeId", vendDcLocationContact.ConCodeId),
-			   new Parameter("@statusId", vendDcLocationContact.StatusId),
+        /// <summary>
+        /// Gets list of parameters required for the Customer DcLocation Contact Module
+        /// </summary>
+        /// <param name="vendDcLocationContact"></param>
+        /// <returns></returns>
+        private static List<Parameter> GetParameterForBatchEdit(VendDcLocationContact vendDcLocationContact)
+        {
+            var parameters = new List<Parameter>
+           {
+               new Parameter("@conVendDcLocationId", vendDcLocationContact.ConPrimaryRecordId),
+               new Parameter("@conItemNumber", vendDcLocationContact.ConItemNumber),
+               new Parameter("@conContactMSTRID", vendDcLocationContact.ContactMSTRID),
+               new Parameter("@conCodeId", vendDcLocationContact.ConCodeId),
+               new Parameter("@statusId", vendDcLocationContact.StatusId),
                                            
                //Related to Contact
                new Parameter("@conTitleId", vendDcLocationContact.ConTitleId),
-			   new Parameter("@conLastName", vendDcLocationContact.ConLastName),
-			   new Parameter("@conFirstName", vendDcLocationContact.ConFirstName),
-			   new Parameter("@conMiddleName", vendDcLocationContact.ConMiddleName),
-			   new Parameter("@conJobTitle", vendDcLocationContact.ConTitle),
-			   new Parameter("@conOrgId", vendDcLocationContact.ConOrgId),
-			   new Parameter("@conTypeId", vendDcLocationContact.ConTypeId),
-			   new Parameter("@conTableTypeId", vendDcLocationContact.ConTableTypeId),
-			   new Parameter("@conEmailAddress", vendDcLocationContact.ConEmailAddress),
-			   new Parameter("@conEmailAddress2", vendDcLocationContact.ConEmailAddress2),
-			   new Parameter("@conBusinessPhone", vendDcLocationContact.ConBusinessPhone),
-			   new Parameter("@conBusinessPhoneExt", vendDcLocationContact.ConBusinessPhoneExt),
-			   new Parameter("@conMobilePhone", vendDcLocationContact.ConMobilePhone),
-			   new Parameter("@conCompanyId", vendDcLocationContact.ConCompanyId),
-		   };
-			return parameters;
-		}
-	}
+               new Parameter("@conLastName", vendDcLocationContact.ConLastName),
+               new Parameter("@conFirstName", vendDcLocationContact.ConFirstName),
+               new Parameter("@conMiddleName", vendDcLocationContact.ConMiddleName),
+               new Parameter("@conJobTitle", vendDcLocationContact.ConTitle),
+               new Parameter("@conOrgId", vendDcLocationContact.ConOrgId),
+               new Parameter("@conTypeId", vendDcLocationContact.ConTypeId),
+               new Parameter("@conTableTypeId", vendDcLocationContact.ConTableTypeId),
+               new Parameter("@conEmailAddress", vendDcLocationContact.ConEmailAddress),
+               new Parameter("@conEmailAddress2", vendDcLocationContact.ConEmailAddress2),
+               new Parameter("@conBusinessPhone", vendDcLocationContact.ConBusinessPhone),
+               new Parameter("@conBusinessPhoneExt", vendDcLocationContact.ConBusinessPhoneExt),
+               new Parameter("@conMobilePhone", vendDcLocationContact.ConMobilePhone),
+               new Parameter("@conCompanyId", vendDcLocationContact.ConCompanyId),
+           };
+            return parameters;
+        }
+    }
 }

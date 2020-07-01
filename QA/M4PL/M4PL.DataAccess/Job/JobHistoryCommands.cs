@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4PL.DataAccess.Common;
+﻿using M4PL.DataAccess.Common;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
@@ -15,7 +12,9 @@ namespace M4PL.DataAccess.Job
     {
         public static IList<JobHistory> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
-            return GetChangeHistory(pagedDataInfo.RecordId, activeUser);
+            var result = GetChangeHistory(pagedDataInfo.RecordId, activeUser);
+            pagedDataInfo.TotalCount = result != null ? result.Count() : 0;
+            return result;
         }
 
         public static List<JobHistory> GetChangeHistory(long jobId, ActiveUser activeUser)

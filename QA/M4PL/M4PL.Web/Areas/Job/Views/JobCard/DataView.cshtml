@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Prasanta Mahankuda
@@ -29,14 +29,21 @@
     {
         cardResponse = (M4PL.Entities.Job.JobCardRequest)TempData["CardTtile"];
     }
+    if (!Model.SessionProvider.ActiveUser.IsSysAdmin)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
+    }
 }
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
+    settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
     settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
     settings.Styles.Header.Wrap = DefaultBoolean.True;
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 350;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
@@ -67,7 +74,7 @@
                 {
                     if (cardResponse != null)
                     {
-                        ViewContext.Writer.Write("<div class='job-card-title-grid'>" + cardResponse.CardType  + " - " + cardResponse.CardName +"  " + "</div>");
+                        ViewContext.Writer.Write("<div class='job-card-title-grid'>" + cardResponse.CardType + " - " + cardResponse.CardName + "  " + "</div>");
                     }
                     else
                     {
@@ -116,6 +123,7 @@
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
+    ////settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
 
     //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
@@ -156,7 +164,7 @@
                     column.SortOrder = colState.SortOrder;
                 };
 
-                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobCard && colSetting.ColColumnName == "Id")
+                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobCard && colSetting.ColColumnName == "JobCustomerSalesOrder")
                 {
                     column.SetDataItemTemplateContent(container =>
                     {
@@ -164,8 +172,8 @@
                         {
                             hlSettings.Name = "HyperLink_" + container.KeyValue;
                             hlSettings.NavigateUrl = "javascript:void(0)";
-                            hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
-                            hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
+                            hlSettings.Properties.Text = Convert.ToString(container.Text);
+                            hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId, entityFor){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0}, '{1}');}}", container.KeyValue, EntitiesAlias.JobCard.ToString());
                         }).Render();
 
                     });
@@ -522,7 +530,7 @@
     {
         settings.HtmlDataCellPrepared = (s, e) =>
         {
-            if(e.DataColumn.FieldName == "JobOriginDateTimePlanned")
+            if (e.DataColumn.FieldName == "JobOriginDateTimePlanned")
             {
                 if (e.GetValue("JobColorCode") != null)
                 {

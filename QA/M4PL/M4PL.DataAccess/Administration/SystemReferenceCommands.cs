@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 {Class name} like SystemReferenceCommands
 Purpose:                                      Contains commands to perform CRUD on SystemReference
@@ -41,6 +41,11 @@ namespace M4PL.DataAccess.Administration
             return Get(activeUser, id, StoredProceduresConstant.GetSystemReference, langCode: true);
         }
 
+        public static List<SystemReference> GetSystemRefrenceList()
+        {
+            return SqlSerializer.Default.DeserializeMultiRecords<SystemReference>(StoredProceduresConstant.GetAllSysRefOption, parameter: null, storedProcedure: true);
+        }
+
         /// <summary>
         /// Creates a new systemReference record
         /// </summary>
@@ -52,7 +57,7 @@ namespace M4PL.DataAccess.Administration
         {
             var parameters = GetParameters(systemReference, activeUser);
             parameters.Add(new Parameter("@enteredBy", activeUser.UserName));
-            parameters.Add(new Parameter("@dateEntered", System.DateTime.UtcNow));
+            parameters.Add(new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()));
             return Post(activeUser, parameters, StoredProceduresConstant.InsertSystemReference);
         }
 
@@ -68,7 +73,7 @@ namespace M4PL.DataAccess.Administration
             var parameters = GetParameters(systemReference, activeUser);
             parameters.Add(new Parameter("@id", systemReference.Id));
             parameters.Add(new Parameter("@changedBy", activeUser.UserName));
-            parameters.Add(new Parameter("@dateChanged", System.DateTime.UtcNow));
+            parameters.Add(new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateSystemReference);
         }
 

@@ -2,13 +2,12 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobReport
 Purpose:                                      Contains objects related to JobReport
 ==========================================================================================================*/
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace M4PL.Entities.Job
@@ -55,6 +54,16 @@ namespace M4PL.Entities.Job
         public string ProductType { get; set; }
         public string JobChannel { get; set; }
         public string DateTypeName { get; set; }
+        //public bool IsEnabledAddtionalfield { get; set; }
+        public bool Manifest { get; set; }
+        //public string CgoPackagingTypeId { get; set; }
+        //public string CgoPackagingTypeIdName { get; set; }
+        //public int? CgoWeightUnitTypeId { get; set; }
+        //public string CgoWeightUnitTypeIdName { get; set; }
+        //public int JobPartsOrdered { get; set; }
+        public long CargoId { get; set; }
+        public string CargoIdName { get; set; }
+        public string PackagingCode { get; set; }
         #endregion
 
     }

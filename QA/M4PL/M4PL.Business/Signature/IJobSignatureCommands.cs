@@ -8,7 +8,6 @@ Program Name:                                 IJobSignatureCommands
 Purpose:                                      Set of rules for IJobSignatureCommands
 =============================================================================================================*/
 
-using M4PL.Entities.Support;
 using M4PL.Entities.Signature;
 
 namespace M4PL.Business.Signature

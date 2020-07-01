@@ -1,8 +1,8 @@
 ﻿@*Copyright (2018) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              10/07/2018
     //Program Name:                                 JobGatewayActionView
     //Purpose:                                      Provides view for Job Gateway Action
@@ -23,7 +23,8 @@
     attachmentRoute.SetParent(EntitiesAlias.JobGateway, Model.Record.Id);
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var actionEnumToCompare = WebUtilities.JobGatewayActions.NotAction;
-    var isEdit = Model.Permission == Permission.ReadOnly ? false : true;
+    //var isEdit = Model.Permission == Permission.ReadOnly ? false : true;
+    var isEdit = Session["isEdit"] != null ? (bool)Session["isEdit"] : true; 
     Model.Record.GwyGatewaySortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.GwyGatewaySortOrder;
 
     if ((bool)Session["isEdit"])
@@ -44,8 +45,8 @@
             }
             Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColIsReadOnly = false;
         }
-
-        var actionToCompare = Regex.Replace(Model.Record.CurrentAction, @"\s+", "");
+        var result = Model.Record.CurrentAction.Contains("3PL") ? "ThreePL" : Model.Record.CurrentAction;
+        var actionToCompare = Regex.Replace(result, @"\s+", "");
         actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
     }
@@ -56,7 +57,7 @@
     var crgoDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
     var exceptionDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
     var exStatusDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
-    if (Model.Record.ProgramID == Model.Record.ElectroluxProgramID)
+    if (Model.Record.IsSpecificCustomer)
     {
         if (Model.Record.CurrentAction.ToLower() == "exception")
         {
@@ -126,7 +127,10 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprWindow, new { Name = "GwyUprWindow" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyAddtionalComment, new { Name = "GwyAddtionalComment" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ProgramID, new { Name = "ProgramID" }).ToHtmlString());
-        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ElectroluxProgramID, new { Name = "ElectroluxProgramID" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsSpecificCustomer, new { Name = "IsSpecificCustomer" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.StatusCode, new { Name = "StatusCode" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsGatewayCalled, new { Name = "IsGatewayCalled" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyTitle, new { Name = "GwyTitle" }).ToHtmlString());
         #endregion
 
         if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Canceled)
@@ -140,15 +144,26 @@
             ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprDate, new { Name = "GwyUprDate" }).ToHtmlString());
         }
 
+        if(actionEnumToCompare == WebUtilities.JobGatewayActions.ThreePL)
+        {
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyPerson").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyPhone").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyEmail").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyPreferredMethod").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyTitle").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColIsReadOnly = false;
+        }
         ViewContext.Writer.Write("<div class='row no-margin'>");
-        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding schedul-details'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPerson).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPhone).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyEmail).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPreferredMethod, new { JobPreferredMethod = Model.Record.GwyPreferredMethod }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyTitle).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("</div>");
-
+        if (!Model.Record.IsGatewayCalled)
+        {
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding schedul-details'>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPerson).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPhone).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyEmail).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPreferredMethod, new { GwyPreferredMethod = Model.Record.GwyPreferredMethod }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyTitle).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("</div>");
+        }
         if (actionEnumToCompare == WebUtilities.JobGatewayActions.Canceled)
         {
             ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
@@ -174,7 +189,7 @@
                                           });
                                       });
                                   });
-                                  if(Model.Record.ProgramID == Model.Record.ElectroluxProgramID)
+                                  if(Model.Record.IsSpecificCustomer)
                                   {
                                       contactEmailsettings.Items.AddGroupItem(eReschedulesettings =>
                                       {
@@ -221,7 +236,10 @@
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyLwrDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = false, DefaultTime = Model.Record.GwyLwrDate, IsEditable = isEdit }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyUprDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = Model.Record.GwyUprDate, IsEditable = isEdit }).ToHtmlString() + "</div>");
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              if (!Model.Record.IsGatewayCalled)
+                                              {
+                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              }
                                           });
                                       });
                                   });
@@ -248,7 +266,6 @@
                                           n.Caption = "";
                                           n.SetNestedContent(() =>
                                           {
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.DateEmail, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
 
@@ -284,21 +301,33 @@
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Schedule Date";
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Schedule Date";
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
                                                }
                                                else
                                                {
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Reschedule Date";
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Reschedule Date";
-                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   if (!Model.Record.IsGatewayCalled)
+                                                   {
+                                                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   }
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                                }
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               if (!Model.Record.IsGatewayCalled)
+                                               {
+                                                   //ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
+                                               else
+                                               {
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
+
                                            });
                                        });
                                    });
-                                   if (Model.Record.ProgramID == Model.Record.ElectroluxProgramID)
+                                   if (Model.Record.IsSpecificCustomer)
                                    {
                                        if (Model.Record.CurrentAction != "Schedule")
                                        {
@@ -349,12 +378,18 @@
                                               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPCurrent, new { Name = "GwyDDPCurrent" }).ToHtmlString());
                                               //ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.DateComment, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
-
+                                              if (!Model.Record.IsGatewayCalled)
+                                              {
+                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                              }
+                                              else
+                                              {
+                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-17 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                              }
                                           });
                                       });
                                   });
-                                  if (Model.Record.ProgramID == Model.Record.ElectroluxProgramID)
+                                  if (Model.Record.IsSpecificCustomer)
                                   {
                                       contactEmailsettings.Items.AddGroupItem(eReschedulesettings =>
                                       {
@@ -364,7 +399,10 @@
                                               n.Caption = "";
                                               n.SetNestedContent(() =>
                                               {
-                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }) + "</div>");
+                                                  if (!Model.Record.IsGatewayCalled)
+                                                  {
+                                                      ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }) + "</div>");
+                                                  }
                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exceptionDropDownViewModel) }) + "</div>");
                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exStatusDropDownViewModel) }) + "</div>");
                                                   ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>");
@@ -379,6 +417,46 @@
 
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
+        }
+        else if (actionEnumToCompare == WebUtilities.JobGatewayActions.ThreePL)
+        {
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+
+            @Html.DevExpress().FormLayout(
+                               contactEmailsettings =>
+                               {
+                                   contactEmailsettings.Name = "OriginDatePlanned";
+                                   contactEmailsettings.ControlStyle.CssClass = "delivery-date";
+                                   contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                                   {
+                                       cEmailsettings.Caption = "Origin Date Planned(ODP)";
+                                       cEmailsettings.Items.Add(n =>
+                                       {
+                                           n.Caption = "";
+                                           n.SetNestedContent(() =>
+                                           {
+                                               Model.Record.StatusCode = string.Empty;
+                                               Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColAliasName = "Arrival Date";
+                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+
+                                               if (!Model.Record.IsGatewayCalled)
+                                               {
+                                                   //ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
+                                               else
+                                               {
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
+                                           });
+                                       });
+                                   });
+                               }
+                           ).GetHtml();
+
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
         }
         else
         {
@@ -433,10 +511,15 @@
 
     if (actionEnumToCompare == WebUtilities.JobGatewayActions.EMail)
     {
-        @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
+        if (!Model.Record.IsGatewayCalled)
+        {
+          @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
+        }
     }
-
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
+    if (!Model.Record.IsGatewayCalled)
+    {
+        @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
+    }
 }
 <input type="hidden" name="gvVisibleIndex" id="gvVisibleIndex" />
 <input type="hidden" name="hf" id="hf" />

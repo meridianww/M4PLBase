@@ -1,8 +1,8 @@
 ﻿@*Copyright (2018) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
-    //Programmer:                                   Akhil
+    //Programmer:                                   Kirty Anurag
     //Date Programmed:                              10/07/2018
     //Program Name:                                 JobGatewayActionView
     //Purpose:                                      Provides view for Job Gateway Action
@@ -17,7 +17,7 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
 @{
     ViewBag.Title = Model.PageName;
-    var checkChangedEvent = "DevExCtrl.CheckBox.CancelOrderActionCheckedChanged(s, e, 'DateCancelled_popup')";
+    //var checkChangedEvent = "DevExCtrl.CheckBox.CancelOrderActionCheckedChanged(s, e, 'DateCancelled_popup')";
     var attachmentRoute = new MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
     attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
     attachmentRoute.SetParent(EntitiesAlias.JobGateway, Model.Record.Id);

@@ -9,20 +9,27 @@
 //===================================================================================================================
 
 using M4PL.APIClient.ViewModels.Finance;
-using System;
+using M4PL.Entities;
+using Newtonsoft.Json;
+using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.APIClient.Finance
 {
-	public class NavPriceCodeCommands : BaseCommands<NavPriceCodeView>,
-		INavPriceCodeCommands
-	{
-		public override string RouteSuffix
-		{
-			get { return "NavPriceCode"; }
-		}
-	}
+    public class NavPriceCodeCommands : BaseCommands<NavPriceCodeView>,
+        INavPriceCodeCommands
+    {
+        public override string RouteSuffix
+        {
+            get { return "NavPriceCode"; }
+        }
+
+        public IList<NavPriceCodeView> GetAllPriceCode()
+        {
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetAllPriceCode"), ActiveUser);
+            var result = RestClient.Execute(request);
+            return JsonConvert.DeserializeObject<ApiResult<List<NavPriceCodeView>>>(result.Content).Results?.FirstOrDefault();
+        }
+    }
 }

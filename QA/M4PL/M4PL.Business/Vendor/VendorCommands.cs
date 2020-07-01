@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 VendorCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Vendor.VendorCommands
@@ -11,8 +11,6 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Vendor.VendorCommands;
-using M4PL.Entities.Vendor;
-using System;
 
 namespace M4PL.Business.Vendor
 {
@@ -83,14 +81,9 @@ namespace M4PL.Business.Vendor
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<Entities.Vendor.Vendor> Get()
+        public Entities.Vendor.Vendor Patch(Entities.Vendor.Vendor entity)
         {
-            throw new NotImplementedException();
+            return _commands.Patch(ActiveUser, entity);
         }
-
-		public Entities.Vendor.Vendor Patch(Entities.Vendor.Vendor entity)
-		{
-			return _commands.Patch(ActiveUser, entity);
-		}
-	}
+    }
 }

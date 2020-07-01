@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 Account
 //Purpose:                                      End point to interact with Account module
@@ -21,7 +30,7 @@ using Orbit.WebApi.Extensions.Validation;
 using Orbit.WebApi.Security.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Configuration;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
@@ -37,6 +46,7 @@ namespace M4PL.API.Controllers
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
+
         /// <summary>
         /// Gets this instance.
         /// </summary>
@@ -380,7 +390,8 @@ namespace M4PL.API.Controllers
         {
             // Ugly hack: I use a server-side HTTP POST because I cannot directly invoke the service (it is deeply hidden in the OAuthAuthorizationServerHandler class)
             HttpRequest request = HttpContext.Current.Request;
-            string tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + "/Token";
+            string tokenServiceUrl = ConfigurationManager.AppSettings["TokenURL"];
+
             using (var client = new HttpClient())
             {
                 var requestParams = new List<KeyValuePair<string, string>>
@@ -409,6 +420,7 @@ namespace M4PL.API.Controllers
                 var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
                 return await client.PostAsync(tokenServiceUrl, requestParamsFormUrlEncoded);
             }
+
         }
 
         [HttpGet]
@@ -435,7 +447,7 @@ namespace M4PL.API.Controllers
 
             };
             _command.ActiveUser = activeUser;
-          
+
             return activeUser;
         }
 

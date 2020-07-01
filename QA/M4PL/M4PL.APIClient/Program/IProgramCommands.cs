@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IProgramCommands
 Purpose:                                      Set of rules for ProgramCommands
@@ -30,6 +30,6 @@ namespace M4PL.APIClient.Program
 
         IList<TreeModel> ProgramCopyTree(long programId, long? parentId, bool isCustNode, bool isSource);
 
-        Task<bool> CopyPPPModel(CopyPPPModel copyPPPModel);
+        bool CopyPPPModel(CopyPPPModel copyPPPModel);
     }
 }

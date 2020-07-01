@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IJobCommands
 Purpose:                                      Set of rules for JobCommands
@@ -10,6 +10,8 @@ Purpose:                                      Set of rules for JobCommands
 
 using M4PL.Entities;
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.Business.Job
@@ -40,13 +42,15 @@ namespace M4PL.Business.Job
         Entities.Job.Job GetJobByProgram(long id, long parentId);
 
         IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false);
-		
-		bool UpdateJobAttributes(long jobId);
-		bool InsertJobComment(JobComment comment);
-		bool InsertJobGateway(long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode);
-		long CreateJobFromEDI204(long eshHeaderID);
+
+        bool UpdateJobAttributes(long jobId);
+        bool InsertJobComment(JobComment comment);
+        bool InsertJobGateway(long jobId, string gatewayStatusCode);
+        long CreateJobFromEDI204(long eshHeaderID);
         bool GetIsJobDataViewPermission(long recordId);
-		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
-		List<ChangeHistoryData> GetChangeHistory(long jobId);
-	}
+        bool CreateJobFromCSVImport(JobCSVData jobCSVData);
+        List<ChangeHistoryData> GetChangeHistory(long jobId);
+        int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser);
+        List<Entities.Job.Job> GetActiveJobByProgramId(long programId);
+    }
 }

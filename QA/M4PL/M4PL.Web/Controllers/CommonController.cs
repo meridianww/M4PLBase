@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/10/2017
 //Program Name:                                 Common
 //Purpose:                                      Contains Actions to get static and page related information
@@ -13,26 +22,24 @@ using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.ViewModels;
 using M4PL.Entities;
+using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using M4PL.Web;
 using M4PL.Web.Models;
 using M4PL.Web.Providers;
 using M4PL_Apln.Models;
 using Newtonsoft.Json;
 using System;
-
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-using M4PL.Web;
-using M4PL.Entities.Administration;
-using System.Configuration;
-
 namespace M4PL.Web.Controllers
 {
-    public class CommonController : MvcBaseController
+    public class CommonController : MvcBaseController 
     {
         public CommonController(ICommonCommands commonCommands)
         {
@@ -66,26 +73,39 @@ namespace M4PL.Web.Controllers
             return _commonCommands.GetIdRefLangNames(lookupId);
         }
 
-        public PartialViewResult GetDropDownViewTemplate(long? selectedId = 0, string selectedCountry = "")
+        public PartialViewResult GetDropDownViewTemplate(long? selectedId = 0, string selectedCountry = "", long? contactId = 0)
         {
             var dropDownViewModel = new DropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
-            {
                 dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
-            }
             else if (Request.Params["strDropDownViewModel"] != null)
-            {
                 dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
-            }
+
             dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
             if (selectedId > 0)
                 dropDownViewModel.SelectedId = selectedId;
             if (!string.IsNullOrEmpty(selectedCountry))
                 dropDownViewModel.SelectedCountry = selectedCountry;
-            if (Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName] != null)
+            if (dropDownViewModel.Entity == EntitiesAlias.OrgRefRole
+                && SessionProvider.ViewPagedDataSession.ContainsKey(EntitiesAlias.SystemAccount)
+                && SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo != null
+                && SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId > 0
+                && Convert.ToInt64(dropDownViewModel.ParentId) == 0)
             {
-                ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
+                contactId = contactId.HasValue && contactId.Value > 0 ? contactId.Value :
+                    SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId;
             }
+            if (contactId.HasValue && contactId.Value > 0)
+            {
+                dropDownViewModel.ParentId = contactId;
+                dropDownViewModel.SelectedId = null;
+                if (SessionProvider.ViewPagedDataSession.ContainsKey(EntitiesAlias.SystemAccount))
+                    SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId = contactId.Value;
+            }
+
+            if (Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName] != null)
+                ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
+
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             return PartialView(MvcConstants.DropDownPartial, dropDownViewModel);
         }
@@ -364,7 +384,7 @@ namespace M4PL.Web.Controllers
                 });
             }
 
-            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => x.DeepCopy()).ToList();
+            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && (defaultRoute.Entity == EntitiesAlias.JobCargo ? true : !GetPrimaryKeyColumns().Contains(c.ColColumnName))).Select(x => x.DeepCopy()).ToList();
             ViewData[MvcConstants.DefaultGroupByColumns] = columnSettingsFromColumnAlias.Where(x => x.ColIsGroupBy).Select(x => x.ColColumnName).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
@@ -428,12 +448,12 @@ namespace M4PL.Web.Controllers
         public PartialViewResult PrefVdcLocationsPartial(string selectedItems)
         {
             var DropDownEditViewModel = new DropDownEditViewModel();
-            string result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
-                ? _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
-            if (!string.IsNullOrEmpty(result))
-                DropDownEditViewModel.selectedLocations = result.Split(',');
+            IList<PreferredLocation> result = _commonCommands != null && _commonCommands.ActiveUser != null
+                ? SessionProvider.ActiveUser.PreferredLocation : null;
+            if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/)
+                DropDownEditViewModel.SelectedDropDownStringArray = result.Select(t => t.Id.ToString()).Distinct()?.ToArray();// result.Split(',');
             else
-                DropDownEditViewModel.selectedLocations = new string[] { };
+                DropDownEditViewModel.SelectedDropDownStringArray = new string[] { };
             var RibbondropDownData = new M4PL.Entities.Support.DropDownInfo
             {
                 PageSize = 500,
@@ -505,6 +525,21 @@ namespace M4PL.Web.Controllers
             return Json(new { status = true, lookupId = _commonCommands.GetLookupIdByName(lookupName) }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetDocumentStatusByJobId(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(jobId) }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult IsPriceCodeDataPresentForJob(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult IsCostCodeDataPresentForJob(long jobId)
+        {
+            return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetContactType(string lookupName)
         {
             return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
@@ -528,6 +563,10 @@ namespace M4PL.Web.Controllers
             var warningTime = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysWarningTime).ToInt();
             var popUpTimeMins = (timeout - warningTime) * 60;
             var idealTimeMins = DateTime.Now.Subtract(SessionProvider.ActiveUser.LastAccessDateTime).TotalSeconds;
+            if (SessionProvider.ActiveUser.LastRoute != null
+                && SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ViewJobCardViewDashboard
+                && SessionProvider.ActiveUser.LastRoute.Controller == "JobCard")
+                idealTimeMins = 1;
             var displayMessage = new DisplayMessage();
             if (popUpTimeMins <= idealTimeMins)
                 displayMessage.Code = DbConstants.WarningTimeOut;
@@ -612,7 +651,7 @@ namespace M4PL.Web.Controllers
                 }
             }
 
-            if (route.Area == EntitiesAlias.Job.ToString() 
+            if (route.Area == EntitiesAlias.Job.ToString()
                 && route.Controller == EntitiesAlias.JobGateway.ToString())
             {
                 var CheckedData = _commonCommands.GetGatewayTypeByJobID(route.RecordId);
@@ -1062,9 +1101,10 @@ namespace M4PL.Web.Controllers
                 _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             }
             var result = _commonCommands.AddorEditPreferedLocations(selectedItems, _commonCommands.ActiveUser.ConTypeId);
+            SessionProvider.ActiveUser.PreferredLocation = result;
             return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult UpdateJobReportFormViewRoute(long jobId)
+        public JsonResult UpdateJobReportFormViewRoute(long jobId, EntitiesAlias entityFor)
         {
             if (SessionProvider != null && SessionProvider.ActiveUser != null && jobId > 0)
             {
@@ -1072,6 +1112,7 @@ namespace M4PL.Web.Controllers
                 var jobFormViewRoute = new MvcRoute(SessionProvider.ActiveUser.CurrentRoute, "FormView", 0, 0, "OwnerCbPanel");
                 jobFormViewRoute.Entity = EntitiesAlias.Job;
                 jobFormViewRoute.Area = EntitiesAlias.Job.ToString();
+                jobFormViewRoute.ParentEntity = entityFor;
                 jobFormViewRoute.ParentRecordId = 0;
                 jobFormViewRoute.RecordId = jobId;
                 jobFormViewRoute.IsPBSReport = true; //// job advance report redirection
@@ -1080,6 +1121,33 @@ namespace M4PL.Web.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetErrorMessageRoute()
+        {
+            string errorMessage = string.Empty;
+            if (Session["Application_Error"] != null)
+            {
+                errorMessage = Convert.ToString(Session["Application_Error"]);
+                Session["Application_Error"] = null;
+                var errorLog = new ErrorLog
+                {
+                    ErrRelatedTo = WebApplicationConstants.DXCallBackError,
+                    ErrInnerException = errorMessage,
+                    ErrMessage = "Devexpress call back issue",
+                    ErrSource = SessionProvider.ActiveUser.LastRoute != null ? SessionProvider.ActiveUser.LastRoute.Entity.ToString() : "CallBack Issue",
+                    ErrStackTrace = errorMessage,
+                    ErrAdditionalMessage = SessionProvider.ActiveUser.LastRoute != null
+                    ? JsonConvert.SerializeObject(SessionProvider.ActiveUser.LastRoute) : string.Empty
+                };
+                _commonCommands = _commonCommands ?? new CommonCommands { ActiveUser = SessionProvider.ActiveUser };
+                var mvcPageAction = SessionProvider.MvcPageAction;
+
+                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.ApplicationError);
+                //displayMessage.Description = errorMessage;
+                return Json(displayMessage, JsonRequestBehavior.AllowGet);
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
         }
     }
 }

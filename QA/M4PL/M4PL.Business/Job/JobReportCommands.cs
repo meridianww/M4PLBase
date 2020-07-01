@@ -2,16 +2,16 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobReportCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobReportCommands
 ===================================================================================================================*/
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobReportCommands;
-using System;
 
 namespace M4PL.Business.Job
 {
@@ -82,15 +82,10 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<JobReport> Get()
+        public JobReport Patch(JobReport entity)
         {
             throw new NotImplementedException();
         }
-
-		public JobReport Patch(JobReport entity)
-		{
-			throw new NotImplementedException();
-		}
         public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
         {
             return _commands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);

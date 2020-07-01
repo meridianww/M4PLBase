@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 IJobCommands
 Purpose:                                      Set of rules for JobCommands
@@ -21,6 +21,6 @@ namespace M4PL.APIClient.Job
     public interface IJobReportCommands : IBaseCommands<JobReportView>
     {
         IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport = false);
-        IList<JobReport> GetDropDownDataForLocation(long customerID,string entity);
+        IList<JobReport> GetDropDownDataForLocation(long customerID, string entity);
     }
 }

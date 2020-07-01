@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 PrgVendLocationCommands
 Purpose:                                      Client to consume M4PL API called PrgVendLocationController
@@ -48,9 +48,9 @@ namespace M4PL.APIClient.Program
             var route = string.Format("{0}/{1}?assign={2}&parentId={3}", RouteSuffix, "MapVendorLocations", assign, parentId);
 
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
-               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(ids)).Content).Results.FirstOrDefault();
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(ids)).Content).Results?.FirstOrDefault();
 
-            return result;
+            return result.HasValue ? (bool)result : false;
         }
 
         public bool MapVendorLocations(ProgramVendorMap programVendorMap)
@@ -62,9 +62,9 @@ namespace M4PL.APIClient.Program
             var route = string.Format("{0}/{1}", RouteSuffix, "MapVendorLocations");
 
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
-               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(programVendorMap)).Content).Results.FirstOrDefault();
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(programVendorMap)).Content).Results?.FirstOrDefault();
 
-            return result;
+            return result.HasValue ? (bool)result : false;
         }
     }
 }

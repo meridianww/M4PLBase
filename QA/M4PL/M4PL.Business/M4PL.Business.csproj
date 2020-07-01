@@ -129,12 +129,14 @@
     <Compile Include="JobRollup\JobRollupCommands.cs" />
     <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\IJobAttachmentCommands.cs" />
     <Compile Include="Job\IJobHistorysCommands.cs" />
     <Compile Include="Job\IJobXcblInfoCommands.cs" />
     <Compile Include="Job\IJobEDIXcblCommands.cs" />
     <Compile Include="Job\IJobCardCommands.cs" />
     <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobAttachmentCommands.cs" />
     <Compile Include="Job\JobHistorysCommands.cs" />
     <Compile Include="Job\JobXcblInfoCommands.cs" />
     <Compile Include="Job\JobEDIXcblCommands.cs" />
@@ -247,6 +249,8 @@
     <Compile Include="Survey\ISurveyUserCommands.cs" />
     <Compile Include="Survey\JobSurveyCommands.cs" />
     <Compile Include="Survey\SurveyUserCommands.cs" />
+    <Compile Include="Training\TrainingCommands.cs" />
+    <Compile Include="Training\ITrainingCommands.cs" />
     <Compile Include="Vendor\IVendDcLocationContactCommands.cs" />
     <Compile Include="Vendor\IVendReportCommands.cs" />
     <Compile Include="Vendor\IVendBusinessTermCommands.cs" />
@@ -290,11 +294,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="M4PL.Business.config" />
+    <None Include="M4PL.Business.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="StyleSheets\JobBOL.xslt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StyleSheets\JobTracking.xslt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

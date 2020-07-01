@@ -2,25 +2,24 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobCommands
 Purpose:                                      Contains commands to call DAL logic for {Namespace:Class name} like M4PL.DAL.Job.JobCommands
 ===================================================================================================================*/
 
+using M4PL.Business.XCBL.HelperClasses;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
-using System.Collections.Generic;
-using _commands = M4PL.DataAccess.Job.JobCommands;
-using _rollupCommands = M4PL.DataAccess.JobRollup.JobRollupCommands;
-using System;
-using M4PL.Entities.JobRollup;
-using System.Threading.Tasks;
-using M4PL.Entities;
-using System.Linq;
 using M4PL.Utilities;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using _commands = M4PL.DataAccess.Job.JobCommands;
 
 namespace M4PL.Business.Job
 {
@@ -70,9 +69,9 @@ namespace M4PL.Business.Job
 
         public Entities.Job.Job Post(Entities.Job.Job job)
         {
-            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
-            bool isUpdateRequired = programId == job.ProgramID ? false : true;
-            return _commands.Post(ActiveUser, job, isUpdateRequired);
+            long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
+            bool isUpdateRequired = customerId == job.CustomerId ? false : true;
+            return _commands.Post(ActiveUser, job, isUpdateRequired, isManualUpdate: true);
         }
 
         /// <summary>
@@ -84,14 +83,41 @@ namespace M4PL.Business.Job
         public Entities.Job.Job Put(Entities.Job.Job job)
         {
             ActiveUser activeUser = ActiveUser;
-            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
-            bool isUpdateRequired = programId == job.ProgramID ? false : true;
-            Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate : isUpdateRequired);
+            long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
+            bool isUpdateRequired = customerId == job.CustomerId ? false : true;
+            Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate: isUpdateRequired, isServiceCall: false, customerId: customerId, isManualUpdate: true);
             if (jobResult != null && jobResult.JobCompleted)
             {
                 Task.Run(() =>
                 {
-                    JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+                    bool isDeliveryChargeRemovalRequired = false;
+                    if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
+                    {
+                        isDeliveryChargeRemovalRequired = false;
+                    }
+                    else
+                    {
+                        isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                    }
+
+                    if (isDeliveryChargeRemovalRequired)
+                    {
+                        _commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete);
+                    }
+
+                    try
+                    {
+                        JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+                    }
+                    catch (Exception exp)
+                    {
+                        DataAccess.Logger.ErrorLogger.Log(exp, "Error while creating Order in NAV after job Completion.", "StartJobRollUpProcess", Utilities.Logger.LogType.Error);
+                    }
+
+                    if (isDeliveryChargeRemovalRequired)
+                    {
+                        _commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Active);
+                    }
                 });
             }
 
@@ -175,11 +201,6 @@ namespace M4PL.Business.Job
             return _commands.GetJobByProgram(ActiveUser, id, parentId);
         }
 
-        public IList<Entities.Job.Job> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         public Entities.Job.Job Patch(Entities.Job.Job entity)
         {
             throw new NotImplementedException();
@@ -207,9 +228,9 @@ namespace M4PL.Business.Job
             return _commands.InsertJobComment(ActiveUser, comment);
         }
 
-        public bool InsertJobGateway(long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
+        public bool InsertJobGateway(long jobId, string gatewayStatusCode)
         {
-            return _commands.InsertJobGateway(ActiveUser, jobId, shippingAppointmentReasonCode, shippingStatusReasonCode);
+            return _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode);
         }
 
         public long CreateJobFromEDI204(long eshHeaderID)
@@ -244,6 +265,32 @@ namespace M4PL.Business.Job
             return _commands.GetChangeHistory(jobId, ActiveUser);
         }
 
+        public bool UpdateJobInvoiceDetail(JobInvoiceData jobInvoiceData)
+        {
+            bool result = false;
+            if (jobInvoiceData?.JobId > 0)
+            {
+                var existingJobDetails = _commands.GetJobByProgram(ActiveUser, jobInvoiceData.JobId, 0);
+                if (existingJobDetails?.Id > 0)
+                {
+                    existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
+                    var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails, false, true, true, isManualUpdate: true);
+                    result = updatedJobDetails?.Id > 0 ? true : false;
+                }
+
+                if (result && jobInvoiceData.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId && jobInvoiceData.IsCustomerUpdateRequired)
+                {
+                    var deliveryUpdateModel = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobInvoiceData.JobId, ActiveUser);
+                    if (deliveryUpdateModel != null)
+                    {
+                        ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdateModel, jobInvoiceData.JobId);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
         {
             int noOfThreads = 10;
@@ -272,6 +319,17 @@ namespace M4PL.Business.Job
             }
 
             return true;
+        }
+
+        public int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser)
+        {
+            return _commands.UpdateJobCompleted(custId, programId, jobId, deliveryDate, includeNullableDeliveryDate, ActiveUser);
+
+        }
+
+        public List<Entities.Job.Job> GetActiveJobByProgramId(long programId)
+        {
+            return _commands.GetActiveJobByProgramId(programId);
         }
     }
 }

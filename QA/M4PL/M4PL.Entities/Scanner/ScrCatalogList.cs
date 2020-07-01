@@ -2,12 +2,11 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ScrCatalogList
 Purpose:                                      Contains objects related to ScrCatalogList
 ==========================================================================================================*/
-using System.Text;
 
 namespace M4PL.Entities.Scanner
 {

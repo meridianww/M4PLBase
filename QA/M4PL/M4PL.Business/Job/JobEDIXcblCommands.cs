@@ -10,14 +10,14 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobEDIXcblCommands;
-using System;
 
 namespace M4PL.Business.Job
 {
     public class JobEDIXcblCommands : BaseCommands<JobEDIXcbl>, IJobEDIXcblCommands
-	{
+    {
         /// <summary>
         /// Get list of job cargo data
         /// </summary>
@@ -39,13 +39,13 @@ namespace M4PL.Business.Job
             return _commands.Get(ActiveUser, id);
         }
 
-		/// <summary>
-		/// Creates a newjob cargo record
-		/// </summary>
-		/// <param name="jobEDIXcbl"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Creates a newjob cargo record
+        /// </summary>
+        /// <param name="jobEDIXcbl"></param>
+        /// <returns></returns>
 
-		public JobEDIXcbl Post(JobEDIXcbl jobEDIXcbl)
+        public JobEDIXcbl Post(JobEDIXcbl jobEDIXcbl)
         {
             return _commands.Post(ActiveUser, jobEDIXcbl);
         }
@@ -83,14 +83,9 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<JobEDIXcbl> Get()
+        public JobEDIXcbl Patch(JobEDIXcbl entity)
         {
             throw new NotImplementedException();
         }
-
-		public JobEDIXcbl Patch(JobEDIXcbl entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

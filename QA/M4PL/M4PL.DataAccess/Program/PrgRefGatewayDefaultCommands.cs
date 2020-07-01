@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 PrgRefGatewayDefaultCommands
 Purpose:                                      Contains commands to perform CRUD on PrgRefGatewayDefault
@@ -13,8 +13,10 @@ using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Program
 {
@@ -79,6 +81,7 @@ namespace M4PL.DataAccess.Program
         public static PrgRefGatewayDefault PutWithSettings(ActiveUser activeUser, SysSetting userSysSetting, PrgRefGatewayDefault prgRefGatewayDefault)
         {
             var parameters = GetParameters(prgRefGatewayDefault, userSysSetting);
+            parameters.Add(new Parameter("@InstallStatusId", prgRefGatewayDefault.InstallStatusId));
             parameters.AddRange(activeUser.PutDefaultParams(prgRefGatewayDefault.Id, prgRefGatewayDefault));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdatePrgRefGatewayDefault);
         }
@@ -134,8 +137,12 @@ namespace M4PL.DataAccess.Program
                new Parameter("@pgdShipmentType", prgRefGatewayDefault.PgdShipmentType),
                new Parameter("@statusId", prgRefGatewayDefault.StatusId),
                new Parameter("@pgdGatewayResponsible", prgRefGatewayDefault.PgdGatewayResponsible),
-			   new Parameter("@pgdGatewayDefaultComplete", prgRefGatewayDefault.PgdGatewayDefaultComplete),
-			   new Parameter("@pgdGatewayAnalyst", prgRefGatewayDefault.PgdGatewayAnalyst),
+               new Parameter("@pgdGatewayDefaultComplete", prgRefGatewayDefault.PgdGatewayDefaultComplete),
+               new Parameter("@pgdGatewayAnalyst", prgRefGatewayDefault.PgdGatewayAnalyst),
+               new Parameter("@PgdGatewayStatusCode", prgRefGatewayDefault.PgdGatewayStatusCode),
+               new Parameter("@MappingId", prgRefGatewayDefault.MappingId),
+               new Parameter("@TransitionStatusId", prgRefGatewayDefault.TransitionStatusId),
+               new Parameter("@PgdGatewayDefaultForJob", prgRefGatewayDefault.PgdGatewayDefaultForJob)
               // new Parameter("@where",string.Format(" AND {0}.{1} ={2} AND {0}.{3}='{4}' AND {0}.{5}='{6}' ",prgRefGatewayDefault.GetType().Name ,PrgRefGatewayDefaultWhereColms.GatewayTypeId,prgRefGatewayDefault.GatewayTypeId.ToString(),PrgRefGatewayDefaultWhereColms.PgdOrderType,prgRefGatewayDefault.PgdOrderType, PrgRefGatewayDefaultWhereColms.PgdShipmentType,prgRefGatewayDefault.PgdShipmentType))
             };
             if (userSysSetting != null && userSysSetting.Settings != null)
@@ -165,6 +172,27 @@ namespace M4PL.DataAccess.Program
                 parameters.Add(new Parameter("@where", whereCondition));
             }
             return parameters;
+        }
+
+        public static bool IsDefaultCompletedExist(string whereCondition, long programId)
+        {
+            bool isDefaultCompletedExist = false;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@WhereCondition", whereCondition),
+               new Parameter("@programId", programId)
+            };
+
+            try
+            {
+                isDefaultCompletedExist = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.IsDefaultCheckforProgramGatewayCombination, parameters.ToArray(), false, true);
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Error occuring in method IsDefaultCheckforProgramGatewayCombination", "IsDefaultCheckforProgramGatewayCombination", Utilities.Logger.LogType.Error);
+            }
+
+            return isDefaultCompletedExist;
         }
     }
 }

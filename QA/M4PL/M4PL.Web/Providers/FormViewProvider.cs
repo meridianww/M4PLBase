@@ -1,8 +1,17 @@
-﻿/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
+//Programmer:                                   Kirty Anurag
 //Date Programmed:                              10/13/2017
 //Program Name:                                 FormViewProvider
 //Purpose:                                      Methods and properties related to FormViewProvider
@@ -31,7 +40,7 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.Organization, new string[] { "Id", "OrgCode", "OrgTitle" } },
                     { EntitiesAlias.Customer, new string[] { "Id", "CustCode", "CustTitle" } },
                   //  { EntitiesAlias.SecurityByRole, new string[] { "Id", "RoleCode", "SecLineOrder" } },
-                    { EntitiesAlias.Program, new string[] { "Id",  "PrgProgramCode" } },
+                    { EntitiesAlias.Program, new string[] { "Id", "PrgCustomerCode", "PrgProgramCode" } },
                     { EntitiesAlias.Job, new string[] { "Id", "JobSiteCode", "JobConsigneeCode" } },
                     { EntitiesAlias.VendDcLocation, new string[] { "Id", "VdcItemNumber", "VdcLocationCode" } },
                     { EntitiesAlias.PrgVendLocation, new string[] { "Id", "PvlItemNumber","PvlLocationCode" } },
@@ -62,7 +71,8 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.JobStatusId, new string[] { "Id", "JobStatusId" } },
                     { EntitiesAlias.JobCargo, new string[] { "Id", "CgoPartNumCode","CgoTitle","CgoSerialNumber" } },
                     { EntitiesAlias.GwyExceptionCode, new string[] { "Id", "JgeTitle", "JgeReasonCode" } },
-                    { EntitiesAlias.GwyExceptionStatusCode, new string[] { "Id", "ExStatusDescription" } }
+                    { EntitiesAlias.GwyExceptionStatusCode, new string[] { "Id", "ExStatusDescription" } },
+                    { EntitiesAlias.PrgRefGatewayDefault, new string[] { "Id", "PgdGatewayCode" } }
                 };
             }
         }
@@ -231,9 +241,9 @@ namespace M4PL.Web.Providers
                 CompanyId = companyId,
                 IsRequiredAll = isRequiredAll,
                 ParentEntity = viewResult.CallBackRoute != null ? viewResult.CallBackRoute.ParentEntity : EntitiesAlias.Contact,
-                GatewayAction = maxLengthField,
+                ControlAction = maxLengthField,
             };
-        }       
+        }
         #endregion Long DropDown
 
         #region String DropDown
@@ -512,9 +522,11 @@ namespace M4PL.Web.Providers
             get
             {
                 return new Dictionary<EntitiesAlias, string[]>
-                {
+                {   
                     //{ EntitiesAlias.CustDcLocation, new string[] { "CdcContactMSTRID" } },
                     //{ EntitiesAlias.VendDcLocation, new string[] { "VdcContactMSTRID" } },
+                    { EntitiesAlias.CustContact, new string[] { "ContactMSTRID" } },
+                    { EntitiesAlias.VendContact, new string[] { "ContactMSTRID" } },
                 };
             }
         }
@@ -544,7 +556,7 @@ namespace M4PL.Web.Providers
         {
             return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionCode, fieldName, viewResult, "JgeTitle", parentId, gatewayAction);
         }
-        public static DropDownViewModel GetExStatusCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0,string gatewayAction = null)
+        public static DropDownViewModel GetExStatusCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, string gatewayAction = null)
         {
             return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionStatusCode, fieldName, viewResult, "ExStatusDescription", parentId, gatewayAction);
         }

@@ -2,17 +2,17 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ScrOsdReasonListCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Scanner.ScrOsdReasonListCommands
 ===================================================================================================================*/
 
+using M4PL.Entities.Scanner;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Scanner.ScrOsdReasonListCommands;
-using M4PL.Entities.Scanner;
-using System;
 
 namespace M4PL.Business.Scanner
 {
@@ -83,14 +83,9 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ScrOsdReasonList> Get()
+        public ScrOsdReasonList Patch(ScrOsdReasonList entity)
         {
             throw new NotImplementedException();
         }
-
-		public ScrOsdReasonList Patch(ScrOsdReasonList entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 ConReportCommands
 Purpose:                                      Contains commands to call DAL logic for like M4PL.DAL.Contact.ConReportCommands
@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Contact;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Contact.ConReportCommands;
-using System;
 
 namespace M4PL.Business.Contact
 {
@@ -83,14 +83,9 @@ namespace M4PL.Business.Contact
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ConReport> Get()
+        public ConReport Patch(ConReport entity)
         {
             throw new NotImplementedException();
         }
-
-		public ConReport Patch(ConReport entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

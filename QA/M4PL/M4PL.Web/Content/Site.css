@@ -725,6 +725,10 @@ label {
     width: 405px;
 }
 
+.col-fixed-57 {
+    width: 420px;
+}
+
 .col-fixed-60 {
     width: 446px;
 }
@@ -2785,7 +2789,8 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 
 .header-background {
-    background-color: #a2a1a1;
+    background-color: #252525;
+    border-bottom: 5px solid #0f6ec5;
 }
 
 .regis_System {
@@ -3142,9 +3147,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 /*#JobDeliveryJobDestinationFormView1DestinationCbPanel > div > div > table {
     height: 96%;
 }*/
-td#pnlJobSecondPOC_RPC {
+/*td#pnlJobSecondPOC_RPC {
     height: 224px !important;
-}
+}*/
 /*#pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
     height: 574px;
 }*/
@@ -4975,12 +4980,12 @@ td#pnlJobSecondPOC_RPC {
 }
 
 .prealtive {
-    position: relative !important;
+    /*position: relative !important;*/
 }
 
-#pnlJobAdvanceReport > tbody > tr:nth-child(2) > td .dxrpAW {
+/*#pnlJobAdvanceReport > tbody > tr:nth-child(2) > td .dxrpAW {
     overflow-y: inherit !important;
-}
+}*/
 
 .custom-jobcard-grid-header {
     margin-bottom: 20px;
@@ -5062,3 +5067,26 @@ div#btnCardRefresh {
 .EDIXcblPanel {
     padding-right: 0px;
 }
+.ConfirmatonPopUp-background {
+    background-color: #a2a1a1;
+}
+
+/*program gateway*/
+.prgGatewayCustomCSS {
+    overflow-y: auto;
+}
+.dxpc-headerContent {
+    text-align: center;
+}
+
+.driverAlert { 
+     width: 425px !important; 
+     height : 21px !important; 
+ } 
+
+@-moz-document url-prefix() {
+     #JobDriverAlert_I{
+		 height : 21px !important;
+	 }
+}
+

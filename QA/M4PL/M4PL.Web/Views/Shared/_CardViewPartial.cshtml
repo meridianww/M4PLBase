@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    //All Rights Reserved Worldwide
+    
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Prasanta
@@ -31,7 +31,9 @@
 @Html.DevExpress().CardView(settings =>
 {
     settings.Name = "CardView";
-    settings.CallbackRouteValues = new {   Controller = "JobCardView",
+    settings.CallbackRouteValues = new
+    {
+        Controller = "JobCardView",
         Action = "CardView",
         Area = "Job",
         OwnerCbPanel = "JobAdvanceReportCbPanel"
@@ -42,7 +44,6 @@
 
     settings.SettingsPager.Visible = true;
 
-
     settings.SettingsPager.SettingsTableLayout.ColumnCount = 5;
     settings.SettingsPager.SettingsTableLayout.RowsPerPage = 5;
     settings.Styles.Card.CssClass = "custom-cardview";
@@ -52,24 +53,25 @@
     settings.Columns.Add("CardCount");
     settings.Columns.Add("Name");
     settings.Columns.Add("CancelClick");
-    settings.Columns.Add("DashboardSubCategoryName"); 
+    settings.Columns.Add("DashboardSubCategoryName");
     settings.EnableCardsCache = true;
     settings.Settings.ShowGroupButtons = false;
     settings.Columns.Add(c =>
     {
         c.FieldName = "CardType";
         c.GroupIndex = 0;
+        c.Visible = false;
     });
 
     settings.SetCardTemplateContent(c =>
     {
         ViewContext.Writer.Write(
-                 "<div style='background:" + DataBinder.Eval(c.DataItem, "BackGroundColor") + ";color: " + DataBinder.Eval(c.DataItem, "FontColor") + ";text-align:center;padding: 5px;'>"
+                 "<div style='cursor: pointer; background:" + DataBinder.Eval(c.DataItem, "BackGroundColor") + ";color: " + DataBinder.Eval(c.DataItem, "FontColor") + ";text-align:center;padding: 5px;'>"
                 + "<strong>" + DataBinder.Eval(c.DataItem, "Name") + "</strong>"
                 + "</div>"
-                + "<div class='col-xs-12' style='padding: 10px 0px 10px 0px;background: #efefef;'>"
+                + "<div class='col-xs-12' style='cursor: pointer; padding: 10px 0px 10px 0px;background: #efefef;'>"
                 + "<div class='col-xs-8'>"
-                + "<img width='35px' src='../Content/Images/Logistic/"+ DataBinder.Eval(c.DataItem, "DashboardSubCategoryName") +".png' />"
+                + "<img width='35px' src='../Content/Images/Logistic/" + DataBinder.Eval(c.DataItem, "DashboardSubCategoryName") + ".png' />"
                 + "</div>"
                 + "<div class='col-xs-4'style= 'padding: 0px; font-size: 10px;'>"
                 + "<strong>" + DataBinder.Eval(c.DataItem, "CardCount") + "</strong>"
@@ -83,6 +85,7 @@
     settings.SettingsBehavior.AllowSelectByCardClick = true;
     settings.SettingsBehavior.AllowFocusedCard = true;
     settings.ClientSideEvents.SelectionChanged = string.Format("function(s, e, form, strRoute){{ M4PLCommon.VocReport.OnCardDataViewClick(s, e,  {0}, \'{1}\');}}", fromName, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+    settings.ClientSideEvents.Init = string.Format("function(s, e){{ M4PLCommon.CardView.Init(s, e);}}");
 
 
     settings.Settings.ShowHeaderPanel = false;

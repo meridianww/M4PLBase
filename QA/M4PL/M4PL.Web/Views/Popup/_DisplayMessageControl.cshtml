@@ -2,7 +2,7 @@
     All Rights Reserved Worldwide
     ====================================================================================================================================================
     Program Title:                                Common popup control for application
-    Programmer:                                   Akhil
+    Programmer:                                   Kirty Anurag
     Date Programmed:                              10/01/2018
     Program Name:                                 _Popup control
     Purpose:                                      Provides control to render fields in popup
@@ -40,7 +40,7 @@
         {
 
             ViewContext.Writer.Write("<div class='display-msg'>");
-            
+
             Html.DevExpress().Image(
                   imgSettings =>
                   {
@@ -52,7 +52,7 @@
 
             ViewContext.Writer.Write("<b class='display-msg-desc'>" + Model.Description + "</b>");
             ViewContext.Writer.Write("</div>");
-           
+
 
             ViewContext.Writer.Write("<div class='btnDisplayMsg-wrapper col-sm-12 col-md-12 col-lg-12' align='center'>");
             foreach (var operation in Model.Operations)
@@ -64,6 +64,10 @@
                        btnSettings.Name = "btn" + operation.LangName;
                        btnSettings.ControlStyle.CssClass = "button";
                        btnSettings.Text = operation.LangName;
+                       if (operation.LangName == "Ok" || operation.LangName == "Save")
+                       {
+                           btnSettings.AllowFocus = true;
+                       }
                        btnSettings.ClientSideEvents.Click = operation.ClickEvent;
                    }).Render();
                 ViewContext.Writer.Write("</div>");

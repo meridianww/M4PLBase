@@ -1,0 +1,1 @@
+UPDATE SYSTM030Ref_TabPageName SET StatusId=3 WHERE TabTableName = 'JobXcblInfo'

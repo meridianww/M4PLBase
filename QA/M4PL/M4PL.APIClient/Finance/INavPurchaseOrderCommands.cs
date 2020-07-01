@@ -11,7 +11,7 @@ using M4PL.APIClient.ViewModels.Finance;
 
 namespace M4PL.APIClient.Finance
 {
-	public interface INavPurchaseOrderCommands : IBaseCommands<NavPurchaseOrderView>
-	{
-	}
+    public interface INavPurchaseOrderCommands : IBaseCommands<NavPurchaseOrderView>
+    {
+    }
 }

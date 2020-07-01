@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =================================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 PrgRefGatewayDefaultCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Program.PrgRefGatewayDefaultCommands
@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgRefGatewayDefaultCommands;
-using System;
 
 namespace M4PL.Business.Program
 {
@@ -36,7 +36,9 @@ namespace M4PL.Business.Program
 
         public PrgRefGatewayDefault Get(long id)
         {
-            return _commands.Get(ActiveUser, id);
+            var result = _commands.Get(ActiveUser, id);
+            result.IsSpecificCustomer = result?.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
+            return result;
         }
 
         /// <summary>
@@ -104,14 +106,9 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgRefGatewayDefault> Get()
+        public PrgRefGatewayDefault Patch(PrgRefGatewayDefault entity)
         {
             throw new NotImplementedException();
         }
-
-		public PrgRefGatewayDefault Patch(PrgRefGatewayDefault entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }

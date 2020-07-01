@@ -7,15 +7,12 @@ Date Programmed:                              24/07/2019
 Program Name:                                 PrgBillableLocationCommands
 Purpose:                                      Contains commands to call DAL logic
 =============================================================================================================*/
+using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgBillableLocationCommands;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4PL.Entities;
 
 namespace M4PL.Business.Program
 {
@@ -86,12 +83,6 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-
-        public IList<PrgBillableLocation> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<TreeModel> BillableLocationTree(long orgId, bool isAssignedBillableLocation, long programId, long? parentId, bool isChild)
         {
             return _commands.BillableLocationTree(orgId, isAssignedBillableLocation, programId, parentId, isChild);
@@ -101,8 +92,8 @@ namespace M4PL.Business.Program
             return _commands.MapVendorBillableLocations(activeUser, programVendorMap);
         }
         public PrgBillableLocation Patch(PrgBillableLocation entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

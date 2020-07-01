@@ -1,4 +1,11 @@
-﻿$(function () {
+﻿/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+******************************************************************************/
+
+$(function () {
 });
 
 var M4PLJob = M4PLJob || {};
@@ -138,50 +145,36 @@ M4PLJob.FormView = function () {
     var marker;
 
     var _mapLoad = function (s, e, deliveryFullAddress) {
+        var mapOptions = {
+            center: null,
+            zoom: 15,
+            mapTypeId: null
+        };
         position[0] = ASPxClientControl.GetControlCollection().GetByName("JobLatitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLatitude").GetValue() : 0;
         position[1] = ASPxClientControl.GetControlCollection().GetByName("JobLongitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLongitude").GetValue() : 0;
+        $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyC__gkF-_5NnFeTyedm7stvTKkmJu5mHI8&callback=', function (data, textStatus, jqxhr) {
+            mapOptions.center = new google.maps.LatLng(position[0], position[1]);
+            mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
 
-        var mapOptions = {
+            var contentString = '<strong>Delivery Address: </strong><p>' + deliveryFullAddress + '</p>';
+            var infoWindow = new google.maps.InfoWindow();
+            infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            var map = new google.maps.Map(document.getElementById("divDestinationMap"), mapOptions);
 
-            //center: new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude),
-            center: new google.maps.LatLng(position[0], position[1]),
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        var contentString = '<strong>Delivery Address: </strong><p>' + deliveryFullAddress + '</p>';
-
-
-        var infoWindow = new google.maps.InfoWindow();
-        infowindow = new google.maps.InfoWindow({
-            content: contentString
+            var myLatlng = new google.maps.LatLng(position[0], position[1]);
+            marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+            });
+            marker.addListener('click', function () {
+                infowindow.open(map, marker);
+                var result = [event.latLng.lat(), event.latLng.lng()];
+                transition(result);
+            });
         });
-        var map = new google.maps.Map(document.getElementById("divDestinationMap"), mapOptions);
-
-        // var data = markers[i]
-        var myLatlng = new google.maps.LatLng(position[0], position[1]); //new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude);
-        marker = new google.maps.Marker({
-            position: myLatlng,
-            map: map,
-            //title: data.title
-        });
-
-        //google.maps.event.addListener(marker, "click", function (event) {
-        //    //infoWindow.setContent(data.description);
-        //    infoWindow.open(map, marker);
-        //    var result = [event.latLng.lat(), event.latLng.lng()];
-        //    transition(result)
-        //});
-
-        marker.addListener('click', function () {
-            infowindow.open(map, marker);
-            var result = [event.latLng.lat(), event.latLng.lng()];
-            transition(result);
-        });
-
-
     }
-    //google.maps.event.addDomListener(window, 'load', _mapLoad);
     var transition = function (result) {
         i = 0;
         deltaLat = (result[0] - position[0]) / numDeltas;
@@ -351,23 +344,24 @@ M4PLJob.FormView = function () {
         }
     }
 
-    var _openJobFormViewByID = function (s, e, strRoute) {
-        $.ajax({
-            type: "GET",
-            url: "/Common/UpdateJobReportFormViewRoute",
-            data: { 'jobId': parseInt(s.GetValue()) },
-            success: function (data) {
-                if (data == true) {
-                    window.open(e.htmlElement.baseURI, '_blank');
-                }
-                else {
-                    alert("Job Report expecting Job ID");
-                }
-            },
-            error: function () {
+    var _openJobFormViewByID = function (s, e, jobId, entityFor) {
+        window.open(window.location.origin + "?jobId=" + jobId)
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/Common/UpdateJobReportFormViewRoute",
+        //    data: { 'jobId': jobId, 'entityFor': entityFor },
+        //    success: function (data) {
+        //        if (data == true) {
+        //            window.open(e.htmlElement.baseURI, '_blank');
+        //        }
+        //        else {
+        //            alert("Job Report expecting Job ID");
+        //        }
+        //    },
+        //    error: function () {
 
-            }
-        });
+        //    }
+        //});
     };
 
     var _jobHistoryPopUpClick = function (s, e, strRoute) {

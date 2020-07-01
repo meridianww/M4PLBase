@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobCargoCommands
 Purpose:                                      Contains commands to perform CRUD on JobCargo
@@ -12,19 +12,45 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace M4PL.DataAccess.Job
 {
     public class JobCargoCommands : BaseCommands<JobCargo>
     {
-        /// <summary>
-        /// Gets list of JobCargo records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<JobCargo> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		public static DateTime DayLightSavingStartDate
+		{
+			get
+			{
+				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+			}
+		}
+
+		public static DateTime DayLightSavingEndDate
+		{
+			get
+			{
+				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+			}
+		}
+
+		public static bool IsDayLightSavingEnable
+		{
+			get
+			{
+				return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+			}
+		}
+
+		/// <summary>
+		/// Gets list of JobCargo records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<JobCargo> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobCargoView, EntitiesAlias.JobCargo);
         }
@@ -39,6 +65,28 @@ namespace M4PL.DataAccess.Job
         public static JobCargo Get(ActiveUser activeUser, long id)
         {
             return Get(activeUser, id, StoredProceduresConstant.GetJobCargo);
+        }
+
+        /// <summary>
+        /// Gets the specific JobCargo record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        public static List<JobCargo> GetCargoListForJob(ActiveUser activeUser, long jobId)
+        {
+            List<JobCargo> cargoList = null;
+            try
+            {
+                cargoList = SqlSerializer.Default.DeserializeMultiRecords<JobCargo>(StoredProceduresConstant.GetCargoListForJob, new Parameter("@jobId", jobId), false, true);
+            }
+            catch (Exception exp)
+            {
+                Logger.ErrorLogger.Log(exp, "Error is occuring while GetCargoListForJob", "GetCargoListForJob", Utilities.Logger.LogType.Error);
+            }
+
+            return cargoList;
         }
 
         /// <summary>
@@ -94,6 +142,35 @@ namespace M4PL.DataAccess.Job
         {
             return Delete(activeUser, ids, EntitiesAlias.JobCargo, statusId, ReservedKeysEnum.StatusId);
         }
+
+		public static StatusModel CreateCargoException(long cargoId, JobExceptionInfo selectedJobExceptionInfo, JobInstallStatus selectedJobInstallStatus, ActiveUser activeUser)
+		{
+			StatusModel statusModel = null;
+			try
+			{
+				string[] codeArray = selectedJobExceptionInfo.ExceptionReferenceCode.Split('-');
+				var parameters = new List<Parameter>
+			{
+				 new Parameter("@cargoId", cargoId),
+				 new Parameter("@GwyGatewayCode", codeArray[0]),
+				 new Parameter("@GwyGatewayTitle", selectedJobExceptionInfo.ExceptionReasonCode),
+				 new Parameter("@CreatedDate", Utilities.TimeUtility.GetPacificDateTime()),
+				 new Parameter("@CreatedBy", activeUser.UserName),
+				 new Parameter("@StatusCode", codeArray[1]),
+				 new Parameter("@GwyExceptionTitleId", selectedJobExceptionInfo.ExceptionReasonId),
+				 new Parameter("@GwyExceptionStatusId", selectedJobInstallStatus.InstallStatusId),
+				 new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+			 };
+
+				statusModel = SqlSerializer.Default.DeserializeSingleRecord<StatusModel>(StoredProceduresConstant.InsertCargoException, parameters.ToArray(), storedProcedure: true);
+			}
+			catch (Exception exp)
+			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Issue while adding the Cargo Exception", "CreateCargoException", Utilities.Logger.LogType.Error);
+			}
+
+			return statusModel;
+		}
 
         /// <summary>
         /// Gets list of parameters required for the JobCargo Module

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4PL.APIClient.ViewModels.Job;
+﻿using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace M4PL.APIClient.Job
 {
@@ -34,7 +31,7 @@ namespace M4PL.APIClient.Job
         {
             var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetDropDownDataForJobCard"), ActiveUser).AddParameter("customerId", customerId).AddParameter("entity", entity);
             var result = RestClient.Execute(request);
-            return JsonConvert.DeserializeObject<ApiResult<List<JobCard>>>(result.Content).Results.FirstOrDefault();
+            return JsonConvert.DeserializeObject<ApiResult<List<JobCard>>>(result.Content).Results?.FirstOrDefault();
         }
     }
 }

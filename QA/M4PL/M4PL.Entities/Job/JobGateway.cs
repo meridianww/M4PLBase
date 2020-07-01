@@ -2,13 +2,14 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/10/2017
 Program Name:                                 JobGateway
 Purpose:                                      Contains objects related to JobGateway
 ==========================================================================================================*/
 
 using System;
+using System.Collections.Generic;
 
 namespace M4PL.Entities.Job
 {
@@ -123,6 +124,15 @@ namespace M4PL.Entities.Job
         public long GwyExceptionTitleId { get; set; }
         public long GwyExceptionStatusId { get; set; }
         public string GwyAddtionalComment { get; set; }
-        public long? ElectroluxProgramID { get; set; }
+        public long CustomerId { get; set; }
+        public string GwyCargoIdName { get; set; }
+        public string GwyExceptionTitleIdName { get; set; }
+        public string GwyExceptionStatusIdName { get; set; }
+        public bool IsSpecificCustomer { get; set; }
+        public int? JobTransitionStatusId { get; set; }
+        public int DeliveryUTCValue { get; set; }
+        public int OriginUTCValue { get; set; }
+        public string[] JobIds { get; set; }
+        public List<long> ChekedJobIds { get; set; }
     }
 }

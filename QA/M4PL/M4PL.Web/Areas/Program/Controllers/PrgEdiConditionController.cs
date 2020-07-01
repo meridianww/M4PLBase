@@ -1,19 +1,18 @@
-﻿/*Copyright (2019) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
-//====================================================================================================================================================
-//Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Nikhil Chauhan
-//Date Programmed:                              08/21/2019
-//Program Name:                                 PrgEdiConditionController
-//Purpose:                                      Contains Actions to render view on Program's EDI Header page
-//====================================================================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Program;
 using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Support;
-using M4PL.Utilities;
 using M4PL.Web.Providers;
 using Newtonsoft.Json;
 using System;
@@ -70,7 +69,7 @@ namespace M4PL.Web.Areas.Program
             Dictionary<long, string> batchError = new Dictionary<long, string>();
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
             prgEdiConditionView.Insert.ForEach(c => { c.PecParentProgramId = ((Request.Params["prgEdiHeaderId"] != null) ? (long.Parse(Request.Params["prgEdiHeaderId"])) : route.ParentRecordId); c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; c.ParentId = Convert.ToInt64(route.Filters.Value); });
-            prgEdiConditionView.Update.ForEach(c => { c.PecParentProgramId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });            
+            prgEdiConditionView.Update.ForEach(c => { c.PecParentProgramId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             batchError = BatchUpdate(prgEdiConditionView, route, gridName);
             if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {

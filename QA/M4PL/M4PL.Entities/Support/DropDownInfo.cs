@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 ==========================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Akhil
+Programmer:                                   Kirty Anurag
 Date Programmed:                              10/04/2017
 Program Name:                                 DropDownInfo
 Purpose:                                      Contains objects related to DropDownInfo
@@ -34,7 +34,8 @@ namespace M4PL.Entities.Support
             TableFields = dropDownInfo.TableFields;
             ColumnName = dropDownInfo.ColumnName;
             IsRequiredAll = dropDownInfo.IsRequiredAll;
-            GatewayAction = dropDownInfo.GatewayAction;
+            ControlAction = dropDownInfo.ControlAction;
+            WhereConditionExtention = dropDownInfo.WhereConditionExtention;
             //isException = dropDownInfo.isException;
         }
 
@@ -60,6 +61,7 @@ namespace M4PL.Entities.Support
         public string ProgramIdCode { get; set; }
         public string SelectedCountry { get; set; }
         //public bool isException { get; set; }
-        public string GatewayAction { get; set; }
+        public string ControlAction { get; set; }
+        public string WhereConditionExtention { get; set; }
     }
 }
