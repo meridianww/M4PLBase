@@ -122,7 +122,7 @@ namespace M4PL.API.Controllers
         /// Get the POD data by Job Id
         /// </summary>
         /// <param name="id">Job Id</param>
-        /// <returns></returns>
+        /// <returns>POD data</returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("Pod")]
