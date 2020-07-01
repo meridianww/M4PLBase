@@ -118,6 +118,11 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJobMapRoute(id);
         }
 
+        /// <summary>
+        /// Get the POD data by Job Id
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <returns></returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("Pod")]
