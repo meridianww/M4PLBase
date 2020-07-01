@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
@@ -43,24 +44,42 @@ namespace M4PL.API.Controllers
             _jobCommands = jobCommands;
         }
 
+        /// <summary>
+        /// Get the job details by Id, If Id is 0 basic details such as Arrival and Delivery, Customer Name from program will be returned
+        /// </summary>
+        /// <param name="id">Identifier of Job</param>
+        /// <param name="parentId">Identifier of Program</param>
+        /// <returns>Job details</returns>
         [CustomAuthorize]
         [HttpGet]
-        [Route("JobByProgram")]
+        [Route("JobByProgram"), ResponseType(typeof(Job))]
         public Job GetJobByProgram(long id, long parentId)
         {
             _jobCommands.ActiveUser = ActiveUser;
             return _jobCommands.GetJobByProgram(id, parentId);
         }
 
+        /// <summary>
+        /// Get the Destination detials by Job Id, if Job id is zero Pickup and delivery information from program 
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <param name="parentId">Program Id</param>
+        /// <returns>Job Destination details</returns>
         [CustomAuthorize]
         [HttpGet]
-        [Route("Destination")]
+        [Route("Destination"), ResponseType(typeof(JobDestination))]
         public JobDestination GetJobDestination(long id, long parentId)
         {
             _jobCommands.ActiveUser = ActiveUser;
             return _jobCommands.GetJobDestination(id, parentId);
         }
 
+        /// <summary>
+        /// Get the Origin , Delivery Site POC2 details , Origin and Delivery Address by Job Id and if job id is zero Pickup and Delivery Time Information from Parent will be returned
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <param name="parentId">Program Id</param>
+        /// <returns>Site POC 2 and Origin and Delivery Address</returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("Poc")]
@@ -70,9 +89,15 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJob2ndPoc(id, parentId);
         }
 
+        /// <summary>
+        /// Get the Job Seller and Ship From information by job id and if the job Id is zero, Pickup and Delivery Time Information from Parent will be returned
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <param name="parentId">Program Id</param>
+        /// <returns>Returns Job Seller and ShipFrom details</returns>
         [CustomAuthorize]
         [HttpGet]
-        [Route("Seller")]
+        [Route("Seller"), ResponseType(typeof(JobSeller))]
         public JobSeller GetJobSeller(long id, long parentId)
         {
             _jobCommands.ActiveUser = ActiveUser;

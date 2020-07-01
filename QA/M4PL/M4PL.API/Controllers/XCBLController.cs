@@ -91,27 +91,41 @@ namespace M4PL.API.Controllers
             return _xcblCommands.ProcessElectroluxOrderDeliveryUpdate(deliveryUpdate, jobId);
         }
 
+        /// <summary>
+        /// Get the list of Un processed delivery update logs
+        /// </summary>
+        /// <returns>List of unprocessed delivery update logs</returns>
         [CustomAuthorize]
         [HttpGet]
-        [Route("Electrolux/DeliveryUpdateProcessingData")]
+        [Route("Electrolux/DeliveryUpdateProcessingData"), ResponseType(typeof(List<DeliveryUpdateProcessingData>))]
         public List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
         {
             _xcblCommands.ActiveUser = ActiveUser;
             return _xcblCommands.GetDeliveryUpdateProcessingData();
         }
 
+        /// <summary>
+        /// Marks the Delivery Update log entry as processed
+        /// </summary>
+        /// <param name="deliveryUpdateProcessingData">Delivery update log entry</param>
+        /// <returns>Returns true if the update is success else false</returns>
         [CustomAuthorize]
         [HttpPost]
-        [Route("Electrolux/UpdateProcessingData")]
+        [Route("Electrolux/UpdateProcessingData"), ResponseType(typeof(bool))]
         public bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)
         {
             _xcblCommands.ActiveUser = ActiveUser;
             return _xcblCommands.UpdateDeliveryUpdateProcessingLog(deliveryUpdateProcessingData);
         }
       
+        /// <summary>
+        /// Returns the data in the format of delivery update model with the necessary fields to send the order update to electrolux by the jobId
+        /// </summary>
+        /// <param name="jobId">job id</param>
+        /// <returns>Delivery update model</returns>
         [CustomAuthorize]
         [HttpGet]
-        [Route("Electrolux/GetDeliveryUpdateModel")]
+        [Route("Electrolux/GetDeliveryUpdateModel"), ResponseType(typeof(DeliveryUpdate))]
         public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
         {
             _xcblCommands.ActiveUser = ActiveUser;
