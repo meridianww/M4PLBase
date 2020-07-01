@@ -43,6 +43,12 @@ namespace M4PL.API.Controllers
             _programCommands = programCommands;
         }
 
+        /// <summary>
+        /// ProgramTree
+        /// </summary>
+        /// <param name="parentId"></param>
+        /// <param name="isCustNode"></param>
+        /// <returns></returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("ProgramTree")]
