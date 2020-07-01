@@ -104,6 +104,11 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJobSeller(id, parentId);
         }
 
+        /// <summary>
+        /// Returns Map route data by job id
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <returns>Map route details</returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("MapRoute")]
@@ -114,10 +119,10 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// GetJobPod
+        /// Get the POD data by Job Id
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Job Id</param>
+        /// <returns>POD data</returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("Pod")]
