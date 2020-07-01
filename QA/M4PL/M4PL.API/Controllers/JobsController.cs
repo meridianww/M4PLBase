@@ -104,6 +104,11 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJobSeller(id, parentId);
         }
 
+        /// <summary>
+        /// Returns Map route data by job id
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <returns>Map route details</returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("MapRoute")]
