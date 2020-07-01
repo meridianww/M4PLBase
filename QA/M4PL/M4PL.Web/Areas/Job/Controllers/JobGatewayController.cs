@@ -756,7 +756,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.RecordId = 0;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
-            }                
+            }
 
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = null;
 
@@ -896,8 +896,11 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
                 var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
-                _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode = result.PgdShipApptmtReasonCode;
+                _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
+                _formResult.Record.StatusCode = _formResult.Record.StatusCode != null ?
+                    _formResult.Record.StatusCode : _formResult.Record.GwyShipApptmtReasonCode;
                 _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
+                _formResult.Permission = Permission.ReadOnly;
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
             }
             if (((bool)Session["isEdit"] == false && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
@@ -916,6 +919,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.CurrentAction = "Comment";
                 _formResult.Record.GwyGatewayCode = "Comment";
                 _formResult.Record.GwyDDPCurrent = Utilities.TimeUtility.GetPacificDateTime();
+                _formResult.Permission = Permission.ReadOnly;
                 return PartialView(MvcConstants.ViewGatewayComment, _formResult);
             }
             return PartialView(_formResult);

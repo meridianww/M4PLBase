@@ -88,10 +88,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
-            if (route.IsJobParentEntityUpdated)
-            {
-                SessionProvider.IsJobParentEntity = isJobParentEntity;
-            }
+            //if (route.IsJobParentEntityUpdated)
+            //{
+            SessionProvider.IsJobParentEntity = route.IsJobParentEntityUpdated;
+            //}
             SetGridResult(route, gridName, false, true, null, isJobParentEntity);
 
             if (SessionProvider.ViewPagedDataSession.Count > 0 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
@@ -175,7 +175,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             else
             {
-              //  SessionProvider.ActiveUser.LastRoute = route;
+                //  SessionProvider.ActiveUser.LastRoute = route;
             }
             #endregion
 
