@@ -388,6 +388,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="M4PL.APIClient.licenseheader" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
