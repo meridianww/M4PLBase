@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   KIRTY ANURAG
@@ -44,7 +44,6 @@
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.ControlStyle.CssClass = "gridfields-text-visible";
 
-    //settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
     settings.SettingsCookies.Enabled = false;
     settings.SettingsCookies.StoreColumnsWidth = true;
     settings.SettingsCookies.StorePaging = true;
@@ -60,12 +59,8 @@
         settings.Toolbars.Add(t =>
         {
             t.EnableAdaptivity = true;
-            //t.Items.Add(GridViewToolbarCommand.ExportToPdf);
             t.Items.Add(GridViewToolbarCommand.ExportToXls);
             t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
-            //t.Items.Add(GridViewToolbarCommand.ExportToDocx);
-            //t.Items.Add(GridViewToolbarCommand.ExportToRtf);
-            //t.Items.Add(GridViewToolbarCommand.ExportToCsv);
         });
     }
     //#endregion
@@ -91,38 +86,20 @@
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
 
-    //settings.CustomActionRouteValues = new { Action = "SaveGridLayoutToCache", Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
-
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
     settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
-    //settings.ClientSideEvents.ColumnMoving = "M4PLWindow.DataView.OnColumnChanged";
     settings.SettingsResizing.Visualization = ResizingMode.Live;
 
     settings.SettingsPager.EnableAdaptivity = true;
     settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
     settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
-    ////settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnReportGridFocusedRowChanged";
     settings.SettingsPager.FirstPageButton.Visible = true;
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
 
-    //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
-
-    //if (settings.SettingsEditing.Mode == GridViewEditingMode.Batch)
-    //{
-    //    settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
-    //    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
-    //    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
-    //    settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
-    //    settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-    //    settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
-    //    settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
-    //    settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
-
-    //}
-
+    
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
 
@@ -239,7 +216,7 @@
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
                 {
-                    if(colSetting.ColTableName== "JobAdvanceReport" && colSetting.ColColumnName == "PackagingCode")
+                    if (colSetting.ColTableName == "JobAdvanceReport" && colSetting.ColColumnName == "PackagingCode")
                     {
                         colSetting.DataType = "dropdown";
                     }
@@ -357,20 +334,7 @@
             });
         }
     }
-
-
-    ////Saving Layout
-    //settings.ClientLayout = (sender, e) =>
-    //{
-    //    if (e.LayoutMode == ClientLayoutMode.Saving)
-    //        WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), e.LayoutData);
-    //    else
-    //    {
-    //        var layout = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
-    //    }
-    //};
-    ////End saving layout
-
+    
     //For Advanced Filter
     settings.FilterControlOperationVisibility = (sender, e) =>
     {
@@ -418,7 +382,7 @@
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
 
     settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";
-    settings.ClientSideEvents.EndCallback = "M4PLWindow.DataView.OnEndCallback";
+    settings.ClientSideEvents.EndCallback = "function(s, e){ M4PLWindow.DataView.OnEndCallback }";
     settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
 
     settings.CellEditorInitialize = (s, e) =>
@@ -449,8 +413,7 @@
             {
                 if (!rowHashes.ContainsKey(id.ToString()))
                     rowHashes.Add(id.ToString(), new Dictionary<string, object>());
-                rowHashes[id.ToString()] = new Dictionary<string, object>
-    ();
+                rowHashes[id.ToString()] = new Dictionary<string, object>();
                 foreach (var col in Model.GridColumnSettings)
                 {
 

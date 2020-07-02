@@ -23,7 +23,6 @@
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramByCustomerCbPanelChange(s, e)}}");
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
-    //Model.Record.IsEnabledAddtionalfield = true;
     var crgoDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
     crgoDropDownViewModel = Model.Record.CargoId.GetCargoDropDown("CargoId", Model, Model.Record.ProgramId);
 }
@@ -103,14 +102,7 @@
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
-        ////
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
-        //ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isAdditional style='padding-bottom: 0px;'>");
-        //ViewContext.Writer.Write(Html.EditorFor(t => t.Record.CgoPackagingTypeId, new { CgoPackagingTypeId = Model.Record.CgoPackagingTypeId }).ToHtmlString());
-        //ViewContext.Writer.Write("</div>");
-        //ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isAdditional style='padding-bottom: 0px;'>");
-        //ViewContext.Writer.Write(Html.EditorFor(t => t.Record.CgoWeightUnitTypeId, new { JobWeightUnitTypeId = Model.Record.CgoWeightUnitTypeId }).ToHtmlString());
-        //ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");    
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.Manifest).ToHtmlString()));
         ViewContext.Writer.Write("</div>");

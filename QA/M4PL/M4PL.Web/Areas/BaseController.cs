@@ -106,7 +106,7 @@ namespace M4PL.Web.Areas
             //if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
             //    && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             //{
-            else if (currentPagedDataInfo.Entity != EntitiesAlias.JobGateway && (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition) 
+            else if (currentPagedDataInfo.Entity != EntitiesAlias.JobGateway && (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition)
                 || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1) && !route.IsJobParentEntityUpdated)
                 currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
             // }
@@ -429,6 +429,11 @@ namespace M4PL.Web.Areas
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition =
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
             }
+            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
+                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && route.RecordId > 0)
+            {
+                route.RecordId = 0;
+            }
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
@@ -444,6 +449,7 @@ namespace M4PL.Web.Areas
             if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
+                route.RecordId = 0;
                 sessionInfo.PagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition
                     + sessionInfo.PagedDataInfo.WhereCondition;
             }

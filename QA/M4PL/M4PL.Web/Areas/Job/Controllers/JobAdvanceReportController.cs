@@ -429,22 +429,5 @@ namespace M4PL.Web.Areas.Job.Controllers
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
             return base.GridFilteringView(filteringState, strRoute, gridName);
         }
-        //public override PartialViewResult GridGroupingView(GridViewColumnState column, string strRoute, string gridName = "")
-        //{
-        //    var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-        //    var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
-        //    _gridResult.SessionProvider = SessionProvider;
-        //    SetGridResult(route, gridName);
-        //    sessionInfo.GridViewColumnGroupingState = column;
-        //    _gridResult.GridViewModel.ApplyGroupingState(column);
-        //    if (_gridResult.Records?.FirstOrDefault().Manifest != null && _gridResult.Records.FirstOrDefault().Manifest)
-        //    {
-        //        var result = _gridResult.ColumnSettings.Where(x => x.ColColumnName == "PackagingCode" || x.ColColumnName == "CgoPartCode"
-        //       || x.ColColumnName == "CargoTitle").FirstOrDefault();
-
-        //        _gridResult.ColumnSettings.Remove(result);
-        //    }
-        //    return base.ProcessCustomBinding(route, MvcConstants.ActionDataView);
-        //}
     }
 }
