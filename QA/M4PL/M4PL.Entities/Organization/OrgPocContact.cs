@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //==========================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -19,37 +19,37 @@
 
 namespace M4PL.Entities.Organization
 {
-    /// <summary>
-    ///
-    /// </summary>
-    public class OrgPocContact : BaseModel
-    {
+	/// <summary>
+	///
+	/// </summary>
+	public class OrgPocContact : BaseModel
+	{
+		public long ConOrgId { get; set; }
+		public string ConOrgIdName { get; set; }
 
-        public long ConOrgId { get; set; }
-        public string ConOrgIdName { get; set; }
+		/// <summary>
+		/// Can create POC contact without any associated contact
+		/// </summary>
+		public long? ContactMSTRID { get; set; }
 
-        /// <summary>
-        /// Can create POC contact without any associated contact 
-        /// </summary>
-        public long? ContactMSTRID { get; set; }
-        public string ContactMSTRIDName { get; set; }
+		public string ContactMSTRIDName { get; set; }
 
-        public long? ConCodeId { get; set; }
+		public long? ConCodeId { get; set; }
 
-        public string ConCodeIdName { get; set; }
+		public string ConCodeIdName { get; set; }
 
-        public string ConTitle { get; set; }
+		public string ConTitle { get; set; }
 
-        public int? ConTableTypeId { get; set; }
+		public int? ConTableTypeId { get; set; }
 
-        public long? Description { get; set; }
+		public long? Description { get; set; }
 
-        public long? Instructions { get; set; }
+		public long? Instructions { get; set; }
 
-        public bool ConIsDefault { get; set; }
+		public bool ConIsDefault { get; set; }
 
-        public int? ConItemNumber { get; set; }
+		public int? ConItemNumber { get; set; }
 
-        public long ConCompanyId { get; set; }
-    }
+		public long ConCompanyId { get; set; }
+	}
 }

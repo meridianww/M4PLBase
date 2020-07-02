@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=============================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -28,171 +28,169 @@ using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
-    public class JobDocReferenceCommands : BaseCommands<JobDocReference>
-    {
-        /// <summary>
-        /// Gets list of Job Document Reference records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<JobDocReference> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
-        {
-            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobDocReferenceView, EntitiesAlias.JobDocReference);
-        }
+	public class JobDocReferenceCommands : BaseCommands<JobDocReference>
+	{
+		/// <summary>
+		/// Gets list of Job Document Reference records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<JobDocReference> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		{
+			return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobDocReferenceView, EntitiesAlias.JobDocReference);
+		}
 
-        /// <summary>
-        /// Gets the specific Job Document Reference record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the specific Job Document Reference record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static JobDocReference Get(ActiveUser activeUser, long id)
-        {
-            return Get(activeUser, id, StoredProceduresConstant.GetJobDocReference);
-        }
+		public static JobDocReference Get(ActiveUser activeUser, long id)
+		{
+			return Get(activeUser, id, StoredProceduresConstant.GetJobDocReference);
+		}
 
-        /// <summary>
-        /// Creates a new Job Document Reference record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="jobDocReference"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new Job Document Reference record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="jobDocReference"></param>
+		/// <returns></returns>
 
-        public static JobDocReference Post(ActiveUser activeUser, JobDocReference jobDocReference)
-        {
-            var parameters = GetParameters(jobDocReference);
-            // parameters.Add(new Parameter("@langCode", jobDocReference.LangCode));
-            parameters.AddRange(activeUser.PostDefaultParams(jobDocReference));
-            parameters.Add(new Parameter("@DocRefId", jobDocReference.Id));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJobDocReference);
-        }
+		public static JobDocReference Post(ActiveUser activeUser, JobDocReference jobDocReference)
+		{
+			var parameters = GetParameters(jobDocReference);
+			// parameters.Add(new Parameter("@langCode", jobDocReference.LangCode));
+			parameters.AddRange(activeUser.PostDefaultParams(jobDocReference));
+			parameters.Add(new Parameter("@DocRefId", jobDocReference.Id));
+			return Post(activeUser, parameters, StoredProceduresConstant.InsertJobDocReference);
+		}
 
-        public static JobDocReference PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobDocReference jobDocReference)
-        {
-            var parameters = GetParameters(jobDocReference, userSysSetting);
-            parameters.AddRange(activeUser.PostDefaultParams(jobDocReference));
-            parameters.Add(new Parameter("@DocRefId", jobDocReference.Id));
-            var result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobDocReference);
-            return result;
-        }
+		public static JobDocReference PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobDocReference jobDocReference)
+		{
+			var parameters = GetParameters(jobDocReference, userSysSetting);
+			parameters.AddRange(activeUser.PostDefaultParams(jobDocReference));
+			parameters.Add(new Parameter("@DocRefId", jobDocReference.Id));
+			var result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobDocReference);
+			return result;
+		}
 
-        /// <summary>
-        /// Updates the existing Job Document Reference record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="jobDocReference"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates the existing Job Document Reference record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="jobDocReference"></param>
+		/// <returns></returns>
 
-        public static JobDocReference Put(ActiveUser activeUser, JobDocReference jobDocReference)
-        {
-            var parameters = GetParameters(jobDocReference);
-            parameters.AddRange(activeUser.PutDefaultParams(jobDocReference.Id, jobDocReference));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobDocReference);
-        }
+		public static JobDocReference Put(ActiveUser activeUser, JobDocReference jobDocReference)
+		{
+			var parameters = GetParameters(jobDocReference);
+			parameters.AddRange(activeUser.PutDefaultParams(jobDocReference.Id, jobDocReference));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobDocReference);
+		}
 
-        public static JobDocReference PutWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobDocReference jobDocReference)
-        {
-            var parameters = GetParameters(jobDocReference, userSysSetting);
-            // parameters.Add(new Parameter("@langCode", jobDocReference.LangCode));
-            parameters.AddRange(activeUser.PutDefaultParams(jobDocReference.Id, jobDocReference));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobDocReference);
-        }
+		public static JobDocReference PutWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobDocReference jobDocReference)
+		{
+			var parameters = GetParameters(jobDocReference, userSysSetting);
+			// parameters.Add(new Parameter("@langCode", jobDocReference.LangCode));
+			parameters.AddRange(activeUser.PutDefaultParams(jobDocReference.Id, jobDocReference));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobDocReference);
+		}
 
-        /// <summary>
-        /// Deletes a specific Job Document Reference record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific Job Document Reference record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static int Delete(ActiveUser activeUser, long id)
-        {
-            //return Delete(activeUser, id, StoredProceduresConstant.DeleteOrganizationActRole);
-            return 0;
-        }
+		public static int Delete(ActiveUser activeUser, long id)
+		{
+			//return Delete(activeUser, id, StoredProceduresConstant.DeleteOrganizationActRole);
+			return 0;
+		}
 
-        /// <summary>
-        /// Deletes list of Job Document Reference records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes list of Job Document Reference records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
-        {
-            return Delete(activeUser, ids, EntitiesAlias.JobDocReference, statusId, ReservedKeysEnum.StatusId);
-        }
+		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+		{
+			return Delete(activeUser, ids, EntitiesAlias.JobDocReference, statusId, ReservedKeysEnum.StatusId);
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the Job Document Reference Module
-        /// </summary>
-        /// <param name="jobDocReference"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the Job Document Reference Module
+		/// </summary>
+		/// <param name="jobDocReference"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(JobDocReference jobDocReference, SysSetting userSysSetting = null)
-        {
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@jobId", jobDocReference.JobID),
-               new Parameter("@jdrItemNumber", jobDocReference.JdrItemNumber),
-               new Parameter("@jdrCode", jobDocReference.JdrCode),
-               new Parameter("@jdrTitle", jobDocReference.JdrTitle),
-               new Parameter("@docTypeId", jobDocReference.DocTypeId),
-               new Parameter("@jdrAttachment", jobDocReference.JdrAttachment),
-               new Parameter("@jdrDateStart", jobDocReference.JdrDateStart),
-               new Parameter("@jdrDateEnd", jobDocReference.JdrDateEnd),
-               new Parameter("@jdrRenewal", jobDocReference.JdrRenewal),
-               new Parameter("@statusId", jobDocReference.StatusId)
-            };
+		private static List<Parameter> GetParameters(JobDocReference jobDocReference, SysSetting userSysSetting = null)
+		{
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@jobId", jobDocReference.JobID),
+			   new Parameter("@jdrItemNumber", jobDocReference.JdrItemNumber),
+			   new Parameter("@jdrCode", jobDocReference.JdrCode),
+			   new Parameter("@jdrTitle", jobDocReference.JdrTitle),
+			   new Parameter("@docTypeId", jobDocReference.DocTypeId),
+			   new Parameter("@jdrAttachment", jobDocReference.JdrAttachment),
+			   new Parameter("@jdrDateStart", jobDocReference.JdrDateStart),
+			   new Parameter("@jdrDateEnd", jobDocReference.JdrDateEnd),
+			   new Parameter("@jdrRenewal", jobDocReference.JdrRenewal),
+			   new Parameter("@statusId", jobDocReference.StatusId)
+			};
 
-            if (userSysSetting != null && userSysSetting.Settings != null)
-            {
-                var whereCondition = string.Empty;
-                var itemNumberConditions = userSysSetting.Settings.Where(s => s.EntityName == EntitiesAlias.JobDocReference.ToString() && s.Name.Equals("ItemNumber"));
-                foreach (var setting in itemNumberConditions)
-                {
-                    if (setting != null && !string.IsNullOrEmpty(setting.Value))
-                    {
-                        var columnList = setting.Value.SplitComma();
-                        var properties = jobDocReference.GetType().GetProperties();
-                        foreach (var columnName in columnList)
-                        {
-                            var propInfo = properties.FirstOrDefault(p => columnName.Contains(p.Name));
-                            if (propInfo != null)
-                            {
-                                if (!setting.ValueType.Equals("string", System.StringComparison.OrdinalIgnoreCase))
-                                    whereCondition = whereCondition + " " + columnName + " " + propInfo.GetValue(jobDocReference, null);
-                                else
-                                    whereCondition = whereCondition + " " + columnName + " '" + propInfo.GetValue(jobDocReference, null) + "'";
-                            }
-                        }
-                    }
-                }
-                parameters.Add(new Parameter("@where", whereCondition));
-            }
+			if (userSysSetting != null && userSysSetting.Settings != null)
+			{
+				var whereCondition = string.Empty;
+				var itemNumberConditions = userSysSetting.Settings.Where(s => s.EntityName == EntitiesAlias.JobDocReference.ToString() && s.Name.Equals("ItemNumber"));
+				foreach (var setting in itemNumberConditions)
+				{
+					if (setting != null && !string.IsNullOrEmpty(setting.Value))
+					{
+						var columnList = setting.Value.SplitComma();
+						var properties = jobDocReference.GetType().GetProperties();
+						foreach (var columnName in columnList)
+						{
+							var propInfo = properties.FirstOrDefault(p => columnName.Contains(p.Name));
+							if (propInfo != null)
+							{
+								if (!setting.ValueType.Equals("string", System.StringComparison.OrdinalIgnoreCase))
+									whereCondition = whereCondition + " " + columnName + " " + propInfo.GetValue(jobDocReference, null);
+								else
+									whereCondition = whereCondition + " " + columnName + " '" + propInfo.GetValue(jobDocReference, null) + "'";
+							}
+						}
+					}
+				}
+				parameters.Add(new Parameter("@where", whereCondition));
+			}
 
-            return parameters;
-        }
+			return parameters;
+		}
 
-        public static long GetNextSequence()
-        {
-            try
-            {
-                var parameters = new List<Parameter>
-            {
-               new Parameter("@Entity", "DocumentReference")
-            };
+		public static long GetNextSequence()
+		{
+			try
+			{
+				var parameters = new List<Parameter>
+			{
+			   new Parameter("@Entity", "DocumentReference")
+			};
 
-
-                return SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.GetSequenceForEntity, parameters.ToArray(), storedProcedure: true);
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
-        }
-
-    }
+				return SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.GetSequenceForEntity, parameters.ToArray(), storedProcedure: true);
+			}
+			catch (Exception)
+			{
+				return 0;
+			}
+		}
+	}
 }

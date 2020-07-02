@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //==========================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -19,141 +19,140 @@
 
 namespace M4PL.Entities.Job
 {
-    public class JobCostSheet : BaseModel
-    {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public long JobID { get; set; }
+	public class JobCostSheet : BaseModel
+	{
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public long JobID { get; set; }
 
-        ////public string JobIDName { get; set; }
+		////public string JobIDName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public string CstLineItem { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public string CstLineItem { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public long CstChargeID { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public long CstChargeID { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public string CstChargeCode { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public string CstChargeCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public string CstTitle { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public string CstTitle { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public long CstSurchargeOrder { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public long CstSurchargeOrder { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public double? CstSurchargePercent { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public double? CstSurchargePercent { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public int? ChargeTypeId { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public int? ChargeTypeId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public int? CstNumberUsed { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public int? CstNumberUsed { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public decimal CstDuration { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public decimal CstDuration { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public decimal CstQuantity { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public decimal CstQuantity { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public int? CstUnitId { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public int? CstUnitId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public decimal CstRate { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public decimal CstRate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public decimal CstAmount { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public decimal CstAmount { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public double? CstMarkupPercent { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public double? CstMarkupPercent { get; set; }
 
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public byte[] CstComments { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public byte[] CstComments { get; set; }
+		public bool CstElectronicBilling { get; set; }
 
-        public bool CstElectronicBilling { get; set; }
-
-        public bool IsProblem { get; set; }
-    }
+		public bool IsProblem { get; set; }
+	}
 }

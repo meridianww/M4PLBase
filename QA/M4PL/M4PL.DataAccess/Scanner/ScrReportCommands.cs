@@ -1,10 +1,12 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
@@ -15,98 +17,98 @@ using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Scanner
 {
-    public class ScrReportCommands : BaseCommands<ScrReport>
-    {
-        /// <summary>
-        /// Gets list of Scanner records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<ScrReport> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
-        {
-            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetReportView, EntitiesAlias.ScrReport);
-        }
+	public class ScrReportCommands : BaseCommands<ScrReport>
+	{
+		/// <summary>
+		/// Gets list of Scanner records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<ScrReport> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		{
+			return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetReportView, EntitiesAlias.ScrReport);
+		}
 
-        /// <summary>
-        /// Gets the specific Scanner record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the specific Scanner record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static ScrReport Get(ActiveUser activeUser, long id)
-        {
-            return Get(activeUser, id, StoredProceduresConstant.GetReport, langCode: true);
-        }
+		public static ScrReport Get(ActiveUser activeUser, long id)
+		{
+			return Get(activeUser, id, StoredProceduresConstant.GetReport, langCode: true);
+		}
 
-        /// <summary>
-        /// Creates a new Scanner record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ScrReport"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new Scanner record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ScrReport"></param>
+		/// <returns></returns>
 
-        public static ScrReport Post(ActiveUser activeUser, ScrReport ScrReport)
-        {
-            var parameters = GetParameters(ScrReport);
-            // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
-            parameters.AddRange(activeUser.PostDefaultParams(ScrReport));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertReport);
-        }
+		public static ScrReport Post(ActiveUser activeUser, ScrReport ScrReport)
+		{
+			var parameters = GetParameters(ScrReport);
+			// parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+			parameters.AddRange(activeUser.PostDefaultParams(ScrReport));
+			return Post(activeUser, parameters, StoredProceduresConstant.InsertReport);
+		}
 
-        /// <summary>
-        /// Updates the existing Scanner record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ScrReport"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates the existing Scanner record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ScrReport"></param>
+		/// <returns></returns>
 
-        public static ScrReport Put(ActiveUser activeUser, ScrReport ScrReport)
-        {
-            var parameters = GetParameters(ScrReport);
-            // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
-            parameters.AddRange(activeUser.PutDefaultParams(ScrReport.Id, ScrReport));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateReport);
-        }
+		public static ScrReport Put(ActiveUser activeUser, ScrReport ScrReport)
+		{
+			var parameters = GetParameters(ScrReport);
+			// parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+			parameters.AddRange(activeUser.PutDefaultParams(ScrReport.Id, ScrReport));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateReport);
+		}
 
-        /// <summary>
-        /// Deletes a specific Scanner record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific Scanner record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static int Delete(ActiveUser activeUser, long id)
-        {
-            return 1;
-            // return Delete(activeUser, id, StoredProceduresConstant.DeleteScanner);
-        }
+		public static int Delete(ActiveUser activeUser, long id)
+		{
+			return 1;
+			// return Delete(activeUser, id, StoredProceduresConstant.DeleteScanner);
+		}
 
-        /// <summary>
-        /// Deletes list of Scanner records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes list of Scanner records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
-        {
-            return Delete(activeUser, ids, EntitiesAlias.Scanner, statusId, ReservedKeysEnum.StatusId);
-        }
+		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+		{
+			return Delete(activeUser, ids, EntitiesAlias.Scanner, statusId, ReservedKeysEnum.StatusId);
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the Scanner Module
-        /// </summary>
-        /// <param name="ScrReport"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the Scanner Module
+		/// </summary>
+		/// <param name="ScrReport"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(ScrReport ScrReport)
-        {
-            var parameters = new List<Parameter>
-            {
-            };
-            return parameters;
-        }
-    }
+		private static List<Parameter> GetParameters(ScrReport ScrReport)
+		{
+			var parameters = new List<Parameter>
+			{
+			};
+			return parameters;
+		}
+	}
 }

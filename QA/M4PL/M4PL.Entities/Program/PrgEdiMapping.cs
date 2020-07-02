@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //==========================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -21,21 +21,21 @@ using System;
 
 namespace M4PL.Entities.Program
 {
-    /// <summary>
-    ///
-    /// </summary>
-    public class PrgEdiMapping : BaseModel
-    {
-        public long? PemHeaderID { get; set; }
-        public string PemHeaderIDName { get; set; }
-        public string PemEdiTableName { get; set; }
-        public string PemEdiFieldName { get; set; }
-        public string PemEdiFieldDataType { get; set; }
-        public string PemSysTableName { get; set; }
-        public string PemSysFieldName { get; set; }
-        public string PemSysFieldDataType { get; set; }
-        public DateTime? PemDateStart { get; set; }
-        public DateTime? PemDateEnd { get; set; }
-        public int? PemInsertUpdate { get; set; }
-    }
+	/// <summary>
+	///
+	/// </summary>
+	public class PrgEdiMapping : BaseModel
+	{
+		public long? PemHeaderID { get; set; }
+		public string PemHeaderIDName { get; set; }
+		public string PemEdiTableName { get; set; }
+		public string PemEdiFieldName { get; set; }
+		public string PemEdiFieldDataType { get; set; }
+		public string PemSysTableName { get; set; }
+		public string PemSysFieldName { get; set; }
+		public string PemSysFieldDataType { get; set; }
+		public DateTime? PemDateStart { get; set; }
+		public DateTime? PemDateEnd { get; set; }
+		public int? PemInsertUpdate { get; set; }
+	}
 }

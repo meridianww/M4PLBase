@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //==========================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -19,70 +19,69 @@
 
 namespace M4PL.Entities.Program
 {
-    public class PrgEdiCondition : BaseModel
-    {
-        /// <summary>
-        /// Gets or sets the Program identifier.
-        /// </summary>
-        /// <value>
-        /// The  Parent  Program identifier.
-        /// </value>
+	public class PrgEdiCondition : BaseModel
+	{
+		/// <summary>
+		/// Gets or sets the Program identifier.
+		/// </summary>
+		/// <value>
+		/// The  Parent  Program identifier.
+		/// </value>
 
-        public long? PecParentProgramId { get; set; }
+		public long? PecParentProgramId { get; set; }
 
-        public string PecParentProgramIdName { get; set; }
+		public string PecParentProgramIdName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Edi header  identifier.
-        /// </summary>
-        /// <value>
-        /// The  Edi header identifier.
-        /// </value>
-        public long? PecProgramId { get; set; }
+		/// <summary>
+		/// Gets or sets the Edi header  identifier.
+		/// </summary>
+		/// <value>
+		/// The  Edi header identifier.
+		/// </value>
+		public long? PecProgramId { get; set; }
 
-        public string PecProgramIdName { get; set; }
+		public string PecProgramIdName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the PecJobField.
-        /// </summary>
-        /// <value>
-        /// The JobField1.
-        /// </value>
-        public string PecJobField { get; set; }
+		/// <summary>
+		/// Gets or sets the PecJobField.
+		/// </summary>
+		/// <value>
+		/// The JobField1.
+		/// </value>
+		public string PecJobField { get; set; }
 
-        /// <summary>
-        /// Gets or sets the PecCondition.
-        /// </summary>
-        /// <value>
-        /// The Condition1.
-        /// </value>
-        public string PecCondition { get; set; }
+		/// <summary>
+		/// Gets or sets the PecCondition.
+		/// </summary>
+		/// <value>
+		/// The Condition1.
+		/// </value>
+		public string PecCondition { get; set; }
 
-        /// <summary>
-        /// Gets or sets the PerLogical.
-        /// </summary>
-        /// <value>
-        /// The Logical.
-        /// </value>
-        public string PerLogical { get; set; }
+		/// <summary>
+		/// Gets or sets the PerLogical.
+		/// </summary>
+		/// <value>
+		/// The Logical.
+		/// </value>
+		public string PerLogical { get; set; }
 
-        /// <summary>
-        /// Gets or sets the PecJobField2.
-        /// </summary>
-        /// <value>
-        /// The JobField2.
-        /// </value>
-        public string PecJobField2 { get; set; }
+		/// <summary>
+		/// Gets or sets the PecJobField2.
+		/// </summary>
+		/// <value>
+		/// The JobField2.
+		/// </value>
+		public string PecJobField2 { get; set; }
 
-        /// <summary>
+		/// <summary>
 
-        /// <summary>
-        /// Gets or sets the PecCondition2
-        /// </summary>
-        /// <value>
-        /// The Condition2.
-        /// </value>
-        public string PecCondition2 { get; set; }
-
-    }
+		/// <summary>
+		/// Gets or sets the PecCondition2
+		/// </summary>
+		/// <value>
+		/// The Condition2.
+		/// </value>
+		public string PecCondition2 { get; set; }
+	}
 }

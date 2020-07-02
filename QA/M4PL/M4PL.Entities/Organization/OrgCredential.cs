@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //==========================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -21,28 +21,28 @@ using System;
 
 namespace M4PL.Entities.Organization
 {
-    /// <summary>
-    /// Organization Credential Class to create and maintain Credential details withing the Organization
-    /// Includes templates, business charters, insurance, policies and procedures
-    /// </summary>
-    public class OrgCredential : BaseModel
-    {
-        public long? OrgID { get; set; }
-        public string OrgIDName { get; set; }
+	/// <summary>
+	/// Organization Credential Class to create and maintain Credential details withing the Organization
+	/// Includes templates, business charters, insurance, policies and procedures
+	/// </summary>
+	public class OrgCredential : BaseModel
+	{
+		public long? OrgID { get; set; }
+		public string OrgIDName { get; set; }
 
-        public int? CreItemNumber { get; set; }
+		public int? CreItemNumber { get; set; }
 
-        public string CreCode { get; set; }
+		public string CreCode { get; set; }
 
-        public string CreTitle { get; set; }
+		public string CreTitle { get; set; }
 
-        public byte[] CreDescription { get; set; }
+		public byte[] CreDescription { get; set; }
 
-        public DateTime? CreExpDate { get; set; }
+		public DateTime? CreExpDate { get; set; }
 
-        /// <summary>
-        /// To get the attachment count for current entity
-        /// </summary>
-        public int? AttachmentCount { get; set; }
-    }
+		/// <summary>
+		/// To get the attachment count for current entity
+		/// </summary>
+		public int? AttachmentCount { get; set; }
+	}
 }

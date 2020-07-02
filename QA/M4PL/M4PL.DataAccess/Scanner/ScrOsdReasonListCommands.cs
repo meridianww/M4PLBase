@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=============================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -24,101 +24,101 @@ using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Scanner
 {
-    public class ScrOsdReasonListCommands : BaseCommands<Entities.Scanner.ScrOsdReasonList>
-    {
-        /// <summary>
-        /// Gets list of scrOsdReasonLists
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<Entities.Scanner.ScrOsdReasonList> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
-        {
-            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetScrOsdReasonListView, EntitiesAlias.ScrOsdReasonList);
-        }
+	public class ScrOsdReasonListCommands : BaseCommands<Entities.Scanner.ScrOsdReasonList>
+	{
+		/// <summary>
+		/// Gets list of scrOsdReasonLists
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<Entities.Scanner.ScrOsdReasonList> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		{
+			return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetScrOsdReasonListView, EntitiesAlias.ScrOsdReasonList);
+		}
 
-        /// <summary>
-        /// Gets the specific scrOsdReasonList
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the specific scrOsdReasonList
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static Entities.Scanner.ScrOsdReasonList Get(ActiveUser activeUser, long id)
-        {
-            return Get(activeUser, id, StoredProceduresConstant.GetScrOsdReasonList);
-        }
+		public static Entities.Scanner.ScrOsdReasonList Get(ActiveUser activeUser, long id)
+		{
+			return Get(activeUser, id, StoredProceduresConstant.GetScrOsdReasonList);
+		}
 
-        /// <summary>
-        /// Creates a new scrOsdReasonList
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="scrOsdReasonList"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new scrOsdReasonList
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="scrOsdReasonList"></param>
+		/// <returns></returns>
 
-        public static Entities.Scanner.ScrOsdReasonList Post(ActiveUser activeUser, Entities.Scanner.ScrOsdReasonList scrOsdReasonList)
-        {
-            var parameters = GetParameters(scrOsdReasonList);
-            parameters.AddRange(activeUser.PostDefaultParams(scrOsdReasonList));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertScrOsdReasonList);
-        }
+		public static Entities.Scanner.ScrOsdReasonList Post(ActiveUser activeUser, Entities.Scanner.ScrOsdReasonList scrOsdReasonList)
+		{
+			var parameters = GetParameters(scrOsdReasonList);
+			parameters.AddRange(activeUser.PostDefaultParams(scrOsdReasonList));
+			return Post(activeUser, parameters, StoredProceduresConstant.InsertScrOsdReasonList);
+		}
 
-        /// <summary>
-        /// Updates the existing scrOsdReasonList record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="scrOsdReasonList"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates the existing scrOsdReasonList record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="scrOsdReasonList"></param>
+		/// <returns></returns>
 
-        public static Entities.Scanner.ScrOsdReasonList Put(ActiveUser activeUser, Entities.Scanner.ScrOsdReasonList scrOsdReasonList)
-        {
-            var parameters = GetParameters(scrOsdReasonList);
-            parameters.AddRange(activeUser.PutDefaultParams(scrOsdReasonList.Id, scrOsdReasonList));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateScrOsdReasonList);
-        }
+		public static Entities.Scanner.ScrOsdReasonList Put(ActiveUser activeUser, Entities.Scanner.ScrOsdReasonList scrOsdReasonList)
+		{
+			var parameters = GetParameters(scrOsdReasonList);
+			parameters.AddRange(activeUser.PutDefaultParams(scrOsdReasonList.Id, scrOsdReasonList));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateScrOsdReasonList);
+		}
 
-        /// <summary>
-        /// Deletes a specific scrOsdReasonList
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific scrOsdReasonList
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static int Delete(ActiveUser activeUser, long id)
-        {
-            //return Delete(activeUser, id, StoredProceduresConstant.DeletescrOsdReasonList);
-            return 0;
-        }
+		public static int Delete(ActiveUser activeUser, long id)
+		{
+			//return Delete(activeUser, id, StoredProceduresConstant.DeletescrOsdReasonList);
+			return 0;
+		}
 
-        /// <summary>
-        /// Deletes list of scrOsdReasonLists
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes list of scrOsdReasonLists
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
-        {
-            return Delete(activeUser, ids, EntitiesAlias.ScrOsdReasonList, statusId, ReservedKeysEnum.StatusId);
-        }
+		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+		{
+			return Delete(activeUser, ids, EntitiesAlias.ScrOsdReasonList, statusId, ReservedKeysEnum.StatusId);
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the scrOsdReasonLists Module
-        /// </summary>
-        /// <param name="scrOsdReasonList"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the scrOsdReasonLists Module
+		/// </summary>
+		/// <param name="scrOsdReasonList"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(Entities.Scanner.ScrOsdReasonList scrOsdReasonList)
-        {
-            var parameters = new List<Parameter>
-           {
-               new Parameter("@programID", scrOsdReasonList.ProgramID),
-               new Parameter("@reasonItemNumber", scrOsdReasonList.ReasonItemNumber),
-               new Parameter("@reasonIDCode", scrOsdReasonList.ReasonIDCode),
-               new Parameter("@reasonTitle", scrOsdReasonList.ReasonTitle),
-               new Parameter("@statusId", scrOsdReasonList.StatusId),
-           };
-            return parameters;
-        }
-    }
+		private static List<Parameter> GetParameters(Entities.Scanner.ScrOsdReasonList scrOsdReasonList)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@programID", scrOsdReasonList.ProgramID),
+			   new Parameter("@reasonItemNumber", scrOsdReasonList.ReasonItemNumber),
+			   new Parameter("@reasonIDCode", scrOsdReasonList.ReasonIDCode),
+			   new Parameter("@reasonTitle", scrOsdReasonList.ReasonTitle),
+			   new Parameter("@statusId", scrOsdReasonList.StatusId),
+		   };
+			return parameters;
+		}
+	}
 }

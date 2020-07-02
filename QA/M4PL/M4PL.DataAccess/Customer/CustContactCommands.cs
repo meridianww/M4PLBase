@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=============================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,104 +25,104 @@ using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Customer
 {
-    public class CustContactCommands : BaseCommands<CustContact>
-    {
-        /// <summary>
-        /// Gets list of Customer Contacts
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<CustContact> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
-        {
-            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetCustContactView, EntitiesAlias.CustContact);
-        }
+	public class CustContactCommands : BaseCommands<CustContact>
+	{
+		/// <summary>
+		/// Gets list of Customer Contacts
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<CustContact> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		{
+			return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetCustContactView, EntitiesAlias.CustContact);
+		}
 
-        /// <summary>
-        /// Gets the specific Customer Contacts
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the specific Customer Contacts
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static CustContact Get(ActiveUser activeUser, long id)
-        {
-            return Get(activeUser, id, StoredProceduresConstant.GetCustContact);
-        }
+		public static CustContact Get(ActiveUser activeUser, long id)
+		{
+			return Get(activeUser, id, StoredProceduresConstant.GetCustContact);
+		}
 
-        /// <summary>
-        /// Creates a new Customer Contacts
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="custContact"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new Customer Contacts
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="custContact"></param>
+		/// <returns></returns>
 
-        public static CustContact Post(ActiveUser activeUser, CustContact custContact)
-        {
-            var parameters = GetParameters(custContact, activeUser.OrganizationId.ToString());
-            // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
-            parameters.AddRange(activeUser.PostDefaultParams(custContact));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertCustContact);
-        }
+		public static CustContact Post(ActiveUser activeUser, CustContact custContact)
+		{
+			var parameters = GetParameters(custContact, activeUser.OrganizationId.ToString());
+			// parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+			parameters.AddRange(activeUser.PostDefaultParams(custContact));
+			return Post(activeUser, parameters, StoredProceduresConstant.InsertCustContact);
+		}
 
-        /// <summary>
-        /// Updates the existing Customer Contacts
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="custContact"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates the existing Customer Contacts
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="custContact"></param>
+		/// <returns></returns>
 
-        public static CustContact Put(ActiveUser activeUser, CustContact custContact)
-        {
-            var parameters = GetParameters(custContact, activeUser.OrganizationId.ToString());
-            // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
-            parameters.AddRange(activeUser.PutDefaultParams(custContact.Id, custContact));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateCustContact);
-        }
+		public static CustContact Put(ActiveUser activeUser, CustContact custContact)
+		{
+			var parameters = GetParameters(custContact, activeUser.OrganizationId.ToString());
+			// parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+			parameters.AddRange(activeUser.PutDefaultParams(custContact.Id, custContact));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateCustContact);
+		}
 
-        /// <summary>
-        /// Deletes a specific Customer Contacts
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific Customer Contacts
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static int Delete(ActiveUser activeUser, long id)
-        {
-            return Delete(activeUser, id, StoredProceduresConstant.DeleteCustContact);
-        }
+		public static int Delete(ActiveUser activeUser, long id)
+		{
+			return Delete(activeUser, id, StoredProceduresConstant.DeleteCustContact);
+		}
 
-        /// <summary>
-        /// Deletes list of Customer Contacts
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes list of Customer Contacts
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
-        {
-            return Delete(activeUser, ids, EntitiesAlias.CustContact, statusId, ReservedKeysEnum.StatusId);
-        }
+		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+		{
+			return Delete(activeUser, ids, EntitiesAlias.CustContact, statusId, ReservedKeysEnum.StatusId);
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the Customer Contacts Module
-        /// </summary>
-        /// <param name="custContact"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the Customer Contacts Module
+		/// </summary>
+		/// <param name="custContact"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(CustContact custContact, string orgId)
-        {
-            var parameters = new List<Parameter>
-           {
-               new Parameter("@orgId", orgId ),
-               new Parameter("@custCustomerId", custContact.ConPrimaryRecordId),
-               new Parameter("@custItemNumber", custContact.ConItemNumber),
-               new Parameter("@custContactCodeId", custContact.ConCodeId),
-               new Parameter("@custContactTitle", custContact.ConTitle),
-               new Parameter("@custContactMSTRId", custContact.ContactMSTRID),
-               new Parameter("@statusId", custContact.StatusId),
-           };
-            return parameters;
-        }
-    }
+		private static List<Parameter> GetParameters(CustContact custContact, string orgId)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@orgId", orgId ),
+			   new Parameter("@custCustomerId", custContact.ConPrimaryRecordId),
+			   new Parameter("@custItemNumber", custContact.ConItemNumber),
+			   new Parameter("@custContactCodeId", custContact.ConCodeId),
+			   new Parameter("@custContactTitle", custContact.ConTitle),
+			   new Parameter("@custContactMSTRId", custContact.ContactMSTRID),
+			   new Parameter("@statusId", custContact.StatusId),
+		   };
+			return parameters;
+		}
+	}
 }

@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=============================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -24,101 +24,101 @@ using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Scanner
 {
-    public class ScrRequirementListCommands : BaseCommands<Entities.Scanner.ScrRequirementList>
-    {
-        /// <summary>
-        /// Gets list of scrRequirementLists
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<Entities.Scanner.ScrRequirementList> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
-        {
-            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetScrRequirementListView, EntitiesAlias.ScrRequirementList);
-        }
+	public class ScrRequirementListCommands : BaseCommands<Entities.Scanner.ScrRequirementList>
+	{
+		/// <summary>
+		/// Gets list of scrRequirementLists
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<Entities.Scanner.ScrRequirementList> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		{
+			return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetScrRequirementListView, EntitiesAlias.ScrRequirementList);
+		}
 
-        /// <summary>
-        /// Gets the specific scrRequirementList
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the specific scrRequirementList
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static Entities.Scanner.ScrRequirementList Get(ActiveUser activeUser, long id)
-        {
-            return Get(activeUser, id, StoredProceduresConstant.GetScrRequirementList);
-        }
+		public static Entities.Scanner.ScrRequirementList Get(ActiveUser activeUser, long id)
+		{
+			return Get(activeUser, id, StoredProceduresConstant.GetScrRequirementList);
+		}
 
-        /// <summary>
-        /// Creates a new scrRequirementList
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="scrRequirementList"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new scrRequirementList
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="scrRequirementList"></param>
+		/// <returns></returns>
 
-        public static Entities.Scanner.ScrRequirementList Post(ActiveUser activeUser, Entities.Scanner.ScrRequirementList scrRequirementList)
-        {
-            var parameters = GetParameters(scrRequirementList);
-            parameters.AddRange(activeUser.PostDefaultParams(scrRequirementList));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertScrRequirementList);
-        }
+		public static Entities.Scanner.ScrRequirementList Post(ActiveUser activeUser, Entities.Scanner.ScrRequirementList scrRequirementList)
+		{
+			var parameters = GetParameters(scrRequirementList);
+			parameters.AddRange(activeUser.PostDefaultParams(scrRequirementList));
+			return Post(activeUser, parameters, StoredProceduresConstant.InsertScrRequirementList);
+		}
 
-        /// <summary>
-        /// Updates the existing scrRequirementList record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="scrRequirementList"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates the existing scrRequirementList record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="scrRequirementList"></param>
+		/// <returns></returns>
 
-        public static Entities.Scanner.ScrRequirementList Put(ActiveUser activeUser, Entities.Scanner.ScrRequirementList scrRequirementList)
-        {
-            var parameters = GetParameters(scrRequirementList);
-            parameters.AddRange(activeUser.PutDefaultParams(scrRequirementList.Id, scrRequirementList));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateScrRequirementList);
-        }
+		public static Entities.Scanner.ScrRequirementList Put(ActiveUser activeUser, Entities.Scanner.ScrRequirementList scrRequirementList)
+		{
+			var parameters = GetParameters(scrRequirementList);
+			parameters.AddRange(activeUser.PutDefaultParams(scrRequirementList.Id, scrRequirementList));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateScrRequirementList);
+		}
 
-        /// <summary>
-        /// Deletes a specific scrRequirementList
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific scrRequirementList
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static int Delete(ActiveUser activeUser, long id)
-        {
-            //return Delete(activeUser, id, StoredProceduresConstant.DeletescrRequirementList);
-            return 0;
-        }
+		public static int Delete(ActiveUser activeUser, long id)
+		{
+			//return Delete(activeUser, id, StoredProceduresConstant.DeletescrRequirementList);
+			return 0;
+		}
 
-        /// <summary>
-        /// Deletes list of scrRequirementLists
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes list of scrRequirementLists
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
-        {
-            return Delete(activeUser, ids, EntitiesAlias.ScrRequirementList, statusId, ReservedKeysEnum.StatusId);
-        }
+		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+		{
+			return Delete(activeUser, ids, EntitiesAlias.ScrRequirementList, statusId, ReservedKeysEnum.StatusId);
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the scrRequirementLists Module
-        /// </summary>
-        /// <param name="scrRequirementList"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the scrRequirementLists Module
+		/// </summary>
+		/// <param name="scrRequirementList"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(Entities.Scanner.ScrRequirementList scrRequirementList)
-        {
-            var parameters = new List<Parameter>
-           {
-               new Parameter("@programID", scrRequirementList.ProgramID),
-               new Parameter("@requirementLineItem", scrRequirementList.RequirementLineItem),
-               new Parameter("@requirementCode", scrRequirementList.RequirementCode),
-               new Parameter("@requirementTitle", scrRequirementList.RequirementTitle),
-               new Parameter("@statusId", scrRequirementList.StatusId),
-           };
-            return parameters;
-        }
-    }
+		private static List<Parameter> GetParameters(Entities.Scanner.ScrRequirementList scrRequirementList)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@programID", scrRequirementList.ProgramID),
+			   new Parameter("@requirementLineItem", scrRequirementList.RequirementLineItem),
+			   new Parameter("@requirementCode", scrRequirementList.RequirementCode),
+			   new Parameter("@requirementTitle", scrRequirementList.RequirementTitle),
+			   new Parameter("@statusId", scrRequirementList.StatusId),
+		   };
+			return parameters;
+		}
+	}
 }

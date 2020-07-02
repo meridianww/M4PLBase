@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=============================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -27,86 +27,86 @@ using System.Globalization;
 
 namespace M4PL.DataAccess.Finance
 {
-    public class NavCostCodeCommands : BaseCommands<NavCostCode>
-    {
-        /// <summary>
-        /// Updates the existing Cost Code record
-        /// </summary>
-        /// <param name="activeUser">activeUser</param>
-        /// <param name="navCostCodeList">navCostCodeList</param>
-        /// <returns></returns>
-        public static NavCostCode Put(ActiveUser activeUser, List<NavCostCode> navCostCodeList)
-        {
-            var parameters = GetParameters(navCostCodeList, activeUser);
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateNavCostCode);
-        }
+	public class NavCostCodeCommands : BaseCommands<NavCostCode>
+	{
+		/// <summary>
+		/// Updates the existing Cost Code record
+		/// </summary>
+		/// <param name="activeUser">activeUser</param>
+		/// <param name="navCostCodeList">navCostCodeList</param>
+		/// <returns></returns>
+		public static NavCostCode Put(ActiveUser activeUser, List<NavCostCode> navCostCodeList)
+		{
+			var parameters = GetParameters(navCostCodeList, activeUser);
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateNavCostCode);
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the Customer Module
-        /// </summary>
-        /// <param name="customer"></param>
-        /// <returns></returns>
-        private static List<Parameter> GetParameters(List<NavCostCode> navCostCodeList, ActiveUser activeUser)
-        {
-            var parameters = new List<Parameter>
-           {
-                new Parameter("@uttNavCostCode", GetCostCodeDT(navCostCodeList)),
-                new Parameter("@changedBy", activeUser.UserName),
-                new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
-           };
+		/// <summary>
+		/// Gets list of parameters required for the Customer Module
+		/// </summary>
+		/// <param name="customer"></param>
+		/// <returns></returns>
+		private static List<Parameter> GetParameters(List<NavCostCode> navCostCodeList, ActiveUser activeUser)
+		{
+			var parameters = new List<Parameter>
+		   {
+				new Parameter("@uttNavCostCode", GetCostCodeDT(navCostCodeList)),
+				new Parameter("@changedBy", activeUser.UserName),
+				new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
+		   };
 
-            return parameters;
-        }
+			return parameters;
+		}
 
-        /// <summary>
-        /// GetCostCodeDT - Method to get CostCode in a datatable
-        /// </summary>
-        /// <param name="navCostCodeList">navCostCodeList</param>
-        /// <returns>DataTable</returns>
-        public static DataTable GetCostCodeDT(List<NavCostCode> navCostCodeList)
-        {
-            if (navCostCodeList == null)
-            {
-                throw new ArgumentNullException("CostCodeList", "NavCostCodeCommands.GetCostCodeDT() - Argument null Exception");
-            }
+		/// <summary>
+		/// GetCostCodeDT - Method to get CostCode in a datatable
+		/// </summary>
+		/// <param name="navCostCodeList">navCostCodeList</param>
+		/// <returns>DataTable</returns>
+		public static DataTable GetCostCodeDT(List<NavCostCode> navCostCodeList)
+		{
+			if (navCostCodeList == null)
+			{
+				throw new ArgumentNullException("CostCodeList", "NavCostCodeCommands.GetCostCodeDT() - Argument null Exception");
+			}
 
-            using (var costCodeUTT = new DataTable("uttNavCostCode"))
-            {
-                costCodeUTT.Locale = CultureInfo.InvariantCulture;
-                costCodeUTT.Columns.Add("ItemId");
-                costCodeUTT.Columns.Add("VendorNo");
-                costCodeUTT.Columns.Add("StartDate");
-                costCodeUTT.Columns.Add("CurrencyCode");
-                costCodeUTT.Columns.Add("VariantCode");
-                costCodeUTT.Columns.Add("MeasureCodeUnit");
-                costCodeUTT.Columns.Add("MinimumQuantity");
-                costCodeUTT.Columns.Add("VendNoFilterCtrl");
-                costCodeUTT.Columns.Add("ItemNoFIlterCtrl");
-                costCodeUTT.Columns.Add("StartingDateFilter");
-                costCodeUTT.Columns.Add("DirectUnitCost");
-                costCodeUTT.Columns.Add("EndingDate");
+			using (var costCodeUTT = new DataTable("uttNavCostCode"))
+			{
+				costCodeUTT.Locale = CultureInfo.InvariantCulture;
+				costCodeUTT.Columns.Add("ItemId");
+				costCodeUTT.Columns.Add("VendorNo");
+				costCodeUTT.Columns.Add("StartDate");
+				costCodeUTT.Columns.Add("CurrencyCode");
+				costCodeUTT.Columns.Add("VariantCode");
+				costCodeUTT.Columns.Add("MeasureCodeUnit");
+				costCodeUTT.Columns.Add("MinimumQuantity");
+				costCodeUTT.Columns.Add("VendNoFilterCtrl");
+				costCodeUTT.Columns.Add("ItemNoFIlterCtrl");
+				costCodeUTT.Columns.Add("StartingDateFilter");
+				costCodeUTT.Columns.Add("DirectUnitCost");
+				costCodeUTT.Columns.Add("EndingDate");
 
-                foreach (var custCode in navCostCodeList)
-                {
-                    var row = costCodeUTT.NewRow();
-                    row["ItemId"] = custCode.Item_No;
-                    row["VendorNo"] = custCode.Vendor_No;
-                    row["StartDate"] = custCode.Starting_Date;
-                    row["CurrencyCode"] = custCode.Currency_Code;
-                    row["VariantCode"] = custCode.Variant_Code;
-                    row["MeasureCodeUnit"] = custCode.Unit_of_Measure_Code;
-                    row["MinimumQuantity"] = custCode.Minimum_Quantity;
-                    row["VendNoFilterCtrl"] = custCode.VendNoFilterCtrl;
-                    row["ItemNoFIlterCtrl"] = custCode.ItemNoFIlterCtrl;
-                    row["StartingDateFilter"] = custCode.StartingDateFilter;
-                    row["DirectUnitCost"] = custCode.Direct_Unit_Cost;
-                    row["EndingDate"] = custCode.Ending_Date;
-                    costCodeUTT.Rows.Add(row);
-                    costCodeUTT.AcceptChanges();
-                }
+				foreach (var custCode in navCostCodeList)
+				{
+					var row = costCodeUTT.NewRow();
+					row["ItemId"] = custCode.Item_No;
+					row["VendorNo"] = custCode.Vendor_No;
+					row["StartDate"] = custCode.Starting_Date;
+					row["CurrencyCode"] = custCode.Currency_Code;
+					row["VariantCode"] = custCode.Variant_Code;
+					row["MeasureCodeUnit"] = custCode.Unit_of_Measure_Code;
+					row["MinimumQuantity"] = custCode.Minimum_Quantity;
+					row["VendNoFilterCtrl"] = custCode.VendNoFilterCtrl;
+					row["ItemNoFIlterCtrl"] = custCode.ItemNoFIlterCtrl;
+					row["StartingDateFilter"] = custCode.StartingDateFilter;
+					row["DirectUnitCost"] = custCode.Direct_Unit_Cost;
+					row["EndingDate"] = custCode.Ending_Date;
+					costCodeUTT.Rows.Add(row);
+					costCodeUTT.AcceptChanges();
+				}
 
-                return costCodeUTT;
-            }
-        }
-    }
+				return costCodeUTT;
+			}
+		}
+	}
 }

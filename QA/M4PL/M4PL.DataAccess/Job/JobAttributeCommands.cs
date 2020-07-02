@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=============================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,106 +25,106 @@ using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Job
 {
-    public class JobAttributeCommands : BaseCommands<JobAttribute>
-    {
-        /// <summary>
-        /// Gets list of JobAttribute records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<JobAttribute> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
-        {
-            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobAttributeView, EntitiesAlias.JobAttribute);
-        }
+	public class JobAttributeCommands : BaseCommands<JobAttribute>
+	{
+		/// <summary>
+		/// Gets list of JobAttribute records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<JobAttribute> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		{
+			return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobAttributeView, EntitiesAlias.JobAttribute);
+		}
 
-        /// <summary>
-        /// Gets the specific JobAttribute record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the specific JobAttribute record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static JobAttribute Get(ActiveUser activeUser, long id)
-        {
-            return Get(activeUser, id, StoredProceduresConstant.GetJobAttribute);
-        }
+		public static JobAttribute Get(ActiveUser activeUser, long id)
+		{
+			return Get(activeUser, id, StoredProceduresConstant.GetJobAttribute);
+		}
 
-        /// <summary>
-        /// Creates a new JobAttribute record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="jobAttribute"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new JobAttribute record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="jobAttribute"></param>
+		/// <returns></returns>
 
-        public static JobAttribute Post(ActiveUser activeUser, JobAttribute jobAttribute)
-        {
-            var parameters = GetParameters(jobAttribute);
-            // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
-            parameters.AddRange(activeUser.PostDefaultParams(jobAttribute));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJobAttribute);
-        }
+		public static JobAttribute Post(ActiveUser activeUser, JobAttribute jobAttribute)
+		{
+			var parameters = GetParameters(jobAttribute);
+			// parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+			parameters.AddRange(activeUser.PostDefaultParams(jobAttribute));
+			return Post(activeUser, parameters, StoredProceduresConstant.InsertJobAttribute);
+		}
 
-        /// <summary>
-        /// Updates the existing JobAttribute record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="jobAttribute"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates the existing JobAttribute record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="jobAttribute"></param>
+		/// <returns></returns>
 
-        public static JobAttribute Put(ActiveUser activeUser, JobAttribute jobAttribute)
-        {
-            var parameters = GetParameters(jobAttribute);
-            // parameters.Add(new Parameter("@langCode", entity.LangCode));
-            parameters.AddRange(activeUser.PutDefaultParams(jobAttribute.Id, jobAttribute));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobAttribute);
-        }
+		public static JobAttribute Put(ActiveUser activeUser, JobAttribute jobAttribute)
+		{
+			var parameters = GetParameters(jobAttribute);
+			// parameters.Add(new Parameter("@langCode", entity.LangCode));
+			parameters.AddRange(activeUser.PutDefaultParams(jobAttribute.Id, jobAttribute));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobAttribute);
+		}
 
-        /// <summary>
-        /// Deletes a specific JobAttribute record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific JobAttribute record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static int Delete(ActiveUser activeUser, long id)
-        {
-            //return Delete(activeUser, id, StoredProceduresConstant.DeleteOrganizationActRole);
-            return 0;
-        }
+		public static int Delete(ActiveUser activeUser, long id)
+		{
+			//return Delete(activeUser, id, StoredProceduresConstant.DeleteOrganizationActRole);
+			return 0;
+		}
 
-        /// <summary>
-        /// Deletes list of JobAttribute records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes list of JobAttribute records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
-        {
-            return Delete(activeUser, ids, EntitiesAlias.JobAttribute, statusId, ReservedKeysEnum.StatusId);
-        }
+		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+		{
+			return Delete(activeUser, ids, EntitiesAlias.JobAttribute, statusId, ReservedKeysEnum.StatusId);
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the JobAttribute Module
-        /// </summary>
-        /// <param name="jobAttribute"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the JobAttribute Module
+		/// </summary>
+		/// <param name="jobAttribute"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(JobAttribute jobAttribute)
-        {
-            var parameters = new List<Parameter>
-           {
-               new Parameter("@jobId", jobAttribute.JobID),
-               new Parameter("@ajbLineOrder", jobAttribute.AjbLineOrder),
-               new Parameter("@ajbAttributeCode", jobAttribute.AjbAttributeCode),
-               new Parameter("@ajbAttributeTitle", jobAttribute.AjbAttributeTitle),
-               new Parameter("@ajbAttributeQty", jobAttribute.AjbAttributeQty),
-               new Parameter("@ajbUnitTypeId", jobAttribute.AjbUnitTypeId),
-               new Parameter("@ajbDefault", jobAttribute.AjbDefault),
-               new Parameter("@statusId", jobAttribute.StatusId),
-           };
-            return parameters;
-        }
-    }
+		private static List<Parameter> GetParameters(JobAttribute jobAttribute)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@jobId", jobAttribute.JobID),
+			   new Parameter("@ajbLineOrder", jobAttribute.AjbLineOrder),
+			   new Parameter("@ajbAttributeCode", jobAttribute.AjbAttributeCode),
+			   new Parameter("@ajbAttributeTitle", jobAttribute.AjbAttributeTitle),
+			   new Parameter("@ajbAttributeQty", jobAttribute.AjbAttributeQty),
+			   new Parameter("@ajbUnitTypeId", jobAttribute.AjbUnitTypeId),
+			   new Parameter("@ajbDefault", jobAttribute.AjbDefault),
+			   new Parameter("@statusId", jobAttribute.StatusId),
+		   };
+			return parameters;
+		}
+	}
 }

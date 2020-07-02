@@ -1,10 +1,12 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 //==========================================================================================================
@@ -17,43 +19,43 @@
 
 namespace M4PL.Entities.Administration
 {
-    /// <summary>
-    /// Entities of Column Alias will contain objects related to  Column Alias
-    /// </summary>
-    public class MenuOptionLevel : BaseModel
-    {
-        /// <summary>
-        /// Gets or sets the Menu option level identifier.
-        /// </summary>
-        /// <value>
-        /// The MolOrder identifier.
-        /// </value>
-        public int? MolOrder { get; set; }
+	/// <summary>
+	/// Entities of Column Alias will contain objects related to  Column Alias
+	/// </summary>
+	public class MenuOptionLevel : BaseModel
+	{
+		/// <summary>
+		/// Gets or sets the Menu option level identifier.
+		/// </summary>
+		/// <value>
+		/// The MolOrder identifier.
+		/// </value>
+		public int? MolOrder { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Menu option level title.
-        /// </summary>
-        /// <value>
-        /// The MolMenuLevelTitle.
-        /// </value>
-        public string MolMenuLevelTitle { get; set; }
+		/// <summary>
+		/// Gets or sets the Menu option level title.
+		/// </summary>
+		/// <value>
+		/// The MolMenuLevelTitle.
+		/// </value>
+		public string MolMenuLevelTitle { get; set; }
 
-        /// <summary>
-        /// Gets or sets the whether the menu should be default.
-        /// </summary>
-        /// <value>
-        /// The MolMenuAccessDefault.
-        /// </value>
-        public int MolMenuAccessDefault { get; set; }
+		/// <summary>
+		/// Gets or sets the whether the menu should be default.
+		/// </summary>
+		/// <value>
+		/// The MolMenuAccessDefault.
+		/// </value>
+		public int MolMenuAccessDefault { get; set; }
 
-        public string MolMenuAccessDefaultName { get; set; }
+		public string MolMenuAccessDefaultName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the whether the menu should be readonly or editable.
-        /// </summary>
-        /// <value>
-        /// The MolMenuAccessOnly.
-        /// </value>
-        public bool MolMenuAccessOnly { get; set; }
-    }
+		/// <summary>
+		/// Gets or sets the whether the menu should be readonly or editable.
+		/// </summary>
+		/// <value>
+		/// The MolMenuAccessOnly.
+		/// </value>
+		public bool MolMenuAccessOnly { get; set; }
+	}
 }

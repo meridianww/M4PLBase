@@ -1,10 +1,12 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
@@ -14,62 +16,62 @@ using System.Linq;
 
 namespace M4PL.DataAccess.JobRollup
 {
-    public class JobRollupCommands
-    {
-        public static List<RollupList> GetRollupListByProgram(long programId)
-        {
-            var result = SqlSerializer.Default.DeserializeMultiRecords<RollupList>(StoredProceduresConstant.GetRollingupJobIdList, new Parameter("@programId", programId), storedProcedure: true);
-            return result;
-        }
+	public class JobRollupCommands
+	{
+		public static List<RollupList> GetRollupListByProgram(long programId)
+		{
+			var result = SqlSerializer.Default.DeserializeMultiRecords<RollupList>(StoredProceduresConstant.GetRollingupJobIdList, new Parameter("@programId", programId), storedProcedure: true);
+			return result;
+		}
 
-        public static List<RollupList> GetRollupListByJob(long jobId)
-        {
-            var result = SqlSerializer.Default.DeserializeMultiRecords<RollupList>(StoredProceduresConstant.GetRollingupJobIdListByJobId, new Parameter("@jobId", jobId), storedProcedure: true);
-            return result;
-        }
+		public static List<RollupList> GetRollupListByJob(long jobId)
+		{
+			var result = SqlSerializer.Default.DeserializeMultiRecords<RollupList>(StoredProceduresConstant.GetRollingupJobIdListByJobId, new Parameter("@jobId", jobId), storedProcedure: true);
+			return result;
+		}
 
-        public static List<JobRollupList> GetRollupByProgram(long programId)
-        {
-            List<JobRollupList> result = null;
-            int completedCount = 0;
-            var rollupList = GetRollupListByProgram(programId);
-            if (rollupList != null && rollupList.Count > 0)
-            {
-                result = new List<JobRollupList>();
-                List<string> distinctList = rollupList.GroupBy(p => p.ColumnValue).Select(g => g.First().ColumnValue).ToList();
-                foreach (var columnValue in distinctList)
-                {
-                    completedCount = rollupList.Where(x => x.IsCompleted && x.ColumnValue == columnValue).Any() ? rollupList.Where(x => x.IsCompleted && x.ColumnValue == columnValue).ToList().Count : completedCount;
-                    if (completedCount > 0 && rollupList.Where(x => x.ColumnValue == columnValue).Any() && completedCount == rollupList.Where(x => x.ColumnValue == columnValue).ToList().Count)
-                    {
-                        result.Add(new JobRollupList() { JobId = rollupList.Where(x => x.ColumnValue == columnValue).Select(x => x.JobId).ToList(), FieldValue = columnValue });
-                    }
-                }
-            }
+		public static List<JobRollupList> GetRollupByProgram(long programId)
+		{
+			List<JobRollupList> result = null;
+			int completedCount = 0;
+			var rollupList = GetRollupListByProgram(programId);
+			if (rollupList != null && rollupList.Count > 0)
+			{
+				result = new List<JobRollupList>();
+				List<string> distinctList = rollupList.GroupBy(p => p.ColumnValue).Select(g => g.First().ColumnValue).ToList();
+				foreach (var columnValue in distinctList)
+				{
+					completedCount = rollupList.Where(x => x.IsCompleted && x.ColumnValue == columnValue).Any() ? rollupList.Where(x => x.IsCompleted && x.ColumnValue == columnValue).ToList().Count : completedCount;
+					if (completedCount > 0 && rollupList.Where(x => x.ColumnValue == columnValue).Any() && completedCount == rollupList.Where(x => x.ColumnValue == columnValue).ToList().Count)
+					{
+						result.Add(new JobRollupList() { JobId = rollupList.Where(x => x.ColumnValue == columnValue).Select(x => x.JobId).ToList(), FieldValue = columnValue });
+					}
+				}
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        public static List<JobRollupList> GetRollupByJob(long jobId)
-        {
-            List<JobRollupList> result = null;
-            int completedCount = 0;
-            var rollupList = GetRollupListByJob(jobId);
-            if (rollupList != null && rollupList.Count > 0)
-            {
-                result = new List<JobRollupList>();
-                List<string> distinctList = rollupList.GroupBy(p => p.ColumnValue).Select(g => g.First().ColumnValue).ToList();
-                foreach (var columnValue in distinctList)
-                {
-                    completedCount = rollupList.Where(x => x.IsCompleted && x.ColumnValue == columnValue).Any() ? rollupList.Where(x => x.IsCompleted && x.ColumnValue == columnValue).ToList().Count : completedCount;
-                    if (completedCount > 0 && rollupList.Where(x => x.ColumnValue == columnValue).Any() && completedCount == rollupList.Where(x => x.ColumnValue == columnValue).ToList().Count)
-                    {
-                        result.Add(new JobRollupList() { JobId = rollupList.Where(x => x.ColumnValue == columnValue).Select(x => x.JobId).ToList(), FieldValue = columnValue });
-                    }
-                }
-            }
+		public static List<JobRollupList> GetRollupByJob(long jobId)
+		{
+			List<JobRollupList> result = null;
+			int completedCount = 0;
+			var rollupList = GetRollupListByJob(jobId);
+			if (rollupList != null && rollupList.Count > 0)
+			{
+				result = new List<JobRollupList>();
+				List<string> distinctList = rollupList.GroupBy(p => p.ColumnValue).Select(g => g.First().ColumnValue).ToList();
+				foreach (var columnValue in distinctList)
+				{
+					completedCount = rollupList.Where(x => x.IsCompleted && x.ColumnValue == columnValue).Any() ? rollupList.Where(x => x.IsCompleted && x.ColumnValue == columnValue).ToList().Count : completedCount;
+					if (completedCount > 0 && rollupList.Where(x => x.ColumnValue == columnValue).Any() && completedCount == rollupList.Where(x => x.ColumnValue == columnValue).ToList().Count)
+					{
+						result.Add(new JobRollupList() { JobId = rollupList.Where(x => x.ColumnValue == columnValue).Select(x => x.JobId).ToList(), FieldValue = columnValue });
+					}
+				}
+			}
 
-            return result;
-        }
-    }
+			return result;
+		}
+	}
 }

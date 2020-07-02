@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=============================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,106 +25,106 @@ using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Administration
 {
-    public class SystemPageTabNameCommands : BaseCommands<SystemPageTabName>
-    {
-        /// <summary>
-        /// Gets list of SystemPageTableName records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<SystemPageTabName> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
-        {
-            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetSystemPageTabNameView, EntitiesAlias.SystemPageTabName, langCode: true);
-        }
+	public class SystemPageTabNameCommands : BaseCommands<SystemPageTabName>
+	{
+		/// <summary>
+		/// Gets list of SystemPageTableName records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<SystemPageTabName> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		{
+			return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetSystemPageTabNameView, EntitiesAlias.SystemPageTabName, langCode: true);
+		}
 
-        /// <summary>
-        /// Gets the specific SystemPageTableName record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the specific SystemPageTableName record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static SystemPageTabName Get(ActiveUser activeUser, long id)
-        {
-            return Get(activeUser, id, StoredProceduresConstant.GetSystemPageTabName, langCode: true);
-        }
+		public static SystemPageTabName Get(ActiveUser activeUser, long id)
+		{
+			return Get(activeUser, id, StoredProceduresConstant.GetSystemPageTabName, langCode: true);
+		}
 
-        /// <summary>
-        /// Creates a new SystemPageTableName record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="systemPageTabName"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new SystemPageTableName record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="systemPageTabName"></param>
+		/// <returns></returns>
 
-        public static SystemPageTabName Post(ActiveUser activeUser, SystemPageTabName systemPageTabName)
-        {
-            var parameters = GetParameters(systemPageTabName);
-            // parameters.Add(new Parameter("@langCode", systemPageTabName.LangCode));
-            parameters.AddRange(activeUser.PostDefaultParams(systemPageTabName));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertSystemPageTabName);
-        }
+		public static SystemPageTabName Post(ActiveUser activeUser, SystemPageTabName systemPageTabName)
+		{
+			var parameters = GetParameters(systemPageTabName);
+			// parameters.Add(new Parameter("@langCode", systemPageTabName.LangCode));
+			parameters.AddRange(activeUser.PostDefaultParams(systemPageTabName));
+			return Post(activeUser, parameters, StoredProceduresConstant.InsertSystemPageTabName);
+		}
 
-        /// <summary>
-        /// Updates the existing SystemPageTableName recordrecords
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="systemPageTabName"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates the existing SystemPageTableName recordrecords
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="systemPageTabName"></param>
+		/// <returns></returns>
 
-        public static SystemPageTabName Put(ActiveUser activeUser, SystemPageTabName systemPageTabName)
-        {
-            var parameters = GetParameters(systemPageTabName);
-            // parameters.Add(new Parameter("@langCode", systemPageTabName.LangCode));
-            parameters.AddRange(activeUser.PutDefaultParams(systemPageTabName.Id, systemPageTabName));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateSystemPageTabName);
-        }
+		public static SystemPageTabName Put(ActiveUser activeUser, SystemPageTabName systemPageTabName)
+		{
+			var parameters = GetParameters(systemPageTabName);
+			// parameters.Add(new Parameter("@langCode", systemPageTabName.LangCode));
+			parameters.AddRange(activeUser.PutDefaultParams(systemPageTabName.Id, systemPageTabName));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateSystemPageTabName);
+		}
 
-        /// <summary>
-        /// Deletes a specific SystemPageTableName record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific SystemPageTableName record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static int Delete(ActiveUser activeUser, long id)
-        {
-            //return Delete(activeUser, id, StoredProceduresConstant.DeleteSystemPageTabName);
-            return 0;
-        }
+		public static int Delete(ActiveUser activeUser, long id)
+		{
+			//return Delete(activeUser, id, StoredProceduresConstant.DeleteSystemPageTabName);
+			return 0;
+		}
 
-        /// <summary>
-        /// Deletes list of SystemPageTableName records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes list of SystemPageTableName records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
-        {
-            return Delete(activeUser, ids, EntitiesAlias.SystemPageTabName, statusId, ReservedKeysEnum.StatusId);
-        }
+		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+		{
+			return Delete(activeUser, ids, EntitiesAlias.SystemPageTabName, statusId, ReservedKeysEnum.StatusId);
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the systemPageTabName Module
-        /// </summary>
-        /// <param name="systemPageTabName"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the systemPageTabName Module
+		/// </summary>
+		/// <param name="systemPageTabName"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(SystemPageTabName systemPageTabName)
-        {
-            var parameters = new List<Parameter>
-            {
-                new Parameter("@langCode", systemPageTabName.LangCode),
-                new Parameter("@refTableName", systemPageTabName.RefTableName),
-                new Parameter("@tabSortOrder", systemPageTabName.TabSortOrder),
-                new Parameter("@tabTableName", systemPageTabName.TabTableName),
-                new Parameter("@tabPageTitle", systemPageTabName.TabPageTitle),
-                new Parameter("@tabExecuteProgram", systemPageTabName.TabExecuteProgram),
-                new Parameter("@statusId", systemPageTabName.StatusId),
-               new Parameter("@where", string.Format(" AND {0}='{1}' ", SysRefTabPageNameColumns.RefTableName.ToString(), systemPageTabName.RefTableName)),
-            };
-            return parameters;
-        }
-    }
+		private static List<Parameter> GetParameters(SystemPageTabName systemPageTabName)
+		{
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@langCode", systemPageTabName.LangCode),
+				new Parameter("@refTableName", systemPageTabName.RefTableName),
+				new Parameter("@tabSortOrder", systemPageTabName.TabSortOrder),
+				new Parameter("@tabTableName", systemPageTabName.TabTableName),
+				new Parameter("@tabPageTitle", systemPageTabName.TabPageTitle),
+				new Parameter("@tabExecuteProgram", systemPageTabName.TabExecuteProgram),
+				new Parameter("@statusId", systemPageTabName.StatusId),
+			   new Parameter("@where", string.Format(" AND {0}='{1}' ", SysRefTabPageNameColumns.RefTableName.ToString(), systemPageTabName.RefTableName)),
+			};
+			return parameters;
+		}
+	}
 }

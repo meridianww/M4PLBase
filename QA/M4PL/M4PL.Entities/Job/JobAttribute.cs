@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //==========================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -19,93 +19,93 @@
 
 namespace M4PL.Entities.Job
 {
-    /// <summary>
-    ///
-    /// </summary>
-    public class JobAttribute : BaseModel
-    {
-        /// <summary>
-        /// Gets or sets the Job identifier.
-        /// </summary>
-        /// <value>
-        /// The job identifier.
-        /// </value>
-        public long? JobID { get; set; }
+	/// <summary>
+	///
+	/// </summary>
+	public class JobAttribute : BaseModel
+	{
+		/// <summary>
+		/// Gets or sets the Job identifier.
+		/// </summary>
+		/// <value>
+		/// The job identifier.
+		/// </value>
+		public long? JobID { get; set; }
 
-        public string JobIDName { get; set; }
+		public string JobIDName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the line order.
-        /// </summary>
-        /// <value>
-        /// The AjbLineOrder.
-        /// </value>
+		/// <summary>
+		/// Gets or sets the line order.
+		/// </summary>
+		/// <value>
+		/// The AjbLineOrder.
+		/// </value>
 
-        public int? AjbLineOrder { get; set; }
+		public int? AjbLineOrder { get; set; }
 
-        /// <summary>
-        /// Gets or sets the type of attribute.
-        /// </summary>
-        /// <value>
-        /// The AjbAttributeCode.
-        /// </value>
+		/// <summary>
+		/// Gets or sets the type of attribute.
+		/// </summary>
+		/// <value>
+		/// The AjbAttributeCode.
+		/// </value>
 
-        public string AjbAttributeCode { get; set; }
+		public string AjbAttributeCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
-        /// <value>
-        /// The AjbAttributeTitle.
-        /// </value>
+		/// <summary>
+		/// Gets or sets the title.
+		/// </summary>
+		/// <value>
+		/// The AjbAttributeTitle.
+		/// </value>
 
-        public string AjbAttributeTitle { get; set; }
+		public string AjbAttributeTitle { get; set; }
 
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        /// <value>
-        /// The AjbAttributeDescription.
-        /// </value>
+		/// <summary>
+		/// Gets or sets the description.
+		/// </summary>
+		/// <value>
+		/// The AjbAttributeDescription.
+		/// </value>
 
-        public byte[] AjbAttributeDescription { get; set; }
+		public byte[] AjbAttributeDescription { get; set; }
 
-        /// <summary>
-        /// Gets or sets the comments.
-        /// </summary>
-        /// <value>
-        /// The AjbAttributeComments.
-        /// </value>
+		/// <summary>
+		/// Gets or sets the comments.
+		/// </summary>
+		/// <value>
+		/// The AjbAttributeComments.
+		/// </value>
 
-        public byte[] AjbAttributeComments { get; set; }
+		public byte[] AjbAttributeComments { get; set; }
 
-        /// <summary>
-        /// Gets or sets the quantity.
-        /// </summary>
-        /// <value>
-        /// The AjbAttributeQty.
-        /// </value>
+		/// <summary>
+		/// Gets or sets the quantity.
+		/// </summary>
+		/// <value>
+		/// The AjbAttributeQty.
+		/// </value>
 
-        public decimal AjbAttributeQty { get; set; }
+		public decimal AjbAttributeQty { get; set; }
 
-        /// <summary>
-        /// Gets or sets the  unit type identifier.
-        /// </summary>
-        /// <value>
-        /// The AjbUnitTypeId.
-        /// </value>
+		/// <summary>
+		/// Gets or sets the  unit type identifier.
+		/// </summary>
+		/// <value>
+		/// The AjbUnitTypeId.
+		/// </value>
 
-        public int? AjbUnitTypeId { get; set; }
+		public int? AjbUnitTypeId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the attribute as default.
-        /// </summary>
-        /// <value>
-        /// The AjbDefault.
-        /// </value>
+		/// <summary>
+		/// Gets or sets the attribute as default.
+		/// </summary>
+		/// <value>
+		/// The AjbDefault.
+		/// </value>
 
-        public bool AjbDefault { get; set; }
+		public bool AjbDefault { get; set; }
 
-        public bool JobCompleted { get; set; }
-    }
+		public bool JobCompleted { get; set; }
+	}
 }

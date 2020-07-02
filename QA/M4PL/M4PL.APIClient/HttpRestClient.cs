@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -23,33 +23,33 @@ using System;
 
 namespace M4PL.APIClient
 {
-    public class HttpRestClient
-    {
-        public static RestRequest RestAuthRequest(Method methodType, string routeSuffix, ActiveUser activeUser)
-        {
-            var request = new RestRequest(routeSuffix, methodType) { RequestFormat = DataFormat.Json };
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
-            request.AddHeader("Authorization", "bearer " + activeUser.AuthToken);
-            request.OnBeforeDeserialization = resp =>
-            {
-                resp.ContentType = "application/json";
-                resp.Content = resp.Content.Replace("[]", "{}");
-            };
+	public class HttpRestClient
+	{
+		public static RestRequest RestAuthRequest(Method methodType, string routeSuffix, ActiveUser activeUser)
+		{
+			var request = new RestRequest(routeSuffix, methodType) { RequestFormat = DataFormat.Json };
+			request.AddHeader("Content-Type", "application/json; charset=utf-8");
+			request.AddHeader("Authorization", "bearer " + activeUser.AuthToken);
+			request.OnBeforeDeserialization = resp =>
+			{
+				resp.ContentType = "application/json";
+				resp.Content = resp.Content.Replace("[]", "{}");
+			};
 
-            return request;
-        }
+			return request;
+		}
 
-        internal static IRestRequest RestAuthRequest(Method gET, string v)
-        {
-            throw new NotImplementedException();
-        }
+		internal static IRestRequest RestAuthRequest(Method gET, string v)
+		{
+			throw new NotImplementedException();
+		}
 
-        public static RestRequest RestRequest(Method methodType, string routeSuffix)
-        {
-            var request = new RestRequest(routeSuffix, methodType) { RequestFormat = DataFormat.Json };
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
-            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
-            return request;
-        }
-    }
+		public static RestRequest RestRequest(Method methodType, string routeSuffix)
+		{
+			var request = new RestRequest(routeSuffix, methodType) { RequestFormat = DataFormat.Json };
+			request.AddHeader("Content-Type", "application/json; charset=utf-8");
+			request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+			return request;
+		}
+	}
 }

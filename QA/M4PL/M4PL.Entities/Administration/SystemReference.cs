@@ -1,10 +1,12 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 //==========================================================================================================
@@ -19,67 +21,67 @@ using System;
 
 namespace M4PL.Entities.Administration
 {
-    /// <summary>
-    /// System Reference class to create and maintain modules in the system
-    /// </summary>
-    public class SystemReference
-    {
-        public int Id { get; set; }
+	/// <summary>
+	/// System Reference class to create and maintain modules in the system
+	/// </summary>
+	public class SystemReference
+	{
+		public int Id { get; set; }
 
-        public string LangCode { get; set; }
+		public string LangCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets the LookupId
-        /// </summary>
-        /// <value>
-        /// The LookupId.
-        /// </value>
-        public int SysLookupId { get; set; }
+		/// <summary>
+		/// Gets or sets the LookupId
+		/// </summary>
+		/// <value>
+		/// The LookupId.
+		/// </value>
+		public int SysLookupId { get; set; }
 
-        public string SysLookupCode { get; set; }
+		public string SysLookupCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets the system option name.
-        /// </summary>
-        /// <value>
-        /// The SysOptionName.
-        /// </value>
-        public string SysOptionName { get; set; }
+		/// <summary>
+		/// Gets or sets the system option name.
+		/// </summary>
+		/// <value>
+		/// The SysOptionName.
+		/// </value>
+		public string SysOptionName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the system sorting order.
-        /// </summary>
-        /// <value>
-        /// The SysSortOrder.
-        /// </value>
-        public int SysSortOrder { get; set; }
+		/// <summary>
+		/// Gets or sets the system sorting order.
+		/// </summary>
+		/// <value>
+		/// The SysSortOrder.
+		/// </value>
+		public int SysSortOrder { get; set; }
 
-        /// <summary>
-        ///Gets or sets the module as default..
-        /// </summary>
-        /// <value>
-        /// The SysDefault.
-        /// </value>
-        public bool SysDefault { get; set; }
+		/// <summary>
+		///Gets or sets the module as default..
+		/// </summary>
+		/// <value>
+		/// The SysDefault.
+		/// </value>
+		public bool SysDefault { get; set; }
 
-        /// <summary>
-        /// Gets or sets the column's status.
-        /// </summary>
-        /// <value>
-        /// The Column Status.
-        /// </value>
-        public bool IsSysAdmin { get; set; }
+		/// <summary>
+		/// Gets or sets the column's status.
+		/// </summary>
+		/// <value>
+		/// The Column Status.
+		/// </value>
+		public bool IsSysAdmin { get; set; }
 
-        public int? StatusId { get; set; }
+		public int? StatusId { get; set; }
 
-        public DateTime DateEntered { get; set; }
+		public DateTime DateEntered { get; set; }
 
-        public DateTime? DateChanged { get; set; }
+		public DateTime? DateChanged { get; set; }
 
-        public string EnteredBy { get; set; }
+		public string EnteredBy { get; set; }
 
-        public string ChangedBy { get; set; }
+		public string ChangedBy { get; set; }
 
-        public bool IsFormView { get; set; }
-    }
+		public bool IsFormView { get; set; }
+	}
 }
