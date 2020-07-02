@@ -292,5 +292,19 @@ namespace M4PL.API.Controllers
 		{
 			return _jobCommands.GetActiveJobByProgramId(programId);
 		}
+
+		/// <summary>
+		/// Update the Invoice Details(Sales/Purchase Order Invoice number for the job)
+		/// </summary>
+		/// <param name="jobInvoiceDetail">jobInvoiceDetail(This contains the JobSalesInvoiceNumber and JobPurchaseInvoiceNumber)</param>
+		/// <param name="jobId">jobId</param>
+		/// <returns>true if job updated successfully else false.</returns>
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("UpdateJobInvoiceDetail")]
+		public bool UpdateJobInvoiceDetail(JobInvoiceDetail jobInvoiceDetail, long jobId)
+		{
+			return _jobCommands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail);
+		}
 	}
 }

@@ -340,5 +340,11 @@ namespace M4PL.Business.Job
         {
             return _commands.GetActiveJobByProgramId(programId);
         }
-    }
+
+		public bool UpdateJobInvoiceDetail(long jobId, JobInvoiceDetail jobInvoiceDetail)
+		{
+			return _commands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail, ActiveUser);
+		}
+
+	}
 }
