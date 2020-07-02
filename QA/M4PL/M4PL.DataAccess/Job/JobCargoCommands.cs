@@ -210,6 +210,8 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@cgoQtyDamaged", jobCargo.CgoQtyDamaged),
 			   new Parameter("@cgoQtyOnHold", jobCargo.CgoQtyOnHold),
 			   new Parameter("@cgoQtyShortOver", jobCargo.CgoQtyShortOver),
+			   new Parameter("@cgoQtyOver", jobCargo.CgoQtyOver),
+			   new Parameter("@cgoQtyOrdered", jobCargo.CgoQtyOrdered),
 			   new Parameter("@cgoQtyUnits", jobCargo.CgoQtyUnitsId),
 			   new Parameter("@cgoReasonCodeOSD", jobCargo.CgoReasonCodeOSD),
 			   new Parameter("@cgoReasonCodeHold", jobCargo.CgoReasonCodeHold),

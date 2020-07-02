@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -26,41 +26,41 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/JobReports")]
-    public class JobReportsController : BaseApiController<JobReport>
-    {
-        private readonly IJobReportCommands _JobReportCommands;
+	[RoutePrefix("api/JobReports")]
+	public class JobReportsController : BaseApiController<JobReport>
+	{
+		private readonly IJobReportCommands _JobReportCommands;
 
-        /// <summary>
-        /// Fucntion to get Jobs reports
-        /// </summary>
-        /// <param name="jobReportCommands"></param>
-        public JobReportsController(IJobReportCommands jobReportCommands)
-            : base(jobReportCommands)
-        {
-            _JobReportCommands = jobReportCommands;
-        }
+		/// <summary>
+		/// Fucntion to get Jobs reports
+		/// </summary>
+		/// <param name="jobReportCommands"></param>
+		public JobReportsController(IJobReportCommands jobReportCommands)
+			: base(jobReportCommands)
+		{
+			_JobReportCommands = jobReportCommands;
+		}
 
-        /// <summary>
-        /// Fucntion to get Jobs reports
-        /// </summary> 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("VocReport")]
-        public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
-        {
-            return _JobReportCommands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
-        }
+		/// <summary>
+		/// Fucntion to get Jobs reports
+		/// </summary>
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("VocReport")]
+		public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
+		{
+			return _JobReportCommands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
+		}
 
-        /// <summary>
-        /// Fucntion to get Jobs reports
-        /// </summary> 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("VocReportByCustomer")]
-        public IList<JobReport> GetDropDownDataForLocation(long customerId, string entity)
-        {
-            return _JobReportCommands.GetDropDownDataForLocation(ActiveUser, customerId, entity);
-        }
-    }
+		/// <summary>
+		/// Fucntion to get Jobs reports
+		/// </summary>
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("VocReportByCustomer")]
+		public IList<JobReport> GetDropDownDataForLocation(long customerId, string entity)
+		{
+			return _JobReportCommands.GetDropDownDataForLocation(ActiveUser, customerId, entity);
+		}
+	}
 }

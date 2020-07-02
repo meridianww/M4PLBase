@@ -123,6 +123,7 @@
     <Compile Include="Job\JobGatewayDetails.cs" />
     <Compile Include="Job\JobHistory.cs" />
     <Compile Include="Job\JobInvoiceData.cs" />
+    <Compile Include="Job\JobInvoiceDetail.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
     <Compile Include="Job\JobUpdateDecisionMaker.cs" />

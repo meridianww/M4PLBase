@@ -1030,7 +1030,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1329,7 +1329,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -1509,6 +1509,7 @@ M4PLCommon.AdvancedReport = (function () {
     }
 
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+
         if ($('.errorMessages') != undefined) {
             $('.errorMessages').html('');
         }
@@ -1525,14 +1526,9 @@ M4PLCommon.AdvancedReport = (function () {
         var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
         var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
         var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
-        //var modeCtrl = ASPxClientControl.GetControlCollection().GetByName('Mode');
         var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
         var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
         var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
-
-        //var isEnabledAddtionalfieldCtrl = ASPxClientControl.GetControlCollection().GetByName('IsEnabledAddtionalfield');
-        //var jobPartsOrderedCtrl = ASPxClientControl.GetControlCollection().GetByName('JobPartsOrdered');
-        //var weightUnitTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('CgoWeightUnitTypeId');
         var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('PackagingTypeByJobCbPanelClosed');
         var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
 
@@ -1580,9 +1576,8 @@ M4PLCommon.AdvancedReport = (function () {
             rprtVwrRoute.OrderType = orderTypeCtrl.GetText();
         if (jobChannelCtrl != null)
             if (jobChannelCtrl.GetValue() != null && jobChannelCtrl.GetValue() != undefined)
-                rprtVwrRoute.Channel = jobChannelCtrl.GetValue().split(',').map(String);//resetVal(jobChannelCtrl.GetValue(), checkListBoxJobChannelByProgramCustomerCbPanelforClosed);
-        //if (modeCtrl != null)
-        //    rprtVwrRoute.Mode = modeCtrl.GetValue();
+                rprtVwrRoute.Channel = jobChannelCtrl.GetValue().split(',').map(String);
+
         if (jobStatusCtrl != null)
             rprtVwrRoute.JobStatus = jobStatusCtrl.GetText();
         if (searchCtrl != null)
@@ -1590,12 +1585,6 @@ M4PLCommon.AdvancedReport = (function () {
         rprtVwrRoute.StartDate = startDateCtrl.GetValue();
         rprtVwrRoute.EndDate = endDateCtrl.GetValue();
         rprtVwrRoute.IsFormRequest = true;
-        //if (isEnabledAddtionalfieldCtrl != null && isEnabledAddtionalfieldCtrl && isEnabledAddtionalfieldCtrl.GetValue()) {
-        //    rprtVwrRoute.IsAddtionalFilter = isEnabledAddtionalfieldCtrl.GetValue();
-        //if (jobPartsOrderedCtrl != null)
-        //    rprtVwrRoute.JobPartsOrdered = jobPartsOrderedCtrl.GetText();
-        //if (weightUnitTypeCtrl != null)
-        //    rprtVwrRoute.CgoWeightUnitTypeId = weightUnitTypeCtrl.GetValue();
         if (packagingTypeCtrl != null)
             rprtVwrRoute.PackagingCode = packagingTypeCtrl.GetText();
         if (cargoTitleCtrl != null)
@@ -1614,6 +1603,9 @@ M4PLCommon.AdvancedReport = (function () {
 
         if (IsFormValidate) {
             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
+            if (grdCtrl != null && grdCtrl != undefined)
+                grdCtrl.ClearFilter();
         } else {
             return false;
         }

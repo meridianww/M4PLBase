@@ -87,46 +87,47 @@ namespace M4PL.Web.Areas
 		{
 			isGridSetting = (route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobCargo) ? true : isGridSetting;
 
-			var columnSettings = //_commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
-			BaseRoute.Entity == EntitiesAlias.JobAdvanceReport
-			   ? _commonCommands.GetGridColumnSettings(BaseRoute.Entity, true, true)
-			   : _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
-			var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
-			route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData, ((isGroupedGrid && pageSizeChanged) || !isGroupedGrid));
-			_gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettings, SessionProvider);
-			_gridResult.GridColumnSettings = _gridResult.ColumnSettings;
-			var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
-			_gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
-			var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
-			if ((route.Action == MvcConstants.ActionGridView || route.Action == MvcConstants.ActionGridPagingView || route.Action == MvcConstants.ActionDataView) && route.Entity == EntitiesAlias.Job)
-				currentPagedDataInfo.IsJobParentEntity = IsJobParentEntity || SessionProvider.IsJobParentEntity;
-			if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
-				currentPagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
-			//if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
-			//    && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
-			//{
-			else if (currentPagedDataInfo.Entity != EntitiesAlias.JobGateway && (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition)
-				|| currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1) && !route.IsJobParentEntityUpdated)
-				currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
-			// }
-			//currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
-			if (route.Entity == EntitiesAlias.JobHistory)
-			{
-				route.IsPBSReport = false;
-				currentPagedDataInfo.RecordId = route.RecordId;
-				var result = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
-				_gridResult.Records = result;
-			}
-			else
-			{
-				_gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
-				if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
-				{
-					currentPagedDataInfo.PageNumber--;
-					_gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
-					_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo = currentPagedDataInfo;
-				}
-			}
+            var columnSettings = //_commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
+            BaseRoute.Entity == EntitiesAlias.JobAdvanceReport
+               ? _commonCommands.GetGridColumnSettings(BaseRoute.Entity, true, true)
+               : _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
+            var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
+            route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData, ((isGroupedGrid && pageSizeChanged) || !isGroupedGrid));
+            _gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettings, SessionProvider);
+            _gridResult.GridColumnSettings = _gridResult.ColumnSettings;
+            var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
+            _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
+            var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
+            if ((route.Action == MvcConstants.ActionGridView || route.Action == MvcConstants.ActionGridPagingView || route.Action == MvcConstants.ActionDataView) && route.Entity == EntitiesAlias.Job)
+                currentPagedDataInfo.IsJobParentEntity = IsJobParentEntity || SessionProvider.IsJobParentEntity;
+            if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
+                currentPagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
+            //if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
+            //    && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
+            //{
+            else if (currentPagedDataInfo.Entity != EntitiesAlias.JobGateway && (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition)
+                || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1) && !route.IsJobParentEntityUpdated)
+                currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
+            // }
+            //currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
+            if (route.Entity == EntitiesAlias.JobHistory)
+            {
+                route.IsPBSReport = false;
+                currentPagedDataInfo.RecordId = route.RecordId;
+                var result = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                _gridResult.Records = result;
+
+            }
+            else
+            {
+                _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
+                {
+                    currentPagedDataInfo.PageNumber--;
+                    _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                    _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo = currentPagedDataInfo;
+                }
+            }
 
 			_gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url, contextChildOptions);
 			if (!string.IsNullOrWhiteSpace(gridName))
