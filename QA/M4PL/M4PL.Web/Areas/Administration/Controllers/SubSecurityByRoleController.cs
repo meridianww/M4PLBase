@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -30,71 +30,71 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Administration.Controllers
 {
-    public class SubSecurityByRoleController : BaseController<SubSecurityByRoleView>
-    {
-        /// <summary>
-        /// Interacts with the interfaces to get the SecurityByRole details for the actrole security tab and renders to the page
-        /// Gets the page related information on the cache basis
-        /// </summary>
-        /// <param name="subSecurityByRoleCommands"></param>
-        /// <param name="commonCommands"></param>
-        public SubSecurityByRoleController(ISubSecurityByRoleCommands subSecurityByRoleCommands, ICommonCommands commonCommands)
-            : base(subSecurityByRoleCommands)
-        {
-            _commonCommands = commonCommands;
-        }
+	public class SubSecurityByRoleController : BaseController<SubSecurityByRoleView>
+	{
+		/// <summary>
+		/// Interacts with the interfaces to get the SecurityByRole details for the actrole security tab and renders to the page
+		/// Gets the page related information on the cache basis
+		/// </summary>
+		/// <param name="subSecurityByRoleCommands"></param>
+		/// <param name="commonCommands"></param>
+		public SubSecurityByRoleController(ISubSecurityByRoleCommands subSecurityByRoleCommands, ICommonCommands commonCommands)
+			: base(subSecurityByRoleCommands)
+		{
+			_commonCommands = commonCommands;
+		}
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);
-            if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
-                route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            SetGridResult(route);
-            if (SessionProvider.ViewPagedDataSession.Count() > 0
-            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
-            {
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
-            }
-            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
-        }
+		public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);
+			if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
+				route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+			SetGridResult(route);
+			if (SessionProvider.ViewPagedDataSession.Count() > 0
+			&& SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+			&& SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+			{
+				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+			}
+			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+		}
 
-        [HttpPost, ValidateInput(false)]
-        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<SubSecurityByRoleView, long> subSecurityByRoleView, string strRoute, string gridName)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            subSecurityByRoleView.Insert.ForEach(c => { c.SecByRoleId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            subSecurityByRoleView.Update.ForEach(c => { c.SecByRoleId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = BatchUpdate(subSecurityByRoleView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
-            {
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+		[HttpPost, ValidateInput(false)]
+		public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<SubSecurityByRoleView, long> subSecurityByRoleView, string strRoute, string gridName)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			subSecurityByRoleView.Insert.ForEach(c => { c.SecByRoleId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			subSecurityByRoleView.Update.ForEach(c => { c.SecByRoleId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			var batchError = BatchUpdate(subSecurityByRoleView, route, gridName);
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			{
+				var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
 
-                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
-                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-            }
-            ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);
-            SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
-        }
+				displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+				ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+			}
+			ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);
+			SetGridResult(route);
+			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+		}
 
-        #region Filtering & Sorting
+		#region Filtering & Sorting
 
-        public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);
-            return base.GridFilteringView(filteringState, strRoute, gridName);
-        }
+		public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);
+			return base.GridFilteringView(filteringState, strRoute, gridName);
+		}
 
-        public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);
-            return base.GridSortingView(column, reset, strRoute, gridName);
-        }
+		public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);
+			return base.GridSortingView(column, reset, strRoute, gridName);
+		}
 
-        #endregion Filtering & Sorting
-    }
+		#endregion Filtering & Sorting
+	}
 }

@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,31 +25,31 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/JobAdvanceReport")]
-    public class JobAdvanceReportController : BaseApiController<JobAdvanceReport>
-    {
-        private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
+	[RoutePrefix("api/JobAdvanceReport")]
+	public class JobAdvanceReportController : BaseApiController<JobAdvanceReport>
+	{
+		private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
 
-        /// <summary>
-        /// Function to get Job's advance Report details
-        /// </summary>
-        /// <param name="jobAdvanceReportCommands"></param>
-        public JobAdvanceReportController(IJobAdvanceReportCommands jobAdvanceReportCommands)
-            : base(jobAdvanceReportCommands)
-        {
-            _jobAdvanceReportCommands = jobAdvanceReportCommands;
-        }
+		/// <summary>
+		/// Function to get Job's advance Report details
+		/// </summary>
+		/// <param name="jobAdvanceReportCommands"></param>
+		public JobAdvanceReportController(IJobAdvanceReportCommands jobAdvanceReportCommands)
+			: base(jobAdvanceReportCommands)
+		{
+			_jobAdvanceReportCommands = jobAdvanceReportCommands;
+		}
 
-        /// <summary>
-        /// Fucntion to get Jobs reports
-        /// </summary> 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("AdvanceReport")]
-        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
-        {
-            _jobAdvanceReportCommands.ActiveUser = ActiveUser;
-            return _jobAdvanceReportCommands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
-        }
-    }
+		/// <summary>
+		/// Fucntion to get Jobs reports
+		/// </summary>
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("AdvanceReport")]
+		public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
+		{
+			_jobAdvanceReportCommands.ActiveUser = ActiveUser;
+			return _jobAdvanceReportCommands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
+		}
+	}
 }

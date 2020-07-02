@@ -8,7 +8,6 @@
     //Purpose:                                      Provides grid view for the JobAdvanceReport
     //====================================================================================================================================================*@
 
-
 @using System.Collections
 @using M4PL.Entities
 @using M4PL.Web.Providers
@@ -101,7 +100,6 @@
     settings.Columns.Clear();
     
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
-
 
     foreach (var colSetting in Model.ColumnSettings)
     {
@@ -365,7 +363,6 @@
         grid.ForceDataRowType(Model.GridSetting.DataRowType);
     };
 
-
     settings.BeforeGetCallbackResult += (s, e) =>
     {
         var grid = (MVCxGridView)s;
@@ -452,6 +449,4 @@
             grid.FocusedRowIndex = grid.FindVisibleIndexByKeyValue(Model.FocusedRowId);
     };
 
-
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
-

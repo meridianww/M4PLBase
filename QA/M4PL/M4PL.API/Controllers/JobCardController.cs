@@ -1,14 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -27,44 +26,43 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/JobCard")]
-    public class JobCardController : BaseApiController<JobCard>
-    {
-        private readonly IJobCardCommands _jobCardCommands;
+	[RoutePrefix("api/JobCard")]
+	public class JobCardController : BaseApiController<JobCard>
+	{
+		private readonly IJobCardCommands _jobCardCommands;
 
-        /// <summary>
-        /// Function to get Job's advance Report details
-        /// </summary>
-        /// <param name="jobCardCommands"></param>
-        public JobCardController(IJobCardCommands jobCardCommands)
-            : base(jobCardCommands)
-        {
-            _jobCardCommands = jobCardCommands;
-        }
+		/// <summary>
+		/// Function to get Job's advance Report details
+		/// </summary>
+		/// <param name="jobCardCommands"></param>
+		public JobCardController(IJobCardCommands jobCardCommands)
+			: base(jobCardCommands)
+		{
+			_jobCardCommands = jobCardCommands;
+		}
 
-        /// <summary>
-        /// Fucntion to get Jobs card title
-        /// </summary> 
-        [CustomAuthorize]
-        [HttpPost]
-        [Route("GetCardTileData")]
-        public IQueryable<JobCardTileDetail> GetCardTileData(JobCardCondition jobCondition)
-        {
-            _jobCardCommands.ActiveUser = ActiveUser;
-            return _jobCardCommands.GetCardTileData(jobCondition.CompanyId, jobCondition.WhereCondition).AsQueryable();
-        }
+		/// <summary>
+		/// Fucntion to get Jobs card title
+		/// </summary>
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("GetCardTileData")]
+		public IQueryable<JobCardTileDetail> GetCardTileData(JobCardCondition jobCondition)
+		{
+			_jobCardCommands.ActiveUser = ActiveUser;
+			return _jobCardCommands.GetCardTileData(jobCondition.CompanyId, jobCondition.WhereCondition).AsQueryable();
+		}
 
-        /// <summary>
-        /// Fucntion to get dropdown data for job card
-        /// </summary> 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("GetDropDownDataForJobCard")]
-        public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)
-        {
-            _jobCardCommands.ActiveUser = ActiveUser;
-            return _jobCardCommands.GetDropDownDataForJobCard(customerId, entity);
-        }
-
-    }
+		/// <summary>
+		/// Fucntion to get dropdown data for job card
+		/// </summary>
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("GetDropDownDataForJobCard")]
+		public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)
+		{
+			_jobCardCommands.ActiveUser = ActiveUser;
+			return _jobCardCommands.GetDropDownDataForJobCard(customerId, entity);
+		}
+	}
 }

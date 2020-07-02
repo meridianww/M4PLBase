@@ -1,11 +1,11 @@
 ﻿@*Copyright (2019) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Nikhil
     //Date Programmed:                              08/09/2019
     //Program Name:                                 _JobDriverPartial
-    //Purpose:                                      Render Contact Partial View inside a Callback Panel 
+    //Purpose:                                      Render Contact Partial View inside a Callback Panel
     //====================================================================================================================================================*@
 @using M4PL.Utilities;
 @model M4PL.APIClient.ViewModels.DropDownViewModel
@@ -18,10 +18,9 @@
     settings.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['JobSiteCode'] = JobSiteCode.GetValue(); }";
     settings.SetContent(() =>
     {
-        
-        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) }));
-       
-    });
 
+        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) }));
+
+    });
 
 }).GetHtml()

@@ -2,7 +2,6 @@
 @using System.Web.UI.WebControls
 @model M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 
-
 @Html.DevExpress().CallbackPanel(setings =>
 {
     setings.Name = "ProgramByCustomerCbPanel";
@@ -56,7 +55,6 @@
             settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesProgram";
             settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesProgram";
         }).Render();
-
 
     });
 

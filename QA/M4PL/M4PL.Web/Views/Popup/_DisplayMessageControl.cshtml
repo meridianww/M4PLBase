@@ -12,7 +12,6 @@
 @using System.Web.UI.WebControls
 @model M4PL.Entities.Support.DisplayMessage
 
-
 @Html.DevExpress().PopupControl(settings =>
 {
     settings.Name = "DisplayMessageControl";
@@ -49,10 +48,8 @@
                       imgSettings.ImageUrl = ViewData[WebApplicationConstants.EntityImage] != null ? ViewData[WebApplicationConstants.EntityImage].ToString() : "";
                   }).Render();
 
-
             ViewContext.Writer.Write("<b class='display-msg-desc'>" + Model.Description + "</b>");
             ViewContext.Writer.Write("</div>");
-
 
             ViewContext.Writer.Write("<div class='btnDisplayMsg-wrapper col-sm-12 col-md-12 col-lg-12' align='center'>");
             foreach (var operation in Model.Operations)

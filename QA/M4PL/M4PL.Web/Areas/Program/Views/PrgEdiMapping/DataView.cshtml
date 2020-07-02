@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -64,7 +64,6 @@
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
-
 
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
     settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnChanged";
@@ -210,7 +209,6 @@
                     {
                         var typeId = col.ColColumnName.Equals(WebApplicationConstants.EdiMapEdiTableName.ToString()) ? (int)TableType.EDI : (int)TableType.M4PL;
 
-
                         var colFieldName = col.ColColumnName.Equals(WebApplicationConstants.EdiMapEdiTableName, StringComparison.OrdinalIgnoreCase) ? WebApplicationConstants.EdiMapEdiFieldName : WebApplicationConstants.EdiMapM4PLFieldName;
                         column.EditFormSettings.Visible = DefaultBoolean.True;
                         column.EditorProperties().ComboBox(cs =>
@@ -337,7 +335,7 @@
     };
     //End saving layout
 
-    //For Advanced Filter 
+    //For Advanced Filter
     settings.FilterControlOperationVisibility = (sender, e) =>
     {
         WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);

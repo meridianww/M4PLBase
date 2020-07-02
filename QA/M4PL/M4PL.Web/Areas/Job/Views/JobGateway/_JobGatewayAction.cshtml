@@ -1,5 +1,5 @@
 ﻿@*Copyright (2018) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -24,7 +24,7 @@
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var actionEnumToCompare = WebUtilities.JobGatewayActions.NotAction;
     //var isEdit = Model.Permission == Permission.ReadOnly ? false : true;
-    var isEdit = Session["isEdit"] != null ? (bool)Session["isEdit"] : true; 
+    var isEdit = Session["isEdit"] != null ? (bool)Session["isEdit"] : true;
     Model.Record.GwyGatewaySortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.GwyGatewaySortOrder;
 
     if ((bool)Session["isEdit"])
@@ -51,8 +51,6 @@
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
     }
     Model.Record.GatewayTypeId = (int)JobGatewayType.Action;
-
-
 
     var crgoDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
     var exceptionDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();

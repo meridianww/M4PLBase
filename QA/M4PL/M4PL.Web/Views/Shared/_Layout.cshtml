@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -18,12 +18,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <title>@ViewBag.Title</title>
 
-    @Scripts.Render("~/bundles/jquery" + WebUtilities.GetBundlingVersion())  
+    @Scripts.Render("~/bundles/jquery" + WebUtilities.GetBundlingVersion())
     @Scripts.Render("~/bundles/modernizr" + WebUtilities.GetBundlingVersion())
     @Scripts.Render("~/bundles/unobtrusive" + WebUtilities.GetBundlingVersion())
     @Scripts.Render("~/bundles/bootstrap" + WebUtilities.GetBundlingVersion())
     @Scripts.Render("~/bundles/M4PLWindow" + WebUtilities.GetBundlingVersion())
-    
+
     @Html.DevExpress().GetStyleSheets(
             new StyleSheet { ExtensionSuite = ExtensionSuite.Icons },
             new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
@@ -99,7 +99,7 @@
             });
             //HelpPage  End
             window.prevFocus = $();
-          
+
             document.addEventListener("click", function (event) {
                 event = event || window.event
                 var targetElement = event.target || event.srcElement

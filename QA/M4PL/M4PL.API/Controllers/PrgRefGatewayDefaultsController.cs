@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -23,46 +23,45 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/PrgRefGatewayDefaults")]
-    public class PrgRefGatewayDefaultsController : BaseApiController<PrgRefGatewayDefault>
-    {
-        private readonly IPrgRefGatewayDefaultCommands _prgRefGatewayDefaultCommands;
+	[RoutePrefix("api/PrgRefGatewayDefaults")]
+	public class PrgRefGatewayDefaultsController : BaseApiController<PrgRefGatewayDefault>
+	{
+		private readonly IPrgRefGatewayDefaultCommands _prgRefGatewayDefaultCommands;
 
+		/// <summary>
+		/// Function to get Program's RefGatewayDefault details
+		/// </summary>
+		/// <param name="prgRefGatewayDefaultCommands"></param>
+		public PrgRefGatewayDefaultsController(IPrgRefGatewayDefaultCommands prgRefGatewayDefaultCommands)
+			: base(prgRefGatewayDefaultCommands)
+		{
+			_prgRefGatewayDefaultCommands = prgRefGatewayDefaultCommands;
+		}
 
-        /// <summary>
-        /// Function to get Program's RefGatewayDefault details
-        /// </summary>
-        /// <param name="prgRefGatewayDefaultCommands"></param>
-        public PrgRefGatewayDefaultsController(IPrgRefGatewayDefaultCommands prgRefGatewayDefaultCommands)
-            : base(prgRefGatewayDefaultCommands)
-        {
-            _prgRefGatewayDefaultCommands = prgRefGatewayDefaultCommands;
-        }
+		/// <summary>
+		/// New put with user sys settings
+		/// </summary>
+		/// <param name="prgRefGatewayDefault"></param>
+		/// <returns></returns>
+		[HttpPost]
+		[Route("SettingPost")]
+		public PrgRefGatewayDefault SettingPost(PrgRefGatewayDefault prgRefGatewayDefault)
+		{
+			_prgRefGatewayDefaultCommands.ActiveUser = ActiveUser;
+			return _prgRefGatewayDefaultCommands.PostWithSettings(UpdateActiveUserSettings(), prgRefGatewayDefault);
+		}
 
-        /// <summary>
-        /// New put with user sys settings
-        /// </summary>
-        /// <param name="prgRefGatewayDefault"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("SettingPost")]
-        public PrgRefGatewayDefault SettingPost(PrgRefGatewayDefault prgRefGatewayDefault)
-        {
-            _prgRefGatewayDefaultCommands.ActiveUser = ActiveUser;
-            return _prgRefGatewayDefaultCommands.PostWithSettings(UpdateActiveUserSettings(), prgRefGatewayDefault);
-        }
-
-        /// <summary>
-        /// New put with user sys settings
-        /// </summary>
-        /// <param name="prgRefGatewayDefault"></param>
-        /// <returns></returns>
-        [HttpPut]
-        [Route("SettingPut")]
-        public PrgRefGatewayDefault SettingPut(PrgRefGatewayDefault prgRefGatewayDefault)
-        {
-            _prgRefGatewayDefaultCommands.ActiveUser = ActiveUser;
-            return _prgRefGatewayDefaultCommands.PutWithSettings(UpdateActiveUserSettings(), prgRefGatewayDefault);
-        }
-    }
+		/// <summary>
+		/// New put with user sys settings
+		/// </summary>
+		/// <param name="prgRefGatewayDefault"></param>
+		/// <returns></returns>
+		[HttpPut]
+		[Route("SettingPut")]
+		public PrgRefGatewayDefault SettingPut(PrgRefGatewayDefault prgRefGatewayDefault)
+		{
+			_prgRefGatewayDefaultCommands.ActiveUser = ActiveUser;
+			return _prgRefGatewayDefaultCommands.PutWithSettings(UpdateActiveUserSettings(), prgRefGatewayDefault);
+		}
+	}
 }

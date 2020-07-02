@@ -1,11 +1,9 @@
 ﻿/******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -72,7 +70,6 @@ M4PLCommon.Common = function () {
     }
 
     var _onLogOut = function () {
-
         $.ajax({
             type: "GET",
             url: "/Account/LogOut",
@@ -81,7 +78,6 @@ M4PLCommon.Common = function () {
                 window.history.go(0);
             }
         });
-
     }
 
     var _switchOrganization = function (orgId, lastRoute) {
@@ -90,13 +86,11 @@ M4PLCommon.Common = function () {
             url: "/Account/SwitchOrganization/?orgId=" + orgId + "&strRoute=" + lastRoute,
             success: function (response) {
                 if (response.status && response.status === true) {
-
                     DisplayMessageControl.Hide();
                     window.location.reload();
                 }
             }
         });
-
     }
 
     var _reloadApplication = function () {
@@ -128,7 +122,6 @@ M4PLCommon.Common = function () {
 
     var _hideGlobalLoadingPanel = function (s, e) {
         DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
-
     }
 
     var _browserIndexClosed = function (s, e) {
@@ -150,7 +143,6 @@ M4PLCommon.Common = function () {
 }();
 
 M4PLCommon.RichEdit = function () {
-
     var _openDialog = function (route, byteArray) {
         if (byteArray.IsPopup === true)
             RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: JSON.stringify(byteArray) });
@@ -574,7 +566,6 @@ M4PLCommon.SessionTimeout = (function () {
 })();
 
 M4PLCommon.WindowService = (function () {
-
     var _enumCustomCommand = { "Notepad": 128, "Calculator": 240, "Skype": 233 };
 
     var _onInitiateActionClick = function (commandId) {
@@ -626,11 +617,9 @@ M4PLCommon.WindowService = (function () {
         OnInitiateActionClick: _onInitiateActionClick,
         OnSyncOutlookClick: _onSyncOutlookClick
     }
-
 })();
 
 M4PLCommon.Control = (function () {
-
     var _onGotFocus = function (s, e, removeCtrlName) {
         if (s && !removeCtrlName)
             M4PLCommon.FocusedControlName = s.name;
@@ -646,7 +635,7 @@ M4PLCommon.Control = (function () {
             if (currentControl.GetChildElement('I')) {
                 var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
                 if (textComponent.selectionStart !== undefined) {
-                    // Standards Compliant Version 
+                    // Standards Compliant Version
                     var startPos = textComponent.selectionStart;
                     var endPos = textComponent.selectionEnd;
                     if (startPos == endPos)
@@ -680,7 +669,7 @@ M4PLCommon.Control = (function () {
             //if (currentControl.GetChildElement('I')) {
             //    var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
             //    if (textComponent.selectionStart !== undefined) {
-            //        // Standards Compliant Version 
+            //        // Standards Compliant Version
             //        var startPos = textComponent.selectionStart;
             //        var endPos = textComponent.selectionEnd;
             //        var currentValue = textComponent.value;
@@ -747,7 +736,6 @@ M4PLCommon.Control = (function () {
 })();
 
 M4PLCommon.CheckHasChanges = (function () {
-
     var _checkDataChanges = function (currentGridName) {
         var hasDataChanged = false;
 
@@ -823,7 +811,6 @@ M4PLCommon.CheckHasChanges = (function () {
     }
 
     var _onIgnoreChanges = function () {
-
         if (ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl').IsVisible()) {
             M4PLWindow.SubPopupFormViewHasChanges = false;
         } else if (ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl').IsVisible()) {
@@ -867,7 +854,6 @@ M4PLCommon.CheckHasChanges = (function () {
 
     var _redirectToClickedItem = function () {
         if (M4PLCommon.CallerNameAndParameters.Caller) {
-
             if (M4PLCommon.IsFromSubDataViewSaveClick && (M4PLCommon.CallerNameAndParameters.Caller.name != "_onManualTabClick") && (M4PLCommon.CallerNameAndParameters.Caller.name != "_onCancelEdit")) {
                 M4PLCommon.IsFromSubDataViewSaveClick = false;
                 $('div[id^="btn"][id$="Save"]').trigger('click');
@@ -949,7 +935,6 @@ M4PLCommon.CheckHasChanges = (function () {
                 var isFromConfirmSave = M4PLWindow.IsFromConfirmSaveClick;
                 M4PLWindow.IsFromConfirmSaveClick = false;
                 if (response && response.status && response.status === true) {
-
                     if (response.redirectLogin !== undefined && response.redirectLogin) {
                         window.location.href = "/Account/Logout";
                         return;
@@ -959,7 +944,6 @@ M4PLCommon.CheckHasChanges = (function () {
                         M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray);
                     }
                     var formInterval = setInterval(function () {
-
                         if ((M4PLCommon.CurrentByteArrayCount <= 0) && AppCbPanel && !AppCbPanel.InCallback()) {
                             window.clearInterval(formInterval);
                             var route = JSON.parse(strRoute);
@@ -982,7 +966,6 @@ M4PLCommon.CheckHasChanges = (function () {
                                     AppCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                                 if (response.displayMessage)
                                     DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
-
                             }
                             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                             if (!isFromConfirmSave)
@@ -991,7 +974,6 @@ M4PLCommon.CheckHasChanges = (function () {
                                 M4PLCommon.CheckHasChanges.RedirectToClickedItem();
                         }
                     }, 500);
-
                 }
                 else if (response.errMessages && response.errMessages.length > 0) {
                     for (var i = 0; i < response.errMessages.length; i++)
@@ -1022,8 +1004,6 @@ M4PLCommon.CheckHasChanges = (function () {
             }
         });
     }
-
-
 
     return {
         CheckDataChanges: _checkDataChanges,
@@ -1066,7 +1046,6 @@ M4PLCommon.NavSync = (function () {
 })();
 
 M4PLCommon.InformationPopup = (function () {
-
     var _navSyncSuccessResponse = function (routUrl) {
         $.ajax({
             type: "GET",
@@ -1090,7 +1069,6 @@ M4PLCommon.InformationPopup = (function () {
 })();
 
 M4PLCommon.VocReport = (function () {
-
     var _pbsCheckBoxEventChange = function (s, e) {
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('CustomerLocationCbPanel');
@@ -1177,7 +1155,6 @@ M4PLCommon.VocReport = (function () {
             else {
                 return false;
             }
-
         }
     };
 
@@ -1213,11 +1190,9 @@ M4PLCommon.VocReport = (function () {
             }
 
         cardVwrCtrl.PerformCallback({ strRoute: JSON.stringify(cardVwrRoute) });
-
     }
 
     var _onCardDataViewClick = function (s, e, form, strRoute) {
-
         var route = JSON.parse(strRoute);
 
         var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
@@ -1250,7 +1225,6 @@ M4PLCommon.VocReport = (function () {
             }
 
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-
     }
 
     var _addAutoRefresh = function (s, e, timeout, rprtVwrRoute) {
@@ -1272,12 +1246,10 @@ M4PLCommon.VocReport = (function () {
                         if (!ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel').InCallback()) {
                             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
                         }
-
                     }
                 }
             }, timeout);
         }
-
     }
 
     var resetVal = function (input, listBoxCtrl) {
@@ -1312,7 +1284,6 @@ M4PLCommon.VocReport = (function () {
 })();
 
 M4PLCommon.AdvancedReport = (function () {
-
     var _init = function () {
         $(".isAdditional").hide();
     }
@@ -1326,7 +1297,6 @@ M4PLCommon.AdvancedReport = (function () {
     //};
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
-
     }
     var _defaultSelectedProgram = function (s, e) {
         s.SetSelectedIndex(0);
@@ -1406,7 +1376,6 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _productTypeOnSelectionChanged = function (s, e) {
-
         var pOneVal = s.GetRowKey(e.visibleIndex);
         if (pOneVal != null) {
             var grid = ProductTypeByCustomerCbPanelforClosed.GetGridView();
@@ -1418,10 +1387,8 @@ M4PLCommon.AdvancedReport = (function () {
                 grid.SelectRowOnPage(0);
             }
         }
-
     }
     var _productTypeOnSelectionChanged = function (s, e) {
-
         var pOneVal = s.GetRowKey(e.visibleIndex);
         if (pOneVal != null) {
             var grid = ProductTypeByCustomerCbPanelforClosed.GetGridView();
@@ -1435,7 +1402,6 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _brandOnSelectionChanged = function (s, e) {
-
         var pOneVal = s.GetRowKey(e.visibleIndex);
         if (pOneVal != null) {
             var grid = BrandByCustomerProgramCbPanelClosed.GetGridView();
@@ -1449,7 +1415,6 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _destinationOnSelectionChanged = function (s, e) {
-
         var pOneVal = s.GetRowKey(e.visibleIndex);
         if (pOneVal != null) {
             var grid = DestinationByCustomerCbPanelforClosed.GetGridView();
@@ -1463,7 +1428,6 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _gatewayStatusOnSelectionChanged = function (s, e) {
-
         var pOneVal = s.GetRowKey(e.visibleIndex);
         if (pOneVal != null) {
             var grid = GatewayStatusIdByCustomerProgramCbPanelClosed.GetGridView();
@@ -1477,7 +1441,6 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _orginOnSelectionChanged = function (s, e) {
-
         var pOneVal = s.GetRowKey(e.visibleIndex);
         if (pOneVal != null) {
             var grid = OriginByCustomerCbPanelforClosed.GetGridView();
@@ -1491,7 +1454,6 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _programOnSelectionChanged = function (s, e) {
-
         var pOneVal = s.GetRowKey(e.visibleIndex);
         if (pOneVal != null) {
             var grid = ProgramByCustomerCbPanelforClosed.GetGridView();
@@ -1505,7 +1467,6 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _serviceModeOnSelectionChanged = function (s, e) {
-
         var pOneVal = s.GetRowKey(e.visibleIndex);
         if (pOneVal != null) {
             var grid = ServiceModeByCustomerCbPanelforClosed.GetGridView();
@@ -1519,7 +1480,6 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _channelOnSelectionChanged = function (s, e) {
-
         var pOneVal = s.GetRowKey(e.visibleIndex);
         if (pOneVal != null) {
             var grid = JobChannelByProgramCustomerCbPanelforClosed.GetGridView();
@@ -1649,7 +1609,6 @@ M4PLCommon.AdvancedReport = (function () {
         } else {
             return false;
         }
-
     }
 
     return {
@@ -1683,7 +1642,6 @@ M4PLCommon.AdvancedReport = (function () {
 })();
 
 M4PLCommon.ProgramRollUp = (function () {
-
     var _disableProgramRollUpBillingJob = function (s, e) {
         var prgRollUpBillingCtrl = ASPxClientControl.GetControlCollection().GetByName('PrgRollUpBilling');
 
@@ -1709,7 +1667,6 @@ M4PLCommon.ProgramRollUp = (function () {
 })();
 
 M4PLCommon.DropDownMultiSelect = (function () {
-
     var textSeparator = ",";
     //-------Location------------------
     var _updateTextLocation = function () {
@@ -1888,7 +1845,6 @@ M4PLCommon.DropDownMultiSelect = (function () {
         var values = _getValuesByTexts(texts, checkListBox);
         checkListBox.SelectValues(values);
         _updateTextServiceMode();//dropDown.name); // for remove non-existing texts
-
     }
 
     //------------------- Product Type-------------------------
@@ -1917,7 +1873,6 @@ M4PLCommon.DropDownMultiSelect = (function () {
         var values = _getValuesByTexts(texts, checkListBox);
         checkListBox.SelectValues(values);
         _updateTextProductType();//dropDown.name); // for remove non-existing texts
-
     }
 
     //------------------- Job Channel-------------------------
@@ -1946,7 +1901,6 @@ M4PLCommon.DropDownMultiSelect = (function () {
         var values = _getValuesByTexts(texts, checkListBox);
         checkListBox.SelectValues(values);
         _updateTextJobChannel();//dropDown.name); // for remove non-existing texts
-
     }
 
     //------------------------------------------------
@@ -1996,7 +1950,6 @@ M4PLCommon.DropDownMultiSelect = (function () {
         var values = _getValuesByValues(texts, checkListBox);
         checkListBox.SelectValues(values);
         _updateTextProgram();//dropDown.name); // for remove non-existing texts
-
     }
     var _getSelectedItemsValues = function (items, checkListBox) {
         var texts = [];
@@ -2096,7 +2049,6 @@ M4PLCommon.DropDownEdit = (function () {
         var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
         dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
         dropDownControl.SetText(_getSelectedItemsText(selectedItems));
-
     }
     var _synchronizeListBoxValues = function (dropDown, args) {
         var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
@@ -2190,7 +2142,6 @@ M4PLCommon.DropDownEdit = (function () {
         SynchronizeListBoxValues: _synchronizeListBoxValues,
         CloseUp: _closeUp
     }
-
 })();
 
 M4PLCommon.PrgGateway = (function () {
@@ -2222,7 +2173,6 @@ M4PLCommon.PrgGateway = (function () {
         var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
         dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
         dropDownControl.SetText(_getSelectedItemsText(selectedItems));
-
     }
     var _synchronizeListBoxValues = function (dropDown, args) {
         var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
@@ -2519,7 +2469,6 @@ M4PLCommon.DocumentStatus = (function () {
 })();
 
 M4PLCommon.DisplayMessage = (function () {
-
     var _defaultClientOk = function () {
         var okCtrl = ASPxClientControl.GetControlCollection().GetByName("btnOk");
         if (okCtrl != undefined && okCtrl != null) {

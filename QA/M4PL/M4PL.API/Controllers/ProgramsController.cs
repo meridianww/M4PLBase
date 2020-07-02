@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -28,68 +28,66 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/Programs")]
-    public class ProgramsController : BaseApiController<Program>
-    {
-        private readonly IProgramCommands _programCommands;
+	[RoutePrefix("api/Programs")]
+	public class ProgramsController : BaseApiController<Program>
+	{
+		private readonly IProgramCommands _programCommands;
 
-        /// <summary>
-        /// Function to get program details
-        /// </summary>
-        /// <param name="programCommands"></param>
-        public ProgramsController(IProgramCommands programCommands)
-            : base(programCommands)
-        {
-            _programCommands = programCommands;
-        }
+		/// <summary>
+		/// Function to get program details
+		/// </summary>
+		/// <param name="programCommands"></param>
+		public ProgramsController(IProgramCommands programCommands)
+			: base(programCommands)
+		{
+			_programCommands = programCommands;
+		}
 
-        /// <summary>
-        /// ProgramTree
-        /// </summary>
-        /// <param name="parentId"></param>
-        /// <param name="isCustNode"></param>
-        /// <returns></returns>
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("ProgramTree")]
-        public virtual IQueryable<TreeModel> ProgramTree(long? parentId, bool isCustNode)
-        {
-            return _programCommands.ProgramTree(ActiveUser, ActiveUser.OrganizationId, parentId, isCustNode).AsQueryable(); ;
-        }
+		/// <summary>
+		/// ProgramTree
+		/// </summary>
+		/// <param name="parentId"></param>
+		/// <param name="isCustNode"></param>
+		/// <returns></returns>
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("ProgramTree")]
+		public virtual IQueryable<TreeModel> ProgramTree(long? parentId, bool isCustNode)
+		{
+			return _programCommands.ProgramTree(ActiveUser, ActiveUser.OrganizationId, parentId, isCustNode).AsQueryable(); ;
+		}
 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("GetProgram")]
-        public Program GetProgram(long id, long? parentId)
-        {
-            return _programCommands.GetProgram(ActiveUser, id, parentId);
-        }
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("GetProgram")]
+		public Program GetProgram(long id, long? parentId)
+		{
+			return _programCommands.GetProgram(ActiveUser, id, parentId);
+		}
 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("ProgramCopyTree")]
-        public virtual IQueryable<TreeModel> ProgramCopyTree(long programId, long? parentId, bool isCustNode, bool isSource)
-        {
-            return _programCommands.ProgramCopyTree(ActiveUser, programId, parentId, isCustNode, isSource).AsQueryable(); ;
-        }
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("ProgramCopyTree")]
+		public virtual IQueryable<TreeModel> ProgramCopyTree(long programId, long? parentId, bool isCustNode, bool isSource)
+		{
+			return _programCommands.ProgramCopyTree(ActiveUser, programId, parentId, isCustNode, isSource).AsQueryable(); ;
+		}
 
-        [CustomAuthorize]
-        [HttpPost]
-        [Route("CopyPPPModel")]
-        public async Task<bool> CopyPPPModel(CopyPPPModel copyPPPMopdel)
-        {
-            var output = await Task.Run(() => _programCommands.CopyPPPModel(copyPPPMopdel, ActiveUser));
-            return output;
-        }
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("CopyPPPModel")]
+		public async Task<bool> CopyPPPModel(CopyPPPModel copyPPPMopdel)
+		{
+			var output = await Task.Run(() => _programCommands.CopyPPPModel(copyPPPMopdel, ActiveUser));
+			return output;
+		}
 
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("GetProgramsByCustomer")]
-        public List<Entities.Program.Program> GetProgramsByCustomer(long custId)
-        {
-            return _programCommands.GetProgramsByCustomer(custId);
-
-        }
-
-    }
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("GetProgramsByCustomer")]
+		public List<Entities.Program.Program> GetProgramsByCustomer(long custId)
+		{
+			return _programCommands.GetProgramsByCustomer(custId);
+		}
+	}
 }
