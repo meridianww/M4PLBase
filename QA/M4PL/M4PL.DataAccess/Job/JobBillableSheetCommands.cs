@@ -1,12 +1,21 @@
-﻿/*Copyright(2019) Meridian Worldwide Transportation Group
-All Rights Reserved Worldwide
-=============================================================================================================
-Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Nikhil
-Date Programmed:                              29/07/2019
-Program Name:                                 JobBillableSheetCommands
-Purpose:                                      Contains commands to perform CRUD on JobBillableSheet
-=============================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
+//=============================================================================================================
+// Program Title:                                Meridian 4th Party Logistics(M4PL)
+// Programmer:                                   Nikhil
+// Date Programmed:                              29/07/2019
+// Program Name:                                 JobBillableSheetCommands
+// Purpose:                                      Contains commands to perform CRUD on JobBillableSheet
+//=============================================================================================================
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Job;
