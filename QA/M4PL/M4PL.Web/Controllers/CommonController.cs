@@ -719,7 +719,7 @@ namespace M4PL.Web.Controllers
 
 			//---Start here: Override the parent security with sub module security if exist---
 			Permission popupNavPermission = security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>();
-			if (security != null)
+			if (security != null && security.UserSubSecurities != null)
 			{
 				var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
 				if (subSecurity != null)
