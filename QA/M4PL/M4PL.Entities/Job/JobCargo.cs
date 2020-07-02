@@ -102,6 +102,8 @@ namespace M4PL.Entities.Job
 
 		public decimal CgoQtyShortOver { get; set; }
 
+		public decimal CgoQtyOver { get; set; }
+
 		public int? CgoQtyUnitsId { get; set; }
 
 		public string CgoQtyUnitsIdName { get; set; }
