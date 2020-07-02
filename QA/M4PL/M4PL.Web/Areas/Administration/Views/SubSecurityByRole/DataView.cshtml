@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -54,7 +54,6 @@
             });
         });
     }
-
 
     settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
@@ -122,7 +121,6 @@
 
                 if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || col.ColColumnName.EndsWith(WebApplicationConstants.LineOrder))
                     column.ReadOnly = true;
-
 
                 if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
                 {

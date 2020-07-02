@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -16,8 +16,8 @@
     @Html.DevExpress().DocumentViewer(
         settings =>
         {
-            settings.ClientSideEvents.Init = "DevExCtrl.ReportDesigner.InitViewer"; 
-            settings.Name = Model.Report.Name; 
+            settings.ClientSideEvents.Init = "DevExCtrl.ReportDesigner.InitViewer";
+            settings.Name = Model.Report.Name;
             settings.Report = Model.Report;
             settings.SettingsSplitter.DocumentMapCollapsed = true;
             settings.CallbackRouteValues = new { Controller = Model.ReportRoute.Controller, Action = Model.ReportRoute.Action, Area = Model.ReportRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute) };

@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Prasanta Mahankuda
@@ -142,7 +142,6 @@
     //}
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
-
 
     foreach (var colSetting in Model.GridColumnSettings)
     {
@@ -367,7 +366,6 @@
         }
     }
 
-
     ////Saving Layout
     //settings.ClientLayout = (sender, e) =>
     //{
@@ -410,7 +408,6 @@
         grid.ForceDataRowType(Model.GridSetting.DataRowType);
     };
 
-
     settings.BeforeGetCallbackResult += (s, e) =>
     {
         var grid = (MVCxGridView)s;
@@ -423,7 +420,6 @@
             grid.SortBy(grid.Columns[colState.FieldName], colState.SortOrder);
         }
     };
-
 
     //settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
     //settings.SetStatusBarTemplateContent(c =>

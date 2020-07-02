@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Prashant Aggarwal
@@ -23,7 +23,7 @@
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
 {
     <div class="job-cargo-pnl-group">
-        <div class="col-sm-12 col-md-12 no-padding-left EDIXcblPanel" >
+        <div class="col-sm-12 col-md-12 no-padding-left EDIXcblPanel">
             @Html.DevExpress().RoundPanel(settings =>
        {
            settings.Name = "pnlJobEDIXcbl";

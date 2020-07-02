@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -158,7 +158,6 @@
 
         var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
-
         foreach (var colSetting in Model.GridColumnSettings)
         {
             if (colSetting.ColIsVisible
@@ -174,7 +173,6 @@
                     column.Visible = colSetting.ColIsVisible;
                     column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                     var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
-
 
                     if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
                     {
@@ -400,7 +398,6 @@
             }
         }
 
-
         //Saving Layout
         settings.ClientLayout = (sender, e) =>
         {
@@ -465,7 +462,6 @@
             grid.ForceDataRowType(Model.GridSetting.DataRowType);
         };
 
-
         settings.BeforeGetCallbackResult += (s, e) =>
         {
             var grid = (MVCxGridView)s;
@@ -478,7 +474,6 @@
                 grid.SortBy(grid.Columns[colState.FieldName], colState.SortOrder);
             }
         };
-
 
         settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
         settings.SetStatusBarTemplateContent(c =>

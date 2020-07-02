@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -31,7 +31,6 @@
 
     @*This code is moved up because subpopup rendering inside the form when the RichEditor with TabPageControl Exist*@
     @Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })
-
 
     @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
     {
@@ -110,11 +109,8 @@
 
         }).GetHtml();
 
-
     });
 }).GetHtml()
-
-
 
         @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 

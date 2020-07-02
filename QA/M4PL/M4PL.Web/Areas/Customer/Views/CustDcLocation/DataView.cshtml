@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -134,7 +134,6 @@
 
     bool isGroupingApplied = false;
     bool isLocationCodeAvailable = false;
-
 
     //adding one more hidden column for contact-- for batch edit validation
     settings.Columns.Add(column =>
@@ -370,7 +369,6 @@
         });
     }
 
-
     //Saving Layout
     settings.ClientLayout = (sender, e) =>
     {
@@ -390,7 +388,6 @@
     {
         WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);
     };
-
 
     settings.SettingsContextMenu.Enabled = true;
     settings.ClientSideEvents.ContextMenuItemClick = "function(s, e){ M4PLWindow.DataView.OnContextMenu(s, e, '" + WebExtension.ConvertByteToString(Model.Icon) + "', '" + MvcConstants.ActionChooseColumn + "', '" + MvcConstants.ActionCopyRecord + "'); }";

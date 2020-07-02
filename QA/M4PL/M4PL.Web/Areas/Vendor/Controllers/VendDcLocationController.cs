@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -29,73 +29,72 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Vendor.Controllers
 {
-    public class VendDcLocationController : BaseController<VendDcLocationView>
-    {
-        /// <summary>
-        /// Interacts with the interfaces to get the Vendor's dc location details and renders to the page
-        /// Gets the page related information on the cache basis
+	public class VendDcLocationController : BaseController<VendDcLocationView>
+	{
+		/// <summary>
+		/// Interacts with the interfaces to get the Vendor's dc location details and renders to the page
+		/// Gets the page related information on the cache basis
 
-        /// </summary>
-        /// <param name="vendDCLocationCommands"></param>
-        /// <param name="commonCommands"></param>
-        public VendDcLocationController(IVendDcLocationCommands vendDCLocationCommands, ICommonCommands commonCommands)
-            : base(vendDCLocationCommands)
-        {
-            _commonCommands = commonCommands;
-        }
+		/// </summary>
+		/// <param name="vendDCLocationCommands"></param>
+		/// <param name="commonCommands"></param>
+		public VendDcLocationController(IVendDcLocationCommands vendDCLocationCommands, ICommonCommands commonCommands)
+			: base(vendDCLocationCommands)
+		{
+			_commonCommands = commonCommands;
+		}
 
-        /// <summary>
-        /// Performs edit or update action on the existing Vendor's dc location record
-        /// </summary>
-        /// <param name="vendDcLocationView"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Performs edit or update action on the existing Vendor's dc location record
+		/// </summary>
+		/// <param name="vendDcLocationView"></param>
+		/// <returns></returns>
 
-        public override ActionResult AddOrEdit(VendDcLocationView vendDcLocationView)
-        {
-            vendDcLocationView.IsFormView = true;
-            SessionProvider.ActiveUser.SetRecordDefaults(vendDcLocationView, Request.Params[WebApplicationConstants.UserDateTime]);
-            vendDcLocationView.VdcVendorID = vendDcLocationView.ParentId;
-            var messages = ValidateMessages(vendDcLocationView);
-            if (messages.Any())
-                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+		public override ActionResult AddOrEdit(VendDcLocationView vendDcLocationView)
+		{
+			vendDcLocationView.IsFormView = true;
+			SessionProvider.ActiveUser.SetRecordDefaults(vendDcLocationView, Request.Params[WebApplicationConstants.UserDateTime]);
+			vendDcLocationView.VdcVendorID = vendDcLocationView.ParentId;
+			var messages = ValidateMessages(vendDcLocationView);
+			if (messages.Any())
+				return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var result = vendDcLocationView.Id > 0 ? base.UpdateForm(vendDcLocationView) : base.SaveForm(vendDcLocationView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
-            if (result is SysRefModel)
-            {
-                route.RecordId = result.Id;
-                route.CompanyId = result.CompanyId;
-                return SuccessMessageForInsertOrUpdate(vendDcLocationView.Id, route);
-            }
-            return ErrorMessageForInsertOrUpdate(vendDcLocationView.Id, route);
+			var result = vendDcLocationView.Id > 0 ? base.UpdateForm(vendDcLocationView) : base.SaveForm(vendDcLocationView);
+			var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+			if (result is SysRefModel)
+			{
+				route.RecordId = result.Id;
+				route.CompanyId = result.CompanyId;
+				return SuccessMessageForInsertOrUpdate(vendDcLocationView.Id, route);
+			}
+			return ErrorMessageForInsertOrUpdate(vendDcLocationView.Id, route);
+		}
 
-        }
+		[HttpPost, ValidateInput(false)]
+		public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<VendDcLocationView, long> vendDcLocationView, string strRoute, string gridName)
+		{
+			var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+			vendDcLocationView.Insert.ForEach(c => { c.VdcVendorID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			vendDcLocationView.Update.ForEach(c => { c.VdcVendorID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			var batchError = BatchUpdate(vendDcLocationView, route, gridName);
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			{
+				var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+				displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+				ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+			}
+			SetGridResult(route);
+			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+		}
 
-        [HttpPost, ValidateInput(false)]
-        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<VendDcLocationView, long> vendDcLocationView, string strRoute, string gridName)
-        {
-            var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-            vendDcLocationView.Insert.ForEach(c => { c.VdcVendorID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            vendDcLocationView.Update.ForEach(c => { c.VdcVendorID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = BatchUpdate(vendDcLocationView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
-            {
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
-                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
-                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-            }
-            SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
-        }
-
-        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
-        {
-            var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            long expandRowId;
-            Int64.TryParse(route.Url, out expandRowId);
-            base.DataView(strRoute);
-            _gridResult.GridSetting.ChildGridRoute.ParentRecordId = expandRowId;
-            return PartialView(_gridResult);
-        }
-    }
+		public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+		{
+			var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			long expandRowId;
+			Int64.TryParse(route.Url, out expandRowId);
+			base.DataView(strRoute);
+			_gridResult.GridSetting.ChildGridRoute.ParentRecordId = expandRowId;
+			return PartialView(_gridResult);
+		}
+	}
 }

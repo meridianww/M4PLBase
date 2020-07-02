@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -93,8 +93,6 @@
 
     });
 }).GetHtml()
-
-   
 
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
     if (!Model.IsPopUp)
