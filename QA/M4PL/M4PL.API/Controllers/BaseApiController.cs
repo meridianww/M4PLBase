@@ -20,11 +20,13 @@
 using M4PL.API.Filters;
 using M4PL.API.Models;
 using M4PL.Business;
+using M4PL.Entities;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Description;
 using _commonCommands = M4PL.Business.Common.CommonCommands;
 
 namespace M4PL.API.Controllers
@@ -34,7 +36,7 @@ namespace M4PL.API.Controllers
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     [CustomAuthorize]
-    public abstract class BaseApiController<TEntity> : ApiController
+    public abstract class BaseApiController<TEntity> : ApiController 
     {
         /// <summary>
         /// BaseCommands
@@ -59,12 +61,15 @@ namespace M4PL.API.Controllers
         }
 
         #region Generic Rest Operation
-
         /// <summary>
-        /// PagedData
+        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values
         /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
+        /// <param name="pagedDataInfo"> 
+        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc
+        /// </param>
+        /// <returns>
+        /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result 
+        /// </returns>
         [CustomQueryable]
         [HttpPost]
         [Route("{pagedDataInfo}/PagedData")]
@@ -75,10 +80,10 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Get
+        /// Get method gets the single record based on numeric Id parameter passed for the Entity 
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Refer to Record Id </param>
+        /// <returns>Returns response as single object</returns>
         [HttpGet]
         [Route("{id}")]
         public virtual TEntity Get(long id)
@@ -88,10 +93,10 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Post
+        /// Post method is used to add a new single record for new entity object passed as parameter
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <param name="entity">Refers to Entity object to add </param>
+        /// <returns>Returns response as object newly added</returns>
         [HttpPost]
         public virtual TEntity Post(TEntity entity)
         {
@@ -100,10 +105,10 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Put
+        /// Put method is used to update record values completely based on entity object passed 
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <param name="entity">Refers to Entity object to update</param>
+        /// <returns>Returns updated single object</returns>
         [HttpPut]
         public virtual TEntity Put(TEntity entity)
         {
@@ -112,10 +117,10 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Delete
+        /// Delete method is used to make a single record archive  
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Refers to numeric value of record to archive</param>
+        /// <returns>Returns response as numeric value</returns>
         [HttpDelete]
         public virtual int Delete(long id)
         {
@@ -124,11 +129,11 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// DeleteList
+        /// DeleteList method is used to Delete a multiple records for ids passed as comma seprated list of string
         /// </summary>
-        /// <param name="ids"></param>
-        /// <param name="statusId"></param>
-        /// <returns></returns>
+        /// <param name="ids">Refers to comma seprated ids as string</param>
+        /// <param name="statusId">Refers to numeric value, It can have value 3 to make record archive</param>
+        /// <returns>Returns response as numeric value</returns>
         [HttpDelete]
         [Route("DeleteList")]
         public virtual IList<IdRefLangName> DeleteList(string ids, int statusId)
@@ -138,11 +143,11 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Patch
+        /// Patch method is used to update partially or completely record values based on entity object passed 
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-		[HttpPatch]
+        /// <param name="entity">Refers object to update</param>
+        /// <returns>Returns response as updated single object</returns>
+        [HttpPatch]
         public virtual TEntity Patch(TEntity entity)
         {
             BaseCommands.ActiveUser = ActiveUser;
