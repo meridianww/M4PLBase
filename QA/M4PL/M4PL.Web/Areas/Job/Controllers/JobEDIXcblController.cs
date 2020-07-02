@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -29,80 +29,80 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
-    public class JobEDIXcblController : BaseController<JobEDIXcblView>
-    {
-        /// <summary>
-        /// Interacts with the interfaces to get the Jobs EDIXcbl details and renders to the page
-        /// Gets the page related information on the cache basis
-        /// </summary>
-        /// <param name="jobEDIXcblCommands"></param>
-        /// <param name="commonCommands"></param>
-        public JobEDIXcblController(IJobEDIXcblCommands jobEDIXcblCommands, ICommonCommands commonCommands)
-            : base(jobEDIXcblCommands)
-        {
-            _commonCommands = commonCommands;
-        }
+	public class JobEDIXcblController : BaseController<JobEDIXcblView>
+	{
+		/// <summary>
+		/// Interacts with the interfaces to get the Jobs EDIXcbl details and renders to the page
+		/// Gets the page related information on the cache basis
+		/// </summary>
+		/// <param name="jobEDIXcblCommands"></param>
+		/// <param name="commonCommands"></param>
+		public JobEDIXcblController(IJobEDIXcblCommands jobEDIXcblCommands, ICommonCommands commonCommands)
+			: base(jobEDIXcblCommands)
+		{
+			_commonCommands = commonCommands;
+		}
 
-        public override ActionResult AddOrEdit(JobEDIXcblView jobEDIXcblView)
-        {
-            jobEDIXcblView.IsFormView = true;
-            SessionProvider.ActiveUser.SetRecordDefaults(jobEDIXcblView, Request.Params[WebApplicationConstants.UserDateTime]);
+		public override ActionResult AddOrEdit(JobEDIXcblView jobEDIXcblView)
+		{
+			jobEDIXcblView.IsFormView = true;
+			SessionProvider.ActiveUser.SetRecordDefaults(jobEDIXcblView, Request.Params[WebApplicationConstants.UserDateTime]);
 
-            var messages = ValidateMessages(jobEDIXcblView);
-            if (messages.Any())
-                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+			var messages = ValidateMessages(jobEDIXcblView);
+			if (messages.Any())
+				return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var result = jobEDIXcblView.Id > 0 ? base.UpdateForm(jobEDIXcblView) : base.SaveForm(jobEDIXcblView);
+			var result = jobEDIXcblView.Id > 0 ? base.UpdateForm(jobEDIXcblView) : base.SaveForm(jobEDIXcblView);
 
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
-            if (result is SysRefModel)
-            {
-                route.RecordId = result.Id;
-                return SuccessMessageForInsertOrUpdate(jobEDIXcblView.Id, route);
-            }
-            return ErrorMessageForInsertOrUpdate(jobEDIXcblView.Id, route);
-        }
+			var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+			if (result is SysRefModel)
+			{
+				route.RecordId = result.Id;
+				return SuccessMessageForInsertOrUpdate(jobEDIXcblView.Id, route);
+			}
+			return ErrorMessageForInsertOrUpdate(jobEDIXcblView.Id, route);
+		}
 
-        [HttpPost, ValidateInput(false)]
-        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<JobEDIXcblView, long> jobEDIXcblView, string strRoute, string gridName)
-        {
-            var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-            jobEDIXcblView.Insert.ForEach(c => { c.JobId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            jobEDIXcblView.Update.ForEach(c => { c.JobId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = base.BatchUpdate(jobEDIXcblView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
-            {
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
-                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
-                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-            }
+		[HttpPost, ValidateInput(false)]
+		public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<JobEDIXcblView, long> jobEDIXcblView, string strRoute, string gridName)
+		{
+			var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+			jobEDIXcblView.Insert.ForEach(c => { c.JobId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			jobEDIXcblView.Update.ForEach(c => { c.JobId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			var batchError = base.BatchUpdate(jobEDIXcblView, route, gridName);
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			{
+				var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+				displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+				ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+			}
 
-            SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
-        }
+			SetGridResult(route);
+			return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+		}
 
-        public ActionResult TabView(string strRoute)
-        {
-            var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var pageControlResult = new PageControlResult
-            {
-                PageInfos = _commonCommands.GetPageInfos(EntitiesAlias.JobCargo),
-                CallBackRoute = new MvcRoute(route, MvcConstants.ActionTabView),
-                ParentUniqueName = string.Concat(route.EntityName, "_", EntitiesAlias.JobCargo.ToString())
-            };
-            foreach (var pageInfo in pageControlResult.PageInfos)
-            {
-                pageInfo.SetRoute(route, _commonCommands);
-                pageInfo.Route.ParentRecordId = route.ParentRecordId;
-            }
-            return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
-        }
+		public ActionResult TabView(string strRoute)
+		{
+			var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var pageControlResult = new PageControlResult
+			{
+				PageInfos = _commonCommands.GetPageInfos(EntitiesAlias.JobCargo),
+				CallBackRoute = new MvcRoute(route, MvcConstants.ActionTabView),
+				ParentUniqueName = string.Concat(route.EntityName, "_", EntitiesAlias.JobCargo.ToString())
+			};
+			foreach (var pageInfo in pageControlResult.PageInfos)
+			{
+				pageInfo.SetRoute(route, _commonCommands);
+				pageInfo.Route.ParentRecordId = route.ParentRecordId;
+			}
+			return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
+		}
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
-        {
-            base.DataView(strRoute);
-            var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            return PartialView(MvcConstants.ActionDataView, _gridResult);
-        }
-    }
+		public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+		{
+			base.DataView(strRoute);
+			var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			return PartialView(MvcConstants.ActionDataView, _gridResult);
+		}
+	}
 }

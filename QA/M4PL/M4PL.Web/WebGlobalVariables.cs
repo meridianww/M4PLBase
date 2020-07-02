@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -24,24 +24,24 @@ using System.Web;
 
 namespace M4PL.Web
 {
-    public static class WebGlobalVariables
-    {
-        public static IList<LeftMenu> ModuleMenus
-        {
-            get
-            {
-                if (HttpContext.Current.Application["ModuleMenus"] == null || !(HttpContext.Current.Application["ModuleMenus"] is List<LeftMenu>))
-                    HttpContext.Current.Application["ModuleMenus"] = new List<LeftMenu>();
-                return HttpContext.Current.Application["ModuleMenus"] as List<LeftMenu>;
-            }
-            set
-            {
-                HttpContext.Current.Application["ModuleMenus"] = value;
-            }
-        }
+	public static class WebGlobalVariables
+	{
+		public static IList<LeftMenu> ModuleMenus
+		{
+			get
+			{
+				if (HttpContext.Current.Application["ModuleMenus"] == null || !(HttpContext.Current.Application["ModuleMenus"] is List<LeftMenu>))
+					HttpContext.Current.Application["ModuleMenus"] = new List<LeftMenu>();
+				return HttpContext.Current.Application["ModuleMenus"] as List<LeftMenu>;
+			}
+			set
+			{
+				HttpContext.Current.Application["ModuleMenus"] = value;
+			}
+		}
 
-        public static List<string> Themes = new List<string>();
+		public static List<string> Themes = new List<string>();
 
-        public static int IsBundlingEnable = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["IsBundlingEnable"]);
-    }
+		public static int IsBundlingEnable = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["IsBundlingEnable"]);
+	}
 }

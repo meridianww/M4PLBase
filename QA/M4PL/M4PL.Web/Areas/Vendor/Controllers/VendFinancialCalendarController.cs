@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -30,85 +30,85 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Vendor.Controllers
 {
-    public class VendFinancialCalendarController : BaseController<VendFinancialCalendarView>
-    {
-        /// <summary>
-        /// Interacts with the interfaces to get the Vendor's financial calendar details and renders to the page
-        /// Gets the page related information on the cache basis
-        /// </summary>
-        /// <param name="vendFinancialCalendarCommands"></param>
-        /// <param name="commonCommands"></param>
-        public VendFinancialCalendarController(IVendFinancialCalendarCommands vendFinancialCalendarCommands, ICommonCommands commonCommands)
-            : base(vendFinancialCalendarCommands)
-        {
-            _commonCommands = commonCommands;
-        }
+	public class VendFinancialCalendarController : BaseController<VendFinancialCalendarView>
+	{
+		/// <summary>
+		/// Interacts with the interfaces to get the Vendor's financial calendar details and renders to the page
+		/// Gets the page related information on the cache basis
+		/// </summary>
+		/// <param name="vendFinancialCalendarCommands"></param>
+		/// <param name="commonCommands"></param>
+		public VendFinancialCalendarController(IVendFinancialCalendarCommands vendFinancialCalendarCommands, ICommonCommands commonCommands)
+			: base(vendFinancialCalendarCommands)
+		{
+			_commonCommands = commonCommands;
+		}
 
-        /// <summary>
-        /// Performs edit or update action on the existing Vendor's financial calendar record
-        /// </summary>
-        /// <param name="vendFinancialCalendarView"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Performs edit or update action on the existing Vendor's financial calendar record
+		/// </summary>
+		/// <param name="vendFinancialCalendarView"></param>
+		/// <returns></returns>
 
-        public override ActionResult AddOrEdit(VendFinancialCalendarView vendFinancialCalendarView)
-        {
-            vendFinancialCalendarView.IsFormView = true;
-            SessionProvider.ActiveUser.SetRecordDefaults(vendFinancialCalendarView, Request.Params[WebApplicationConstants.UserDateTime]);
-            vendFinancialCalendarView.OrganizationId = SessionProvider.ActiveUser.OrganizationId;
-            vendFinancialCalendarView.VendID = vendFinancialCalendarView.ParentId;
-            var messages = ValidateMessages(vendFinancialCalendarView);
-            var descriptionByteArray = vendFinancialCalendarView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.VendFinancialCalendar, ByteArrayFields.FclDescription.ToString());
-            var byteArray = new List<ByteArray> {
-                descriptionByteArray
-            };
-            if (messages.Any())
-                return Json(new { status = false, errMessages = messages, byteArray = byteArray }, JsonRequestBehavior.AllowGet);
+		public override ActionResult AddOrEdit(VendFinancialCalendarView vendFinancialCalendarView)
+		{
+			vendFinancialCalendarView.IsFormView = true;
+			SessionProvider.ActiveUser.SetRecordDefaults(vendFinancialCalendarView, Request.Params[WebApplicationConstants.UserDateTime]);
+			vendFinancialCalendarView.OrganizationId = SessionProvider.ActiveUser.OrganizationId;
+			vendFinancialCalendarView.VendID = vendFinancialCalendarView.ParentId;
+			var messages = ValidateMessages(vendFinancialCalendarView);
+			var descriptionByteArray = vendFinancialCalendarView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.VendFinancialCalendar, ByteArrayFields.FclDescription.ToString());
+			var byteArray = new List<ByteArray> {
+				descriptionByteArray
+			};
+			if (messages.Any())
+				return Json(new { status = false, errMessages = messages, byteArray = byteArray }, JsonRequestBehavior.AllowGet);
 
-            var record = vendFinancialCalendarView.Id > 0 ? base.UpdateForm(vendFinancialCalendarView) : base.SaveForm(vendFinancialCalendarView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+			var record = vendFinancialCalendarView.Id > 0 ? base.UpdateForm(vendFinancialCalendarView) : base.SaveForm(vendFinancialCalendarView);
+			var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
 
-            if (record is SysRefModel)
-            {
-                route.RecordId = record.Id;
-                descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(vendFinancialCalendarView.Id, route, byteArray);
-            }
-            return ErrorMessageForInsertOrUpdate(vendFinancialCalendarView.Id, route);
-        }
+			if (record is SysRefModel)
+			{
+				route.RecordId = record.Id;
+				descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+				return SuccessMessageForInsertOrUpdate(vendFinancialCalendarView.Id, route, byteArray);
+			}
+			return ErrorMessageForInsertOrUpdate(vendFinancialCalendarView.Id, route);
+		}
 
-        [HttpPost, ValidateInput(false)]
-        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<VendFinancialCalendarView, long> vendFinancialCalendarView, string strRoute, string gridName)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            vendFinancialCalendarView.Insert.ForEach(c => { c.VendID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            vendFinancialCalendarView.Update.ForEach(c => { c.VendID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = BatchUpdate(vendFinancialCalendarView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
-            {
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
-                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
-                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-            }
-            SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
-        }
+		[HttpPost, ValidateInput(false)]
+		public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<VendFinancialCalendarView, long> vendFinancialCalendarView, string strRoute, string gridName)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			vendFinancialCalendarView.Insert.ForEach(c => { c.VendID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			vendFinancialCalendarView.Update.ForEach(c => { c.VendID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			var batchError = BatchUpdate(vendFinancialCalendarView, route, gridName);
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			{
+				var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+				displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+				ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+			}
+			SetGridResult(route);
+			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+		}
 
-        #region RichEdit
+		#region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-        {
-            long newDocumentId;
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.FclDescription.ToString());
-            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-            {
-                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.FclDescription.ToString());
-            }
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.FclDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.FclDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
-    }
+		#endregion RichEdit
+	}
 }

@@ -1,5 +1,5 @@
 ﻿@*Copyright (2018) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Job Destination
     //Programmer:                                   Kirty Anurag
@@ -126,8 +126,6 @@
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCPhone, new { MakeSkypeCall = true }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
 
-           
-         
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCEmail).ToHtmlString());
            ViewContext.Writer.Write("</div>");
@@ -149,11 +147,9 @@
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryStateDropDownViewModel) }) + "</div>");
 
-
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryPostalCode, new { onTextChange = changeEvent }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-
 
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryCountry, new { onTextChange = changeEvent }).ToHtmlString());
@@ -164,11 +160,11 @@
           //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
           //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignText).ToHtmlString());
           //ViewContext.Writer.Write("</div>");
-          
+
           //ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right' >");
           //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLatitude).ToHtmlString());
           //ViewContext.Writer.Write("</div>");
-        
+
           //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right' style='float: none !important'>");
           //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLongitude).ToHtmlString());
           //ViewContext.Writer.Write("</div>");
@@ -199,7 +195,6 @@
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCPhone2, new { MakeSkypeCall = true }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-
 
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCEmail2).ToHtmlString());

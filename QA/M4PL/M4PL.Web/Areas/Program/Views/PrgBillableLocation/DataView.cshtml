@@ -1,5 +1,5 @@
 ﻿@*Copyright (2019) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Nikhil
@@ -7,7 +7,6 @@
     //Program Name:                                 PrgBillableLocation
     //Purpose:                                      Provides grid view for Program's BillableLocation
     //====================================================================================================================================================*@
-
 
 @using System.Collections
 @using M4PL.Entities
@@ -405,9 +404,7 @@
             });
         }
 
-
     }
-
 
     //Saving Layout
     settings.ClientLayout = (sender, e) =>
@@ -431,7 +428,6 @@
     {
         WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);
     };
-
 
     settings.SettingsContextMenu.Enabled = true;
     settings.ClientSideEvents.ContextMenuItemClick = "function(s, e){ M4PLWindow.DataView.OnContextMenu(s, e, '" + WebExtension.ConvertByteToString(Model.Icon) + "', '" + MvcConstants.ActionChooseColumn + "', '" + MvcConstants.ActionCopyRecord + "'); }";

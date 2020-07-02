@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   KIRTY ANURAG
@@ -7,7 +7,6 @@
     //Program Name:                                 JobAdvanceReportView
     //Purpose:                                      Provides grid view for the JobAdvanceReport
     //====================================================================================================================================================*@
-
 
 @using System.Collections
 @using M4PL.Entities
@@ -124,7 +123,6 @@
     //}
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
-
 
     foreach (var colSetting in Model.ColumnSettings)
     {
@@ -358,7 +356,6 @@
         }
     }
 
-
     ////Saving Layout
     //settings.ClientLayout = (sender, e) =>
     //{
@@ -400,7 +397,6 @@
         var grid = (MVCxGridView)s;
         grid.ForceDataRowType(Model.GridSetting.DataRowType);
     };
-
 
     settings.BeforeGetCallbackResult += (s, e) =>
     {
@@ -489,6 +485,4 @@
             grid.FocusedRowIndex = grid.FindVisibleIndexByKeyValue(Model.FocusedRowId);
     };
 
-
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
-

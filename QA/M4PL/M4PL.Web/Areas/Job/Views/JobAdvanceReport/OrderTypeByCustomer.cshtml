@@ -1,7 +1,6 @@
 ﻿@using M4PL.Web.Providers
 @model M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 
-
 @Html.DevExpress().CallbackPanel(setings =>
 {
     setings.Name = "OrderTypeByCustomerProgramCbPanel";
@@ -54,6 +53,3 @@
     });
 
 }).GetHtml()
-
-
-

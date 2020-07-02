@@ -1,14 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -35,196 +34,193 @@ using System.Web.Routing;
 
 namespace M4PL.Web.Areas
 {
-    public class BaseDashboardController : DevExpress.DashboardWeb.Mvc.DashboardController
-    {
-        protected DashboardResult<AppDashboardView> _dashboardResult = new DashboardResult<AppDashboardView>();
+	public class BaseDashboardController : DevExpress.DashboardWeb.Mvc.DashboardController
+	{
+		protected DashboardResult<AppDashboardView> _dashboardResult = new DashboardResult<AppDashboardView>();
 
-        protected ICommonCommands _commonCommands;
-        protected IAppDashboardCommands _appDashboardCommands;
-        protected Dictionary<string, Dictionary<string, object>> RowHashes { get; set; }
-        public SessionProvider SessionProvider
-        {
-            get { return SessionProvider.Instance; }
-        }
+		protected ICommonCommands _commonCommands;
+		protected IAppDashboardCommands _appDashboardCommands;
+		protected Dictionary<string, Dictionary<string, object>> RowHashes { get; set; }
 
-        public BaseDashboardController(DashboardConfigurator dashboardConfigurator)
-            : base(dashboardConfigurator)
-        {
-        }
+		public SessionProvider SessionProvider
+		{
+			get { return SessionProvider.Instance; }
+		}
 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (SessionProvider == null || SessionProvider.ActiveUser == null)
-                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Account" }, { "action", MvcConstants.ActionIndex }, { "area", string.Empty } });
-            else
-            {
-                if (SessionProvider.ActiveUser != null && !filterContext.ActionDescriptor.ActionName.Equals("GetLastCallDateTime"))
-                    SessionProvider.ActiveUser.LastAccessDateTime = DateTime.Now;
+		public BaseDashboardController(DashboardConfigurator dashboardConfigurator)
+			: base(dashboardConfigurator)
+		{
+		}
 
-                _commonCommands.ActiveUser = SessionProvider.ActiveUser;
-                _appDashboardCommands.ActiveUser = SessionProvider.ActiveUser;
-            }
-            base.OnActionExecuting(filterContext);
-        }
+		protected override void OnActionExecuting(ActionExecutingContext filterContext)
+		{
+			if (SessionProvider == null || SessionProvider.ActiveUser == null)
+				filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Account" }, { "action", MvcConstants.ActionIndex }, { "area", string.Empty } });
+			else
+			{
+				if (SessionProvider.ActiveUser != null && !filterContext.ActionDescriptor.ActionName.Equals("GetLastCallDateTime"))
+					SessionProvider.ActiveUser.LastAccessDateTime = DateTime.Now;
 
+				_commonCommands.ActiveUser = SessionProvider.ActiveUser;
+				_appDashboardCommands.ActiveUser = SessionProvider.ActiveUser;
+			}
+			base.OnActionExecuting(filterContext);
+		}
 
+		#region Base Methods copied from Base and MvcBase Controller
 
-        #region Base Methods copied from Base and MvcBase Controller
+		protected MvcRoute GetDefaultRoute()
+		{
+			if (SessionProvider.ActiveUser.LastRoute != null && SessionProvider.MvcPageAction.Count == 0)
+				return SessionProvider.ActiveUser.LastRoute;
 
+			SessionProvider.MvcPageAction.Clear();
 
+			if (_commonCommands == null)
+			{
+				_commonCommands = new CommonCommands();
+				_commonCommands.ActiveUser = SessionProvider.ActiveUser;
+			}
+			if (WebGlobalVariables.ModuleMenus.Count == 0)
+				WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
 
-        protected MvcRoute GetDefaultRoute()
-        {
-            if (SessionProvider.ActiveUser.LastRoute != null && SessionProvider.MvcPageAction.Count == 0)
-                return SessionProvider.ActiveUser.LastRoute;
+			var leftMenus = (from mnu in WebGlobalVariables.ModuleMenus
+							 join sec in SessionProvider.UserSecurities on mnu.MnuModuleId equals sec.SecMainModuleId
+							 where mnu.MnuBreakDownStructure.StartsWith("02")
+							 select mnu).ToList();
+			SessionProvider.UserSecurities.ToList().ForEach(sec => leftMenus.GetNotAccessibleMenus(sec).ForEach(nmnu => leftMenus.FirstOrDefault(mnu => mnu.MnuModuleId == sec.SecMainModuleId).Children.Remove(nmnu)));
+			//Comment this line if want to show on left menu if it has no operations to perform
+			leftMenus.RemoveAll(mnu => mnu.Children.Count == 0);
 
-            SessionProvider.MvcPageAction.Clear();
+			var defaultMenu = (from mnu in leftMenus
+							   where mnu.MnuModuleId == SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysMainModuleId).ToInt()
+							   select mnu).LastOrDefault().Children.FirstOrDefault(m => !string.IsNullOrEmpty(m.MnuTableName)); // because first might be ribbon and select where table/Controller name is not empty or null
 
-            if (_commonCommands == null)
-            {
-                _commonCommands = new CommonCommands();
-                _commonCommands.ActiveUser = SessionProvider.ActiveUser;
-            }
-            if (WebGlobalVariables.ModuleMenus.Count == 0)
-                WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
+			if (defaultMenu == null || string.IsNullOrEmpty(defaultMenu.MnuExecuteProgram) || !Enum.IsDefined(typeof(EntitiesAlias), defaultMenu.MnuTableName))
+				defaultMenu = leftMenus.FirstOrDefault().Children.FirstOrDefault(m => !string.IsNullOrEmpty(m.MnuTableName));
 
-            var leftMenus = (from mnu in WebGlobalVariables.ModuleMenus
-                             join sec in SessionProvider.UserSecurities on mnu.MnuModuleId equals sec.SecMainModuleId
-                             where mnu.MnuBreakDownStructure.StartsWith("02")
-                             select mnu).ToList();
-            SessionProvider.UserSecurities.ToList().ForEach(sec => leftMenus.GetNotAccessibleMenus(sec).ForEach(nmnu => leftMenus.FirstOrDefault(mnu => mnu.MnuModuleId == sec.SecMainModuleId).Children.Remove(nmnu)));
-            //Comment this line if want to show on left menu if it has no operations to perform
-            leftMenus.RemoveAll(mnu => mnu.Children.Count == 0);
+			defaultMenu.Route = new MvcRoute
+			{
+				Entity = defaultMenu.MnuTableName.ToEnum<EntitiesAlias>(),
+				Action = defaultMenu.MnuExecuteProgram,
+				Area = !string.IsNullOrEmpty(defaultMenu.MnuTableName) && _commonCommands.Tables.ContainsKey(defaultMenu.MnuTableName.ToEnum<EntitiesAlias>()) ? _commonCommands.Tables[defaultMenu.MnuTableName.ToEnum<EntitiesAlias>()].MainModuleName : string.Empty,
+				EntityName = !string.IsNullOrEmpty(defaultMenu.MnuTableName) && _commonCommands.Tables.ContainsKey(defaultMenu.MnuTableName.ToEnum<EntitiesAlias>()) ? _commonCommands.Tables[defaultMenu.MnuTableName.ToEnum<EntitiesAlias>()].TblLangName : string.Empty,
+			};
 
-            var defaultMenu = (from mnu in leftMenus
-                               where mnu.MnuModuleId == SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysMainModuleId).ToInt()
-                               select mnu).LastOrDefault().Children.FirstOrDefault(m => !string.IsNullOrEmpty(m.MnuTableName)); // because first might be ribbon and select where table/Controller name is not empty or null
+			defaultMenu.Route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+			ViewData[MvcConstants.DefaultRoute] = defaultMenu.Route;
+			return defaultMenu.Route;
+		}
 
-            if (defaultMenu == null || string.IsNullOrEmpty(defaultMenu.MnuExecuteProgram) || !Enum.IsDefined(typeof(EntitiesAlias), defaultMenu.MnuTableName))
-                defaultMenu = leftMenus.FirstOrDefault().Children.FirstOrDefault(m => !string.IsNullOrEmpty(m.MnuTableName));
+		public ActionResult CallbackPanelPartial(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute) ?? GetDefaultRoute();
 
-            defaultMenu.Route = new MvcRoute
-            {
-                Entity = defaultMenu.MnuTableName.ToEnum<EntitiesAlias>(),
-                Action = defaultMenu.MnuExecuteProgram,
-                Area = !string.IsNullOrEmpty(defaultMenu.MnuTableName) && _commonCommands.Tables.ContainsKey(defaultMenu.MnuTableName.ToEnum<EntitiesAlias>()) ? _commonCommands.Tables[defaultMenu.MnuTableName.ToEnum<EntitiesAlias>()].MainModuleName : string.Empty,
-                EntityName = !string.IsNullOrEmpty(defaultMenu.MnuTableName) && _commonCommands.Tables.ContainsKey(defaultMenu.MnuTableName.ToEnum<EntitiesAlias>()) ? _commonCommands.Tables[defaultMenu.MnuTableName.ToEnum<EntitiesAlias>()].TblLangName : string.Empty,
-            };
+			//start- Not Found logic
 
-            defaultMenu.Route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            ViewData[MvcConstants.DefaultRoute] = defaultMenu.Route;
-            return defaultMenu.Route;
-        }
+			var controllerFullName = string.Format("M4PL.Web.Areas.{0}.Controllers.{1}Controller", route.Area, route.Entity.ToString());
+			var cont = Assembly.GetExecutingAssembly().GetType(controllerFullName);
+			if (!route.Action.EqualsOrdIgnoreCase("Dashboard") && !string.IsNullOrEmpty(route.Area) && (cont == null || cont.GetMethod(route.Action) == null))
+			{
+				var errorLog = new ErrorLog
+				{
+					ErrRelatedTo = WebApplicationConstants.NotFoundError,
+					ErrInnerException = "Controller or action not found", // should be from database
+					ErrMessage = "Controller or action not found", // should be from database
+					ErrSource = route.Entity.ToString(),
+					ErrStackTrace = WebApplicationConstants.NotFoundError,
+					ErrAdditionalMessage = JsonConvert.SerializeObject(route)
+				};
+				var mvcPageAction = SessionProvider.MvcPageAction;
+				mvcPageAction.Add(_commonCommands.GetOrInsErrorLog(errorLog).Id, MvcConstants.ActionNotFound);
+				SessionProvider.MvcPageAction = mvcPageAction;
+				route = new MvcRoute(EntitiesAlias.Common, SessionProvider.MvcPageAction.FirstOrDefault().Value, string.Empty);
+				route.RecordId = SessionProvider.MvcPageAction.FirstOrDefault().Key;
+			}
+			SessionProvider.MvcPageAction.Clear();
+			//End
+			SessionProvider.ActiveUser.LastRoute = route;
+			if (DevExpress.Web.Mvc.DevExpressHelper.IsCallback)
+				System.Threading.Thread.Sleep(100);
+			return PartialView(MvcConstants.CallBackPanelPartial, route);
+		}
 
-        public ActionResult CallbackPanelPartial(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute) ?? GetDefaultRoute();
+		public ActionResult InnerCallbackPanelPartial(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			if (route.Action.Equals(MvcConstants.ActionRibbonMenu) && route.Entity == EntitiesAlias.Common)
+			{
+				var arbValue = route.OwnerCbPanel;
+				route = new MvcRoute(GetDefaultRoute());
+				route.OwnerCbPanel = arbValue;
+			}
+			if (DevExpress.Web.Mvc.DevExpressHelper.IsCallback)
+				System.Threading.Thread.Sleep(100);
+			return PartialView(MvcConstants.ViewInnerCallBackPanelPartial, route);
+		}
 
-            //start- Not Found logic
+		#endregion Base Methods copied from Base and MvcBase Controller
 
-            var controllerFullName = string.Format("M4PL.Web.Areas.{0}.Controllers.{1}Controller", route.Area, route.Entity.ToString());
-            var cont = Assembly.GetExecutingAssembly().GetType(controllerFullName);
-            if (!route.Action.EqualsOrdIgnoreCase("Dashboard") && !string.IsNullOrEmpty(route.Area) && (cont == null || cont.GetMethod(route.Action) == null))
-            {
-                var errorLog = new ErrorLog
-                {
-                    ErrRelatedTo = WebApplicationConstants.NotFoundError,
-                    ErrInnerException = "Controller or action not found", // should be from database
-                    ErrMessage = "Controller or action not found", // should be from database
-                    ErrSource = route.Entity.ToString(),
-                    ErrStackTrace = WebApplicationConstants.NotFoundError,
-                    ErrAdditionalMessage = JsonConvert.SerializeObject(route)
-                };
-                var mvcPageAction = SessionProvider.MvcPageAction;
-                mvcPageAction.Add(_commonCommands.GetOrInsErrorLog(errorLog).Id, MvcConstants.ActionNotFound);
-                SessionProvider.MvcPageAction = mvcPageAction;
-                route = new MvcRoute(EntitiesAlias.Common, SessionProvider.MvcPageAction.FirstOrDefault().Value, string.Empty);
-                route.RecordId = SessionProvider.MvcPageAction.FirstOrDefault().Key;
-            }
-            SessionProvider.MvcPageAction.Clear();
-            //End
-            SessionProvider.ActiveUser.LastRoute = route;
-            if (DevExpress.Web.Mvc.DevExpressHelper.IsCallback)
-                System.Threading.Thread.Sleep(100);
-            return PartialView(MvcConstants.CallBackPanelPartial, route);
-        }
+		public int GetorSetUserGridPageSize(int? pageSize = null)
+		{
+			var sysPageSize = SessionProvider.UserSettings.Settings.GetSettingByEntityAndName(_commonCommands.GetSystemSetting().Settings, EntitiesAlias.System, WebApplicationConstants.SysPageSize).ToInt();
+			if (pageSize == null)
+				return sysPageSize;
+			else
+			{
+				if (pageSize != sysPageSize)
+				{
+					SessionProvider.UserSettings.Settings.SetSettingByEnitityAndName(EntitiesAlias.System, WebApplicationConstants.SysPageSize, pageSize.Value.ToString());
+					_commonCommands.UpdateUserSystemSettings(SessionProvider.UserSettings);
+				}
+				return pageSize.Value;
+			}
+		}
 
-        public ActionResult InnerCallbackPanelPartial(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            if (route.Action.Equals(MvcConstants.ActionRibbonMenu) && route.Entity == EntitiesAlias.Common)
-            {
-                var arbValue = route.OwnerCbPanel;
-                route = new MvcRoute(GetDefaultRoute());
-                route.OwnerCbPanel = arbValue;
-            }
-            if (DevExpress.Web.Mvc.DevExpressHelper.IsCallback)
-                System.Threading.Thread.Sleep(100);
-            return PartialView(MvcConstants.ViewInnerCallBackPanelPartial, route);
-        }
+		#region Check Record Used
 
-        #endregion Base Methods copied from Base and MvcBase Controller
+		public ActionResult CheckRecordUsed(string strRoute, string allRecordIds, string gridName)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var isRecordUsed = _commonCommands.CheckRecordUsed(allRecordIds, route.Entity);
+			var currentGridSettings = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, true, Permission.ReadOnly, this.Url);
 
-        public int GetorSetUserGridPageSize(int? pageSize = null)
-        {
-            var sysPageSize = SessionProvider.UserSettings.Settings.GetSettingByEntityAndName(_commonCommands.GetSystemSetting().Settings, EntitiesAlias.System, WebApplicationConstants.SysPageSize).ToInt();
-            if (pageSize == null)
-                return sysPageSize;
-            else
-            {
-                if (pageSize != sysPageSize)
-                {
-                    SessionProvider.UserSettings.Settings.SetSettingByEnitityAndName(EntitiesAlias.System, WebApplicationConstants.SysPageSize, pageSize.Value.ToString());
-                    _commonCommands.UpdateUserSystemSettings(SessionProvider.UserSettings);
-                }
-                return pageSize.Value;
-            }
-        }
+			if (!string.IsNullOrWhiteSpace(gridName))
+				currentGridSettings.GridName = gridName;
 
-        #region Check Record Used
+			if (!isRecordUsed)
+			{
+				var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.DeleteWarning);
 
-        public ActionResult CheckRecordUsed(string strRoute, string allRecordIds, string gridName)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var isRecordUsed = _commonCommands.CheckRecordUsed(allRecordIds, route.Entity);
-            var currentGridSettings = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, true, Permission.ReadOnly, this.Url);
+				var noOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.No.ToString()));
+				noOperation.SetupOperationRoute(route);
 
-            if (!string.IsNullOrWhiteSpace(gridName))
-                currentGridSettings.GridName = gridName;
+				var yesOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Yes.ToString()));
+				yesOperation.SetupOperationRoute(route, string.Format(JsConstants.DeleteConfirmClick, currentGridSettings.GridName));
 
-            if (!isRecordUsed)
-            {
-                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.DeleteWarning);
+				return Json(new { status = true, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
+			}
+			else
+			{
+				var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.DeleteMoreInfo);
 
-                var noOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.No.ToString()));
-                noOperation.SetupOperationRoute(route);
+				var deleteOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.DeleteMoreInfo.ToString()));
+				var deleteInfoRoute = new MvcRoute()
+				{
+					Action = "GetDeleteInfo",
+					Entity = EntitiesAlias.Common,
+					Area = String.Empty,
+					ParentEntity = route.Entity,
+					Url = allRecordIds
+				};
+				deleteOperation.ClickEvent = string.Format(JsConstants.DeleteMoreInfoEvent, Newtonsoft.Json.JsonConvert.SerializeObject(deleteInfoRoute));
+				var cancelOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Cancel.ToString()));
+				cancelOperation.SetupOperationRoute(route);
 
-                var yesOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Yes.ToString()));
-                yesOperation.SetupOperationRoute(route, string.Format(JsConstants.DeleteConfirmClick, currentGridSettings.GridName));
+				return Json(new { status = true, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
+			}
+		}
 
-                return Json(new { status = true, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.DeleteMoreInfo);
-
-                var deleteOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.DeleteMoreInfo.ToString()));
-                var deleteInfoRoute = new MvcRoute()
-                {
-                    Action = "GetDeleteInfo",
-                    Entity = EntitiesAlias.Common,
-                    Area = String.Empty,
-                    ParentEntity = route.Entity,
-                    Url = allRecordIds
-                };
-                deleteOperation.ClickEvent = string.Format(JsConstants.DeleteMoreInfoEvent, Newtonsoft.Json.JsonConvert.SerializeObject(deleteInfoRoute));
-                var cancelOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Cancel.ToString()));
-                cancelOperation.SetupOperationRoute(route);
-
-                return Json(new { status = true, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        #endregion Check Record Used
-    }
+		#endregion Check Record Used
+	}
 }
