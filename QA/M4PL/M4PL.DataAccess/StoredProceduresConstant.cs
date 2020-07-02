@@ -432,6 +432,7 @@ namespace M4PL.DataAccess
 		public const string GetJobGatewayCode = "dbo.GetJobGatewayCode";
 		public const string CompleteJobById = "dbo.CompleteJobById";
 		public const string GetActiveJobByProgram = "dbo.GetActiveJobByProgram";
+		public const string UpdateJobInvoiceDetail = "dbo.UpdateJobInvoiceDetail";
 
 		public const string InsertJob = "dbo.InsJob";
 		public const string UpdateJob = "dbo.UpdJob";
