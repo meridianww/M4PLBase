@@ -534,8 +534,7 @@ namespace M4PL.Web.Providers
 				{
                     //{ EntitiesAlias.CustDcLocation, new string[] { "CdcContactMSTRID" } },
                     //{ EntitiesAlias.VendDcLocation, new string[] { "VdcContactMSTRID" } },
-                    { EntitiesAlias.CustContact, new string[] { "ContactMSTRID" } },
-					{ EntitiesAlias.VendContact, new string[] { "ContactMSTRID" } },
+    
 				};
 			}
 		}
