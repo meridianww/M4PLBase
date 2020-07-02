@@ -996,6 +996,10 @@ namespace M4PL.Web
                     case DevExpress.Data.ColumnSortOrder.Descending:
                         sortColumn += " DESC ";
                         break;
+                    default:
+                        if(entity == EntitiesAlias.PrgRefGatewayDefault)
+                        sortColumn += " ASC ";
+                        break;
                 }
             }
             return sortColumn;
@@ -1693,7 +1697,7 @@ namespace M4PL.Web
                         if ((currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) && (route.Action == "TreeView"))
                         {
                             mnu.StatusId = 1;
-                            if(route.IsJobParentEntityUpdated && mnu.MnuTitle == "New")
+                            if (route.IsJobParentEntityUpdated && mnu.MnuTitle == "New")
                             {
                                 mnu.StatusId = 3;
                             }
