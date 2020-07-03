@@ -1510,6 +1510,10 @@ M4PLCommon.AdvancedReport = (function () {
 
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
 
+        var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
+        if (grdCtrl != null && grdCtrl != undefined)
+            grdCtrl.ClearFilter();
+
         if ($('.errorMessages') != undefined) {
             $('.errorMessages').html('');
         }
@@ -1603,9 +1607,6 @@ M4PLCommon.AdvancedReport = (function () {
 
         if (IsFormValidate) {
             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-            var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
-            if (grdCtrl != null && grdCtrl != undefined)
-                grdCtrl.ClearFilter();
         } else {
             return false;
         }
