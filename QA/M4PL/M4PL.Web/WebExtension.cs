@@ -973,34 +973,37 @@ namespace M4PL.Web
 			{
 				var colSetting = commands.GetColumnSettings(entity).FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnState.FieldName));
 
-				if (WebUtilities.IsIdNameField(columnState.FieldName) && entity != EntitiesAlias.JobAdvanceReport)
-					sortColumn = columnState.FieldName;
-				else
-				{
-					if (entity == EntitiesAlias.JobAdvanceReport)
-						sortColumn = colSetting.ColColumnName;
-					else
-					{
-						sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName);
-						if (columnState.FieldName.ToUpper().EndsWith("IDNAME"))
-							sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
-						else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
-							sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
-					}
-				}
-				switch (columnState.SortOrder)
-				{
-					case DevExpress.Data.ColumnSortOrder.Ascending:
-						sortColumn += " ASC ";
-						break;
-
-					case DevExpress.Data.ColumnSortOrder.Descending:
-						sortColumn += " DESC ";
-						break;
-				}
-			}
-			return sortColumn;
-		}
+                if (WebUtilities.IsIdNameField(columnState.FieldName) && entity != EntitiesAlias.JobAdvanceReport)
+                    sortColumn = columnState.FieldName;
+                else
+                {
+                    if (entity == EntitiesAlias.JobAdvanceReport)
+                        sortColumn = colSetting.ColColumnName;
+                    else
+                    {
+                        sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName);
+                        if (columnState.FieldName.ToUpper().EndsWith("IDNAME"))
+                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                        else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
+                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                    }
+                }
+                switch (columnState.SortOrder)
+                {
+                    case DevExpress.Data.ColumnSortOrder.Ascending:
+                        sortColumn += " ASC ";
+                        break;
+                    case DevExpress.Data.ColumnSortOrder.Descending:
+                        sortColumn += " DESC ";
+                        break;
+                    default:
+                        if(entity == EntitiesAlias.PrgRefGatewayDefault)
+                        sortColumn += " ASC ";
+                        break;
+                }
+            }
+            return sortColumn;
+        }
 
 		//public static string BuildGridSortCondition(this DevExpress.Web.Mvc.GridViewColumnState columnState, bool reset, EntitiesAlias entity, ICommonCommands commands)
 		//{
