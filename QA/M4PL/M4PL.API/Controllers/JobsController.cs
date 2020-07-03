@@ -304,7 +304,8 @@ namespace M4PL.API.Controllers
 		[Route("UpdateJobInvoiceDetail")]
 		public bool UpdateJobInvoiceDetail(JobInvoiceDetail jobInvoiceDetail, long jobId)
 		{
-			return _jobCommands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail);
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail);
 		}
 	}
 }

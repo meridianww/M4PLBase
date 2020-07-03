@@ -253,10 +253,10 @@ M4PLWindow.DataView = function () {
     }
 
     var _onUpdateEdit = function (grid, e, route) {
-        if (grid.batchEditApi.GetDeletedRowIndices().length > 0) {
+        if (grid.batchEditApi.GetDeletedRecordKeys().length > 0) {
             var allIds = [];
-            for (var i = 0; i < grid.batchEditApi.GetDeletedRowIndices().length; i++)
-                allIds.push(grid.GetRowKey(grid.batchEditApi.GetDeletedRowIndices()[i]));
+            for (var i = 0; i < grid.batchEditApi.GetDeletedRecordKeys().length; i++)
+                allIds.push(grid.batchEditApi.GetDeletedRecordKeys()[i]);
 
             $.ajax({
                 type: "POST",
