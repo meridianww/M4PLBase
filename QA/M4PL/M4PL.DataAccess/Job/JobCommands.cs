@@ -1575,5 +1575,28 @@ namespace M4PL.DataAccess.Job
 				return null;
 			}
 		}
+
+		public static bool UpdateJobInvoiceDetail(long jobId, JobInvoiceDetail jobInvoiceDetail, ActiveUser activeUser)
+		{
+			bool result = true;
+			var parameters = new[]
+			    {
+			            new Parameter("@JobId",jobId),
+			            new Parameter("@JobPurchaseInvoiceNumber",jobInvoiceDetail.JobPurchaseInvoiceNumber),
+			            new Parameter("@JobSalesInvoiceNumber",jobInvoiceDetail.JobSalesInvoiceNumber),
+			            new Parameter("@UpdatedBy",activeUser.UserName),
+			            new Parameter("@UpdatedDate", TimeUtility.GetPacificDateTime())
+			     };
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobInvoiceDetail, parameters, storedProcedure: true);
+			}
+			catch (Exception)
+			{
+				result = false;
+			}
+
+			return result;
+		}
 	}
 }

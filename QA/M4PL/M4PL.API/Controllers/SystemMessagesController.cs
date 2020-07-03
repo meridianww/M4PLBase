@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -23,19 +23,19 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/SystemMessages")]
-    public class SystemMessagesController : BaseApiController<SystemMessage>
-    {
-        private readonly ISystemMessageCommands _systemMessagesCommands;
+	[RoutePrefix("api/SystemMessages")]
+	public class SystemMessagesController : BaseApiController<SystemMessage>
+	{
+		private readonly ISystemMessageCommands _systemMessagesCommands;
 
-        /// <summary>
-        /// Function to get Administration's System message details
-        /// </summary>
-        /// <param name="systemMessageCommands"></param>
-        public SystemMessagesController(ISystemMessageCommands systemMessageCommands)
-            : base(systemMessageCommands)
-        {
-            _systemMessagesCommands = systemMessageCommands;
-        }
-    }
+		/// <summary>
+		/// Function to get Administration's System message details
+		/// </summary>
+		/// <param name="systemMessageCommands"></param>
+		public SystemMessagesController(ISystemMessageCommands systemMessageCommands)
+			: base(systemMessageCommands)
+		{
+			_systemMessagesCommands = systemMessageCommands;
+		}
+	}
 }

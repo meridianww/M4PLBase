@@ -666,7 +666,7 @@ M4PLWindow.DataView = function () {
 
     var _contextMenu = function (s, e, currentGrid, isGroupingApplied, isFromGatewayAction, isScheduledUrl, parentId, gatewayActionFormName) {
         ASPxClientUtils.AttachEventToElement(document, "scroll", function (evt) {
-            if (e.menu !== undefined && e.menu !== "undefined")
+            if (e.menu !== undefined && e.menu !== "undefined" && e.menu != null)
                 e.menu.SetVisible(false);
         });
 
@@ -818,7 +818,6 @@ M4PLWindow.DataView = function () {
         MenuDriverBatchEditStartEditing: _onMenuDriverBatchEditStartEditing,
         MenuBatchEditEndEditing: _onMenuBatchEditEndEditing,
         SetCutomeButtonsVisibility: _setCustomButtonsVisibility,
-
         PrgGatewayBatchEditStartEditing: _onPrgGatewayBatchEditStartEditing,
         PrgGatewayBatchEditEndEditing: _onPrgGatewayBatchEditEndEditing,
         JobGatewayBatchEditStartEditing: _onJobGatewayBatchEditStartEditing,

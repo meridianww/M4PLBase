@@ -1278,6 +1278,7 @@ namespace M4PL.Web
 				&& (route.Entity != EntitiesAlias.JobGateway)
 				&& (route.Entity != EntitiesAlias.JobXcblInfo)
 				&& (route.Entity != EntitiesAlias.JobHistory)
+				&& (route.Entity != EntitiesAlias.PrgRefGatewayDefault)
 			   )
 				headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
 
@@ -1289,6 +1290,7 @@ namespace M4PL.Web
 				&& (route.Entity != EntitiesAlias.JobGateway)
 				&& (route.Entity != EntitiesAlias.JobXcblInfo)
 				&& (route.Entity != EntitiesAlias.JobHistory)
+				&& (route.Entity != EntitiesAlias.PrgRefGatewayDefault)
 				)
 			{
 				var navMenuEnabled = true;
