@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -29,6 +29,10 @@ using System.Text;
 using System.Data;
 using System.Collections;
 using System.Linq;
+using System.IO.Compression;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
 
 namespace M4PL.Business.Attachment
 {
@@ -55,10 +59,69 @@ namespace M4PL.Business.Attachment
             return _commands.Get(ActiveUser, id);
         }
 
-        public List<Entities.Attachment> GetAttachmentsByJobId(long jobId)
+        public DocumentData GetAllAvaliableAttachmentsForJob(List<long> jobId)
         {
-            return _commands.GetAttachmentsByJobId(ActiveUser, jobId); 
-        }
+			DocumentData documentData = null;
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			foreach (var selectedJob in jobId)
+			{
+				var attachmentList = _commands.GetAttachmentsByJobId(ActiveUser, selectedJob);
+				if (attachmentList != null && attachmentList.Count > 0)
+				{
+					using (MemoryStream ms = new MemoryStream())
+					{
+						using (var archive = new System.IO.Compression.ZipArchive(ms, ZipArchiveMode.Create, true))
+						{
+							foreach (var file in attachmentList)
+							{
+								var entry = archive.CreateEntry(file.AttFileName, CompressionLevel.Fastest);
+								using (var zipStream = entry.Open())
+								{
+									zipStream.Write(file.AttData, 0, file.AttData.Length);
+								}
+							}
+						}
+
+						documentDataList.Add(
+							new DocumentData(){
+								DocumentContent = ms.ToArray(),
+								ContentType = "application/zip",
+								DocumentName = string.Format("documents_{0}.zip", selectedJob)
+							});
+					}
+				}
+			}
+
+			if (documentDataList != null && documentDataList.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var jobDocument in documentDataList)
+						{
+							var entry = archive.CreateEntry(jobDocument.DocumentName, CompressionLevel.Fastest);
+							using (var zipStream = entry.Open())
+							{
+								zipStream.Write(jobDocument.DocumentContent, 0, jobDocument.DocumentContent.Length);
+							}
+						}
+					}
+
+					documentData = new DocumentData();
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedDocuments");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else if (documentDataList != null && documentDataList.Count == 1)
+			{
+
+				return documentDataList[0];
+			}
+
+			return documentData;
+		}
 
 		public DocumentData GetBOLDocumentByJobId(long jobId)
 		{
@@ -69,18 +132,33 @@ namespace M4PL.Business.Attachment
 				documentData = new DocumentData();
 				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationURL + "Content/Images/M4plLogo.png" } };
 				Stream stream = GenerateHtmlFile(setcollection, "JobBOLDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobBOL.xslt", args);
-				StringBuilder sb = new StringBuilder();
+				StringBuilder stringBuilder = new StringBuilder();
 				using (StreamReader reader = new StreamReader(stream))
 				{
 					string line = string.Empty;
 					while ((line = reader.ReadLine()) != null)
 					{
-						sb.Append(line);
+						stringBuilder.Append(line);
 					}
 				}
 
-				documentData.DocumentHtml = sb.ToString();
-				documentData.DocumentName = string.Format("{0}.pdf", jobId);
+				if (!string.IsNullOrEmpty(stringBuilder.ToString()))
+				{
+					using (MemoryStream memorystream = new System.IO.MemoryStream())
+					{
+						StringReader sr = new StringReader(stringBuilder.ToString());
+						Document pdfDoc = new Document();
+						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, memorystream);
+						pdfDoc.Open();
+						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+						pdfDoc.Close();
+						documentData.DocumentContent = memorystream.ToArray();
+					}
+				}
+
+				documentData.DocumentHtml = stringBuilder.ToString();
+				documentData.DocumentName = string.Format("BOL_{0}.pdf", jobId);
+				documentData.ContentType = "application/pdf";
 			}
 
 			return documentData;
@@ -95,18 +173,33 @@ namespace M4PL.Business.Attachment
 				documentData = new DocumentData();
 				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationURL + "Content/Images/M4plLogo.png" } };
 				Stream stream = GenerateHtmlFile(setcollection, "JobTrackingDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobTracking.xslt", args);
-				StringBuilder sb = new StringBuilder();
+				StringBuilder stringBuilder = new StringBuilder();
 				using (StreamReader reader = new StreamReader(stream))
 				{
 					string line = string.Empty;
 					while ((line = reader.ReadLine()) != null)
 					{
-						sb.Append(line);
+						stringBuilder.Append(line);
 					}
 				}
 
-				documentData.DocumentHtml = sb.ToString();
-				documentData.DocumentName = string.Format("{0}.pdf", jobId);
+				if (!string.IsNullOrEmpty(stringBuilder.ToString()))
+				{
+					using (MemoryStream memorystream = new System.IO.MemoryStream())
+					{
+						StringReader sr = new StringReader(stringBuilder.ToString());
+						Document pdfDoc = new Document();
+						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, memorystream);
+						pdfDoc.Open();
+						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+						pdfDoc.Close();
+						documentData.DocumentContent = memorystream.ToArray();
+					}
+				}
+
+				documentData.DocumentHtml = stringBuilder.ToString();
+				documentData.DocumentName = string.Format("Tracking_{0}.pdf", jobId);
+				documentData.ContentType = "application/pdf";
 			}
 
 			return documentData;
@@ -201,17 +294,18 @@ namespace M4PL.Business.Attachment
 				if (byteArrayList?.Count > 0)
 				{
 					documentData.DocumentContent = PdfHelper.CombindMultiplePdf(byteArrayList);
-					documentData.DocumentName = string.Format("{0}.pdf", jobId);
+					documentData.DocumentName = string.Format("POD_{0}.pdf", jobId);
+					documentData.ContentType = "application/pdf";
 				}
 			}
 
 			return documentData;
 		}
 
-		public DocumentStatus GetDocumentStatusByJobId(long jobId)
+		public DocumentStatus GetDocumentStatusByJobId(List<long> selectedJobId)
 		{
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent= false };
-			List<Entities.Attachment> attachments = _commands.GetAttachmentsByJobId(ActiveUser, jobId);
+			List<Entities.Attachment> attachments = _commands.GetAttachmentsByMultipleJobId(ActiveUser, selectedJobId);
 			if (attachments != null && attachments.Count > 0)
 			{
 				documentStatus.IsAttachmentPresent = true;
@@ -358,6 +452,138 @@ namespace M4PL.Business.Attachment
 			}
 
 			return null;
+		}
+
+		public DocumentData GetAttachmentsByJobId(List<long> jobId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public DocumentData GetBOLDocumentByJobId(List<long> jobId)
+		{
+			DocumentData documentData = new DocumentData();
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			foreach (var currentJobId in jobId)
+			{
+				documentDataList.Add(GetBOLDocumentByJobId(currentJobId));
+			}
+
+			if (documentDataList?.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var bolDocument in documentDataList)
+						{
+							var entry = archive.CreateEntry(bolDocument.DocumentName, CompressionLevel.Fastest);
+							using (var zipStream = entry.Open())
+							{
+								zipStream.Write(bolDocument.DocumentContent, 0, bolDocument.DocumentContent.Length);
+							}
+						}
+					}
+
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedBOL");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else
+			{
+				return documentDataList[0];
+			}
+
+			return documentData;
+		}
+
+		public DocumentData GetTrackingDocumentByJobId(List<long> jobId)
+		{
+			DocumentData documentData = new DocumentData();
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			foreach (var currentJobId in jobId)
+			{
+				documentDataList.Add(GetTrackingDocumentByJobId(currentJobId));
+			}
+
+			if (documentDataList?.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var trackingDocument in documentDataList)
+						{
+							var entry = archive.CreateEntry(trackingDocument.DocumentName, CompressionLevel.Fastest);
+							using (var zipStream = entry.Open())
+							{
+								zipStream.Write(trackingDocument.DocumentContent, 0, trackingDocument.DocumentContent.Length);
+							}
+						}
+					}
+
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedTracking");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else
+			{
+				return documentDataList[0];
+			}
+
+			return documentData;
+		}
+
+		public DocumentData GetPriceCodeReportDocumentByJobId(List<long> jobId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public DocumentData GetCostCodeReportDocumentByJobId(List<long> jobId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public DocumentData GetPODDocumentByJobId(List<long> jobId)
+		{
+			DocumentData documentData = new DocumentData();
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			foreach (var currentJobId in jobId)
+			{
+				documentDataList.Add(GetPODDocumentByJobId(currentJobId));
+			}
+
+			if (documentDataList?.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var podDocument in documentDataList)
+						{
+							if (podDocument != null && podDocument.DocumentContent != null)
+							{
+								var entry = archive.CreateEntry(podDocument.DocumentName, CompressionLevel.Fastest);
+								using (var zipStream = entry.Open())
+								{
+									zipStream.Write(podDocument.DocumentContent, 0, podDocument.DocumentContent.Length);
+								}
+							}
+						}
+					}
+
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedPOD");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else
+			{
+				return documentDataList[0];
+			}
+
+			return documentData;
 		}
 	}
 }

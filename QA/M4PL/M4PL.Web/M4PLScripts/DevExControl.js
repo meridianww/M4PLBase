@@ -192,13 +192,14 @@ DevExCtrl.Ribbon = function () {
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadAll":
+                    var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsAttachmentPresentForJob(route.RecordId, jobIds);
                     else
-                        var result = M4PLCommon.DocumentStatus.IsAttachmentPresentForJob(route.RecordId);
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     if (result == true) {
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     }
                     else {
                         M4PLCommon.DocumentStatus.DisplayMessage("Business Rule", "Please select specific any row", 2, 'JobDocumentPresent');
@@ -208,20 +209,22 @@ DevExCtrl.Ribbon = function () {
                     window.open(window.location.origin + "/m4pltraining");
                     break;
                 case "DownloadBOL":
+                    var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     else
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     break;
                 case "DownloadPOD":
+                    var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(route.RecordId, jobIds);
                     else
-                        var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(route.RecordId);
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     if (result == true) {
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     }
                     else {
                         M4PLCommon.DocumentStatus.PODMissingDisplayMessage("Business Rule", "Please select specific any row");
@@ -229,10 +232,11 @@ DevExCtrl.Ribbon = function () {
                     break;
                 case "DownloadTracking":
                     route = _onJobReportClick(route);
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    var jobIds = _onJobReportClickMultiSelect();
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     else
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     break;
                 case "DownloadPriceReport":
                     route = _onJobReportClick(route);
@@ -351,6 +355,18 @@ DevExCtrl.Ribbon = function () {
         }
 
         return route;
+    }
+
+    var _onJobReportClickMultiSelect = function () {
+        var jobIds = '';
+        var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+        if (s != null && s != undefined) {
+            if (s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0) {
+                jobIds = s.GetSelectedKeysOnPage().join();
+            }
+        }
+
+        return jobIds;
     }
 
     return {

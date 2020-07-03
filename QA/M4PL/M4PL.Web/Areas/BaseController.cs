@@ -24,6 +24,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
 using M4PL.APIClient;
+using M4PL.APIClient.ViewModels.Document;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
@@ -1254,35 +1255,21 @@ namespace M4PL.Web.Areas
 
         #region Attachments
 
-        public FileResult DownloadAll(string strRoute)
+        public FileResult DownloadAll(string strRoute, string jobIds = null)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
             try
             {
-                var attachmentViewList = _commonCommands.DownloadAll(route.RecordId);
+				List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var jobDocuments = _commonCommands.DownloadAll(jobId);
+				if (jobDocuments != null && !string.IsNullOrEmpty(jobDocuments.DocumentName))
+				{
+					return File(jobDocuments.DocumentContent, jobDocuments.ContentType, jobDocuments.DocumentName);
+				}
 
-                if (attachmentViewList?.Count > 0)
-                {
-                    string fileName = attachmentViewList[0].AttTitle;
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        using (var archive = new System.IO.Compression.ZipArchive(ms, ZipArchiveMode.Create, true))
-                        {
-                            foreach (var file in attachmentViewList)
-                            {
-                                var entry = archive.CreateEntry(file.AttFileName, CompressionLevel.Fastest);
-                                using (var zipStream = entry.Open())
-                                {
-                                    zipStream.Write(file.AttData, 0, file.AttData.Length);
-                                }
-                            }
-                        }
-
-                        return File(ms.ToArray(), "application/zip", fileName + ".zip");
-                    }
-                }
-                return null;
+				return null;
             }
             catch (Exception)
             {
@@ -1290,30 +1277,43 @@ namespace M4PL.Web.Areas
             }
         }
 
-        public ActionResult DownloadBOL(string strRoute)
+        public ActionResult DownloadBOL(string strRoute, string jobIds = null)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
             try
             {
-                var bolDocument = _commonCommands.DownloadBOL(route.RecordId);
+			    List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var bolDocument = _commonCommands.DownloadBOL(jobId);
+				if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentName))
+				{
+					return File(bolDocument.DocumentContent, bolDocument.ContentType, bolDocument.DocumentName);
+				}
 
-                if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
-                {
-                    string fileName = "BOL_" + bolDocument.DocumentName;
-                    using (MemoryStream stream = new System.IO.MemoryStream())
-                    {
-                        StringReader sr = new StringReader(bolDocument.DocumentHtml);
-                        Document pdfDoc = new Document();
-                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                        pdfDoc.Open();
-                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
-                        pdfDoc.Close();
-                        return File(stream.ToArray(), "application/pdf", fileName);
-                    }
-                }
-
+				return null;
+            }
+            catch (Exception exp)
+            {
                 return null;
+            }
+        }
+
+        public ActionResult DownloadPOD(string strRoute, string jobIds = null)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            try
+            {
+				List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var podDocument = _commonCommands.DownloadPOD(jobId);
+				if (podDocument != null && !string.IsNullOrEmpty(podDocument.DocumentName))
+				{
+					return File(podDocument.DocumentContent, podDocument.ContentType, podDocument.DocumentName);
+				}
+
+				return null;
             }
             catch (Exception)
             {
@@ -1321,52 +1321,21 @@ namespace M4PL.Web.Areas
             }
         }
 
-        public ActionResult DownloadPOD(string strRoute)
+        public FileResult DownloadTracking(string strRoute, string jobIds = null)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
             try
             {
-                var podDocument = _commonCommands.DownloadPOD(route.RecordId);
+				List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var trackingDocument = _commonCommands.DownloadTracking(jobId);
+				if (trackingDocument != null && !string.IsNullOrEmpty(trackingDocument.DocumentName))
+				{
+					return File(trackingDocument.DocumentContent, trackingDocument.ContentType, trackingDocument.DocumentName);
+				}
 
-                if (podDocument != null && !string.IsNullOrEmpty(podDocument.DocumentName))
-                {
-                    string fileName = "POD_" + podDocument.DocumentName;
-                    return File(podDocument.DocumentContent, "application/pdf", fileName);
-                }
-
-                return null;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public FileResult DownloadTracking(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
-            try
-            {
-                var bolDocument = _commonCommands.DownloadTracking(route.RecordId);
-
-                if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
-                {
-                    string fileName = "Tracking_" + bolDocument.DocumentName;
-                    using (MemoryStream stream = new System.IO.MemoryStream())
-                    {
-                        StringReader sr = new StringReader(bolDocument.DocumentHtml);
-                        Document pdfDoc = new Document();
-                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                        pdfDoc.Open();
-                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
-                        pdfDoc.Close();
-                        return File(stream.ToArray(), "application/pdf", fileName);
-                    }
-                }
-
-                return null;
+				return null;
             }
             catch (Exception)
             {

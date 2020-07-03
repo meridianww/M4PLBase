@@ -21,6 +21,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Document;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -59,6 +60,16 @@ namespace M4PL.DataAccess.Attachment
 				new Parameter("@Jobid", jobId),
 			};
 			return SqlSerializer.Default.DeserializeMultiRecords<Entities.Attachment>(StoredProceduresConstant.GetAttachmentByJobId, parameters, storedProcedure: true);
+		}
+
+		public static List<Entities.Attachment> GetAttachmentsByMultipleJobId(ActiveUser activeUser, List<long> jobId)
+		{
+			var parameters = new[]
+			{
+				new Parameter("@JobIdList", jobId.ToIdListDataTable(), "uttIDList")
+			};
+
+			return SqlSerializer.Default.DeserializeMultiRecords<Entities.Attachment>(StoredProceduresConstant.GetAttachmentsByMultipleJobId, parameters, storedProcedure: true);
 		}
 
 		public static SetCollection GetBOLDocumentByJobId(ActiveUser activeUser, long jobId)

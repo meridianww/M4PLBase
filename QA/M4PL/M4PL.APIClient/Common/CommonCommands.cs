@@ -978,15 +978,15 @@ namespace M4PL.APIClient.Common
 			return JsonConvert.DeserializeObject<ApiResult<CompanyCorpAddress>>(content).Results.FirstOrDefault();
 		}
 
-		public List<AttachmentView> DownloadAll(long jobId)
+		public DocumentDataView DownloadAll(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetAttachmentsByJobId");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
-			var response = JsonConvert.DeserializeObject<ApiResult<List<AttachmentView>>>(content).Results.FirstOrDefault();
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
 			return response;
 		}
 
-		public DocumentDataView DownloadTracking(long jobId)
+		public DocumentDataView DownloadTracking(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetTrackingDocumentByJobId");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
@@ -1010,15 +1010,7 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
-		public DocumentDataView DownloadBOL(long jobId)
-		{
-			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetBOLDocumentByJobId");
-			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
-			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
-			return response;
-		}
-
-		public DocumentDataView DownloadPOD(long jobId)
+		public DocumentDataView DownloadPOD(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetPODDocumentByJobId");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
@@ -1026,7 +1018,7 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
-		public DocumentStatusView GetDocumentStatusByJobId(long jobId)
+		public DocumentStatusView GetDocumentStatusByJobId(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetDocumentStatusByJobId");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
@@ -1056,5 +1048,38 @@ namespace M4PL.APIClient.Common
 			var apiResult = JsonConvert.DeserializeObject<ApiResult<JobAction>>(content);
 			return apiResult.Results;
 		}
+
+		#region Multiple Document Select Report
+
+		public DocumentDataView DownloadAll(List<long> jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetAttachmentsByJobId");
+			return JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser)
+				.AddObject(jobId)).Content).Results.FirstOrDefault();
+		}
+
+		public DocumentDataView GetPriceCodeReportByJobId(List<long> jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetPriceCodeReportByJobId");
+			return JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser)
+				.AddObject(jobId)).Content).Results.FirstOrDefault();
+		}
+
+		public DocumentDataView GetCostCodeReportByJobId(List<long> jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetCostCodeReportByJobId");
+			return JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser)
+				.AddObject(jobId)).Content).Results.FirstOrDefault();
+		}
+
+		public DocumentDataView DownloadBOL(string jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetBOLDocumentByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
+		#endregion
 	}
 }

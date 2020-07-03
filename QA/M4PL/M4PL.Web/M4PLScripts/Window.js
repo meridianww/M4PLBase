@@ -1048,7 +1048,7 @@ M4PLWindow.FormView = function () {
         if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway" && currentRoute.Action == "GatewayActionFormView") {
             var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
             if (s != null && s != undefined)
-                putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });
+                putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });n
         }
         if (currentRoute.Controller == "JobXcblInfo" && currentRoute.Action == "FormView") {
             putOrPostData.push({ name: "IsAccepted", value: isNewContactCard })
