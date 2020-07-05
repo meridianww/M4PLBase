@@ -810,6 +810,7 @@ namespace M4PL.DataAccess
 		public const string GetAttachmentByJobId = "dbo.GetAttachmentByJobId";
 		public const string GetPriceReportDataByJobId = "dbo.GetPriceReportDataByJobId";
 		public const string GetCostReportDataByJobId = "dbo.GetCostReportDataByJobId";
+		public const string GetAttachmentsByMultipleJobId = "dbo.GetAttachmentsByMultipleJobId";
 
 		#endregion Attachment
 

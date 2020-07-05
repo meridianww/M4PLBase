@@ -197,19 +197,23 @@ namespace M4PL.APIClient.Common
 
 		JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
 
-		List<AttachmentView> DownloadAll(long jobId);
+		DocumentDataView DownloadAll(string jobId);
 
-		DocumentDataView DownloadBOL(long recordId);
+		DocumentDataView DownloadBOL(string jobId);
 
-		DocumentDataView DownloadTracking(long recordId);
+		DocumentDataView DownloadTracking(string jobId);
 
 		DocumentDataView GetPriceCodeReportByJobId(long jobId);
 
+		DocumentDataView GetPriceCodeReportByJobId(List<long> recordId);
+
 		DocumentDataView GetCostCodeReportByJobId(long jobId);
 
-		DocumentDataView DownloadPOD(long recordId);
+		DocumentDataView GetCostCodeReportByJobId(List<long> recordId);
 
-		DocumentStatusView GetDocumentStatusByJobId(long jobId);
+		DocumentDataView DownloadPOD(string jobId);
+
+		DocumentStatusView GetDocumentStatusByJobId(string jobId);
 
 		DocumentStatusView IsPriceCodeDataPresentForJob(long jobId);
 

@@ -534,7 +534,7 @@ namespace M4PL.Web
 			}
 
 			columnSets = columnSets.OrderBy(x => x.ColSortOrder).ToList();
-			UpdateScannerRelationEntity(columnSets);
+			////UpdateScannerRelationEntity(columnSets);
 			UpdateOrganizationColumnSettings(columnSets, sessionProvider);
 			UpdateOrgCredentialColumnSettings(columnSets);
 			return columnSets.OrderBy(x => x.ColSortOrder).ToList();

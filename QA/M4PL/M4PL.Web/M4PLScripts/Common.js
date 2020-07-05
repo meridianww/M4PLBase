@@ -2311,12 +2311,12 @@ M4PLCommon.Error = (function () {
 })();
 
 M4PLCommon.DocumentStatus = (function () {
-    var _isPODAttachedForJob = function (jobId) {
+    var _isPODAttachedForJob = function (jobId, jobIds) {
         var isPODUploaded = false;
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         $.ajax({
             type: "GET",
-            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId,
+            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId + "&jobIds=" + jobIds,
             contentType: 'application/json; charset=utf-8',
             async: false,
             success: function (response) {
@@ -2336,12 +2336,12 @@ M4PLCommon.DocumentStatus = (function () {
         return isPODUploaded
     };
 
-    var _isAttachmentPresentForJob = function (jobId) {
+    var _isAttachmentPresentForJob = function (jobId, jobIds) {
         var isjobAttachmentPresent = false;
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         $.ajax({
             type: "GET",
-            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId,
+            url: "/Common/GetDocumentStatusByJobId?jobId=" + jobId + "&jobIds=" + jobIds,
             contentType: 'application/json; charset=utf-8',
             async: false,
             success: function (response) {

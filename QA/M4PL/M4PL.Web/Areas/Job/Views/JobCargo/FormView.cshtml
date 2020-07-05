@@ -17,12 +17,6 @@
 
     Model.Record.JobID = Model.Record.ParentId;
     Model.Record.CgoLineItem = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.CgoLineItem;
-    var qtyExpectedCtrl = (Model.IsPopUp) ? "CgoQtyExpected" + WebApplicationConstants.PopupSuffix : "CgoQtyExpected";
-    var qtyOnHandCtrl = (Model.IsPopUp) ? "CgoQtyOnHand" + WebApplicationConstants.PopupSuffix : "CgoQtyOnHand";
-    var qtyOnHoldCtrl = (Model.IsPopUp) ? "CgoQtyOnHold" + WebApplicationConstants.PopupSuffix : "CgoQtyOnHold";
-    var qtyDamagedCtrl = (Model.IsPopUp) ? "CgoQtyDamaged" + WebApplicationConstants.PopupSuffix : "CgoQtyDamaged";
-    var qtyStartOverCtrl = (Model.IsPopUp) ? "CgoQtyShortOver" + WebApplicationConstants.PopupSuffix : "CgoQtyShortOver";
-    var qtyOrderedCtrl = (Model.IsPopUp) ? "CgoQtyOrdered" + WebApplicationConstants.PopupSuffix : "CgoQtyOrdered";
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -68,10 +62,10 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoCubes).ToHtmlString() + "</div>");
 
                ViewContext.Writer.Write("<div class='col-sm-11 col-md-11 col-lg-11 quantity-expected no-padding'>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOrdered, new { OnChangeEvent = "DevExCtrl.Decimal.QuantityChanged(s, e, " + qtyExpectedCtrl + ", " + qtyOnHandCtrl + ", " + qtyOnHoldCtrl + ", " + qtyDamagedCtrl + ", " + qtyStartOverCtrl + ");" }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyExpected, new { OnChangeEvent = "DevExCtrl.Decimal.QuantityChanged(s, e, " + qtyExpectedCtrl + ", " + qtyOnHandCtrl + ", " + qtyOnHoldCtrl + ", " + qtyDamagedCtrl + ", " + qtyStartOverCtrl + ");" }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOnHand, new { OnChangeEvent = "DevExCtrl.Decimal.QuantityChanged(s, e, " + qtyExpectedCtrl + ", " + qtyOnHandCtrl + ", " + qtyOnHoldCtrl + ", " + qtyDamagedCtrl + ", " + qtyStartOverCtrl + ");" }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOnHold, new { OnChangeEvent = "DevExCtrl.Decimal.QuantityChanged(s, e, " + qtyExpectedCtrl + ", " + qtyOnHandCtrl + ", " + qtyOnHoldCtrl + ", " + qtyDamagedCtrl + ", " + qtyStartOverCtrl + ");" }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOrdered).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyExpected).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOnHand).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOnHold).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOver).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyShortOver).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");

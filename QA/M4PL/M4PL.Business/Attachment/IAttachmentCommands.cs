@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -30,16 +30,16 @@ namespace M4PL.Business.Attachment
     public interface IAttachmentCommands : IBaseCommands<Entities.Attachment>
     {
         IList<IdRefLangName> DeleteAndUpdateAttachmentCount(List<long> ids, int statusId, string parentTable, string fieldName);
-
-        List<Entities.Attachment> GetAttachmentsByJobId(long jobId);
-		Entities.Document.DocumentData GetBOLDocumentByJobId(long jobId);
-		DocumentData GetTrackingDocumentByJobId(long jobId);
-
+		Entities.Document.DocumentData GetAllAvaliableAttachmentsForJob(List<long> jobId);
 		DocumentData GetPriceCodeReportDocumentByJobId(long jobId);
-
 		DocumentData GetCostCodeReportDocumentByJobId(long jobId);
-		DocumentData GetPODDocumentByJobId(long jobId);
-		DocumentStatus GetDocumentStatusByJobId(long jobId);
+		DocumentData GetAttachmentsByJobId(List<long> jobId);
+		Entities.Document.DocumentData GetBOLDocumentByJobId(List<long> jobId);
+		DocumentData GetTrackingDocumentByJobId(List<long> jobId);
+		DocumentData GetPriceCodeReportDocumentByJobId(List<long> jobId);
+		DocumentData GetCostCodeReportDocumentByJobId(List<long> jobId);
+		DocumentData GetPODDocumentByJobId(List<long> jobId);
+		DocumentStatus GetDocumentStatusByJobId(List<long> selectedJobId);
 		DocumentStatus IsPriceCodeDataPresentForJob(long jobId);
 		DocumentStatus IsCostCodeDataPresentForJob(long jobId);
 	}

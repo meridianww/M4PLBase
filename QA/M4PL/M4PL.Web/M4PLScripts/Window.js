@@ -253,10 +253,10 @@ M4PLWindow.DataView = function () {
     }
 
     var _onUpdateEdit = function (grid, e, route) {
-        if (grid.batchEditApi.GetDeletedRowIndices().length > 0) {
+        if (grid.batchEditApi.GetDeletedRecordKeys().length > 0) {
             var allIds = [];
-            for (var i = 0; i < grid.batchEditApi.GetDeletedRowIndices().length; i++)
-                allIds.push(grid.GetRowKey(grid.batchEditApi.GetDeletedRowIndices()[i]));
+            for (var i = 0; i < grid.batchEditApi.GetDeletedRecordKeys().length; i++)
+                allIds.push(grid.batchEditApi.GetDeletedRecordKeys()[i]);
 
             $.ajax({
                 type: "POST",
@@ -1048,7 +1048,7 @@ M4PLWindow.FormView = function () {
         if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway" && currentRoute.Action == "GatewayActionFormView") {
             var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
             if (s != null && s != undefined)
-                putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });
+                putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });n
         }
         if (currentRoute.Controller == "JobXcblInfo" && currentRoute.Action == "FormView") {
             putOrPostData.push({ name: "IsAccepted", value: isNewContactCard })

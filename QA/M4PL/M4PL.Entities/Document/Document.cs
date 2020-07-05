@@ -22,5 +22,7 @@ namespace M4PL.Entities.Document
 		public string DocumentHtml { get; set; }
 
 		public string DocumentType { get; set; }
+
+		public string ContentType { get; set; }
 	}
 }
