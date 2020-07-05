@@ -129,7 +129,8 @@ namespace M4PL.DataAccess.Job
 				parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
 				parameters.Add(new Parameter("@statusCode", jobGateway.StatusCode));
 				parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
-				parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
+                parameters.Add(new Parameter("@isMultiOperation", jobGateway.IsMultiOperation));
+                parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
 				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
 				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
 			}

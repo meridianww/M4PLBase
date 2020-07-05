@@ -102,9 +102,11 @@ namespace M4PL.Business.Job
         public JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
             var gateway = new JobGateway();
+            jobGateway.IsMultiOperation = false;
             if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
             {
                 List<Task> tasks = new List<Task>();
+                jobGateway.IsMultiOperation = true;
                 foreach (var item in jobGateway.JobIds[0].Split(','))
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
