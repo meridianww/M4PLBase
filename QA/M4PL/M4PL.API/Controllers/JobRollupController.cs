@@ -20,6 +20,7 @@ using M4PL.Business.JobRollup;
 using M4PL.Entities.JobRollup;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
@@ -44,7 +45,7 @@ namespace M4PL.API.Controllers
         /// <param name="programId">program id</param>
         /// <returns>Rollup List</returns>
 		[HttpGet]
-		[Route("GetRollupByProgram")]
+		[Route("GetRollupByProgram"), ResponseType(typeof(List<JobRollupList>))]
 		public List<JobRollupList> GetRollupByProgram(long programId)
 		{
 			return _jobRollupCommands.GetRollupByProgram(programId);
@@ -56,7 +57,7 @@ namespace M4PL.API.Controllers
         /// <param name="jobId">job id</param>
         /// <returns>Rollup List</returns>
 		[HttpGet]
-		[Route("GetRollupByJob")]
+		[Route("GetRollupByJob"),ResponseType(typeof(List<JobRollupList>))]
 		public List<JobRollupList> GetRollupByJob(long jobId)
 		{
 			return _jobRollupCommands.GetRollupByJob(jobId);

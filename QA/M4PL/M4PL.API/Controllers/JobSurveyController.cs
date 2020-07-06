@@ -21,6 +21,7 @@ using M4PL.Business.Survey;
 using M4PL.Entities.Survey;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
@@ -43,12 +44,13 @@ namespace M4PL.API.Controllers
 			_jobSurveyCommands = jobSurveyCommands;
 		}
 
-		/// <summary>
-		/// Get the survey information for a particular Job
-		/// </summary>
-		/// <param name="jobId">jobId</param>
-		[HttpGet]
-		[Route("{jobId}/job")]
+        /// <summary>
+        /// Get the survey information for a particular Job by job id
+        /// </summary>
+        /// <param name="jobId">jobId</param>
+        /// <returns>Job Seurvery record</returns>
+        [HttpGet]
+		[Route("{jobId}/job"),ResponseType(typeof(JobSurvey))]
 		public JobSurvey GetJobSurvey(string jobId)
 		{
 			long updatedJobId = 0;
@@ -62,7 +64,7 @@ namespace M4PL.API.Controllers
 		/// <param name="jobSurvey">jobSurvey</param>
 		/// <returns>true if Saved Successfully Else False</returns>
 		[HttpPost]
-		[Route("job")]
+		[Route("job"),ResponseType(typeof(bool))]
 		public bool InsertJobSurvey(JobSurvey jobSurvey)
 		{
 			return _jobSurveyCommands.InsertJobSurvey(jobSurvey);

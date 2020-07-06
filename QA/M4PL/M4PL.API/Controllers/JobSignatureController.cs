@@ -20,6 +20,7 @@
 using M4PL.Business.Signature;
 using M4PL.Entities.Signature;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
@@ -45,12 +46,12 @@ namespace M4PL.API.Controllers
 		}
 
 		/// <summary>
-		/// Insert job signature
+		/// Insert the signature by job id
 		/// </summary>
-		/// <param name="jobSignature"></param>
-		/// <returns></returns>
+		/// <param name="jobSignature">job signature details</param>
+		/// <returns>Returns true if record inserted successfully else false</returns>
 		[HttpPost]
-		[Route("jobSignature")]
+		[Route("jobSignature"), ResponseType(typeof(JobSignature))]
 		public bool InsertJobSignature(JobSignature jobSignature)
 		{
 			return _jobSignatureCommands.InsertJobSignature(jobSignature);
