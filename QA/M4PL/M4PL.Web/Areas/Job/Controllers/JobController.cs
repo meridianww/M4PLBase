@@ -456,8 +456,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 				{
 					if ((SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionDataView || SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm) && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
 					{
-						ViewData["CurrentRoute"] = SessionProvider.ActiveUser.CurrentRoute;
-						ViewData["IsJobParent"] = Session["IsJobParent"] != null ? Session["IsJobParent"] : null;
+						Session["CurrentRoute"] = SessionProvider.ActiveUser.CurrentRoute;
+                        Session["IsJobParent"] = Session["IsJobParent"] != null ? Session["IsJobParent"] : null;
 					}
 				}
 			}
