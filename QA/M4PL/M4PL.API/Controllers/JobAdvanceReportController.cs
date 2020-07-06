@@ -22,9 +22,13 @@ using M4PL.Business.Job;
 using M4PL.Entities.Job;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// JobAdvanceReportController
+    /// </summary>
 	[RoutePrefix("api/JobAdvanceReport")]
 	public class JobAdvanceReportController : BaseApiController<JobAdvanceReport>
 	{
@@ -41,12 +45,12 @@ namespace M4PL.API.Controllers
 		}
 
 		/// <summary>
-		/// Fucntion to get Jobs reports
+		/// Get the job advance report filter, based upon customerId and entity and if customerId is 0 return all result by entity
 		/// </summary>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("AdvanceReport")]
-		public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
+        [Route("AdvanceReport"), ResponseType(typeof(IList<JobAdvanceReportFilter>))]
+        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
 		{
 			_jobAdvanceReportCommands.ActiveUser = ActiveUser;
 			return _jobAdvanceReportCommands.GetDropDownDataForProgram(ActiveUser, customerId, entity);

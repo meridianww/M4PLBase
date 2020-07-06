@@ -21,30 +21,36 @@ using M4PL.API.Filters;
 using M4PL.Business.Customer;
 using M4PL.Entities.Customer;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
-	[RoutePrefix("api/CustDcLocationContacts")]
-	public class CustDcLocationContactsController : BaseApiController<CustDcLocationContact>
-	{
-		private readonly ICustDcLocationContactCommands _custDcLocationContactCommands;
+    [RoutePrefix("api/CustDcLocationContacts")]
+    public class CustDcLocationContactsController : BaseApiController<CustDcLocationContact>
+    {
+        private readonly ICustDcLocationContactCommands _custDcLocationContactCommands;
 
-		/// <summary>
-		/// Function to get Customer's DC Location Contact details
-		/// </summary>
-		/// <param name="custDcLocationContactCommands"></param>
-		public CustDcLocationContactsController(ICustDcLocationContactCommands custDcLocationContactCommands)
-			: base(custDcLocationContactCommands)
-		{
-			_custDcLocationContactCommands = custDcLocationContactCommands;
-		}
-
+        /// <summary>
+        /// Function to get Customer's DC Location Contact details
+        /// </summary>
+        /// <param name="custDcLocationContactCommands"></param>
+        public CustDcLocationContactsController(ICustDcLocationContactCommands custDcLocationContactCommands)
+            : base(custDcLocationContactCommands)
+        {
+            _custDcLocationContactCommands = custDcLocationContactCommands;
+        }
+        /// <summary>
+        /// Get the customer dc location contact details by Id and customer id, If Id is 0 then we will return all records by customer id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="parentId"></param>
+        /// <returns></returns>
 		[CustomAuthorize]
-		[HttpGet]
-		[Route("GetCustDcLocationContact")]
-		public CustDcLocationContact GetCustDcLocationContact(long id, long? parentId)
-		{
-			return _custDcLocationContactCommands.GetCustDcLocationContact(ActiveUser, id, parentId);
-		}
-	}
+        [HttpGet]
+        [Route("GetCustDcLocationContact"), ResponseType(typeof(CustDcLocationContact))]
+        public CustDcLocationContact GetCustDcLocationContact(long id, long? parentId)
+        {
+            return _custDcLocationContactCommands.GetCustDcLocationContact(ActiveUser, id, parentId);
+        }
+    }
 }
