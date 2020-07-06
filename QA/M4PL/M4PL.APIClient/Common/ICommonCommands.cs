@@ -203,21 +203,17 @@ namespace M4PL.APIClient.Common
 
 		DocumentDataView DownloadTracking(string jobId);
 
-		DocumentDataView GetPriceCodeReportByJobId(long jobId);
+		DocumentDataView GetPriceCodeReportByJobId(string jobId);
 
-		DocumentDataView GetPriceCodeReportByJobId(List<long> recordId);
-
-		DocumentDataView GetCostCodeReportByJobId(long jobId);
-
-		DocumentDataView GetCostCodeReportByJobId(List<long> recordId);
+		DocumentDataView GetCostCodeReportByJobId(string jobId);
 
 		DocumentDataView DownloadPOD(string jobId);
 
 		DocumentStatusView GetDocumentStatusByJobId(string jobId);
 
-		DocumentStatusView IsPriceCodeDataPresentForJob(long jobId);
+		DocumentStatusView IsPriceCodeDataPresentForJob(string jobId);
 
-		DocumentStatusView IsCostCodeDataPresentForJob(long jobId);
+		DocumentStatusView IsCostCodeDataPresentForJob(string jobId);
 
 		IList<JobAction> GetJobAction(long jobId);
 	}

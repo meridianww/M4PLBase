@@ -220,7 +220,8 @@ namespace M4PL.Business.Attachment
 					}
 
 					documentData.DocumentContent = memoryStream.ToArray();
-					documentData.DocumentName = string.Format("{0}.csv", jobId);
+					documentData.DocumentName = string.Format("PriceCode_{0}.csv", jobId);
+					documentData.ContentType = "text/csv";
 				}
 			}
 
@@ -242,17 +243,18 @@ namespace M4PL.Business.Attachment
 					}
 
 					documentData.DocumentContent = memoryStream.ToArray();
-					documentData.DocumentName = string.Format("{0}.csv", jobId);
+					documentData.DocumentName = string.Format("CostCode_{0}.csv", jobId);
+					documentData.ContentType = "text/csv";
 				}
 			}
 
 			return documentData;
 		}
 
-		public DocumentStatus IsPriceCodeDataPresentForJob(long jobId)
+		public DocumentStatus IsPriceCodeDataPresentForJob(List<long> selectedJobId)
 		{
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
-			var priceCodeData = _commands.GetJobPriceReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			var priceCodeData = _commands.GetMultipleJobPriceReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, selectedJobId);
 			if (priceCodeData != null && priceCodeData.Count > 0)
 			{
 				documentStatus.IsAttachmentPresent = true;
@@ -261,10 +263,10 @@ namespace M4PL.Business.Attachment
 			return documentStatus;
 		}
 
-		public DocumentStatus IsCostCodeDataPresentForJob(long jobId)
+		public DocumentStatus IsCostCodeDataPresentForJob(List<long> selectedJobId)
 		{
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
-			var costCodeData = _commands.GetJobCostReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			var costCodeData = _commands.GetMultipleJobCostReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, selectedJobId);
 			if (costCodeData != null && costCodeData.Count > 0)
 			{
 				documentStatus.IsAttachmentPresent = true;
@@ -537,12 +539,80 @@ namespace M4PL.Business.Attachment
 
 		public DocumentData GetPriceCodeReportDocumentByJobId(List<long> jobId)
 		{
-			throw new NotImplementedException();
+			DocumentData documentData = null;
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			foreach (var currentJobId in jobId)
+			{
+				documentDataList.Add(GetPriceCodeReportDocumentByJobId(currentJobId));
+			}
+
+			if (documentDataList?.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var trackingDocument in documentDataList)
+						{
+							var entry = archive.CreateEntry(trackingDocument.DocumentName, CompressionLevel.Fastest);
+							using (var zipStream = entry.Open())
+							{
+								zipStream.Write(trackingDocument.DocumentContent, 0, trackingDocument.DocumentContent.Length);
+							}
+						}
+					}
+
+					documentData = new DocumentData();
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedPriceCode");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else if(documentDataList?.Count == 1)
+			{
+				return documentDataList[0];
+			}
+
+			return documentData;
 		}
 
 		public DocumentData GetCostCodeReportDocumentByJobId(List<long> jobId)
 		{
-			throw new NotImplementedException();
+			DocumentData documentData = null;
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			foreach (var currentJobId in jobId)
+			{
+				documentDataList.Add(GetCostCodeReportDocumentByJobId(currentJobId));
+			}
+
+			if (documentDataList?.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var trackingDocument in documentDataList)
+						{
+							var entry = archive.CreateEntry(trackingDocument.DocumentName, CompressionLevel.Fastest);
+							using (var zipStream = entry.Open())
+							{
+								zipStream.Write(trackingDocument.DocumentContent, 0, trackingDocument.DocumentContent.Length);
+							}
+						}
+					}
+
+					documentData = new DocumentData();
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedCostCode");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else if (documentDataList?.Count == 1)
+			{
+				return documentDataList[0];
+			}
+
+			return documentData;
 		}
 
 		public DocumentData GetPODDocumentByJobId(List<long> jobId)

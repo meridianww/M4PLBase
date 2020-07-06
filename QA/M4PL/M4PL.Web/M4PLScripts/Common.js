@@ -2361,12 +2361,12 @@ M4PLCommon.DocumentStatus = (function () {
         return isjobAttachmentPresent
     };
 
-    var _isPriceCodeDataPresentForJob = function (jobId) {
+    var _isPriceCodeDataPresentForJob = function (jobId, jobIds) {
         var isPriceCodeDataPresent = false;
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         $.ajax({
             type: "GET",
-            url: "/Common/IsPriceCodeDataPresentForJob?jobId=" + jobId,
+            url: "/Common/IsPriceCodeDataPresentForJob?jobId=" + jobId + "&jobIds=" + jobIds,
             contentType: 'application/json; charset=utf-8',
             async: false,
             success: function (response) {
@@ -2386,12 +2386,12 @@ M4PLCommon.DocumentStatus = (function () {
         return isPriceCodeDataPresent
     };
 
-    var _isCostCodeDataPresentForJob = function (jobId) {
+    var _isCostCodeDataPresentForJob = function (jobId, jobIds) {
         var isCostCodeDataPresent = false;
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         $.ajax({
             type: "GET",
-            url: "/Common/IsCostCodeDataPresentForJob?jobId=" + jobId,
+            url: "/Common/IsCostCodeDataPresentForJob?jobId=" + jobId + "&jobIds=" + jobIds,
             contentType: 'application/json; charset=utf-8',
             async: false,
             success: function (response) {

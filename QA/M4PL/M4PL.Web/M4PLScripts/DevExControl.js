@@ -239,8 +239,13 @@ DevExCtrl.Ribbon = function () {
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     break;
                 case "DownloadPriceReport":
+                    var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
-                    var result = M4PLCommon.DocumentStatus.IsPriceCodeDataPresentForJob(route.RecordId);
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsPriceCodeDataPresentForJob(route.RecordId, jobIds);
+                    else
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+
                     if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     }
@@ -249,8 +254,12 @@ DevExCtrl.Ribbon = function () {
                     }
                     break;
                 case "DownloadCostReport":
+                    var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
-                    var result = M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJob(route.RecordId);
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJob(route.RecordId, jobIds);
+                    else
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     }
@@ -1002,7 +1011,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount(); i++) {
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1842,7 +1851,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

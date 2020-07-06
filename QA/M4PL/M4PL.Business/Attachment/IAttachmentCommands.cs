@@ -31,8 +31,6 @@ namespace M4PL.Business.Attachment
     {
         IList<IdRefLangName> DeleteAndUpdateAttachmentCount(List<long> ids, int statusId, string parentTable, string fieldName);
 		Entities.Document.DocumentData GetAllAvaliableAttachmentsForJob(List<long> jobId);
-		DocumentData GetPriceCodeReportDocumentByJobId(long jobId);
-		DocumentData GetCostCodeReportDocumentByJobId(long jobId);
 		DocumentData GetAttachmentsByJobId(List<long> jobId);
 		Entities.Document.DocumentData GetBOLDocumentByJobId(List<long> jobId);
 		DocumentData GetTrackingDocumentByJobId(List<long> jobId);
@@ -40,7 +38,7 @@ namespace M4PL.Business.Attachment
 		DocumentData GetCostCodeReportDocumentByJobId(List<long> jobId);
 		DocumentData GetPODDocumentByJobId(List<long> jobId);
 		DocumentStatus GetDocumentStatusByJobId(List<long> selectedJobId);
-		DocumentStatus IsPriceCodeDataPresentForJob(long jobId);
-		DocumentStatus IsCostCodeDataPresentForJob(long jobId);
+		DocumentStatus IsPriceCodeDataPresentForJob(List<long> selectedJobId);
+		DocumentStatus IsCostCodeDataPresentForJob(List<long> selectedJobId);
 	}
 }
