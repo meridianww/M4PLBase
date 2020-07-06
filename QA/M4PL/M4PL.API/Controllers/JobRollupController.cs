@@ -38,6 +38,11 @@ namespace M4PL.API.Controllers
 			_jobRollupCommands = jobRollupCommands;
 		}
 
+        /// <summary>
+        /// Get the rollup list by program Id, List contains distinct columns where all of them are completed. 
+        /// </summary>
+        /// <param name="programId">program id</param>
+        /// <returns>Rollup List</returns>
 		[HttpGet]
 		[Route("GetRollupByProgram")]
 		public List<JobRollupList> GetRollupByProgram(long programId)
@@ -45,6 +50,11 @@ namespace M4PL.API.Controllers
 			return _jobRollupCommands.GetRollupByProgram(programId);
 		}
 
+        /// <summary>
+        /// Get the rollup list by program Id, List contains distinct columns where all of them are completed. 
+        /// </summary>
+        /// <param name="jobId">job id</param>
+        /// <returns>Rollup List</returns>
 		[HttpGet]
 		[Route("GetRollupByJob")]
 		public List<JobRollupList> GetRollupByJob(long jobId)

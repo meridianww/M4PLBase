@@ -41,9 +41,15 @@ namespace M4PL.API.Controllers
 			_JobReportCommands = jobReportCommands;
 		}
 
-		/// <summary>
-		/// Fucntion to get Jobs reports
-		/// </summary>
+        /// <summary>
+        /// Returns the job report data by company.
+        /// </summary>
+        /// <param name="companyId">company Id</param>
+        /// <param name="locationCode">location code</param>
+        /// <param name="startDate">Start Date</param>
+        /// <param name="endDate">End Date</param>
+        /// <param name="IsPBSReport">IsPBSReport</param>
+        /// <returns>List of Report data</returns>
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("VocReport")]
@@ -51,10 +57,13 @@ namespace M4PL.API.Controllers
 		{
 			return _JobReportCommands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
 		}
-
-		/// <summary>
-		/// Fucntion to get Jobs reports
-		/// </summary>
+        
+        /// <summary>
+        /// Returns the Site codes by customer Id
+        /// </summary>
+        /// <param name="customerId">Customer Id</param>
+        /// <param name="entity">entity will be location</param>
+        /// <returns>Site codes list</returns>
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("VocReportByCustomer")]
