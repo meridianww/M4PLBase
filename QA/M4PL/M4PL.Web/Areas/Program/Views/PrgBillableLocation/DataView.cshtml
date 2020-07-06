@@ -1,5 +1,5 @@
 ﻿@*Copyright (2019) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Nikhil
@@ -7,7 +7,6 @@
     //Program Name:                                 PrgBillableLocation
     //Purpose:                                      Provides grid view for Program's BillableLocation
     //====================================================================================================================================================*@
-
 
 @using System.Collections
 @using M4PL.Entities
@@ -105,7 +104,7 @@
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
         settings.ClientSideEvents.CustomButtonClick = string.Format("function(s, e){{ M4PLWindow.DataView.OnHavingChildCustomButtonClick(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
@@ -405,9 +404,7 @@
             });
         }
 
-
     }
-
 
     //Saving Layout
     settings.ClientLayout = (sender, e) =>
@@ -431,7 +428,6 @@
     {
         WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);
     };
-
 
     settings.SettingsContextMenu.Enabled = true;
     settings.ClientSideEvents.ContextMenuItemClick = "function(s, e){ M4PLWindow.DataView.OnContextMenu(s, e, '" + WebExtension.ConvertByteToString(Model.Icon) + "', '" + MvcConstants.ActionChooseColumn + "', '" + MvcConstants.ActionCopyRecord + "'); }";

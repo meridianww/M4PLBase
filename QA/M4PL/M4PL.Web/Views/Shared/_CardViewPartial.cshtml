@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Prasanta
@@ -16,7 +16,6 @@
 @using M4PL.Entities
 @using M4PL.Web.Models;
 @using M4PL.APIClient.ViewModels.Job;
-
 
 @model CardViewResult<JobCardViewView>
 
@@ -79,14 +78,12 @@
             + "</div>");
     });
 
-
     settings.Settings.ShowGroupSelector = false;
 
     settings.SettingsBehavior.AllowSelectByCardClick = true;
     settings.SettingsBehavior.AllowFocusedCard = true;
     settings.ClientSideEvents.SelectionChanged = string.Format("function(s, e, form, strRoute){{ M4PLCommon.VocReport.OnCardDataViewClick(s, e,  {0}, \'{1}\');}}", fromName, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
     settings.ClientSideEvents.Init = string.Format("function(s, e){{ M4PLCommon.CardView.Init(s, e);}}");
-
 
     settings.Settings.ShowHeaderPanel = false;
     settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;

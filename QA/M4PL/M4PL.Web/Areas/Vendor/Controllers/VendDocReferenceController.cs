@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -30,84 +30,84 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Vendor.Controllers
 {
-    public class VendDocReferenceController : BaseController<VendDocReferenceView>
-    {
-        /// <summary>
-        /// Interacts with the interfaces to get the Vendor's document reference details and renders to the page
-        /// Gets the page related information on the cache basis
-        /// </summary>
-        /// <param name="vendDocReferenceCommands"></param>
-        /// <param name="commonCommands"></param>
-        public VendDocReferenceController(IVendDocReferenceCommands vendDocReferenceCommands, ICommonCommands commonCommands)
-            : base(vendDocReferenceCommands)
-        {
-            _commonCommands = commonCommands;
-        }
+	public class VendDocReferenceController : BaseController<VendDocReferenceView>
+	{
+		/// <summary>
+		/// Interacts with the interfaces to get the Vendor's document reference details and renders to the page
+		/// Gets the page related information on the cache basis
+		/// </summary>
+		/// <param name="vendDocReferenceCommands"></param>
+		/// <param name="commonCommands"></param>
+		public VendDocReferenceController(IVendDocReferenceCommands vendDocReferenceCommands, ICommonCommands commonCommands)
+			: base(vendDocReferenceCommands)
+		{
+			_commonCommands = commonCommands;
+		}
 
-        /// <summary>
-        /// Performs edit or update action on the existing Vendor's document reference record
-        /// </summary>
-        /// <param name="vendDocReferenceView"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Performs edit or update action on the existing Vendor's document reference record
+		/// </summary>
+		/// <param name="vendDocReferenceView"></param>
+		/// <returns></returns>
 
-        public override ActionResult AddOrEdit(VendDocReferenceView vendDocReferenceView)
-        {
-            vendDocReferenceView.IsFormView = true;
-            SessionProvider.ActiveUser.SetRecordDefaults(vendDocReferenceView, Request.Params[WebApplicationConstants.UserDateTime]);
-            vendDocReferenceView.OrganizationId = SessionProvider.ActiveUser.OrganizationId;
-            vendDocReferenceView.VdrVendorID = vendDocReferenceView.ParentId;
-            var messages = ValidateMessages(vendDocReferenceView);
-            var descriptionByteArray = vendDocReferenceView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.VendDocReference, ByteArrayFields.VdrDescription.ToString());
-            var byteArray = new List<ByteArray> {
-                descriptionByteArray
-            };
-            if (messages.Any())
-                return Json(new { status = false, errMessages = messages, byteArray = byteArray }, JsonRequestBehavior.AllowGet);
+		public override ActionResult AddOrEdit(VendDocReferenceView vendDocReferenceView)
+		{
+			vendDocReferenceView.IsFormView = true;
+			SessionProvider.ActiveUser.SetRecordDefaults(vendDocReferenceView, Request.Params[WebApplicationConstants.UserDateTime]);
+			vendDocReferenceView.OrganizationId = SessionProvider.ActiveUser.OrganizationId;
+			vendDocReferenceView.VdrVendorID = vendDocReferenceView.ParentId;
+			var messages = ValidateMessages(vendDocReferenceView);
+			var descriptionByteArray = vendDocReferenceView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.VendDocReference, ByteArrayFields.VdrDescription.ToString());
+			var byteArray = new List<ByteArray> {
+				descriptionByteArray
+			};
+			if (messages.Any())
+				return Json(new { status = false, errMessages = messages, byteArray = byteArray }, JsonRequestBehavior.AllowGet);
 
-            var record = vendDocReferenceView.Id > 0 ? base.UpdateForm(vendDocReferenceView) : base.SaveForm(vendDocReferenceView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
-            if (record is SysRefModel)
-            {
-                route.RecordId = record.Id;
-                descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(vendDocReferenceView.Id, route, byteArray);
-            }
-            return ErrorMessageForInsertOrUpdate(vendDocReferenceView.Id, route);
-        }
+			var record = vendDocReferenceView.Id > 0 ? base.UpdateForm(vendDocReferenceView) : base.SaveForm(vendDocReferenceView);
+			var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+			if (record is SysRefModel)
+			{
+				route.RecordId = record.Id;
+				descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+				return SuccessMessageForInsertOrUpdate(vendDocReferenceView.Id, route, byteArray);
+			}
+			return ErrorMessageForInsertOrUpdate(vendDocReferenceView.Id, route);
+		}
 
-        [HttpPost, ValidateInput(false)]
-        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<VendDocReferenceView, long> vendDocReferenceView, string strRoute, string gridName)
-        {
-            var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-            vendDocReferenceView.Insert.ForEach(c => { c.VdrVendorID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            vendDocReferenceView.Update.ForEach(c => { c.VdrVendorID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = BatchUpdate(vendDocReferenceView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
-            {
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
-                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
-                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-            }
-            SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
-        }
+		[HttpPost, ValidateInput(false)]
+		public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<VendDocReferenceView, long> vendDocReferenceView, string strRoute, string gridName)
+		{
+			var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+			vendDocReferenceView.Insert.ForEach(c => { c.VdrVendorID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			vendDocReferenceView.Update.ForEach(c => { c.VdrVendorID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			var batchError = BatchUpdate(vendDocReferenceView, route, gridName);
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			{
+				var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+				displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+				ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+			}
+			SetGridResult(route);
+			return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+		}
 
-        #region RichEdit
+		#region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-        {
-            long newDocumentId;
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VdrDescription.ToString());
-            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-            {
-                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.VdrDescription.ToString());
-            }
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VdrDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.VdrDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
-    }
+		#endregion RichEdit
+	}
 }

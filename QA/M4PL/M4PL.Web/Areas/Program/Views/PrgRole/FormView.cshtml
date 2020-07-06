@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -22,10 +22,8 @@
     //var roleCodeDropDownViewModel = Model.Record.OrgRefRoleId.GetValueOrDefault().GetOrgRefRoleDropDown(EntitiesAlias.PrgActRole, "OrgRefRoleId", Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").IsRequired, Model.IsPopUp, Model.Permission,Model.Record.ParentId);
     var roleCodeDropDownViewModel = Model.Record.OrgRefRoleId.GetValueOrDefault().GetLongDropDown(EntitiesAlias.PrgRefRole, "OrgRefRoleId", Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").IsRequired, Model.IsPopUp, "OrgRefRoleId", Model.Permission, Model.Record.ParentId);
 
-
     roleCodeDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramRefRoleChange(s, e)}}");
     //roleCodeDropDownViewModel.ValueChangedEvent = string.Format("function(s, e,ajaxUrl,ispopup) {{DevExCtrl.ComboBox.ProgramRefRoleChange(s, e,'{0}','{1}')}}", Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(Model.CallBackRoute, "GetRefRoleLogicals")), Model.IsPopUp);
-
 
     Model.Record.PrgRoleSortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.PrgRoleSortOrder;
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
@@ -62,7 +60,6 @@
         Html.RenderPartial("ProgramRoleCode", Model);
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
         Html.RenderPartial("Logicals", Model);
-
 
     });
 }).GetHtml()
@@ -109,8 +106,6 @@
 
     });
 }).GetHtml()
-
-
 
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
     if (!Model.IsPopUp)

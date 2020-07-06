@@ -1,5 +1,5 @@
 ﻿@*Copyright (2019) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Nikhil Chauhan
@@ -19,8 +19,6 @@
     ViewBag.Title = Model.PageName;
 }
 
-
-
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
@@ -29,7 +27,7 @@
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
-    //settings.Settings.VerticalScrollableHeight = 300;
+    settings.Settings.VerticalScrollableHeight = 300;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
@@ -66,7 +64,6 @@
     //settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
     //settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
 
-
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
     settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnChanged";
     settings.SettingsResizing.Visualization = ResizingMode.Live;
@@ -89,7 +86,7 @@
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
     }
@@ -264,7 +261,6 @@
                         });
                     }
 
-
                     else
                     {
                         column.EditorProperties().TextBox(txtBox =>
@@ -279,7 +275,6 @@
             });
         }
     }
-
 
     settings.ClientLayout = (sender, e) =>
     {

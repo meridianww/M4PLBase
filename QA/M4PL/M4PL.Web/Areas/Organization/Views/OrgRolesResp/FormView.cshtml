@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -46,7 +46,6 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.StatusId, new { Name = "PreviousStatusId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.OrgID, new { Name = "OrgID" }).ToHtmlString());
 
-
         ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 org-rolseresp no-padding'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide label-width-x-small'>" + Html.EditorFor(m => m.Record.OrgRoleSortOrder).ToHtmlString() + "</div>");
@@ -66,7 +65,6 @@
         //ViewContext.Writer.Write("<div class='orgpoc-contact-grp form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId, IsReadOnly = isLoggedInUserRole }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
-
 
     });
 }).GetHtml()
@@ -93,7 +91,6 @@
         ViewContext.Writer.Write("<div class='col-md-3 width-25p'>");
 
         ViewContext.Writer.Write("<div class='form-row-group full-width'>" + Html.EditorFor(m => m.Record.PrxJobDefaultResponsible).ToHtmlString() + "</div>");
-
 
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-md-3 width-25p'>");
@@ -152,8 +149,6 @@
     });
 }).GetHtml()
 
-
-
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 
     if (!Model.IsPopUp)
@@ -185,7 +180,6 @@
             </div>
         </div>
     }
-
 
 }
 @Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })

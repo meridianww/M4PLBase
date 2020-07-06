@@ -1,46 +1,48 @@
 #region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 using System;
 
 namespace M4PL.API.Areas.HelpPage
 {
-    /// <summary>
-    /// This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
-    /// </summary>
-    public class TextSample
-    {
-        public TextSample(string text)
-        {
-            if (text == null)
-            {
-                throw new ArgumentNullException("text");
-            }
-            Text = text;
-        }
+	/// <summary>
+	/// This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
+	/// </summary>
+	public class TextSample
+	{
+		public TextSample(string text)
+		{
+			if (text == null)
+			{
+				throw new ArgumentNullException("text");
+			}
+			Text = text;
+		}
 
-        public string Text { get; private set; }
+		public string Text { get; private set; }
 
-        public override bool Equals(object obj)
-        {
-            TextSample other = obj as TextSample;
-            return other != null && Text == other.Text;
-        }
+		public override bool Equals(object obj)
+		{
+			TextSample other = obj as TextSample;
+			return other != null && Text == other.Text;
+		}
 
-        public override int GetHashCode()
-        {
-            return Text.GetHashCode();
-        }
+		public override int GetHashCode()
+		{
+			return Text.GetHashCode();
+		}
 
-        public override string ToString()
-        {
-            return Text;
-        }
-    }
+		public override string ToString()
+		{
+			return Text;
+		}
+	}
 }

@@ -157,7 +157,6 @@
                     else
                         settings.Properties.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{DevExCtrl.ComboBox.DropDownBeginCallBack(s, e, {0}); }}", Newtonsoft.Json.JsonConvert.SerializeObject(Model));
 
-
                     if (!string.IsNullOrEmpty(Model.OnInit))
                         settings.Properties.ClientSideEvents.Init = "function(s,e){ DevExCtrl.ComboBox.OnComboBoxInit(s, e); " + Model.OnInit + "}";
                     else

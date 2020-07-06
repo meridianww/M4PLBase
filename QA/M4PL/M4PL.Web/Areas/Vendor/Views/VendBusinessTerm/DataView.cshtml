@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -8,7 +8,6 @@
     //Purpose:                                      Provides view for the grid View
     //====================================================================================================================================================*@
 
-
 @using M4PL.Entities
 @using M4PL.Web.Models;
 @using M4PL.APIClient.ViewModels.Vendor;
@@ -16,7 +15,6 @@
 @{
     ViewBag.Title = Model.PageName;
 }
-
 
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
@@ -95,7 +93,7 @@
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
 
@@ -361,7 +359,6 @@
         grid.ForceDataRowType(Model.GridSetting.DataRowType);
     };
 
-
     settings.BeforeGetCallbackResult += (s, e) =>
     {
         var grid = (MVCxGridView)s;
@@ -374,7 +371,6 @@
             grid.SortBy(grid.Columns[colState.FieldName], colState.SortOrder);
         }
     };
-
 
     settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
     settings.SetStatusBarTemplateContent(c =>

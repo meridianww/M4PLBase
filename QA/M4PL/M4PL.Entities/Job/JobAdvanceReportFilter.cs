@@ -1,38 +1,49 @@
-﻿namespace M4PL.Entities.Job
+﻿#region Copyright
+
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+******************************************************************************/
+
+#endregion Copyright
+
+namespace M4PL.Entities.Job
 {
-    public class JobAdvanceReportFilter : BaseReportModel
-    {
-        public JobAdvanceReportFilter()
-        {
-        }
+	public class JobAdvanceReportFilter : BaseReportModel
+	{
+		public JobAdvanceReportFilter()
+		{
+		}
 
-        public JobAdvanceReportFilter(BaseReportModel baseReportModel) : base(baseReportModel)
-        {
-        }
+		public JobAdvanceReportFilter(BaseReportModel baseReportModel) : base(baseReportModel)
+		{
+		}
 
-        public long CustomerId { get; set; }
-        public long ProgramId { get; set; }
-        public string ProgramIdCode { get; set; }
-        public int? OrderType { get; set; }
-        public string OrderTypeName { get; set; }
-        public int? Scheduled { get; set; }
-        public string ScheduledName { get; set; }
-        public string Origin { get; set; }
-        public string Destination { get; set; }
-        public long JobStatusId { get; set; }
-        public string JobStatusIdName { get; set; }
-        public string GatewayStatus { get; set; }
-        public string ServiceMode { get; set; }
-        public long Mode { get; set; }
-        public string Search { get; set; }
-        public string ProgramCode { get; set; }
-        public string ProgramTitle { get; set; }
-        public string Brand { get; set; }
-        public string ProductType { get; set; }
-        public string JobChannel { get; set; }
-        public string DateTypeName { get; set; }
-        public string PackagingCode { get; set; }
-        public string WeightUnit { get; set; }
-        public string CargoTitle { get; set; }
-    }
+		public long CustomerId { get; set; }
+		public long ProgramId { get; set; }
+		public string ProgramIdCode { get; set; }
+		public int? OrderType { get; set; }
+		public string OrderTypeName { get; set; }
+		public int? Scheduled { get; set; }
+		public string ScheduledName { get; set; }
+		public string Origin { get; set; }
+		public string Destination { get; set; }
+		public long JobStatusId { get; set; }
+		public string JobStatusIdName { get; set; }
+		public string GatewayStatus { get; set; }
+		public string ServiceMode { get; set; }
+		public long Mode { get; set; }
+		public string Search { get; set; }
+		public string ProgramCode { get; set; }
+		public string ProgramTitle { get; set; }
+		public string Brand { get; set; }
+		public string ProductType { get; set; }
+		public string JobChannel { get; set; }
+		public string DateTypeName { get; set; }
+		public string PackagingCode { get; set; }
+		public string WeightUnit { get; set; }
+		public string CargoTitle { get; set; }
+	}
 }

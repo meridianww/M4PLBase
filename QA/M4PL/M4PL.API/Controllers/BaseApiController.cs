@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -43,22 +43,22 @@ namespace M4PL.API.Controllers
         /// </summary>
         protected IBaseCommands<TEntity> BaseCommands;
 
-        /// <summary>
-        /// ActiveUser
-        /// </summary>
-        public ActiveUser ActiveUser
-        {
-            get { return ApiContext.ActiveUser; }
-        }
+		/// <summary>
+		/// ActiveUser
+		/// </summary>
+		public ActiveUser ActiveUser
+		{
+			get { return ApiContext.ActiveUser; }
+		}
 
-        /// <summary>
-        /// BaseApiController
-        /// </summary>
-        /// <param name="baseCommands"></param>
-        protected BaseApiController(IBaseCommands<TEntity> baseCommands)
-        {
-            BaseCommands = baseCommands;
-        }
+		/// <summary>
+		/// BaseApiController
+		/// </summary>
+		/// <param name="baseCommands"></param>
+		protected BaseApiController(IBaseCommands<TEntity> baseCommands)
+		{
+			BaseCommands = baseCommands;
+		}
 
         #region Generic Rest Operation
         /// <summary>
@@ -154,39 +154,37 @@ namespace M4PL.API.Controllers
             return BaseCommands.Patch(entity);
         }
 
+		#endregion Generic Rest Operation
 
-        #endregion Generic Rest Operation
-
-        /// <summary>
-        /// UpdateActiveUserSettings
-        /// </summary>
-        /// <returns></returns>
-        protected SysSetting UpdateActiveUserSettings()
-        {
-            _commonCommands.ActiveUser = ActiveUser;
-            SysSetting userSysSetting = _commonCommands.GetUserSysSettings();
-            IList<RefSetting> refSettings = JsonConvert.DeserializeObject<IList<RefSetting>>(_commonCommands.GetSystemSettings().SysJsonSetting);
-            if (!string.IsNullOrEmpty(userSysSetting.SysJsonSetting) && (userSysSetting.Settings == null || !userSysSetting.Settings.Any()))
-                userSysSetting.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSysSetting.SysJsonSetting);
-            else
-                userSysSetting.Settings = new List<RefSetting>();
-            userSysSetting.SysJsonSetting = string.Empty; // To save storage in cache as going to use only Model not json.
-            foreach (var setting in refSettings)
-            {
-                if (!setting.IsSysAdmin)
-                {
-                    var userSetting = userSysSetting.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.Value.Equals(setting.Value));
-                    if (userSetting == null)
-                    {
-                        userSysSetting.Settings.Add(new RefSetting { Entity = setting.Entity, Name = setting.Name, Value = setting.Value });
-                        continue;
-                    }
-                    if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable)
-                        userSetting.Value = setting.Value;
-                }
-            }
-            return userSysSetting;
-        }
-
-    }
+		/// <summary>
+		/// UpdateActiveUserSettings
+		/// </summary>
+		/// <returns></returns>
+		protected SysSetting UpdateActiveUserSettings()
+		{
+			_commonCommands.ActiveUser = ActiveUser;
+			SysSetting userSysSetting = _commonCommands.GetUserSysSettings();
+			IList<RefSetting> refSettings = JsonConvert.DeserializeObject<IList<RefSetting>>(_commonCommands.GetSystemSettings().SysJsonSetting);
+			if (!string.IsNullOrEmpty(userSysSetting.SysJsonSetting) && (userSysSetting.Settings == null || !userSysSetting.Settings.Any()))
+				userSysSetting.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSysSetting.SysJsonSetting);
+			else
+				userSysSetting.Settings = new List<RefSetting>();
+			userSysSetting.SysJsonSetting = string.Empty; // To save storage in cache as going to use only Model not json.
+			foreach (var setting in refSettings)
+			{
+				if (!setting.IsSysAdmin)
+				{
+					var userSetting = userSysSetting.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.Value.Equals(setting.Value));
+					if (userSetting == null)
+					{
+						userSysSetting.Settings.Add(new RefSetting { Entity = setting.Entity, Name = setting.Name, Value = setting.Value });
+						continue;
+					}
+					if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable)
+						userSetting.Value = setting.Value;
+				}
+			}
+			return userSysSetting;
+		}
+	}
 }

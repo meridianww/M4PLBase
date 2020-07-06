@@ -26,7 +26,6 @@
             ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding choosecolumn-grp'>");
             ViewContext.Writer.Write("<h4>" + Model.Records.FirstOrDefault().Title + "</h4>");
 
-
             ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 chooseclm-available padding-5'>");
             Html.DevExpress().ListBox(settings =>
             {
@@ -203,13 +202,13 @@
             ViewContext.Writer.Write("</div>");
 
             if (Model.ColumnSettings.Where(c => c.ColIsFreezed == true).Count() > 0)
-                ViewContext.Writer.Write("<div class='full-width'><p>" + string.Join(", ", Model.ColumnSettings.Where(c => c.ColIsFreezed == true).Select(x => x.ColAliasName).ToList()).Replace("<br/>", ", ") + "</p></div>");
+                ViewContext.Writer.Write("<div class='full-width'><p>" + string.Join(", ", Model.ColumnSettings.Where(c => c.ColIsFreezed == true).Select(x => x.ColAliasName).ToList()).Replace("<br />", ", ") + "</p></div>");
 
             if (Model.Records.FirstOrDefault().ShowGrouping)
             {
                 ViewContext.Writer.Write("<div class='full-width padding-5 bottom-separator bold headerMenu'>" + Model.Records.FirstOrDefault().GroupBy + ":" + "</div>");
                 if (Model.ColumnSettings.Where(c => c.ColIsGroupBy == true).Count() > 0)
-                    ViewContext.Writer.Write("<div class='full-width'><p>" + string.Join(", ", Model.ColumnSettings.Where(c => c.ColIsGroupBy == true).Select(x => x.ColAliasName).ToList()).Replace("<br/>", ", ") + "</p></div>");
+                    ViewContext.Writer.Write("<div class='full-width'><p>" + string.Join(", ", Model.ColumnSettings.Where(c => c.ColIsGroupBy == true).Select(x => x.ColAliasName).ToList()).Replace("<br />", ", ") + "</p></div>");
             }
 
             ViewContext.Writer.Write("</div>");

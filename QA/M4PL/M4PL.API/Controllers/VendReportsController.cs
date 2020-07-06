@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -23,19 +23,19 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/VendReports")]
-    public class VendReportsController : BaseApiController<VendReport>
-    {
-        private readonly IVendReportCommands _VendReportCommands;
+	[RoutePrefix("api/VendReports")]
+	public class VendReportsController : BaseApiController<VendReport>
+	{
+		private readonly IVendReportCommands _VendReportCommands;
 
-        /// <summary>
-        /// Fucntion to get Vendors reports
-        /// </summary>
-        /// <param name="vendReportCommands"></param>
-        public VendReportsController(IVendReportCommands vendReportCommands)
-            : base(vendReportCommands)
-        {
-            _VendReportCommands = vendReportCommands;
-        }
-    }
+		/// <summary>
+		/// Fucntion to get Vendors reports
+		/// </summary>
+		/// <param name="vendReportCommands"></param>
+		public VendReportsController(IVendReportCommands vendReportCommands)
+			: base(vendReportCommands)
+		{
+			_VendReportCommands = vendReportCommands;
+		}
+	}
 }

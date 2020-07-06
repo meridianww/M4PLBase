@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -23,7 +23,6 @@
     settings.SetContent(() =>
     {
 
-
         ViewContext.Writer.Write("<div class='col-md-12 no-padding prg-role-checkbox'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrxJobDefaultAnalyst).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrxJobDefaultResponsible).ToHtmlString() + "</div>");
@@ -31,16 +30,5 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrxJobGWDefaultResponsible).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
-
     });
 }).GetHtml()
-
-
-
-
-
-
-
-
-
-

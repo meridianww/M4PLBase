@@ -2,4 +2,3 @@ ace.define("ace/snippets",["require","exports","module","ace/lib/oop","ace/lib/e
                 (function() {
                     ace.require(["ace/ext/language_tools"], function() {});
                 })();
-            

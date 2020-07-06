@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -55,7 +55,6 @@
         });
     }
 
-
     settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
@@ -83,7 +82,7 @@
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
     }
@@ -122,7 +121,6 @@
 
                 if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || col.ColColumnName.EndsWith(WebApplicationConstants.LineOrder))
                     column.ReadOnly = true;
-
 
                 if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
                 {

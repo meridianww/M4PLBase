@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Janardana
@@ -19,7 +19,6 @@
     contactDropDownModel.ParentEntity = EntitiesAlias.SystemAccount;
     contactDropDownModel.EntityFor = EntitiesAlias.SystemAccount;
     contactDropDownModel.ControlAction = "SysOrgRefRoleId";
-
 
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var roleCodeDropDownViewModel = Model.Record.SysOrgRefRoleId.GetValueOrDefault().GetOrgRefRoleDropDown("SysOrgRefRoleId",

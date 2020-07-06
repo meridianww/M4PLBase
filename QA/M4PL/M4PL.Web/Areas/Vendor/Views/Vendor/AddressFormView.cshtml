@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -109,7 +109,7 @@
             @Html.EditorFor(m => m.Record.CorporateCountryId, new { CorporateCountryId = Model.Record.CorporateCountryId })
         </div>
     </div>
-    
+
     <div class="col-lg-4 col-md-4 padding-rt-lt  set_border_right">
         @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(vendBusContactDropDownViewModel) })
         <div class="col-lg-6 col-md-12 col-sm-12 form-group">
@@ -184,7 +184,7 @@
             @Html.EditorFor(m => m.Record.BusinessCountryId, new { BusinessCountryId = Model.Record.BusinessCountryId })
         </div>
     </div>
-    
+
     <div class="col-lg-4 col-md-4 padding-rt-lt">
         @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(vendWorkContactDropDownViewModel) })
         <div class="col-lg-6 col-md-12 col-sm-12 form-group">

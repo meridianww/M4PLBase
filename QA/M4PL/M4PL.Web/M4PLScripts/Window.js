@@ -1,11 +1,9 @@
 ﻿/******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -71,7 +69,6 @@ M4PLWindow.CallBackPanel = function () {
 }();
 
 M4PLWindow.DataView = function () {
-
     var _allowBatchEdit = {};
 
     var _onBeginCallback = function (s, e, gridName) {
@@ -81,7 +78,6 @@ M4PLWindow.DataView = function () {
     }
 
     var _onInit = function (s, e, isChildExpanded, clearFilterManually) {
-
         if (clearFilterManually && clearFilterManually == "True") {
             s.ClearFilter();
         }
@@ -140,19 +136,16 @@ M4PLWindow.DataView = function () {
                     setClipboard(selectedText);
 
                 return;
-
             }
             else if (route.Action == "Paste") {
                 s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
                 var clipText = localStorage.getItem("CopiedText");
                 if (!s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).readOnly && clipText != undefined)
                     s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText)
-                    //navigator.clipboard.readText().then(clipText => s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText));
+                //navigator.clipboard.readText().then(clipText => s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText));
 
                 return;
-
             }
-
 
             else if (route.Action == "Cut") {
                 s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
@@ -166,9 +159,6 @@ M4PLWindow.DataView = function () {
                     //s.batchEditApi.SetCellValue(e.elementIndex, s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName, "", null, true);
                 }
                 return;
-
-
-
             }
 
             else if (!M4PLCommon.CheckHasChanges.CheckDataChanges(s.name)) {
@@ -204,7 +194,6 @@ M4PLWindow.DataView = function () {
                 $("#" + "btnSave" + s.name).removeClass("noHover");
                 $("#" + "btnCancel" + s.name).removeClass("noHover");
             }
-
         }
     }
 
@@ -264,10 +253,10 @@ M4PLWindow.DataView = function () {
     }
 
     var _onUpdateEdit = function (grid, e, route) {
-        if (grid.batchEditApi.GetDeletedRowIndices().length > 0) {
+        if (grid.batchEditApi.GetDeletedRecordKeys().length > 0) {
             var allIds = [];
-            for (var i = 0; i < grid.batchEditApi.GetDeletedRowIndices().length; i++)
-                allIds.push(grid.GetRowKey(grid.batchEditApi.GetDeletedRowIndices()[i]));
+            for (var i = 0; i < grid.batchEditApi.GetDeletedRecordKeys().length; i++)
+                allIds.push(grid.batchEditApi.GetDeletedRecordKeys()[i]);
 
             $.ajax({
                 type: "POST",
@@ -280,7 +269,6 @@ M4PLWindow.DataView = function () {
                     console.log(response);
                 }
             });
-
         } else {
             grid.callbackCustomArgs["UserDateTime"] = moment.now();
             grid.UpdateEdit();
@@ -357,7 +345,6 @@ M4PLWindow.DataView = function () {
             if (selectedCompanyId !== -1) {
                 selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").listBox.GetItem(selectedCompanyId).texts[2];
                 seletedCompany = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedItem().value;
-
             } else {
                 var ConTypeComboBox = ASPxClientControl.GetControlCollection().GetByName('ConTypeId');
                 if (ConTypeComboBox !== null) {
@@ -481,9 +468,7 @@ M4PLWindow.DataView = function () {
     }
 
     var _onMenuDriverBatchEditStartEditing = function (s, e, isReadOnly) {
-
         isReadOnly = (isReadOnly === undefined) ? false : (isReadOnly == 'True') ? true : false;
-
 
         var templateColumn = s.GetColumnByField("MnuRibbon");
         if (!e.rowValues.hasOwnProperty(templateColumn.index))
@@ -507,8 +492,6 @@ M4PLWindow.DataView = function () {
     }
 
     var _onMenuBatchEditEndEditing = function (s, e) {
-
-
         var key = s.GetRowKey(e.visibleIndex)
         var templateColumn = s.GetColumnByField("MnuRibbon");
         if (!e.rowValues.hasOwnProperty(templateColumn.index))
@@ -522,7 +505,6 @@ M4PLWindow.DataView = function () {
         if (ASPxClientControl.GetControlCollection().GetByName(dataItemTemplateKey))
             ASPxClientControl.GetControlCollection().GetByName(dataItemTemplateKey).SetValue(MnuRibbonEdit.GetValue());
 
-
         var templateColumn = s.GetColumnByField("MnuMenuItem");
         if (!e.rowValues.hasOwnProperty(templateColumn.index))
             return;
@@ -534,12 +516,10 @@ M4PLWindow.DataView = function () {
         //if (ASPxClientControl.GetControlCollection().GetByName(dataItemTemplateKey))
         //    ASPxClientControl.GetControlCollection().GetByName(dataItemTemplateKey).SetValue(MnuMenuItemEdit.GetValue());
 
-
         window.setTimeout(function () { _setCustomButtonsVisibility(s, e); }, 0);
 
         if (ASPxClientControl.GetControlCollection().GetByName(dataItemTemplateKey))
             ASPxClientControl.GetControlCollection().GetByName(dataItemTemplateKey).SetValue(MnuMenuItemEdit.GetValue());
-
     }
 
     var _onPrgGatewayBatchEditStartEditing = function (s, e, isReadOnly) {
@@ -562,7 +542,6 @@ M4PLWindow.DataView = function () {
     }
 
     var _onPrgGatewayBatchEditEndEditing = function (s, e) {
-
         var key = s.GetRowKey(e.visibleIndex)
         var templateColumn = s.GetColumnByField("PgdShipApptmtReasonCode");
         if (templateColumn && e.rowValues.hasOwnProperty(templateColumn.index)) {
@@ -596,12 +575,10 @@ M4PLWindow.DataView = function () {
             GwyShipStatusReasonCodeEdit.SetFocus();
         }
 
-
         e.cancel = (!isReadOnly) ? !_allowBatchEdit[s.name] : isReadOnly;
     }
 
     var _onJobGatewayBatchEditEndEditing = function (s, e) {
-
         var key = s.GetRowKey(e.visibleIndex)
         var templateColumn = s.GetColumnByField("GwyShipApptmtReasonCode");
         if (templateColumn && e.rowValues.hasOwnProperty(templateColumn.index)) {
@@ -621,18 +598,14 @@ M4PLWindow.DataView = function () {
         //var tempColumnDateReference = s.GetColumnByField("GwyDateRefTypeId");
         //var ddp = ASPxClientControl.GetControlCollection().GetByName("JobDeliveryDateTimePlanned")
         //if (e.rowValues[tempColumnDateReference.index].text == "Pickup Date") {
-
         //}
         //else if (e.rowValues[tempColumnDateReference.index].text == "Delivery Date") {
-
         //}
-
 
         window.setTimeout(function () { _setCustomButtonsVisibility(s, e); }, 0);
     }
 
     var _onUpdateEditWithConfirmation = function (grid, e, route) {
-
         if (grid.batchEditApi.GetDeletedRowIndices().length > 0) {
             var allIds = [];
             for (var i = 0; i < grid.batchEditApi.GetDeletedRowIndices().length; i++)
@@ -645,10 +618,8 @@ M4PLWindow.DataView = function () {
                     DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
                 },
                 error: function (response) {
-
                 }
             });
-
         } else {
             grid.callbackCustomArgs["UserDateTime"] = moment.now();
             grid.UpdateEdit();
@@ -675,7 +646,6 @@ M4PLWindow.DataView = function () {
     }
 
     var _onDBValidationBatchEditEndEditing = function (s, e) {
-
         var key = s.GetRowKey(e.visibleIndex)
         var templateColumn = s.GetColumnByField("ValTableName");
         if (!e.rowValues.hasOwnProperty(templateColumn.index))
@@ -696,7 +666,7 @@ M4PLWindow.DataView = function () {
 
     var _contextMenu = function (s, e, currentGrid, isGroupingApplied, isFromGatewayAction, isScheduledUrl, parentId, gatewayActionFormName) {
         ASPxClientUtils.AttachEventToElement(document, "scroll", function (evt) {
-            if (e.menu !== undefined && e.menu !== "undefined")
+            if (e.menu !== undefined && e.menu !== "undefined" && e.menu != null)
                 e.menu.SetVisible(false);
         });
 
@@ -783,7 +753,6 @@ M4PLWindow.DataView = function () {
                         }
                     }
                 }
-
             } else {
                 for (var i = 0; e.menu.GetItem(i) != null; i++) {
                     var currentName = JSON.parse(e.menu.GetItem(i).name);
@@ -849,7 +818,6 @@ M4PLWindow.DataView = function () {
         MenuDriverBatchEditStartEditing: _onMenuDriverBatchEditStartEditing,
         MenuBatchEditEndEditing: _onMenuBatchEditEndEditing,
         SetCutomeButtonsVisibility: _setCustomButtonsVisibility,
-
         PrgGatewayBatchEditStartEditing: _onPrgGatewayBatchEditStartEditing,
         PrgGatewayBatchEditEndEditing: _onPrgGatewayBatchEditEndEditing,
         JobGatewayBatchEditStartEditing: _onJobGatewayBatchEditStartEditing,
@@ -876,7 +844,6 @@ M4PLWindow.FormView = function () {
         delCount = 1;
         delRecover = 1;
         $(document).on('click', 'a', function () {
-
             if ($(this).text() != undefined && $(this).text() == "Recover") {
                 delRecover = ++delRecover;
                 if (delCount == delRecover) {
@@ -894,8 +861,6 @@ M4PLWindow.FormView = function () {
                 delCount = ++delCount;
             }
         });
-
-
     };
 
     var _clearErrorMessages = function () {
@@ -916,7 +881,6 @@ M4PLWindow.FormView = function () {
     }
 
     var _onAddOrEdit = function (s, form, controlSuffix, strRoute) {
-
         //To save opened Tab GridData
         var isSaveRequired = false;
         for (var gridName in M4PLWindow.SubDataViewsHaveChanges) {
@@ -972,7 +936,6 @@ M4PLWindow.FormView = function () {
                 }
             }
 
-
             $.ajax({
                 type: "POST",
                 url: $(form).attr("action"),
@@ -998,7 +961,6 @@ M4PLWindow.FormView = function () {
                             M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray);
                         }
                         var formInterval = setInterval(function () {
-
                             if ((M4PLCommon.CurrentByteArrayCount <= 0) && AppCbPanel && !AppCbPanel.InCallback()) {
                                 window.clearInterval(formInterval);
                                 var route = JSON.parse(strRoute);
@@ -1015,7 +977,6 @@ M4PLWindow.FormView = function () {
                                     return;
                                 }
                                 else if (route.Controller === "PrgEdiHeader") {
-
                                     if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
                                         if (response.refreshContent) {
                                             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route) });
@@ -1039,7 +1000,6 @@ M4PLWindow.FormView = function () {
                                         AppCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                                     if (response.displayMessage)
                                         DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
-
                                 }
                                 DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                                 if (!isFromConfirmSave)
@@ -1065,7 +1025,6 @@ M4PLWindow.FormView = function () {
 
     /*->parameter parentRoute is used to where to redirectAction*/
     var _onPopupAddOrEdit = function (form, controlSuffix, currentRoute, isNewContactCard, strDropDownViewModel) {
-
         //if (ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView') && ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView').IsVisible()) {
         //    var btn = ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView');
         //    btn.DoClick();
@@ -1080,8 +1039,6 @@ M4PLWindow.FormView = function () {
         if (typeof AttachmentGridView !== "undefined" && ASPxClientUtils.IsExists(AttachmentGridView) && ASPxClientUtils.IsExists(pnlCreAttachment)) {
             attachmentGrid = ASPxClientControl.GetControlCollection().GetByName('AttachmentGridView');
             var totalRecords = attachmentGrid.GetVisibleRowsOnPage();
-
-
         }
         var putOrPostData = $(form).serializeArray();
         if (currentRoute.PreviousRecordId != null && currentRoute.PreviousRecordId != 0
@@ -1089,10 +1046,9 @@ M4PLWindow.FormView = function () {
             putOrPostData.push({ name: "JobId", value: currentRoute.PreviousRecordId });
         }
         if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway" && currentRoute.Action == "GatewayActionFormView") {
-
             var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
             if (s != null && s != undefined)
-                putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });
+                putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });n
         }
         if (currentRoute.Controller == "JobXcblInfo" && currentRoute.Action == "FormView") {
             putOrPostData.push({ name: "IsAccepted", value: isNewContactCard })
@@ -1131,7 +1087,6 @@ M4PLWindow.FormView = function () {
                             attachmentGrid.UpdateEdit();
                         }
                         if (ownerCbPanel && !ownerCbPanel.InCallback()) {
-
                             response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
                             response.route.IsPopup = currentRoute.IsPopup;
                             if (!response.route.ParentEntity) {
@@ -1210,7 +1165,6 @@ M4PLWindow.FormView = function () {
     }
 
     var _onPopupCancel = function (form, controlSuffix, currentRoute, isNewContactCard, strDropDownViewModel) {
-
         var selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId');
         if (selectedTxtBox == null)
             selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId_popup');
@@ -1220,7 +1174,6 @@ M4PLWindow.FormView = function () {
     }
 
     var _onPopupUpdateJobGatewayComplete = function (form, controlSuffix, currentRoute, isNewContactCard) {
-
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         _clearErrorMessages();
 
@@ -1236,18 +1189,14 @@ M4PLWindow.FormView = function () {
                 //Below "DXMVCEditorsValues" checking because all the Editor's value with _popup name will be available with this key and in post these values only will go
                 if (putOrPostData[ctrlIdx].name == "DXMVCEditorsValues") {
                     putOrPostData[ctrlIdx].value = putOrPostData[ctrlIdx].value.replace(new RegExp(controlSuffix, 'g'), "").replace(new RegExp("_popup", 'g'), "");
-
                 }
-
             }
             $.ajax({
                 type: "POST",
                 url: $(form).attr("action"),
                 data: putOrPostData,
                 success: function (response) {
-
                     if (response && response.status && response.status === true) {
-
                         if (typeof (RecordSubPopupControl) !== "undefined" && RecordSubPopupControl.IsVisible())
                             RecordSubPopupControl.Hide();
                         else
@@ -1298,7 +1247,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1326,9 +1275,7 @@ M4PLWindow.FormView = function () {
                 type: "POST",
                 contentType: "application/json",
                 success: function (data) {
-
                     cplMapVendorTreeViewPanel.PerformCallback();
-
                 }
             });
         }
@@ -1337,7 +1284,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1415,7 +1362,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1443,9 +1390,7 @@ M4PLWindow.FormView = function () {
                 type: "POST",
                 contentType: "application/json",
                 success: function (data) {
-
                     cplMapVendorCostTreeViewPanel.PerformCallback();
-
                 }
             });
         }
@@ -1454,7 +1399,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1488,7 +1433,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1516,9 +1461,7 @@ M4PLWindow.FormView = function () {
                 type: "POST",
                 contentType: "application/json",
                 success: function (data) {
-
                     cplMapVendorPriceTreeViewPanel.PerformCallback();
-
                 }
             });
         }
@@ -1527,7 +1470,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1589,7 +1532,6 @@ M4PLWindow.FormView = function () {
             ConBusinessZipPostalCtrlName = ConBusinessZipPostalCtrlName + "_popupContact";
             ConBusinessStateIdCtrlName = ConBusinessStateIdCtrlName + "_popup";
             ConBusinessCountryIdCtrlName = ConBusinessCountryIdCtrlName + "_popupContact";
-
         }
 
         var ConBusinessAddress1 = ASPxClientControl.GetControlCollection().GetByName(ConBusinessAddress1CtrlName)
@@ -1612,7 +1554,6 @@ M4PLWindow.FormView = function () {
                 stateDropDown.SetSelectedItem(stateDropDown.GetItem(CompanyCorpAddress.StateId));
             //if (CountryDropDown !== null)
             //    CountryDropDown.SetSelectedItem(CountryDropDown.GetItem(CompanyCorpAddress.CountryId));
-
         }
         else {
             if (ConBusinessAddress1 !== null)
@@ -1740,8 +1681,6 @@ M4PLWindow.ChooseColumns = function () {
                 }
             });
 
-
-
             if (isGroupByItemSelected && isNonGroupByItemSelected) { /*If selected items are available in both Grouped columns AND UnGrouped columns*/
                 _disableUpAndDownBtn();
             } else if (isGroupByItemSelected && !isNonGroupByItemSelected) {
@@ -1830,7 +1769,6 @@ M4PLWindow.ChooseColumns = function () {
     /// <param name="strRoute">current string route</param>
     /// <param name="ownerPanel">callback Panel control</param>
     _onInsAndUpdChooseColumn = function (s, e, form, strRoute, ownerPanel, actionToAssign) {
-
         //To update FormViewHasChanges values
         M4PLCommon.Control.UpdateFormViewHasChangesWithDefaultValue();
 
@@ -1856,7 +1794,6 @@ M4PLWindow.ChooseColumns = function () {
                             case 3:
                                 actionToAssign = "JobGatewayLog";
                                 break;
-
                         }
                     }
                     if (currentRoute.Action == "ChooseColumns" && currentRoute.Controller == "JobGateway") {
@@ -1875,16 +1812,13 @@ M4PLWindow.ChooseColumns = function () {
                                 case 3:
                                     actionToAssign = "JobGatewayLog";
                                     break;
-
                             }
-
                         }
                     }
                 }
                 currentRoute.Action = actionToAssign;
 
                 if (currentRoute.Controller == "SecurityByRole") {
-
                     currentRoute.Action = 'FormView';
                     currentRoute.Entity = 26;
                     currentRoute.Area = "Organization";
@@ -1941,7 +1875,6 @@ M4PLWindow.DisplayMessage = function () {
 }();
 
 M4PLWindow.UploadFileDragDrop = function () {
-
     var _init = function (s, e) {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
     }

@@ -1,14 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,6 +24,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
 using M4PL.APIClient;
+using M4PL.APIClient.ViewModels.Document;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
@@ -106,7 +106,7 @@ namespace M4PL.Web.Areas
             //if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
             //    && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             //{
-            else if (currentPagedDataInfo.Entity != EntitiesAlias.JobGateway && (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition) 
+            else if (currentPagedDataInfo.Entity != EntitiesAlias.JobGateway && (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition)
                 || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1) && !route.IsJobParentEntityUpdated)
                 currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
             // }
@@ -144,6 +144,7 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.PrgEdiHeader:
                     _gridResult.GridSetting.ShowFilterRow = true;
                     break;
+
                 default:
                     _gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
                     break;
@@ -213,7 +214,6 @@ namespace M4PL.Web.Areas
 
         public virtual void GetDataRowCount(GridViewCustomBindingGetDataRowCountArgs e)
         {
-
             if (SessionProvider.ViewPagedDataSession.ContainsKey(BaseRoute.Entity))
                 e.DataRowCount = SessionProvider.ViewPagedDataSession[BaseRoute.Entity].PagedDataInfo.TotalCount;
             else e.DataRowCount = 0;
@@ -301,7 +301,6 @@ namespace M4PL.Web.Areas
 
         public virtual Dictionary<long, string> BatchUpdate(MVCxGridViewBatchUpdateValues<TView, long> batchEdit, MvcRoute route, string gridName)
         {
-
             var columnSettings = WebUtilities.GetUserColumnSettings(_commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, true), SessionProvider);
             var batchError = new Dictionary<long, string>();
             foreach (var item in batchEdit.Insert)
@@ -337,7 +336,6 @@ namespace M4PL.Web.Areas
                     {
                         if (RowHashes != null)
                         {
-
                             var hiddenColumnValue = RowHashes[((record) as SysRefModel).Id.ToString()][col.ColColumnName];
                             if (hiddenColumnValue != null)
                             {
@@ -429,6 +427,11 @@ namespace M4PL.Web.Areas
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition =
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
             }
+            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
+               && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && route.RecordId > 0)
+            {
+                route.RecordId = 0;
+            }
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
@@ -469,6 +472,7 @@ namespace M4PL.Web.Areas
 
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
+
         public virtual PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -500,7 +504,6 @@ namespace M4PL.Web.Areas
         //    }
         //    else if (oldOrderBy.IndexOf(sortcondition[0]) != -1)
         //    {
-
         //        string replacement = "";
         //        if (sortcondition[1] == "DESC")
         //        {
@@ -527,7 +530,6 @@ namespace M4PL.Web.Areas
         //    SetGridResult(route, gridName);
         //    return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         //}
-
 
         #endregion Filtering & Sorting
 
@@ -687,7 +689,6 @@ namespace M4PL.Web.Areas
             }, JsonRequestBehavior.AllowGet);
         }
 
-
         #endregion Form View
 
         #region Choose Column
@@ -731,7 +732,6 @@ namespace M4PL.Web.Areas
 
             var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && (route.Entity == EntitiesAlias.JobCargo ? true : !GetPrimaryKeyColumns().Contains(c.ColColumnName))).Select(x => (APIClient.ViewModels.ColumnSetting)x.Clone()).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
-
 
             return PartialView(MvcConstants.ChooseColumnPartial, gridResult);
         }
@@ -832,6 +832,7 @@ namespace M4PL.Web.Areas
         #endregion RichEdit
 
         #region Check Record Used
+
         [HttpPost]
         public ActionResult CheckRecordUsed(string strRoute, string allRecordIds, string gridName)
         {
@@ -884,6 +885,7 @@ namespace M4PL.Web.Areas
             var errDisplayMessage = recordId > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.SaveError);
             return Json(new { status = false, displayMessage = errDisplayMessage, route = route }, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
               bool reloadApplication = false, long newRecordId = 0, string jobGatewayStatus = null, MvcRoute tabRoute = null)
         {
@@ -1075,6 +1077,7 @@ namespace M4PL.Web.Areas
             },
               JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult Create(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -1089,6 +1092,7 @@ namespace M4PL.Web.Areas
             routeToSend.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             return Json(new { status = true, ownerName = ownerName, callbackMethod = callbackMethod, route = JsonConvert.SerializeObject(routeToSend) }, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult Save(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -1103,7 +1107,6 @@ namespace M4PL.Web.Areas
                 else
                     ownerName = string.Concat("btnSave", lastRoute.Entity, WebApplicationConstants.GridName);//This is the standard button name using in the GridView
             }
-
             else if ((lastRoute != null) && (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm)
                 || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm)
                 || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView)
@@ -1118,6 +1121,7 @@ namespace M4PL.Web.Areas
             }
             return Json(new { status = true, ownerName = ownerName, callbackMethod = MvcConstants.ActionDoClick }, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult Delete(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -1250,90 +1254,22 @@ namespace M4PL.Web.Areas
         #endregion Export Data
 
         #region Attachments
-        public FileResult DownloadAll(string strRoute)
+
+        public FileResult DownloadAll(string strRoute, string jobIds = null)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
             try
             {
-                var attachmentViewList = _commonCommands.DownloadAll(route.RecordId);
+				List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var jobDocuments = _commonCommands.DownloadAll(jobId);
+				if (jobDocuments != null && !string.IsNullOrEmpty(jobDocuments.DocumentName))
+				{
+					return File(jobDocuments.DocumentContent, jobDocuments.ContentType, jobDocuments.DocumentName);
+				}
 
-                if (attachmentViewList?.Count > 0)
-                {
-                    string fileName = attachmentViewList[0].AttTitle;
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        using (var archive = new System.IO.Compression.ZipArchive(ms, ZipArchiveMode.Create, true))
-                        {
-                            foreach (var file in attachmentViewList)
-                            {
-                                var entry = archive.CreateEntry(file.AttFileName, CompressionLevel.Fastest);
-                                using (var zipStream = entry.Open())
-                                {
-                                    zipStream.Write(file.AttData, 0, file.AttData.Length);
-                                }
-                            }
-                        }
-
-                        return File(ms.ToArray(), "application/zip", fileName + ".zip");
-                    }
-                }
-                return null;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-
-        }
-
-        public ActionResult DownloadBOL(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
-            try
-            {
-                var bolDocument = _commonCommands.DownloadBOL(route.RecordId);
-
-                if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
-                {
-                    string fileName = "BOL_" + bolDocument.DocumentName;
-                    using (MemoryStream stream = new System.IO.MemoryStream())
-                    {
-                        StringReader sr = new StringReader(bolDocument.DocumentHtml);
-                        Document pdfDoc = new Document();
-                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                        pdfDoc.Open();
-                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
-                        pdfDoc.Close();
-                        return File(stream.ToArray(), "application/pdf", fileName);
-                    }
-                }
-
-                return null;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-
-        }
-
-        public ActionResult DownloadPOD(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
-            try
-            {
-                var podDocument = _commonCommands.DownloadPOD(route.RecordId);
-
-                if (podDocument != null && !string.IsNullOrEmpty(podDocument.DocumentName))
-                {
-                    string fileName = "POD_" + podDocument.DocumentName;
-                    return File(podDocument.DocumentContent, "application/pdf", fileName);
-                }
-
-                return null;
+				return null;
             }
             catch (Exception)
             {
@@ -1341,36 +1277,70 @@ namespace M4PL.Web.Areas
             }
         }
 
-        public FileResult DownloadTracking(string strRoute)
+        public ActionResult DownloadBOL(string strRoute, string jobIds = null)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
             try
             {
-                var bolDocument = _commonCommands.DownloadTracking(route.RecordId);
+			    List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var bolDocument = _commonCommands.DownloadBOL(jobId);
+				if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentName))
+				{
+					return File(bolDocument.DocumentContent, bolDocument.ContentType, bolDocument.DocumentName);
+				}
 
-                if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
-                {
-                    string fileName = "Tracking_" + bolDocument.DocumentName;
-                    using (MemoryStream stream = new System.IO.MemoryStream())
-                    {
-                        StringReader sr = new StringReader(bolDocument.DocumentHtml);
-                        Document pdfDoc = new Document();
-                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                        pdfDoc.Open();
-                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
-                        pdfDoc.Close();
-                        return File(stream.ToArray(), "application/pdf", fileName);
-                    }
-                }
-
+				return null;
+            }
+            catch (Exception exp)
+            {
                 return null;
+            }
+        }
+
+        public ActionResult DownloadPOD(string strRoute, string jobIds = null)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            try
+            {
+				List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var podDocument = _commonCommands.DownloadPOD(jobId);
+				if (podDocument != null && !string.IsNullOrEmpty(podDocument.DocumentName))
+				{
+					return File(podDocument.DocumentContent, podDocument.ContentType, podDocument.DocumentName);
+				}
+
+				return null;
             }
             catch (Exception)
             {
                 return null;
             }
+        }
 
+        public FileResult DownloadTracking(string strRoute, string jobIds = null)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            try
+            {
+				List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var trackingDocument = _commonCommands.DownloadTracking(jobId);
+				if (trackingDocument != null && !string.IsNullOrEmpty(trackingDocument.DocumentName))
+				{
+					return File(trackingDocument.DocumentContent, trackingDocument.ContentType, trackingDocument.DocumentName);
+				}
+
+				return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public FileResult DownloadPriceReport(string strRoute)
@@ -1392,7 +1362,6 @@ namespace M4PL.Web.Areas
             {
                 return null;
             }
-
         }
 
         public FileResult DownloadCostReport(string strRoute)
@@ -1414,11 +1383,12 @@ namespace M4PL.Web.Areas
             {
                 return null;
             }
-
         }
 
         #endregion Attachments
+
         #endregion Ribbon
+
         private string GetCallbackViewName(EntitiesAlias entity)
         {
             string callbackDataViewName = MvcConstants.GridViewPartial;
@@ -1427,6 +1397,7 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.MenuDriver:
                     callbackDataViewName = MvcConstants.ViewMenuGridViewPartial;
                     break;
+
                 case EntitiesAlias.JobGateway:
                 case EntitiesAlias.SystemAccount:
                 case EntitiesAlias.Job:
@@ -1461,6 +1432,7 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.JobAdvanceReport:
                     callbackDataViewName = MvcConstants.ActionDataView;
                     break;
+
                 case EntitiesAlias.OrgRolesResp:
                     callbackDataViewName = MvcConstants.GridView;
                     break;
@@ -1471,7 +1443,8 @@ namespace M4PL.Web.Areas
             return callbackDataViewName;
         }
 
-        #region Report 
+        #region Report
+
         public virtual ActionResult ExportReportViewer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -1488,7 +1461,8 @@ namespace M4PL.Web.Areas
 
             return DocumentViewerExtension.ExportTo(report);
         }
-        #endregion
+
+        #endregion Report
 
         #region Copy/Paste Record
 

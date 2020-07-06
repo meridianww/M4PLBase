@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -35,14 +35,14 @@
                                      Model.Record.PgdGatewayCode.ToLower().Contains("-") ? Model.Record.PgdGatewayCode.ToLower().Split('-')[0]
                                    : Model.Record.PgdGatewayCode.ToLower());
     }
-    
-   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "MappingId").ColIsVisible = true; 
+
+   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "MappingId").ColIsVisible = true;
 
 }
-@if (!Model.IsPopUp && (Model.Record.Id > 0))
+@*@if (!Model.IsPopUp && (Model.Record.Id > 0))
 {
     @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane);
-}
+}*@
 
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
 {
@@ -95,7 +95,6 @@
     });
 }).GetHtml()
 
-
     @Html.DevExpress().RoundPanel(settings =>
     {
         settings.Name = "pnlControlPrgRefGatewayDetail";
@@ -138,10 +137,6 @@
 
         });
     }).GetHtml()
-
-
-
-
 
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 

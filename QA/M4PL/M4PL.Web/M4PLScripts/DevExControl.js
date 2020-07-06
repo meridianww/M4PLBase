@@ -1,5 +1,5 @@
 ﻿/******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
@@ -19,7 +19,6 @@ DevExCtrl.Navbar = function () {
     var init = function (p) {
         params = p;
     };
-
 
     var _itemClick = function (s, e) {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
@@ -47,7 +46,6 @@ DevExCtrl.Ribbon = function () {
         params = p;
     };
     var _onCommandExecuted = function (s, e, gridNameSuffix, appCbPanelName) {
-
         if (e.item.name == "") return;
 
         var route = JSON.parse(e.item.name);
@@ -58,7 +56,6 @@ DevExCtrl.Ribbon = function () {
         }
 
         if (route.EntityName === "Download Executor") {
-
             $.ajax({
                 type: "GET",
                 cache: false,
@@ -166,9 +163,7 @@ DevExCtrl.Ribbon = function () {
             }
         }
 
-
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges() || (route.Action === "Save")) {
-
             switch (route.Action) {
                 case "FormView":
                 case "DataView":
@@ -197,13 +192,14 @@ DevExCtrl.Ribbon = function () {
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadAll":
+                    var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsAttachmentPresentForJob(route.RecordId, jobIds);
                     else
-                        var result = M4PLCommon.DocumentStatus.IsAttachmentPresentForJob(route.RecordId);
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     if (result == true) {
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     }
                     else {
                         M4PLCommon.DocumentStatus.DisplayMessage("Business Rule", "Please select specific any row", 2, 'JobDocumentPresent');
@@ -213,20 +209,22 @@ DevExCtrl.Ribbon = function () {
                     window.open(window.location.origin + "/m4pltraining");
                     break;
                 case "DownloadBOL":
+                    var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     else
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     break;
                 case "DownloadPOD":
+                    var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(route.RecordId, jobIds);
                     else
-                        var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(route.RecordId);
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     if (result == true) {
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     }
                     else {
                         M4PLCommon.DocumentStatus.PODMissingDisplayMessage("Business Rule", "Please select specific any row");
@@ -234,10 +232,11 @@ DevExCtrl.Ribbon = function () {
                     break;
                 case "DownloadTracking":
                     route = _onJobReportClick(route);
-                    if (route.RecordId == null || route.RecordId <= 0)
-                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    var jobIds = _onJobReportClickMultiSelect();
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     else
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     break;
                 case "DownloadPriceReport":
                     route = _onJobReportClick(route);
@@ -270,12 +269,9 @@ DevExCtrl.Ribbon = function () {
                     _onFilterClicked(s, e, route, appCbPanelName, gridNameSuffix);
                     break;
             }
-
         } else {
-
             M4PLCommon.CallerNameAndParameters = { "Caller": _onCommandExecuted, "Parameters": [s, e, gridNameSuffix, appCbPanelName] };
             M4PLCommon.CheckHasChanges.ShowConfirmation();
-
         }
     }
 
@@ -361,6 +357,18 @@ DevExCtrl.Ribbon = function () {
         return route;
     }
 
+    var _onJobReportClickMultiSelect = function () {
+        var jobIds = '';
+        var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+        if (s != null && s != undefined) {
+            if (s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0) {
+                jobIds = s.GetSelectedKeysOnPage().join();
+            }
+        }
+
+        return jobIds;
+    }
+
     return {
         init: init,
         OnCommandExecuted: _onCommandExecuted,
@@ -389,7 +397,6 @@ DevExCtrl.TextBox = function () {
     }
 
     var _onCustBTThresholdValueChanged = function (s, e, hiThresholdControl, lowThresholdControl, currentThresholdPercentage) {
-
         var currentThresholdValue = s.GetValue();
         if (ASPxClientControl.GetControlCollection().GetByName(hiThresholdControl))
             ASPxClientControl.GetControlCollection().GetByName(hiThresholdControl).SetValue((currentThresholdValue > 0) ? (currentThresholdValue + (currentThresholdValue * currentThresholdPercentage / 100)) : 0);
@@ -422,17 +429,13 @@ DevExCtrl.TextBox = function () {
         }
     }
 
-
     var _onCustVendBTThresholdValueChangedBatchEdit = function (s, e, gridCtrl, hiThresholdControl, lowThresholdControl, currentThresholdPercentage) {
-
         var currentThresholdValue = s.GetValue();
         if (gridCtrl.GetColumnByField(hiThresholdControl) != null)
             gridCtrl.SetEditValue(hiThresholdControl, (currentThresholdValue > 0) ? (currentThresholdValue + (currentThresholdValue * (currentThresholdPercentage / 100))) : 0);
         if (gridCtrl.GetColumnByField(lowThresholdControl) != null)
             gridCtrl.SetEditValue(lowThresholdControl, (currentThresholdValue > 0) ? (currentThresholdValue - (currentThresholdValue * (currentThresholdPercentage / 100))) : 0);
-
     }
-
 
     return {
         init: init,
@@ -446,7 +449,6 @@ DevExCtrl.TextBox = function () {
 }();
 
 DevExCtrl.ComboBox = function () {
-
     var _selectedIndexChanged = function (s, e) {
     }
 
@@ -511,28 +513,21 @@ DevExCtrl.ComboBox = function () {
     }
 
     var _valueChangeMenuModule = function (s, e, bdsUrl, bdsCtrl, rbnCtrl) {
-
         if (bdsCtrl && rbnCtrl) {
-
             if (s.GetSelectedItem() == null) {
                 $.ajax({
                     url: bdsUrl + "?module=" + s.GetValue() + "&isRibbon=" + rbnCtrl.GetValue(),
                     type: "GET",
                     success: function (data) {
-
                         bdsCtrl.SetValue(data);
                     }
                 });
-
             } else {
-
                 if (rbnCtrl.GetValue())
                     bdsCtrl.SetValue(s.GetSelectedItem().texts[2]);
                 else
                     bdsCtrl.SetValue(s.GetSelectedItem().texts[1]);
             }
-
-
 
             //if (rbnCtrl.GetValue())
             //    bdsCtrl.SetValue(s.GetSelectedItem().texts[2]);
@@ -543,7 +538,6 @@ DevExCtrl.ComboBox = function () {
             //    url: bdsUrl + "?moduleId=" + s.GetValue() + "&isRibbon=" + rbnCtrl.GetValue(),
             //    type: "GET",
             //    success: function (data) {
-
             //        bdsCtrl.SetValue(data);
             //    }
             //});
@@ -575,7 +569,6 @@ DevExCtrl.ComboBox = function () {
     //cascading Combobox load Start
 
     var _onTableCombo_SelectedIndexChanged = function (s, e, grid, field) {
-
         grid.GetEditor(field).PerformCallback();
     }
 
@@ -584,7 +577,6 @@ DevExCtrl.ComboBox = function () {
     }
 
     function _onMnuClassification_BeginCallback(s, e, grid, field, menuLookupId, RibbonLookupId) {
-
         if (grid.GetEditor(field).GetValue()) {
             menuLookupId = RibbonLookupId;
         }
@@ -592,7 +584,6 @@ DevExCtrl.ComboBox = function () {
     }
 
     var _onPrgGatewayLostFocus = function EdiHeaderRadioLostFocus(gridCtrl) {
-
         gridCtrl.batchEditApi.EndEdit();
     }
 
@@ -624,7 +615,6 @@ DevExCtrl.ComboBox = function () {
     };
 
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {
-
         if (prgRoleCodeCtrl && codeValue.trim().length > 0)
             prgRoleCodeCtrl.SetText(codeValue);
     };
@@ -781,7 +771,6 @@ DevExCtrl.TreeView = function () {
     };
 
     var _setBreadCrumb = function (currentNode) {
-
         var breadCrumb = [];
         var customerId;
         var cNode = currentNode.name.split("_");
@@ -933,11 +922,9 @@ DevExCtrl.CheckBox = function () {
     };
 
     var _onMenuRibbonCheckedChanged = function (s, e, MnuOptionLevelCtrl, MnuAccessLevelCtrl, MnuClassificationCtrl, strMnuClassificationDropDownViewModel, menuLookupId, RibbonLookupId) {
-
         strMnuClassificationDropDownViewModel.ParentId = menuLookupId;
         if (s.GetValue())
             strMnuClassificationDropDownViewModel.ParentId = RibbonLookupId;
-
 
         MnuClassificationCtrl.PerformCallback({ strDropDownViewModel: JSON.stringify(strMnuClassificationDropDownViewModel) });
         _onMenuRibbonChange(s, MnuOptionLevelCtrl, MnuAccessLevelCtrl);
@@ -994,12 +981,10 @@ DevExCtrl.Button = function () {
     }
 
     var _onGetAssociations = function (s, route) {
-
         var url = "/Common/GetAssociations?strRoute=" + encodeURIComponent(route);
         window.open(url, '_blank');
     }
     var _onDeleteAll = function (s, e, strRoute) {
-
         $.ajax({
             type: "Post",
             url: "Common/RemoveDeleteInfoRecords?strRoute=" + strRoute,
@@ -1017,7 +1002,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1108,7 +1093,6 @@ DevExCtrl.Button = function () {
     }
 
     var _recursiveDestinationPrograms = function (nodes, destinationCheckedNodes) {
-
         for (var i = 0; i < nodes.length; i++) {
             var programId = 0;
             var parentNode = nodes[i];
@@ -1120,7 +1104,6 @@ DevExCtrl.Button = function () {
             if (parentNode.nodes.length > 0) {
                 _recursiveDestinationPrograms(parentNode.nodes, destinationCheckedNodes);
             }
-
         }
     }
 
@@ -1148,10 +1131,8 @@ DevExCtrl.Button = function () {
                         parentCopyPPPModel.CopyPPPModelSub.push(nextParentCopyPPPModel);
                 }
             }
-
         }
     }
-
 
     return {
         OnGridClosePopup: _onGridClosePopup,
@@ -1195,7 +1176,7 @@ DevExCtrl.TreeList = function () {
                     IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
-                
+
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 DevExCtrl.Ribbon.DoCallBack(route);
             }
@@ -1206,7 +1187,6 @@ DevExCtrl.TreeList = function () {
     }
 
     var _onNodeDisable = function (s, e) {
-
     }
     var _init = function (s, e, contentCbPanel, contentCbPanelRoute) {
         var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
@@ -1306,9 +1286,7 @@ DevExCtrl.DateEdit = function () {
         }
     }
     var _onCustVendFCDatesChanged = function (s, e, gridCtrl, startDateControl, endDateControl, autoShortCodeControl, workDaysControl, colColumnName) {
-
         if (gridCtrl.GetColumnByField(startDateControl) != null && gridCtrl.GetColumnByField(endDateControl)) {
-
             var startDate = gridCtrl.batchEditApi.GetCellValueByKey(gridCtrl.batchEditHelper.editingRecordKey, startDateControl);
             var endDate = gridCtrl.batchEditApi.GetCellValueByKey(gridCtrl.batchEditHelper.editingRecordKey, endDateControl);
             if (startDateControl == colColumnName)
@@ -1371,7 +1349,7 @@ DevExCtrl.DateEdit = function () {
             date = new Date();
             date = new Date(date.toDateString().replace(/-/g, "/"));
         }
-        if (e.buttonIndex == -2) //increment button  
+        if (e.buttonIndex == -2) //increment button
         {
             if (date != null) {
                 var hours = date.getHours();
@@ -1385,7 +1363,7 @@ DevExCtrl.DateEdit = function () {
                 // s.SetCaretPosition(0);
             }
         }
-        if (e.buttonIndex == -3) //decrement button  
+        if (e.buttonIndex == -3) //decrement button
         {
             if (date != null) {
                 var hours = date.getHours();
@@ -1561,7 +1539,6 @@ DevExCtrl.PopupControl = function () {
     }
 
     var _onGetDeleteInfoModules = function (strRoute) {
-
         var route = JSON.parse(strRoute);
         route.OwnerCbPanel = route.Action + "DataAppCBPanel";
         if (RecordPopupControl.IsVisible()) {
@@ -1572,7 +1549,6 @@ DevExCtrl.PopupControl = function () {
     }
 
     var _onProgramCopyClose = function (cbPanel) {
-
         _close();
     };
 
@@ -1594,16 +1570,13 @@ DevExCtrl.PopupControl = function () {
 }();
 
 DevExCtrl.BinaryImage = function () {
-
     var _error = function (s, e) {
     }
 
     var _validation = function (s, e) {
-
     }
 
     var _valueChanged = function (s, e) {
-
     }
 
     var _init = function (s, e) {
@@ -1621,26 +1594,26 @@ DevExCtrl.Dashboard = function () {
     var _onDashboardEndUpdate = function (s, e) {
     }
 
+    var _onBeforeRender = function (s, e) {
+        var control = s.getDashboardControl();
+    }
+
     return {
         OnDashboardEndUpdate: _onDashboardEndUpdate,
+        OnBeforeRender: _onBeforeRender,
     }
 }();
 
 DevExCtrl.Radio = function () {
     var _onDataViewMenuRibbonCheckedChanged = function (s, destCtrl, gridCtrl) {
-
         destCtrl.SetValue(!s.GetValue());
-
 
         //s.SetValue(null);
 
-
         //if (s.name === rbnCtrl.name) {
-
         //    destCtrl.SetValue(!s.GetValue());
 
         //    //grid.GetEditor(MnuCtrl).SetValue(!s.GetValue());
-
 
         //    //MnuCtrl.SetValue(!s.GetValue())
 
@@ -1652,24 +1625,18 @@ DevExCtrl.Radio = function () {
         //    destCtrl.SetValue(!s.GetValue());
         //    //grid.batchEditApi.SetCellValue(e.visibleIndex, rbnCtrl.name, !s.GetValue());
         //}
-
-
-
     }
     var _onMenuDriverRibbonLostFocus = function MenuDriverRibbonLostFocus(gridCtrl) {
-
         //if (!preventEndEditOnLostFocus)
         gridCtrl.batchEditApi.EndEdit();
         //preventEndEditOnLostFocus = false;
     }
 
     var _onEdiHeaderRadioLostFocus = function EdiHeaderRadioLostFocus(gridCtrl) {
-
         //if (!preventEndEditOnLostFocus)
         gridCtrl.batchEditApi.EndEdit();
         //preventEndEditOnLostFocus = false;
     }
-
 
     return {
         DataViewMenuRibbonCheckedChanged: _onDataViewMenuRibbonCheckedChanged,
@@ -1701,7 +1668,6 @@ DevExCtrl.Menu = function () {
     return {
         UserMenuClick: _onUserMenuClick
     }
-
 }();
 
 DevExCtrl.EdiHeader = function () {
@@ -1723,7 +1689,6 @@ DevExCtrl.EdiHeader = function () {
             route.ParentRecordId = parseInt(TreeList.GetFocusedNodeKey());
             route.ParentEntity = "Program";
 
-
             if (PrgEdiHeaderDataViewCbPanel && !PrgEdiHeaderDataViewCbPanel.InCallback()) {
                 PrgEdiHeaderDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                 DevExCtrl.Ribbon.DoCallBack(route);
@@ -1739,17 +1704,14 @@ DevExCtrl.EdiHeader = function () {
     }
 
     return {
-
         CreateEdiHeaderFromRibbon: _onCreateEdiHeaderFromRibbon,
         FormViewEdiHeaderFromRibbon: _onFormViewEdiHeaderFromRibbon,
         DataViewEdiHeaderFromRibbon: _onDataViewEdiHeaderFromRibbon
     }
-
 }();
 
 DevExCtrl.Decimal = function () {
     var _onCalculateCubes = function (s, e, cubesCtrl, Ctrl1, Ctrl2) {
-
         if (cubesCtrl) {
             cubesCtrl.SetValue(s.GetValue() * Ctrl1.GetValue() * Ctrl2.GetValue());
         }
@@ -1764,11 +1726,9 @@ DevExCtrl.Decimal = function () {
         CalculateCubes: _onCalculateCubes,
         QuantityChanged: _onQuantityChanged
     }
-
 }();
 
 DevExCtrl.PageControl = function () {
-
     var _onManualTabClick = function (currentPageControl, index) {
         $('#' + currentPageControl + '_T' + index).trigger('click');
     }
@@ -1826,11 +1786,9 @@ DevExCtrl.PageControl = function () {
         ActiveTabChanging: _onActiveTabChanging,
         ActiveTabChanged: _onActiveTabChanged,
     }
-
 }();
 
 DevExCtrl.ListBox = function () {
-
     var onInit = function (currentListBox) {
         if (currentListBox && currentListBox.itemsValue && (lblEmployees.itemsValue.length > 0)) {
             currentListBox.SetSelectedIndex(0);
@@ -1841,30 +1799,23 @@ DevExCtrl.ListBox = function () {
     var _onListBoxValueChanged = function (s, e) {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel)
         GetDeleteInfoDataAppCbPanel.PerformCallback({ referenceEntity: s.GetValue() });
-
-
     }
 
     return {
         OnInit: onInit,
         OnListBoxValueChanged: _onListBoxValueChanged
     }
-
 }();
 
 DevExCtrl.PopupMenu = function () {
     var _onItemClick = function (s, e) {
-
         var route = JSON.parse(e.item.name);
         route.RecordId = ProgramTree.GetSelectedNode().name.split('_')[1];
 
         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
-
     };
 
     var _onPopUp = function (s, e) {
-
-
     };
 
     return {
@@ -1874,7 +1825,6 @@ DevExCtrl.PopupMenu = function () {
 }();
 
 DevExCtrl.ReportDesigner = function () {
-
     var _onExit = function (s, e, currentRoute) {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges())
             AppCbPanel.PerformCallback({ strRoute: currentRoute });
@@ -1892,7 +1842,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
+        for (var i = 0; i < xportContol.GetItemCount(); i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);
@@ -1901,7 +1851,7 @@ DevExCtrl.ReportDesigner = function () {
     }
 
     var _customizeActions = function (s, e) {
-        //add custom action  
+        //add custom action
         e.Actions.push({
             text: "Show report help",
             imageClassName: "dxrd-custom-export-image",
@@ -1918,7 +1868,6 @@ DevExCtrl.ReportDesigner = function () {
         CustomizeActions: _customizeActions
     }
 }();
-
 
 DevExCtrl.TokenBox = function () {
     var _valueChanged = function (s, e, CallbackPanelAnalystResponsibleDriver) {
@@ -1949,8 +1898,6 @@ DevExCtrl.TokenBox = function () {
         }
     }
 
-
-
     var _init = function (s, e, CallbackPanelAnalystResponsibleDriver) {
         var tokenCollection = s.GetTokenCollection();
         var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
@@ -1967,11 +1914,9 @@ DevExCtrl.TokenBox = function () {
                 JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
             }
         }
-
     }
     return {
         ValueChanged: _valueChanged,
         Init: _init
     }
-
 }();

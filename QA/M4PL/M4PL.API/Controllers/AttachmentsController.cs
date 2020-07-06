@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -19,7 +19,9 @@
 
 using M4PL.Business.Attachment;
 using M4PL.Entities;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -49,6 +51,8 @@ namespace M4PL.API.Controllers
 			return _attachmentCommands.DeleteAndUpdateAttachmentCount(ids.Split(',').Select(long.Parse).ToList(), statusId, parentTable, fieldName);
 		}
 
+		#region API's To Get the Document For a Single Job
+
 		/// <summary>
 		/// GetAttachmentsByJobId
 		/// </summary>
@@ -56,66 +60,10 @@ namespace M4PL.API.Controllers
 		/// <returns></returns>
 		[HttpGet]
 		[Route("GetAttachmentsByJobId")]
-		public List<Entities.Attachment> GetAttachmentsByJobId(long jobId)
+		public Entities.Document.DocumentData GetAttachmentsByJobId(string jobId)
 		{
-			return _attachmentCommands.GetAttachmentsByJobId(jobId);
-		}
-
-		/// <summary>
-		/// GetBOLDocumentByJobId
-		/// </summary>
-		/// <param name="jobId"></param>
-		/// <returns></returns>
-		[HttpGet]
-		[Route("GetBOLDocumentByJobId")]
-		public Entities.Document.DocumentData GetBOLDocumentByJobId(long jobId)
-		{
-			return _attachmentCommands.GetBOLDocumentByJobId(jobId);
-		}
-
-		/// <summary>
-		/// GetBOLDocumentByJobId
-		/// </summary>
-		/// <param name="jobId"></param>
-		/// <returns></returns>
-		[HttpGet]
-		[Route("GetPODDocumentByJobId")]
-		public Entities.Document.DocumentData GetPODDocumentByJobId(long jobId)
-		{
-			return _attachmentCommands.GetPODDocumentByJobId(jobId);
-		}
-		
-		[HttpGet]
-		[Route("GetDocumentStatusByJobId")]
-		public Entities.Document.DocumentStatus GetDocumentStatusByJobId(long jobId)
-		{
-			return _attachmentCommands.GetDocumentStatusByJobId(jobId);
-		}
-
-		[HttpGet]
-		[Route("IsPriceCodeDataPresentForJob")]
-		public Entities.Document.DocumentStatus IsPriceCodeDataPresentForJob(long jobId)
-		{
-			return _attachmentCommands.IsPriceCodeDataPresentForJob(jobId);
-		}
-
-		[HttpGet]
-		[Route("IsCostCodeDataPresentForJob")]
-		public Entities.Document.DocumentStatus IsCostCodeDataPresentForJob(long jobId)
-		{
-			return _attachmentCommands.IsCostCodeDataPresentForJob(jobId);
-		}
-
-		/// <summary>
-		/// GetBOLDocumentByJobId
-		/// </summary>
-		/// <param name="jobId"></param>
-		/// <returns></returns>
-		[HttpGet]
-		[Route("GetTrackingDocumentByJobId")]
-		public Entities.Document.DocumentData GetTrackingDocumentByJobId(long jobId)
-		{
-			return _attachmentCommands.GetTrackingDocumentByJobId(jobId);
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.GetAllAvaliableAttachmentsForJob(selectedJobId);
 		}
 
 		/// <summary>
@@ -143,6 +91,100 @@ namespace M4PL.API.Controllers
 			return _attachmentCommands.GetCostCodeReportDocumentByJobId(jobId);
 		}
 
+		#endregion
+
+		#region API's to Get the Document For Multiple Jobs
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetBOLDocumentByJobId")]
+		public Entities.Document.DocumentData GetBOLDocumentByJobId(string jobId)
+		{
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.GetBOLDocumentByJobId(selectedJobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetPODDocumentByJobId")]
+		public Entities.Document.DocumentData GetPODDocumentByJobId(string jobId)
+		{
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.GetPODDocumentByJobId(selectedJobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetTrackingDocumentByJobId")]
+		public Entities.Document.DocumentData GetTrackingDocumentByJobId(string jobId)
+		{
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.GetTrackingDocumentByJobId(selectedJobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpPost]
+		[Route("GetPriceCodeReportByJobId")]
+		public Entities.Document.DocumentData GetPriceCodeReportByJobId(List<long> jobId)
+		{
+			return _attachmentCommands.GetPriceCodeReportDocumentByJobId(jobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[AllowAnonymous]
+		[HttpPost]
+		[Route("GetCostCodeReportByJobId")]
+		public Entities.Document.DocumentData GetCostCodeReportByJobId(List<long> jobId)
+		{
+			return _attachmentCommands.GetCostCodeReportDocumentByJobId(jobId);
+		}
+
+		#endregion
+
+		#region API's to Check the Different Job Document Existence
+
+		[HttpGet]
+		[Route("IsPriceCodeDataPresentForJob")]
+		public Entities.Document.DocumentStatus IsPriceCodeDataPresentForJob(long jobId)
+		{
+			return _attachmentCommands.IsPriceCodeDataPresentForJob(jobId);
+		}
+
+		[HttpGet]
+		[Route("IsCostCodeDataPresentForJob")]
+		public Entities.Document.DocumentStatus IsCostCodeDataPresentForJob(long jobId)
+		{
+			return _attachmentCommands.IsCostCodeDataPresentForJob(jobId);
+		}
+
+		[HttpGet]
+		[Route("GetDocumentStatusByJobId")]
+		public Entities.Document.DocumentStatus GetDocumentStatusByJobId(string jobId)
+		{
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.GetDocumentStatusByJobId(selectedJobId);
+		}
+
+		#endregion
 	}
 }
-

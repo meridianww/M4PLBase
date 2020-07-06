@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -86,7 +86,7 @@
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
     }
@@ -182,7 +182,6 @@
                 {
                     column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
 
-
                     column.EditorProperties().DateEdit(dateEdit =>
                     {
                         dateEdit.DisplayFormatString = col.ColDisplayFormat;
@@ -191,7 +190,6 @@
 
                             dateEdit.ClientSideEvents.ValueChanged = "function(s, e){ DevExCtrl.DateEdit.OnCustVendFCDatesChanged(s, e," + Model.GridSetting.GridName + ", 'FclPeriodStart', 'FclPeriodEnd', 'FclAutoShortCode', 'FclWorkDays','" + col.ColColumnName + "'); }";
                     });
-
 
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && col.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)

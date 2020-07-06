@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -32,167 +32,163 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Organization.Controllers
 {
-    public class OrgRefRoleController : BaseController<OrgRefRoleView>
-    {
+	public class OrgRefRoleController : BaseController<OrgRefRoleView>
+	{
+		/// <summary>
+		/// Interacts with the interfaces to get the Organization's ref role details and renders to the page
+		/// Gets the page related information on the cache basis
+		/// </summary>
+		/// <param name="orgRefRoleCommands"></param>
+		/// <param name="commonCommands"></param>
+		public OrgRefRoleController(IOrgRefRoleCommands orgRefRoleCommands, ICommonCommands commonCommands)
+			: base(orgRefRoleCommands)
+		{
+			_commonCommands = commonCommands;
+		}
 
+		public override ActionResult AddOrEdit(OrgRefRoleView orgRefRoleView)
+		{
+			orgRefRoleView.IsFormView = true;
+			SessionProvider.ActiveUser.SetRecordDefaults(orgRefRoleView, Request.Params[WebApplicationConstants.UserDateTime]);
+			orgRefRoleView.OrgID = SessionProvider.ActiveUser.OrganizationId;
+			orgRefRoleView.OrganizationId = SessionProvider.ActiveUser.OrganizationId;
+			var messages = ValidateMessages(orgRefRoleView);
+			var descriptionByteArray = orgRefRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgRoleDescription.ToString());
+			var commentByteArray = orgRefRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgComments.ToString());
+			var byteArray = new List<ByteArray> { descriptionByteArray, commentByteArray };
+			if (Request.Params["IsSecurityDefined"] == null || bool.Parse(Request.Params["IsSecurityDefined"]) == false)
+			{
+				messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
+			}
+			if (orgRefRoleView.Id > 0 && _commonCommands.GetRefRoleSecurities(new ActiveUser { UserId = SessionProvider.ActiveUser.UserId, RoleId = orgRefRoleView.Id }).Count == 0)
+				messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
 
-        /// <summary>
-        /// Interacts with the interfaces to get the Organization's ref role details and renders to the page
-        /// Gets the page related information on the cache basis
-        /// </summary>
-        /// <param name="orgRefRoleCommands"></param>
-        /// <param name="commonCommands"></param>
-        public OrgRefRoleController(IOrgRefRoleCommands orgRefRoleCommands, ICommonCommands commonCommands)
-            : base(orgRefRoleCommands)
-        {
-            _commonCommands = commonCommands;
-        }
+			if (messages.Any())
+				return Json(new { status = false, errMessages = messages, byteArray = byteArray }, JsonRequestBehavior.AllowGet);
 
-        public override ActionResult AddOrEdit(OrgRefRoleView orgRefRoleView)
-        {
+			var record = orgRefRoleView.Id > 0 ? base.UpdateForm(orgRefRoleView) : base.SaveForm(orgRefRoleView);
+			var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView).SetParent(EntitiesAlias.Organization, orgRefRoleView.ParentId);
 
+			if (record is SysRefModel)
+			{
+				route.RecordId = record.Id;
+				route.PreviousRecordId = orgRefRoleView.Id;
+				descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+				commentByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+				return SuccessMessageForInsertOrUpdate(orgRefRoleView.Id, route, byteArray);
+			}
+			return ErrorMessageForInsertOrUpdate(orgRefRoleView.Id, route);
+		}
 
-            orgRefRoleView.IsFormView = true;
-            SessionProvider.ActiveUser.SetRecordDefaults(orgRefRoleView, Request.Params[WebApplicationConstants.UserDateTime]);
-            orgRefRoleView.OrgID = SessionProvider.ActiveUser.OrganizationId;
-            orgRefRoleView.OrganizationId = SessionProvider.ActiveUser.OrganizationId;
-            var messages = ValidateMessages(orgRefRoleView);
-            var descriptionByteArray = orgRefRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgRoleDescription.ToString());
-            var commentByteArray = orgRefRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgComments.ToString());
-            var byteArray = new List<ByteArray> { descriptionByteArray, commentByteArray };
-            if (Request.Params["IsSecurityDefined"] == null || bool.Parse(Request.Params["IsSecurityDefined"]) == false)
-            {
-                messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
-            }
-            if (orgRefRoleView.Id > 0 && _commonCommands.GetRefRoleSecurities(new ActiveUser { UserId = SessionProvider.ActiveUser.UserId, RoleId = orgRefRoleView.Id }).Count == 0)
-                messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
+		[HttpPost, ValidateInput(false)]
+		public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<OrgRefRoleView, long> orgRefRoleView, string strRoute, string gridName)
+		{
+			var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			orgRefRoleView.Insert.ForEach(c => { c.OrgID = route.ParentRecordId; c.OrganizationId = route.ParentRecordId; });
+			orgRefRoleView.Update.ForEach(c => { c.OrgID = route.ParentRecordId; c.OrganizationId = route.ParentRecordId; });
+			var batchError = BatchUpdate(orgRefRoleView, route, gridName);
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			{
+				var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+				displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+				ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+			}
+			SetGridResult(route);
+			return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+		}
 
-            if (messages.Any())
-                return Json(new { status = false, errMessages = messages, byteArray = byteArray }, JsonRequestBehavior.AllowGet);
+		#region Tab View
 
-            var record = orgRefRoleView.Id > 0 ? base.UpdateForm(orgRefRoleView) : base.SaveForm(orgRefRoleView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView).SetParent(EntitiesAlias.Organization, orgRefRoleView.ParentId);
+		public ActionResult TabView(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			if (route.RecordId == 0)
+				route.Url = string.Empty;
+			route.EntityName = _commonCommands.Tables[route.Entity].TblLangName;
+			if (route.RecordId > 0)
+			{
+				var currentRefRole = _currentEntityCommands.Get(route.RecordId);
+				if (currentRefRole != null)
+					route.Url = string.Concat(currentRefRole.OrgRoleCode, WebApplicationConstants.M4PLSeparator, WebApplicationConstants.M4PLSeparator, currentRefRole.OrgRoleTitle);
+				//  currentRefRole.OrgRoleContactID.GetValueOrDefault(),
+			}
+			route.SetParent(EntitiesAlias.OrgRefRole, route.RecordId);
+			return PartialView(MvcConstants.ViewTab, route);
+		}
 
-            if (record is SysRefModel)
-            {
-                route.RecordId = record.Id;
-                route.PreviousRecordId = orgRefRoleView.Id;
-                descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                commentByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(orgRefRoleView.Id, route, byteArray);
-            }
-            return ErrorMessageForInsertOrUpdate(orgRefRoleView.Id, route);
-        }
+		public ActionResult TabViewCallBack(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var pageControlResult = new PageControlResult
+			{
+				PageInfos = _commonCommands.GetPageInfos(route.Entity).Select(x => x.CopyPageInfos()).ToList(),
+				CallBackRoute = route,
+			};
 
-        [HttpPost, ValidateInput(false)]
-        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<OrgRefRoleView, long> orgRefRoleView, string strRoute, string gridName)
-        {
-            var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            orgRefRoleView.Insert.ForEach(c => { c.OrgID = route.ParentRecordId; c.OrganizationId = route.ParentRecordId; });
-            orgRefRoleView.Update.ForEach(c => { c.OrgID = route.ParentRecordId; c.OrganizationId = route.ParentRecordId; });
-            var batchError = BatchUpdate(orgRefRoleView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
-            {
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
-                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
-                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-            }
-            SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
-        }
+			foreach (var pageInfo in pageControlResult.PageInfos)
+			{
+				pageInfo.SetRoute(route, _commonCommands);
+				if ((pageInfo.TabTableName == EntitiesAlias.SecurityByRole.ToString()) && (!string.IsNullOrWhiteSpace(route.Url)))
+				{
+					var currentPageTitle = (pageInfo.TabPageTitle.IndexOf(" - ") > -1) ? pageInfo.TabPageTitle.Remove(pageInfo.TabPageTitle.IndexOf(" - "), pageInfo.TabPageTitle.Length - pageInfo.TabPageTitle.IndexOf(" - ")) : pageInfo.TabPageTitle;
+					pageInfo.TabPageTitle = string.Concat(currentPageTitle, " - ", route.Url.Split(new[] { WebApplicationConstants.M4PLSeparator }, StringSplitOptions.None)[0]);
+				}
+			}
 
-        #region Tab View
+			return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);
+		}
 
-        public ActionResult TabView(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            if (route.RecordId == 0)
-                route.Url = string.Empty;
-            route.EntityName = _commonCommands.Tables[route.Entity].TblLangName;
-            if (route.RecordId > 0)
-            {
-                var currentRefRole = _currentEntityCommands.Get(route.RecordId);
-                if (currentRefRole != null)
-                    route.Url = string.Concat(currentRefRole.OrgRoleCode, WebApplicationConstants.M4PLSeparator, WebApplicationConstants.M4PLSeparator, currentRefRole.OrgRoleTitle);
-                //  currentRefRole.OrgRoleContactID.GetValueOrDefault(),
-            }
-            route.SetParent(EntitiesAlias.OrgRefRole, route.RecordId);
-            return PartialView(MvcConstants.ViewTab, route);
-        }
+		#endregion Tab View
 
-        public ActionResult TabViewCallBack(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var pageControlResult = new PageControlResult
-            {
-                PageInfos = _commonCommands.GetPageInfos(route.Entity).Select(x => x.CopyPageInfos()).ToList(),
-                CallBackRoute = route,
-            };
+		#region RichEdit
 
-            foreach (var pageInfo in pageControlResult.PageInfos)
-            {
-                pageInfo.SetRoute(route, _commonCommands);
-                if ((pageInfo.TabTableName == EntitiesAlias.SecurityByRole.ToString()) && (!string.IsNullOrWhiteSpace(route.Url)))
-                {
-                    var currentPageTitle = (pageInfo.TabPageTitle.IndexOf(" - ") > -1) ? pageInfo.TabPageTitle.Remove(pageInfo.TabPageTitle.IndexOf(" - "), pageInfo.TabPageTitle.Length - pageInfo.TabPageTitle.IndexOf(" - ")) : pageInfo.TabPageTitle;
-                    pageInfo.TabPageTitle = string.Concat(currentPageTitle, " - ", route.Url.Split(new[] { WebApplicationConstants.M4PLSeparator }, StringSplitOptions.None)[0]);
-                }
-            }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.OrgRoleDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.OrgRoleDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-            return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);
-        }
+		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.OrgComments.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.OrgComments.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion Tab View
+		#endregion RichEdit
 
-        #region RichEdit
+		public override ActionResult FormView(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
-        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-        {
-            long newDocumentId;
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.OrgRoleDescription.ToString());
-            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-            {
-                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.OrgRoleDescription.ToString());
-            }
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+			if (route.ParentEntity == EntitiesAlias.OrgRefRole)
+				route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+			return base.FormView(JsonConvert.SerializeObject(route));
+		}
 
-        public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
-        {
-            long newDocumentId;
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.OrgComments.ToString());
-            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-            {
-                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.OrgComments.ToString());
-            }
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-            return base.RichEditFormView(byteArray);
-        }
-
-        #endregion RichEdit
-
-        public override ActionResult FormView(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
-            if (route.ParentEntity == EntitiesAlias.OrgRefRole)
-                route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            return base.FormView(JsonConvert.SerializeObject(route));
-        }
-
-        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            route.ParentEntity = EntitiesAlias.Organization;
-            route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
-            route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            base.DataView(JsonConvert.SerializeObject(route));
-            return PartialView(_gridResult);
-        }
-    }
+		public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			route.ParentEntity = EntitiesAlias.Organization;
+			route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
+			route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+			base.DataView(JsonConvert.SerializeObject(route));
+			return PartialView(_gridResult);
+		}
+	}
 }

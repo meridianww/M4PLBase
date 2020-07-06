@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -24,48 +24,48 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    /// <summary>
-    /// Job Survey Controller
-    /// </summary>
-    [AllowAnonymous]
-    [RoutePrefix("api/Survey")]
-    public class JobSurveyController : BaseApiController<JobSurvey>
-    {
-        private readonly IJobSurveyCommands _jobSurveyCommands;
+	/// <summary>
+	/// Job Survey Controller
+	/// </summary>
+	[AllowAnonymous]
+	[RoutePrefix("api/Survey")]
+	public class JobSurveyController : BaseApiController<JobSurvey>
+	{
+		private readonly IJobSurveyCommands _jobSurveyCommands;
 
-        /// <summary>
-        /// Function to get the Contact details
-        /// </summary>
-        /// <param name="jobSurveyCommands">jobSurveyCommands</param>
-        public JobSurveyController(IJobSurveyCommands jobSurveyCommands)
-            : base(jobSurveyCommands)
-        {
-            _jobSurveyCommands = jobSurveyCommands;
-        }
+		/// <summary>
+		/// Function to get the Contact details
+		/// </summary>
+		/// <param name="jobSurveyCommands">jobSurveyCommands</param>
+		public JobSurveyController(IJobSurveyCommands jobSurveyCommands)
+			: base(jobSurveyCommands)
+		{
+			_jobSurveyCommands = jobSurveyCommands;
+		}
 
-        /// <summary>
-        /// Get the survey information for a particular Job
-        /// </summary>
-        /// <param name="jobId">jobId</param>
-        [HttpGet]
-        [Route("{jobId}/job")]
-        public JobSurvey GetJobSurvey(string jobId)
-        {
-            long updatedJobId = 0;
-            long.TryParse(new string(jobId.ToCharArray().Where(c => char.IsDigit(c)).ToArray()), out updatedJobId);
-            return _jobSurveyCommands.GetJobSurvey(null, updatedJobId);
-        }
+		/// <summary>
+		/// Get the survey information for a particular Job
+		/// </summary>
+		/// <param name="jobId">jobId</param>
+		[HttpGet]
+		[Route("{jobId}/job")]
+		public JobSurvey GetJobSurvey(string jobId)
+		{
+			long updatedJobId = 0;
+			long.TryParse(new string(jobId.ToCharArray().Where(c => char.IsDigit(c)).ToArray()), out updatedJobId);
+			return _jobSurveyCommands.GetJobSurvey(null, updatedJobId);
+		}
 
-        /// <summary>
-        /// Insert Job Survey
-        /// </summary>
-        /// <param name="jobSurvey">jobSurvey</param>
-        /// <returns>true if Saved Successfully Else False</returns>
-        [HttpPost]
-        [Route("job")]
-        public bool InsertJobSurvey(JobSurvey jobSurvey)
-        {
-            return _jobSurveyCommands.InsertJobSurvey(jobSurvey);
-        }
-    }
+		/// <summary>
+		/// Insert Job Survey
+		/// </summary>
+		/// <param name="jobSurvey">jobSurvey</param>
+		/// <returns>true if Saved Successfully Else False</returns>
+		[HttpPost]
+		[Route("job")]
+		public bool InsertJobSurvey(JobSurvey jobSurvey)
+		{
+			return _jobSurveyCommands.InsertJobSurvey(jobSurvey);
+		}
+	}
 }

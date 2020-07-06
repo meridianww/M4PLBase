@@ -4,7 +4,6 @@
 @using M4PL.Web.Providers
 @model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Finance.NavVendorView>
 
-
 @{
     ViewBag.Title = Model.PageName;
     Model.Record.Id = Model.Record.M4PLVendorId;
@@ -77,7 +76,6 @@ set.SetContent(() =>
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
 
-
         ViewContext.Writer.Write("<div class='row row-marg-data'>");
         ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 mc'>");
         ViewContext.Writer.Write("<div class='row'>");
@@ -130,8 +128,6 @@ set.SetContent(() =>
         ViewContext.Writer.Write("Vendor records have been synced successfully with Dynamics NAV. Click 'Close' to redirect on Vendor Data View.");
         ViewContext.Writer.Write("</div>");
     }
-
-
 
 });
 set.SetHeaderContentTemplateContent(headerSetting =>

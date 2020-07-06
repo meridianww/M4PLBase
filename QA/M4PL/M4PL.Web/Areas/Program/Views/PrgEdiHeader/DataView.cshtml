@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -26,7 +26,7 @@
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
-    //settings.Settings.VerticalScrollableHeight = 300;
+    settings.Settings.VerticalScrollableHeight = 300;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
@@ -85,7 +85,7 @@
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
 
@@ -154,8 +154,6 @@
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
                     column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
                 column.FixedStyle = (col.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
-
-
 
                 if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber)
                 || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder)
@@ -324,7 +322,6 @@
                             column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
                             spn.SpinButtons.ClientVisible = false;
                         }
-
 
                     });
                 }
