@@ -72,35 +72,6 @@ namespace M4PL.API.Controllers
 		/// <param name="jobId"></param>
 		/// <returns></returns>
 		[HttpGet]
-		[Route("GetPriceCodeReportByJobId")]
-		public Entities.Document.DocumentData GetPriceCodeReportByJobId(long jobId)
-		{
-			return _attachmentCommands.GetPriceCodeReportDocumentByJobId(jobId);
-		}
-
-		/// <summary>
-		/// GetBOLDocumentByJobId
-		/// </summary>
-		/// <param name="jobId"></param>
-		/// <returns></returns>
-		[AllowAnonymous]
-		[HttpGet]
-		[Route("GetCostCodeReportByJobId")]
-		public Entities.Document.DocumentData GetCostCodeReportByJobId(long jobId)
-		{
-			return _attachmentCommands.GetCostCodeReportDocumentByJobId(jobId);
-		}
-
-		#endregion
-
-		#region API's to Get the Document For Multiple Jobs
-
-		/// <summary>
-		/// GetBOLDocumentByJobId
-		/// </summary>
-		/// <param name="jobId"></param>
-		/// <returns></returns>
-		[HttpGet]
 		[Route("GetBOLDocumentByJobId")]
 		public Entities.Document.DocumentData GetBOLDocumentByJobId(string jobId)
 		{
@@ -139,11 +110,12 @@ namespace M4PL.API.Controllers
 		/// </summary>
 		/// <param name="jobId"></param>
 		/// <returns></returns>
-		[HttpPost]
+		[HttpGet]
 		[Route("GetPriceCodeReportByJobId")]
-		public Entities.Document.DocumentData GetPriceCodeReportByJobId(List<long> jobId)
+		public Entities.Document.DocumentData GetPriceCodeReportByJobId(string jobId)
 		{
-			return _attachmentCommands.GetPriceCodeReportDocumentByJobId(jobId);
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.GetPriceCodeReportDocumentByJobId(selectedJobId);
 		}
 
 		/// <summary>
@@ -152,12 +124,17 @@ namespace M4PL.API.Controllers
 		/// <param name="jobId"></param>
 		/// <returns></returns>
 		[AllowAnonymous]
-		[HttpPost]
+		[HttpGet]
 		[Route("GetCostCodeReportByJobId")]
-		public Entities.Document.DocumentData GetCostCodeReportByJobId(List<long> jobId)
+		public Entities.Document.DocumentData GetCostCodeReportByJobId(string jobId)
 		{
-			return _attachmentCommands.GetCostCodeReportDocumentByJobId(jobId);
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.GetCostCodeReportDocumentByJobId(selectedJobId);
 		}
+
+		#endregion
+
+		#region API's to Get the Document For Multiple Jobs
 
 		#endregion
 
@@ -165,16 +142,18 @@ namespace M4PL.API.Controllers
 
 		[HttpGet]
 		[Route("IsPriceCodeDataPresentForJob")]
-		public Entities.Document.DocumentStatus IsPriceCodeDataPresentForJob(long jobId)
+		public Entities.Document.DocumentStatus IsPriceCodeDataPresentForJob(string jobId)
 		{
-			return _attachmentCommands.IsPriceCodeDataPresentForJob(jobId);
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.IsPriceCodeDataPresentForJob(selectedJobId);
 		}
 
 		[HttpGet]
 		[Route("IsCostCodeDataPresentForJob")]
-		public Entities.Document.DocumentStatus IsCostCodeDataPresentForJob(long jobId)
+		public Entities.Document.DocumentStatus IsCostCodeDataPresentForJob(string jobId)
 		{
-			return _attachmentCommands.IsCostCodeDataPresentForJob(jobId);
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.IsCostCodeDataPresentForJob(selectedJobId);
 		}
 
 		[HttpGet]

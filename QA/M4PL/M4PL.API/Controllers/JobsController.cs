@@ -104,14 +104,15 @@ namespace M4PL.API.Controllers
 			return _jobCommands.GetJobSeller(id, parentId);
 		}
 
-		/// <summary>
-		/// Returns Map route data by job id
-		/// </summary>
-		/// <param name="id">Job Id</param>
-		/// <returns>Map route details</returns>
-		[CustomAuthorize]
+        /// <summary>
+        /// Gets the origin and Delivery address details for supplied Job Id
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <returns>Origin and Destination details</returns>
+        /// 
+        [CustomAuthorize]
 		[HttpGet]
-		[Route("MapRoute")]
+		[Route("MapRoute"), ResponseType(typeof(JobMapRoute))]
 		public JobMapRoute GetJobMapRoute(long id)
 		{
 			_jobCommands.ActiveUser = ActiveUser;
@@ -132,6 +133,11 @@ namespace M4PL.API.Controllers
 			return _jobCommands.GetJobPod(id);
 		}
 
+        /// <summary>
+        /// Update the destination details of a Job by Job Id
+        /// </summary>
+        /// <param name="jobDestination"></param>
+        /// <returns></returns>
 		[CustomAuthorize]
 		[HttpPut]
 		[Route("JobDestination")]
@@ -168,8 +174,15 @@ namespace M4PL.API.Controllers
 			return _jobCommands.PutJobMapRoute(jobMapRoute);
 		}
 
+        /// <summary>
+        /// Returns the list of Job Site Codes for available for a program. If NULL filter is true the details will be fetched by using job Id else parentId which is program Id 
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <param name="parentId">Program Id</param>
+        /// <param name="isNullFIlter">if true then job Id is used  else parentId is uesd to filter.</param>
+        /// <returns>Site codes list</returns>
 		[HttpGet]
-		[Route("JobsSiteCodeByProgram")]
+		[Route("JobsSiteCodeByProgram"), ResponseType(typeof(JobsSiteCode))]
 		public IQueryable<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false)
 		{
 			try
@@ -183,36 +196,57 @@ namespace M4PL.API.Controllers
 			}
 		}
 
+        /// <summary>
+        /// For the supplied job id Gateway, cost and price information will be copied to from program and Job attributes will be filled from program. 
+        /// </summary>
+        /// <param name="jobId">Job Id</param>
+        /// <returns>Returns true if its copied else false.</returns>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("UpdateJobAttribute")]
+		[Route("UpdateJobAttribute"), ResponseType(typeof(bool))]
 		public bool UpdateJobAttributes(long jobId)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.UpdateJobAttributes(jobId);
 		}
 
+        /// <summary>
+        /// A job comment(Job Tracking tab => comment) will be created for the supplied job Id with the title mentioned and once its saved successfully rich text editor also saved for the comment with mentioned gateway comment.
+        /// </summary>
+        /// <param name="comment">Gateway comment input, Gateway Title is used as comment title and Gateway comment is used in Rich text editor</param>
+        /// <returns>Returns true if its saved successfully else false.</returns>
 		[CustomAuthorize]
 		[HttpPost]
-		[Route("Gateway/Comment")]
+		[Route("Gateway/Comment"), ResponseType(typeof(bool))]
 		public bool InsertJobComment(JobComment comment)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.InsertJobComment(comment);
 		}
 
+        /// <summary>
+        /// A gateway will be created for a job and it will be copied from program by GatewayStatusCode. Job Status code and Job Cargo details will be updated.
+        /// </summary>
+        /// <param name="jobId">Job Id for which gateway will be added</param>
+        /// <param name="gatewayStatusCode">Gateway Status code used to identify gateway from Job</param>
+        /// <returns>Returns true if it is inserted scussessfully else false</returns>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("Gateway/InsertJobGateway")]
+		[Route("Gateway/InsertJobGateway"), ResponseType(typeof(bool))]
 		public bool InsertJobGateway(long jobId, string gatewayStatusCode)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.InsertJobGateway(jobId, gatewayStatusCode);
 		}
 
+        /// <summary>
+        /// Creates a new Job.
+        /// </summary>
+        /// <param name="job">The new job will contains these values.</param>
+        /// <returns>new job id</returns>
 		[CustomAuthorize]
 		[HttpPost]
-		[Route("CreateJob")]
+		[Route("CreateJob"),ResponseType(typeof(long))]
 		public long CreateJob(Job job)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
@@ -220,9 +254,14 @@ namespace M4PL.API.Controllers
 			return jobData != null && jobData.Id > 0 ? jobData.Id : 0;
 		}
 
+        /// <summary>
+        /// Updates the job with the supplied values.
+        /// </summary>
+        /// <param name="job">The job will be updated with the values supplied.</param>
+        /// <returns>Returns true if it is udated successfully.</returns>
 		[CustomAuthorize]
 		[HttpPost]
-		[Route("UpdateJob")]
+		[Route("UpdateJob"), ResponseType(typeof(bool))]
 		public bool UpdateJob(Job job)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
@@ -230,33 +269,53 @@ namespace M4PL.API.Controllers
 			return jobData != null && jobData.Id > 0 ? true : false;
 		}
 
+        /// <summary>
+        /// Get the job details by the job Id
+        /// </summary>
+        /// <param name="jobId">Job Id</param>
+        /// <returns>Returns Job data</returns>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("GetJob")]
+		[Route("GetJob"), ResponseType(typeof(Job))]
 		public Job GetJob(long jobId)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.Get(jobId);
 		}
 
+        /// <summary>
+        /// If the EDI recods found with the supplied eshHeaderId then new job will be created withe EDI details.
+        /// </summary>
+        /// <param name="eshHeaderID">Identifier to get the EDI record</param>
+        /// <returns>Returns created Job Id if job is created created else 0.</returns>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("CreateJobFromEDI204")]
+		[Route("CreateJobFromEDI204"), ResponseType(typeof(long))]
 		public long CreateJobFromEDI204(long eshHeaderID)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.CreateJobFromEDI204(eshHeaderID);
 		}
 
+        /// <summary>
+        /// Returns true if user is user is having permission to JobData View else false will be returned
+        /// </summary>
+        /// <param name="recordId">Job Id</param>
+        /// <returns>Returns true if user is user is having permission to JobData View else false will be returned</returns>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("GetIsJobDataViewPermission")]
+		[Route("GetIsJobDataViewPermission"), ResponseType(typeof(bool))]
 		public bool GetIsJobDataViewPermission(long recordId)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.GetIsJobDataViewPermission(recordId);
 		}
 
+        /// <summary>
+        /// Multiple order will be created in the system with CSV data. While created each order a check will be performed with Customer Sales order is unique and if the job is created comment also creatd with Notes column in the csv.
+        /// </summary>
+        /// <param name="jobCSVData">CSV data used to creted multiple orders</param>
+        /// <returns>Returns true if the task completed successfully else false.</returns>
 		[CustomAuthorize]
 		[HttpPost]
 		[Route("CreateJobFromCSVImport")]
@@ -267,6 +326,11 @@ namespace M4PL.API.Controllers
 			return _jobCommands.CreateJobFromCSVImport(jobCSVData);
 		}
 
+        /// <summary>
+        /// Get the list of change history for the job by job id to know what is modified , when and by whom.
+        /// </summary>
+        /// <param name="jobId">Job Id for which History is fetched.</param>
+        /// <returns>List of changes for the Job</returns>
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("ChangeHistory")]
@@ -276,6 +340,17 @@ namespace M4PL.API.Controllers
 			return _jobCommands.GetChangeHistory(jobId);
 		}
 
+        /// <summary>
+        /// Complete the Job, If job exists it will complete particular job. If customer and ProgramId exists all the Jobs under program will be completed. 
+        /// If Customer Id only exists all the programs under the customer will be completed. Even if customer id is also 0 then all the Jobs in the system will be marked as complete.
+        /// Delivery date of the jobs less than the delivery date param will be considered. 
+        /// </summary>
+        /// <param name="custId">Customer Id</param>
+        /// <param name="programId">Program id</param>
+        /// <param name="jobId">job Id</param>
+        /// <param name="deliveryDate">Delivery Date of the job less than this date</param>
+        /// <param name="includeNullableDeliveryDate">If true the consider the jobs with NULL delivery date</param>
+        /// <returns>Returns the count of the jobs marked as completed.</returns>
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("CompleteJob")]
@@ -285,6 +360,11 @@ namespace M4PL.API.Controllers
 			return _jobCommands.UpdateJobCompleted(custId, programId, jobId, deliveryDate, includeNullableDeliveryDate, BaseCommands.ActiveUser);
 		}
 
+        /// <summary>
+        /// Returns the list of the non completed Jobs by program Id 
+        /// </summary>
+        /// <param name="programId">program id</param>
+        /// <returns>List of non completed jobs</returns>
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("ActiveJobsByProramId")]

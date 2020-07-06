@@ -529,14 +529,18 @@ namespace M4PL.Web.Controllers
 			return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(requestedJobId) }, JsonRequestBehavior.AllowGet);
 		}
 
-		public ActionResult IsPriceCodeDataPresentForJob(long jobId)
+		public ActionResult IsPriceCodeDataPresentForJob(long jobId, string jobIds)
 		{
-			return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+			List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+			string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+			return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
 		}
 
-		public ActionResult IsCostCodeDataPresentForJob(long jobId)
+		public ActionResult IsCostCodeDataPresentForJob(long jobId, string jobIds)
 		{
-			return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+			List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+			string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+			return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
 		}
 
 		public ActionResult GetContactType(string lookupName)

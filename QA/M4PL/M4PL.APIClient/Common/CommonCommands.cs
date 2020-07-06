@@ -994,7 +994,7 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
-		public DocumentDataView GetPriceCodeReportByJobId(long jobId)
+		public DocumentDataView GetPriceCodeReportByJobId(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetPriceCodeReportByJobId");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
@@ -1002,7 +1002,7 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
-		public DocumentDataView GetCostCodeReportByJobId(long jobId)
+		public DocumentDataView GetCostCodeReportByJobId(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetCostCodeReportByJobId");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
@@ -1026,7 +1026,7 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
-		public DocumentStatusView IsPriceCodeDataPresentForJob(long jobId)
+		public DocumentStatusView IsPriceCodeDataPresentForJob(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "IsPriceCodeDataPresentForJob");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
@@ -1034,7 +1034,7 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
-		public DocumentStatusView IsCostCodeDataPresentForJob(long jobId)
+		public DocumentStatusView IsCostCodeDataPresentForJob(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "IsCostCodeDataPresentForJob");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;

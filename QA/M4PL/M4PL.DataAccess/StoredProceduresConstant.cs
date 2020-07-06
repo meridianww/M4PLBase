@@ -811,7 +811,8 @@ namespace M4PL.DataAccess
 		public const string GetPriceReportDataByJobId = "dbo.GetPriceReportDataByJobId";
 		public const string GetCostReportDataByJobId = "dbo.GetCostReportDataByJobId";
 		public const string GetAttachmentsByMultipleJobId = "dbo.GetAttachmentsByMultipleJobId";
-
+		public const string GetPriceReportDataByMultipleJobId = "GetPriceReportDataByMultipleJobId";
+		public const string GetCostReportDataByMultipleJobId = "dbo.GetCostReportDataByMultipleJobId";
 		#endregion Attachment
 
 		#region Survey
