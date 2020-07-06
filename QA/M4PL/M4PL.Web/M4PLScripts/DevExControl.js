@@ -247,7 +247,7 @@ DevExCtrl.Ribbon = function () {
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
 
                     if (result == true) {
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     }
                     else {
                         M4PLCommon.DocumentStatus.JobPriceCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
@@ -261,7 +261,7 @@ DevExCtrl.Ribbon = function () {
                     else
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     if (result == true) {
-                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     }
                     else {
                         M4PLCommon.DocumentStatus.JobCostCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
