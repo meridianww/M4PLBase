@@ -1343,20 +1343,20 @@ namespace M4PL.Web.Areas
             }
         }
 
-        public FileResult DownloadPriceReport(string strRoute)
+        public FileResult DownloadPriceReport(string strRoute, string jobIds = null)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             try
             {
-                var priceReportDocument = _commonCommands.GetPriceCodeReportByJobId(route.RecordId);
+				List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var priceReportDocument = _commonCommands.GetPriceCodeReportByJobId(jobId);
+				if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
+				{
+					return File(priceReportDocument.DocumentContent, priceReportDocument.ContentType, priceReportDocument.DocumentName);
+				}
 
-                if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
-                {
-                    string fileName = "PriceReport_" + priceReportDocument.DocumentName;
-                    return File(priceReportDocument.DocumentContent, "text/csv", fileName);
-                }
-
-                return null;
+				return null;
             }
             catch (Exception)
             {
@@ -1364,20 +1364,20 @@ namespace M4PL.Web.Areas
             }
         }
 
-        public FileResult DownloadCostReport(string strRoute)
+        public FileResult DownloadCostReport(string strRoute, string jobIds = null)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             try
             {
-                var priceReportDocument = _commonCommands.GetCostCodeReportByJobId(route.RecordId);
+				List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+         		var priceReportDocument = _commonCommands.GetCostCodeReportByJobId(jobId);
+				if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
+				{
+					return File(priceReportDocument.DocumentContent, priceReportDocument.ContentType, priceReportDocument.DocumentName);
+				}
 
-                if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
-                {
-                    string fileName = "CostReport_" + priceReportDocument.DocumentName;
-                    return File(priceReportDocument.DocumentContent, "text/csv", fileName);
-                }
-
-                return null;
+				return null;
             }
             catch (Exception)
             {

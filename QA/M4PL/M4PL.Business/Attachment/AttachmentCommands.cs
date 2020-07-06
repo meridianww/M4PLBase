@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -17,81 +17,88 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DataAccess.Attachment.AttachmentCommands;
 //====================================================================================================================
 
-using M4PL.Entities.Support;
-using System;
-using System.Collections.Generic;
-using _commands = M4PL.DataAccess.Attachment.AttachmentCommands;
-using M4PL.Entities.Document;
-using M4PL.DataAccess.SQLSerializer.Serializer;
-using System.IO;
-using M4PL.Utilities;
-using System.Text;
-using System.Data;
-using System.Collections;
-using System.Linq;
-using System.IO.Compression;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
+using M4PL.DataAccess.SQLSerializer.Serializer;
+using M4PL.Entities.Document;
+using M4PL.Entities.Support;
+using M4PL.Utilities;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using _commands = M4PL.DataAccess.Attachment.AttachmentCommands;
 
 namespace M4PL.Business.Attachment
 {
-    public class AttachmentCommands : BaseCommands<Entities.Attachment>, IAttachmentCommands
-    {
-        /// <summary>
-        /// Get list of contacts data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<Entities.Attachment> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class AttachmentCommands : BaseCommands<Entities.Attachment>, IAttachmentCommands
+	{
+		/// <summary>
+		/// Get list of contacts data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<Entities.Attachment> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific contact record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific contact record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public Entities.Attachment Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public Entities.Attachment Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        public DocumentData GetAllAvaliableAttachmentsForJob(List<long> jobId)
-        {
+		public DocumentData GetAllAvaliableAttachmentsForJob(List<long> jobId)
+		{
 			DocumentData documentData = null;
 			List<DocumentData> documentDataList = new List<DocumentData>();
+			List<Task> tasks = new List<Task>();
 			foreach (var selectedJob in jobId)
 			{
-				var attachmentList = _commands.GetAttachmentsByJobId(ActiveUser, selectedJob);
-				if (attachmentList != null && attachmentList.Count > 0)
+				tasks.Add(Task.Factory.StartNew(() =>
 				{
-					using (MemoryStream ms = new MemoryStream())
+					var attachmentList = _commands.GetAttachmentsByJobId(ActiveUser, selectedJob);
+					if (attachmentList != null && attachmentList.Count > 0)
 					{
-						using (var archive = new System.IO.Compression.ZipArchive(ms, ZipArchiveMode.Create, true))
+						using (MemoryStream ms = new MemoryStream())
 						{
-							foreach (var file in attachmentList)
+							using (var archive = new System.IO.Compression.ZipArchive(ms, ZipArchiveMode.Create, true))
 							{
-								var entry = archive.CreateEntry(file.AttFileName, CompressionLevel.Fastest);
-								using (var zipStream = entry.Open())
+								foreach (var file in attachmentList)
 								{
-									zipStream.Write(file.AttData, 0, file.AttData.Length);
+									var entry = archive.CreateEntry(file.AttFileName, CompressionLevel.Fastest);
+									using (var zipStream = entry.Open())
+									{
+										zipStream.Write(file.AttData, 0, file.AttData.Length);
+									}
 								}
 							}
-						}
 
-						documentDataList.Add(
-							new DocumentData(){
-								DocumentContent = ms.ToArray(),
-								ContentType = "application/zip",
-								DocumentName = string.Format("documents_{0}.zip", selectedJob)
-							});
+							documentDataList.Add(
+								new DocumentData()
+								{
+									DocumentContent = ms.ToArray(),
+									ContentType = "application/zip",
+									DocumentName = string.Format("documents_{0}.zip", selectedJob)
+								});
+						}
 					}
-				}
+				}));
 			}
 
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
 			if (documentDataList != null && documentDataList.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
@@ -116,7 +123,6 @@ namespace M4PL.Business.Attachment
 			}
 			else if (documentDataList != null && documentDataList.Count == 1)
 			{
-
 				return documentDataList[0];
 			}
 
@@ -220,7 +226,8 @@ namespace M4PL.Business.Attachment
 					}
 
 					documentData.DocumentContent = memoryStream.ToArray();
-					documentData.DocumentName = string.Format("{0}.csv", jobId);
+					documentData.DocumentName = string.Format("PriceCode_{0}.csv", jobId);
+					documentData.ContentType = "text/csv";
 				}
 			}
 
@@ -242,17 +249,18 @@ namespace M4PL.Business.Attachment
 					}
 
 					documentData.DocumentContent = memoryStream.ToArray();
-					documentData.DocumentName = string.Format("{0}.csv", jobId);
+					documentData.DocumentName = string.Format("CostCode_{0}.csv", jobId);
+					documentData.ContentType = "text/csv";
 				}
 			}
 
 			return documentData;
 		}
 
-		public DocumentStatus IsPriceCodeDataPresentForJob(long jobId)
+		public DocumentStatus IsPriceCodeDataPresentForJob(List<long> selectedJobId)
 		{
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
-			var priceCodeData = _commands.GetJobPriceReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			var priceCodeData = _commands.GetMultipleJobPriceReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, selectedJobId);
 			if (priceCodeData != null && priceCodeData.Count > 0)
 			{
 				documentStatus.IsAttachmentPresent = true;
@@ -261,10 +269,10 @@ namespace M4PL.Business.Attachment
 			return documentStatus;
 		}
 
-		public DocumentStatus IsCostCodeDataPresentForJob(long jobId)
+		public DocumentStatus IsCostCodeDataPresentForJob(List<long> selectedJobId)
 		{
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
-			var costCodeData = _commands.GetJobCostReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			var costCodeData = _commands.GetMultipleJobCostReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, selectedJobId);
 			if (costCodeData != null && costCodeData.Count > 0)
 			{
 				documentStatus.IsAttachmentPresent = true;
@@ -304,7 +312,7 @@ namespace M4PL.Business.Attachment
 
 		public DocumentStatus GetDocumentStatusByJobId(List<long> selectedJobId)
 		{
-			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent= false };
+			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
 			List<Entities.Attachment> attachments = _commands.GetAttachmentsByMultipleJobId(ActiveUser, selectedJobId);
 			if (attachments != null && attachments.Count > 0)
 			{
@@ -322,47 +330,47 @@ namespace M4PL.Business.Attachment
 		/// <returns></returns>
 
 		public Entities.Attachment Post(Entities.Attachment contact)
-        {
-            return _commands.Post(ActiveUser, contact);
-        }
+		{
+			return _commands.Post(ActiveUser, contact);
+		}
 
-        /// <summary>
-        /// Updates an existing contact record
-        /// </summary>
-        /// <param name="contact"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing contact record
+		/// </summary>
+		/// <param name="contact"></param>
+		/// <returns></returns>
 
-        public Entities.Attachment Put(Entities.Attachment contact)
-        {
-            return _commands.Put(ActiveUser, contact);
-        }
+		public Entities.Attachment Put(Entities.Attachment contact)
+		{
+			return _commands.Put(ActiveUser, contact);
+		}
 
-        /// <summary>
-        /// Deletes a specific contact record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific contact record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of contacts records
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of contacts records
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
-        public IList<IdRefLangName> DeleteAndUpdateAttachmentCount(List<long> ids, int statusId, string parentTable, string fieldName)
-        {
-            return _commands.DeleteAndUpdateAttachmentCount(ActiveUser, ids, statusId, parentTable, fieldName);
-        }
+		public IList<IdRefLangName> DeleteAndUpdateAttachmentCount(List<long> ids, int statusId, string parentTable, string fieldName)
+		{
+			return _commands.DeleteAndUpdateAttachmentCount(ActiveUser, ids, statusId, parentTable, fieldName);
+		}
 
 		public Entities.Attachment Patch(Entities.Attachment entity)
 		{
@@ -454,20 +462,20 @@ namespace M4PL.Business.Attachment
 			return null;
 		}
 
-		public DocumentData GetAttachmentsByJobId(List<long> jobId)
-		{
-			throw new NotImplementedException();
-		}
-
 		public DocumentData GetBOLDocumentByJobId(List<long> jobId)
 		{
 			DocumentData documentData = new DocumentData();
 			List<DocumentData> documentDataList = new List<DocumentData>();
+			List<Task> tasks = new List<Task>();
 			foreach (var currentJobId in jobId)
 			{
-				documentDataList.Add(GetBOLDocumentByJobId(currentJobId));
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					documentDataList.Add(GetBOLDocumentByJobId(currentJobId));
+				}));
 			}
 
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
 			if (documentDataList?.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
@@ -501,11 +509,16 @@ namespace M4PL.Business.Attachment
 		{
 			DocumentData documentData = new DocumentData();
 			List<DocumentData> documentDataList = new List<DocumentData>();
+			List<Task> tasks = new List<Task>();
 			foreach (var currentJobId in jobId)
 			{
-				documentDataList.Add(GetTrackingDocumentByJobId(currentJobId));
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					documentDataList.Add(GetTrackingDocumentByJobId(currentJobId));
+				}));
 			}
 
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
 			if (documentDataList?.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
@@ -537,23 +550,106 @@ namespace M4PL.Business.Attachment
 
 		public DocumentData GetPriceCodeReportDocumentByJobId(List<long> jobId)
 		{
-			throw new NotImplementedException();
+			DocumentData documentData = null;
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			List<Task> tasks = new List<Task>();
+			foreach (var currentJobId in jobId)
+			{
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					documentDataList.Add(GetPriceCodeReportDocumentByJobId(currentJobId));
+				}));
+			}
+
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			if (documentDataList?.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var trackingDocument in documentDataList)
+						{
+							var entry = archive.CreateEntry(trackingDocument.DocumentName, CompressionLevel.Fastest);
+							using (var zipStream = entry.Open())
+							{
+								zipStream.Write(trackingDocument.DocumentContent, 0, trackingDocument.DocumentContent.Length);
+							}
+						}
+					}
+
+					documentData = new DocumentData();
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedPriceCode");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else if (documentDataList?.Count == 1)
+			{
+				return documentDataList[0];
+			}
+
+			return documentData;
 		}
 
 		public DocumentData GetCostCodeReportDocumentByJobId(List<long> jobId)
 		{
-			throw new NotImplementedException();
+			DocumentData documentData = null;
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			List<Task> tasks = new List<Task>();
+			foreach (var currentJobId in jobId)
+			{
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					documentDataList.Add(GetCostCodeReportDocumentByJobId(currentJobId));
+				}));
+			}
+
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			if (documentDataList?.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var trackingDocument in documentDataList)
+						{
+							var entry = archive.CreateEntry(trackingDocument.DocumentName, CompressionLevel.Fastest);
+							using (var zipStream = entry.Open())
+							{
+								zipStream.Write(trackingDocument.DocumentContent, 0, trackingDocument.DocumentContent.Length);
+							}
+						}
+					}
+
+					documentData = new DocumentData();
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedCostCode");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else if (documentDataList?.Count == 1)
+			{
+				return documentDataList[0];
+			}
+
+			return documentData;
 		}
 
 		public DocumentData GetPODDocumentByJobId(List<long> jobId)
 		{
 			DocumentData documentData = new DocumentData();
 			List<DocumentData> documentDataList = new List<DocumentData>();
-			foreach (var currentJobId in jobId)
+			List<Task> tasks = new List<Task>();
+			foreach (var selectedJobId in jobId)
 			{
-				documentDataList.Add(GetPODDocumentByJobId(currentJobId));
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					documentDataList.Add(GetPODDocumentByJobId(selectedJobId));
+				}));
 			}
 
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
 			if (documentDataList?.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
