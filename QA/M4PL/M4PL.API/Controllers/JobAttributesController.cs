@@ -23,6 +23,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// JobAttributes
+    /// </summary>
 	[RoutePrefix("api/JobAttributes")]
 	public class JobAttributesController : BaseApiController<JobAttribute>
 	{

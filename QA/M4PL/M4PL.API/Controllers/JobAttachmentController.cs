@@ -26,9 +26,13 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// JobAttachmentController
+    /// </summary>
 	[RoutePrefix("api/JobAttachment")]
 	public class JobAttachmentController : BaseApiController<JobAttachment>
 	{
@@ -43,12 +47,19 @@ namespace M4PL.API.Controllers
 		{
 			_jobAttachmentCommands = jobAttachmentCommands;
 		}
-
+        /// <summary>
+        /// Response
+        /// </summary>
 		public System.Web.HttpResponse Response { get; }
 
+        /// <summary>
+        /// Get job attachment for download by order number
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
 		[HttpGet]
-		[Route("DownloadJobAttachment")]
-		public HttpResponseMessage DownloadJobAttachment(string orderNumber)
+        [Route("DownloadJobAttachment"), ResponseType(typeof(HttpResponseMessage))]
+        public HttpResponseMessage DownloadJobAttachment(string orderNumber)
 		{
 			HttpResponseMessage response = Request.CreateResponse();
 			IList<JobAttachment> fileAttachmentList = _jobAttachmentCommands.GetJobAttachment(orderNumber);
@@ -85,9 +96,14 @@ namespace M4PL.API.Controllers
 			return Request.CreateResponse(HttpStatusCode.ExpectationFailed);
 		}
 
+        /// <summary>
+        /// Get job attachment for download by invoice number
+        /// </summary>
+        /// <param name="invoiceNumber"></param>
+        /// <returns></returns>
 		[HttpGet]
-		[Route("DownloadPdfAttachment")]
-		public HttpResponseMessage DownloadPdfAttachment(string invoiceNumber)
+        [Route("DownloadPdfAttachment"), ResponseType(typeof(HttpResponseMessage))]
+        public HttpResponseMessage DownloadPdfAttachment(string invoiceNumber)
 		{
 			HttpResponseMessage response = Request.CreateResponse();
 			IList<JobAttachment> fileAttachmentList = _jobAttachmentCommands.GetJobAttachmentByInvoiceNumber(invoiceNumber);

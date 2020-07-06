@@ -159,6 +159,27 @@ namespace M4PL.DataAccess.Attachment
 			}
 		}
 
+		public static List<JobPriceReport> GetMultipleJobPriceReportData(ActiveUser activeUser, long customerId, List<long> jobId)
+		{
+			List<JobPriceReport> result = null;
+			try
+			{
+				var parameters = new List<Parameter>
+				   {
+					  new Parameter("@JobIdList", jobId.ToIdListDataTable(), "uttIDList")
+				   };
+
+				result = SqlSerializer.Default.DeserializeMultiRecords<JobPriceReport>(StoredProceduresConstant.GetPriceReportDataByMultipleJobId, parameters.ToArray(), storedProcedure: true);
+
+				return result;
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Exception occured in method GetJobPriceReportData. Exception :" + exp.Message, "Price Code Report", Utilities.Logger.LogType.Error);
+				return null;
+			}
+		}
+
 		public static List<JobCostReport> GetJobCostReportData(ActiveUser activeUser, long customerId, long jobId)
 		{
 			List<JobCostReport> result = null;
@@ -171,6 +192,27 @@ namespace M4PL.DataAccess.Attachment
 				   };
 
 				result = SqlSerializer.Default.DeserializeMultiRecords<JobCostReport>(StoredProceduresConstant.GetCostReportDataByJobId, parameters.ToArray(), storedProcedure: true);
+
+				return result;
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Exception occured in method GetJobCostReportData. Exception :" + exp.Message, "Cost Code Report", Utilities.Logger.LogType.Error);
+				return null;
+			}
+		}
+
+		public static List<JobCostReport> GetMultipleJobCostReportData(ActiveUser activeUser, long customerId, List<long> jobId)
+		{
+			List<JobCostReport> result = null;
+			try
+			{
+				var parameters = new List<Parameter>
+				   {
+					  new Parameter("@JobIdList", jobId.ToIdListDataTable(), "uttIDList")
+				   };
+
+				result = SqlSerializer.Default.DeserializeMultiRecords<JobCostReport>(StoredProceduresConstant.GetCostReportDataByMultipleJobId, parameters.ToArray(), storedProcedure: true);
 
 				return result;
 			}

@@ -666,11 +666,11 @@ namespace M4PL.DataAccess.Job
 		}
 
 		/// <summary>
-		/// Gets the specific Job limited fields for MapRoute
+		/// Gets the origin and Delivery address details for supplied Job Id
 		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="id"></param>
-		/// <returns></returns>
+		/// <param name="activeUser">Current User</param>
+		/// <param name="id">Job Id</param>
+		/// <returns>Origin and Destination details</returns>
 		public static JobMapRoute GetJobMapRoute(ActiveUser activeUser, long id)
 		{
 			var parameters = activeUser.GetRecordDefaultParams(id);

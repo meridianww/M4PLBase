@@ -74,9 +74,9 @@ namespace M4PL.Business.Job
             return _commands.Get(ActiveUser, id);
         }
 
-        public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction)
+        public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction, string gatewayCode = null)
         {
-            var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor, is3PlAction);
+            var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor, is3PlAction, gatewayCode);
             result.IsSpecificCustomer = result.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
             return result;
         }
@@ -111,7 +111,7 @@ namespace M4PL.Business.Job
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, 
+                        gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway,
                             M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
                     }));
                 }

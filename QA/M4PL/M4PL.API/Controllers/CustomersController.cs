@@ -22,30 +22,35 @@ using M4PL.Business.Customer;
 using M4PL.Entities.Customer;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
-	[RoutePrefix("api/Customers")]
-	public class CustomersController : BaseApiController<Customer>
-	{
-		private readonly ICustomerCommands _customerCommands;
+    [RoutePrefix("api/Customers")]
+    public class CustomersController : BaseApiController<Customer>
+    {
+        private readonly ICustomerCommands _customerCommands;
 
-		/// <summary>
-		/// Fucntion to get Customers details
-		/// </summary>
-		/// <param name="customerCommands"></param>
-		public CustomersController(ICustomerCommands customerCommands)
-			: base(customerCommands)
-		{
-			_customerCommands = customerCommands;
-		}
+        /// <summary>
+        /// Fucntion to get Customers details
+        /// </summary>
+        /// <param name="customerCommands"></param>
+        public CustomersController(ICustomerCommands customerCommands)
+            : base(customerCommands)
+        {
+            _customerCommands = customerCommands;
+        }
 
+        /// <summary>
+        /// Get the all active customer details 
+        /// </summary>
+        /// <returns></returns>
 		[CustomAuthorize]
-		[HttpGet]
-		[Route("GetActiveCutomers")]
-		public List<Entities.Customer.Customer> GetActiveCutomers()
-		{
-			return _customerCommands.GetActiveCutomers();
-		}
-	}
+        [HttpGet]
+        [Route("GetActiveCutomers"), ResponseType(typeof(Customer))]
+        public List<Customer> GetActiveCutomers()
+        {
+            return _customerCommands.GetActiveCutomers();
+        }
+    }
 }
