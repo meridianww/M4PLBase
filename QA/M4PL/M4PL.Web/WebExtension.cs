@@ -3094,7 +3094,7 @@ namespace M4PL.Web
             if (actionContextMenuAvailable && !isParentEntity)
             {
                 bool? isScheduleAciton = null;
-                if(route.Entity != EntitiesAlias.Job)
+                if(route.Entity == EntitiesAlias.Job)
                 {
                     var record = (IList<JobView>)_gridResult.Records;
                     if (record != null && route.Location != null && route.Location.Count() > 0)
