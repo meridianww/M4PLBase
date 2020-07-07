@@ -450,6 +450,7 @@ M4PLWindow.DataView = function () {
                 if (urlParams.has('strRoute')) {
                     var route = JSON.parse(urlParams.getAll('strRoute'));
                     route.RecordId = selectedJobId;
+                    route.Location = null;
                     s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                     s.Refresh();
                 }
@@ -1049,8 +1050,10 @@ M4PLWindow.FormView = function () {
         }
         if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway" && currentRoute.Action == "GatewayActionFormView") {
             var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
-            if (s != null && s != undefined)
+            if (s != null && s != undefined && s.GetSelectedKeysOnPage() != null && s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0)
                 putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });
+            else if (s != null && s != undefined && s.GetFocusedRowIndex() != null && s.GetFocusedRowIndex() != undefined)
+                putOrPostData.push({ name: "JobIds", value: s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'Id') });
         }
         if (currentRoute.Controller == "JobXcblInfo" && currentRoute.Action == "FormView") {
             putOrPostData.push({ name: "IsAccepted", value: isNewContactCard })
