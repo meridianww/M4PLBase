@@ -68,7 +68,9 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				CgoWeightUnitsId = cargoitem.WeightUnitOfMeasure?.ToUpper() == "KGM" ? weightUnitKg : weightUnitLbs,
                 CgoCubes = cargoitem.Volume.ToDecimal(),
                 CgoVolumeUnitsId = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? volumeUnitMeters : volumeUnitFeet,
-                CgoQtyOrdered = cargoitem.ShipQuantity,
+				CgoWeightUnitsIdName = cargoitem.WeightUnitOfMeasure?.ToUpper() == "KGM" ? "KGs" : "Lbs",
+				CgoVolumeUnitsIdName = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? "Meters" : "Cubic Feet",
+				CgoQtyOrdered = cargoitem.ShipQuantity,
                 CgoQtyUnitsIdName = "EA",
                 CgoQtyUnitsId = systemOptionList?.
                 Where(x => x.SysLookupCode.Equals("CargoUnit", StringComparison.OrdinalIgnoreCase))?.
