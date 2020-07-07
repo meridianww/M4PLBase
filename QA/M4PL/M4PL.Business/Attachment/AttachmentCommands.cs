@@ -99,6 +99,7 @@ namespace M4PL.Business.Attachment
 			}
 
 			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
 			if (documentDataList != null && documentDataList.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
@@ -476,6 +477,7 @@ namespace M4PL.Business.Attachment
 			}
 
 			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
 			if (documentDataList?.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
@@ -519,6 +521,7 @@ namespace M4PL.Business.Attachment
 			}
 
 			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
 			if (documentDataList?.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
@@ -562,6 +565,7 @@ namespace M4PL.Business.Attachment
 			}
 
 			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
 			if (documentDataList?.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
@@ -606,6 +610,7 @@ namespace M4PL.Business.Attachment
 			}
 
 			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
 			if (documentDataList?.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
@@ -650,6 +655,7 @@ namespace M4PL.Business.Attachment
 			}
 
 			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
 			if (documentDataList?.Count > 1)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())

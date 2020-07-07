@@ -23,6 +23,7 @@ using M4PL.Entities.Job;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
@@ -52,8 +53,8 @@ namespace M4PL.API.Controllers
         /// <returns>List of Report data</returns>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("VocReport")]
-		public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
+		[Route("VocReport"),ResponseType(typeof(IList<JobReport>))]
+        public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
 		{
 			return _JobReportCommands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
 		}
@@ -66,7 +67,7 @@ namespace M4PL.API.Controllers
         /// <returns>Site codes list</returns>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("VocReportByCustomer")]
+		[Route("VocReportByCustomer"), ResponseType(typeof(IList<JobReport>))]
 		public IList<JobReport> GetDropDownDataForLocation(long customerId, string entity)
 		{
 			return _JobReportCommands.GetDropDownDataForLocation(ActiveUser, customerId, entity);
