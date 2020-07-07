@@ -1202,6 +1202,12 @@ DevExCtrl.TreeList = function () {
         if (s.cpIsJobParent) {
             isJobParentEntity = s.cpIsJobParent;
         }
+        if (s.cpselectedNode) {
+            if (isJobParentEntity)
+                s.SetFocusedNodeKey("Customer_" + s.cpselectedNode);
+            else
+                s.SetFocusedNodeKey(s.cpselectedNode);
+        }
         if (contentCbPanelRoute) {
             var route = JSON.parse(contentCbPanelRoute);
             if (route.ParentRecordId && route.EntityName == 'Job' && (route.Action == "DataView" || route.Action == "FormView" && route.ParentRecordId > 0)) {
