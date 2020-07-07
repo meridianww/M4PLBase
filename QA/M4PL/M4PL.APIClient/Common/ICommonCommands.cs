@@ -215,6 +215,6 @@ namespace M4PL.APIClient.Common
 
 		DocumentStatusView IsCostCodeDataPresentForJob(string jobId);
 
-		IList<JobAction> GetJobAction(long jobId, string entity = null);
+		IList<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null);
 	}
 }

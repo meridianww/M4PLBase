@@ -423,20 +423,27 @@ M4PLWindow.DataView = function () {
     function _onRowSelectionChanged(s, e) {
         var isLoadingPanelShow = true;
         var selectedRowCount = s.GetSelectedRowCount();
+
+        var callbackUrl = s.callbackUrl;
+        s.GetSelectedKeysOnPage() 
         if (selectedRowCount == 1 && e.isSelected)
             M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
         else if (selectedRowCount != 0 && M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule')) {
-            s.SelectRows(s.GetFocusedRowIndex(), false);
-            isLoadingPanelShow = false;
-            if (s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule'))
-                M4PLCommon.DocumentStatus.DisplayMessage("Warning", "Selected job is already scheduled", 2, "JobExistSchedule");
-            else
-                M4PLCommon.DocumentStatus.DisplayMessage("Warning", "Job is not Scheduled Yet", 2, "JobExistSchedule");
+            if (callbackUrl != undefined && callbackUrl != "") {
+                var callbackUri = new URL(callbackUrl, window.location.origin);
+                var urlParams = new URLSearchParams(callbackUri.search);
+                if (urlParams.has('strRoute')) {
+                    var route = JSON.parse(urlParams.getAll('strRoute'));
+                    route.RecordId = 0;
+                    route.Location = s.GetSelectedKeysOnPage();
+                    s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
+                    s.Refresh();
+                }
+            }
             return;
         }
         if (selectedRowCount <= 1 && selectedRowCount >= 0) {
             var selectedJobId = selectedRowCount == 0 ? 0 : s.GetItemKey(s.GetFocusedRowIndex());
-            var callbackUrl = s.callbackUrl;
             if (callbackUrl != undefined && callbackUrl != "") {
                 var callbackUri = new URL(callbackUrl, window.location.origin);
                 var urlParams = new URLSearchParams(callbackUri.search);
@@ -444,12 +451,7 @@ M4PLWindow.DataView = function () {
                     var route = JSON.parse(urlParams.getAll('strRoute'));
                     route.RecordId = selectedJobId;
                     s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
-                    if (isLoadingPanelShow)
-                        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
-                    //s.GetSelectedFieldValues("Id", GetSelectedFieldValuesCallback);
                     s.Refresh();
-                    if (isLoadingPanelShow)
-                        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                 }
             }
         }

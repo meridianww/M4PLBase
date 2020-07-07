@@ -1190,12 +1190,13 @@ namespace M4PL.DataAccess.Common
             return changeHistoryDataList;
         }
 
-        public static IList<JobAction> GetJobAction(ActiveUser activeUser, long jobId, string entity = null)
+        public static IList<JobAction> GetJobAction(ActiveUser activeUser, long jobId, string entity = null, bool? isScheduleAciton = null)
         {
             var parameters = new List<Parameter>
             {
                new Parameter("@jobId", jobId),
-               new Parameter("@entity", entity)
+               new Parameter("@entity", entity),
+               new Parameter("@isScheduleAciton", isScheduleAciton)
             };
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobAction>(StoredProceduresConstant.GetJobActions, parameters.ToArray(), storedProcedure: true);
             return result;

@@ -532,10 +532,10 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("JobAction")]
-        public IQueryable<JobAction> GetJobAction(long jobId, string entity = null)
+        public IQueryable<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null)
         {
             _command.ActiveUser = ActiveUser;
-            return _command.GetJobAction(jobId, entity).AsQueryable();
+            return _command.GetJobAction(jobId, entity, isScheduleAciton).AsQueryable();
         }
     }
 }
