@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -39,8 +39,24 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
                 Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
+			int weightUnitKg = (int)systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("UnitWeight", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("KGs", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id;
+			int weightUnitLbs = (int)systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("UnitWeight", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Lbs", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id;
+			int volumeUnitFeet = (int)systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("UnitVolume", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Cubic Feet", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id;
+			int volumeUnitMeters = (int)systemOptionList?.
+			Where(x => x.SysLookupCode.Equals("UnitVolume", StringComparison.OrdinalIgnoreCase))?.
+			Where(y => y.SysOptionName.Equals("Meters", StringComparison.OrdinalIgnoreCase))?.
+			FirstOrDefault().Id;
 
-            jobCargos.AddRange(orderLineDetail.Select(cargoitem => new JobCargo
+			jobCargos.AddRange(orderLineDetail.Select(cargoitem => new JobCargo
             {
                 JobID = jobId,
                 CgoLineItem = cargoitem.LineNumber.ToInt(), //Nathan will ask to Electrolux,
@@ -49,9 +65,9 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 CgoSerialNumber = cargoitem.SerialNumber,
                 CgoPackagingTypeIdName = cargoitem.MaterialType,
                 CgoWeight = cargoitem.Weight,
-                CgoWeightUnitsIdName = cargoitem.WeightUnitOfMeasure?.ToUpper() == "KGM" ? "KG" : "LB",
+				CgoWeightUnitsId = cargoitem.WeightUnitOfMeasure?.ToUpper() == "KGM" ? weightUnitKg : weightUnitLbs,
                 CgoCubes = cargoitem.Volume.ToDecimal(),
-                CgoVolumeUnitsIdName = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? "Meters" : "Cubic Feet",
+                CgoVolumeUnitsId = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? volumeUnitMeters : volumeUnitFeet,
                 CgoQtyOrdered = cargoitem.ShipQuantity,
                 CgoQtyUnitsIdName = "EA",
                 CgoQtyUnitsId = systemOptionList?.
