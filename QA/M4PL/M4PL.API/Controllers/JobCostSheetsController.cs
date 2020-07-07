@@ -28,8 +28,16 @@ namespace M4PL.API.Controllers
 		{
 			_jobRefCostSheetsCommands = jobCostSheetsCommands;
 		}
-
-		[CustomAuthorize]
+        /// <summary>
+        /// GetJobCostCodeAction method is used to get cost details associated with particular Order/Job.
+        /// </summary>
+        /// <param name="jobId"> 
+        /// jobId(type numeric) parameter refer to Order/Job id.
+        /// </param>
+        /// <returns>
+        /// Returns response as queryable list of JobCostCodeAction object based on parameter.
+        /// </returns>
+        [CustomAuthorize]
 		[HttpGet]
 		[Route("JobCostCodeAction")]
 		public IQueryable<JobCostCodeAction> GetJobCostCodeAction(long jobId)
@@ -37,8 +45,19 @@ namespace M4PL.API.Controllers
 			_jobRefCostSheetsCommands.ActiveUser = ActiveUser;
 			return _jobRefCostSheetsCommands.GetJobCostCodeAction(jobId).AsQueryable();
 		}
-
-		[HttpGet]
+        /// <summary>
+        /// JobCostCodeByProgram method is used get Cost Rate details for particular orderid/jobid.
+        /// </summary>
+        /// <param name="id"> 
+        /// Refer to Record Id(type numeric) for Cost Rate. 
+        /// </param>
+        /// <param name="jobId"> 
+        /// Refer to Order/Job Id(type numeric) for Cost Rate. 
+        /// </param>
+        /// <returns>
+        /// Returns response as JobCostSheet object based on parameters.
+        /// </returns>
+        [HttpGet]
 		[Route("JobCostCodeByProgram")]
 		public JobCostSheet JobCostCodeByProgram(long id, long jobId)
 		{
