@@ -40,12 +40,16 @@ namespace M4PL.API.Controllers
 			_jobDocReferenceCommands = jobDocReferenceCommands;
 		}
 
-		/// <summary>
-		/// New put with user sys settings
-		/// </summary>
-		/// <param name="jobDocReference"></param>
-		/// <returns></returns>
-		[HttpPost]
+        /// <summary>
+        /// SettingPost method is used to add document type settings for Job documents for system logged in user.
+        /// </summary>
+        /// <param name="jobDocReference">
+        /// This prameter require document details like JobId,ItemNumber,Title etc.
+        /// </param>
+        /// <returns>
+        /// Returns response as JobDocReference object with new settings.
+        /// </returns>
+        [HttpPost]
 		[Route("SettingPost")]
 		public JobDocReference SettingPost(JobDocReference jobDocReference)
 		{
@@ -53,12 +57,16 @@ namespace M4PL.API.Controllers
 			return _jobDocReferenceCommands.PostWithSettings(UpdateActiveUserSettings(), jobDocReference);
 		}
 
-		/// <summary>
-		/// New put with user sys settings
-		/// </summary>
-		/// <param name="jobDocReference"></param>
-		/// <returns></returns>
-		[HttpPut]
+        /// <summary>
+        /// SettingPut method is used to update document type settings for Job documents for system logged in user.
+        /// </summary>
+        /// <param name="jobDocReference">
+        /// This prameter require Document details like JobId,ItemNumber,Title etc.
+        /// </param>
+        /// <returns>
+        /// Returns response as JobDocReference object with updated settings.
+        /// </returns>
+        [HttpPut]
 		[Route("SettingPut")]
 		public JobDocReference SettingPut(JobDocReference jobDocReference)
 		{
@@ -86,7 +94,11 @@ namespace M4PL.API.Controllers
 			_jobDocReferenceCommands.ActiveUser = ActiveUser;
 			return _jobDocReferenceCommands.InsertJobDocumentData(jobDocumentAttachment, jobId, documentType);
 		}
-
+        /// <summary>
+		/// GetNextSequence method is used to get next sequence for documents that can be added with respect to Order/Job. 
+		/// </summary>
+		/// <returns>Returns next sequence(numeric)
+        /// </returns>
 		[HttpGet]
 		[Route("GetNextSequence")]
 		public long GetNextSequence()

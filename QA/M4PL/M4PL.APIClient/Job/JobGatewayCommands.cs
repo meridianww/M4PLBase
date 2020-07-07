@@ -38,7 +38,7 @@ namespace M4PL.APIClient.Job
 			get { return "JobGateways"; }
 		}
 
-		public JobGatewayView GetGatewayWithParent(long id, long parentId, string entityFor = null, bool is3PlAction = false)
+		public JobGatewayView GetGatewayWithParent(long id, long parentId, string entityFor = null, bool is3PlAction = false, string gatewayCode = null)
 		{
 			return JsonConvert.DeserializeObject<ApiResult<JobGatewayView>>(
 			 RestClient.Execute(
@@ -46,7 +46,8 @@ namespace M4PL.APIClient.Job
 				 .AddParameter("id", id)
 				 .AddParameter("parentId", parentId)
 				 .AddParameter("entityFor", entityFor)
-				 .AddParameter("is3PlAction", is3PlAction)).Content).Results?.FirstOrDefault();
+				 .AddParameter("is3PlAction", is3PlAction)
+                 .AddParameter("gatewayCode", gatewayCode)).Content).Results?.FirstOrDefault();
 		}
 
 		public JobGatewayComplete GetJobGatewayComplete(long id, long parentId)

@@ -29,7 +29,7 @@ namespace M4PL.APIClient.Job
 	/// </summary>
 	public interface IJobGatewayCommands : IBaseCommands<JobGatewayView>
 	{
-		JobGatewayView GetGatewayWithParent(long id, long parentId, string entityFor = null, bool is3PlAction = false);
+		JobGatewayView GetGatewayWithParent(long id, long parentId, string entityFor = null, bool is3PlAction = false, string GatewayCode = null);
 
 		JobGatewayComplete GetJobGatewayComplete(long id, long parentId);
 
