@@ -110,20 +110,21 @@ namespace M4PL.Web.Areas.Job.Controllers
 			{
 				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
 			}
-			//To Add Actions Operation in ContextMenu
-			if (_gridResult.FocusedRowId > 0)
-				WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
-			else
-			{
-				if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
-					&& _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
-				{
-					var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
-					if (actionsContextMenu != null)
-						_gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
-				}
-			}
-			if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
+            //To Add Actions Operation in ContextMenu
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            //if (_gridResult.FocusedRowId > 0)
+            //	WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            //else
+            //{
+            //	if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+            //		&& _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+            //	{
+            //		var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+            //		if (actionsContextMenu != null)
+            //			_gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+            //	}
+            //}
+            if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
 				return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
 			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
@@ -696,20 +697,21 @@ namespace M4PL.Web.Areas.Job.Controllers
 			SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
 			_gridResult.SessionProvider = SessionProvider;
 			SetGridResult(route, gridName);
-			//To Add Actions Operation in ContextMenu
-			if (_gridResult.FocusedRowId > 0)
-				WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
-			else
-			{
-				if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
-					&& _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
-				{
-					var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
-					if (actionsContextMenu != null)
-						_gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
-				}
-			}
-			Session["costJobCodeActions"] = null;
+            //To Add Actions Operation in ContextMenu
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            //if (_gridResult.FocusedRowId > 0)
+            //	WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            //else
+            //{
+            //	if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+            //		&& _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+            //	{
+            //		var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+            //		if (actionsContextMenu != null)
+            //			_gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+            //	}
+            //}
+            Session["costJobCodeActions"] = null;
 			Session["priceJobCodeActions"] = null;
 
 			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -726,19 +728,20 @@ namespace M4PL.Web.Areas.Job.Controllers
 			sessionInfo.GridViewColumnState = column;
 			sessionInfo.GridViewColumnStateReset = reset;
 			SetGridResult(route, gridName);
-			//To Add Actions Operation in ContextMenu
-			if (_gridResult.FocusedRowId > 0)
-				WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
-			else
-			{
-				if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
-					&& _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
-				{
-					var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
-					if (actionsContextMenu != null)
-						_gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
-				}
-			}
+            //To Add Actions Operation in ContextMenu
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            // if (_gridResult.FocusedRowId > 0)
+			//	WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+			//else
+			//{
+			//	if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+			//		&& _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+			//	{
+			//		var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+			//		if (actionsContextMenu != null)
+			//			_gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+			//	}
+			//}
 			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
@@ -765,20 +768,21 @@ namespace M4PL.Web.Areas.Job.Controllers
 			_gridResult.SessionProvider = SessionProvider;
 			SetGridResult(route, gridName, (currentPageSize != pager.PageSize));
 			_gridResult.GridViewModel.ApplyPagingState(pager);
-			//To Add Actions Operation in ContextMenu
-			if (_gridResult.FocusedRowId > 0)
-				WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
-			else
-			{
-				if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
-					&& _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
-				{
-					var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
-					if (actionsContextMenu != null)
-						_gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
-				}
-			}
-			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+            //To Add Actions Operation in ContextMenu
+            WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            //if (_gridResult.FocusedRowId > 0)
+            //	WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
+            //else
+            //{
+            //	if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+            //		&& _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+            //	{
+            //		var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+            //		if (actionsContextMenu != null)
+            //			_gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
+            //	}
+            //}
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
 		#endregion Paging

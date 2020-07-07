@@ -427,9 +427,9 @@ namespace M4PL.Business.Common
             return _commands.GetCompCorpAddress(compId);
         }
 
-        public static IList<JobAction> GetJobAction(long jobId)
+        public static IList<JobAction> GetJobAction(long jobId, string entity)
         {
-            return _commands.GetJobAction(ActiveUser, jobId);
+            return _commands.GetJobAction(ActiveUser, jobId, entity);
         }
     }
 }
