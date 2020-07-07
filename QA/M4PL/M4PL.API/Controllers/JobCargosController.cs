@@ -40,13 +40,17 @@ namespace M4PL.API.Controllers
 			_jobCargoCommands = jobCargoCommands;
 		}
 
-		/// <summary>
-		/// Create Cargo Exception For a Particular Job Cargo
-		/// </summary>
-		/// <param name="jobCargoException">jobCargoException</param>
-		/// <param name="cargoId">cargoId</param>
-		/// <returns>StatusModel</returns>
-		[CustomAuthorize]
+        /// <summary>
+        /// CreateCargoException method creates a new cargo exception code, exception reason and install status for a particular Order/Job cargo.
+        /// </summary>
+        /// <param name="jobCargoException">
+        /// This parameter require field values ExceptionCode(type string),ExceptionReason(type string) and InstallStatus(type string).
+        /// </param>
+        /// <param name="cargoId">Order/Job cargoId(type numeric).</param>
+        /// <returns>
+        /// Returns response as StatusModel object for newly created Cargo Exception.
+        /// </returns>
+        [CustomAuthorize]
 		[HttpPost]
 		[Route("CreateCargoException")]
 		public StatusModel CreateCargoException(JobCargoException jobCargoException, long cargoId)

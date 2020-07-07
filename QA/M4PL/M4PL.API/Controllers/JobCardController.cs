@@ -31,20 +31,33 @@ namespace M4PL.API.Controllers
 	{
 		private readonly IJobCardCommands _jobCardCommands;
 
-		/// <summary>
-		/// Function to get Job's advance Report details
-		/// </summary>
-		/// <param name="jobCardCommands"></param>
-		public JobCardController(IJobCardCommands jobCardCommands)
+       
+
+        /// <summary>
+        /// Functions to get Order details
+        /// </summary>
+        /// <param name="jobCardCommands"></param>
+        public JobCardController(IJobCardCommands jobCardCommands)
 			: base(jobCardCommands)
 		{
 			_jobCardCommands = jobCardCommands;
 		}
 
-		/// <summary>
-		/// Fucntion to get Jobs card title
-		/// </summary>
-		[CustomAuthorize]
+        /// <summary>
+        /// GetCardTileData method is used to get Order data for "Not Scheduled","Schedule Past Due","Scheduled For Today" actions(Order State)
+        /// Each above category contain count for following order state- 
+        /// 1.In-Transit-- Gateway
+        /// 2.On-Hand   -- Gateway
+        /// 3.On-Truck  -- Gateway
+        /// 4.Returns   -- Order type e.g. Return,Original etc.
+        /// </summary>
+        /// <param name="JobCardCondition"> 
+        /// This parameter require fields Customer Id(type numeric) and Where (type string) condition to filter data 
+        /// </param>
+        /// <returns>
+        /// Returns response as queryable list of JobCardTileDetail object based on Customer Id(numeric)  and where(string) filter applied.
+        /// </returns>
+        [CustomAuthorize]
 		[HttpPost]
 		[Route("GetCardTileData")]
 		public IQueryable<JobCardTileDetail> GetCardTileData(JobCardCondition jobCondition)
@@ -53,10 +66,19 @@ namespace M4PL.API.Controllers
 			return _jobCardCommands.GetCardTileData(jobCondition.CompanyId, jobCondition.WhereCondition).AsQueryable();
 		}
 
-		/// <summary>
-		/// Fucntion to get dropdown data for job card
-		/// </summary>
-		[CustomAuthorize]
+        /// <summary>
+        /// GetDropDownDataForJobCard method is used to get Manufacturing Locations used for particular customer. 
+        /// </summary>
+        /// <param name="customerId"> 
+        /// Refer to Customer Id (type numeric) value
+        /// </param>
+        /// <param name="entity"> 
+        /// Refer to Entiy (type string) value = "Destination" always.
+        /// </param>
+        /// <returns>
+        /// Returns response as  list of JobCard object based on Customer Id(numeric) and where(string) filter applied.
+        /// </returns>
+        [CustomAuthorize]
 		[HttpGet]
 		[Route("GetDropDownDataForJobCard")]
 		public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)

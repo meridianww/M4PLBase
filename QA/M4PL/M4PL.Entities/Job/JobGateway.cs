@@ -144,5 +144,8 @@ namespace M4PL.Entities.Job
 		public string[] JobIds { get; set; }
 		public List<long> ChekedJobIds { get; set; }
         public bool IsMultiOperation { get; set; }
+        public decimal? CargoQuantity { get; set; }
+        public bool IsCargoRequired { get; set; }
+        public string CargoField { get; set; }
     }
 }

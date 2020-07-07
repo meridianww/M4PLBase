@@ -21,18 +21,23 @@ using M4PL.API.Filters;
 using M4PL.Business.Job;
 using M4PL.Entities.Contact;
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// Job Gateway Services
+	/// </summary>
 	[RoutePrefix("api/JobGateways")]
 	public class JobGatewaysController : BaseApiController<JobGateway>
 	{
 		private readonly IJobGatewayCommands _jobGatewayCommands;
 
 		/// <summary>
-		/// Function to get Job's gateway details
+		/// Constructor of Job gateway details
 		/// </summary>
 		/// <param name="jobGatewayCommands"></param>
 		public JobGatewaysController(IJobGatewayCommands jobGatewayCommands)
@@ -41,24 +46,43 @@ namespace M4PL.API.Controllers
 			_jobGatewayCommands = jobGatewayCommands;
 		}
 
+		/// <summary>
+		/// GET to the Job Gateway based on jobid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="parentId"></param>
+		/// <param name="entityFor"></param>
+		/// <param name="is3PlAction"></param>
+		/// <returns>Return the job gateway detail.</returns>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("GatewayWithParent")]
-		public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction)
+		[Route("GatewayWithParent"), ResponseType(typeof(JobGateway))]
+		public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction, string gatewayCode = null)
 		{
 			_jobGatewayCommands.ActiveUser = ActiveUser;
-			return _jobGatewayCommands.GetGatewayWithParent(id, parentId, entityFor, is3PlAction);
+			return _jobGatewayCommands.GetGatewayWithParent(id, parentId, entityFor, is3PlAction, gatewayCode);
 		}
 
+		/// <summary>
+		/// GET to Completed job gateway based on job id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="parentId"></param>
+		/// <returns>Returns the job latested completed gateway.</returns>
 		[CustomAuthorize]
 		[HttpGet]
-		[Route("GatewayComplete")]
+		[Route("GatewayComplete"), ResponseType(typeof(JobGatewayComplete))]
 		public Entities.Support.JobGatewayComplete GetJobGatewayComplete(long id, long parentId)
 		{
 			_jobGatewayCommands.ActiveUser = ActiveUser;
 			return _jobGatewayCommands.GetJobGatewayComplete(id, parentId);
 		}
 
+		/// <summary>
+		/// PUT to partial update of job gateway to make complete with required property need to update followed to business rules
+		/// </summary>
+		/// <param name="jobGateway"></param>
+		/// <returns></returns>
 		[CustomAuthorize]
 		[HttpPut]
 		[Route("GatewayComplete")]
@@ -77,6 +101,11 @@ namespace M4PL.API.Controllers
 		//    return _jobGatewayCommands.GetJobAction(jobId).AsQueryable();
 		//}
 
+		/// <summary>
+		/// PUT to partial updates for job action
+		/// </summary>
+		/// <param name="jobGateway"></param>
+		/// <returns></returns>
 		[CustomAuthorize]
 		[HttpPut]
 		[Route("JobAction")]
@@ -153,6 +182,11 @@ namespace M4PL.API.Controllers
 			return _jobGatewayCommands.PostContactCard(contact);
 		}
 
+		/// <summary>
+		/// Upload POD gateway based on job id
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns>Returns true/false based on operation success</returns>
 		[HttpGet]
 		[Route("UploadPODGateway")]
 		public bool InsJobGatewayPODIfPODDocExistsByJobId(long jobId)

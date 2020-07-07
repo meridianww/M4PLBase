@@ -21,16 +21,20 @@ using M4PL.API.Filters;
 using M4PL.Business.Job;
 using M4PL.Entities.Job;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// Job EDI xCBL Services
+	/// </summary>
 	[RoutePrefix("api/JobEDIXcbl")]
 	public class JobEDIXcblController : BaseApiController<JobEDIXcbl>
 	{
 		private readonly IJobEDIXcblCommands _jobEDIXcblCommands;
 
 		/// <summary>
-		/// Function to get Job's Cargo details
+		/// Constructor to get Job's Cargo details
 		/// </summary>
 		/// <param name="jobEDIXcblCommands">jobEDIXcblCommands</param>
 		public JobEDIXcblController(IJobEDIXcblCommands jobEDIXcblCommands)
@@ -39,9 +43,14 @@ namespace M4PL.API.Controllers
 			_jobEDIXcblCommands = jobEDIXcblCommands;
 		}
 
+		/// <summary>
+		/// POST too Add Electonic transaction for job
+		/// </summary>
+		/// <param name="jobEDIXcbl"></param>
+		/// <returns></returns>
 		[CustomAuthorize]
 		[HttpPost]
-		[Route("ElectronicTransaction")]
+		[Route("ElectronicTransaction"), ResponseType(typeof(long))]
 		public long JobAddElectronicTransaction(JobEDIXcbl jobEDIXcbl)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
@@ -50,9 +59,14 @@ namespace M4PL.API.Controllers
 			return updatedJobEDIXcbl != null ? updatedJobEDIXcbl.Id : 0;
 		}
 
+		/// <summary>
+		/// PUT to update Electonic transaction data for job EDI xCBL
+		/// </summary>
+		/// <param name="jobEDIXcbl"></param>
+		/// <returns>Returns the job EDI xCBL Id.</returns>
 		[CustomAuthorize]
 		[HttpPut]
-		[Route("ElectronicTransaction")]
+		[Route("ElectronicTransaction"), ResponseType(typeof(long))]
 		public long JobUpdateElectronicTransaction(JobEDIXcbl jobEDIXcbl)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
