@@ -1042,9 +1042,9 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
-		public IList<JobAction> GetJobAction(long jobId)
+		public IList<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null)
 		{
-			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddParameter("jobId", jobId)).Content;
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddParameter("jobId", jobId).AddParameter("entity", entity).AddParameter("isScheduleAciton", isScheduleAciton)).Content;
 			var apiResult = JsonConvert.DeserializeObject<ApiResult<JobAction>>(content);
 			return apiResult.Results;
 		}
