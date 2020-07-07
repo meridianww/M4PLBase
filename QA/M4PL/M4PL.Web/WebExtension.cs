@@ -3094,22 +3094,24 @@ namespace M4PL.Web
             if (actionContextMenuAvailable && !isParentEntity)
             {
                 bool? isScheduleAciton = null;
-
-                var record = (IList<JobView>)_gridResult.Records;
-                if (record != null && route.Location != null && route.Location.Count() > 0)
+                if(route.Entity != EntitiesAlias.Job)
                 {
-                    var locationIds = route.Location.Select(long.Parse).ToList();
-                    var entity = record.Where(t => locationIds.Contains(t.Id));
-                    if (entity.All(t => t.JobIsSchedule == true))
-                        isScheduleAciton = true;
-                    else if (entity.All(t => t.JobIsSchedule == false))
-                        isScheduleAciton = false;
-                }
-                else if (record != null && _gridResult.FocusedRowId > 0)
-                {
-                    var entity = record.FirstOrDefault(t => t.Id == _gridResult.FocusedRowId);
-                    isScheduleAciton = entity != null && entity.JobIsSchedule;
-                }
+                    var record = (IList<JobView>)_gridResult.Records;
+                    if (record != null && route.Location != null && route.Location.Count() > 0)
+                    {
+                        var locationIds = route.Location.Select(long.Parse).ToList();
+                        var entity = record.Where(t => locationIds.Contains(t.Id));
+                        if (entity.All(t => t.JobIsSchedule == true))
+                            isScheduleAciton = true;
+                        else if (entity.All(t => t.JobIsSchedule == false))
+                            isScheduleAciton = false;
+                    }
+                    else if (record != null && _gridResult.FocusedRowId > 0)
+                    {
+                        var entity = record.FirstOrDefault(t => t.Id == _gridResult.FocusedRowId);
+                        isScheduleAciton = entity != null && entity.JobIsSchedule;
+                    }
+                }               
 
                 var allActions = _commonCommands.GetJobAction(route.ParentRecordId, route.Entity.ToString(), isScheduleAciton);
                 _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
