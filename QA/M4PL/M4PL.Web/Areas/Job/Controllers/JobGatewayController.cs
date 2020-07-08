@@ -158,9 +158,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 messages.RemoveAt(0);
 
-            if (jobGatewayView.CustomerId > 0 && (jobGatewayView.CustomerId == jobGatewayView.CustomerId) && (jobGatewayView.CurrentAction.ToLower() == "exception"
-               || jobGatewayView.CurrentAction.ToLower() == "reschedule"
-               || jobGatewayView.CurrentAction.ToLower() == "canceled"))
+            if (jobGatewayView.CurrentAction.ToLower() == "exception" ||
+                (jobGatewayView.IsSpecificCustomer && (jobGatewayView.CurrentAction.ToLower() == "reschedule" || jobGatewayView.CurrentAction.ToLower() == "canceled")))
             {
                 if (jobGatewayView.GwyExceptionStatusId == 0)
                     messages.Add("Install Status Code is Required");
@@ -168,14 +167,18 @@ namespace M4PL.Web.Areas.Job.Controllers
                     messages.Add("Reason Code is Required");
                 else if (jobGatewayView.GwyExceptionTitleId == 0 && jobGatewayView.CurrentAction.ToLower() == "exception")
                     messages.Add("Exception Code is Required");
+                if (jobGatewayView.IsCargoRequired && jobGatewayView.GwyCargoId == 0)
+                {
+                    messages.Add("Cargo is Required");
+                }
             }
 
-            if (jobGatewayView.IsCargoRequired && jobGatewayView.GwyCargoId < 0)
-            {
-                messages.Add("Cargo is Required");
-            }
             if (messages.Any())
-                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    status = false,
+                    errMessages = messages
+                }, JsonRequestBehavior.AllowGet);
 
             jobGatewayView.isScheduleReschedule = false;
             var result = new JobGatewayView();
@@ -195,7 +198,11 @@ namespace M4PL.Web.Areas.Job.Controllers
                     messages.Add("Earliest time should be minimum 2 hours less from Latest time");
 
                 if (messages.Any())
-                    return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+                    return Json(new
+                    {
+                        status = false,
+                        errMessages = messages
+                    }, JsonRequestBehavior.AllowGet);
             }
 
             JobGatewayView jobGatewayViewAction = new JobGatewayView();
@@ -343,7 +350,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             //AddActionsInActionContextMenu(route);//To Add Actions Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
-            
+
             //To Add Gateways Operation in ContextMenu
             AddGatewayInGatewayContextMenu(route);
 
@@ -594,7 +601,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Actions Operation in ContextMenu
             //AddActionsInActionContextMenu(route);
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
-            
+
             //To Add Gateways Operation in ContextMenu
             AddGatewayInGatewayContextMenu(route);
             _gridResult.GridSetting.GridName = currentGridName;
@@ -739,7 +746,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             //To Add Actions Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
-            
+
             //To Add Gateways Operation in ContextMenu
             AddGatewayInGatewayContextMenu(route);
             _gridResult.GridSetting.GridName = currentGridName;
@@ -780,7 +787,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Actions Operation in ContextMenu
             //AddActionsInActionContextMenu(route);
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
-            
+
             //To Add Gateways Operation in ContextMenu
             AddGatewayInGatewayContextMenu(route);
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
@@ -821,7 +828,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
 
-            var gatewayCode = route.Filters != null ? route.Filters.FieldName + "-" + route.Filters.Value.Split('-')[1] : string.Empty;
+            var ifFilterValue = route.Filters != null ? route.Filters.Value.Split('-') : null;
+            var gatewayCode = route.Filters != null ? (route.Filters.FieldName + "-" +
+                (ifFilterValue != null && ifFilterValue.Count() > 1 ? ifFilterValue[1] : string.Empty)) : string.Empty;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, entityFor, route.Filters != null && route.Filters.FieldName.Contains("3PL") ? true : false, gatewayCode) ?? new JobGatewayView();
 
             if (route.Filters != null && !(bool)Session["isEdit"])
