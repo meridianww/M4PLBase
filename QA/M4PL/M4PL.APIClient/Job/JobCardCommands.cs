@@ -12,6 +12,7 @@
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Collections.Generic;
@@ -29,7 +30,17 @@ namespace M4PL.APIClient.Job
 			get { return "JobCard"; }
 		}
 
-		public IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition)
+        public override IList<JobCardView> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            var content = restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "GetPagedData"), ActiveUser).AddObject(pagedDataInfo)).Content;
+            content = content.Replace("[[", "[");
+            content = content.Replace("]]", "]");
+            var apiResult = JsonConvert.DeserializeObject<ApiResult<JobCardView>>(content);
+            pagedDataInfo.TotalCount = ((apiResult != null) && apiResult.TotalResults > 0) ? apiResult.TotalResults : apiResult.ReturnedResults;
+            return apiResult.Results;
+        }
+
+        public IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition)
 		{
 			var jobCondition = new JobCardCondition() { CompanyId = companyId, WhereCondition = whereCondition };
 			var request = HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "GetCardTileData"), ActiveUser).AddObject(jobCondition);

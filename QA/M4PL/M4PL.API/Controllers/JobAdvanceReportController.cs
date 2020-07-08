@@ -18,8 +18,10 @@
 //====================================================================================================================================================*/
 
 using M4PL.API.Filters;
+using M4PL.API.Models;
 using M4PL.Business.Job;
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
 using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -30,16 +32,23 @@ namespace M4PL.API.Controllers
     /// JobAdvanceReportController
     /// </summary>
 	[RoutePrefix("api/JobAdvanceReport")]
-	public class JobAdvanceReportController : BaseApiController<JobAdvanceReport>
+	public class JobAdvanceReportController : ApiController
 	{
 		private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
 
-		/// <summary>
-		/// Function to get Job's advance Report details
-		/// </summary>
-		/// <param name="jobAdvanceReportCommands"></param>
-		public JobAdvanceReportController(IJobAdvanceReportCommands jobAdvanceReportCommands)
-			: base(jobAdvanceReportCommands)
+        public ActiveUser ActiveUser
+        {
+            get
+            {
+                return ApiContext.ActiveUser;
+            }
+        }
+
+        /// <summary>
+        /// Function to get Job's advance Report details
+        /// </summary>
+        /// <param name="jobAdvanceReportCommands"></param>
+        public JobAdvanceReportController(IJobAdvanceReportCommands jobAdvanceReportCommands)
 		{
 			_jobAdvanceReportCommands = jobAdvanceReportCommands;
 		}
@@ -55,5 +64,33 @@ namespace M4PL.API.Controllers
 			_jobAdvanceReportCommands.ActiveUser = ActiveUser;
 			return _jobAdvanceReportCommands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
 		}
-	}
+
+
+        /// <summary>
+        /// Get the job Report Data based on the paging settings
+        /// </summary>
+        /// <param name="pagedDataInfo">Pagination settings</param>
+        /// <returns>List of job Report Data</returns>
+        [CustomQueryable]
+        [HttpPost]
+        [Route("GetPagedData"), ResponseType(typeof(IList<JobAdvanceReport>))]
+        public IList<JobAdvanceReport> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            _jobAdvanceReportCommands.ActiveUser = ActiveUser;
+            return _jobAdvanceReportCommands.GetPagedData(pagedDataInfo);
+        }
+
+        /// <summary>
+        /// Get the job record by job Id
+        /// </summary>
+        /// <param name="Id">job Id</param>
+        /// <returns>Job</returns>
+        [HttpGet]
+        [Route("{id}"), ResponseType(typeof(JobAdvanceReport))]
+        public JobAdvanceReport Get(long Id)
+        {
+            _jobAdvanceReportCommands.ActiveUser = ActiveUser;
+            return _jobAdvanceReportCommands.Get(Id);
+        }
+    }
 }

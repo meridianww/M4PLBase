@@ -27,15 +27,6 @@ namespace M4PL.Business.Job
 {
     public class JobAdvanceReportCommands : BaseCommands<JobAdvanceReport>, IJobAdvanceReportCommands
     {
-        public int Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            throw new NotImplementedException();
-        }
 
         public JobAdvanceReport Get(long id)
         {
@@ -46,17 +37,7 @@ namespace M4PL.Business.Job
         {
             return _commands.GetPagedData(ActiveUser, pagedDataInfo);
         }
-
-        public JobAdvanceReport Patch(JobAdvanceReport entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobAdvanceReport Post(JobAdvanceReport entity)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public JobAdvanceReport Put(JobAdvanceReport entity)
         {
             throw new NotImplementedException();

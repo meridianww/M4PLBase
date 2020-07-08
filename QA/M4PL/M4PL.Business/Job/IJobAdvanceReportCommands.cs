@@ -26,8 +26,11 @@ namespace M4PL.Business.Job
     /// <summary>
     /// perfoems basic CRUD operation on the JobAdvanceReport Entity
     /// </summary>
-    public interface IJobAdvanceReportCommands : IBaseCommands<JobAdvanceReport>
+    public interface IJobAdvanceReportCommands 
     {
+        ActiveUser ActiveUser { get; set; }
+        IList<JobAdvanceReport> GetPagedData(PagedDataInfo pagedDataInfo);
+        JobAdvanceReport Get(long id);
         IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, long customerID, string entity);
     }
 }

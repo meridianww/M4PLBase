@@ -8,6 +8,7 @@
 #endregion Copyright
 
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
 using System.Collections.Generic;
 
 namespace M4PL.Business.Job
@@ -15,8 +16,10 @@ namespace M4PL.Business.Job
     /// <summary>
 	/// perfoems basic CRUD operation on the Job Card Veiw Entity
 	/// </summary>
-	public interface IJobCardCommands : IBaseCommands<Entities.Job.JobCard>
+	public interface IJobCardCommands 
     {
+        ActiveUser ActiveUser { get; set; }
+        IList<JobCard> GetPagedData(PagedDataInfo pagedDataInfo);
         IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition);
 
         IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity);

@@ -54,38 +54,7 @@ namespace M4PL.Business.Job
             return result;
         }
 
-
-
-        public JobCard Get(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobCard Post(JobCard entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobCard Put(JobCard entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobCard Patch(JobCard entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)
         {
             return _commands.GetDropDownDataForJobCard(ActiveUser, customerId, entity);
