@@ -450,7 +450,7 @@ M4PLWindow.DataView = function () {
                 if (urlParams.has('strRoute')) {
                     var route = JSON.parse(urlParams.getAll('strRoute'));
                     route.RecordId = selectedJobId;
-                    route.Location = null;
+                    route.Location = s.GetSelectedKeysOnPage();
                     s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                     s.Refresh();
                 }
