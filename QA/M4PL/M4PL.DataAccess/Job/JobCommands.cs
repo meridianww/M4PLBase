@@ -86,16 +86,98 @@ namespace M4PL.DataAccess.Job
 
 		public static Entities.Job.Job Get(ActiveUser activeUser, long id)
 		{
-			var parameters = activeUser.GetRecordDefaultParams(id, false);
-			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+			bool jobIsHavingPermission = false;
+			Entities.Job.Job result = null;
+			Entities.Job.JobAdditionalInfo jobAdditionalInfo = null;
+			List<Task> tasks = new List<Task>();
+			tasks.Add(Task.Factory.StartNew(() =>
+			{
+				var permittedProgramEntity = GetCustomEntityIdByEntityName(activeUser, EntitiesAlias.Job, false);
+				jobIsHavingPermission = permittedProgramEntity != null && permittedProgramEntity.Any(t => t.EntityId == -1 || t.EntityId == id);
+			}));
+
+			tasks.Add(Task.Factory.StartNew(() =>
+			{
+				if (id > 0)
+				{
+					jobAdditionalInfo = SqlSerializer.Default.DeserializeSingleRecord<JobAdditionalInfo>(StoredProceduresConstant.GetJobAdditionalInfo, new Parameter("@id", id), storedProcedure: true);
+				}
+			}));
+
+			tasks.Add(Task.Factory.StartNew(() =>
+			{
+				var parameters = activeUser.GetRecordDefaultParams(id, false);
+				result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+			}));
+
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			if (jobAdditionalInfo != null && result != null)
+			{
+				result.CustomerERPId = jobAdditionalInfo.CustomerERPId;
+				result.VendorERPId = jobAdditionalInfo.VendorERPId;
+				result.JobSONumber = jobAdditionalInfo.JobSONumber;
+				result.JobPONumber = jobAdditionalInfo.JobPONumber;
+				result.JobElectronicInvoiceSONumber = jobAdditionalInfo.JobElectronicInvoiceSONumber;
+				result.JobElectronicInvoicePONumber = jobAdditionalInfo.JobElectronicInvoicePONumber;
+				result.JobDeliveryAnalystContactIDName = jobAdditionalInfo.JobDeliveryAnalystContactIDName;
+				result.JobDeliveryResponsibleContactIDName = jobAdditionalInfo.JobDeliveryResponsibleContactIDName;
+				result.JobQtyUnitTypeIdName = jobAdditionalInfo.JobQtyUnitTypeIdName;
+				result.JobCubesUnitTypeIdName = jobAdditionalInfo.JobCubesUnitTypeIdName;
+				result.JobWeightUnitTypeIdName = jobAdditionalInfo.JobWeightUnitTypeIdName;
+				result.JobOriginResponsibleContactIDName = jobAdditionalInfo.JobOriginResponsibleContactIDName;
+				result.JobDriverIdName = jobAdditionalInfo.JobDriverIdName;
+			}
+			if (result != null) { result.JobIsHavingPermission = jobIsHavingPermission; }
+
 			return result ?? new Entities.Job.Job();
 		}
 
 		public static Entities.Job.Job GetJobByProgram(ActiveUser activeUser, long id, long parentId)
 		{
-			var parameters = activeUser.GetRecordDefaultParams(id);
-			parameters.Add(new Parameter("@parentId", parentId));
-			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+			bool jobIsHavingPermission = false;
+			Entities.Job.Job result = null;
+			Entities.Job.JobAdditionalInfo jobAdditionalInfo = null;
+			List<Task> tasks = new List<Task>();
+			tasks.Add(Task.Factory.StartNew(() =>
+			{
+				var permittedProgramEntity = GetCustomEntityIdByEntityName(activeUser, EntitiesAlias.Job, false);
+				jobIsHavingPermission = permittedProgramEntity != null && permittedProgramEntity.Any(t => t.EntityId == -1 || t.EntityId == id);
+			}));
+
+			tasks.Add(Task.Factory.StartNew(() =>
+			{
+				if (id > 0)
+				{
+					jobAdditionalInfo = SqlSerializer.Default.DeserializeSingleRecord<JobAdditionalInfo>(StoredProceduresConstant.GetJobAdditionalInfo, new Parameter("@id", id), storedProcedure: true);
+				}
+			}));
+
+			tasks.Add(Task.Factory.StartNew(() =>
+			{
+				var parameters = activeUser.GetRecordDefaultParams(id);
+				parameters.Add(new Parameter("@parentId", parentId));
+				result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+			}));
+
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			if (jobAdditionalInfo != null && result != null)
+			{
+				result.CustomerERPId = jobAdditionalInfo.CustomerERPId;
+				result.VendorERPId = jobAdditionalInfo.VendorERPId;
+				result.JobSONumber = jobAdditionalInfo.JobSONumber;
+				result.JobPONumber = jobAdditionalInfo.JobPONumber;
+				result.JobElectronicInvoiceSONumber = jobAdditionalInfo.JobElectronicInvoiceSONumber;
+				result.JobElectronicInvoicePONumber = jobAdditionalInfo.JobElectronicInvoicePONumber;
+				result.JobDeliveryAnalystContactIDName = jobAdditionalInfo.JobDeliveryAnalystContactIDName;
+				result.JobDeliveryResponsibleContactIDName = jobAdditionalInfo.JobDeliveryResponsibleContactIDName;
+				result.JobQtyUnitTypeIdName = jobAdditionalInfo.JobQtyUnitTypeIdName;
+				result.JobCubesUnitTypeIdName = jobAdditionalInfo.JobCubesUnitTypeIdName;
+				result.JobWeightUnitTypeIdName = jobAdditionalInfo.JobWeightUnitTypeIdName;
+				result.JobOriginResponsibleContactIDName = jobAdditionalInfo.JobOriginResponsibleContactIDName;
+				result.JobDriverIdName = jobAdditionalInfo.JobDriverIdName;
+			}
+			if (result != null) { result.JobIsHavingPermission = jobIsHavingPermission; }
+
 			return result ?? new Entities.Job.Job();
 		}
 

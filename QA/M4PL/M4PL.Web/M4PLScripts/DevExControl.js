@@ -309,6 +309,8 @@ DevExCtrl.Ribbon = function () {
                             if (response.route) {
                                 switch (response.route.Action) {
                                     case "AdvancedSortFilter":
+                                        if (response.route.Controller == "JobAdvanceReport")
+                                            response.route.EntityName = response.route.Controller;
                                         var currentGrid = ASPxClientControl.GetControlCollection().GetByName(response.route.EntityName + gridNameSuffix);
                                         //currentGrid.SetFilterEnabled(true);
                                         currentGrid.ShowFilterControl();
@@ -1011,7 +1013,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1857,7 +1859,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
+        for (var i = 0; i < xportContol.GetItemCount(); i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

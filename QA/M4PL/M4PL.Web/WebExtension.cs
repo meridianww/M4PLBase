@@ -1845,7 +1845,8 @@ namespace M4PL.Web
                     mnu.StatusId = 3;
                 if (route.Entity == EntitiesAlias.JobReport)
                     mnu.StatusId = 3;
-
+                if (route.Entity == EntitiesAlias.JobAdvanceReport && mnu.MnuTitle == "Advanced")
+                    mnu.StatusId = 1;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });
@@ -3094,7 +3095,7 @@ namespace M4PL.Web
             if (actionContextMenuAvailable && !isParentEntity)
             {
                 bool? isScheduleAciton = null;
-                if(route.Entity == EntitiesAlias.Job)
+                if (route.Entity == EntitiesAlias.Job)
                 {
                     var record = (IList<JobView>)_gridResult.Records;
                     if (record != null && route.Location != null && route.Location.Count() > 0)
@@ -3111,7 +3112,7 @@ namespace M4PL.Web
                         var entity = record.FirstOrDefault(t => t.Id == _gridResult.FocusedRowId);
                         isScheduleAciton = entity != null && entity.JobIsSchedule;
                     }
-                }               
+                }
 
                 var allActions = _commonCommands.GetJobAction(route.ParentRecordId, route.Entity.ToString(), isScheduleAciton);
                 _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
