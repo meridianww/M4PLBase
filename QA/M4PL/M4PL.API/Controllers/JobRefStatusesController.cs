@@ -34,7 +34,7 @@ namespace M4PL.API.Controllers
 		/// <summary>
 		/// Job ref status constructor with required parameter
 		/// </summary>
-		/// <param name="jobRefStatusCommands"></param>
+		/// <param name="jobRefStatusCommands">Required parameter jobRefStatusCommands to initialize the required objects</param>
 		public JobRefStatusesController(IJobRefStatusCommands jobRefStatusCommands)
 			: base(jobRefStatusCommands)
 		{
