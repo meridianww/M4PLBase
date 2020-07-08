@@ -18,13 +18,28 @@
 //==============================================================================================================
 
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
     /// <summary>
     /// Perfomrs basic CRUD operation on the JobRefStatus Entity
     /// </summary>
-    public interface IJobRefStatusCommands : IBaseCommands<JobRefStatus>
+    public interface IJobRefStatusCommands 
     {
+        ActiveUser ActiveUser { get; set; }
+
+        IList<Entities.Job.JobRefStatus> GetPagedData(PagedDataInfo pagedDataInfo);
+
+        Entities.Job.JobRefStatus Post(Entities.Job.JobRefStatus job);
+
+        Entities.Job.JobRefStatus Put(Entities.Job.JobRefStatus job);
+
+        Entities.Job.JobRefStatus Get(long id);
+
+        int Delete(long Id);
+
+        IList<IdRefLangName> Delete(List<long> ids, int statusId);
     }
 }

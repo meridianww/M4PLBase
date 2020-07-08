@@ -18,6 +18,11 @@
 //=================================================================================================================
 
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.Entities;
+using M4PL.Entities.Support;
+using Newtonsoft.Json;
+using RestSharp;
+using System.Collections.Generic;
 
 namespace M4PL.APIClient.Job
 {
@@ -30,5 +35,15 @@ namespace M4PL.APIClient.Job
 		{
 			get { return "JobRefStatuses"; }
 		}
-	}
+
+        public override IList<JobRefStatusView> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            var content = restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "GetPagedData"), ActiveUser).AddObject(pagedDataInfo)).Content;
+            content = content.Replace("[[", "[");
+            content = content.Replace("]]", "]");
+            var apiResult = JsonConvert.DeserializeObject<ApiResult<JobRefStatusView>>(content);
+            pagedDataInfo.TotalCount = ((apiResult != null) && apiResult.TotalResults > 0) ? apiResult.TotalResults : apiResult.ReturnedResults;
+            return apiResult.Results;
+        }
+    }
 }

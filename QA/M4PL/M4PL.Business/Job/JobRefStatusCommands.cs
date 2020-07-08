@@ -91,10 +91,6 @@ namespace M4PL.Business.Job
         {
             return _commands.Delete(ActiveUser, ids, statusId);
         }
-
-        public JobRefStatus Patch(JobRefStatus entity)
-        {
-            throw new NotImplementedException();
-        }
+            
     }
 }

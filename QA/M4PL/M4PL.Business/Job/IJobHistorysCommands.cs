@@ -8,13 +8,18 @@
 #endregion Copyright
 
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
     /// <summary>
     /// IJobHistorysCommands
     /// </summary>
-    public interface IJobHistorysCommands : IBaseCommands<JobHistory>
+    public interface IJobHistorysCommands 
     {
+        ActiveUser ActiveUser { get; set; }
+
+        IList<Entities.Job.JobHistory> GetPagedData(PagedDataInfo pagedDataInfo);
     }
 }
