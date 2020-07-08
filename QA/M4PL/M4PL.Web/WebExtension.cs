@@ -1845,8 +1845,7 @@ namespace M4PL.Web
                     mnu.StatusId = 3;
                 if (route.Entity == EntitiesAlias.JobReport)
                     mnu.StatusId = 3;
-                if ((route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.Job)
-                && mnu.MnuTitle == "Advanced")
+                if (route.Entity == EntitiesAlias.JobAdvanceReport && mnu.MnuTitle == "Advanced")
                     mnu.StatusId = 1;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
