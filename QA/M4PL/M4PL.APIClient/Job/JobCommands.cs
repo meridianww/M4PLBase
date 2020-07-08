@@ -20,6 +20,7 @@
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Collections.Generic;
@@ -37,7 +38,15 @@ namespace M4PL.APIClient.Job
 			get { return "Jobs"; }
 		}
 
-		public JobDestination GetJobDestination(long id, long parentId)
+        public override IList<JobView> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            var content = restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "GetPagedData"), ActiveUser).AddObject(pagedDataInfo)).Content;
+            var apiResult = JsonConvert.DeserializeObject<ApiResult<JobView>>(content);
+            pagedDataInfo.TotalCount = ((apiResult != null) && apiResult.TotalResults > 0) ? apiResult.TotalResults : apiResult.ReturnedResults;
+            return apiResult.Results;
+        }
+
+        public JobDestination GetJobDestination(long id, long parentId)
 		{
 			return JsonConvert.DeserializeObject<ApiResult<JobDestination>>(
 			RestClient.Execute(

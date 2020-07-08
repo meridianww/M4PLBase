@@ -28,8 +28,22 @@ namespace M4PL.Business.Job
     /// <summary>
     /// Performs basic CRUD operation on the Job Entity
     /// </summary>
-    public interface IJobCommands : IBaseCommands<Entities.Job.Job>
+    public interface IJobCommands
     {
+        ActiveUser ActiveUser { get; set; }
+
+        IList<Entities.Job.Job> GetPagedData(PagedDataInfo pagedDataInfo);
+
+        Entities.Job.Job Post(Entities.Job.Job job);
+
+        Entities.Job.Job Put(Entities.Job.Job job);
+
+        Entities.Job.Job Get(long id);
+
+        int Delete(long Id);
+
+        IList<IdRefLangName> Delete(List<long> ids, int statusId);
+
         JobDestination GetJobDestination(long id, long parentId);
 
         Job2ndPoc GetJob2ndPoc(long id, long parentId);
@@ -61,7 +75,7 @@ namespace M4PL.Business.Job
         List<ChangeHistoryData> GetChangeHistory(long jobId);
         int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser);
         List<Entities.Job.Job> GetActiveJobByProgramId(long programId);
-		bool UpdateJobInvoiceDetail(long jobId, JobInvoiceDetail jobInvoiceDetail);
+        bool UpdateJobInvoiceDetail(long jobId, JobInvoiceDetail jobInvoiceDetail);
 
-	}
+    }
 }
