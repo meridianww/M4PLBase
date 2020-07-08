@@ -16,7 +16,7 @@ using System.Web.Http;
 namespace M4PL.API.Controllers
 {
 	/// <summary>
-	/// JobHistorysController
+	/// Job history/logs service
 	/// </summary>
 	[RoutePrefix("api/JobHistorys")]
 	public class JobHistorysController : BaseApiController<JobHistory>
@@ -24,7 +24,7 @@ namespace M4PL.API.Controllers
 		private readonly IJobHistorysCommands _jobHistorysController;
 
 		/// <summary>
-		/// JobHistorysController
+		/// Job history/logs constructor with required parameter
 		/// </summary>
 		/// <param name="jobHistorysController"></param>
 		public JobHistorysController(IJobHistorysCommands jobHistorysController)

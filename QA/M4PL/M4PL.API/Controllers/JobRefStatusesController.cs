@@ -23,13 +23,16 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// Job ref status service
+	/// </summary>
 	[RoutePrefix("api/JobRefStatuses")]
 	public class JobRefStatusesController : BaseApiController<JobRefStatus>
 	{
 		private readonly IJobRefStatusCommands _jobRefStatusCommands;
 
 		/// <summary>
-		/// Function to get Job's RefStatuses details
+		/// Job ref status constructor with required parameter
 		/// </summary>
 		/// <param name="jobRefStatusCommands"></param>
 		public JobRefStatusesController(IJobRefStatusCommands jobRefStatusCommands)
