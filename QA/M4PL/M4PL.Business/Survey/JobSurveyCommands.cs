@@ -27,21 +27,7 @@ namespace M4PL.Business.Survey
 {
     public class JobSurveyCommands : BaseCommands<JobSurvey>, IJobSurveyCommands
     {
-        public int Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobSurvey Get(long id)
-        {
-            throw new NotImplementedException();
-        }
-
+      
         public JobSurvey GetJobSurvey(ActiveUser activeUser, long id)
         {
             return _commands.GetJobSurvey(activeUser, id);
@@ -51,25 +37,6 @@ namespace M4PL.Business.Survey
         {
             return _commands.InsertJobSurvey(jobSurvey);
         }
-
-        public IList<JobSurvey> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobSurvey Patch(JobSurvey entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobSurvey Post(JobSurvey entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobSurvey Put(JobSurvey entity)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

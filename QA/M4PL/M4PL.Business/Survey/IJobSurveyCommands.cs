@@ -22,7 +22,7 @@ using M4PL.Entities.Survey;
 
 namespace M4PL.Business.Survey
 {
-    public interface IJobSurveyCommands : IBaseCommands<JobSurvey>
+    public interface IJobSurveyCommands 
     {
         JobSurvey GetJobSurvey(ActiveUser activeUser, long id);
 

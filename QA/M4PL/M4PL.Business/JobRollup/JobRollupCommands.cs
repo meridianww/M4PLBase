@@ -17,21 +17,7 @@ namespace M4PL.Business.JobRollup
 {
     public class JobRollupCommands : BaseCommands<JobRollupList>, IJobRollupCommands
     {
-        public int Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobRollupList Get(long id)
-        {
-            throw new NotImplementedException();
-        }
-
+     
         public List<JobRollupList> GetRollupByProgram(long programId)
         {
             return _commands.GetRollupByProgram(programId);
@@ -42,24 +28,6 @@ namespace M4PL.Business.JobRollup
             return _commands.GetRollupByJob(jobId);
         }
 
-        public IList<JobRollupList> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobRollupList Patch(JobRollupList entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobRollupList Post(JobRollupList entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobRollupList Put(JobRollupList entity)
-        {
-            throw new NotImplementedException();
-        }
+             
     }
 }

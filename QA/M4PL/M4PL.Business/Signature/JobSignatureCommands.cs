@@ -42,33 +42,6 @@ namespace M4PL.Business.Signature
         {
             return _commands.InsertJobSignature(jobSignature);
         }
-        public int Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            throw new NotImplementedException();
-        }
-        public JobSignature Get(long id)
-        {
-            throw new NotImplementedException();
-        }
-        public IList<JobSignature> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            throw new NotImplementedException();
-        }
-        public JobSignature Patch(JobSignature entity)
-        {
-            throw new NotImplementedException();
-        }
-        public JobSignature Post(JobSignature entity)
-        {
-            throw new NotImplementedException();
-        }
-        public JobSignature Put(JobSignature entity)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

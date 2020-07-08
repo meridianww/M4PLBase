@@ -41,10 +41,19 @@ namespace M4PL.APIClient.Job
         public override IList<JobView> GetPagedData(PagedDataInfo pagedDataInfo)
         {
             var content = restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "GetPagedData"), ActiveUser).AddObject(pagedDataInfo)).Content;
+            content = content.Replace("[[", "[");
+            content = content.Replace("]]", "]");
             var apiResult = JsonConvert.DeserializeObject<ApiResult<JobView>>(content);
             pagedDataInfo.TotalCount = ((apiResult != null) && apiResult.TotalResults > 0) ? apiResult.TotalResults : apiResult.ReturnedResults;
             return apiResult.Results;
         }
+
+        //public override JobView Get(long id)
+        //{
+        //    return JsonConvert.DeserializeObject<ApiResult<JobView>>(
+        //    RestClient.Execute(
+        //        HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "id"), ActiveUser).AddParameter("id", id)).Content).Results?.FirstOrDefault();
+        //}
 
         public JobDestination GetJobDestination(long id, long parentId)
 		{

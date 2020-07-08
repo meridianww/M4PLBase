@@ -26,8 +26,20 @@ namespace M4PL.Business.Job
     /// <summary>
     /// Performs Reports for Job
     /// </summary>
-    public interface IJobReportCommands : IBaseCommands<JobReport>
+    public interface IJobReportCommands 
     {
+        ActiveUser ActiveUser { get; set; }
+        IList<Entities.Job.JobReport> GetPagedData(PagedDataInfo pagedDataInfo);
+
+        Entities.Job.JobReport Post(Entities.Job.JobReport job);
+
+        Entities.Job.JobReport Put(Entities.Job.JobReport job);
+
+        Entities.Job.JobReport Get(long id);
+
+        int Delete(long Id);
+
+        IList<IdRefLangName> Delete(List<long> ids, int statusId);
         IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport);
         IList<JobReport> GetDropDownDataForLocation(ActiveUser activeUser, long customerID, string entity);
     }

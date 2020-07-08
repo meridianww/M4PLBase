@@ -29,7 +29,7 @@ namespace M4PL.API.Controllers
 	/// </summary>
 	[AllowAnonymous]
 	[RoutePrefix("api/Signature")]
-	public class JobSignatureController : BaseApiController<JobSignature>
+	public class JobSignatureController : ApiController
 	{
 		/// <summary>
 		/// Field to assign
@@ -40,7 +40,7 @@ namespace M4PL.API.Controllers
 		/// constructor
 		/// </summary>
 		/// <param name="jobSignatureCommands"></param>
-		public JobSignatureController(IJobSignatureCommands jobSignatureCommands) : base(jobSignatureCommands)
+		public JobSignatureController(IJobSignatureCommands jobSignatureCommands)
 		{
 			_jobSignatureCommands = jobSignatureCommands;
 		}

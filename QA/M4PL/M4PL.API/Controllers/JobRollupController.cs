@@ -25,7 +25,7 @@ using System.Web.Http.Description;
 namespace M4PL.API.Controllers
 {
 	[RoutePrefix("api/JobRollup")]
-	public class JobRollupController : BaseApiController<JobRollupList>
+	public class JobRollupController : ApiController
 	{
 		private readonly IJobRollupCommands _jobRollupCommands;
 
@@ -34,7 +34,6 @@ namespace M4PL.API.Controllers
 		/// </summary>
 		/// <param name="jobRollupCommands">jobRollupCommands</param>
 		public JobRollupController(IJobRollupCommands jobRollupCommands)
-			: base(jobRollupCommands)
 		{
 			_jobRollupCommands = jobRollupCommands;
 		}

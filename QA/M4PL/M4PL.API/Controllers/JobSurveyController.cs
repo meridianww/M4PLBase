@@ -30,7 +30,7 @@ namespace M4PL.API.Controllers
 	/// </summary>
 	[AllowAnonymous]
 	[RoutePrefix("api/Survey")]
-	public class JobSurveyController : BaseApiController<JobSurvey>
+	public class JobSurveyController : ApiController
 	{
 		private readonly IJobSurveyCommands _jobSurveyCommands;
 
@@ -39,7 +39,6 @@ namespace M4PL.API.Controllers
 		/// </summary>
 		/// <param name="jobSurveyCommands">jobSurveyCommands</param>
 		public JobSurveyController(IJobSurveyCommands jobSurveyCommands)
-			: base(jobSurveyCommands)
 		{
 			_jobSurveyCommands = jobSurveyCommands;
 		}

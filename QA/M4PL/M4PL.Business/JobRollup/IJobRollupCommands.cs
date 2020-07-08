@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace M4PL.Business.JobRollup
 {
-    public interface IJobRollupCommands : IBaseCommands<JobRollupList>
+    public interface IJobRollupCommands 
     {
         List<JobRollupList> GetRollupByProgram(long programId);
 

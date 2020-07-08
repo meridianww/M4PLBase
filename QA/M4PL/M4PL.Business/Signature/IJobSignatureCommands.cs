@@ -21,7 +21,7 @@ using M4PL.Entities.Signature;
 
 namespace M4PL.Business.Signature
 {
-    public interface IJobSignatureCommands : IBaseCommands<JobSignature>
+    public interface IJobSignatureCommands 
     {
         bool InsertJobSignature(JobSignature jobSignature);
     }
