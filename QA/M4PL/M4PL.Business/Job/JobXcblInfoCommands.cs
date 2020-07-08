@@ -29,40 +29,7 @@ namespace M4PL.Business.Job
 {
     public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>, IJobXcblInfoCommands
     {
-        public int Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobXcblInfo Get(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<JobXcblInfo> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobXcblInfo Patch(JobXcblInfo entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobXcblInfo Post(JobXcblInfo entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JobXcblInfo Put(JobXcblInfo entity)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public JobXcblInfo GetJobXcblInfo(long jobId, long gatewayId)
         {

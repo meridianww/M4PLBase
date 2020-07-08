@@ -18,8 +18,10 @@
 //====================================================================================================================================================*/
 
 using M4PL.API.Filters;
+using M4PL.API.Models;
 using M4PL.Business.Job;
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -29,16 +31,23 @@ namespace M4PL.API.Controllers
 	/// JobXcblInfosController
 	/// </summary>
 	[RoutePrefix("api/JobXcblInfos")]
-	public class JobXcblInfosController : BaseApiController<JobXcblInfo>
+	public class JobXcblInfosController : ApiController
 	{
 		private readonly IJobXcblInfoCommands _jobXcblInfoCommands;
 
-		/// <summary>
-		/// Function to get Job's Cargo details
-		/// </summary>
-		/// <param name="jobXcblInfoCommands">jobXcblInfoCommands</param>
-		public JobXcblInfosController(IJobXcblInfoCommands jobXcblInfoCommands)
-			: base(jobXcblInfoCommands)
+        public ActiveUser ActiveUser
+        {
+            get
+            {
+                return ApiContext.ActiveUser;
+            }
+        }
+
+        /// <summary>
+        /// Function to get Job's Cargo details
+        /// </summary>
+        /// <param name="jobXcblInfoCommands">jobXcblInfoCommands</param>
+        public JobXcblInfosController(IJobXcblInfoCommands jobXcblInfoCommands)
 		{
 			_jobXcblInfoCommands = jobXcblInfoCommands;
 		}
@@ -54,7 +63,7 @@ namespace M4PL.API.Controllers
 		[Route("GetJobXcblInfo"), ResponseType(typeof(JobXcblInfo))]
 		public JobXcblInfo GetJobXcblInfo(long jobId, long gatewayId)
 		{
-			BaseCommands.ActiveUser = ActiveUser;
+            _jobXcblInfoCommands.ActiveUser = ActiveUser;
 			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gatewayId);
 		}
 
@@ -69,7 +78,7 @@ namespace M4PL.API.Controllers
 		[Route("AcceptJobXcblInfo"), ResponseType(typeof(bool))]
 		public bool AcceptJobXcblInfo(long jobId, long gatewayId)
 		{
-			BaseCommands.ActiveUser = ActiveUser;
+            _jobXcblInfoCommands.ActiveUser = ActiveUser;
 			return _jobXcblInfoCommands.AcceptJobXcblInfo(jobId, gatewayId);
 		}
 
@@ -83,7 +92,7 @@ namespace M4PL.API.Controllers
 		[Route("RejectJobXcblInfo"), ResponseType(typeof(bool))]
 		public bool RejectJobXcblInfo(long gatewayId)
 		{
-			BaseCommands.ActiveUser = ActiveUser;
+            _jobXcblInfoCommands.ActiveUser = ActiveUser;
 			return _jobXcblInfoCommands.RejectJobXcblInfo(gatewayId);
 		}
 	}
