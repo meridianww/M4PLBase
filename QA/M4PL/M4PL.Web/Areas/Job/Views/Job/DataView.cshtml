@@ -196,8 +196,8 @@
                         });
                     }
 
-                    if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
-                        column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.SetJobGridPixel(colSetting));
+                    //if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
+                    //    column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.SetJobGridPixel(colSetting));
                     column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
                     if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber)
@@ -577,9 +577,16 @@
 
     }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml();
 }
-@*else
-    {
-        <div style="text-align:center">
-            <h2><strong>Access Denied, please contact system administrator.</strong></h2>
-        </div>
-    }*@
+else if(!Model.IsAccessPermission)
+{
+    Html.DevExpress().Label(
+                       settings =>
+                       {
+                           settings.Name = "lblErrOrigin";
+                           settings.Text = "Access Denied, please contact system administrator.";
+                           settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
+                       }).GetHtml();
+    @*<div style="text-align:center">
+        <h2><strong>Access Denied, please contact system administrator.</strong></h2>
+    </div>*@
+}
