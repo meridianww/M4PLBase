@@ -56,7 +56,7 @@ namespace M4PL.API.Controllers
 		[Route("VocReport"),ResponseType(typeof(IList<JobReport>))]
         public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
 		{
-			return _JobReportCommands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
+			return _JobReportCommands.GetVocReportData(ActiveUser, companyId, locationCode, startDate, endDate, IsPBSReport);
 		}
         
         /// <summary>
