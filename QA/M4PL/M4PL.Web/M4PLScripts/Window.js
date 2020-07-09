@@ -416,7 +416,7 @@ M4PLWindow.DataView = function () {
 
     var _onColumnResized = function (s, e) {
         if (!s.batchEditApi.HasChanges()) {
-            s.PerformCallback();
+            //s.PerformCallback();
         }
     }
 
