@@ -127,21 +127,8 @@
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
     ////settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
 
-    //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
+    settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
-
-    //if (settings.SettingsEditing.Mode == GridViewEditingMode.Batch)
-    //{
-    //    settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
-    //    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
-    //    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
-    //    settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
-    //    settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-    //    settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
-    //    settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
-    //    settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
-
-    //}
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
@@ -156,7 +143,7 @@
                 column.FieldName = colSetting.ColColumnName;
                 column.Caption = colSetting.ColGridAliasName;
                 column.ToolTip = colSetting.ColCaption;
-                column.ReadOnly = colSetting.ColIsReadOnly;
+                column.ReadOnly = true;// colSetting.ColIsReadOnly;
                 column.Visible = colSetting.ColIsVisible;
                 column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                 var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
@@ -169,14 +156,16 @@
                 {
                     column.SetDataItemTemplateContent(container =>
                     {
-                        Html.DevExpress().HyperLink(hlSettings =>
+                        if (container != null && container.KeyValue != null)
                         {
-                            hlSettings.Name = "HyperLink_" + container.KeyValue;
-                            hlSettings.NavigateUrl = "javascript:void(0)";
-                            hlSettings.Properties.Text = Convert.ToString(container.Text);
-                            hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId, entityFor){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0}, '{1}');}}", container.KeyValue, EntitiesAlias.JobCard.ToString());
-                        }).Render();
-
+                            Html.DevExpress().HyperLink(hlSettings =>
+                            {
+                                hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
+                                hlSettings.NavigateUrl = "javascript:void(0)";
+                                hlSettings.Properties.Text = Convert.ToString(container.Text);
+                                hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId, entityFor){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0}, '{1}');}}", container.KeyValue, EntitiesAlias.JobCard.ToString());
+                            }).Render();
+                        }
                     });
                 }
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
@@ -424,27 +413,6 @@
     };
 
     settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
-    settings.SetStatusBarTemplateContent(c =>
-    {
-        Html.DevExpress().Button(btnSaveSettings =>
-        {
-            btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action and dependency on window.js _setCustomButtonsVisibility
-            btnSaveSettings.EnableTheming = true;
-            btnSaveSettings.Text = Model.Operations[OperationTypeEnum.SaveChanges].LangName;
-            btnSaveSettings.AllowFocus = false;
-            btnSaveSettings.ControlStyle.CssClass = "form-btn";
-        }).Render();
-
-        ViewContext.Writer.Write("&nbsp;&nbsp;&nbsp;");
-        Html.DevExpress().Button(btnCancelSettings =>
-        {
-            btnCancelSettings.Name = "btnCancel" + Model.GridSetting.GridName;//dependency on window.js _setCustomButtonsVisibility
-            btnCancelSettings.EnableTheming = true;
-            btnCancelSettings.Text = Model.Operations[OperationTypeEnum.CancelChanges].LangName;
-            btnCancelSettings.AllowFocus = false;
-            btnCancelSettings.ControlStyle.CssClass = "form-btn";
-        }).Render();
-    });
 
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
 
