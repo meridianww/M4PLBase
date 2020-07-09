@@ -244,12 +244,12 @@ namespace M4PL.Web
 
                 case EntitiesAlias.JobAdvanceReport:
                     gridViewSetting.EnableClientSideExportAPI = true;
-                    gridViewSetting.Mode = GridViewEditingMode.Inline;
+                    gridViewSetting.Mode = GridViewEditingMode.Batch;
                     gridViewSetting.CallBackRoute.Action = route.Action;
                     break;
 
                 case EntitiesAlias.JobCard:
-                    gridViewSetting.Mode = GridViewEditingMode.Inline;
+                    gridViewSetting.Mode = GridViewEditingMode.Batch;
                     gridViewSetting.ContextMenu.Add(gridRefresh);
                     break;
 

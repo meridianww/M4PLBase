@@ -7,7 +7,6 @@
     //Program Name:                                 JobAdvanceReportView
     //Purpose:                                      Provides grid view for the JobAdvanceReport
     //====================================================================================================================================================*@
-
 @using System.Collections
 @using M4PL.Entities
 @using M4PL.Web.Providers
@@ -15,7 +14,6 @@
 @using M4PL.Entities.Support;
 @using DevExpress.Data.Filtering.Helpers;
 @model  M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Job.JobAdvanceReportView>
-
 @{
     ViewBag.Title = Model.PageName;
     if (!Model.SessionProvider.ActiveUser.IsSysAdmin)
@@ -23,7 +21,6 @@
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
     }
 }
-
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
@@ -96,10 +93,23 @@
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
-
+    settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
-    
+
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
+
+    if (settings.SettingsEditing.Mode == GridViewEditingMode.Batch)
+    {
+        settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
+        settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
+        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
+        //settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
+        //settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
+        //settings.ClientSideEvents.CustomButtonClick = string.Format("function(s, e){{ M4PLWindow.DataView.OnHavingChildCustomButtonClick(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
+    }
 
     foreach (var colSetting in Model.ColumnSettings)
     {
@@ -210,7 +220,8 @@
                     column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
                     column.ColumnType = MVCxGridViewColumnType.DateEdit;
                     column.PropertiesEdit.DisplayFormatString = colSetting.ColDisplayFormat;
-
+                    if (column.ReadOnly)
+                        column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
                 {
@@ -259,10 +270,10 @@
                                     }
                                 }
                             };
-                            if (colSetting.ColIsReadOnly)
-                            {
-                                cs.ControlStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
-                            }
+                            //if (colSetting.ColIsReadOnly)
+                            //{
+                            //    cs.ControlStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
+                            //}
                         }).BindList(allIdRefLangNames).GetHtml().ToHtmlString());
                     });
 
@@ -273,6 +284,10 @@
                         cs.ValueField = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                         cs.ValueType = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
                         cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
+                        if (colSetting.ColIsReadOnly)
+                        {
+                            cs.Style.CssClass = CssConstants.ReadOnlyBackgroundColor;
+                        }
                     });
 
                 }
@@ -332,7 +347,7 @@
             });
         }
     }
-    
+
     //For Advanced Filter
     settings.FilterControlOperationVisibility = (sender, e) =>
     {
@@ -351,7 +366,10 @@
             {
                 var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
                 command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
-                command.Enabled = true;
+                if (command.Text == "Cut" || command.Text == "Paste")
+                    command.Enabled = false;
+                else
+                    command.Enabled = true;
                 e.Items.Add(command);
             }
         }
@@ -375,7 +393,33 @@
             grid.SortBy(grid.Columns[colState.FieldName], colState.SortOrder);
         }
     };
+    settings.SetStatusBarTemplateContent(c =>
+    {
 
+        Html.DevExpress().Button(btnSaveSettings =>
+        {
+            btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action and dependency on window.js _setCustomButtonsVisibility
+            btnSaveSettings.EnableTheming = true;
+            btnSaveSettings.Text = Model.Operations[OperationTypeEnum.SaveChanges].LangName;
+            btnSaveSettings.AllowFocus = false;
+            btnSaveSettings.ControlStyle.CssClass = "form-btn";
+
+            btnSaveSettings.ClientVisible = false;
+
+        }).Render();
+
+        ViewContext.Writer.Write("&nbsp;&nbsp;&nbsp;");
+        Html.DevExpress().Button(btnCancelSettings =>
+        {
+            btnCancelSettings.Name = "btnCancel" + Model.GridSetting.GridName;//dependency on window.js _setCustomButtonsVisibility
+            btnCancelSettings.EnableTheming = true;
+            btnCancelSettings.Text = Model.Operations[OperationTypeEnum.CancelChanges].LangName;
+            btnCancelSettings.AllowFocus = false;
+            btnCancelSettings.ControlStyle.CssClass = "form-btn";
+            btnCancelSettings.ClientVisible = false;
+
+        }).Render();
+    });
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
 
     settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";

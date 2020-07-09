@@ -1,0 +1,1 @@
+update [SYSTM000ColumnsAlias] set ColIsReadOnly =1 where ColTableName= 'JobAdvanceReport' and IsGridColumn = 1
