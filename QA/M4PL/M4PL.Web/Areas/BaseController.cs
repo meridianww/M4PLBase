@@ -192,8 +192,14 @@ namespace M4PL.Web.Areas
 				route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
 			if (route.ParentEntity == EntitiesAlias.Common)
 				route.ParentRecordId = 0;
-			SetGridResult(route, gridName, isGridSetting);
-			if (SessionProvider.ViewPagedDataSession.Count() > 0
+          
+           
+            SetGridResult(route, gridName, isGridSetting);
+            long expandRowId;
+            Int64.TryParse(route.Url, out expandRowId);
+            if(_gridResult.GridSetting.ChildGridRoute != null)
+            _gridResult.GridSetting.ChildGridRoute.ParentRecordId = expandRowId;
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
 			&& SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
 			&& SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
 			{
