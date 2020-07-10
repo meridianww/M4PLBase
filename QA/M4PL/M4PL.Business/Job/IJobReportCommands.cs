@@ -28,7 +28,7 @@ namespace M4PL.Business.Job
     /// </summary>
     public interface IJobReportCommands : IBaseCommands<JobReport>
     {
-        IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport);
+        IList<JobVocReport> GetVocReportData(ActiveUser activeUser, long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport);
         IList<JobReport> GetDropDownDataForLocation(ActiveUser activeUser, long customerID, string entity);
     }
 }
