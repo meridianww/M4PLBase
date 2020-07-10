@@ -469,7 +469,7 @@ namespace M4PL.Web.Areas
 			}
 			Session["costJobCodeActions"] = null;
 			Session["priceJobCodeActions"] = null;
-
+			route.Filters = null;
 			return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
 		}
 

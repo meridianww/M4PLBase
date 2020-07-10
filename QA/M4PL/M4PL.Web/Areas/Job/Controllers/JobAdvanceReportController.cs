@@ -452,6 +452,9 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
+
+            route.Filters = null;
+            strRoute = JsonConvert.SerializeObject(route);
             return base.GridFilteringView(filteringState, strRoute, gridName);
         }
 

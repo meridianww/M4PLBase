@@ -230,6 +230,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["BackUrl"] = TempData["BackUrl"];
             TempData.Keep();
             base.GridFilteringView(filteringState, strRoute, gridName);
+            route.Filters = null;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
