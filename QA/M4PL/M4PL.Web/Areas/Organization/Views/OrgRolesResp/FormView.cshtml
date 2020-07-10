@@ -62,6 +62,7 @@
 
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-12'>" + Html.EditorFor(m => m.Record.RoleTypeId, new { RoleTypeId = Model.Record.RoleTypeId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.OrgRoleDefault).ToHtmlString() + " </div>");
+        //ViewContext.Writer.Write("<div class='orgpoc-contact-grp form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
@@ -168,14 +169,14 @@
             </div>
             <div class="half-width">
                 @Html.DevExpress().Button(settings =>
-       {
-           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
-           settings.EnableTheming = true;
-           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
-           settings.AllowFocus = false;
-           settings.ControlStyle.CssClass = "form-btn pull-left";
-           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-       }).GetHtml()
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+               settings.EnableTheming = true;
+               settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-left";
+               settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+           }).GetHtml()
             </div>
         </div>
     }
