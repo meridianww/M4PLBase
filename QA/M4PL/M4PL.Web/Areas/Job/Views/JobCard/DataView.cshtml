@@ -238,6 +238,8 @@
                     column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
                     column.ColumnType = MVCxGridViewColumnType.DateEdit;
                     column.PropertiesEdit.DisplayFormatString = colSetting.ColDisplayFormat;
+                    if (column.ReadOnly)
+                        column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
 
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
@@ -283,10 +285,10 @@
                                     }
                                 }
                             };
-                            if (colSetting.ColIsReadOnly)
-                            {
-                                cs.ControlStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
-                            }
+                            //if (colSetting.ColIsReadOnly)
+                            //{
+                            //    cs.ControlStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
+                            //}
                         }).BindList(allIdRefLangNames).GetHtml().ToHtmlString());
                     });
 
@@ -297,6 +299,10 @@
                         cs.ValueField = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                         cs.ValueType = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
                         cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
+                        if (colSetting.ColIsReadOnly)
+                        {
+                            cs.Style.CssClass = CssConstants.ReadOnlyBackgroundColor;
+                        }
                     });
 
                 }
@@ -387,7 +393,10 @@
             {
                 var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
                 command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
-                command.Enabled = true;
+                if (command.Text == "Cut" || command.Text == "Paste")
+                    command.Enabled = false;
+                else
+                    command.Enabled = true;
                 e.Items.Add(command);
             }
         }
@@ -413,7 +422,10 @@
     };
 
     settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
-
+    settings.SetStatusBarTemplateContent(c =>
+    {
+        
+    });
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
 
     settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";

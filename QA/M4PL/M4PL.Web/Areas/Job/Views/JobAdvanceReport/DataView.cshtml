@@ -380,7 +380,10 @@
             grid.SortBy(grid.Columns[colState.FieldName], colState.SortOrder);
         }
     };
-    
+    settings.SetStatusBarTemplateContent(c =>
+    {
+  
+    });
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
 
     settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";
