@@ -1845,7 +1845,8 @@ namespace M4PL.Web
                     mnu.StatusId = 3;
                 if (route.Entity == EntitiesAlias.JobReport)
                     mnu.StatusId = 3;
-                if ((route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.JobCard) && (mnu.MnuTitle == "Advanced" || mnu.MnuTitle == "Copy" || mnu.MnuTitle == "Paste"))
+                if ((route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.Job)
+                && (mnu.MnuTitle == "Advanced" || mnu.MnuTitle == "Copy" || mnu.MnuTitle == "Paste"))
                     mnu.StatusId = 1;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
@@ -2942,7 +2943,7 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%'", jobAdvanceReportRequest.Search)
-					 + string.Format(" OR JobAdvanceReport.JobBOLMaster like '%{0}%')", jobAdvanceReportRequest.Search);
+                     + string.Format(" OR JobAdvanceReport.JobBOLMaster like '%{0}%')", jobAdvanceReportRequest.Search);
             //if (jobAdvanceReportRequest.IsAddtionalFilter)
             //{
             //    where += jobAdvanceReportRequest.WeightUnit > 0 ?
