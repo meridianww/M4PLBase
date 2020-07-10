@@ -701,7 +701,7 @@ namespace M4PL.Web.Areas
 
             var gridResult = new GridResult<Entities.MasterTables.ChooseColumn>();
             gridResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider);
-            gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, sessionInfo.PagedDataInfo, true, gridResult.Permission, this.Url);
+            gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, sessionInfo.PagedDataInfo, true, gridResult.Permission, this.Url, null, SessionProvider);
             gridResult.Records = (List<Entities.MasterTables.ChooseColumn>)_commonCommands.GetMasterTableObject(EntitiesAlias.ChooseColumn);
             gridResult.Operations = _commonCommands.ChooseColumnOperations();
 
