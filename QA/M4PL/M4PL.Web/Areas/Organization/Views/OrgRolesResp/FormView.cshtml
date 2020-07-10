@@ -62,8 +62,7 @@
 
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-12'>" + Html.EditorFor(m => m.Record.RoleTypeId, new { RoleTypeId = Model.Record.RoleTypeId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.OrgRoleDefault).ToHtmlString() + " </div>");
-        //ViewContext.Writer.Write("<div class='orgpoc-contact-grp form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId, IsReadOnly = isLoggedInUserRole }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
     });
