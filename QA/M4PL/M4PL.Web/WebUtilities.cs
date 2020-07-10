@@ -67,7 +67,7 @@ namespace M4PL.Web
             return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
 
-        public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper, object contextChildOptions = null)
+        public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper, object contextChildOptions = null, SessionProvider sessionProvider = null)
         {
             if (route.Entity == EntitiesAlias.PrgCostRate || route.Entity == EntitiesAlias.PrgBillableRate)
             {
@@ -292,12 +292,21 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(copyOperation);
                     if (route.Entity == EntitiesAlias.Job)
                     {
-                        //gridViewSetting.ContextMenu.Add(Copy);
-                        //gridViewSetting.ContextMenu.Add(Cut);
-                        //gridViewSetting.ContextMenu.Add(Paste);
-                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                        var moduleIdToCompare = MainModule.Job.ToInt();
+                        var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
+                        int? permission = security?.SecMenuAccessLevelId;
+                        if (security?.UserSubSecurities?.Count != null || security.UserSubSecurities.Count > 0)
+                        {
+                            var tableRef = commonCommands.Tables[EntitiesAlias.JobGateway];
+                            string refTableName = tableRef.SysRefName != null ? Convert.ToString(tableRef.SysRefName).ToUpper() : tableRef.SysRefName;
+                            var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && x.RefTableName.ToUpper() == refTableName);
+
+                            permission = subSecurity != null ? subSecurity.SubsMenuAccessLevelId : permission;
+                        }
+                        if (permission.HasValue && permission.Value > (int)Permission.ReadOnly)
+                            gridViewSetting.ContextMenu.Add(actionsContextMenu);
                     }
-                    if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
+                    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly) //action context menu should come after new and edit. So, Have added this here
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                         gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
@@ -305,7 +314,7 @@ namespace M4PL.Web
                 }
                 else if (!hasRecords && !gridViewSetting.IsJobCardEntity)
                 {
-                    if (route.Entity == EntitiesAlias.JobGateway)
+                    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly)
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                         gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
