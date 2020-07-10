@@ -100,6 +100,7 @@
 
             settings.SetDetailRowTemplateContent(c =>
             {
+                Model.GridSetting.CallBackRoute.Url = DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName).ToString();
                 childRoute.ParentRecordId = DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName).ToLong();
                 childRoute.Filters = new M4PL.Entities.Support.Filter
                 {

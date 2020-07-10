@@ -110,6 +110,7 @@
 
             settings.SetDetailRowTemplateContent(c =>
             {
+                Model.GridSetting.CallBackRoute.Url = DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName).ToString();
                 childRoute.ParentRecordId = Convert.ToInt64(DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName));
                 childRoute.Filters = new M4PL.Entities.Support.Filter { Value = DataBinder.Eval(c.DataItem, "VdcLocationCode").ToString() , FieldName = "VdcLocationCode" };
                 childRoute.Url = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute);
