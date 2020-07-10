@@ -2942,7 +2942,7 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliveryState like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%')", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%'", jobAdvanceReportRequest.Search)
 					 + string.Format(" OR JobAdvanceReport.JobBOLMaster like '%{0}%')", jobAdvanceReportRequest.Search);
             //if (jobAdvanceReportRequest.IsAddtionalFilter)
             //{
