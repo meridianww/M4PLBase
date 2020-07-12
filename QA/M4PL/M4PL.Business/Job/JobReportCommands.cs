@@ -95,9 +95,9 @@ namespace M4PL.Business.Job
         {
             throw new NotImplementedException();
         }
-        public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
+        public IList<JobVocReport> GetVocReportData(ActiveUser activeUser, long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
         {
-            return _commands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
+            return _commands.GetVocReportData(activeUser, companyId, locationCode, startDate, endDate, IsPBSReport);
         }
         public IList<JobReport> GetDropDownDataForLocation(ActiveUser activeUser, long customerId, string entity)
         {
