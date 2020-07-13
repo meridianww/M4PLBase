@@ -116,10 +116,14 @@ namespace M4PL.DataAccess.Job
 		/// </summary>
 		/// <param name="job"></param>
 		/// <returns></returns>
-		public static IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
+		public static IList<JobVocReport> GetVocReportData(ActiveUser activeUser, long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
 		{
 			var parameters = new List<Parameter>
 			{
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@roleId", activeUser.RoleId),
+				new Parameter("@orgId", activeUser.OrganizationId > 0 ? activeUser.OrganizationId : 1),
+
 				new Parameter("@CompanyId", companyId),
 				new Parameter("@LocationCode", locationCode),
 				new Parameter("@StartDate", startDate),

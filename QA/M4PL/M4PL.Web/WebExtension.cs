@@ -1132,7 +1132,8 @@ namespace M4PL.Web
 
                         if ((allConcatenatedColumns == null) || (allConcatenatedColumns.Count == 0))
                         {
-                            whereCondition += string.Concat(" AND ", sqlCondition, " ");
+                            if ("(" + entity + ".StatusId = 0)" != sqlCondition)
+                                whereCondition += string.Concat(" AND ", sqlCondition, " ");
                         }
                         else
                         {
@@ -1845,7 +1846,9 @@ namespace M4PL.Web
                     mnu.StatusId = 3;
                 if (route.Entity == EntitiesAlias.JobReport)
                     mnu.StatusId = 3;
-
+                if ((route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.Job)
+                && (mnu.MnuTitle == "Advanced" || mnu.MnuTitle == "Copy" || mnu.MnuTitle == "Paste"))
+                    mnu.StatusId = 1;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });
@@ -2940,7 +2943,8 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliveryState like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%')", jobAdvanceReportRequest.Search);
+                     + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobBOLMaster like '%{0}%')", jobAdvanceReportRequest.Search);
             //if (jobAdvanceReportRequest.IsAddtionalFilter)
             //{
             //    where += jobAdvanceReportRequest.WeightUnit > 0 ?
@@ -3094,7 +3098,7 @@ namespace M4PL.Web
             if (actionContextMenuAvailable && !isParentEntity)
             {
                 bool? isScheduleAciton = null;
-                if(route.Entity == EntitiesAlias.Job)
+                if (route.Entity == EntitiesAlias.Job)
                 {
                     var record = (IList<JobView>)_gridResult.Records;
                     if (record != null && route.Location != null && route.Location.Count() > 0)
@@ -3111,7 +3115,7 @@ namespace M4PL.Web
                         var entity = record.FirstOrDefault(t => t.Id == _gridResult.FocusedRowId);
                         isScheduleAciton = entity != null && entity.JobIsSchedule;
                     }
-                }               
+                }
 
                 var allActions = _commonCommands.GetJobAction(route.ParentRecordId, route.Entity.ToString(), isScheduleAciton);
                 _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();

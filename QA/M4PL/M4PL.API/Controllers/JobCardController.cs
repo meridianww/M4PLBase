@@ -89,19 +89,19 @@ namespace M4PL.API.Controllers
 			return _jobCardCommands.GetCardTileData(jobCondition.CompanyId, jobCondition.WhereCondition).AsQueryable();
 		}
 
-        /// <summary>
-        /// GetDropDownDataForJobCard method is used to get Manufacturing Locations used for particular customer. 
-        /// </summary>
-        /// <param name="customerId"> 
-        /// Refer to Customer Id (type numeric) value
-        /// </param>
-        /// <param name="entity"> 
-        /// Refer to Entiy (type string) value = "Destination" always.
-        /// </param>
-        /// <returns>
-        /// Returns response as  list of JobCard object based on Customer Id(numeric) and where(string) filter applied.
-        /// </returns>
-        [CustomAuthorize]
+		/// <summary>
+		/// GetDropDownDataForJobCard method is used to get Manufacturing Locations used for particular customer.
+		/// </summary>
+		/// <param name="customerId">
+		/// Refer to Customer Id (type numeric) value
+		/// </param>
+		/// <param name="entity">
+		/// Refer to Entiy (type string) value = "Destination" always.
+		/// </param>
+		/// <returns>
+		/// Returns response as  list of JobCard object based on Customer Id(numeric) and where(string) filter applied.
+		/// </returns>
+		[CustomAuthorize]
 		[HttpGet]
 		[Route("GetDropDownDataForJobCard")]
 		public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)

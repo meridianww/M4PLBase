@@ -145,7 +145,7 @@
             ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprDate, new { Name = "GwyUprDate" }).ToHtmlString());
         }
 
-        if(actionEnumToCompare == WebUtilities.JobGatewayActions.ThreePL)
+        if (actionEnumToCompare == WebUtilities.JobGatewayActions.ThreePL)
         {
             Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyPerson").ColIsReadOnly = true;
             Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyPhone").ColIsReadOnly = true;
@@ -203,7 +203,7 @@
                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exceptionDropDownViewModel) }) + "</div>");
                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exStatusDropDownViewModel) }) + "</div>");
                                                   ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>");
-                                                  ViewContext.Writer.Write("<div class='form-row-group  col-lg-12 col-md-12 no-padding'>" + Html.EditorFor(m => m.Record.GwyAddtionalComment, "MultilineText").ToHtmlString() + "</div>");
+                                                  ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>" + Html.EditorFor(m => m.Record.GwyAddtionalComment, "MultilineText").ToHtmlString() + "</div>");
                                                   ViewContext.Writer.Write("</div>");
                                               });
                                           });
@@ -343,7 +343,7 @@
                                                        ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exceptionDropDownViewModel) }) + "</div>");
                                                        ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exStatusDropDownViewModel) }) + "</div>");
                                                        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>");
-                                                       ViewContext.Writer.Write("<div class='form-row-group  col-lg-12 col-md-12 no-padding'>" + Html.EditorFor(m => m.Record.GwyAddtionalComment, "MultilineText").ToHtmlString() + "</div>");
+                                                       ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>" + Html.EditorFor(m => m.Record.GwyAddtionalComment, "MultilineText").ToHtmlString() + "</div>");
                                                        ViewContext.Writer.Write("</div>");
                                                    });
                                                });
@@ -356,7 +356,7 @@
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write("</div>");
         }
-        else if(actionEnumToCompare == WebUtilities.JobGatewayActions.Exception)
+        else if (actionEnumToCompare == WebUtilities.JobGatewayActions.Exception)
         {
             /*By Default will consider as comment entry*/
 
@@ -400,15 +400,20 @@
                                           n.Caption = "";
                                           n.SetNestedContent(() =>
                                           {
-                                             // if (!Model.Record.IsGatewayCalled)
-                                              //{
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }) + "</div>");
-                                              //}
+                                              if (!Model.Record.IsGatewayCalled)
+                                              {
+                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }) + "</div>");
+                                              }
+
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exceptionDropDownViewModel) }) + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exStatusDropDownViewModel) }) + "</div>");
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.EditorFor(m => m.Record.CargoQuantity).ToHtmlString() + "</div>");
+                                              if (!Model.Record.IsGatewayCalled)
+                                              {
+                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.EditorFor(m => m.Record.CargoQuantity).ToHtmlString() + "</div>");
+                                              }
+
                                               ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>");
-                                              ViewContext.Writer.Write("<div class='form-row-group  col-lg-12 col-md-12 no-padding'>" + Html.EditorFor(m => m.Record.GwyAddtionalComment, "MultilineText").ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>" + Html.EditorFor(m => m.Record.GwyAddtionalComment, "MultilineText").ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("</div>");
                                           });
                                       });
@@ -497,19 +502,19 @@
 }).GetHtml()
 
     @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlJgaNotes";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Notes";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
     {
-        settings.Name = "pnlJgaNotes";
-        settings.Width = Unit.Percentage(100);
-        settings.AllowCollapsingByHeaderClick = true;
-        settings.ShowCollapseButton = true;
-        settings.HeaderText = "Notes";
-        settings.Collapsed = true;
-        settings.ControlStyle.CssClass = "form-layout";
-        settings.SetContent(() =>
-        {
-            Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) });
-        });
-    }).GetHtml()
+        Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) });
+    });
+}).GetHtml()
 
     if (actionEnumToCompare == WebUtilities.JobGatewayActions.EMail)
     {

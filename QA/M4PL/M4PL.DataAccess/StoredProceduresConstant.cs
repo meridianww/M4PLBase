@@ -416,6 +416,7 @@ namespace M4PL.DataAccess
 		/* Job */
 		public const string GetJobView = "dbo.GetJobView";
 		public const string GetJob = "dbo.GetJob";
+		public const string GetJobAdditionalInfo = "GetJobAdditionalInfo";
 		public const string GetJobsSiteCodeByProgram = "dbo.GetJobsSiteCodeByProgram";
 		public const string GetJobByCustomerView = "dbo.GetJobByCustomerView";
 		public const string GetJobDataFromEDI204 = "dbo.GetJobDataFromEDI204";

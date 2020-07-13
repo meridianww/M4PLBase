@@ -49,7 +49,7 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.OrgRoleTitle).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-8'>" + Html.EditorFor(m => m.Record.OrgRoleDefault).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13 label-width-small'>" + Html.EditorFor(m => m.Record.RoleTypeId, new { RoleTypeId = Model.Record.RoleTypeId }).ToHtmlString() + "</div>");
-
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-8'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
     });

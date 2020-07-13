@@ -139,7 +139,7 @@ namespace M4PL.Web.Controllers
 			var allSelectedColumns = (!string.IsNullOrWhiteSpace(selectedColumns)) ? selectedColumns.SplitComma() : new string[] { };
 			var gridResult = new GridResult<Entities.MasterTables.ChooseColumn>();
 			gridResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider);
-			gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, defaultRoute, SessionProvider.ViewPagedDataSession[defaultRoute.Entity].PagedDataInfo, true, gridResult.Permission, this.Url);
+			gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, defaultRoute, SessionProvider.ViewPagedDataSession[defaultRoute.Entity].PagedDataInfo, true, gridResult.Permission, this.Url , null, SessionProvider);
 
 			if (!string.IsNullOrWhiteSpace(currentOperation))
 			{

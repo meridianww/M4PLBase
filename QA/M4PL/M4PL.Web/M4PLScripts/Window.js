@@ -84,8 +84,7 @@ M4PLWindow.DataView = function () {
         if (s.cpCustomerDefaultActiveFilter && s.cpCustomerDefaultActiveFilter.length > 0 && s.name === 'JobGridView') {
             s.ApplyFilter(s.cpCustomerDefaultActiveFilter);
         }
-        else if (s.GetFilterRowMenu() !== undefined && s.GetFilterRowMenu() !== "undefined" && s.name != 'JobGridView')
-            s.ApplyFilter("[StatusId] == 1");
+    
 
         ASPxClientUtils.AttachEventToElement(document, "scroll", function (evt) {
             if (s.GetFilterRowMenu() !== undefined && s.GetFilterRowMenu() !== "undefined")
@@ -99,14 +98,7 @@ M4PLWindow.DataView = function () {
     }
 
     var _onContextMenu = function (s, e, pageIcon, chooseColumnActionName, copyActionName) {
-        function setClipboard(text) {
-            localStorage.setItem("CopiedText", text);
-            //navigator.clipboard.writeText(text).then(function () {
-            //    /* clipboard successfully set */
-            //}, function () {
-            //    /* clipboard write failed */
-            //});
-        }
+
         var route = JSON.parse(e.item.name);
         var isDataView = false;
         isDataView = route.Action === "FormView" ? false : true
@@ -131,19 +123,14 @@ M4PLWindow.DataView = function () {
             else if (route.Action == "Copy") {
                 //var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
                 var selectedText = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), s.cellFocusHelper.focusedCellInfo.columnIndex);
-                localStorage.setItem("CopiedText", selectedText);
                 if (selectedText != undefined && selectedText != null)
-                    setClipboard(selectedText);
-
+                    M4PLCommon.Clipboard.SetClipboard(selectedText);
                 return;
             }
             else if (route.Action == "Paste") {
                 s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
-                var clipText = localStorage.getItem("CopiedText");
-                if (!s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).readOnly && clipText != undefined)
-                    s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText)
-                //navigator.clipboard.readText().then(clipText => s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue(clipText));
-
+                if (!s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).readOnly)
+                    M4PLCommon.Clipboard.GetClipboard(s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex), false);
                 return;
             }
 
@@ -151,10 +138,8 @@ M4PLWindow.DataView = function () {
                 s.batchEditApi.StartEditByKey(s.GetRowKey(e.elementIndex), s.cellFocusHelper.focusedCellInfo.columnIndex);
                 if (!s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).readOnly) {
                     var selectedText = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), s.cellFocusHelper.focusedCellInfo.columnIndex);
-                    //var selectedText = s.batchEditApi.GetCellTextContainer(s.GetFocusedRowIndex(), s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName).innerText;
-                    localStorage.setItem("CopiedText", selectedText);
                     if (selectedText != undefined && selectedText != null)
-                        setClipboard(selectedText);
+                        M4PLCommon.Clipboard.SetClipboard(selectedText);
                     s.GetEditor(s.cellFocusHelper.focusedCellInfo.columnIndex).SetValue("");
                     //s.batchEditApi.SetCellValue(e.elementIndex, s.columns[s.cellFocusHelper.focusedCellInfo.columnIndex].fieldName, "", null, true);
                 }
@@ -416,7 +401,7 @@ M4PLWindow.DataView = function () {
 
     var _onColumnResized = function (s, e) {
         if (!s.batchEditApi.HasChanges()) {
-            s.PerformCallback();
+            //s.PerformCallback();
         }
     }
 
@@ -425,7 +410,7 @@ M4PLWindow.DataView = function () {
         var selectedRowCount = s.GetSelectedRowCount();
 
         var callbackUrl = s.callbackUrl;
-        s.GetSelectedKeysOnPage() 
+        s.GetSelectedKeysOnPage()
         if (selectedRowCount == 1 && e.isSelected)
             M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
         else if (selectedRowCount != 0 && M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule')) {
@@ -450,7 +435,7 @@ M4PLWindow.DataView = function () {
                 if (urlParams.has('strRoute')) {
                     var route = JSON.parse(urlParams.getAll('strRoute'));
                     route.RecordId = selectedJobId;
-                    route.Location = null;
+                    route.Location = s.GetSelectedKeysOnPage();
                     s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                     s.Refresh();
                 }
@@ -1252,7 +1237,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1289,7 +1274,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1367,7 +1352,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1404,7 +1389,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1438,7 +1423,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1475,7 +1460,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {

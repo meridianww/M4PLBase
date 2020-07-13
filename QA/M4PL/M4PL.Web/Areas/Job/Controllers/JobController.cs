@@ -689,7 +689,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             
             Session["costJobCodeActions"] = null;
 			Session["priceJobCodeActions"] = null;
-
+			route.Filters = null;
 			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
