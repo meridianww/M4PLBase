@@ -1132,7 +1132,8 @@ namespace M4PL.Web
 
                         if ((allConcatenatedColumns == null) || (allConcatenatedColumns.Count == 0))
                         {
-                            whereCondition += string.Concat(" AND ", sqlCondition, " ");
+                            if ("(" + entity + ".StatusId = 0)" != sqlCondition)
+                                whereCondition += string.Concat(" AND ", sqlCondition, " ");
                         }
                         else
                         {
@@ -2942,7 +2943,7 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%'", jobAdvanceReportRequest.Search)
-					 + string.Format(" OR JobAdvanceReport.JobBOLMaster like '%{0}%')", jobAdvanceReportRequest.Search);
+                     + string.Format(" OR JobAdvanceReport.JobBOLMaster like '%{0}%')", jobAdvanceReportRequest.Search);
             //if (jobAdvanceReportRequest.IsAddtionalFilter)
             //{
             //    where += jobAdvanceReportRequest.WeightUnit > 0 ?

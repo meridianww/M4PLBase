@@ -84,8 +84,7 @@ M4PLWindow.DataView = function () {
         if (s.cpCustomerDefaultActiveFilter && s.cpCustomerDefaultActiveFilter.length > 0 && s.name === 'JobGridView') {
             s.ApplyFilter(s.cpCustomerDefaultActiveFilter);
         }
-        else if (s.GetFilterRowMenu() !== undefined && s.GetFilterRowMenu() !== "undefined" && s.name != 'JobGridView')
-            s.ApplyFilter("[StatusId] == 1");
+    
 
         ASPxClientUtils.AttachEventToElement(document, "scroll", function (evt) {
             if (s.GetFilterRowMenu() !== undefined && s.GetFilterRowMenu() !== "undefined")
