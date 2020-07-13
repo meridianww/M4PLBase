@@ -660,36 +660,9 @@ M4PLCommon.Control = (function () {
     }
 
     var _updateSelectedText = function () {
-        var clipText = localStorage.getItem("CopiedText");
         if (M4PLCommon.FocusedControlName) {
             var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
-            document.getElementById(currentControl).innerText = clipText
-            //navigator.clipboard.readText().then(clipText => document.getElementById(currentControl).innerText = clipText);
-            //For TextBox
-            //if (currentControl.GetChildElement('I')) {
-            //    var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
-            //    if (textComponent.selectionStart !== undefined) {
-            //        // Standards Compliant Version
-            //        var startPos = textComponent.selectionStart;
-            //        var endPos = textComponent.selectionEnd;
-            //        var currentValue = textComponent.value;
-            //        if (currentControl.GetText() != "")
-            //            currentControl.SetText(textComponent.value.substring(0, startPos) + localStorage.getItem("CopiedText") + textComponent.value.substring(endPos, textComponent.value.length));
-            //        else
-            //            currentControl.SetText(localStorage.getItem("CopiedText"));
-            //        textComponent.focus();
-            //    }
-            //    else if (document.selection !== undefined) {
-            //        // IE Version
-            //        textComponent.focus();
-            //        var sel = document.selection.createRange();
-            //    }
-            //}
-            ////For RichTextBox
-            //if (currentControl.selection && currentControl.document) {
-            //    currentControl.commands.insertText.execute(localStorage.getItem("CopiedText"));
-            //    currentControl.Focus();
-            //}
+            M4PLCommon.Clipboard.GetClipboard(document.getElementById(currentControl), true);
         }
     }
 
@@ -2484,5 +2457,43 @@ M4PLCommon.DisplayMessage = (function () {
 
     return {
         DefaultClientOk: _defaultClientOk
+    }
+})();
+
+M4PLCommon.Clipboard = (function () {
+
+    var _setClipboard = function (text) {
+        if (navigator != undefined && navigator.clipboard != undefined) {
+            navigator.clipboard.writeText(text).then(function () {
+                /* clipboard successfully set */
+            }, function () {
+                /* clipboard write failed */
+            });
+        } else {
+            localStorage.setItem("CopiedText", text);
+        }
+    }
+
+    var _getClipboard = function (ctrl, isInnerText) {
+        if (navigator != undefined && navigator.clipboard != undefined) {
+            if (isInnerText)
+                navigator.clipboard.readText().then(function (clipText) { ctrl.innerText = clipText; ctrl.value = clipText });
+            else
+                navigator.clipboard.readText().then(clipText => ctrl.SetValue(clipText));
+        } else {
+            var copiedText = localStorage.getItem("CopiedText");
+            if (copiedText != undefined && copiedText != '' && copiedText != null)
+                if (isInnerText) {
+                    ctrl.innerText = copiedText;
+                    ctrl.value = copiedText;
+                }
+                else
+                    ctrl.SetValue(clipText)
+        }
+    }
+
+    return {
+        SetClipboard: _setClipboard,
+        GetClipboard: _getClipboard
     }
 })();
