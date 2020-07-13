@@ -17,8 +17,10 @@
 //Purpose:                                      End point to interact with JobAttachment module
 //====================================================================================================================================================*/
 
+using M4PL.API.Models;
 using M4PL.Business.Job;
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -34,19 +36,27 @@ namespace M4PL.API.Controllers
     /// JobAttachmentController
     /// </summary>
 	[RoutePrefix("api/JobAttachment")]
-	public class JobAttachmentController : BaseApiController<JobAttachment>
+	public class JobAttachmentController : ApiController
 	{
 		private readonly IJobAttachmentCommands _jobAttachmentCommands;
 
-		/// <summary>
-		/// Function to get Job's Attachment details
-		/// </summary>
-		/// <param name="jobAttachmentCommands"></param>
-		public JobAttachmentController(IJobAttachmentCommands jobAttachmentCommands)
-			: base(jobAttachmentCommands)
+        public ActiveUser ActiveUser
+        {
+            get
+            {
+                return ApiContext.ActiveUser;
+            }
+        }
+
+        /// <summary>
+        /// Function to get Job's Attachment details
+        /// </summary>
+        /// <param name="jobAttachmentCommands"></param>
+        public JobAttachmentController(IJobAttachmentCommands jobAttachmentCommands)
 		{
 			_jobAttachmentCommands = jobAttachmentCommands;
 		}
+
         /// <summary>
         /// Response
         /// </summary>

@@ -25,7 +25,7 @@ namespace M4PL.Business.Job
     /// <summary>
     /// Performs basis CRUD operation on the JobAttachment Entity
     /// </summary>
-    public interface IJobAttachmentCommands : IBaseCommands<JobAttachment>
+    public interface IJobAttachmentCommands 
     {
         IList<JobAttachment> GetJobAttachment(string orderNumber);
 

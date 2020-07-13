@@ -18,13 +18,29 @@
 //==============================================================================================================
 
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
     /// <summary>
     /// perfoems basic CRUD operation on the JobAttribute Entity
     /// </summary>
-    public interface IJobAttributeCommands : IBaseCommands<JobAttribute>
+    public interface IJobAttributeCommands 
     {
+        ActiveUser ActiveUser { get; set; }
+
+        IList<Entities.Job.JobAttribute> GetPagedData(PagedDataInfo pagedDataInfo);
+
+        Entities.Job.JobAttribute Post(Entities.Job.JobAttribute job);
+
+        Entities.Job.JobAttribute Put(Entities.Job.JobAttribute job);
+
+        Entities.Job.JobAttribute Get(long id);
+
+        int Delete(long Id);
+
+        IList<IdRefLangName> Delete(List<long> ids, int statusId);
+
     }
 }

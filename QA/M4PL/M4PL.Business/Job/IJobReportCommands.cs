@@ -40,7 +40,7 @@ namespace M4PL.Business.Job
         int Delete(long Id);
 
         IList<IdRefLangName> Delete(List<long> ids, int statusId);
-        IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport);
+        IList<JobVocReport> GetVocReportData(ActiveUser activeuser, long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport);
         IList<JobReport> GetDropDownDataForLocation(ActiveUser activeUser, long customerID, string entity);
     }
 }
