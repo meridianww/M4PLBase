@@ -70,12 +70,7 @@ DevExCtrl.Ribbon = function () {
 
         if ((route.Action === "Copy")) {
             var selectedText = M4PLCommon.Control.GetSelectedText();
-            localStorage.setItem("CopiedText", selectedText);
-            //navigator.clipboard.writeText(selectedText).then(function () {
-            //    /* clipboard successfully set */
-            //}, function () {
-            //    /* clipboard write failed */
-            //});
+            M4PLCommon.Clipboard.SetClipboard(selectedText);
             return;
         }
         if ((route.Action === "Cut")) {
@@ -83,12 +78,7 @@ DevExCtrl.Ribbon = function () {
                 var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
                 if (currentControl.GetText() != "") {
                     var selectedText = M4PLCommon.Control.GetSelectedText();
-                    localStorage.setItem("CopiedText", selectedText);
-                    //navigator.clipboard.writeText(selectedText).then(function () {
-                    //    /* clipboard successfully set */
-                    //}, function () {
-                    //    /* clipboard write failed */
-                    //});
+                    M4PLCommon.Clipboard.SetClipboard(selectedText);
                     currentControl.SetText("");
                 }
             }
@@ -103,14 +93,11 @@ DevExCtrl.Ribbon = function () {
                 if (inputcontrol != null && inputcontrol[0] != null) {
                     var str = inputcontrol[0].id;
                     var res = str.substring(0, str.lastIndexOf("_"));
-                    var clipText = localStorage.getItem("CopiedText");
-                    if (ASPxClientControl.GetControlCollection().GetByName(res) == null && clipText != undefined) {
-                        inputcontrol[0].value = clipText;
-                        //navigator.clipboard.readText().then(clipText => inputcontrol[0].value = clipText);
+                    if (ASPxClientControl.GetControlCollection().GetByName(res) == null) {
+                        M4PLCommon.Clipboard.GetClipboard(inputcontrol[0], true)
                     }
                     else {
-                        ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText)
-                        //navigator.clipboard.readText().then(clipText => ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText));
+                        M4PLCommon.Clipboard.GetClipboard(inputcontrol[0], false)
                     }
                 }
             }
