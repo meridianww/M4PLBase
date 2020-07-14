@@ -935,7 +935,7 @@ namespace M4PL.Web
                                 cs.TextField = "LangName";
                                 cs.ValueField = "SysRefId";
                                 cs.ValueType = typeof(int);
-                                cs.DataSource = commonCommands.GetIdRefLangNames(col.ColLookupId);
+                                cs.DataSource = commonCommands.GetIdRefLangNames(col.ColLookupId).Where(s => s.SysRefId != 0);
                             });
                         }
                         else if (col.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)

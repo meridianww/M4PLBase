@@ -336,7 +336,7 @@ settings.SettingsPager.EnableAdaptivity = true;
                             cs.TextField = "LangName";
                             cs.ValueField = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                             cs.ValueType = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
-                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
+                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId).Where(s => s.SysRefId != 0);
                         });
 
                     }
