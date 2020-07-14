@@ -28,6 +28,9 @@
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
     }
+    else {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsFreezed = true;
+    }
     //Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobIsSchedule").ColIsVisible = false;
 }
 @if (Model.IsAccessPermission)

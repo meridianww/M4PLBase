@@ -31,9 +31,14 @@
     {
         cardResponse = (M4PL.Entities.Job.JobCardRequest)TempData["CardTtile"];
     }
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "StatusId").ColIsVisible = false;
     if (!Model.SessionProvider.ActiveUser.IsSysAdmin)
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
+    }
+    else
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsFreezed = true;
     }
 }
 @Html.DevExpress().GridView(settings =>
@@ -504,7 +509,7 @@
     {
         settings.HtmlDataCellPrepared = (s, e) =>
         {
-            if (e.DataColumn.FieldName == "JobOriginDateTimePlanned")
+            if (e.DataColumn.FieldName == "JobDeliveryDateTimePlanned")
             {
                 if (e.GetValue("JobColorCode") != null)
                 {

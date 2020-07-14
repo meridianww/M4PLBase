@@ -111,8 +111,21 @@ namespace M4PL.Web.Areas.Job.Controllers
             var jobCardRequest = new JobCardRequest();
             TempData["CardTtile"] = null;
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
-            if (filterId > 0)
+            
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId =
+                    filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
+            else
             {
+                var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+                var viewPagedDataSession = SessionProvider.ViewPagedDataSession; viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
+                SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId =
+                    filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
+            }
+            if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId > 0)
+            {
+                filterId = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId;
                 jobCardRequest.DashboardCategoryRelationId = filterId;
                 if (route.CompanyId != 0)
                     jobCardRequest.CustomerId = route.CompanyId;
