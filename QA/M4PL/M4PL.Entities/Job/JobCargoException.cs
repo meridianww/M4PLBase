@@ -18,5 +18,7 @@ namespace M4PL.Entities.Job
 		public string ExceptionReason { get; set; }
 
 		public string InstallStatus { get; set; }
+
+		public int CargoQuantity { get; set; }
 	}
 }

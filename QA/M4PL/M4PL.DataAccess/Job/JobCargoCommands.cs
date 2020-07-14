@@ -152,7 +152,7 @@ namespace M4PL.DataAccess.Job
 			return Delete(activeUser, ids, EntitiesAlias.JobCargo, statusId, ReservedKeysEnum.StatusId);
 		}
 
-		public static StatusModel CreateCargoException(long cargoId, JobExceptionInfo selectedJobExceptionInfo, JobInstallStatus selectedJobInstallStatus, ActiveUser activeUser)
+		public static StatusModel CreateCargoException(long cargoId, JobExceptionInfo selectedJobExceptionInfo, JobInstallStatus selectedJobInstallStatus, int cargoQuantity, ActiveUser activeUser)
 		{
 			StatusModel statusModel = null;
 			try
@@ -165,10 +165,12 @@ namespace M4PL.DataAccess.Job
 				 new Parameter("@GwyGatewayTitle", selectedJobExceptionInfo.ExceptionReasonCode),
 				 new Parameter("@CreatedDate", Utilities.TimeUtility.GetPacificDateTime()),
 				 new Parameter("@CreatedBy", activeUser.UserName),
-				 new Parameter("@StatusCode", codeArray[1]),
+				 new Parameter("@StatusCode", codeArray != null && codeArray.Length > 1 ? codeArray[1] : string.Empty),
 				 new Parameter("@GwyExceptionTitleId", selectedJobExceptionInfo.ExceptionReasonId),
 				 new Parameter("@GwyExceptionStatusId", selectedJobInstallStatus.InstallStatusId),
-				 new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+				 new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
+				 new Parameter("@CargoQuantity", cargoQuantity),
+				 new Parameter("@CargoField", selectedJobExceptionInfo.CargoField)
 			 };
 
 				statusModel = SqlSerializer.Default.DeserializeSingleRecord<StatusModel>(StoredProceduresConstant.InsertCargoException, parameters.ToArray(), storedProcedure: true);
