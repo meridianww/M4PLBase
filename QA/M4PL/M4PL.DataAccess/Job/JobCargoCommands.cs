@@ -165,7 +165,7 @@ namespace M4PL.DataAccess.Job
 				 new Parameter("@GwyGatewayTitle", selectedJobExceptionInfo.ExceptionReasonCode),
 				 new Parameter("@CreatedDate", Utilities.TimeUtility.GetPacificDateTime()),
 				 new Parameter("@CreatedBy", activeUser.UserName),
-				 new Parameter("@StatusCode", codeArray[1]),
+				 new Parameter("@StatusCode", codeArray != null && codeArray.Length > 1 ? codeArray[1] : string.Empty),
 				 new Parameter("@GwyExceptionTitleId", selectedJobExceptionInfo.ExceptionReasonId),
 				 new Parameter("@GwyExceptionStatusId", selectedJobInstallStatus.InstallStatusId),
 				 new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
