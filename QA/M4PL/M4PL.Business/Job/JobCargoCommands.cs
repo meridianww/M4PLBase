@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -107,7 +107,7 @@ namespace M4PL.Business.Job
 			StatusModel statusModel = CargoExceptionValidation(jobCargoException, cargoId, out selectedJobExceptionInfo, out selectedJobInstallStatus);
 			if (statusModel != null) { return statusModel; }
 
-			statusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, ActiveUser);
+			statusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, jobCargoException.CargoQuantity, ActiveUser);
 
 			if (statusModel == null) { return new StatusModel() { AdditionalDetail = "There is some issue while processing the request.", Status = "Failure", StatusCode = 500 };}
 
@@ -144,7 +144,7 @@ namespace M4PL.Business.Job
 				return new StatusModel() { AdditionalDetail = "ExceptionReason can not be empty, please sent a ExceptionReason for processing.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
 			}
 
-			var jobExceptionDetail = M4PL.DataAccess.Common.CommonCommands.GetJobExceptionDetail();
+			var jobExceptionDetail = M4PL.DataAccess.Common.CommonCommands.GetJobExceptionDetail(cargoId);
 			if (jobExceptionDetail != null)
 			{
 				if (jobExceptionDetail.JobExceptionInfo != null && jobExceptionDetail.JobExceptionInfo.Count > 0)

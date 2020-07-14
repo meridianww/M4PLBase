@@ -1202,13 +1202,13 @@ namespace M4PL.DataAccess.Common
             return result;
         }
 
-        public static JobExceptionDetail GetJobExceptionDetail()
+        public static JobExceptionDetail GetJobExceptionDetail(long cargoId)
         {
             JobExceptionDetail jobExceptionDetail = new JobExceptionDetail();
             SetCollection sets = new SetCollection();
             sets.AddSet<JobExceptionInfo>("JobExceptionInfo");
             sets.AddSet<JobInstallStatus>("JobInstallStatus");
-            SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetJobExceptionDetail, parameter: null, storedProcedure: true);
+            SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetJobExceptionDetail, new Parameter("@CargoId", cargoId), storedProcedure: true);
 
             var jobExceptionInfo = sets.GetSet<JobExceptionInfo>("JobExceptionInfo");
             var jobInstallStatus = sets.GetSet<JobInstallStatus>("JobInstallStatus");

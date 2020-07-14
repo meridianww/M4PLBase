@@ -32,6 +32,9 @@ namespace M4PL.Entities.Job
 		public string ExceptionTitle { get; set; }
 
 		public long ExceptionReasonId { get; set; }
+
+		public bool IsCargoRequired { get; set; }
+		public string CargoField { get; set; }
 	}
 
 	public class JobInstallStatus
