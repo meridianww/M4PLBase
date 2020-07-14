@@ -115,8 +115,8 @@ namespace M4PL.Web.Controllers
                     if (OkOperation != null && string.IsNullOrEmpty(OkOperation.ClickEvent))
                         OkOperation.ClickEvent = JsConstants.CloseDisplayMessage;
                 }
-                if(displayMessage.Code != null)
-                    return PartialView(MvcConstants.ViewDisplayPopupControl, displayMessage);
+                //if(displayMessage.Code != null)
+                //    return PartialView(MvcConstants.ViewDisplayPopupControl, displayMessage);
                 if (displayMessage.Code.Equals(DbConstants.WarningTimeOut))
                 {
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.WarningTimeOut);
