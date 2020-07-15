@@ -1131,8 +1131,8 @@ namespace M4PL.DataAccess.Common
                 if (Equals(oOldValue, oNewValue)) continue;
                 // Handle the display values when the underlying value is null
 
-                var sOldValue = oOldValue == null ? "null" : oOldValue.ToString();
-                var sNewValue = oNewValue == null ? "null" : oNewValue.ToString();
+                string sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
+                string sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
                 changeHistoryDataList.Add(new ChangeHistoryData() { FieldName = oProperty.Name, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate });
             }
 
