@@ -890,7 +890,7 @@ namespace M4PL.Web.Areas
         }
 
         public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
-              bool reloadApplication = false, long newRecordId = 0, string jobGatewayStatus = null, MvcRoute tabRoute = null)
+              bool reloadApplication = false, long newRecordId = 0, string jobGatewayStatus = null, MvcRoute tabRoute = null,string gatewayIds = null)
         {
             var displayMessage = new DisplayMessage();
             displayMessage = recordId > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
@@ -914,6 +914,7 @@ namespace M4PL.Web.Areas
                     reloadApplication = reloadApplication,
                     jobGatewayStatus = jobGatewayStatus,
                     tabRoute = tabRoute,
+                    gatewayIds = gatewayIds,
                 }, JsonRequestBehavior.AllowGet);
             return Json(new
             {
@@ -922,6 +923,7 @@ namespace M4PL.Web.Areas
                 displayMessage = displayMessage,
                 jobGatewayStatus = jobGatewayStatus,
                 tabRoute = tabRoute,
+                gatewayIds = gatewayIds,
             }, JsonRequestBehavior.AllowGet);
         }
 

@@ -166,11 +166,13 @@ M4PLCommon.RichEdit = function () {
         _openDialogCancelClick(s, e, byteArray.IsPopup);
     }
 
-    var _richEditorsPerformCallBack = function (route, byteArray) {
+    var _richEditorsPerformCallBack = function (route, byteArray, gatewayIds) {
+        
         $.each(byteArray, function (index, value) {
             if (ASPxClientControl.GetControlCollection().GetByName(value.ControlName)) {
                 M4PLCommon.CurrentByteArrayCount += 1;
                 ASPxClientControl.GetControlCollection().GetByName(value.ControlName).callbackCustomArgs["ByteArrayRecordId"] = route.RecordId;//same callbackCustomArgs name as WebApplicationConstants.ByteArrayRecordId
+                value.JobGatewayIds = gatewayIds;
                 ASPxClientControl.GetControlCollection().GetByName(value.ControlName).PerformCallback({ strByteArray: JSON.stringify(value) });
             }
         });
@@ -914,7 +916,7 @@ M4PLCommon.CheckHasChanges = (function () {
                     }
                     M4PLCommon.CurrentByteArrayCount = 0;
                     if (response.byteArray && response.byteArray.length > 0 && response.route) {
-                        M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray);
+                        M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray, null);
                     }
                     var formInterval = setInterval(function () {
                         if ((M4PLCommon.CurrentByteArrayCount <= 0) && AppCbPanel && !AppCbPanel.InCallback()) {

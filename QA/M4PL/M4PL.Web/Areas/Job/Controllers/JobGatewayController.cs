@@ -108,7 +108,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     resultRoute.Action = "FormView";
                     resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                     resultRoute.ParentRecordId = result.ProgramID ?? 0; ;
-                    resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
+                    resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport 
                                                ? WebApplicationConstants.AppCbPanel
                                                : "JobDataViewCbPanel";
 
@@ -313,7 +313,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                     route.SetParent(EntitiesAlias.Job, result.ParentId);
                 }
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(result.Id, route, byteArray, false, 0, null, resRoute);
+                commentByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+                return SuccessMessageForInsertOrUpdate(result.Id, route, byteArray, false, 0, null, resRoute,result.GatewayIds);
             }
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }

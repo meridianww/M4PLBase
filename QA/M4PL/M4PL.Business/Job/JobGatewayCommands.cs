@@ -102,6 +102,7 @@ namespace M4PL.Business.Job
         public JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
             var gateway = new JobGateway();
+            var gatewaysIds = string.Empty;
             jobGateway.IsMultiOperation = false;
             if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
             {
@@ -113,9 +114,11 @@ namespace M4PL.Business.Job
                     {
                         gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway,
                             M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
+                        gatewaysIds += gateway.Id + ",";
                     }));
                 }
                 Task.WaitAll(tasks.ToArray());
+                gateway.GatewayIds = gatewaysIds.Remove(gatewaysIds.Length - 1);
             }
             else
             {

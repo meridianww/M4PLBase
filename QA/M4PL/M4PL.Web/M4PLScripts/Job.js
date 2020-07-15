@@ -50,7 +50,7 @@ M4PLJob.FormView = function () {
                     M4PLWindow.IsFromConfirmSaveClick = false;
                     if (response && response.status && response.status === true) {
                         if (response.byteArray && response.byteArray.length > 0 && response.route) {
-                            M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray);
+                            M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray, null);
                         }
                         var route = JSON.parse(strRoute);
                         route.RecordId = response.route.RecordId;
