@@ -21,14 +21,14 @@ namespace M4PL.DataAccess.Job
 {
 	public class JobHistoryCommands : BaseCommands<Entities.Job.JobHistory>
 	{
-		public static IList<JobHistory> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		public static IList<JobHistory> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo, IList<ColumnSetting> columnSetting)
 		{
-			var result = GetChangeHistory(pagedDataInfo.RecordId, activeUser);
+			var result = GetChangeHistory(pagedDataInfo.RecordId, activeUser, columnSetting);
 			pagedDataInfo.TotalCount = result != null ? result.Count() : 0;
 			return result;
 		}
 
-		public static List<JobHistory> GetChangeHistory(long jobId, ActiveUser activeUser)
+		public static List<JobHistory> GetChangeHistory(long jobId, ActiveUser activeUser, IList<ColumnSetting> columnSetting)
 		{
 			List<JobHistory> changedDataList = null;
 			List<Entities.Job.Job> changeHistoryData = DataAccess.Job.JobCommands.GetJobChangeHistory(jobId);
@@ -47,7 +47,8 @@ namespace M4PL.DataAccess.Job
 						changedData.ForEach(x =>
 						changedDataList.Add(new JobHistory()
 						{
-							FieldName = x.FieldName,
+							FieldName = columnSetting != null && columnSetting.Where(y => y.ColColumnName == x.FieldName).Any() ?
+							columnSetting.Where(y => y.ColColumnName == x.FieldName).First().ColAliasName : x.FieldName,
 							ChangedBy = x.ChangedBy,
 							ChangedDate = x.ChangedDate,
 							OldValue = x.OldValue,
