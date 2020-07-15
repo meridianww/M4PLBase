@@ -107,7 +107,7 @@ namespace M4PL.Business.Job
 			StatusModel statusModel = CargoExceptionValidation(jobCargoException, cargoId, out selectedJobExceptionInfo, out selectedJobInstallStatus);
 			if (statusModel != null) { return statusModel; }
 
-			statusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, jobCargoException.CargoQuantity, ActiveUser);
+			statusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, jobCargoException.CargoQuantity, jobCargoException.CgoReasonCodeOSD, ActiveUser);
 
 			if (statusModel == null) { return new StatusModel() { AdditionalDetail = "There is some issue while processing the request.", Status = "Failure", StatusCode = 500 };}
 
@@ -127,6 +127,11 @@ namespace M4PL.Business.Job
 			if (jobCargoException == null)
 			{
 				return new StatusModel() { AdditionalDetail = "Request model can not be empty.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
+			}
+
+			if (jobCargoException.CargoQuantity <= 0)
+			{
+				return new StatusModel() { AdditionalDetail = "Cargo Quantity can not be less then or equal to zero.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
 			}
 
 			if (string.IsNullOrEmpty(jobCargoException.InstallStatus))

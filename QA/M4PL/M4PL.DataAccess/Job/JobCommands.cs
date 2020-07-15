@@ -1605,7 +1605,7 @@ namespace M4PL.DataAccess.Job
 					row["CgoVolumeUnits"] = jobCargo.CgoVolumeUnitsIdName;
 					row["CgoCubes"] = jobCargo.CgoCubes;
 					row["CgoQtyUnits"] = jobCargo.CgoQtyUnitsIdName;
-					row["CgoQTYOrdered"] = jobCargo.CgoQtyOrdered;
+					row["CgoQtyOrdered"] = jobCargo.CgoQtyOrdered;
 					row["CgoPackagingTypeId"] = jobCargo.CgoPackagingTypeId;
 					row["CgoQtyUnitsId"] = jobCargo.CgoQtyUnitsId;
 					row["CgoWeightUnitsId"] = jobCargo.CgoWeightUnitsId;
