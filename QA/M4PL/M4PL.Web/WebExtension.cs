@@ -120,9 +120,9 @@ namespace M4PL.Web
                 {
                     formResult.ComboBoxProvider = formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
                     if (formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
-                        formResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
+                        formResult.ComboBoxProvider[colSetting.ColLookupId] =  commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
                     else
-                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, true).Where(s=>s.SysRefId>0).ToList());
                 }
         }
 
@@ -2303,14 +2303,20 @@ namespace M4PL.Web
             {
                 if (!setting.IsSysAdmin)
                 {
-                    var userSetting = userSettings.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.Value.Equals(setting.Value));
+                    var userSetting = userSettings.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity);
                     if (userSetting == null)
                     {
                         userSettings.Settings.Add(setting);
                         continue;
                     }
-                    if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable)
-                        userSetting.Value = setting.Value;
+                    if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable )
+                    {
+                       
+                            userSetting.Value = setting.Value;
+                    }
+                    if (userSetting.Name == "SysStatusesIn" && userSetting.EntityName == "System")
+                        userSetting.Value = "1,2,3";
+                  
                 }
             }
 
