@@ -1122,7 +1122,7 @@ namespace M4PL.DataAccess.Common
             List<ChangeHistoryData> changeHistoryDataList = new List<ChangeHistoryData>();
             foreach (var oProperty in oType.GetProperties())
             {
-                if (oProperty.Name.Equals("ChangedBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("lastupdated", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("jobIsHavingpermission", StringComparison.OrdinalIgnoreCase))
+                if (oProperty.Name.Equals("ChangedBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("JobDriverAlert", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("DateChanged", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("EnteredBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("DateEntered", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("jobIsHavingpermission", StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 var oOldValue = oProperty.GetValue(oldObject, null);
@@ -1132,8 +1132,8 @@ namespace M4PL.DataAccess.Common
                 if (Equals(oOldValue, oNewValue)) continue;
                 // Handle the display values when the underlying value is null
 
-                var sOldValue = oOldValue == null ? "null" : oOldValue.ToString();
-                var sNewValue = oNewValue == null ? "null" : oNewValue.ToString();
+                string sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
+                string sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
                 changeHistoryDataList.Add(new ChangeHistoryData() { FieldName = oProperty.Name, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate });
             }
 

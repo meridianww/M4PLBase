@@ -835,20 +835,25 @@ namespace M4PL.DataAccess.Job
 			return result;
 		}
 
-		public static List<ChangeHistoryData> GetChangeHistory(long jobId, ActiveUser activeUser)
+		public static List<Entities.Job.Job> GetJobChangeHistory(long jobId)
+		{
+			return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetJobChangeHistory, new Parameter("@JobId", jobId), storedProcedure: true);
+		}
+
+		public static List<ChangeHistoryData> GetJobChangeHistory(long jobId, ActiveUser activeUser)
 		{
 			List<ChangeHistoryData> changedDataList = null;
-			List<ChangeHistory> changeHistoryData = CommonCommands.GetChangeHistory(activeUser, jobId, EntitiesAlias.Job);
-			if (changeHistoryData != null && changeHistoryData.Count > 0)
+			List<Entities.Job.Job> changeHistoryData = GetJobChangeHistory(jobId);
+			if (changeHistoryData != null && changeHistoryData.Count > 1)
 			{
 				changedDataList = new List<ChangeHistoryData>();
 				Entities.Job.Job originalDataModel = null;
 				Entities.Job.Job changedDataModel = null;
-				foreach (var historyData in changeHistoryData)
+				for (int i = 0; i < changeHistoryData.Count - 1; i++)
 				{
-					originalDataModel = JsonConvert.DeserializeObject<Entities.Job.Job>(historyData.OrigionalData);
-					changedDataModel = JsonConvert.DeserializeObject<Entities.Job.Job>(historyData.ChangedData);
-					List<ChangeHistoryData> changedData = CommonCommands.GetChangedValues(originalDataModel, changedDataModel, historyData.ChangedBy, historyData.ChangedDate);
+					originalDataModel = changeHistoryData[i];
+					changedDataModel = changeHistoryData[i + 1];
+					List<ChangeHistoryData> changedData = CommonCommands.GetChangedValues(originalDataModel, changedDataModel, !string.IsNullOrEmpty(changedDataModel.ChangedBy) ? changedDataModel.ChangedBy : changedDataModel.EnteredBy, changedDataModel.DateChanged.HasValue ? (DateTime)changedDataModel.DateChanged : (DateTime)changedDataModel.DateEntered);
 					if (changedData != null && changedData.Count > 0)
 					{
 						changedData.ForEach(x => changedDataList.Add(x));
