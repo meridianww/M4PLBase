@@ -44,7 +44,7 @@ namespace M4PL.API.Controllers
 		/// CreateCargoException method creates a new cargo exception code, exception reason and install status for a particular Order/Job cargo.
 		/// </summary>
 		/// <param name="jobCargoException">
-		/// This parameter require field values ExceptionCode(type string),ExceptionReason(type string), InstallStatus(type string) and CargoQuantity(type integer).
+		/// This parameter require field values ExceptionCode(type string),ExceptionReason(type string), InstallStatus(type string), CargoQuantity(type integer) and CgoReasonCodeOSD(type string).
 		/// </param>
 		/// <param name="cargoId">Order/Job cargoId(type numeric).</param>
 		/// <returns>
