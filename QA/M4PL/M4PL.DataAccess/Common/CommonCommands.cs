@@ -514,7 +514,8 @@ namespace M4PL.DataAccess.Common
                         new Parameter("@refTableName", byteArray.Entity.ToString()),
                         new Parameter("@fieldName", byteArray.FieldName),
                         new Parameter("@type", byteArray.Type.ToString()),
-                        new Parameter("@documentText", byteArray.DocumentText)
+                        new Parameter("@documentText", byteArray.DocumentText),
+                        new Parameter("@gatewayIds", byteArray.JobGatewayIds)
                 };
 
             if (byteArray.Bytes != null)

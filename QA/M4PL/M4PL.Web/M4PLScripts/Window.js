@@ -84,7 +84,7 @@ M4PLWindow.DataView = function () {
         if (s.cpCustomerDefaultActiveFilter && s.cpCustomerDefaultActiveFilter.length > 0 && s.name === 'JobGridView') {
             s.ApplyFilter(s.cpCustomerDefaultActiveFilter);
         }
-    
+
 
         ASPxClientUtils.AttachEventToElement(document, "scroll", function (evt) {
             if (s.GetFilterRowMenu() !== undefined && s.GetFilterRowMenu() !== "undefined")
@@ -946,7 +946,7 @@ M4PLWindow.FormView = function () {
                         }
                         M4PLCommon.CurrentByteArrayCount = 0;
                         if (response.byteArray && response.byteArray.length > 0 && response.route) {
-                            M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray);
+                            M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray, null);
                         }
                         var formInterval = setInterval(function () {
                             if ((M4PLCommon.CurrentByteArrayCount <= 0) && AppCbPanel && !AppCbPanel.InCallback()) {
@@ -1086,7 +1086,7 @@ M4PLWindow.FormView = function () {
 
                             M4PLCommon.CurrentByteArrayCount = 0;
                             if (response.byteArray && response.byteArray.length > 0 && response.route)
-                                M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray);
+                                M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray, response.gatewayIds);
                             var currentPopupInterval = setInterval(function () {
                                 if ((M4PLCommon.CurrentByteArrayCount <= 0)) {
                                     window.clearInterval(currentPopupInterval);
