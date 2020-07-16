@@ -39,8 +39,9 @@ namespace M4PL.Business.Job
         /// <returns></returns>
         public IList<Entities.Job.JobHistory> GetPagedData(PagedDataInfo pagedDataInfo)
         {
+			IList<IdRefLangName> statusLookup  = CoreCache.GetIdRefLangNames("EN", 39);
 			IList<ColumnSetting>  columnSetting = CoreCache.GetColumnSettingsByEntityAlias("EN", Entities.EntitiesAlias.Job);
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo, columnSetting);
+            return _commands.GetPagedData(ActiveUser, pagedDataInfo, columnSetting, statusLookup);
         }
 
         public JobHistory Patch(JobHistory entity)

@@ -110,8 +110,9 @@ namespace M4PL.Web.Areas
             {
                 route.IsPBSReport = false;
                 currentPagedDataInfo.RecordId = route.RecordId;
-                var result = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
-                _gridResult.Records = result;
+				var result = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+				currentPagedDataInfo.PageSize = result == null ? currentPagedDataInfo.PageSize : result.Count;
+				_gridResult.Records = result;
             }
             else
             {
@@ -154,8 +155,8 @@ namespace M4PL.Web.Areas
             _gridResult.Operations = _commonCommands.GridOperations();
             _gridResult.GridSetting.DataRowType = typeof(TView);
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-            _gridResult.GridViewModel.Pager.PageSize = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize;
-            _gridResult.GridViewModel.Pager.PageIndex = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber - 1;
+            _gridResult.GridViewModel.Pager.PageSize = route.Entity == EntitiesAlias.JobHistory && _gridResult.Records != null ? _gridResult.Records.Count : _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize;
+            _gridResult.GridViewModel.Pager.PageIndex = route.Entity == EntitiesAlias.JobHistory ? 0 : _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber - 1;
 
             ////reset the pageindex when Filter applied and pageing is opted
             if ((ViewData[WebApplicationConstants.ViewDataFilterPageNo] != null) && ((double)_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount / _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize >= (int)ViewData[WebApplicationConstants.ViewDataFilterPageNo]))
@@ -192,8 +193,8 @@ namespace M4PL.Web.Areas
 				route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
 			if (route.ParentEntity == EntitiesAlias.Common)
 				route.ParentRecordId = 0;
-          
-           
+
+
             SetGridResult(route, gridName, isGridSetting);
             long expandRowId;
             Int64.TryParse(route.Url, out expandRowId);

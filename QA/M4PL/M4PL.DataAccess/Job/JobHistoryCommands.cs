@@ -21,14 +21,14 @@ namespace M4PL.DataAccess.Job
 {
 	public class JobHistoryCommands : BaseCommands<Entities.Job.JobHistory>
 	{
-		public static IList<JobHistory> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo, IList<ColumnSetting> columnSetting)
+		public static IList<JobHistory> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo, IList<ColumnSetting> columnSetting, IList<IdRefLangName> statusLookup)
 		{
-			var result = GetChangeHistory(pagedDataInfo.RecordId, activeUser, columnSetting);
+			var result = GetChangeHistory(pagedDataInfo.RecordId, activeUser, columnSetting, statusLookup);
 			pagedDataInfo.TotalCount = result != null ? result.Count() : 0;
 			return result;
 		}
 
-		public static List<JobHistory> GetChangeHistory(long jobId, ActiveUser activeUser, IList<ColumnSetting> columnSetting)
+		public static List<JobHistory> GetChangeHistory(long jobId, ActiveUser activeUser, IList<ColumnSetting> columnSetting, IList<IdRefLangName> statusLookup)
 		{
 			List<JobHistory> changedDataList = null;
 			List<Entities.Job.Job> changeHistoryData = DataAccess.Job.JobCommands.GetJobChangeHistory(jobId);
@@ -51,8 +51,10 @@ namespace M4PL.DataAccess.Job
 							columnSetting.Where(y => y.ColColumnName == x.FieldName).First().ColAliasName : x.FieldName,
 							ChangedBy = x.ChangedBy,
 							ChangedDate = x.ChangedDate,
-							OldValue = x.OldValue,
-							NewValue = x.NewValue,
+							OldValue = statusLookup != null && x.FieldName.Equals("StatusId", StringComparison.OrdinalIgnoreCase) ?
+							statusLookup.FirstOrDefault(z => z.SysRefId == Convert.ToInt32(x.OldValue))?.LangName : x.OldValue,
+							NewValue = statusLookup != null && x.FieldName.Equals("StatusId", StringComparison.OrdinalIgnoreCase) ?
+							statusLookup.FirstOrDefault(z => z.SysRefId == Convert.ToInt32(x.NewValue))?.LangName : x.NewValue,
 							JobID = jobId
 						}));
 					}

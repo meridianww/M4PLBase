@@ -775,7 +775,29 @@ namespace M4PL.Web
             return 80;
         }
 
-        public static string ShouldRenderDetailGrid(object dataItem, ICommonCommands commonCommands, ref MvcRoute currentChildRoute)
+		public static int SetJobHistoryGridPixel(APIClient.ViewModels.ColumnSetting columnSetting)
+		{
+			switch (columnSetting.ColColumnName)
+			{
+				case "FieldName":
+					return columnSetting.MaxLength = 50;
+
+				case "OldValue":
+					return columnSetting.MaxLength = 80;
+
+				case "NewValue":
+					return columnSetting.MaxLength = 80;
+
+				case "ChangedDate":
+					return columnSetting.MaxLength = 100;
+				case "ChangedBy":
+					return columnSetting.MaxLength = 80;
+			}
+
+			return 80;
+		}
+
+		public static string ShouldRenderDetailGrid(object dataItem, ICommonCommands commonCommands, ref MvcRoute currentChildRoute)
         {
             switch (currentChildRoute.Entity)
             {

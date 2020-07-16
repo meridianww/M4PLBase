@@ -55,13 +55,13 @@
     settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
     settings.SettingsResizing.Visualization = ResizingMode.Live;
 
-    settings.SettingsPager.EnableAdaptivity = true;
-    settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
-    settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
-    settings.SettingsPager.FirstPageButton.Visible = true;
-    settings.SettingsPager.LastPageButton.Visible = true;
-    settings.SettingsPager.PageSizeItemSettings.Visible = true;
-    settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
+    //settings.SettingsPager.EnableAdaptivity = false;
+    //settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
+    //settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
+    //settings.SettingsPager.FirstPageButton.Visible = false;
+    //settings.SettingsPager.LastPageButton.Visible = false;
+    //settings.SettingsPager.PageSizeItemSettings.Visible = false;
+    //settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
 
     //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
@@ -109,8 +109,8 @@
                 if (colSetting.ColIsGroupBy)
                     isGroupingApplied = true;
 
-                if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
-                    column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
+               //// if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
+                    column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.SetJobHistoryGridPixel(colSetting));
                 column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
                 if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineItem))
@@ -165,7 +165,7 @@
                         ViewContext.Writer.Write(Html.DevExpress().ComboBox(cs =>
                         {
                             cs.Name = "Filter" + Model.GridSetting.CallBackRoute.Controller + colSetting.ColColumnName;
-                            cs.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                           //// cs.Width = System.Web.UI.WebControls.Unit.Percentage(100);
                             cs.Properties.ClientInstanceName = colSetting.ColColumnName;
                             cs.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
                             cs.Properties.TextField = "LangName";
