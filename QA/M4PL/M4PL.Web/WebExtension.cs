@@ -1774,7 +1774,16 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Price Code")
+				if (mnu.MnuTitle == "Job History")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (mnu.MnuTitle == "Price Code")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
@@ -2311,12 +2320,12 @@ namespace M4PL.Web
                     }
                     if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable )
                     {
-                       
+
                             userSetting.Value = setting.Value;
                     }
                     if (userSetting.Name == "SysStatusesIn" && userSetting.EntityName == "System")
                         userSetting.Value = "1,2,3";
-                  
+
                 }
             }
 

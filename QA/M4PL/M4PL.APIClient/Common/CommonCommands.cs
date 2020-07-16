@@ -1010,6 +1010,14 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
+		public DocumentDataView GetHistoryReportDocumentByJobId(string jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetHistoryReportDocumentByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
 		public DocumentDataView DownloadPOD(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetPODDocumentByJobId");
@@ -1042,6 +1050,14 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
+		public DocumentStatusView IsHistoryPresentForJob(string jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "IsHistoryPresentForJob");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentStatusView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
 		public IList<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null)
 		{
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddParameter("jobId", jobId).AddParameter("entity", entity).AddParameter("isScheduleAciton", isScheduleAciton)).Content;
@@ -1050,27 +1066,6 @@ namespace M4PL.APIClient.Common
 		}
 
 		#region Multiple Document Select Report
-
-		public DocumentDataView DownloadAll(List<long> jobId)
-		{
-			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetAttachmentsByJobId");
-			return JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser)
-				.AddObject(jobId)).Content).Results.FirstOrDefault();
-		}
-
-		public DocumentDataView GetPriceCodeReportByJobId(List<long> jobId)
-		{
-			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetPriceCodeReportByJobId");
-			return JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser)
-				.AddObject(jobId)).Content).Results.FirstOrDefault();
-		}
-
-		public DocumentDataView GetCostCodeReportByJobId(List<long> jobId)
-		{
-			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetCostCodeReportByJobId");
-			return JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser)
-				.AddObject(jobId)).Content).Results.FirstOrDefault();
-		}
 
 		public DocumentDataView DownloadBOL(string jobId)
 		{

@@ -25,7 +25,7 @@ namespace M4PL.DataAccess.Job
 		{
 			var result = GetChangeHistory(pagedDataInfo.RecordId, activeUser, columnSetting, statusLookup);
 			pagedDataInfo.TotalCount = result != null ? result.Count() : 0;
-			return result;
+			return result == null ? new List<JobHistory>() : result;
 		}
 
 		public static List<JobHistory> GetChangeHistory(long jobId, ActiveUser activeUser, IList<ColumnSetting> columnSetting, IList<IdRefLangName> statusLookup)
