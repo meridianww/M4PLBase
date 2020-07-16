@@ -107,7 +107,7 @@ namespace M4PL.Business.Job
 			StatusModel statusModel = CargoExceptionValidation(jobCargoException, cargoId, out selectedJobExceptionInfo, out selectedJobInstallStatus);
 			if (statusModel != null) { return statusModel; }
 
-			statusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, jobCargoException.CargoQuantity, jobCargoException.CgoReasonCodeOSD, ActiveUser);
+			statusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, jobCargoException.CargoQuantity, jobCargoException.CgoReasonCodeOSD, jobCargoException.CgoDateLastScan, ActiveUser);
 
 			if (statusModel == null) { return new StatusModel() { AdditionalDetail = "There is some issue while processing the request.", Status = "Failure", StatusCode = 500 };}
 

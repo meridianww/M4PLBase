@@ -17,6 +17,8 @@
 // Purpose:                                      Contains objects related to JobCargo
 //==========================================================================================================
 
+using System;
+
 namespace M4PL.Entities.Job
 {
 	/// <summary>
@@ -138,5 +140,7 @@ namespace M4PL.Entities.Job
 		public string CgoLongitude { get; set; }
 
 		public string CgoComment { get; set; }
+
+		public DateTime? CgoDateLastScan { get; set; }
 	}
 }

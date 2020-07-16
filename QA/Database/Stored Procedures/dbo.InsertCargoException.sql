@@ -22,6 +22,7 @@ CREATE PROCEDURE [dbo].[InsertCargoException] (
 	,@CargoQuantity INT = 0
 	,@CargoField VARCHAR(150)
 	,@CgoReasonCodeOSD VARCHAR(30)
+	,@CgoDateLastScan datetime2(7) = NULL
 	)
 AS
 BEGIN
@@ -168,7 +169,7 @@ BEGIN
 
 		IF (@currentId > 0 AND @cargoId > 0)
 		BEGIN
-		UPDATE JOBDL010Cargo SET CgoReasonCodeOSD = @CgoReasonCodeOSD 
+		UPDATE JOBDL010Cargo SET CgoReasonCodeOSD = @CgoReasonCodeOSD , CgoDateLastScan = ISNULL(@CgoDateLastScan,CgoDateLastScan)
 		Where Id = @cargoId
 
 		IF(ISNULL(@CargoField, '') <> '')

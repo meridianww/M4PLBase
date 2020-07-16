@@ -152,7 +152,7 @@ namespace M4PL.DataAccess.Job
 			return Delete(activeUser, ids, EntitiesAlias.JobCargo, statusId, ReservedKeysEnum.StatusId);
 		}
 
-		public static StatusModel CreateCargoException(long cargoId, JobExceptionInfo selectedJobExceptionInfo, JobInstallStatus selectedJobInstallStatus, int cargoQuantity, string cgoReasonCodeOSD, ActiveUser activeUser)
+		public static StatusModel CreateCargoException(long cargoId, JobExceptionInfo selectedJobExceptionInfo, JobInstallStatus selectedJobInstallStatus, int cargoQuantity, string cgoReasonCodeOSD, DateTime? cgoDateLastScan, ActiveUser activeUser)
 		{
 			StatusModel statusModel = null;
 			try
@@ -171,7 +171,8 @@ namespace M4PL.DataAccess.Job
 				 new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
 				 new Parameter("@CargoQuantity", cargoQuantity),
 				 new Parameter("@CargoField", selectedJobExceptionInfo.CargoField),
-				 new Parameter("@CgoReasonCodeOSD", cgoReasonCodeOSD)
+				 new Parameter("@CgoReasonCodeOSD", cgoReasonCodeOSD),
+				 new Parameter("@CgoDateLastScan", cgoDateLastScan)
 
 			 };
 
@@ -224,7 +225,8 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@cgoLongitude", jobCargo.CgoLongitude),
 			   new Parameter("@cgoProcessingFlags", jobCargo.CgoProcessingFlags),
 			   new Parameter("@statusId", jobCargo.StatusId),
-			   new Parameter("@CgoComment",jobCargo.CgoComment)
+			   new Parameter("@CgoComment",jobCargo.CgoComment),
+			   new Parameter("@CgoDateLastScan", jobCargo.CgoDateLastScan)
 			};
 			return parameters;
 		}

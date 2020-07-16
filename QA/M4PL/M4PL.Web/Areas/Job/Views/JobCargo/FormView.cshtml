@@ -91,24 +91,24 @@
 
         <div class="col-sm-2 col-md-2 col-lg-2 job-cargostatus-panel no-padding-right">
             @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlJobCargoStatus";
-    settings.Width = Unit.Percentage(100);
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Job Cargo Status";
-    settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout";
-    settings.SetContent(() =>
-    {
+       {
+           settings.Name = "pnlJobCargoStatus";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "Job Cargo Status";
+           settings.Collapsed = false;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
 
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.CgoSeverityCode).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.CgoSeverityCode).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.CgoDateLastScan).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15 field_height_3'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + "</div>");
 
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-15 field_height_3'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + "</div>");
-
-    });
-}).GetHtml()
+           });
+       }).GetHtml()
         </div>
 
         @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
