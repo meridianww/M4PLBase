@@ -5,3 +5,5 @@ INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTable
 VALUES ('EN', 'JobCargo', NULL, 'CgoDateLastScan', 'Last Scanned', 'Last Scanned', NULL, NULL, NULL, 40, 0, 1, 1, 1, NULL, 0, 0, NULL, 1, 'Last Scanned')
 END
 
+
+

@@ -123,13 +123,25 @@ namespace M4PL.API.Controllers
 		/// </summary>
 		/// <param name="jobId"></param>
 		/// <returns></returns>
-		[AllowAnonymous]
 		[HttpGet]
 		[Route("GetCostCodeReportByJobId")]
 		public Entities.Document.DocumentData GetCostCodeReportByJobId(string jobId)
 		{
 			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
 			return _attachmentCommands.GetCostCodeReportDocumentByJobId(selectedJobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetHistoryReportDocumentByJobId")]
+		public Entities.Document.DocumentData GetHistoryReportDocumentByJobId(string jobId)
+		{
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.GetHistoryReportDocumentByJobId(selectedJobId);
 		}
 
 		#endregion
@@ -154,6 +166,14 @@ namespace M4PL.API.Controllers
 		{
 			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
 			return _attachmentCommands.IsCostCodeDataPresentForJob(selectedJobId);
+		}
+
+		[HttpGet]
+		[Route("IsHistoryPresentForJob")]
+		public Entities.Document.DocumentStatus IsHistoryPresentForJob(string jobId)
+		{
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			return _attachmentCommands.IsHistoryPresentForJob(selectedJobId);
 		}
 
 		[HttpGet]

@@ -1370,7 +1370,7 @@ namespace M4PL.Web.Areas
             }
         }
 
-        public FileResult DownloadCostReport(string strRoute, string jobIds = null)
+		public FileResult DownloadCostReport(string strRoute, string jobIds = null)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             try
@@ -1391,11 +1391,32 @@ namespace M4PL.Web.Areas
             }
         }
 
-        #endregion Attachments
+		public FileResult DownloadJobHistoryReport(string strRoute, string jobIds = null)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			try
+			{
+				List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+				string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+				var jobHistoryReportDocument = _commonCommands.GetHistoryReportDocumentByJobId(jobId);
+				if (jobHistoryReportDocument != null && !string.IsNullOrEmpty(jobHistoryReportDocument.DocumentName))
+				{
+					return File(jobHistoryReportDocument.DocumentContent, jobHistoryReportDocument.ContentType, jobHistoryReportDocument.DocumentName);
+				}
 
-        #endregion Ribbon
+				return null;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
 
-        private string GetCallbackViewName(EntitiesAlias entity)
+		#endregion Attachments
+
+		#endregion Ribbon
+
+		private string GetCallbackViewName(EntitiesAlias entity)
         {
             string callbackDataViewName = MvcConstants.GridViewPartial;
             switch (entity)

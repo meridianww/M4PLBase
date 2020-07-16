@@ -20,6 +20,7 @@
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Document;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System;
@@ -381,6 +382,34 @@ namespace M4PL.DataAccess.Attachment
 			}
 
 			return tblJobCostReport;
+		}
+
+		public static DataTable GetJobHistoryDataTable(ActiveUser activeUser, long jobId, IList<ColumnSetting> columnSetting, IList<IdRefLangName> statusLookup)
+		{
+			IList<JobHistory> jobHistoryList = DataAccess.Job.JobHistoryCommands.GetPagedData(activeUser, new PagedDataInfo() { RecordId = jobId }, columnSetting, statusLookup);
+			DataTable tblJobHistoryReport = new DataTable();
+			tblJobHistoryReport.Columns.Add("Field Name");
+			tblJobHistoryReport.Columns.Add("Old Value");
+			tblJobHistoryReport.Columns.Add("New Value");
+			tblJobHistoryReport.Columns.Add("Change dBy");
+			tblJobHistoryReport.Columns.Add("Changed Date");
+
+			if (jobHistoryList?.Count > 0)
+			{
+				foreach (var jobHistory in jobHistoryList)
+				{
+					var row = tblJobHistoryReport.NewRow();
+					row["Field Name"] = jobHistory.FieldName;
+					row["Old Value"] = jobHistory.OldValue;
+					row["New Value"] = jobHistory.NewValue;
+					row["Change dBy"] = jobHistory.ChangedBy;
+					row["Changed Date"] = jobHistory.ChangedDate;
+					tblJobHistoryReport.Rows.Add(row);
+					tblJobHistoryReport.AcceptChanges();
+				}
+			}
+
+			return tblJobHistoryReport;
 		}
 
 		/// <summary>
