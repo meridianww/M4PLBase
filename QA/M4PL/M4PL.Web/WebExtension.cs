@@ -120,9 +120,9 @@ namespace M4PL.Web
                 {
                     formResult.ComboBoxProvider = formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
                     if (formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
-                        formResult.ComboBoxProvider[colSetting.ColLookupId] =  commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
+                        formResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
                     else
-                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, true).Where(s=>s.SysRefId>0).ToList());
+                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, true).Where(s => s.SysRefId > 0).ToList());
                 }
         }
 
@@ -743,13 +743,15 @@ namespace M4PL.Web
                     case EntitiesAlias.OrgRefRole:
                         if (dropDownData.EntityFor == EntitiesAlias.OrgRolesResp)
                             dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", EntitiesAlias.OrgRefRole.ToString(), "OrgId", dropDownData.ParentId);
+                        if (dropDownData.EntityFor == EntitiesAlias.SystemAccount)
+                        {
+                            dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", EntitiesAlias.OrgRefRole.ToString(), ReservedKeysEnum.StatusId.ToString(), "1");
+                        }
                         if (dropDownData.EntityFor == EntitiesAlias.OrgPocContact)
                         {
                             dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "OrgID");
                             dropDownData.WhereCondition += string.Format(" AND {0}.{1} IN ( {2} )", EntitiesAlias.OrgRefRole.ToString(), "RoleTypeId", "95,97,98");
                         }
-                        else
-                            dropDownData.WhereCondition = null;
                         break;
 
                     case EntitiesAlias.SecurityByRole:
@@ -2293,7 +2295,7 @@ namespace M4PL.Web
         public static SysSetting UpdateActiveUserSettings(this ICommonCommands _commonCommands, ActiveUser activeUser = null)
         {
             IList<RefSetting> sysRefSettings = _commonCommands.GetSystemSetting(activeUser: activeUser).Settings;
-            SysSetting userSettings = _commonCommands.GetUserSysSettings(activeUser: activeUser);
+            SysSetting userSettings =  _commonCommands.GetUserSysSettings(activeUser: activeUser);
             if (!string.IsNullOrEmpty(userSettings.SysJsonSetting) && (userSettings.Settings == null || !userSettings.Settings.Any()))
                 userSettings.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSettings.SysJsonSetting);
             else
@@ -2309,14 +2311,14 @@ namespace M4PL.Web
                         userSettings.Settings.Add(setting);
                         continue;
                     }
-                    if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable )
+                    if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable)
                     {
-                       
-                            userSetting.Value = setting.Value;
+
+                        userSetting.Value = setting.Value;
                     }
                     if (userSetting.Name == "SysStatusesIn" && userSetting.EntityName == "System")
                         userSetting.Value = "1,2,3";
-                  
+
                 }
             }
 
