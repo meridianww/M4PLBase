@@ -1694,11 +1694,12 @@ namespace M4PL.Web
                         }
                         if ((currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) && (route.Action == "TreeView"))
                         {
-                            mnu.StatusId = 1;
-                            if (route.IsJobParentEntityUpdated && mnu.MnuTitle == "New")
+
+                            if (mnu.MnuTitle == "New" && (route.Action == "TreeView" || route.IsJobParentEntityUpdated))
                             {
                                 mnu.StatusId = 3;
                             }
+                            else mnu.StatusId = 1;
                         }
                     }
                 }
@@ -1776,16 +1777,16 @@ namespace M4PL.Web
                     }
                 }
 
-				if (mnu.MnuTitle == "Job History")
-				{
-					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
-					{
-						mnu.StatusId = 1;
-					}
-				}
+                if (mnu.MnuTitle == "Job History")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
 
-				if (mnu.MnuTitle == "Price Code")
+                if (mnu.MnuTitle == "Price Code")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
