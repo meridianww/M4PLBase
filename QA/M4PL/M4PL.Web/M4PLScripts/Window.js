@@ -410,7 +410,6 @@ M4PLWindow.DataView = function () {
         var selectedRowCount = s.GetSelectedRowCount();
 
         var callbackUrl = s.callbackUrl;
-        s.GetSelectedKeysOnPage()
         if (selectedRowCount == 1 && e.isSelected)
             M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
         else if (selectedRowCount != 0 && M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule')) {
@@ -1110,8 +1109,25 @@ M4PLWindow.FormView = function () {
                                             var resultRoute = response.tabRoute;
                                             if (resultRoute != null) {
                                                 resultRoute.Controller = "Job";
-                                                if (ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel))
-                                                    ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(resultRoute) });
+                                                var sender = ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel);
+                                                if (response.gatewayIds != null && response.gatewayIds != undefined) {
+                                                    var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+                                                    if (s != null && s != undefined) {
+                                                        var callbackUrl = s.callbackUrl;
+                                                        if (callbackUrl != undefined && callbackUrl != "") {
+                                                            var callbackUri = new URL(callbackUrl, window.location.origin);
+                                                            var urlParams = new URLSearchParams(callbackUri.search);
+                                                            if (urlParams.has('strRoute')) {
+                                                                var route = JSON.parse(urlParams.getAll('strRoute'));
+                                                                route.RecordId = 0;
+                                                                route.Location = s.GetSelectedKeysOnPage();
+                                                                s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
+                                                                s.Refresh();
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (sender)
+                                                    sender.PerformCallback({ strRoute: JSON.stringify(resultRoute) });
                                             }
                                             else {
                                                 ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
