@@ -191,7 +191,7 @@
                             {
                                 Html.DevExpress().HyperLink(hlSettings =>
                                 {
-                                    hlSettings.Name = "HyperLink__" + Guid.NewGuid().ToString();
+                                    hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
                                     hlSettings.NavigateUrl = "javascript:void(0)";
                                     hlSettings.Properties.Text = Convert.ToString(DataBinder.Eval(container.DataItem, colSetting.ColColumnName));
                                     hlSettings.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, colSetting.ColColumnName));
