@@ -254,6 +254,20 @@ DevExCtrl.Ribbon = function () {
                         M4PLCommon.DocumentStatus.JobCostCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
                     }
                     break;
+                case "DownloadJobHistoryReport":
+                    var jobIds = _onJobReportClickMultiSelect();
+                    route = _onJobReportClick(route);
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsHistoryPresentForJob(route.RecordId, jobIds);
+                    else
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobHistoryMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
                 default:
                     if (route.Action === "Create" && (route.Controller === "OrgRefRole")) {
                         switch (route.Action) {

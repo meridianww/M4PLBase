@@ -167,7 +167,7 @@ M4PLCommon.RichEdit = function () {
     }
 
     var _richEditorsPerformCallBack = function (route, byteArray, gatewayIds) {
-        
+
         $.each(byteArray, function (index, value) {
             if (ASPxClientControl.GetControlCollection().GetByName(value.ControlName)) {
                 M4PLCommon.CurrentByteArrayCount += 1;
@@ -2386,6 +2386,31 @@ M4PLCommon.DocumentStatus = (function () {
         return isCostCodeDataPresent
     };
 
+    var _isHistoryPresentForJob = function (jobId, jobIds) {
+        var isHistoryDataPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/IsHistoryPresentForJob?jobId=" + jobId + "&jobIds=" + jobIds,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isHistoryDataPresent = response.documentStatus.IsHistoryPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isHistoryDataPresent
+    };
+
     var _podMissingDisplayMessage = function (title, text) {
         var displaymessage =
         {
@@ -2432,15 +2457,29 @@ M4PLCommon.DocumentStatus = (function () {
         DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
     };
 
+    var _jobHistoryMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobHistoryMissing'
+        };
+
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
     return {
         IsPODAttachedForJob: _isPODAttachedForJob,
         IsAttachmentPresentForJob: _isAttachmentPresentForJob,
         IsPriceCodeDataPresentForJob: _isPriceCodeDataPresentForJob,
         IsCostCodeDataPresentForJob: _isCostCodeDataPresentForJob,
+        IsHistoryPresentForJob: _isHistoryPresentForJob,
         PODMissingDisplayMessage: _podMissingDisplayMessage,
         DisplayMessage: _displayMessage,
         JobPriceCodeMissingDisplayMessage: _jobPriceCodeMissingDisplayMessage,
-        JobCostCodeMissingDisplayMessage: _jobCostCodeMissingDisplayMessage
+        JobCostCodeMissingDisplayMessage: _jobCostCodeMissingDisplayMessage,
+        JobHistoryMissingDisplayMessage: _jobHistoryMissingDisplayMessage
     }
 })();
 

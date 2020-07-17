@@ -547,10 +547,17 @@ namespace M4PL.Web.Controllers
             return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetContactType(string lookupName)
-        {
-            return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
-        }
+		public ActionResult IsHistoryPresentForJob(long jobId, string jobIds)
+		{
+			List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+			string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+			return Json(new { status = true, documentStatus = _commonCommands.IsHistoryPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult GetContactType(string lookupName)
+		{
+			return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
+		}
 
         public PartialViewResult SessionTimeOut()
         {

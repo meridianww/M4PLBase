@@ -1776,7 +1776,16 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Price Code")
+				if (mnu.MnuTitle == "Job History")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (mnu.MnuTitle == "Price Code")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)

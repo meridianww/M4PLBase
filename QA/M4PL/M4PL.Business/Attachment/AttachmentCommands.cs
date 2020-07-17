@@ -22,6 +22,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities.Document;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System;
@@ -258,6 +259,31 @@ namespace M4PL.Business.Attachment
 			return documentData;
 		}
 
+		public DocumentData GetHistoryReportByJobId(long jobId)
+		{
+			DocumentData documentData = null;
+			IList<IdRefLangName> statusLookup = CoreCache.GetIdRefLangNames("EN", 39);
+			IList<ColumnSetting> columnSetting = CoreCache.GetColumnSettingsByEntityAlias("EN", Entities.EntitiesAlias.Job);
+			DataTable tblResult = _commands.GetJobHistoryDataTable(ActiveUser, jobId, columnSetting, statusLookup);
+			if (tblResult != null && tblResult.Rows.Count > 0)
+			{
+				documentData = new DocumentData();
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (StreamWriter writer = new StreamWriter(memoryStream))
+					{
+						WriteDataTable(tblResult, writer, true);
+					}
+
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("JobHistory_{0}.csv", jobId);
+					documentData.ContentType = "text/csv";
+				}
+			}
+
+			return documentData;
+		}
+
 		public DocumentStatus IsPriceCodeDataPresentForJob(List<long> selectedJobId)
 		{
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
@@ -277,6 +303,30 @@ namespace M4PL.Business.Attachment
 			if (costCodeData != null && costCodeData.Count > 0)
 			{
 				documentStatus.IsAttachmentPresent = true;
+			}
+
+			return documentStatus;
+		}
+
+		public DocumentStatus IsHistoryPresentForJob(List<long> selectedJobId)
+		{
+			IList<IdRefLangName> statusLookup = CoreCache.GetIdRefLangNames("EN", 39);
+			IList<ColumnSetting> columnSetting = CoreCache.GetColumnSettingsByEntityAlias("EN", Entities.EntitiesAlias.Job);
+			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false, IsHistoryPresent = false };
+			List<Task> tasks = new List<Task>();
+			List<IList<JobHistory>> jobHistory = new List<IList<JobHistory>>();
+			foreach (var currentJobId in selectedJobId)
+			{
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					jobHistory.Add(DataAccess.Job.JobHistoryCommands.GetPagedData(ActiveUser, new PagedDataInfo() { RecordId = currentJobId }, columnSetting, statusLookup));
+				}));
+			}
+
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			if (jobHistory?.Count > 0 && jobHistory.Where(x => x?.Count > 0).Any())
+			{
+				documentStatus.IsHistoryPresent = true;
 			}
 
 			return documentStatus;
@@ -630,6 +680,51 @@ namespace M4PL.Business.Attachment
 					documentData = new DocumentData();
 					documentData.DocumentContent = memoryStream.ToArray();
 					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedCostCode");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else if (documentDataList?.Count == 1)
+			{
+				return documentDataList[0];
+			}
+
+			return documentData;
+		}
+
+		public DocumentData GetHistoryReportDocumentByJobId(List<long> jobId)
+		{
+			DocumentData documentData = null;
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			List<Task> tasks = new List<Task>();
+			foreach (var currentJobId in jobId)
+			{
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					documentDataList.Add(GetHistoryReportByJobId(currentJobId));
+				}));
+			}
+
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
+			if (documentDataList?.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var trackingDocument in documentDataList)
+						{
+							var entry = archive.CreateEntry(trackingDocument.DocumentName, CompressionLevel.Fastest);
+							using (var zipStream = entry.Open())
+							{
+								zipStream.Write(trackingDocument.DocumentContent, 0, trackingDocument.DocumentContent.Length);
+							}
+						}
+					}
+
+					documentData = new DocumentData();
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedJobHistory");
 					documentData.ContentType = "application/zip";
 				}
 			}
