@@ -482,15 +482,18 @@
         settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
         settings.SetStatusBarTemplateContent(c =>
         {
-            @Html.DevExpress().Button(btnCancelCheckBox =>
+            if (!Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].PagedDataInfo.IsJobParentEntity)
             {
-                btnCancelCheckBox.Name = "btnClearSelection" + Model.GridSetting.GridName;
-                btnCancelCheckBox.Text = "Clear Selection";
-                btnCancelCheckBox.EnableTheming = true;
-                btnCancelCheckBox.ClientSideEvents.Click = "function(s, e) { JobGridView.UnselectRows(); }";
-                btnCancelCheckBox.AllowFocus = false;
-                btnCancelCheckBox.ControlStyle.CssClass = "form-btn";
-            }).Render();
+                @Html.DevExpress().Button(btnCancelCheckBox =>
+                {
+                    btnCancelCheckBox.Name = "btnClearSelection" + Model.GridSetting.GridName;
+                    btnCancelCheckBox.Text = "Clear Selection";
+                    btnCancelCheckBox.EnableTheming = true;
+                    btnCancelCheckBox.ClientSideEvents.Click = "function(s, e) { JobGridView.UnselectRows(); }";
+                    btnCancelCheckBox.AllowFocus = false;
+                    btnCancelCheckBox.ControlStyle.CssClass = "form-btn";
+                }).Render();
+            }
 
             var saveRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;//conversion needed as dyamic has no applicable extension method.
             saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) });
