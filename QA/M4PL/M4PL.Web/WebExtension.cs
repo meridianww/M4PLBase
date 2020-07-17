@@ -1692,7 +1692,7 @@ namespace M4PL.Web
                             else
                                 mnu.StatusId = 3;
                         }
-                        if ((currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) && (route.Action == "TreeView"))
+                        if ((currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All))
                         {
 
                             if (mnu.MnuTitle == "New" && (route.Action == "TreeView" || route.IsJobParentEntityUpdated))
@@ -2305,7 +2305,7 @@ namespace M4PL.Web
         public static SysSetting UpdateActiveUserSettings(this ICommonCommands _commonCommands, ActiveUser activeUser = null)
         {
             IList<RefSetting> sysRefSettings = _commonCommands.GetSystemSetting(activeUser: activeUser).Settings;
-            SysSetting userSettings =  _commonCommands.GetUserSysSettings(activeUser: activeUser);
+            SysSetting userSettings = _commonCommands.GetUserSysSettings(activeUser: activeUser);
             if (!string.IsNullOrEmpty(userSettings.SysJsonSetting) && (userSettings.Settings == null || !userSettings.Settings.Any()))
                 userSettings.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSettings.SysJsonSetting);
             else
