@@ -120,9 +120,9 @@ namespace M4PL.Web
                 {
                     formResult.ComboBoxProvider = formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
                     if (formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
-                        formResult.ComboBoxProvider[colSetting.ColLookupId] =  commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
+                        formResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
                     else
-                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, true).Where(s=>s.SysRefId>0).ToList());
+                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, true).Where(s => s.SysRefId > 0).ToList());
                 }
         }
 
@@ -1692,11 +1692,12 @@ namespace M4PL.Web
                         }
                         if ((currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) && (route.Action == "TreeView"))
                         {
-                            mnu.StatusId = 1;
-                            if (route.IsJobParentEntityUpdated && mnu.MnuTitle == "New")
+
+                            if (mnu.MnuTitle == "New" && (route.Action == "TreeView" || route.IsJobParentEntityUpdated))
                             {
                                 mnu.StatusId = 3;
                             }
+                            else mnu.StatusId = 1;
                         }
                     }
                 }
@@ -1774,16 +1775,16 @@ namespace M4PL.Web
                     }
                 }
 
-				if (mnu.MnuTitle == "Job History")
-				{
-					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
-					{
-						mnu.StatusId = 1;
-					}
-				}
+                if (mnu.MnuTitle == "Job History")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
 
-				if (mnu.MnuTitle == "Price Code")
+                if (mnu.MnuTitle == "Price Code")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
@@ -2318,10 +2319,10 @@ namespace M4PL.Web
                         userSettings.Settings.Add(setting);
                         continue;
                     }
-                    if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable )
+                    if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable)
                     {
 
-                            userSetting.Value = setting.Value;
+                        userSetting.Value = setting.Value;
                     }
                     if (userSetting.Name == "SysStatusesIn" && userSetting.EntityName == "System")
                         userSetting.Value = "1,2,3";
