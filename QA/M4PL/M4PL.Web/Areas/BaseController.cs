@@ -165,8 +165,7 @@ namespace M4PL.Web.Areas
 
         public virtual PartialViewResult ProcessCustomBinding(MvcRoute route, string viewName)
         {
-            if (route.Entity != EntitiesAlias.JobHistory)
-                _gridResult.GridViewModel.ProcessCustomBinding(GetDataRowCount, GetData, GetGroupingInfo);
+            _gridResult.GridViewModel.ProcessCustomBinding(GetDataRowCount, GetData, GetGroupingInfo);
             try
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
