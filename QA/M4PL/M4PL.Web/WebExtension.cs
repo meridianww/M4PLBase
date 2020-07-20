@@ -37,6 +37,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace M4PL.Web
 {
@@ -1863,6 +1864,12 @@ namespace M4PL.Web
                     mnu.StatusId = 1;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
+
+                if (route.ParentEntity == EntitiesAlias.Common
+                && (route.Entity == EntitiesAlias.JobCard
+                    || route.Entity == EntitiesAlias.JobAdvanceReport
+                    || route.Entity == EntitiesAlias.Job) && route.Action == MvcConstants.ActionForm && mnu.MnuTitle == "New")
+                    mnu.StatusId = 3;
             });
         }
 
