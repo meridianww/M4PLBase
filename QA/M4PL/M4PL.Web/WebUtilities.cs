@@ -295,7 +295,7 @@ namespace M4PL.Web
                         var moduleIdToCompare = MainModule.Job.ToInt();
                         var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
                         int? permission = security?.SecMenuAccessLevelId;
-                        if (security?.UserSubSecurities?.Count != null || security.UserSubSecurities.Count > 0)
+                        if (security?.UserSubSecurities != null && security.UserSubSecurities.Count > 0)
                         {
                             var tableRef = commonCommands.Tables[EntitiesAlias.JobGateway];
                             string refTableName = tableRef.SysRefName != null ? Convert.ToString(tableRef.SysRefName).ToUpper() : tableRef.SysRefName;
