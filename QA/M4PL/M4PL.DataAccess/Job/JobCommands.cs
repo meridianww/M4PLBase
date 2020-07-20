@@ -290,8 +290,9 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
+		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
 		{
+			long insertedGatewayId = 0;
 			try
 			{
 				var parameters = new List<Parameter>
@@ -303,7 +304,7 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@userId", activeUser.UserId)
 				};
 
-				long insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
+				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
 				if (insertedGatewayId > 0)
 				{
 					InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
@@ -313,6 +314,8 @@ namespace M4PL.DataAccess.Job
 			{
 				_logger.Log(exp, "Exception is occuring while cancelling a job requested by customer.", "Job Cancellation", Utilities.Logger.LogType.Error);
 			}
+
+			return insertedGatewayId;
 		}
 
 		public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
