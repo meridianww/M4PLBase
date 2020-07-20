@@ -191,9 +191,10 @@
                             {
                                 Html.DevExpress().HyperLink(hlSettings =>
                                 {
-                                    hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
+                                    hlSettings.Name = "HyperLink__" + Guid.NewGuid().ToString();
                                     hlSettings.NavigateUrl = "javascript:void(0)";
-                                    hlSettings.Properties.Text = Convert.ToString(container.Text);
+                                    hlSettings.Properties.Text = Convert.ToString(DataBinder.Eval(container.DataItem, colSetting.ColColumnName));
+                                    hlSettings.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, colSetting.ColColumnName));
                                     hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId, entityFor){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0}, '{1}');}}", container.KeyValue, EntitiesAlias.Job.ToString());
                                 }).Render();
                             }
