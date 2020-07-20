@@ -128,6 +128,25 @@ M4PLCommon.Common = function () {
         window.close();
     }
 
+    var _arrayRemove = function (arr, value) { return arr.filter(function (ele) { return ele != value; }); }
+
+    var _enableJobGridMultiSelection = function (isEnable) {
+        var sJobGrid = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+        if (sJobGrid != null && sJobGrid != undefined) {
+            var clearBtnCtrl = ASPxClientControl.GetControlCollection().GetByName("btnClearSelectionJobGridView");
+            if (clearBtnCtrl != null && clearBtnCtrl != undefined) {
+                if (!isEnable) {
+                    clearBtnCtrl.SetEnabled(false);
+                    $("#btnClearSelectionJobGridView").addClass("noHover");
+                }
+                else {
+                    clearBtnCtrl.SetEnabled(true);
+                    $("#btnClearSelectionJobGridView").removeClass("noHover");
+                }
+            }
+        }
+    }
+
     return {
         init: init,
         SwitchOrganization: _switchOrganization,
@@ -139,6 +158,8 @@ M4PLCommon.Common = function () {
         LogOut: _onLogOut,
         HideGlobalLoadingPanel: _hideGlobalLoadingPanel,
         BrowserIndexClosed: _browserIndexClosed,
+        ArrayRemove: _arrayRemove,
+        EnableJobGridMultiSelection: _enableJobGridMultiSelection
     };
 }();
 

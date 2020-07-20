@@ -26,6 +26,7 @@ M4PLWindow.DataViewsHaveChanges = {};
 M4PLWindow.SubDataViewsHaveChanges = {};
 M4PLWindow.OrderId = 0;
 M4PLWindow.JobIsScheduled = false;
+M4PLWindow.MultiSelectedJobIds = [];
 
 M4PLWindow.CallBackPanel = function () {
     var params;
@@ -78,6 +79,8 @@ M4PLWindow.DataView = function () {
     }
 
     var _onInit = function (s, e, isChildExpanded, clearFilterManually) {
+        M4PLWindow.MultiSelectedJobIds = [];
+        M4PLCommon.Common.EnableJobGridMultiSelection(false);
         if (clearFilterManually && clearFilterManually == "True") {
             s.ClearFilter();
         }
@@ -179,6 +182,9 @@ M4PLWindow.DataView = function () {
                 $("#" + "btnSave" + s.name).removeClass("noHover");
                 $("#" + "btnCancel" + s.name).removeClass("noHover");
             }
+
+            if (M4PLWindow.MultiSelectedJobIds.length == 0)
+                M4PLCommon.Common.EnableJobGridMultiSelection(false);
         }
     }
 
@@ -410,8 +416,23 @@ M4PLWindow.DataView = function () {
         var selectedRowCount = s.GetSelectedRowCount();
 
         var callbackUrl = s.callbackUrl;
-        if (selectedRowCount == 1 && e.isSelected)
+        if (selectedRowCount > 0) {
+
+            if (selectedRowCount == 1 && e.isSelected)
+                M4PLWindow.MultiSelectedJobIds = [];
+
+            if (e.isSelected)
+                M4PLWindow.MultiSelectedJobIds.push(s.GetItemKey(s.GetFocusedRowIndex()));
+            else
+                M4PLWindow.MultiSelectedJobIds = M4PLCommon.Common.ArrayRemove(M4PLWindow.MultiSelectedJobIds, s.GetItemKey(s.GetFocusedRowIndex()));
+        }
+        else
+            M4PLWindow.MultiSelectedJobIds = [];
+
+        if (selectedRowCount == 1 && e.isSelected) {
             M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
+            M4PLCommon.Common.EnableJobGridMultiSelection(true);
+        }
         else if (selectedRowCount != 0 && M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule')) {
             if (callbackUrl != undefined && callbackUrl != "") {
                 var callbackUri = new URL(callbackUrl, window.location.origin);
@@ -1034,8 +1055,9 @@ M4PLWindow.FormView = function () {
         }
         if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway" && currentRoute.Action == "GatewayActionFormView") {
             var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
-            if (s != null && s != undefined && s.GetSelectedKeysOnPage() != null && s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0)
-                putOrPostData.push({ name: "JobIds", value: s.GetSelectedKeysOnPage() });
+            //if (s != null && s != undefined && s.GetSelectedKeysOnPage() != null && s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0)
+            if (s != null && s != undefined && M4PLWindow.MultiSelectedJobIds.length > 0)
+                putOrPostData.push({ name: "JobIds", value: M4PLWindow.MultiSelectedJobIds });
             else if (s != null && s != undefined && s.GetFocusedRowIndex() != null && s.GetFocusedRowIndex() != undefined)
                 putOrPostData.push({ name: "JobIds", value: s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'Id') });
         }
