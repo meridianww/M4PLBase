@@ -138,7 +138,7 @@ namespace M4PL.Business.Attachment
 			if (setcollection != null)
 			{
 				documentData = new DocumentData();
-				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationURL + "Content/Images/M4plLogo.png" } };
+				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationLocalURL + "Content/Images/M4plLogo.png" } };
 				Stream stream = GenerateHtmlFile(setcollection, "JobBOLDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobBOL.xslt", args);
 				StringBuilder stringBuilder = new StringBuilder();
 				using (StreamReader reader = new StreamReader(stream))
@@ -179,7 +179,7 @@ namespace M4PL.Business.Attachment
 			if (setcollection != null)
 			{
 				documentData = new DocumentData();
-				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationURL + "Content/Images/M4plLogo.png" } };
+				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationLocalURL + "Content/Images/M4plLogo.png" } };
 				Stream stream = GenerateHtmlFile(setcollection, "JobTrackingDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobTracking.xslt", args);
 				StringBuilder stringBuilder = new StringBuilder();
 				using (StreamReader reader = new StreamReader(stream))

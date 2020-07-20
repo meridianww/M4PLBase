@@ -1184,7 +1184,7 @@ namespace M4PL.DataAccess.Common
                 var sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
 
                 ////// Dead end/////
-                var columnName = jobColumns?.Where(x => x.ColColumnName == oProperty.Name)?.FirstOrDefault()?.ColAliasName;
+                var columnName = jobColumns?.Where(x => x.ColColumnName == oProperty.Name)?.FirstOrDefault()?.ColGridAliasName;
                 changeHistoryDataList.Add(new Entities.Job.JobHistory() { FieldName = string.IsNullOrEmpty(columnName) ? oProperty.Name : columnName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate, JobID = jobId });
             }
 
