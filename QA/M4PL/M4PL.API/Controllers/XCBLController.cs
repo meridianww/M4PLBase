@@ -11,6 +11,7 @@
 
 using M4PL.API.Filters;
 using M4PL.Business.XCBL;
+using M4PL.Entities.Support;
 using M4PL.Entities.XCBL;
 using M4PL.Entities.XCBL.Electrolux;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
@@ -18,16 +19,21 @@ using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateResponse;
 using M4PL.Entities.XCBL.Electrolux.OrderRequest;
 using M4PL.Entities.XCBL.Electrolux.OrderResponse;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 
+
 namespace M4PL.API.Controllers
 {
-	/// <summary>
-	/// XCBL Summary Header
-	/// </summary>
-	[RoutePrefix("api/XCBL")]
-	public class XCBLController : BaseApiController<XCBLToM4PLRequest>
+    
+    /// <summary>
+    /// XCBL Summary Header
+    /// </summary>
+    
+    [CustomAuthorize]
+    [RoutePrefix("api/XCBL")]
+    public class XCBLController : ApiController
 	{
 		private readonly IXCBLCommands _xcblCommands;
 
@@ -36,25 +42,117 @@ namespace M4PL.API.Controllers
 		/// </summary>
 		/// <param name="xcblCommands"></param>
 		public XCBLController(IXCBLCommands xcblCommands)
-			: base(xcblCommands)
 		{
 			_xcblCommands = xcblCommands;
 		}
 
-		/// <summary>
-		///The requested information such as Header, Address, UDF, CustomAttribute, Line Detail will be inserted into respective xcbl tables and in future it will be used for mannually accepting changes.
-		/// For Shipping Schedule Request.It will compare the fields with existing job.If there the a change in fields, action Codes Mapped in the Decision Maker will be Added to the Job.
-		/// If the Added Gateway/Action is Marked as complete based on the settings from Program the new values will be Updated in Job else On completion of Gateway/Action new values will be updated.
-		/// </summary>
-		/// <param name="xCBLToM4PLRequest">The request may be type of either Shipping schedule or Requisition</param>
-		/// <returns>Inserted Xcbl Summary Header Id</returns>
-		[CustomAuthorize]
+        /// <summary>
+        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
+        /// </summary>
+        /// <param name="pagedDataInfo">
+        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
+        /// </param>
+        /// <returns>
+        /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
+        /// </returns>
+        [CustomQueryable]
+        [HttpPost]
+        [Route("PagedData")]
+        public virtual IQueryable<XCBLToM4PLRequest> PagedData(PagedDataInfo pagedDataInfo)
+        {
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.GetPagedData(pagedDataInfo).AsQueryable();
+        }
+
+        /// <summary>
+        /// Get method gets the single record based on numeric Id parameter passed for the xCBLToM4PLRequest.
+        /// </summary>
+        /// <param name="id">Refer to  Record Id as numeric value.</param>
+        /// <returns>Returns response as single object.</returns>
+        [HttpGet]
+        //[Route("{id}")]
+        public virtual XCBLToM4PLRequest Get(long id)
+        {
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.Get(id);
+        }
+
+        /// <summary>
+        /// Post method is used to add a new single record for new xCBLToM4PLRequest object passed as parameter.
+        /// </summary>
+        /// <param name="xCBLToM4PLRequest">Refers to xCBLToM4PLRequest object to add.</param>
+        /// <returns>Returns response as object newly added.</returns>
+        [HttpPost]
+        public virtual XCBLToM4PLRequest Post(XCBLToM4PLRequest xCBLToM4PLRequest)
+        {
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.Post(xCBLToM4PLRequest);
+        }
+
+        /// <summary>
+        /// Put method is used to update record values completely based on xCBLToM4PLRequest object passed.
+        /// </summary>
+        /// <param name="xCBLToM4PLRequest">Refers to xCBLToM4PLRequest object to update.</param>
+        /// <returns>Returns updated single object.</returns>
+        [HttpPut]
+        public virtual XCBLToM4PLRequest Put(XCBLToM4PLRequest xCBLToM4PLRequest)
+        {
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.Put(xCBLToM4PLRequest);
+        }
+
+        /// <summary>
+        /// Delete method is used to make a single record archive.
+        /// </summary>
+        /// <param name="id">Refers to numeric value of record to archive.</param>
+        /// <returns>Returns response as numeric value.</returns>
+        [HttpDelete]
+        protected virtual int Delete(long id)
+        {
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.Delete(id);
+        }
+
+        /// <summary>
+        /// DeleteList method is used to delete a multiple records for ids passed as comma seprated list of string.
+        /// </summary>
+        /// <param name="ids">Refers to comma seprated ids as string.</param>
+        /// <param name="statusId">Refers to numeric value, It can have value 3 to make record archive.</param>
+        /// <returns>Returns response as list of IdRefLangName objects.</returns>
+        [HttpDelete]
+        [Route("DeleteList")]
+        public virtual IList<IdRefLangName> DeleteList(string ids, int statusId)
+        {
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.Delete(ids.Split(',').Select(long.Parse).ToList(), statusId);
+        }
+
+        /// <summary>
+        /// Patch method is used to update partially or completely record values based on xCBLToM4PLRequest object passed.
+        /// </summary>
+        /// <param name="xCBLToM4PLRequest">Refers object to update.</param>
+        /// <returns>Returns response as updated single object.</returns>
+        [HttpPatch]
+        public virtual XCBLToM4PLRequest Patch(XCBLToM4PLRequest xCBLToM4PLRequest)
+        {
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.Patch(xCBLToM4PLRequest);
+        }
+
+        /// <summary>
+        ///The requested information such as Header, Address, UDF, CustomAttribute, Line Detail will be inserted into respective xcbl tables and in future it will be used for mannually accepting changes.
+        /// For Shipping Schedule Request.It will compare the fields with existing job.If there the a change in fields, action Codes Mapped in the Decision Maker will be Added to the Job.
+        /// If the Added Gateway/Action is Marked as complete based on the settings from Program the new values will be Updated in Job else On completion of Gateway/Action new values will be updated.
+        /// </summary>
+        /// <param name="xCBLToM4PLRequest">The request may be type of either Shipping schedule or Requisition</param>
+        /// <returns>Inserted Xcbl Summary Header Id</returns>
+        [CustomAuthorize]
 		[HttpPost]
 		[Route("XCBLSummaryHeader"), ResponseType(typeof(long))]
 		public long InsertXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequest)
 		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return _xcblCommands.PostXCBLSummaryHeader(xCBLToM4PLRequest);
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.PostXCBLSummaryHeader(xCBLToM4PLRequest);
 		}
 
 		/// <summary>
@@ -72,8 +170,8 @@ namespace M4PL.API.Controllers
 		[Route("Electrolux/OrderRequest"), ResponseType(typeof(OrderResponse))]
 		public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
 		{
-			_xcblCommands.ActiveUser = ActiveUser;
-			return _xcblCommands.ProcessElectroluxOrderRequest(electroluxOrderDetails);
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.ProcessElectroluxOrderRequest(electroluxOrderDetails);
 		}
 
 		/// <summary>
@@ -87,8 +185,8 @@ namespace M4PL.API.Controllers
 		[Route("Electrolux/OrderDeliveryUpdate"), ResponseType(typeof(DeliveryUpdateResponse))]
 		public DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId)
 		{
-			_xcblCommands.ActiveUser = ActiveUser;
-			return _xcblCommands.ProcessElectroluxOrderDeliveryUpdate(deliveryUpdate, jobId);
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.ProcessElectroluxOrderDeliveryUpdate(deliveryUpdate, jobId);
 		}
 
 		/// <summary>
@@ -100,8 +198,8 @@ namespace M4PL.API.Controllers
 		[Route("Electrolux/DeliveryUpdateProcessingData"), ResponseType(typeof(List<DeliveryUpdateProcessingData>))]
 		public List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
 		{
-			_xcblCommands.ActiveUser = ActiveUser;
-			return _xcblCommands.GetDeliveryUpdateProcessingData();
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.GetDeliveryUpdateProcessingData();
 		}
 
 		/// <summary>
@@ -114,8 +212,8 @@ namespace M4PL.API.Controllers
 		[Route("Electrolux/UpdateProcessingData"), ResponseType(typeof(bool))]
 		public bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)
 		{
-			_xcblCommands.ActiveUser = ActiveUser;
-			return _xcblCommands.UpdateDeliveryUpdateProcessingLog(deliveryUpdateProcessingData);
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.UpdateDeliveryUpdateProcessingLog(deliveryUpdateProcessingData);
 		}
 
 		/// <summary>
@@ -128,8 +226,8 @@ namespace M4PL.API.Controllers
 		[Route("Electrolux/GetDeliveryUpdateModel"), ResponseType(typeof(DeliveryUpdate))]
 		public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
 		{
-			_xcblCommands.ActiveUser = ActiveUser;
-			return _xcblCommands.GetDeliveryUpdateModel(jobId);
+            _xcblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _xcblCommands.GetDeliveryUpdateModel(jobId);
 		}
 	}
 }

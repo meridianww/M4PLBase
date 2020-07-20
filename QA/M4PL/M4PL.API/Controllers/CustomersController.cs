@@ -66,7 +66,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Get method gets the single record based on numeric Id parameter passed for the Entity.
+        /// Get method gets the single record based on numeric Id parameter passed for the customer.
         /// </summary>
         /// <param name="id">Refer to  Record Id as numeric value.</param>
         /// <returns>Returns response as single object.</returns>
@@ -79,27 +79,27 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Post method is used to add a new single record for new entity object passed as parameter.
+        /// Post method is used to add a new single record for new customer object passed as parameter.
         /// </summary>
-        /// <param name="entity">Refers to Entity object to add.</param>
+        /// <param name="customer">Refers to customer object to add.</param>
         /// <returns>Returns response as object newly added.</returns>
         [HttpPost]
-        public virtual Customer Post(Customer entity)
+        public virtual Customer Post(Customer customer)
         {
             _customerCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _customerCommands.Post(entity);
+            return _customerCommands.Post(customer);
         }
 
         /// <summary>
-        /// Put method is used to update record values completely based on entity object passed.
+        /// Put method is used to update record values completely based on customer object passed.
         /// </summary>
-        /// <param name="entity">Refers to Entity object to update.</param>
+        /// <param name="customer">Refers to customer object to update.</param>
         /// <returns>Returns updated single object.</returns>
         [HttpPut]
-        public virtual Customer Put(Customer entity)
+        public virtual Customer Put(Customer customer)
         {
             _customerCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _customerCommands.Put(entity);
+            return _customerCommands.Put(customer);
         }
 
         /// <summary>
@@ -129,15 +129,15 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Patch method is used to update partially or completely record values based on entity object passed.
+        /// Patch method is used to update partially or completely record values based on customer object passed.
         /// </summary>
-        /// <param name="entity">Refers object to update.</param>
+        /// <param name="customer">Refers object to update.</param>
         /// <returns>Returns response as updated single object.</returns>
         [HttpPatch]
-        public virtual Customer Patch(Customer entity)
+        public virtual Customer Patch(Customer customer)
         {
             _customerCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _customerCommands.Patch(entity);
+            return _customerCommands.Patch(customer);
         }
 
         /// <summary>

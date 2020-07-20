@@ -87,8 +87,8 @@ namespace M4PL.Web.Controllers
             if (!string.IsNullOrEmpty(selectedCountry))
                 dropDownViewModel.SelectedCountry = selectedCountry;
             if (dropDownViewModel.Entity == EntitiesAlias.OrgRefRole
-                && SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo != null
                 && SessionProvider.ViewPagedDataSession.ContainsKey(EntitiesAlias.SystemAccount)
+                && SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo != null
                 && SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId > 0
                 && Convert.ToInt64(dropDownViewModel.ParentId) == 0)
             {
