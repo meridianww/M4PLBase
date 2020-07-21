@@ -118,5 +118,7 @@ namespace M4PL.Web.Providers
 		public bool IsCardEditMode { get; set; }
 
 		public bool IsJobParentEntity { get; set; }
+
+		public bool IsSpecialJobId { get; set; }
 	}
 }
