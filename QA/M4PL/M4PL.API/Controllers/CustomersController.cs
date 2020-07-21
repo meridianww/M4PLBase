@@ -151,12 +151,7 @@ namespace M4PL.API.Controllers
         {
             return _customerCommands.GetActiveCutomers();
         }
-
-
-        /// <summary>
-        /// UpdateActiveUserSettings
-        /// </summary>
-        /// <returns></returns>
+             
 
     }
 }

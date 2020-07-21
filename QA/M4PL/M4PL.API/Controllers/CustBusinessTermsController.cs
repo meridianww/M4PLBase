@@ -32,7 +32,7 @@ namespace M4PL.API.Controllers
     [RoutePrefix("api/CustBusinessTerms")]
 	public class CustBusinessTermsController : ApiController
 	{
-		private readonly ICustBusinessTermCommands _custDcLocationContactCommands;
+		private readonly ICustBusinessTermCommands _custBusinessTermCommands;
 
 		/// <summary>
 		/// Function to get Customer's business Terms details
@@ -41,7 +41,7 @@ namespace M4PL.API.Controllers
 		public CustBusinessTermsController(ICustBusinessTermCommands custBusinessTermCommands)
 		
 		{
-			_custDcLocationContactCommands = custBusinessTermCommands;
+            _custBusinessTermCommands = custBusinessTermCommands;
 		}
         /// <summary>
         /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
@@ -57,8 +57,8 @@ namespace M4PL.API.Controllers
         [Route("PagedData")]
         public virtual IQueryable<CustBusinessTerm> PagedData(PagedDataInfo pagedDataInfo)
         {
-            _custDcLocationContactCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _custDcLocationContactCommands.GetPagedData(pagedDataInfo).AsQueryable();
+            _custBusinessTermCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _custBusinessTermCommands.GetPagedData(pagedDataInfo).AsQueryable();
         }
 
         /// <summary>
@@ -70,8 +70,8 @@ namespace M4PL.API.Controllers
         //[Route("{id}")]
         public virtual CustBusinessTerm Get(long id)
         {
-            _custDcLocationContactCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _custDcLocationContactCommands.Get(id);
+            _custBusinessTermCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _custBusinessTermCommands.Get(id);
         }
 
         /// <summary>
@@ -82,8 +82,8 @@ namespace M4PL.API.Controllers
         [HttpPost]
         public virtual CustBusinessTerm Post(CustBusinessTerm custBusinessTerm)
         {
-            _custDcLocationContactCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _custDcLocationContactCommands.Post(custBusinessTerm);
+            _custBusinessTermCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _custBusinessTermCommands.Post(custBusinessTerm);
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace M4PL.API.Controllers
         [HttpPut]
         public virtual CustBusinessTerm Put(CustBusinessTerm custBusinessTerm)
         {
-            _custDcLocationContactCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _custDcLocationContactCommands.Put(custBusinessTerm);
+            _custBusinessTermCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _custBusinessTermCommands.Put(custBusinessTerm);
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace M4PL.API.Controllers
         [HttpDelete]
         protected virtual int Delete(long id)
         {
-            _custDcLocationContactCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _custDcLocationContactCommands.Delete(id);
+            _custBusinessTermCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _custBusinessTermCommands.Delete(id);
         }
 
         /// <summary>
@@ -120,8 +120,8 @@ namespace M4PL.API.Controllers
         [Route("DeleteList")]
         public virtual IList<IdRefLangName> DeleteList(string ids, int statusId)
         {
-            _custDcLocationContactCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _custDcLocationContactCommands.Delete(ids.Split(',').Select(long.Parse).ToList(), statusId);
+            _custBusinessTermCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _custBusinessTermCommands.Delete(ids.Split(',').Select(long.Parse).ToList(), statusId);
         }
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace M4PL.API.Controllers
         [HttpPatch]
         public virtual CustBusinessTerm Patch(CustBusinessTerm custBusinessTerm)
         {
-            _custDcLocationContactCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _custDcLocationContactCommands.Patch(custBusinessTerm);
+            _custBusinessTermCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _custBusinessTermCommands.Patch(custBusinessTerm);
         }
     }
 }

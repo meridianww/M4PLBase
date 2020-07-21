@@ -26,7 +26,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace M4PL.API.Controllerss
+namespace M4PL.API.Controllers
 {
     [CustomAuthorize]
     [RoutePrefix("api/CustContacts")]
