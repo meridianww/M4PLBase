@@ -491,8 +491,8 @@ namespace M4PL.API.Controllers
 		[Route("CancelOrder"), ResponseType(typeof(StatusModel))]
 		public StatusModel CancelOrder(string orderNumber)
 		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return _jobCommands.CancelJobByOrderNumber(orderNumber);
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.CancelJobByOrderNumber(orderNumber);
 		}
 	}
 }
