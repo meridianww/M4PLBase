@@ -431,5 +431,9 @@ namespace M4PL.Business.Common
         {
             return _commands.GetJobAction(ActiveUser, jobId, entity, isScheduleAciton);
         }
+        public static IList<JobGatewayDetails> GetJobGateway(long jobId)
+        {
+            return _commands.GetJobGateway(ActiveUser, jobId);
+        }
     }
 }

@@ -1065,6 +1065,13 @@ namespace M4PL.APIClient.Common
 			return apiResult.Results;
 		}
 
+		public IList<JobGatewayDetails> GetJobGateway(long jobId)
+		{
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetJobGateway"), ActiveUser).AddParameter("jobId", jobId)).Content;
+			var apiResult = JsonConvert.DeserializeObject<ApiResult<JobGatewayDetails>>(content);
+			return apiResult.Results;
+		}
+
 		#region Multiple Document Select Report
 
 		public DocumentDataView DownloadBOL(string jobId)
@@ -1075,6 +1082,6 @@ namespace M4PL.APIClient.Common
 			return response;
 		}
 
-		#endregion
-	}
+        #endregion
+    }
 }
