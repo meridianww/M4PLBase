@@ -203,7 +203,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="id">Job Id</param>
         /// <returns>Origin and Destination details</returns>
-        /// 
+        ///
         [CustomAuthorize]
         [HttpGet]
         [Route("MapRoute"), ResponseType(typeof(JobMapRoute))]
@@ -269,7 +269,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Returns the list of Job Site Codes for available for a program. If NULL filter is true the details will be fetched by using job Id else parentId which is program Id 
+        /// Returns the list of Job Site Codes for available for a program. If NULL filter is true the details will be fetched by using job Id else parentId which is program Id
         /// </summary>
         /// <param name="id">Job Id</param>
         /// <param name="parentId">Program Id</param>
@@ -291,7 +291,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// For the supplied job id Gateway, cost and price information will be copied to from program and Job attributes will be filled from program. 
+        /// For the supplied job id Gateway, cost and price information will be copied to from program and Job attributes will be filled from program.
         /// </summary>
         /// <param name="jobId">Job Id</param>
         /// <returns>Returns true if its copied else false.</returns>
@@ -435,9 +435,9 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Complete the Job, If job exists it will complete particular job. If customer and ProgramId exists all the Jobs under program will be completed. 
+        /// Complete the Job, If job exists it will complete particular job. If customer and ProgramId exists all the Jobs under program will be completed.
         /// If Customer Id only exists all the programs under the customer will be completed. Even if customer id is also 0 then all the Jobs in the system will be marked as complete.
-        /// Delivery date of the jobs less than the delivery date param will be considered. 
+        /// Delivery date of the jobs less than the delivery date param will be considered.
         /// </summary>
         /// <param name="custId">Customer Id</param>
         /// <param name="programId">Program id</param>
@@ -455,7 +455,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Returns the list of the non completed Jobs by program Id 
+        /// Returns the list of the non completed Jobs by program Id
         /// </summary>
         /// <param name="programId">program id</param>
         /// <returns>List of non completed jobs</returns>
@@ -480,6 +480,19 @@ namespace M4PL.API.Controllers
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail);
-        }
-    }
+		}
+
+		/// <summary>
+		/// Cancel a Existing Order From Meridian System
+		/// </summary>
+		/// <param name="orderNumber">orderNumbe is a unique identifier for a order of type string.</param>
+		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpPost]
+		[Route("CancelOrder"), ResponseType(typeof(StatusModel))]
+		public StatusModel CancelOrder(string orderNumber)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.CancelJobByOrderNumber(orderNumber);
+		}
+	}
 }
