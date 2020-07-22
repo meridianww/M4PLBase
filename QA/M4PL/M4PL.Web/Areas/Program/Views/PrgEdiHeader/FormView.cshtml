@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -16,10 +16,10 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgEdiHeaderView>
 @{
     ViewBag.Title = Model.PageName;
-    var prgDropDownViewModel = Model.Record.PehProgramID.GetValueOrDefault().GetProgramDropDown("PehProgramID", 
-        Model.ColumnSettings.FirstOrDefault("PehProgramID").ColAliasName, 
-        Model.ColumnSettings.FirstOrDefault("PehProgramID").IsRequired, 
-        Model.IsPopUp, Model.Permission, 
+    var prgDropDownViewModel = Model.Record.PehProgramID.GetValueOrDefault().GetProgramDropDown("PehProgramID",
+        Model.ColumnSettings.FirstOrDefault("PehProgramID").ColAliasName,
+        Model.ColumnSettings.FirstOrDefault("PehProgramID").IsRequired,
+        Model.IsPopUp, Model.Permission,
         Model.Record.ParentId);
 
     Model.Record.PehItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.PehItemNumber;
@@ -40,7 +40,6 @@
     };
     ediConditionRoute.SetParent(EntitiesAlias.PrgEdiHeader, Model.Record.Id);
 }
-
 
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
 
@@ -217,8 +216,7 @@
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpUsername).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>" + "<label>" + sysColumn.ColAliasName + "<em class=\"dxeRequiredMark_Office2010Black\"> </em></label><br/>" + "<input type='password' id='txtPehFtpPassword' name='" + sysColumn.ColColumnName + "' title='" + sysColumn.ColCaption + "' placeholder='" + sysColumn.ColAliasName + "' value='" + Model.Record.PehFtpPassword + "' />" + "</div>");
-
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>" + "<label>" + sysColumn.ColAliasName + "<em class=\"dxeRequiredMark_Office2010Black\"> </em></label><br />" + "<input type='password' id='txtPehFtpPassword' name='" + sysColumn.ColColumnName + "' title='" + sysColumn.ColCaption + "' placeholder='" + sysColumn.ColAliasName + "' value='" + Model.Record.PehFtpPassword + "' />" + "</div>");
 
                                            ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpPort).ToHtmlString());

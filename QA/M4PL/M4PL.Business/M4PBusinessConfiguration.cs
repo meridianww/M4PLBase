@@ -1,4 +1,13 @@
-﻿using System;
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+******************************************************************************/
+#endregion Copyright
+
+using System;
 using System.ComponentModel;
 using System.Configuration;
 using System.Reflection;
@@ -245,16 +254,28 @@ namespace M4PL.Business
             }
         }
 
-        #endregion Properties
+		/// <summary>
+		/// Gets the value of M4PLApplicationLocalURL.
+		/// </summary>
+		[ConfigurationProperty("M4PLApplicationLocalURL")]
+		public string M4PLApplicationLocalURL
+		{
+			get
+			{
+				return (string)this["M4PLApplicationLocalURL"];
+			}
+		}
 
-        #region Public Methods
+		#endregion Properties
 
-        /// <summary>
-        /// GetEnumDescription
-        /// </summary>
-        /// <param name="value">value</param>
-        /// <returns>string</returns>
-        public static string GetEnumDescription(Enum value)
+		#region Public Methods
+
+		/// <summary>
+		/// GetEnumDescription
+		/// </summary>
+		/// <param name="value">value</param>
+		/// <returns>string</returns>
+		public static string GetEnumDescription(Enum value)
         {
             if (value == null)
             {

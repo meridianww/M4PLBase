@@ -1,12 +1,21 @@
-﻿/*Copyright(2016) Meridian Worldwide Transportation Group
-All Rights Reserved Worldwide
-==========================================================================================================
-Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Kirty Anurag
-Date Programmed:                              10/10/2017
-Program Name:                                 PagedDataInfo
-Purpose:                                      Contains objects related to PagedDataInfo
-==========================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
+//==========================================================================================================
+// Program Title:                                Meridian 4th Party Logistics(M4PL)
+// Programmer:                                   Kirty Anurag
+// Date Programmed:                              10/10/2017
+// Program Name:                                 PagedDataInfo
+// Purpose:                                      Contains objects related to PagedDataInfo
+//==========================================================================================================
 
 using M4PL.Utilities;
 
@@ -46,6 +55,7 @@ namespace M4PL.Entities.Support
             IsJobParentEntity = pagedDataInfo.IsJobParentEntity;
             IsJobCardEntity = pagedDataInfo.IsJobCardEntity;
             EntityFor = pagedDataInfo.EntityFor;
+            JobCardFilterId = pagedDataInfo.JobCardFilterId;
         }
 
         public long RecordId { get; set; }
@@ -72,6 +82,7 @@ namespace M4PL.Entities.Support
         public bool IsJobCardEntity { get; set; }
         public string EntityFor { get; set; }
         public bool IsDataView { get; set; }
+        public long JobCardFilterId { get; set; }
         public PagedDataInfo Clone()
         {
             return this.MemberwiseClone() as PagedDataInfo;

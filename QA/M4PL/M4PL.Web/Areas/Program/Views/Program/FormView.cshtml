@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -91,7 +91,6 @@ else
                ViewContext.Writer.Write("<div class='form-row-group pro-title'>" + Html.EditorFor(m => m.Record.PrgProgramTitle, new { AssociatedColName = "PrgPhaseTitle" }).ToHtmlString() + "</div>");
            }
 
-
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrgAccountCode).ToHtmlString() + "</div>");
            ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString()));
            ViewContext.Writer.Write("</div>");
@@ -126,7 +125,6 @@ else
            ViewContext.Writer.Write("<div class='row no-margin'>");
            ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
 
-
            ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 threshold-div no-padding'>");
            @Html.DevExpress().FormLayout(
                       orderTypeSettings =>
@@ -148,7 +146,6 @@ else
                                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.PckLatest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = 0, MaxValue = 23, ClientEnabled = !Model.Record.PckDay }).ToHtmlString() + "</div>");
 
                                       ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, string.Join(" ", CssConstants.ColFixed5, CssConstants.RemoveMarginRight), Html.EditorFor(m => m.Record.PckDay, new { CheckedChanged = "DevExCtrl.CheckBox.EnableProgramThreshHold(s,e," + pckearlCtrl + "," + pcklateCtrl + ");" }).ToHtmlString()));
-
 
                                   });
                               });
@@ -177,7 +174,6 @@ else
                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.DelEarliest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = -23, MaxValue = 0, ClientEnabled = !Model.Record.DelDay }).ToHtmlString() + "</div>");
                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.DelLatest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = 0, MaxValue = 23, ClientEnabled = !Model.Record.DelDay }).ToHtmlString() + "</div>");
 
-
                                  var earlCtrl = "DelEarliest" + (Model.IsPopUp ? "_popup" : "");
                                  var lateCtrl = "DelLatest" + (Model.IsPopUp ? "_popup" : "");
 
@@ -190,8 +186,6 @@ else
              ).GetHtml();
 
            ViewContext.Writer.Write("</div>");
-
-
 
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("</div>");

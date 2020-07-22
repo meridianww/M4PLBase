@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -147,7 +147,6 @@ else
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobBOLChild).ToHtmlString() + "</div>");
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobProductType).ToHtmlString() + "</div>");
 
-
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobServiceMode).ToHtmlString() + "</div>");
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobChannel).ToHtmlString() + "</div>");
 
@@ -179,14 +178,11 @@ else
                    ViewContext.Writer.Write("<div class='custom-float-right col-fixed-12'>" + Html.EditorFor(m => m.Record.JobServiceOrder).ToHtmlString() + "</div>");
                    ViewContext.Writer.Write("</div>");
 
-
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
                    ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobServiceActual).ToHtmlString() + "</div>");
                    ViewContext.Writer.Write("</div>");
 
-
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, "MultilineText").ToHtmlString() + "</div>");
-
 
                    //ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
 
@@ -257,7 +253,6 @@ else
                            ).GetHtml();
                ViewContext.Writer.Write("</div>");
 
-
                ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 team-div no-padding'>");
                @Html.DevExpress().FormLayout(
                                contactEmailsettings =>
@@ -283,7 +278,6 @@ else
                                }
                            ).GetHtml();
                ViewContext.Writer.Write("</div>");
-
 
                ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 team-div no-padding'>");
 
@@ -380,7 +374,6 @@ else
                             }
                         ).GetHtml();
             ViewContext.Writer.Write("</div>");
-
 
             ViewContext.Writer.Write("<div class='col-md-6 col-lg-6 received-window style='margin-left:-30px'>");
             @Html.DevExpress().FormLayout(
@@ -514,7 +507,6 @@ else
                                                      ).GetHtml();
                                                       ViewContext.Writer.Write("</div>");
 
-
                                                   });
                                               });
                                           });
@@ -523,7 +515,6 @@ else
             ViewContext.Writer.Write("</div>");
         });
     }).GetHtml()
-
 
         @Html.Action(MvcConstants.ActionTabViewCallBack, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) })
 
@@ -551,7 +542,6 @@ else
                });
            }).GetHtml()
         </div>
-
 
         @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
         if (!Model.IsPopUp)
@@ -597,7 +587,6 @@ else
                                   settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
                               }).GetHtml()
                     }
-
                 </div>
                 <div class="col-md-2 no-padding">
                     @Html.DevExpress().Button(settings =>

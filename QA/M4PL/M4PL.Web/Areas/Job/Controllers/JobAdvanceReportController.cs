@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -37,6 +37,7 @@ namespace M4PL.Web.Areas.Job.Controllers
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
         private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
+
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
         /// Gets the page related information on the cache basis
@@ -49,6 +50,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _commonCommands = commonCommands;
             _jobAdvanceReportCommands = JobAdvanceReportCommands;
         }
+
         public ActionResult Report(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -112,9 +114,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
         }
+
         public PartialViewResult ProgramByCustomer(string model, long id = 0)
         {
-
             if (id == 0)
             {
                 ViewData["isFirstProgram"] = false;
@@ -131,9 +133,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Program");
             return PartialView("ProgramByCustomer", _reportResult);
         }
+
         public PartialViewResult OrginByCustomer(string model, long id = 0)
         {
-
             if (id == 0)
             {
                 ViewData["isFirstLoadOrgin"] = false;
@@ -149,9 +151,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Origin");
             return PartialView("OrginByCustomer", _reportResult);
         }
+
         public PartialViewResult DestinationByProgramCustomer(string model, long id = 0)
         {
-
             if (id == 0)
             {
                 ViewData["isFirstDestination"] = false;
@@ -167,14 +169,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Destination");
             return PartialView("DestinationByProgramCustomer", _reportResult);
         }
+
         public PartialViewResult BrandByProgramCustomer(string model, long id = 0)
         {
-
             if (id == 0)
             {
                 ViewData["isFirstBrand"] = false;
                 return null;
-
             }
             else
                 ViewData["isFirstBrand"] = true;
@@ -185,9 +186,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Brand");
             return PartialView("BrandByProgramCustomer", _reportResult);
         }
+
         public PartialViewResult GatewayStatusByProgramCustomer(string model, long id = 0)
         {
-
             if (id == 0)
             {
                 ViewData["isFirstLoadGatewayStatus"] = false;
@@ -202,6 +203,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "GatewayStatus");
             return PartialView("GatewayStatusByProgramCustomer", _reportResult);
         }
+
         public PartialViewResult ServiceModeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -219,6 +221,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "ServiceMode");
             return PartialView("ServiceModeByCustomer", _reportResult);
         }
+
         public PartialViewResult ProductTypeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -235,6 +238,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "ProductType");
             return PartialView("ProductTypeByCustomer", _reportResult);
         }
+
         public PartialViewResult ScheduleByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -249,6 +253,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Scheduled");
             return PartialView("ScheduleByCustomer", _reportResult);
         }
+
         public PartialViewResult OrderTypeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -263,6 +268,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "OrderType");
             return PartialView("OrderTypeByCustomer", _reportResult);
         }
+
         public PartialViewResult JobStatusIdByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -277,6 +283,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobStatus");
             return PartialView("JobStatusIdByCustomer", _reportResult);
         }
+
         public PartialViewResult ChannelByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -293,6 +300,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobChannel");
             return PartialView("ChannelByCustomer", _reportResult);
         }
+
         public PartialViewResult DateTypeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -306,6 +314,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "DateType");
             return PartialView("DateTypeByCustomer", _reportResult);
         }
+
         public PartialViewResult PackagingTypeByJob(string model, long id = 0)
         {
             if (id == 0)
@@ -320,6 +329,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "PackagingCode");
             return PartialView("PackagingTypeByJob", _reportResult);
         }
+
         //public PartialViewResult WeightUnitTypeByJob(string model, long id = 0)
         //{
         //    if (id == 0)
@@ -338,7 +348,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public PartialViewResult CargoTitleByJob(string model, long id = 0)
         {
-
             if (id == 0)
             {
                 ViewData["isFirstLoadCargoTitle"] = false;
@@ -354,6 +363,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "CargoTitle");
             return PartialView("CargoTitleByJob", _reportResult);
         }
+
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
@@ -417,6 +427,21 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
+        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<JobAdvanceReportView, long> JobCardView, string strRoute, string gridName)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            //JobCardView.Insert.ForEach(c => { c.ProgramID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            //JobCardView.Update.ForEach(c => { c.ProgramID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            var batchError = base.BatchUpdate(JobCardView, route, gridName);
+            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+            {
+                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+            }
+            SetGridResult(route);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             _gridResult.Permission = Permission.ReadOnly;
@@ -427,8 +452,12 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
+
+            route.Filters = null;
+            strRoute = JsonConvert.SerializeObject(route);
             return base.GridFilteringView(filteringState, strRoute, gridName);
         }
+
         //public override PartialViewResult GridGroupingView(GridViewColumnState column, string strRoute, string gridName = "")
         //{
         //    var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);

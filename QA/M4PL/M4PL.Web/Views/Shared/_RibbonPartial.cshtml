@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -13,7 +13,6 @@
     var lastActiveTabRoute = ViewData[MvcConstants.LastActiveTabRoute] as M4PL.Entities.Support.MvcRoute;
 
 }
-
 
 @Html.DevExpress().Ribbon(settings =>
 {
@@ -43,7 +42,6 @@
                     {
                         if (subChild.MnuTitle == WebApplicationConstants.Themes)
                         {
-
 
                             var currentSuperSubChildItem = new RibbonComboBoxItem
                             {
@@ -87,13 +85,9 @@
                             else
                                 newChildButton.SmallImage.Url = WebExtension.ConvertByteToString(subChild.MnuIconVerySmall);
 
-
-
                             if (!string.IsNullOrEmpty(subChild.Route.Action) && lastActiveTabRoute.Entity == subChild.Route.Entity
                                 && !string.IsNullOrEmpty(subChild.Route.Area) && lastActiveTabRoute.Area.Equals(subChild.Route.Area))//Main Ribbon
                                 settings.ActiveTabIndex = tab.Index;
-
-
 
                             foreach (var superChild in subChild.Children)
                             {
@@ -107,7 +101,6 @@
                                 };
                                 currentSuperSubChildItem.SmallImage.Url = WebExtension.ConvertByteToString(superChild.MnuIconVerySmall);
                                 newChildButton.Items.Add(currentSuperSubChildItem);
-
 
                             }
 

@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -40,6 +40,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         private readonly IJobCommands _jobCommands;
         public static bool IsSellerTabEdited = false;
         public static bool IsPODTabEdited = false;
+
         /// <summary>
         /// Interacts with the interfaces to get the Job details from the system and renders to the page
         /// Gets the page related information on the cache basis
@@ -88,10 +89,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
-            if (route.IsJobParentEntityUpdated)
-            {
-                SessionProvider.IsJobParentEntity = isJobParentEntity;
-            }
+
+            SessionProvider.IsJobParentEntity = route.IsJobParentEntityUpdated;
             SetGridResult(route, gridName, false, true, null, isJobParentEntity);
 
             if (SessionProvider.ViewPagedDataSession.Count > 0 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
@@ -102,26 +101,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 _gridResult.IsAccessPermission = _jobCommands.GetIsJobDataViewPermission(route.ParentRecordId);
             SessionProvider.ActiveUser.CurrentRoute = route;
-            //SessionProvider.ActiveUser.LastRoute = route;
             if (SessionProvider.ViewPagedDataSession.Count() > 0
             && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
             && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
             }
+
             //To Add Actions Operation in ContextMenu
-            if (_gridResult.FocusedRowId > 0)
-                WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
-            else
-            {
-                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
-                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
-                {
-                    var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
-                    if (actionsContextMenu != null)
-                        _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
-                }
-            }
+            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
+            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+
             if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -140,6 +130,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
 
             #region next/previous
+
             CommonIds maxMinFormData = null;
             maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
             if (maxMinFormData != null)
@@ -156,12 +147,14 @@ namespace M4PL.Web.Areas.Job.Controllers
                     SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
                 }
             }
-            #endregion
+
+            #endregion next/previous
 
             _formResult.SessionProvider = SessionProvider;
             _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
 
             #region Job Card
+
             //SessionProvider.ActiveUser.LastRoute.RecordId = 1;
             if (SessionProvider.ActiveUser.LastRoute.IsPBSReport && SessionProvider.ActiveUser.ReportRoute != null
                 && (SessionProvider.ActiveUser.ReportRoute.ParentEntity == EntitiesAlias.JobAdvanceReport ||
@@ -175,9 +168,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             else
             {
-              //  SessionProvider.ActiveUser.LastRoute = route;
+                //  SessionProvider.ActiveUser.LastRoute = route;
             }
-            #endregion
+
+            #endregion Job Card
 
             _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
             _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
@@ -209,7 +203,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 cancelRoute.EntityName = "JobCard";
                 cancelRoute.RecordId = cancelRoute.ParentRecordId = 0;
                 _formResult.CancelClick = string.Format(JsConstants.FormCancelClick, _formResult.FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+                _formResult.SessionProvider.IsSpecialJobId = (bool)Session["SpecialJobId"];
             }
+            else
+                _formResult.SessionProvider.IsSpecialJobId = false;
 
             SessionProvider.ActiveUser.CurrentRoute = route;
             _formResult.SetupFormResult(_commonCommands, route);
@@ -430,8 +427,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public ActionResult TreeView(string strRoute)
         {
-
-
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Program;
             var treeSplitterControl = new Models.TreeSplitterControl();
@@ -453,10 +448,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     if ((SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionDataView || SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm) && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
                     {
-                        ViewData["CurrentRoute"] = SessionProvider.ActiveUser.CurrentRoute;
-                        ViewData["IsJobParent"] = Session["IsJobParent"] != null ? Session["IsJobParent"] : null;
+                        Session["CurrentRoute"] = SessionProvider.ActiveUser.CurrentRoute;
+                        Session["IsJobParent"] = Session["IsJobParent"] != null ? Session["IsJobParent"] : null;
                     }
-
                 }
             }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -503,7 +497,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
-
             var pageControlResult = new PageControlResult
             {
                 PageInfos = _commonCommands.GetPageInfos(EntitiesAlias.JobDelivery),// Only for special case where setup sub view based on parent entity
@@ -514,7 +507,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             foreach (var pageInfo in pageControlResult.PageInfos)
             {
                 pageInfo.SetRoute(route, _commonCommands);
-
             }
 
             return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
@@ -664,6 +656,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             formResult.SetupFormResult(_commonCommands, route);
             return PartialView(MvcConstants.ViewPODBaseFormView, formResult);
         }
+
         #endregion TabView
 
         #region Filtering & Sorting
@@ -696,23 +689,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult.SessionProvider = SessionProvider;
             SetGridResult(route, gridName);
             //To Add Actions Operation in ContextMenu
-            if (_gridResult.FocusedRowId > 0)
-                WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
-            else
-            {
-                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
-                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
-                {
-                    var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
-                    if (actionsContextMenu != null)
-                        _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
-                }
-            }
+            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
+
             Session["costJobCodeActions"] = null;
             Session["priceJobCodeActions"] = null;
-
+            route.Filters = null;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
+
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -725,18 +709,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             sessionInfo.GridViewColumnStateReset = reset;
             SetGridResult(route, gridName);
             //To Add Actions Operation in ContextMenu
-            if (_gridResult.FocusedRowId > 0)
-                WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
-            else
-            {
-                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
-                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
-                {
-                    var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
-                    if (actionsContextMenu != null)
-                        _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
-                }
-            }
+            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
+
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
@@ -763,19 +737,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult.SessionProvider = SessionProvider;
             SetGridResult(route, gridName, (currentPageSize != pager.PageSize));
             _gridResult.GridViewModel.ApplyPagingState(pager);
+
             //To Add Actions Operation in ContextMenu
-            if (_gridResult.FocusedRowId > 0)
-                WebUtilities.AddActionsInActionContextMenu(route, _commonCommands, _gridResult, EntitiesAlias.Job);
-            else
-            {
-                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
-                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
-                {
-                    var actionsContextMenu = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
-                    if (actionsContextMenu != null)
-                        _gridResult.GridSetting.ContextMenu.Remove(actionsContextMenu);
-                }
-            }
+            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
+
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
@@ -804,6 +769,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         //    return View();
         //}
     }
+
     //public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
     //{
     //    public DragAndDropSupportDemoBinder()

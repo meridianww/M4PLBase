@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -39,7 +39,7 @@ using System.Web.Routing;
 
 namespace M4PL.Web.Controllers
 {
-    public class CommonController : MvcBaseController 
+    public class CommonController : MvcBaseController
     {
         public CommonController(ICommonCommands commonCommands)
         {
@@ -92,8 +92,12 @@ namespace M4PL.Web.Controllers
                 && SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId > 0
                 && Convert.ToInt64(dropDownViewModel.ParentId) == 0)
             {
-                contactId = contactId.HasValue && contactId.Value > 0 ? contactId.Value :
-                    SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId;
+                contactId = contactId.HasValue && contactId.Value > 0 ? contactId.Value : SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId;
+            }
+            if (dropDownViewModel.Entity == EntitiesAlias.OrgRefRole && (dropDownViewModel.EntityFor == EntitiesAlias.SystemAccount || dropDownViewModel.EntityFor == EntitiesAlias.CustContact || dropDownViewModel.EntityFor == EntitiesAlias.VendContact)
+                && contactId.Value == 0)
+            {
+                dropDownViewModel.ParentCondition = string.Format(" AND {0}.{1} = {2} ", EntitiesAlias.OrgRefRole.ToString(), ReservedKeysEnum.StatusId.ToString(), "1");
             }
             if (contactId.HasValue && contactId.Value > 0)
             {
@@ -112,7 +116,6 @@ namespace M4PL.Web.Controllers
 
         public PartialViewResult GetIntDropDownViewTemplate(int? selectedId = 0)
         {
-
             var intDropDownViewModel = new IntDropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
             {
@@ -140,7 +143,7 @@ namespace M4PL.Web.Controllers
             var allSelectedColumns = (!string.IsNullOrWhiteSpace(selectedColumns)) ? selectedColumns.SplitComma() : new string[] { };
             var gridResult = new GridResult<Entities.MasterTables.ChooseColumn>();
             gridResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider);
-            gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, defaultRoute, SessionProvider.ViewPagedDataSession[defaultRoute.Entity].PagedDataInfo, true, gridResult.Permission, this.Url);
+            gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, defaultRoute, SessionProvider.ViewPagedDataSession[defaultRoute.Entity].PagedDataInfo, true, gridResult.Permission, this.Url, null, SessionProvider);
 
             if (!string.IsNullOrWhiteSpace(currentOperation))
             {
@@ -247,7 +250,6 @@ namespace M4PL.Web.Controllers
                                     allSortedColumns[nextItemIndex] = currentItem;
                                     allSortedColumns[currentItemIndex] = nextItem;
                                     SessionProvider.UserColumnSetting.ColSortOrder = allSortedColumns.CommaJoin();
-
                                 }
 
                                 //For Grouped Columns Repositioning
@@ -282,10 +284,10 @@ namespace M4PL.Web.Controllers
                             SessionProvider.UserColumnSetting.ColSortOrder = allSortedColumns.CommaJoin();
                         }
                         break;
+
                     case OperationTypeEnum.RemoveFreeze:
                         if (allSelectedColumns.Length > 0)
                         {
-
                             var allSortedColumns = SessionProvider.UserColumnSetting.ColSortOrder.SplitComma().ToList();
                             ViewData[WebApplicationConstants.ChooseColumnSelectedColumns] = selectedColumns;
                             if (!string.IsNullOrWhiteSpace(SessionProvider.UserColumnSetting.ColIsFreezed))
@@ -302,7 +304,6 @@ namespace M4PL.Web.Controllers
                                 SessionProvider.UserColumnSetting.ColIsFreezed = allfreezedColumns.CommaJoin();
                                 allSortedColumns.InsertRange(SessionProvider.UserColumnSetting.ColIsFreezed.Split(',').Length + 1, allfreezedColumns.ToList());
                             }
-
                         }
                         break;
 
@@ -329,6 +330,7 @@ namespace M4PL.Web.Controllers
                             SessionProvider.UserColumnSetting.ColSortOrder = allSortedColumns.CommaJoin();
                         }
                         break;
+
                     case OperationTypeEnum.RemoveGroupBy:
                         if (allSelectedColumns.Length > 0)
                         {
@@ -349,6 +351,7 @@ namespace M4PL.Web.Controllers
                             SessionProvider.UserColumnSetting.ColSortOrder = allSortedColumns.CommaJoin();
                         }
                         break;
+
                     case OperationTypeEnum.Restore:
                         SessionProvider.UserColumnSetting = RestoreUserColumnSettings(defaultRoute);
                         break;
@@ -406,8 +409,6 @@ namespace M4PL.Web.Controllers
 
         public PartialViewResult ContactComboBox(long? selectedId = 0)
         {
-
-
             var dropDownViewModel = new DropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
             {
@@ -428,7 +429,6 @@ namespace M4PL.Web.Controllers
 
         public PartialViewResult JobDriverPartial()
         {
-
             string JobSiteCode = (Request.Params["JobSiteCode"] != null) ? Request.Params["JobSiteCode"].ToString() : "";
             var dropDownViewModel = new DropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
@@ -445,6 +445,7 @@ namespace M4PL.Web.Controllers
             dropDownViewModel.JobSiteCode = JobSiteCode;
             return PartialView("_JobDriverPartial", dropDownViewModel);
         }
+
         public PartialViewResult PrefVdcLocationsPartial(string selectedItems)
         {
             var DropDownEditViewModel = new DropDownEditViewModel();
@@ -525,22 +526,35 @@ namespace M4PL.Web.Controllers
             return Json(new { status = true, lookupId = _commonCommands.GetLookupIdByName(lookupName) }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetDocumentStatusByJobId(long jobId)
+        public ActionResult GetDocumentStatusByJobId(long jobId, string jobIds)
         {
-            return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(jobId) }, JsonRequestBehavior.AllowGet);
+            List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+            string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+            return Json(new { status = true, documentStatus = _commonCommands.GetDocumentStatusByJobId(requestedJobId) }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult IsPriceCodeDataPresentForJob(long jobId)
+        public ActionResult IsPriceCodeDataPresentForJob(long jobId, string jobIds)
         {
-            return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+            List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+            string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+            return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult IsCostCodeDataPresentForJob(long jobId)
+        public ActionResult IsCostCodeDataPresentForJob(long jobId, string jobIds)
         {
-            return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(jobId) }, JsonRequestBehavior.AllowGet);
+            List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+            string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+            return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetContactType(string lookupName)
+		public ActionResult IsHistoryPresentForJob(long jobId, string jobIds)
+		{
+			List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+			string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+			return Json(new { status = true, documentStatus = _commonCommands.IsHistoryPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult GetContactType(string lookupName)
         {
             return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
         }
@@ -677,10 +691,8 @@ namespace M4PL.Web.Controllers
                 }
                 else
                 {
-
                 }
             }
-
 
             ViewData[WebApplicationConstants.AppCbPanel] = route.OwnerCbPanel;
 
@@ -724,7 +736,7 @@ namespace M4PL.Web.Controllers
 
             //---Start here: Override the parent security with sub module security if exist---
             Permission popupNavPermission = security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>();
-            if (security != null)
+            if (security != null && security.UserSubSecurities != null)
             {
                 var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
                 if (subSecurity != null)
@@ -757,6 +769,7 @@ namespace M4PL.Web.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return PartialView(MvcConstants.ViewNotFound, _commonCommands.GetOrInsErrorLog(new ErrorLog { Id = route.RecordId }));// have to pass Not found model
         }
+
         public ContentResult EmptyResult()
         {
             return Content(string.Empty);
@@ -846,47 +859,59 @@ namespace M4PL.Web.Controllers
                 case EntitiesAlias.SystemAccount:
                     _gridResult = new GridResult<SystemAccount>();
                     break;
+
                 case EntitiesAlias.Organization:
                     _gridResult = new GridResult<Entities.Organization.Organization>();
                     break;
+
                 case EntitiesAlias.OrgPocContact:
                     _gridResult = new GridResult<Entities.Organization.OrgPocContact>();
                     break;
+
                 case EntitiesAlias.OrgCredential:
                     _gridResult = new GridResult<Entities.Organization.OrgCredential>();
                     break;
+
                 case EntitiesAlias.OrgFinancialCalendar:
                     _gridResult = new GridResult<Entities.Organization.OrgFinancialCalendar>();
                     break;
+
                 case EntitiesAlias.OrgRefRole:
                     _gridResult = new GridResult<Entities.Organization.OrgRefRole>();
                     break;
+
                 case EntitiesAlias.SecurityByRole:
                     _gridResult = new GridResult<SecurityByRole>();
                     break;
+
                 case EntitiesAlias.SubSecurityByRole:
                     _gridResult = new GridResult<SubSecurityByRole>();
                     break;
 
-
                 case EntitiesAlias.Customer:
                     _gridResult = new GridResult<Entities.Customer.Customer>();
                     break;
+
                 case EntitiesAlias.CustBusinessTerm:
                     _gridResult = new GridResult<Entities.Customer.CustBusinessTerm>();
                     break;
+
                 case EntitiesAlias.CustFinancialCalendar:
                     _gridResult = new GridResult<Entities.Customer.CustFinancialCalendar>();
                     break;
+
                 case EntitiesAlias.CustContact:
                     _gridResult = new GridResult<Entities.Customer.CustContact>();
                     break;
+
                 case EntitiesAlias.CustDcLocation:
                     _gridResult = new GridResult<Entities.Customer.CustDcLocation>();
                     break;
+
                 case EntitiesAlias.CustDcLocationContact:
                     _gridResult = new GridResult<Entities.Customer.CustDcLocationContact>();
                     break;
+
                 case EntitiesAlias.CustDocReference:
                     _gridResult = new GridResult<Entities.Customer.CustDocReference>();
                     break;
@@ -894,60 +919,75 @@ namespace M4PL.Web.Controllers
                 case EntitiesAlias.Vendor:
                     _gridResult = new GridResult<Entities.Vendor.Vendor>();
                     break;
+
                 case EntitiesAlias.VendBusinessTerm:
                     _gridResult = new GridResult<Entities.Vendor.VendBusinessTerm>();
                     break;
+
                 case EntitiesAlias.VendFinancialCalendar:
                     _gridResult = new GridResult<Entities.Vendor.VendFinancialCalendar>();
                     break;
+
                 case EntitiesAlias.VendContact:
                     _gridResult = new GridResult<Entities.Vendor.VendContact>();
                     break;
+
                 case EntitiesAlias.VendDcLocation:
                     _gridResult = new GridResult<Entities.Vendor.VendDcLocation>();
                     break;
+
                 case EntitiesAlias.VendDcLocationContact:
                     _gridResult = new GridResult<Entities.Vendor.VendDcLocationContact>();
                     break;
+
                 case EntitiesAlias.VendDocReference:
                     _gridResult = new GridResult<Entities.Vendor.VendDocReference>();
                     break;
 
-
-
                 case EntitiesAlias.Program:
                     _gridResult = new GridResult<Entities.Program.Program>();
                     break;
+
                 case EntitiesAlias.PrgRefGatewayDefault:
                     _gridResult = new GridResult<Entities.Program.PrgRefGatewayDefault>();
                     break;
+
                 case EntitiesAlias.PrgRole:
                     _gridResult = new GridResult<Entities.Program.PrgRole>();
                     break;
+
                 case EntitiesAlias.PrgVendLocation:
                     _gridResult = new GridResult<Entities.Program.PrgVendLocation>();
                     break;
+
                 case EntitiesAlias.PrgBillableRate:
                     _gridResult = new GridResult<Entities.Program.PrgBillableRate>();
                     break;
+
                 case EntitiesAlias.PrgCostRate:
                     _gridResult = new GridResult<Entities.Program.PrgCostRate>();
                     break;
+
                 case EntitiesAlias.PrgMvoc:
                     _gridResult = new GridResult<Entities.Program.PrgMvoc>();
                     break;
+
                 case EntitiesAlias.PrgMvocRefQuestion:
                     _gridResult = new GridResult<Entities.Program.PrgMvocRefQuestion>();
                     break;
+
                 case EntitiesAlias.PrgEdiHeader:
                     _gridResult = new GridResult<Entities.Program.PrgEdiHeader>();
                     break;
+
                 case EntitiesAlias.PrgEdiMapping:
                     _gridResult = new GridResult<Entities.Program.PrgEdiMapping>();
                     break;
+
                 case EntitiesAlias.PrgBillableLocation:
                     _gridResult = new GridResult<Entities.Program.PrgBillableLocation>();
                     break;
+
                 case EntitiesAlias.PrgCostLocation:
                     _gridResult = new GridResult<Entities.Program.PrgCostLocation>();
                     break;
@@ -955,41 +995,51 @@ namespace M4PL.Web.Controllers
                 case EntitiesAlias.Job:
                     _gridResult = new GridResult<Entities.Job.Job>();
                     break;
+
                 case EntitiesAlias.JobGateway:
                     _gridResult = new GridResult<Entities.Job.JobGateway>();
                     break;
+
                 case EntitiesAlias.JobAttribute:
                     _gridResult = new GridResult<Entities.Job.JobAttribute>();
                     break;
+
                 case EntitiesAlias.JobCargo:
                     _gridResult = new GridResult<Entities.Job.JobCargo>();
                     break;
+
                 case EntitiesAlias.JobDocReference:
                     _gridResult = new GridResult<Entities.Job.JobDocReference>();
                     break;
+
                 case EntitiesAlias.JobCostSheet:
                     _gridResult = new GridResult<Entities.Job.JobCostSheet>();
                     break;
+
                 case EntitiesAlias.JobBillableSheet:
                     _gridResult = new GridResult<Entities.Job.JobBillableSheet>();
                     break;
 
-
                 case EntitiesAlias.ScrOsdList:
                     _gridResult = new GridResult<Entities.Scanner.ScrOsdList>();
                     break;
+
                 case EntitiesAlias.ScrCatalogList:
                     _gridResult = new GridResult<Entities.Scanner.ScrCatalogList>();
                     break;
+
                 case EntitiesAlias.ScrOsdReasonList:
                     _gridResult = new GridResult<Entities.Scanner.ScrOsdReasonList>();
                     break;
+
                 case EntitiesAlias.ScrRequirementList:
                     _gridResult = new GridResult<Entities.Scanner.ScrRequirementList>();
                     break;
+
                 case EntitiesAlias.ScrReturnReasonList:
                     _gridResult = new GridResult<Entities.Scanner.ScrReturnReasonList>();
                     break;
+
                 case EntitiesAlias.ScrServiceList:
                     _gridResult = new GridResult<Entities.Scanner.ScrServiceList>();
                     break;
@@ -1053,9 +1103,9 @@ namespace M4PL.Web.Controllers
 
             return Json(new { IsValid = isValid, DisplayMessage = JsonConvert.SerializeObject(displayMessage) }, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetCompCorpAddress(int compId)
         {
-
             bool status = false;
             CompanyCorpAddress CompanyCorpAddress = null;
             if (compId > 0)
@@ -1104,6 +1154,7 @@ namespace M4PL.Web.Controllers
             SessionProvider.ActiveUser.PreferredLocation = result;
             return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult UpdateJobReportFormViewRoute(long jobId, EntitiesAlias entityFor)
         {
             if (SessionProvider != null && SessionProvider.ActiveUser != null && jobId > 0)

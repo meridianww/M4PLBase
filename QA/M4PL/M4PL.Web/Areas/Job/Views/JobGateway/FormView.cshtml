@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -17,7 +17,7 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
 @{
     ViewBag.Title = Model.PageName;
-    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GatewayTypeId").ColIsReadOnly = true; 
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GatewayTypeId").ColIsReadOnly = true;
 
     if (Model.Record.GwyCompleted)
     {
@@ -47,8 +47,6 @@
     var gwyClosedByContactDropDownViewModel = fieldValue.GetStringDropDown(EntitiesAlias.Contact, "ConFullName", "GwyClosedBy", Model.ColumnSettings.FirstOrDefault("GwyClosedBy").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyClosedBy").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, 0);
     gwyClosedByContactDropDownViewModel.PopupHorizontalAlignRight = true;
 
-
-
     var gatewayDaterefChangeEvent = "function(s, unitCtrl, ecdCtrl, pcdCtrl, acdCtrl, record){ M4PLJob.FormView.OnGatewayDateRefChange(s,GatewayUnitId" + popup + ",GwyGatewayECD" + popup + ",GwyGatewayPCD" + popup + ",GwyGatewayACD" + popup + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) + "');}";
 
     var attachmentRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
@@ -61,8 +59,6 @@
     appointmentDropDownViewModel.EntityFor = EntitiesAlias.Job;
     var reasonDropDownViewModel = Model.Record.GwyShipStatusReasonCode.GetStringDropDown(EntitiesAlias.PrgShipStatusReasonCode, "PscShipReasonCode", "GwyShipStatusReasonCode", Model.ColumnSettings.FirstOrDefault("GwyShipStatusReasonCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyShipStatusReasonCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.JobID.GetValueOrDefault());
     reasonDropDownViewModel.EntityFor = EntitiesAlias.Job;
-
-
 
     var completeRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, "GatewayComplete");
     completeRoute.OwnerCbPanel = "formView";
@@ -84,7 +80,6 @@
 }
 
 @Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })
-
 
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
 {
@@ -118,6 +113,7 @@
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprDate, new { Name = "GwyUprDate" }).ToHtmlString());
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyLwrDate, new { Name = "GwyLwrDate" }).ToHtmlString());
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.DefaultTime, new { Name = "DefaultTime" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsGatewayCalled, new { Name = "IsGatewayCalled" }).ToHtmlString());
 
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ClosedByContactExist, new { Name = "ClosedByContactExist" }).ToHtmlString());
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
@@ -210,8 +206,6 @@
         </div>
     </div>
 
-
-
     @Html.DevExpress().RoundPanel(settings =>
 {
     settings.Name = "pnlJobGatewayDescription";
@@ -256,7 +250,6 @@
 }).GetHtml()
 
     @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
-
 
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 

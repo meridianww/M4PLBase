@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -65,7 +65,6 @@
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
 
-
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
     settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnChanged";
     settings.SettingsResizing.Visualization = ResizingMode.Live;
@@ -88,7 +87,7 @@
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
     }
@@ -148,15 +147,15 @@
                     column.SetFilterTemplateContent(lookup =>
                     {
                         var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
-                        if (col.ColLookupId == LookupEnums.Status.ToInt())
-                        {
-                            var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
-                            if (!string.IsNullOrWhiteSpace(allStatuses))
-                            {
-                                var allStatus = allStatuses.SplitComma().ToList();
-                                allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-                            }
-                        }
+                        //if (col.ColLookupId == LookupEnums.Status.ToInt())
+                        //{
+                        //    var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
+                        //    if (!string.IsNullOrWhiteSpace(allStatuses))
+                        //    {
+                        //        var allStatus = allStatuses.SplitComma().ToList();
+                        //        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
+                        //    }
+                        //}
                         var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                         string relatedValue = null;
                         allFilters.TryGetValue(column.FieldName, out relatedValue);
@@ -199,7 +198,7 @@
                         cs.TextField = "LangName";
                         cs.ValueField = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                         cs.ValueType = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
-                        cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
+                        cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId).Where(s => s.SysRefId != 0);
                     });
                 }
 
@@ -209,7 +208,6 @@
                     if ((col.ColColumnName.Equals(WebApplicationConstants.EdiMapEdiTableName, StringComparison.OrdinalIgnoreCase)) || (col.ColColumnName.Equals(WebApplicationConstants.EdiMapM4PLTableName, StringComparison.OrdinalIgnoreCase)))
                     {
                         var typeId = col.ColColumnName.Equals(WebApplicationConstants.EdiMapEdiTableName.ToString()) ? (int)TableType.EDI : (int)TableType.M4PL;
-
 
                         var colFieldName = col.ColColumnName.Equals(WebApplicationConstants.EdiMapEdiTableName, StringComparison.OrdinalIgnoreCase) ? WebApplicationConstants.EdiMapEdiFieldName : WebApplicationConstants.EdiMapM4PLFieldName;
                         column.EditFormSettings.Visible = DefaultBoolean.True;
@@ -337,7 +335,7 @@
     };
     //End saving layout
 
-    //For Advanced Filter 
+    //For Advanced Filter
     settings.FilterControlOperationVisibility = (sender, e) =>
     {
         WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);

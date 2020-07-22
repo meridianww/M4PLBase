@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Popup Controller
@@ -115,7 +115,8 @@ namespace M4PL.Web.Controllers
                     if (OkOperation != null && string.IsNullOrEmpty(OkOperation.ClickEvent))
                         OkOperation.ClickEvent = JsConstants.CloseDisplayMessage;
                 }
-
+                //if(displayMessage.Code != null)
+                //    return PartialView(MvcConstants.ViewDisplayPopupControl, displayMessage);
                 if (displayMessage.Code.Equals(DbConstants.WarningTimeOut))
                 {
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.WarningTimeOut);
@@ -141,7 +142,10 @@ namespace M4PL.Web.Controllers
                 if (displayMessage.Code.Equals(DbConstants.JobCostCodeMissing))
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobCostCodeMissing);
 
-                if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
+				if (displayMessage.Code.Equals(DbConstants.JobHistoryMissing))
+					displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobHistoryMissing);
+
+				if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
                 {
                     displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.WarningIgnoreChanges));
 
@@ -160,7 +164,7 @@ namespace M4PL.Web.Controllers
                 if (displayMessage.Code.Equals(DbConstants.JobExistSchedule))
                 {
                     displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobExistSchedule);
-                    displayMessage.Description = !string.IsNullOrEmpty(description) ? description 
+                    displayMessage.Description = !string.IsNullOrEmpty(description) ? description
                                                  : displayMessage.Description;
                 }
             }
@@ -171,10 +175,11 @@ namespace M4PL.Web.Controllers
         {
             var displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(messageTypeEnum, dbConstants));
             var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
-            if (messageTypeEnum == MessageTypeEnum.Warning && dbConstants == DbConstants.WarningTimeOut)
-                OkOperation.ClickEvent = string.Format("function(s, e) {{ {0}; {1}; }}", JsConstants.UpdateSessionTimeClick, JsConstants.UpdateSessionTimeClick);
-            else
-                OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
+            if (OkOperation != null)
+                if (messageTypeEnum == MessageTypeEnum.Warning && dbConstants == DbConstants.WarningTimeOut)
+                    OkOperation.ClickEvent = string.Format("function(s, e) {{ {0}; {1}; }}", JsConstants.UpdateSessionTimeClick, JsConstants.UpdateSessionTimeClick);
+                else
+                    OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
             return displayMessage;
         }
     }

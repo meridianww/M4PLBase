@@ -1,12 +1,21 @@
-﻿/*Copyright(2016) Meridian Worldwide Transportation Group
-All Rights Reserved Worldwide
-=================================================================================================================
-Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Kirty Anurag
-Date Programmed:                              10/10/2017
-Program Name:                                 JobGatewayCommands
-Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobGatewayCommands
-===================================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
+//=================================================================================================================
+// Program Title:                                Meridian 4th Party Logistics(M4PL)
+// Programmer:                                   Kirty Anurag
+// Date Programmed:                              10/10/2017
+// Program Name:                                 JobGatewayCommands
+// Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobGatewayCommands
+//====================================================================================================================
 
 using M4PL.Entities;
 using M4PL.Entities.Job;
@@ -65,9 +74,9 @@ namespace M4PL.Business.Job
             return _commands.Get(ActiveUser, id);
         }
 
-        public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction)
+        public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction, string gatewayCode = null)
         {
-            var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor, is3PlAction);
+            var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor, is3PlAction, gatewayCode);
             result.IsSpecificCustomer = result.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
             return result;
         }
@@ -92,27 +101,30 @@ namespace M4PL.Business.Job
         /// <returns></returns>
         public JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
-            var gateway = new JobGateway();
+            var gatewaysIds = string.Empty;
+            jobGateway.IsMultiOperation = false;
             if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
             {
                 List<Task> tasks = new List<Task>();
+                jobGateway.IsMultiOperation = true;
+                var gateway = new JobGateway();
                 foreach (var item in jobGateway.JobIds[0].Split(','))
                 {
-                    tasks.Add(Task.Factory.StartNew(() =>
-                    {
-                        gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, 
-                            M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
-                    }));
+                    gateway = new JobGateway();
+                    gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway,
+                        M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
+                    gatewaysIds += gateway.Id + ",";
                 }
-                Task.WaitAll(tasks.ToArray());
+                gateway.GatewayIds = gatewaysIds.Remove(gatewaysIds.Length - 1);
+                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
+                return gateway;
             }
             else
             {
-                gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                var gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
+                return gateway;
             }
-
-            PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
-            return gateway;
         }
 
         /// <summary>
@@ -201,10 +213,6 @@ namespace M4PL.Business.Job
         public JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle)
         {
             return _commands.JobActionCodeByTitle(ActiveUser, jobId, gwyTitle);
-        }
-        public IList<JobGatewayDetails> GetJobGateway(long jobId)
-        {
-            return _commands.GetJobGateway(ActiveUser, jobId);
         }
 
         /// <summary>

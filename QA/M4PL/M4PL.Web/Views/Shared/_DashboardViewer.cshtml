@@ -1,5 +1,5 @@
 ﻿@*Copyright (2018) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -10,11 +10,6 @@
 
 @using M4PL.Utilities;
 @using M4PL.Utilities;
-<script type="text/javascript">
-    function onBeforeRender(sender) {
-        var control = sender.getDashboardControl();
-    }
-</script>
 
 @model  M4PL.Web.Models.DashboardResult<M4PL.APIClient.ViewModels.AppDashboardView>
 @{
@@ -31,7 +26,6 @@
     settings.ControllerName =  Model.CallBackRoute.Controller;
 
     settings.WorkingMode = DevExpress.DashboardWeb.WorkingMode.ViewerOnly;
-    settings.ClientSideEvents.BeforeRender = "onBeforeRender";
-
+    settings.ClientSideEvents.BeforeRender = "DevExCtrl.Dashboard.OnBeforeRender";
 
 }).GetHtml()

@@ -1,14 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -30,82 +29,81 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Scanner.Controllers
 {
-    public class ScrServiceListController : BaseController<ScrServiceListView>
-    {
-        /// <summary>
-        /// Interacts with the interfaces to get the ScrServiceList details of the system and renders to the page
-        /// Gets the page related information on the cache basis
-        /// </summary>
-        /// <param name="scrServiceListCommands"></param>
-        /// <param name="commonCommands"></param>
-        public ScrServiceListController(IScrServiceListCommands scrServiceListCommands, ICommonCommands commonCommands)
-            : base(scrServiceListCommands)
-        {
-            _commonCommands = commonCommands;
-        }
+	public class ScrServiceListController : BaseController<ScrServiceListView>
+	{
+		/// <summary>
+		/// Interacts with the interfaces to get the ScrServiceList details of the system and renders to the page
+		/// Gets the page related information on the cache basis
+		/// </summary>
+		/// <param name="scrServiceListCommands"></param>
+		/// <param name="commonCommands"></param>
+		public ScrServiceListController(IScrServiceListCommands scrServiceListCommands, ICommonCommands commonCommands)
+			: base(scrServiceListCommands)
+		{
+			_commonCommands = commonCommands;
+		}
 
-        [HttpPost, ValidateInput(false)]
-        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<ScrServiceListView, long> scrServiceListView, string strRoute, string gridName)
-        {
-            var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-            scrServiceListView.Insert.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            scrServiceListView.Update.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = BatchUpdate(scrServiceListView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
-            {
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
-                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
-                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-            }
-            SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
-        }
+		[HttpPost, ValidateInput(false)]
+		public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<ScrServiceListView, long> scrServiceListView, string strRoute, string gridName)
+		{
+			var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+			scrServiceListView.Insert.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			scrServiceListView.Update.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			var batchError = BatchUpdate(scrServiceListView, route, gridName);
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			{
+				var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+				displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+				ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+			}
+			SetGridResult(route);
+			return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+		}
 
+		public override ActionResult AddOrEdit(ScrServiceListView scrServiceListView)
+		{
+			SessionProvider.ActiveUser.SetRecordDefaults(scrServiceListView, Request.Params[WebApplicationConstants.UserDateTime]);
+			scrServiceListView.IsFormView = true;
+			var messages = ValidateMessages(scrServiceListView);
+			if (messages.Any())
+				return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-        public override ActionResult AddOrEdit(ScrServiceListView scrServiceListView)
-        {
-            SessionProvider.ActiveUser.SetRecordDefaults(scrServiceListView, Request.Params[WebApplicationConstants.UserDateTime]);
-            scrServiceListView.IsFormView = true;
-            var messages = ValidateMessages(scrServiceListView);
-            if (messages.Any())
-                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+			var descriptionByteArray = scrServiceListView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.ScrServiceList, ByteArrayFields.ServiceDescription.ToString());
+			var byteArray = new List<ByteArray> {
+				descriptionByteArray
+			};
 
-            var descriptionByteArray = scrServiceListView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.ScrServiceList, ByteArrayFields.ServiceDescription.ToString());
-            var byteArray = new List<ByteArray> {
-                descriptionByteArray
-            };
+			var record = scrServiceListView.Id > 0 ? UpdateForm(scrServiceListView) : SaveForm(scrServiceListView);
+			var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
 
-            var record = scrServiceListView.Id > 0 ? UpdateForm(scrServiceListView) : SaveForm(scrServiceListView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+			if (record is SysRefModel)
+			{
+				route.RecordId = record.Id;
+				route.PreviousRecordId = scrServiceListView.Id;
+				descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
 
-            if (record is SysRefModel)
-            {
-                route.RecordId = record.Id;
-                route.PreviousRecordId = scrServiceListView.Id;
-                descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+				return SuccessMessageForInsertOrUpdate(scrServiceListView.Id, route, byteArray);
+			}
 
-                return SuccessMessageForInsertOrUpdate(scrServiceListView.Id, route, byteArray);
-            }
+			return ErrorMessageForInsertOrUpdate(scrServiceListView.Id, route);
+		}
 
-            return ErrorMessageForInsertOrUpdate(scrServiceListView.Id, route);
-        }
+		#region RichEdit
 
-        #region RichEdit
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.ServiceDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.ServiceDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-        {
-            long newDocumentId;
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.ServiceDescription.ToString());
-            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-            {
-                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.ServiceDescription.ToString());
-            }
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-            return base.RichEditFormView(byteArray);
-        }
-
-        #endregion RichEdit
-    }
+		#endregion RichEdit
+	}
 }

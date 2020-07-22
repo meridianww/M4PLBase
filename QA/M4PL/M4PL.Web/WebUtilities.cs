@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -60,13 +60,14 @@ namespace M4PL.Web
 
             //Set the value of the property
             propertyInfo.SetValue(inputObject, propertyVal, null);
-
         }
+
         private static bool IsNullableType(Type type)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
-        public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper, object contextChildOptions = null)
+
+        public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper, object contextChildOptions = null, SessionProvider sessionProvider = null)
         {
             if (route.Entity == EntitiesAlias.PrgCostRate || route.Entity == EntitiesAlias.PrgBillableRate)
             {
@@ -120,10 +121,12 @@ namespace M4PL.Web
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
                     gridViewSetting.ShowNewButton = true;
                     break;
+
                 case EntitiesAlias.PrgEdiCondition:
                     gridViewSetting.GridName = GetGridName(route);
                     gridViewSetting.ShowNewButton = true;
                     break;
+
                 case EntitiesAlias.PrgBillableLocation:
                     gridViewSetting.ChildGridRoute = new MvcRoute(EntitiesAlias.PrgBillableRate, MvcConstants.ActionDataView, EntitiesAlias.Program.ToString());
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
@@ -137,6 +140,7 @@ namespace M4PL.Web
                     }
 
                     break;
+
                 case EntitiesAlias.PrgCostLocation:
                     gridViewSetting.ChildGridRoute = new MvcRoute(EntitiesAlias.PrgCostRate, MvcConstants.ActionDataView, EntitiesAlias.Program.ToString());
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
@@ -150,39 +154,47 @@ namespace M4PL.Web
 
                     //gridViewSetting.ShowNewButton = true;
                     break;
+
                 case EntitiesAlias.PrgMvoc:
                     gridViewSetting.ChildGridRoute = new MvcRoute(route, MvcConstants.ActionDataView);
                     gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgMvocRefQuestion;
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong(), true);
                     break;
+
                 case EntitiesAlias.PrgEdiHeader:
                     gridViewSetting.ChildGridRoute = new MvcRoute(route, MvcConstants.ActionDataView);
                     gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgEdiMapping;
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong(), true);
                     break;
+
                 case EntitiesAlias.SubSecurityByRole:
                     gridViewSetting.GridName = GetGridName(route);
                     gridViewSetting.ShowNewButton = true;
                     break;
+
                 case EntitiesAlias.PrgMvocRefQuestion:
                 case EntitiesAlias.JobCargoDetail:
                     gridViewSetting.GridName = GetGridName(route);
                     break;
+
                 case EntitiesAlias.CustDcLocationContact:
                 case EntitiesAlias.VendDcLocationContact:
                     addOperation.LangName = string.Format("{0} {1}", "Add", EntitiesAlias.Contact.ToString());
                     editOperation.LangName = string.Format("{0} {1}", editOperation.LangName, EntitiesAlias.Contact.ToString());
                     gridViewSetting.GridName = GetGridName(route);
                     break;
+
                 case EntitiesAlias.PrgEdiMapping:
                     gridViewSetting.GridName = GetGridName(route);
                     gridViewSetting.ShowNewButton = true;
                     break;
+
                 case EntitiesAlias.CustDcLocation:
                     gridViewSetting.ChildGridRoute = new MvcRoute(route, MvcConstants.ActionDataView);
                     gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.CustDcLocationContact;
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong(), true);
                     break;
+
                 case EntitiesAlias.VendDcLocation:
                     gridViewSetting.ChildGridRoute = new MvcRoute(route, MvcConstants.ActionDataView);
                     gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.VendDcLocationContact;
@@ -208,6 +220,7 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(editOperation);
                     }
                     break;
+
                 case EntitiesAlias.Report:
                     gridViewSetting.ShowNewButton = true;
                     if (hasRecords)
@@ -217,30 +230,34 @@ namespace M4PL.Web
                 case EntitiesAlias.Attachment:
                     gridViewSetting.ShowNewButton = true;
                     break;
+
                 case EntitiesAlias.JobGateway:
                 case EntitiesAlias.JobDocReference:
                 case EntitiesAlias.JobCostSheet:
                 case EntitiesAlias.JobBillableSheet:
                     gridViewSetting.CallBackRoute.Action = route.Action;
                     break;
+
                 case EntitiesAlias.ColumnAlias:
                     gridViewSetting.CallBackRoute.Action = MvcConstants.ActionColAliasDataViewCallback;
                     break;
 
                 case EntitiesAlias.JobAdvanceReport:
                     gridViewSetting.EnableClientSideExportAPI = true;
-                    gridViewSetting.Mode = GridViewEditingMode.Inline;
+                    gridViewSetting.Mode = GridViewEditingMode.Batch;
                     gridViewSetting.CallBackRoute.Action = route.Action;
                     break;
+
                 case EntitiesAlias.JobCard:
-                    gridViewSetting.Mode = GridViewEditingMode.Inline;
+                    gridViewSetting.Mode = GridViewEditingMode.Batch;
                     gridViewSetting.ContextMenu.Add(gridRefresh);
                     break;
+
                 default:
                     break;
             }
             //!(currentPermission < Permission.AddEdit) &&
-            if (!gridViewSetting.ShowNewButton &&  route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
+            if (!gridViewSetting.ShowNewButton && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
             {
                 if (route.Entity != EntitiesAlias.PrgVendLocation
                     && route.Entity != EntitiesAlias.PrgCostLocation
@@ -275,12 +292,24 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(copyOperation);
                     if (route.Entity == EntitiesAlias.Job)
                     {
-                        //gridViewSetting.ContextMenu.Add(Copy);
-                        //gridViewSetting.ContextMenu.Add(Cut);
-                        //gridViewSetting.ContextMenu.Add(Paste);
-                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                        var moduleIdToCompare = MainModule.Job.ToInt();
+                        var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
+                        int? permission = security?.SecMenuAccessLevelId;
+                        if (security?.UserSubSecurities != null && security.UserSubSecurities.Count > 0)
+                        {
+                            var tableRef = commonCommands.Tables[EntitiesAlias.JobGateway];
+                            string refTableName = tableRef.SysRefName != null ? Convert.ToString(tableRef.SysRefName).ToUpper() : tableRef.SysRefName;
+                            var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && x.RefTableName.ToUpper() == refTableName);
+
+                            permission = subSecurity != null ? subSecurity.SubsMenuAccessLevelId : permission;
+                        }
+                        if (permission.HasValue && permission.Value > (int)Permission.ReadOnly)
+                        {
+                            gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                            gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                        }
                     }
-                    if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
+                    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly) //action context menu should come after new and edit. So, Have added this here
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                         gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
@@ -288,7 +317,7 @@ namespace M4PL.Web
                 }
                 else if (!hasRecords && !gridViewSetting.IsJobCardEntity)
                 {
-                    if (route.Entity == EntitiesAlias.JobGateway)
+                    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly)
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                         gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
@@ -298,7 +327,6 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                     }
                 }
-
 
                 if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
                 {
@@ -329,7 +357,6 @@ namespace M4PL.Web
                                 newRoute.Filters.Value = singleReasonCode.CostCodeId.ToString(); ////String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PcrCode);
                                 newChildOperation.Route = newRoute;
                                 newOperation.ChildOperations.Add(newChildOperation);
-
                             }
 
                             costActionsContextMenu.ChildOperations.Add(newOperation);
@@ -368,7 +395,6 @@ namespace M4PL.Web
                                 newRoute.Filters.Value = singleReasonCode.PriceCodeId.ToString();
                                 newChildOperation.Route = newRoute;
                                 newOperation.ChildOperations.Add(newChildOperation);
-
                             }
 
                             billableActionsContextMenu.ChildOperations.Add(newOperation);
@@ -378,9 +404,8 @@ namespace M4PL.Web
                     }
                 }
             }
-
             else if (!gridViewSetting.ShowNewButton
-                //&& currentPermission == Permission.EditAll 
+                //&& currentPermission == Permission.EditAll
                 && route.Entity != EntitiesAlias.StatusLog
                 && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.JobCard
                  && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole && editOperation != null
@@ -389,7 +414,7 @@ namespace M4PL.Web
                 gridViewSetting.ContextMenu.Add(editOperation);
             }
             else if (!gridViewSetting.ShowNewButton
-                //&& currentPermission == Permission.EditAll 
+                //&& currentPermission == Permission.EditAll
                 && (route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.Job)
                  && editOperation != null && pagedDataInfo != null && pagedDataInfo.TotalCount > 0)
             {
@@ -414,7 +439,7 @@ namespace M4PL.Web
             {
                 gridViewSetting.ContextMenu.Remove(editOperation);
             }
-            if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
+            if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.
                 gridViewSetting.ShowFilterRow = false;
 
             if (route.IsPopup && hasRecords && route.Entity != EntitiesAlias.JobHistory)
@@ -446,6 +471,7 @@ namespace M4PL.Web
                 case EntitiesAlias.PrgBillableRate:
                 case EntitiesAlias.PrgCostRate:
                     return string.Concat(gridName, route.ParentRecordId);
+
                 case EntitiesAlias.JobDocReference:
                     if (route.Action == MvcConstants.ActionDocumentDataView)
                         gridName = string.Format("DocumentPod_{0}", gridName);
@@ -454,6 +480,7 @@ namespace M4PL.Web
                     else if (route.Action == MvcConstants.ActionDocDamagedDataView)
                         gridName = string.Format("DocDamagedDataView_{0}", gridName);
                     return gridName;
+
                 default:
                     return gridName;
             }
@@ -519,7 +546,7 @@ namespace M4PL.Web
             }
 
             columnSets = columnSets.OrderBy(x => x.ColSortOrder).ToList();
-            UpdateScannerRelationEntity(columnSets);
+            ////UpdateScannerRelationEntity(columnSets);
             UpdateOrganizationColumnSettings(columnSets, sessionProvider);
             UpdateOrgCredentialColumnSettings(columnSets);
             return columnSets.OrderBy(x => x.ColSortOrder).ToList();
@@ -595,6 +622,7 @@ namespace M4PL.Web
                             if (columnSetting.ColColumnName == "JobDeliveryState")
                                 return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 270;
                             return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : 270;
+
                         case SQLDataTypes.datetime2:
                             return columnSetting.MaxLength < 11 ? 150 : columnSetting.MaxLength < 26 ? 170 : 270;
                     }
@@ -609,64 +637,94 @@ namespace M4PL.Web
             {
                 case "Id":
                     return columnSetting.MaxLength = 60;
+
                 case "JobMITJobID":
                     return columnSetting.MaxLength = 120;
+
                 case "JobSiteCode":
                     return columnSetting.MaxLength = 120;
+
                 case "JobCustomerSalesOrder":
                     return columnSetting.MaxLength = 120;
+
                 case "JobCustomerPurchaseOrder":
                     return columnSetting.MaxLength = 120;
+
                 case "JobCarrierContract":
                     return columnSetting.MaxLength = 120;
+
                 case "JobGatewayStatus":
                     return columnSetting.MaxLength = 100;
+
                 case "StatusId":
                     return columnSetting.MaxLength = 60;
+
                 case "JobDeliverySitePOC":
                     return columnSetting.MaxLength = 270;
+
                 case "JobDeliverySitePOCPhone":
                     return columnSetting.MaxLength = 120;
+
                 case "JobDeliverySitePOCEmail":
                     return columnSetting.MaxLength = 160;
+
                 case "JobDeliverySiteName":
                     return columnSetting.MaxLength = 220;
+
                 case "JobDeliveryStreetAddress":
                     return columnSetting.MaxLength = 220;
+
                 case "JobDeliveryStreetAddress2":
                     return columnSetting.MaxLength = 220;
+
                 case "JobDeliveryCity":
                     return columnSetting.MaxLength = 120;
+
                 case "JobDeliveryState":
                     return columnSetting.MaxLength = 60;
+
                 case "JobDeliveryPostalCode":
                     return columnSetting.MaxLength = 80;
+
                 case "JobDeliveryDateTimePlanned":
                     return columnSetting.MaxLength = 150;
+
                 case "JobDeliveryDateTimeActual":
                     return columnSetting.MaxLength = 150;
+
                 case "JobOriginDateTimePlanned":
                     return columnSetting.MaxLength = 150;
+
                 case "JobOriginDateTimeActual":
                     return columnSetting.MaxLength = 150;
+
                 case "JobSellerSiteName":
                     return columnSetting.MaxLength = 270;
+
                 case "JobDeliverySitePOCPhone2":
                     return columnSetting.MaxLength = 120;
+
                 case "JobManifestNo":
                     return columnSetting.MaxLength = 120;
+
                 case "PlantIDCode":
                     return columnSetting.MaxLength = 60;
+
                 case "JobBOL":
                     return columnSetting.MaxLength = 220;
+
                 case "JobQtyActual":
                     return columnSetting.MaxLength = 60;
+
                 case "JobPartsActual":
                     return columnSetting.MaxLength = 60;
+
                 case "JobTotalCubes":
                     return columnSetting.MaxLength = 60;
+
                 case "JobServiceMode":
                     return columnSetting.MaxLength = 120;
+
                 case "JobOrderedDate":
                     return columnSetting.MaxLength = 150;
             }
@@ -720,6 +778,28 @@ namespace M4PL.Web
             return 80;
         }
 
+        public static int SetJobHistoryGridPixel(APIClient.ViewModels.ColumnSetting columnSetting)
+        {
+            switch (columnSetting.ColColumnName)
+            {
+                case "FieldName":
+                    return columnSetting.MaxLength = 50;
+
+                case "OldValue":
+                    return columnSetting.MaxLength = 80;
+
+                case "NewValue":
+                    return columnSetting.MaxLength = 80;
+
+                case "ChangedDate":
+                    return columnSetting.MaxLength = 100;
+                case "ChangedBy":
+                    return columnSetting.MaxLength = 80;
+            }
+
+            return 80;
+        }
+
         public static string ShouldRenderDetailGrid(object dataItem, ICommonCommands commonCommands, ref MvcRoute currentChildRoute)
         {
             switch (currentChildRoute.Entity)
@@ -733,11 +813,13 @@ namespace M4PL.Web
                         return commonCommands.GetPageInfos((EntitiesAlias)Enum.Parse(typeof(EntitiesAlias), currentModuleMenu.MnuExecuteProgram)).Where(x => x.TabTableName != x.RefTableName).Count() > 0 ? string.Empty : "No data available.";
                     else
                         return "No data available.";
+
                 case EntitiesAlias.PrgEdiMapping:
                     if (currentChildRoute.Filters == null)
                         currentChildRoute.Filters = new Entities.Support.Filter();
                     currentChildRoute.Filters.CustomFilter = Convert.ToBoolean(DataBinder.Eval(dataItem, WebApplicationConstants.PehSendReceive));
                     return string.Empty;
+
                 case EntitiesAlias.PrgBillableRate:
                     if (currentChildRoute.ParentEntity == EntitiesAlias.PrgBillableLocation) //TODO: Remove this condition later when starts get and set child grid from database
                         return string.Empty;
@@ -746,6 +828,7 @@ namespace M4PL.Web
                     currentChildRoute.Filters.FieldName = CustColumnNames.CdcLocationCode.ToString();
                     currentChildRoute.Filters.Value = Convert.ToString(DataBinder.Eval(dataItem, CustColumnNames.CdcLocationCode.ToString()));
                     return string.Empty;
+
                 case EntitiesAlias.PrgCostRate:
                     if (currentChildRoute.ParentEntity == EntitiesAlias.PrgCostLocation)//TODO: Remove this condition later when starts get and set child grid from database
                         return string.Empty;
@@ -775,9 +858,11 @@ namespace M4PL.Web
                 case EntitiesAlias.Job:
                     treeListResult.ContentRouteCallBack.OwnerCbPanel = string.Concat(treeListResult.ContentRouteCallBack.Entity, MvcConstants.ActionDataView, "CbPanel");
                     break;
+
                 case EntitiesAlias.PrgEdiHeader:
                     treeListResult.ContentRouteCallBack.OwnerCbPanel = string.Concat(treeListResult.ContentRouteCallBack.Entity, MvcConstants.ActionDataView, "CbPanel");
                     break;
+
                 default:
                     break;
             }
@@ -859,7 +944,6 @@ namespace M4PL.Web
                                     column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
                             });
                         }
-
                         else if (col.DataType.Equals(SQLDataTypes.bit.ToString(), StringComparison.OrdinalIgnoreCase))
                         {
                             column.EditorProperties().CheckBox(chckBx =>
@@ -876,7 +960,7 @@ namespace M4PL.Web
                                 cs.TextField = "LangName";
                                 cs.ValueField = "SysRefId";
                                 cs.ValueType = typeof(int);
-                                cs.DataSource = commonCommands.GetIdRefLangNames(col.ColLookupId);
+                                cs.DataSource = commonCommands.GetIdRefLangNames(col.ColLookupId).Where(s => s.SysRefId != 0);
                             });
                         }
                         else if (col.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)
@@ -936,7 +1020,6 @@ namespace M4PL.Web
             {
                 gridCookie = new HttpCookie(entityName);
                 gridCookie.Expires = DateTime.Now.AddDays(14);
-
             }
             if (!string.IsNullOrEmpty(layout))
             {
@@ -954,7 +1037,6 @@ namespace M4PL.Web
             {
                 gridCookie = new HttpCookie(cookieId);
                 gridCookie.Expires = DateTime.Now.AddDays(14);
-
             }
             if (!string.IsNullOrEmpty(layout))
             {
@@ -1003,11 +1085,13 @@ namespace M4PL.Web
                             case ClauseType.DoesNotEqual:
                                 e.Visible = true;
                                 break;
+
                             default:
                                 e.Visible = false;
                                 break;
                         }
                         break;
+
                     case MVCxGridViewColumnType.SpinEdit:
                         switch (e.Operation)
                         {
@@ -1019,12 +1103,12 @@ namespace M4PL.Web
                             case ClauseType.GreaterOrEqual:
                                 e.Visible = true;
                                 break;
+
                             default:
                                 e.Visible = false;
                                 break;
                         }
                         break;
-
                 }
             }
         }
@@ -1036,15 +1120,19 @@ namespace M4PL.Web
                 case EntitiesAlias.ScrOsdList:
                     keyFieldName = ScannerTablesPrimaryColumnName.OSDID.ToString();
                     break;
+
                 case EntitiesAlias.ScrOsdReasonList:
                     keyFieldName = ScannerTablesPrimaryColumnName.ReasonID.ToString();
                     break;
+
                 case EntitiesAlias.ScrRequirementList:
                     keyFieldName = ScannerTablesPrimaryColumnName.RequirementID.ToString();
                     break;
+
                 case EntitiesAlias.ScrServiceList:
                     keyFieldName = ScannerTablesPrimaryColumnName.ServiceID.ToString();
                     break;
+
                 case EntitiesAlias.ScrReturnReasonList:
                     keyFieldName = ScannerTablesPrimaryColumnName.ReturnReasonID.ToString();
                     break;
@@ -1064,6 +1152,7 @@ namespace M4PL.Web
                 case EntitiesAlias.ScrServiceList:
                     columnName = ScrCommonColumns.ProgramID.ToString();
                     break;
+
                 case EntitiesAlias.Contact:
                     columnName = CompColumnNames.ConCompanyId.ToString();
                     break;
@@ -1194,6 +1283,7 @@ namespace M4PL.Web
                     if (String.IsNullOrEmpty(orderBy.Trim()))
                         orderBy = orderByClause;
                     return " " + orderBy + " ";
+
                 default:
                     return orderByClause;
             }
@@ -1203,7 +1293,6 @@ namespace M4PL.Web
         {
             return new List<EntitiesAlias>()
             {
-
             };
         }
 
@@ -1414,112 +1503,6 @@ namespace M4PL.Web
             SecurityByRoleView,
             SubSecurityByRoleView,
             SystemMessageView
-        }
-
-        public static void AddActionsInActionContextMenu<TView>(MvcRoute currentRoute, ICommonCommands _commonCommands, GridResult<TView> _gridResult, EntitiesAlias entitiyAlias)
-        {
-            var route = currentRoute;
-            var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Actions);
-
-            var actionContextMenuAvailable = false;
-            var actionContextMenuIndex = -1;
-
-            if (_gridResult.GridSetting.ContextMenu.Count > 0)
-            {
-                for (var i = 0; i < _gridResult.GridSetting.ContextMenu.Count; i++)
-                {
-                    if (_gridResult.GridSetting.ContextMenu[i].SysRefName.EqualsOrdIgnoreCase(actionsContextMenu.SysRefName))
-                    {
-                        actionContextMenuAvailable = true;
-                        actionContextMenuIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            if (actionContextMenuAvailable)
-            {
-                // M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
-
-                var allActions = _commonCommands.GetJobAction(
-                    route.Entity == EntitiesAlias.Job ? _gridResult.FocusedRowId : route.ParentRecordId);
-                //if (route.ParentRecordId != 0)
-                //{
-                //    ContactAction.PgdGatewayCode = "Add Contact";
-                //    ContactAction.PgdGatewayTitle = "Driver";
-                //    ContactAction.ProgramId = allActions.FirstOrDefault()?.ProgramId ?? 0;
-                //}
-                //allActions.Add(ContactAction);
-                _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
-
-                var routeToAssign = new MvcRoute(currentRoute);
-                routeToAssign.Entity = EntitiesAlias.JobGateway;
-                routeToAssign.Action = MvcConstants.ActionGatewayActionForm;
-                routeToAssign.IsPopup = true;
-                routeToAssign.RecordId = _gridResult.FocusedRowId;
-                routeToAssign.IsPBSReport = currentRoute.Entity != EntitiesAlias.JobGateway;
-                //SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor = JobGatewayType.Action.ToString();
-
-                if (allActions.Count > 0)
-                {
-                    var groupedActions = allActions.GroupBy(x => x.GatewayCode);
-
-                    foreach (var singleApptCode in groupedActions)
-                    {
-                        var newOperation = new Operation();
-                        newOperation.LangName = singleApptCode.First().GatewayCode;
-
-                        foreach (var singleReasonCode in singleApptCode)
-                        {
-                            routeToAssign.Filters = new Entities.Support.Filter();
-                            routeToAssign.Filters.FieldName = singleReasonCode.GatewayCode;
-
-                            var newChildOperation = new Operation();
-                            var newRoute = new MvcRoute(routeToAssign);
-                            newChildOperation.LangName = singleReasonCode.PgdGatewayTitle;
-                            newRoute.Filters = new Entities.Support.Filter();
-                            newRoute.Filters.FieldName = singleReasonCode.GatewayCode;
-                            newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
-                            #region Add Contact
-                            //if (singleReasonCode.GatewayCode == "Add Contact")
-                            //{
-                            //    var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
-                            //    contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
-                            //    contactRoute.IsPopup = true;
-                            //    contactRoute.RecordId = 0;
-                            //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
-                            //        = M4PL.Entities.EntitiesAlias.Contact.ToString();
-                            //    contactRoute.OwnerCbPanel = "pnlJobDetail";
-                            //    contactRoute.CompanyId = newRoute.CompanyId;
-                            //    contactRoute.ParentEntity = EntitiesAlias.Job;
-                            //    if (route.Filters != null)
-                            //    {
-                            //        var isValidCode = _commonCommands.IsValidJobSiteCode(Convert.ToString(route.Filters.FieldName), Convert.ToInt64(newRoute.Url));
-                            //        if (string.IsNullOrEmpty(isValidCode))
-                            //        {
-                            //            contactRoute.Filters = new Entities.Support.Filter();
-                            //            contactRoute.Filters = route.Filters;
-                            //            contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
-                            //            //contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
-                            //        }
-                            //    }
-
-                            //    contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
-                            //    if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
-                            //        contactRoute.ParentRecordId = ContactAction.ProgramId;
-                            //    newChildOperation.Route = contactRoute;
-
-                            //}
-                            //else
-                            #endregion
-                            newChildOperation.Route = newRoute;
-                            newOperation.ChildOperations.Add(newChildOperation);
-
-                        }
-                        _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
-                    }
-                }
-            }
         }
     }
 }

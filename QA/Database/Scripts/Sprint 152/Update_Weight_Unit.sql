@@ -1,0 +1,2 @@
+UPDATE [dbo].[JOBDL010Cargo] SET [CgoWeightUnitsId] = CASE WHEN [CgoWeightUnits] ='KG' THEN 192 WHEN [CgoWeightUnits] ='LB' THEN 191 ELSE [CgoWeightUnitsId] END
+UPDATE [dbo].[JOBDL010Cargo] SET [CgoVolumeUnitsId] = CASE WHEN [CgoVolumeUnits] ='Cubic Feet' THEN 193 WHEN [CgoVolumeUnits] ='Meters' THEN 3308 ELSE [CgoVolumeUnitsId] END

@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -17,13 +17,7 @@
 
     Model.Record.JobID = Model.Record.ParentId;
     Model.Record.CgoLineItem = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.CgoLineItem;
-    var qtyExpectedCtrl = (Model.IsPopUp) ? "CgoQtyExpected" + WebApplicationConstants.PopupSuffix : "CgoQtyExpected";
-    var qtyOnHandCtrl = (Model.IsPopUp) ? "CgoQtyOnHand" + WebApplicationConstants.PopupSuffix : "CgoQtyOnHand";
-    var qtyOnHoldCtrl = (Model.IsPopUp) ? "CgoQtyOnHold" + WebApplicationConstants.PopupSuffix : "CgoQtyOnHold";
-    var qtyDamagedCtrl = (Model.IsPopUp) ? "CgoQtyDamaged" + WebApplicationConstants.PopupSuffix : "CgoQtyDamaged";
-    var qtyStartOverCtrl = (Model.IsPopUp) ? "CgoQtyShortOver" + WebApplicationConstants.PopupSuffix : "CgoQtyShortOver";
 }
-
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
 {
@@ -68,18 +62,19 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoCubes).ToHtmlString() + "</div>");
 
                ViewContext.Writer.Write("<div class='col-sm-11 col-md-11 col-lg-11 quantity-expected no-padding'>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyExpected, new { OnChangeEvent = "DevExCtrl.Decimal.QuantityChanged(s, e, " + qtyExpectedCtrl + ", " + qtyOnHandCtrl + ", " + qtyOnHoldCtrl + ", " + qtyDamagedCtrl + ", " + qtyStartOverCtrl + ");" }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOnHand, new { OnChangeEvent = "DevExCtrl.Decimal.QuantityChanged(s, e, " + qtyExpectedCtrl + ", " + qtyOnHandCtrl + ", " + qtyOnHoldCtrl + ", " + qtyDamagedCtrl + ", " + qtyStartOverCtrl + ");" }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyDamaged, new { OnChangeEvent = "DevExCtrl.Decimal.QuantityChanged(s, e, " + qtyExpectedCtrl + ", " + qtyOnHandCtrl + ", " + qtyOnHoldCtrl + ", " + qtyDamagedCtrl + ", " + qtyStartOverCtrl + ");" }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOnHold, new { OnChangeEvent = "DevExCtrl.Decimal.QuantityChanged(s, e, " + qtyExpectedCtrl + ", " + qtyOnHandCtrl + ", " + qtyOnHoldCtrl + ", " + qtyDamagedCtrl + ", " + qtyStartOverCtrl + ");" }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOrdered).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyExpected).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOnHand).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOnHold).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyOver).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyShortOver).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyUnitsId, new { CgoQtyUnitsId = Model.Record.CgoQtyUnitsId }).ToHtmlString() + "</div>");
-
                ViewContext.Writer.Write("</div>");
 
                ViewContext.Writer.Write("<div class='col-sm-3 col-md-3 col-lg-3 reason-code no-padding'>");
-               ViewContext.Writer.Write("<div class='form-row-group lati-longi'>" + Html.EditorFor(m => m.Record.CgoReasonCodeOSD).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group lati-longi'>" + Html.EditorFor(m => m.Record.CgoReasonCodeHold).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyDamaged).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoQtyUnitsId, new { CgoQtyUnitsId = Model.Record.CgoQtyUnitsId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoReasonCodeOSD).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15 iteminput-hide'>" + Html.EditorFor(m => m.Record.CgoReasonCodeHold).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");
                ViewContext.Writer.Write("<div class='col-sm-3 col-md-3 col-lg-3 reason-code no-padding'>");
                ViewContext.Writer.Write("<div class='form-row-group lati-longi'>" + Html.EditorFor(m => m.Record.CgoLatitude).ToHtmlString() + "</div>");
@@ -87,7 +82,7 @@
                ViewContext.Writer.Write("</div>");
 
                ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>");
-               ViewContext.Writer.Write("<div class='form-row-group  col-lg-10 col-md-10 no-padding'>" + Html.EditorFor(m => m.Record.CgoComment,"MultilineText").ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='col-lg-10 col-md-10 no-padding'>" + Html.EditorFor(m => m.Record.CgoComment,"MultilineText").ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");
 
            });
@@ -96,29 +91,27 @@
 
         <div class="col-sm-2 col-md-2 col-lg-2 job-cargostatus-panel no-padding-right">
             @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlJobCargoStatus";
-    settings.Width = Unit.Percentage(100);
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Job Cargo Status";
-    settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout";
-    settings.SetContent(() =>
-    {
+       {
+           settings.Name = "pnlJobCargoStatus";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "Job Cargo Status";
+           settings.Collapsed = false;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
 
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.CgoSeverityCode).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.CgoSeverityCode).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.CgoDateLastScan).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15 field_height_3'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + "</div>");
 
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-15 field_height_3'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + "</div>");
-
-    });
-}).GetHtml()
+           });
+       }).GetHtml()
         </div>
 
-
         @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
-
     </div>
     if (!Model.IsPopUp)
     {

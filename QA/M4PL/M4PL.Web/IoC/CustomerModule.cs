@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -22,19 +22,19 @@ using M4PL.APIClient.Customer;
 
 namespace M4PL.Web.IoC
 {
-    public class CustomerModule : Module
-    {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<CustBusinessTermCommands>().As<ICustBusinessTermCommands>().InstancePerRequest();
-            builder.RegisterType<CustContactCommands>().As<ICustContactCommands>().InstancePerRequest();
-            builder.RegisterType<CustDcLocationCommands>().As<ICustDcLocationCommands>().InstancePerRequest();
-            builder.RegisterType<CustDcLocationContactCommands>().As<ICustDcLocationContactCommands>().InstancePerRequest();
-            builder.RegisterType<CustDocReferenceCommands>().As<ICustDocReferenceCommands>().InstancePerRequest();
-            builder.RegisterType<CustFinancialCalendarCommands>().As<ICustFinancialCalendarCommands>().InstancePerRequest();
-            builder.RegisterType<CustomerCommands>().As<ICustomerCommands>().InstancePerRequest();
-            builder.RegisterType<CustReportCommands>().As<ICustReportCommands>().InstancePerRequest();
-            base.Load(builder);
-        }
-    }
+	public class CustomerModule : Module
+	{
+		protected override void Load(ContainerBuilder builder)
+		{
+			builder.RegisterType<CustBusinessTermCommands>().As<ICustBusinessTermCommands>().InstancePerRequest();
+			builder.RegisterType<CustContactCommands>().As<ICustContactCommands>().InstancePerRequest();
+			builder.RegisterType<CustDcLocationCommands>().As<ICustDcLocationCommands>().InstancePerRequest();
+			builder.RegisterType<CustDcLocationContactCommands>().As<ICustDcLocationContactCommands>().InstancePerRequest();
+			builder.RegisterType<CustDocReferenceCommands>().As<ICustDocReferenceCommands>().InstancePerRequest();
+			builder.RegisterType<CustFinancialCalendarCommands>().As<ICustFinancialCalendarCommands>().InstancePerRequest();
+			builder.RegisterType<CustomerCommands>().As<ICustomerCommands>().InstancePerRequest();
+			builder.RegisterType<CustReportCommands>().As<ICustReportCommands>().InstancePerRequest();
+			base.Load(builder);
+		}
+	}
 }

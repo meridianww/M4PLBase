@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -27,6 +27,10 @@
     if (!Model.SessionProvider.ActiveUser.IsSysAdmin)
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
+    }
+    else
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsFreezed = true;
     }
     //Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobIsSchedule").ColIsVisible = false;
 }
@@ -137,7 +141,7 @@
             settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
             settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
             settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-            settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+            settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
             settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
             settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
 
@@ -158,7 +162,6 @@
 
         var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
-
         foreach (var colSetting in Model.GridColumnSettings)
         {
             if (colSetting.ColIsVisible
@@ -175,7 +178,6 @@
                     column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                     var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
 
-
                     if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
                     {
                         column.SortOrder = colState.SortOrder;
@@ -189,9 +191,10 @@
                             {
                                 Html.DevExpress().HyperLink(hlSettings =>
                                 {
-                                    hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
+                                    hlSettings.Name = "HyperLink__" + Guid.NewGuid().ToString();
                                     hlSettings.NavigateUrl = "javascript:void(0)";
-                                    hlSettings.Properties.Text = Convert.ToString(container.Text);
+                                    hlSettings.Properties.Text = Convert.ToString(DataBinder.Eval(container.DataItem, colSetting.ColColumnName));
+                                    hlSettings.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, colSetting.ColColumnName));
                                     hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId, entityFor){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0}, '{1}');}}", container.KeyValue, EntitiesAlias.Job.ToString());
                                 }).Render();
                             }
@@ -338,7 +341,7 @@
                             cs.TextField = "LangName";
                             cs.ValueField = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                             cs.ValueType = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
-                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
+                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId).Where(s => s.SysRefId != 0);
                         });
 
                     }
@@ -399,7 +402,6 @@
                 });
             }
         }
-
 
         //Saving Layout
         settings.ClientLayout = (sender, e) =>
@@ -465,7 +467,6 @@
             grid.ForceDataRowType(Model.GridSetting.DataRowType);
         };
 
-
         settings.BeforeGetCallbackResult += (s, e) =>
         {
             var grid = (MVCxGridView)s;
@@ -479,12 +480,25 @@
             }
         };
 
-
         settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
         settings.SetStatusBarTemplateContent(c =>
         {
+            if (!Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].PagedDataInfo.IsJobParentEntity)
+            {
+                @Html.DevExpress().Button(btnCancelCheckBox =>
+                {
+                    btnCancelCheckBox.Name = "btnClearSelection" + Model.GridSetting.GridName;
+                    btnCancelCheckBox.Text = "Clear Selection";
+                    btnCancelCheckBox.EnableTheming = true;
+                    btnCancelCheckBox.ClientSideEvents.Click = "function(s, e) { JobGridView.UnselectRows(); }";
+                    btnCancelCheckBox.AllowFocus = false;
+                    btnCancelCheckBox.ControlStyle.CssClass = "form-btn";
+                }).Render();
+            }
+
             var saveRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;//conversion needed as dyamic has no applicable extension method.
             saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) });
+
             Html.DevExpress().Button(btnSaveSettings =>
             {
                 btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action and dependency on window.js _setCustomButtonsVisibility
@@ -582,9 +596,9 @@
 
     }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml();
 }
-@*else
-    {
-        <div style="text-align:center">
-            <h2><strong>Access Denied, please contact system administrator.</strong></h2>
-        </div>
-    }*@
+else
+{
+    <div style="text-align:center">
+        <h2><strong>Access Denied, please contact system administrator.</strong></h2>
+    </div>
+}

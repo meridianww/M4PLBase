@@ -3,7 +3,7 @@
 @using M4PL.Web.Providers
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobView>
 @{
-    ViewBag.Title = Model.PageName; 
+    ViewBag.Title = Model.PageName;
     var docCallBackRoute = Model.CallBackRoute;
     docCallBackRoute.Entity = EntitiesAlias.JobDocReference;
     docCallBackRoute.Action = M4PL.Web.MvcConstants.ActionDataView;

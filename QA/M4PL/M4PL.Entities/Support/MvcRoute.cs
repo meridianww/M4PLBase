@@ -1,12 +1,21 @@
-﻿/*Copyright(2016) Meridian Worldwide Transportation Group
-All Rights Reserved Worldwide
-==========================================================================================================
-Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Kirty Anurag
-Date Programmed:                              10/10/2017
-Program Name:                                 MvcRoute
-Purpose:                                      Contains objects related to MvcRoute
-==========================================================================================================*/
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+******************************************************************************/
+#endregion Copyright
+
+
+
+//==========================================================================================================
+// Program Title:                                Meridian 4th Party Logistics(M4PL)
+// Programmer:                                   Kirty Anurag
+// Date Programmed:                              10/10/2017
+// Program Name:                                 MvcRoute
+// Purpose:                                      Contains objects related to MvcRoute
+//==========================================================================================================
 
 using System.Collections.Generic;
 
@@ -40,6 +49,7 @@ namespace M4PL.Entities.Support
                 PreviousRecordId = route.PreviousRecordId;
                 CompanyId = route.CompanyId;
                 IsPBSReport = route.IsPBSReport;
+                IsJobParentEntityUpdated = route.IsJobParentEntityUpdated;
             }
         }
 
@@ -53,12 +63,14 @@ namespace M4PL.Entities.Support
         public MvcRoute(MvcRoute route, long recordId) : this(route)
         {
             RecordId = recordId;
+            IsJobParentEntityUpdated = route.IsJobParentEntityUpdated;
         }
 
         public MvcRoute(MvcRoute route, string action, long recordId) : this(route)
         {
             RecordId = recordId;
             Action = action;
+            IsJobParentEntityUpdated = route.IsJobParentEntityUpdated;
         }
 
         public MvcRoute(MvcRoute route, string action, long recordId, long recordIdToCopy, string ownerCbPanel) : this(route)
@@ -67,6 +79,7 @@ namespace M4PL.Entities.Support
             Action = action;
             RecordIdToCopy = recordIdToCopy;
             OwnerCbPanel = ownerCbPanel;
+            IsJobParentEntityUpdated = route.IsJobParentEntityUpdated;
         }
 
         public MvcRoute(MvcRoute route, string action) : this(route)
@@ -77,12 +90,14 @@ namespace M4PL.Entities.Support
             EndDate = route.EndDate;
             IsPBSReport = route.IsPBSReport;
             IsEdit = route.IsEdit;
+            IsJobParentEntityUpdated = route.IsJobParentEntityUpdated;
         }
 
         public MvcRoute(MvcRoute route, string action, long? companyId) : this(route)
         {
             Action = action;
             CompanyId = companyId;
+            IsJobParentEntityUpdated = route.IsJobParentEntityUpdated;
         }
 
         /// <summary>

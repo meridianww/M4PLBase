@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -193,8 +193,6 @@ namespace M4PL.API.Controllers
             return _command.UpdSysAccAndConBridgeRole(systemAccount);
         }
 
-
-
         [HttpGet]
         [Route("UserColumnSettings")]
         public UserColumnSettings UserColumnSettings(EntitiesAlias entity)
@@ -210,7 +208,6 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetUserSysSettings();
         }
-
 
         [HttpGet]
         [CustomQueryable]
@@ -340,7 +337,6 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetUserContactType();
         }
-
 
         [HttpGet]
         [Route("ContactById")]
@@ -475,11 +471,9 @@ namespace M4PL.API.Controllers
             _command.UpdateUserSystemSettings(userSystemSettings);
         }
 
-
         [HttpPost]
         [CustomQueryable]
         [Route("GetDeleteInfoModules")]
-
         public IQueryable<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
         {
             _command.ActiveUser = ActiveUser;
@@ -489,13 +483,11 @@ namespace M4PL.API.Controllers
         [HttpPost]
         [CustomQueryable]
         [Route("GetDeleteInfoRecords")]
-
         public dynamic GetDeleteInfoRecords(PagedDataInfo pagedDataInfo)
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetDeleteInfoRecords(pagedDataInfo);
         }
-
 
         [HttpPost]
         [Route("RemoveDeleteInfoRecords")]
@@ -520,6 +512,7 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetMaxMinRecordsByEntity(entity, RecordID, ActiveUser.OrganizationId, ID);
         }
+
         [HttpGet]
         [Route("GetGatewayTypeByJobID")]
         public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
@@ -539,12 +532,24 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("JobAction")]
-        public IQueryable<JobAction> GetJobAction(long jobId)
+        public IQueryable<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null)
         {
             _command.ActiveUser = ActiveUser;
-            return _command.GetJobAction(jobId).AsQueryable();
+            return _command.GetJobAction(jobId, entity, isScheduleAciton).AsQueryable();
+        }
+
+        /// <summary>
+        /// job gateways by jobid
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetJobGateway")]
+        public IQueryable<JobGatewayDetails> GetJobGateway(long jobId)
+        {
+            _command.ActiveUser = Models.ApiContext.ActiveUser;
+            return _command.GetJobGateway(jobId).AsQueryable();
         }
     }
-
-
 }

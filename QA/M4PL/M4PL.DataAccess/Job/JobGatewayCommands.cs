@@ -1,12 +1,21 @@
-﻿/*Copyright(2016) Meridian Worldwide Transportation Group
-All Rights Reserved Worldwide
-=============================================================================================================
-Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Kirty Anurag
-Date Programmed:                              10/10/2017
-Program Name:                                 JobGatewayCommands
-Purpose:                                      Contains commands to perform CRUD on JobGateway
-=============================================================================================================*/
+﻿#region Copyright
+
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+******************************************************************************/
+
+#endregion Copyright
+
+//=============================================================================================================
+// Program Title:                                Meridian 4th Party Logistics(M4PL)
+// Programmer:                                   Kirty Anurag
+// Date Programmed:                              10/10/2017
+// Program Name:                                 JobGatewayCommands
+// Purpose:                                      Contains commands to perform CRUD on JobGateway
+//=============================================================================================================
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.DataAccess.XCBL;
@@ -73,13 +82,14 @@ namespace M4PL.DataAccess.Job
             return result ?? new JobGateway();
         }
 
-        public static JobGateway GetGatewayWithParent(ActiveUser activeUser, long id, long parentId, string entityFor = null, bool is3PlAction = false)
+        public static JobGateway GetGatewayWithParent(ActiveUser activeUser, long id, long parentId, string entityFor = null, bool is3PlAction = false, string gatewayCode = null)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
             parameters.Add(new Parameter("@entityFor", entityFor));
             parameters.Add(new Parameter("@is3PlAction", is3PlAction));
             parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+            parameters.Add(new Parameter("@gatewayCode", gatewayCode));
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.GetJobGateway, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobGateway();
         }
@@ -109,7 +119,8 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
-        public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway, 
+
+        public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway,
             long customerId, long? jobId = null)
         {
             JobGateway result = null;
@@ -119,6 +130,9 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
                 parameters.Add(new Parameter("@statusCode", jobGateway.StatusCode));
                 parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+                parameters.Add(new Parameter("@isMultiOperation", jobGateway.IsMultiOperation));
+                parameters.Add(new Parameter("@cargoQuantity", jobGateway.CargoQuantity));
+                parameters.Add(new Parameter("@cargoField", jobGateway.CargoField));
                 parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
                 result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
                 XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
@@ -145,6 +159,7 @@ namespace M4PL.DataAccess.Job
             new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable);
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGateway);
         }
+
         public static JobGateway PutWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway)
         {
             var parameters = GetParameters(jobGateway, userSysSetting);
@@ -259,7 +274,6 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobTransitionStatusId", jobGateway.JobTransitionStatusId)
                //new Parameter("@where",string.Format(" AND {0}.{1} ={2} AND {0}.{3}='{4}' AND {0}.{5}='{6}' ",
                //jobGateway.GetType().Name, JobGatewayDefaultWhereColms.GatewayTypeId, jobGateway.GatewayTypeId.ToString(), JobGatewayDefaultWhereColms.GwyOrderType, jobGateway.GwyOrderType, JobGatewayDefaultWhereColms.GwyShipmentType, jobGateway.GwyShipmentType))
-    
             };
             if (userSysSetting != null && userSysSetting.Settings != null)
             {
@@ -369,18 +383,6 @@ namespace M4PL.DataAccess.Job
             return result ?? new JobActionCode();
         }
 
-        public static IList<JobGatewayDetails> GetJobGateway(ActiveUser activeUser, long jobId)
-        {
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@jobId", jobId),
-               new Parameter("@userId", activeUser.UserId),
-               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
-        };
-            var result = SqlSerializer.Default.DeserializeMultiRecords<JobGatewayDetails>(StoredProceduresConstant.GetJobGateways, parameters.ToArray(), storedProcedure: true);
-            return result;
-        }
-
         private static List<Parameter> GetContactParameters(Entities.Contact.Contact contact, string conOrgId)
         {
             var parameters = new List<Parameter>
@@ -422,8 +424,6 @@ namespace M4PL.DataAccess.Job
                new Parameter("@conCompanyId", contact.ConCompanyId),
                new Parameter("@jobSiteCode", contact.JobSiteCode),
                new Parameter("@parentId", contact.ParentId)
-
-
            };
             return parameters;
         }

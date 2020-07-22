@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //====================================================================================================================================================
 //Program Title:                                Mvc Base Controller
@@ -38,6 +38,7 @@ namespace M4PL.Web.Controllers
     {
         protected ICommonCommands _commonCommands;
         public MvcRoute BaseRoute { get; set; }
+
         public SessionProvider SessionProvider
         {
             get { return SessionProvider.Instance; }
@@ -78,7 +79,6 @@ namespace M4PL.Web.Controllers
             });
             if (leftMenu.Children.Count > 0 && leftMenu.Children.FirstOrDefault() != null && leftMenu.Children.FirstOrDefault().Route != null)
                 leftMenu.Route = leftMenu.Children.FirstOrDefault().Route == null ? GetPageNotFoundRoute() : new MvcRoute(leftMenu.Children.FirstOrDefault().Route, string.Empty);
-
         }
 
         private MvcRoute GetPageNotFoundRoute()
@@ -91,7 +91,6 @@ namespace M4PL.Web.Controllers
                 RecordId = 0
             };
         }
-
 
         #endregion Private Methods
 
@@ -148,7 +147,6 @@ namespace M4PL.Web.Controllers
             if (modules != null)
                 areaName = modules.MainModuleName;
 
-
             defaultMenu.Route = new MvcRoute
             {
                 Entity = defaultMenu.MnuTableName.ToEnum<EntitiesAlias>(),
@@ -170,7 +168,7 @@ namespace M4PL.Web.Controllers
                 if (jobId > 0)
                 {
                     return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty, jobId = jobId, tabName = tabName });
-                }                    
+                }
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
             }
             else
@@ -222,10 +220,19 @@ namespace M4PL.Web.Controllers
             }
             SessionProvider.MvcPageAction.Clear();
             //End
-            if (route.Action != MvcConstants.ActionTreeView && route.Controller != "Program" && (Session["TreeViewLayoutData"] != null || Session["CurrentNode"] != null))
+            if (route.Entity != EntitiesAlias.Program && (Session["TreeViewLayoutData"] != null || Session["CurrentNode"] != null))
             {
                 Session["CurrentNode"] = null;
                 Session["TreeViewLayoutData"] = null;
+            }
+            if (route.Entity != EntitiesAlias.Job && (Session["TreeListLayoutData"] != null || Session["JobNode"] != null))
+            {
+                Session["JobNode"] = null;
+                Session["TreeListLayoutData"] = null;
+                Session["CurrentRoute"] = null;
+                Session["IsJobParent"] = null;
+                if (SessionProvider.ActiveUser.CurrentRoute != null && SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ActionTreeView)
+                    SessionProvider.ActiveUser.CurrentRoute = null;
             }
             SessionProvider.ActiveUser.LastRoute = route;
 
@@ -264,10 +271,11 @@ namespace M4PL.Web.Controllers
 
             return PartialView(MvcConstants.ViewInnerCallBackPanelPartial, route);
         }
+
         //public ActionResult InnerReportCallbackPanelPartial(string strRoute, List<string> Location = null,
         //    DateTime? StartDate = null, DateTime? EndDate = null, bool IsPBSReport = false)
         //{
-        //    var routeObjects = JsonConvert.DeserializeObject<M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>>(strRoute);           
+        //    var routeObjects = JsonConvert.DeserializeObject<M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>>(strRoute);
 
         //    return PartialView(MvcConstants.ViewInnerReportCallBackPanelPartial, routeObjects);
         //}
@@ -405,10 +413,10 @@ namespace M4PL.Web.Controllers
                 var result = _commonCommands.IsValidJobSiteCode(Convert.ToString(props[propNames.IndexOf("JobSiteCode")].GetValue(viewRecord)), Convert.ToInt64(props[propNames.IndexOf("ParentId")].GetValue(viewRecord)));
                 if (!string.IsNullOrEmpty(result))
                 {
-
                     errorMessages.Add("JobSiteCode", result);
                 }
             }
+
             #region For Maskfields
 
             var allMaskedColumns = columnSettings.Where(x => !string.IsNullOrWhiteSpace(x.ColMask));
@@ -427,9 +435,7 @@ namespace M4PL.Web.Controllers
                         props[propNames.IndexOf(column.ColColumnName)].SetValue(viewRecord, null);
                     if (val != null && val.GetType() == typeof(string) && !string.IsNullOrWhiteSpace(Convert.ToString(val)))
                         props[propNames.IndexOf(column.ColColumnName)].SetValue(viewRecord, Convert.ToString(val).Trim());
-
                 }
-
             }
 
             #endregion For Maskfields
@@ -481,8 +487,6 @@ namespace M4PL.Web.Controllers
                 }
             });
 
-
-
             var regExProps = _commonCommands.GetValidationRegExpsByEntityAlias(entity).Where(x => !escapeRegexField.Contains(x.ValFieldName)).ToList();
 
             if (regExProps.Count > 0)
@@ -505,7 +509,6 @@ namespace M4PL.Web.Controllers
                         else
                             ValidateLogic(viewRecord, props, pInfo.Name, pInfo.PropertyType, pInfo.GetValue(viewRecord), ref errorMessages, regExProp);
                     }
-
                 }
 
             foreach (var errMsg in errorMessages)
@@ -862,7 +865,6 @@ namespace M4PL.Web.Controllers
             };
             _commonCommands = _commonCommands ?? new CommonCommands { ActiveUser = SessionProvider.ActiveUser };
             return PartialView(MvcConstants.ViewNotFound, _commonCommands.GetOrInsErrorLog(errorLog));
-
         }
 
         public List<string> GetPrimaryKeyColumns()
@@ -887,15 +889,13 @@ namespace M4PL.Web.Controllers
             };
         }
 
-
         protected void UpdateAccessToken(ActiveUser activeUser, bool status)
         {
             var authTokenCookie = HttpContext.Response?.Cookies;
             if (authTokenCookie[WebApplicationConstants.AuthTokenCookie] != null)
                 authTokenCookie.Remove(WebApplicationConstants.AuthTokenCookie);
-            if (status  && activeUser != null)
+            if (status && activeUser != null)
                 authTokenCookie.Add(new HttpCookie(WebApplicationConstants.AuthTokenCookie, activeUser.AuthToken));
         }
-
     }
 }

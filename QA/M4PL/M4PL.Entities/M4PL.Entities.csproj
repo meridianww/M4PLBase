@@ -102,6 +102,7 @@
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
     <Compile Include="Job\BatchJobDetail.cs" />
+    <Compile Include="Job\JobAdditionalInfo.cs" />
     <Compile Include="Job\JobCargoException.cs" />
     <Compile Include="Job\JobExceptionDetail.cs" />
     <Compile Include="Job\JobActionCode.cs" />
@@ -123,12 +124,14 @@
     <Compile Include="Job\JobGatewayDetails.cs" />
     <Compile Include="Job\JobHistory.cs" />
     <Compile Include="Job\JobInvoiceData.cs" />
+    <Compile Include="Job\JobInvoiceDetail.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
     <Compile Include="Job\JobUpdateDecisionMaker.cs" />
     <Compile Include="Job\JobVocReport.cs" />
     <Compile Include="Job\JobVOCReportRequest.cs" />
     <Compile Include="Job\JobXcblInfo.cs" />
+    <Compile Include="Job\SelectedJobList.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
     <Compile Include="Program\NextGatewayModel.cs" />
@@ -336,6 +339,9 @@
       <Project>{3f5e804b-8abd-4871-9ea6-4305d3195123}</Project>
       <Name>M4PL.Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="M4PL.Entities.licenseheader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

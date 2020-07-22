@@ -19,12 +19,18 @@ CREATE PROCEDURE [dbo].[InsertCargoException] (
 	,@GwyExceptionTitleId BIGINT
 	,@GwyExceptionStatusId BIGINT
 	,@isDayLightSavingEnable BIT = 0
+	,@CargoQuantity INT = 0
+	,@CargoField VARCHAR(150)
+	,@CgoReasonCodeOSD VARCHAR(30)
+	,@CgoDateLastScan datetime2(7) = NULL
 	)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @jobId BIGINT
+		,@sqlCommand NVARCHAR(MAX) = NULL
+		,@currentId BIGINT
 
 	SELECT @jobId = jobId
 	FROM JOBDL010Cargo
@@ -158,6 +164,22 @@ BEGIN
 			,@GwyExceptionStatusId
 			,@StatusCode
 			)
+
+        SET @currentId = SCOPE_IDENTITY();
+
+		IF (@currentId > 0 AND @cargoId > 0)
+		BEGIN
+		UPDATE JOBDL010Cargo SET CgoReasonCodeOSD = @CgoReasonCodeOSD , CgoDateLastScan = ISNULL(@CgoDateLastScan,CgoDateLastScan)
+		Where Id = @cargoId
+
+		IF(ISNULL(@CargoField, '') <> '')
+		BEGIN
+			SET @sqlCommand = 'UPDATE JOBDL010Cargo SET ' + @CargoField + ' = ' + CONVERT(NVARCHAR(30), @CargoQuantity) + 
+			' WHERE ID = ' + CONVERT(NVARCHAR(30), @cargoId)
+
+			EXEC sp_executesql @sqlCommand
+		END
+		END
 	END
 
 	SELECT CASE 

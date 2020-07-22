@@ -1,4 +1,13 @@
-﻿using M4PL.Entities;
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+******************************************************************************/
+#endregion Copyright
+
+using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.XCBL.Electrolux.OrderRequest;
 using M4PL.Utilities;
@@ -23,6 +32,8 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 Where(y => y.SysOptionName.Equals("Each", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
             jobDatatoUpdate.JobPONumber = orderHeader.CustomerPO;
+			jobDatatoUpdate.JobBOLMaster = orderHeader.OriginalOrderNumber;
+			jobDatatoUpdate.JobCustomerPurchaseOrder = orderHeader.CustomerPO;
             jobDatatoUpdate.JobCustomerSalesOrder = orderHeader.OrderNumber;
             jobDatatoUpdate.PlantIDCode = (orderHeader.ShipFrom != null && !string.IsNullOrEmpty(orderHeader.ShipFrom.LocationID)) ? orderHeader.ShipFrom.LocationID : jobDatatoUpdate.PlantIDCode;
             jobDatatoUpdate.StatusId = (int)StatusType.Active;

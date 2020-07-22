@@ -1,5 +1,5 @@
 ﻿/******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
@@ -14,7 +14,6 @@ M4PLJob.FormView = function () {
         $('.popupErrorMessages, .errorMessages').html('');
     };
     _onAddOrEdit = function (s, form, strRoute, loadingPanelControl) {
-
         //To save opened Tab GridData
         var isSaveRequired = false;
         for (var gridName in M4PLWindow.SubDataViewsHaveChanges) {
@@ -51,14 +50,13 @@ M4PLJob.FormView = function () {
                     M4PLWindow.IsFromConfirmSaveClick = false;
                     if (response && response.status && response.status === true) {
                         if (response.byteArray && response.byteArray.length > 0 && response.route) {
-                            M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray);
+                            M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray, null);
                         }
                         var route = JSON.parse(strRoute);
                         route.RecordId = response.route.RecordId;
                         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
                             if (!isFromConfirmSave) {
                                 window.setTimeout(function () {
-
                                     if (response.tabRoute != null) {
                                         ASPxClientControl.GetControlCollection().GetByName("pageControl").PerformCallback({ strRoute: response.tabRoute });
                                     }
@@ -69,7 +67,6 @@ M4PLJob.FormView = function () {
                                         ASPxClientControl.GetControlCollection().GetByName("JobDeliveryDateTimeActual").SetValue(FromJsonToDate(response.record.JobDeliveryDateTimeActual));
                                     if (ASPxClientControl.GetControlCollection().GetByName("JobOriginDateTimeActual") && response.record.JobOriginDateTimeActual != null)
                                         ASPxClientControl.GetControlCollection().GetByName("JobOriginDateTimeActual").SetValue(FromJsonToDate(response.record.JobOriginDateTimeActual));
-
 
                                     if (ASPxClientControl.GetControlCollection().GetByName("DateChanged") && response.record.DateChanged != null)
                                         ASPxClientControl.GetControlCollection().GetByName("DateChanged").SetValue(FromJsonToDate(response.record.DateChanged));
@@ -100,8 +97,6 @@ M4PLJob.FormView = function () {
     };
 
     var _setJobOriginDestinationCtrlValues = function (s, e, extnNameOrSuffix, tabNames) {
-
-
         var ctrlRealName = s.name.split(extnNameOrSuffix)[0];
 
         if (ASPxClientControl.GetControlCollection().GetByName(ctrlRealName)) {
@@ -240,7 +235,6 @@ M4PLJob.FormView = function () {
     }
 
     var _doJobCallback = function (route) {
-
         var keyValue = TreeList.GetFocusedNodeKey();
         if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && keyValue.indexOf("_") >= 0) {
             keyValue = keyValue.split('_')[1];
@@ -275,7 +269,6 @@ M4PLJob.FormView = function () {
     }
 
     var _onGatewayCompleteClick = function (s, e, gridCtrl, recordId, strRoute, xCBLRoute) {
-
         var rowIndex = gridCtrl.GetFocusedRowIndex();
 
         if (gridCtrl.batchEditApi.GetColumnIndex("GwyCompleted") !== null) {
@@ -310,9 +303,6 @@ M4PLJob.FormView = function () {
     }
 
     var _setJobOriginDestinationCtrlValuesAnsSetWindowTime = function (s, e, extnNameOrSuffix, tabNames, isDay, earlyThresHold, lateThresHold, programTime, stCtrl, endCtrl) {
-
-
-
         _setJobOriginDestinationCtrlValues(s, e, extnNameOrSuffix, tabNames);
 
         //SET WindowTime;
@@ -326,14 +316,12 @@ M4PLJob.FormView = function () {
         }
 
         if (isDay === "True") {
-
             var elTime1 = moment(new Date(plannedDate));
             var ltTime1 = moment(new Date(plannedDate));
 
             stCtrl.SetValue(elTime1.add(-1, 'days')._d);
             endCtrl.SetValue(ltTime1.add(1, 'days')._d);
         } else {
-
             var earlyMins = earlyThresHold * 60;
             var lateMins = lateThresHold * 60;
 
@@ -359,7 +347,6 @@ M4PLJob.FormView = function () {
         //        }
         //    },
         //    error: function () {
-
         //    }
         //});
     };
@@ -388,7 +375,6 @@ M4PLJob.FormView = function () {
         JobHistoryPopUpClick: _jobHistoryPopUpClick
     }
 }();
-
 
 //var _onGatewayUnitChange = function (s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
 //    var reco = JSON.parse(jsonRecord);

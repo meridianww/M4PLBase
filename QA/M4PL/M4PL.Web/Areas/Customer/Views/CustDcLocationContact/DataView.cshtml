@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -88,37 +88,37 @@
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.True;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
 
-        if (Model.GridSetting.ChildGridRoute != null && Model.GridSetting.ChildGridRoute.Entity != Model.GridSetting.CallBackRoute.Entity)
-        {
-            settings.ClientSideEvents.DetailRowExpanding = "M4PLWindow.DataView.OnDetailRowExpanding";
-            settings.ClientSideEvents.DetailRowCollapsing = "M4PLWindow.DataView.OnDetailRowCollapsing";
-            settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = false;
-            settings.SettingsDetail.ShowDetailRow = true;
+        //if (Model.GridSetting.ChildGridRoute != null && Model.GridSetting.ChildGridRoute.Entity != Model.GridSetting.CallBackRoute.Entity)
+        //{
+        //    settings.ClientSideEvents.DetailRowExpanding = "M4PLWindow.DataView.OnDetailRowExpanding";
+        //    settings.ClientSideEvents.DetailRowCollapsing = "M4PLWindow.DataView.OnDetailRowCollapsing";
+        //    settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = false;
+        //    settings.SettingsDetail.ShowDetailRow = true;
 
-            var childRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.ChildGridRoute;//conversion needed as dyamic has no applicable extension method.
+        //    var childRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.ChildGridRoute;//conversion needed as dyamic has no applicable extension method.
 
-            settings.SetDetailRowTemplateContent(c =>
-            {
-                childRoute.ParentRecordId = Convert.ToInt64(DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName));
-                childRoute.Url = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute);
-                childRoute.Filters = new M4PL.Entities.Support.Filter
-                {
-                    FieldName = "ChildGridRoute"
-                };
-                var msg = WebUtilities.ShouldRenderDetailGrid(c.DataItem, ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands, ref childRoute);
-                if (string.IsNullOrEmpty(msg))
-                {
-                    childRoute.OwnerCbPanel = Model.GridSetting.CallBackRoute.OwnerCbPanel;
-                    Html.RenderAction(childRoute.Action, childRoute.Controller, new { Area = childRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(childRoute) });
-                }
-                else
-                    ViewContext.Writer.Write("<div>" + msg + "</div>");
-            });
-        }
+        //    settings.SetDetailRowTemplateContent(c =>
+        //    {
+        //        childRoute.ParentRecordId = Convert.ToInt64(DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName));
+        //        childRoute.Url = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute);
+        //        childRoute.Filters = new M4PL.Entities.Support.Filter
+        //        {
+        //            FieldName = "ChildGridRoute"
+        //        };
+        //        var msg = WebUtilities.ShouldRenderDetailGrid(c.DataItem, ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands, ref childRoute);
+        //        if (string.IsNullOrEmpty(msg))
+        //        {
+        //            childRoute.OwnerCbPanel = Model.GridSetting.CallBackRoute.OwnerCbPanel;
+        //            Html.RenderAction(childRoute.Action, childRoute.Controller, new { Area = childRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(childRoute) });
+        //        }
+        //        else
+        //            ViewContext.Writer.Write("<div>" + msg + "</div>");
+        //    });
+        //}
     }
 
     if (Model.Permission == Permission.All)
@@ -268,15 +268,15 @@
                     column.SetFilterTemplateContent(lookup =>
                     {
                         var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
-                        if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
-                        {
-                            var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
-                            if (!string.IsNullOrWhiteSpace(allStatuses))
-                            {
-                                var allStatus = allStatuses.SplitComma().ToList();
-                                allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-                            }
-                        }
+                        //if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
+                        //{
+                        //    var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
+                        //    if (!string.IsNullOrWhiteSpace(allStatuses))
+                        //    {
+                        //        var allStatus = allStatuses.SplitComma().ToList();
+                        //        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
+                        //    }
+                        //}
                         var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                         string relatedValue = null;
                         allFilters.TryGetValue(column.FieldName, out relatedValue);
@@ -379,7 +379,6 @@
         }
     }
 
-
     //Saving Layout
     settings.ClientLayout = (sender, e) =>
     {
@@ -397,7 +396,6 @@
     {
         WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);
     };
-
 
     settings.SettingsContextMenu.Enabled = true;
     settings.ClientSideEvents.ContextMenuItemClick = "function(s, e){ M4PLWindow.DataView.OnContextMenu(s, e, '" + WebExtension.ConvertByteToString(Model.Icon) + "', '" + MvcConstants.ActionChooseColumn + "', '" + MvcConstants.ActionCopyRecord + "'); }";

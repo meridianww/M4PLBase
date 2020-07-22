@@ -1,5 +1,5 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-    
+
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Kirty Anurag
@@ -23,7 +23,6 @@
             columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData[WebApplicationConstants.AssociatedColumnName].ToString(), ViewData[MvcConstants.ParentColumnName]);
         }
         var onChange = (string)ViewData[MvcConstants.onTextChange];
-
 
         if (columnSetting != null && columnSetting.ColLookupId > 0)
         {
@@ -75,7 +74,6 @@
                    settings.Properties.ClientSideEvents.GotFocus = "function(s, e){ M4PLCommon.Control.OnGotFocus(s, e, true); }";
                    settings.Properties.ClientSideEvents.ValueChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
 
-
                }).BindList(viewResult.ComboBoxProvider[columnSetting.ColLookupId]).GetHtml()
         }
         else if (columnSetting != null)
@@ -84,7 +82,6 @@
             if (!columnSetting.ColIsReadOnly) { columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll; }
             if ((ViewData[MvcConstants.IsReadOnly] != null)) { isReadOnly = Convert.ToBoolean(ViewData[MvcConstants.IsReadOnly]); }
             isReadOnly = !columnSetting.ColIsReadOnly ? isReadOnly : columnSetting.ColIsReadOnly;
-
 
             if ((ViewData[MvcConstants.MakeSkypeCall] != null) && (Model != null))
             {
@@ -139,7 +136,7 @@
                 }).Bind(Model).GetHtml()
                 ViewContext.Writer.Write("</div>");
                 ViewContext.Writer.Write("<div class='phone-icon'>");
-                ViewContext.Writer.Write("<div class='floatleft'><div><a href='skype:" + Model.ToString().Replace("(", "").Trim() + "?call' onclick='return M4PLCommon.WindowService.OnInitiateActionClick(M4PLCommon.WindowService.EnumCustomCommand.Skype);'><img src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGHRFWHRUaXRsZQBNb2JpbGVQaG9uZTtQaG9uZTsNNiy7AAAAQElEQVR4Xu2RMQoAIAwD+828tJNvi4uDGSSo6KLD0SUcKQmSAgA2YoDkzwgMZVfA5RcmBF/guDmj3ocapBFkn68gvEbKs2v4NQAAAABJRU5ErkJggg=='/></a></div></div>");
+                ViewContext.Writer.Write("<div class='floatleft'><div><a href='skype:" + Model.ToString().Replace("(", "").Trim() + "?call' onclick='return M4PLCommon.WindowService.OnInitiateActionClick(M4PLCommon.WindowService.EnumCustomCommand.Skype);'><img src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGHRFWHRUaXRsZQBNb2JpbGVQaG9uZTtQaG9uZTsNNiy7AAAAQElEQVR4Xu2RMQoAIAwD+828tJNvi4uDGSSo6KLD0SUcKQmSAgA2YoDkzwgMZVfA5RcmBF/guDmj3ocapBFkn68gvEbKs2v4NQAAAABJRU5ErkJggg==' /></a></div></div>");
                 ViewContext.Writer.Write("</div>");
                 ViewContext.Writer.Write("</div>");
             }
@@ -152,7 +149,7 @@
                             settings.Properties.Caption = columnSetting.ColAliasName;
                             if (columnSetting.ColColumnName == "Search")
                             {
-                                settings.ToolTip = "Customer Title \n BOL \n Contract# \n  Manifest \n Plant ID \n Seller Site Name \n Delivery Site Name \n Delivery Site POC \n Carrier Contract \n Site Code \n Delivery Site Name \n Delivery Street Address \n Delivery Street Address 2 \n Delivery Street Address 3 \n Delivery City \n Delivery State \n Delivery Postal Code";
+                                settings.ToolTip = "Customer Title \n BOL \n BOL Parent \n Contract# \n  Manifest \n Plant ID \n Seller Site Name \n Delivery Site Name \n Delivery Site POC \n Carrier Contract \n Site Code \n Delivery Site Name \n Delivery Street Address \n Delivery Street Address 2 \n Delivery Street Address 3 \n Delivery City \n Delivery State \n Delivery Postal Code";
                             }
                             else
                             {
