@@ -254,20 +254,6 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// job gateways by jobid
-        /// </summary>
-        /// <param name="jobId"></param>
-        /// <returns></returns>
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("GetJobGateway")]
-        public IQueryable<JobGatewayDetails> GetJobGateway(long jobId)
-        {
-            _jobGatewayCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobGatewayCommands.GetJobGateway(jobId).AsQueryable();
-        }
-
-        /// <summary>
         /// Function to update the Contact card details
         /// </summary>
         /// <param name="contact"></param>

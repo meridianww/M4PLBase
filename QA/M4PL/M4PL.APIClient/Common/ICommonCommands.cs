@@ -220,5 +220,6 @@ namespace M4PL.APIClient.Common
 		DocumentStatusView IsHistoryPresentForJob(string jobId);
 
 		IList<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null);
-	}
+        IList<JobGatewayDetails> GetJobGateway(long parentRecordId);
+    }
 }

@@ -383,18 +383,6 @@ namespace M4PL.DataAccess.Job
             return result ?? new JobActionCode();
         }
 
-        public static IList<JobGatewayDetails> GetJobGateway(ActiveUser activeUser, long jobId)
-        {
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@jobId", jobId),
-               new Parameter("@userId", activeUser.UserId),
-               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
-        };
-            var result = SqlSerializer.Default.DeserializeMultiRecords<JobGatewayDetails>(StoredProceduresConstant.GetJobGateways, parameters.ToArray(), storedProcedure: true);
-            return result;
-        }
-
         private static List<Parameter> GetContactParameters(Entities.Contact.Contact contact, string conOrgId)
         {
             var parameters = new List<Parameter>

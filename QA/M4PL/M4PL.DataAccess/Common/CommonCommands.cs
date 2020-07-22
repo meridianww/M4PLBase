@@ -25,6 +25,7 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
@@ -34,6 +35,30 @@ namespace M4PL.DataAccess.Common
     public static class CommonCommands
     {
         public static object JsonConvert { get; private set; }
+
+        public static DateTime DayLightSavingStartDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+            }
+        }
+
+        public static DateTime DayLightSavingEndDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+            }
+        }
+
+        public static bool IsDayLightSavingEnable
+        {
+            get
+            {
+                return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+            }
+        }
 
         /// <summary>
         /// Gets UserColumnSettings
@@ -1200,6 +1225,18 @@ namespace M4PL.DataAccess.Common
                new Parameter("@isScheduleAciton", isScheduleAciton)
             };
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobAction>(StoredProceduresConstant.GetJobActions, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+
+        public static IList<JobGatewayDetails> GetJobGateway(ActiveUser activeUser, long jobId)
+        {
+            var parameters = new List<Parameter>()
+            {
+               new Parameter("@jobId", jobId),
+               new Parameter("@userId", activeUser.UserId),
+               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobGatewayDetails>(StoredProceduresConstant.GetJobGateways, parameters.ToArray(), storedProcedure: true);
             return result;
         }
 

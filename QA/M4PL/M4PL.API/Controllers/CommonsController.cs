@@ -537,5 +537,19 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetJobAction(jobId, entity, isScheduleAciton).AsQueryable();
         }
+
+        /// <summary>
+        /// job gateways by jobid
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetJobGateway")]
+        public IQueryable<JobGatewayDetails> GetJobGateway(long jobId)
+        {
+            _command.ActiveUser = Models.ApiContext.ActiveUser;
+            return _command.GetJobGateway(jobId).AsQueryable();
+        }
     }
 }

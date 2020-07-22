@@ -26,6 +26,7 @@ M4PLWindow.DataViewsHaveChanges = {};
 M4PLWindow.SubDataViewsHaveChanges = {};
 M4PLWindow.OrderId = 0;
 M4PLWindow.JobIsScheduled = false;
+M4PLWindow.JobGatewayStatus = '';
 M4PLWindow.MultiSelectedJobIds = [];
 
 M4PLWindow.CallBackPanel = function () {
@@ -429,11 +430,20 @@ M4PLWindow.DataView = function () {
         else
             M4PLWindow.MultiSelectedJobIds = [];
 
+        var isJobIsScheduled = M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule');
+        var isJobGatewayStatus = M4PLWindow.JobGatewayStatus != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobGatewayStatus');
+
+        if (selectedRowCount == 1 && !e.isSelected) {
+            M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValueByKey(M4PLWindow.MultiSelectedJobIds[0], 'JobIsSchedule', '')
+            M4PLWindow.JobGatewayStatus = s.batchEditApi.GetCellValueByKey(M4PLWindow.MultiSelectedJobIds[0], 'JobGatewayStatus', '')
+        }
+
         if (selectedRowCount == 1 && e.isSelected) {
             M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
+            M4PLWindow.JobGatewayStatus = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobGatewayStatus');
             M4PLCommon.Common.EnableJobGridMultiSelection(true);
         }
-        else if (selectedRowCount != 0 && M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule')) {
+        else if (selectedRowCount != 0 && (isJobIsScheduled || isJobGatewayStatus)) {
             if (callbackUrl != undefined && callbackUrl != "") {
                 var callbackUri = new URL(callbackUrl, window.location.origin);
                 var urlParams = new URLSearchParams(callbackUri.search);
@@ -448,7 +458,8 @@ M4PLWindow.DataView = function () {
             return;
         }
         if (selectedRowCount <= 1 && selectedRowCount >= 0) {
-            var selectedJobId = selectedRowCount == 0 ? 0 : s.GetItemKey(s.GetFocusedRowIndex());
+            var selectedJobId = selectedRowCount == 0 ? 0
+                : (selectedRowCount == 1 && !e.isSelected ? M4PLWindow.MultiSelectedJobIds[0] : s.GetItemKey(s.GetFocusedRowIndex()));
             if (callbackUrl != undefined && callbackUrl != "") {
                 var callbackUri = new URL(callbackUrl, window.location.origin);
                 var urlParams = new URLSearchParams(callbackUri.search);
@@ -1053,7 +1064,8 @@ M4PLWindow.FormView = function () {
             && currentRoute.PreviousRecordId != undefined && currentRoute.Action == "ContactCardFormView" && currentRoute.EntityName === "Contact") {
             putOrPostData.push({ name: "JobId", value: currentRoute.PreviousRecordId });
         }
-        if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway" && currentRoute.Action == "GatewayActionFormView") {
+        if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway"
+            && (currentRoute.Action == "GatewayActionFormView" || currentRoute.Action == "FormView")) {
             var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
             //if (s != null && s != undefined && s.GetSelectedKeysOnPage() != null && s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0)
             if (s != null && s != undefined && M4PLWindow.MultiSelectedJobIds.length > 0)
