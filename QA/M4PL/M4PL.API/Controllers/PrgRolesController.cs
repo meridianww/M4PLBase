@@ -29,7 +29,7 @@ namespace M4PL.API.Controllers
 {
 	
     [CustomAuthorize]
-    [RoutePrefix("api/ProgramRoles")]
+    [RoutePrefix("api/PrgRoles")]
     public class PrgRolesController : ApiController
 	{
 		private readonly IPrgRoleCommands _programRoleCommands;

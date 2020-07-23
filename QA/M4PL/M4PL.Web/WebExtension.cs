@@ -18,9 +18,11 @@
 //====================================================================================================================================================*/
 
 using DevExpress.Data.Filtering;
+using DevExpress.DirectX.Common.Direct2D;
 using DevExpress.Web.Mvc;
 using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
+using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
@@ -3226,6 +3228,68 @@ namespace M4PL.Web
                 }
             }
 
+            return _gridResult;
+        }
+
+        public static GridResult<TView> AddGatewayInGatewayContextMenu<TView>(this GridResult<TView> _gridResult,
+            MvcRoute route, ICommonCommands _commonCommands)
+        {
+            var gatewaysContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
+            
+            if (_gridResult.GridSetting.ContextMenu.Count > 0)
+            {
+                var gatewayEntity = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == gatewaysContextMenu.SysRefName);
+
+                if (gatewayEntity != null) _gridResult.GridSetting.ContextMenu.Remove(gatewayEntity);
+
+                if (_gridResult.Records is IList<JobView>)
+                {
+                    route.IsPBSReport = true;
+                    route.ParentRecordId = 0;
+                    IList<JobView> record = (IList<JobView>)_gridResult.Records;
+                    if (record != null && route.Location != null && route.Location.Count() > 0)
+                    {
+                        var locationIds = route.Location.Select(long.Parse).ToList();
+                        var entity = record.Where(t => locationIds.Contains(t.Id)).Select(t => t.JobGatewayStatus).Distinct();
+                        if (entity.Count() == 1)
+                            route.ParentRecordId = locationIds.FirstOrDefault();
+                    }
+                    else if (record != null && _gridResult.FocusedRowId > 0)
+                        route.ParentRecordId = _gridResult.FocusedRowId; 
+                }
+
+                if (gatewayEntity != null && route.ParentRecordId > 0)
+                {
+                    var allGateways = _commonCommands.GetJobGateway((long)route.ParentRecordId);
+                    gatewayEntity.ChildOperations = new List<Operation>();
+
+                    var routeToAssign = new MvcRoute(route);
+                    routeToAssign.Entity = EntitiesAlias.JobGateway;
+                    routeToAssign.Action = MvcConstants.ActionForm;
+                    routeToAssign.IsPopup = true;
+                    routeToAssign.RecordId = 0;
+                    routeToAssign.IsPBSReport = route.IsPBSReport;
+
+                    if (allGateways.Count > 0)
+                    {
+                        var groupedGateways = allGateways.GroupBy(x => x.GatewayCode);
+                        foreach (var singleApptCode in groupedGateways)
+                        {
+                            var newOperation = new Operation();
+                            var newRoute = new MvcRoute(routeToAssign);
+                            newOperation.LangName = singleApptCode.First().GatewayCode; // "Add Gateway";
+                            newRoute.Filters = new Entities.Support.Filter();
+                            newRoute.Filters.FieldName = singleApptCode.First().GatewayCode;
+                            newRoute.Filters.Value = singleApptCode.First().GwyGatewayTitle;
+                            
+                            newOperation.Route = newRoute;
+                            newOperation.Route.IsPBSReport = route.IsPBSReport;
+                            gatewayEntity.ChildOperations.Add(newOperation);
+                        }
+                        _gridResult.GridSetting.ContextMenu.Add(gatewayEntity);
+                    }
+                }
+            }
             return _gridResult;
         }
     }

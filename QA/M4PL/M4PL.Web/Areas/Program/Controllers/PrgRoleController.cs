@@ -54,11 +54,11 @@ namespace M4PL.Web.Areas.Program.Controllers
 			programRoleView.ProgramID = programRoleView.ParentId;
 			if (programRoleView.OrgID == 0)
 				programRoleView.OrgID = SessionProvider.ActiveUser.OrganizationId;
-			programRoleView.ProgramRoleCode = Request.Form["PrgRoleId"];
-			if (programRoleView.ProgramRoleCode == WebUtilities.GetNullText(WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(EntitiesAlias.PrgRole), SessionProvider).FirstOrDefault("PrgRoleId").ColAliasName))
-				programRoleView.ProgramRoleCode = null;
-			if (!string.IsNullOrWhiteSpace(programRoleView.ProgramRoleCode) && !programRoleView.PrgRoleId.HasValue)
-				programRoleView.PrgRoleId = 0;
+			//programRoleView.ProgramRoleCode = Request.Form["PrgRoleId"];
+			//if (programRoleView.ProgramRoleCode == WebUtilities.GetNullText(WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(EntitiesAlias.PrgRole), SessionProvider).FirstOrDefault("PrgRoleId").ColAliasName))
+			//	programRoleView.ProgramRoleCode = null;
+			//if (!string.IsNullOrWhiteSpace(programRoleView.ProgramRoleCode) && !programRoleView.PrgRoleId.HasValue)
+			//	programRoleView.PrgRoleId = 0;
 			var descriptionByteArray = programRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.PrgRole, ByteArrayFields.PrgRoleDescription.ToString());
 			var commentByteArray = programRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.PrgRole, ByteArrayFields.PrgComments.ToString());
 			var byteArray = new List<ByteArray> {

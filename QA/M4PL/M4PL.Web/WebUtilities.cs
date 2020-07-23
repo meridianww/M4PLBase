@@ -304,7 +304,10 @@ namespace M4PL.Web
                             permission = subSecurity != null ? subSecurity.SubsMenuAccessLevelId : permission;
                         }
                         if (permission.HasValue && permission.Value > (int)Permission.ReadOnly)
+                        {
                             gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                            gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                        }
                     }
                     if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly) //action context menu should come after new and edit. So, Have added this here
                     {
@@ -775,29 +778,29 @@ namespace M4PL.Web
             return 80;
         }
 
-		public static int SetJobHistoryGridPixel(APIClient.ViewModels.ColumnSetting columnSetting)
-		{
-			switch (columnSetting.ColColumnName)
-			{
-				case "FieldName":
-					return columnSetting.MaxLength = 50;
+        public static int SetJobHistoryGridPixel(APIClient.ViewModels.ColumnSetting columnSetting)
+        {
+            switch (columnSetting.ColColumnName)
+            {
+                case "FieldName":
+                    return columnSetting.MaxLength = 50;
 
-				case "OldValue":
-					return columnSetting.MaxLength = 80;
+                case "OldValue":
+                    return columnSetting.MaxLength = 80;
 
-				case "NewValue":
-					return columnSetting.MaxLength = 80;
+                case "NewValue":
+                    return columnSetting.MaxLength = 80;
 
-				case "ChangedDate":
-					return columnSetting.MaxLength = 100;
-				case "ChangedBy":
-					return columnSetting.MaxLength = 80;
-			}
+                case "ChangedDate":
+                    return columnSetting.MaxLength = 100;
+                case "ChangedBy":
+                    return columnSetting.MaxLength = 80;
+            }
 
-			return 80;
-		}
+            return 80;
+        }
 
-		public static string ShouldRenderDetailGrid(object dataItem, ICommonCommands commonCommands, ref MvcRoute currentChildRoute)
+        public static string ShouldRenderDetailGrid(object dataItem, ICommonCommands commonCommands, ref MvcRoute currentChildRoute)
         {
             switch (currentChildRoute.Entity)
             {
