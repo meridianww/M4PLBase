@@ -290,7 +290,7 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
+		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job, long customerId)
 		{
 			long insertedGatewayId = 0;
 			try
@@ -301,8 +301,9 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@ProgramID", job.ProgramID),
 				new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
 				new Parameter("@enteredBy", activeUser.UserName),
-				new Parameter("@userId", activeUser.UserId)
-				};
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@IsGatewayExceptionUpdate", job.CustomerId == customerId ? true : false)
+			};
 
 				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
 				if (insertedGatewayId > 0)

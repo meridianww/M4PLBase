@@ -358,30 +358,79 @@ namespace M4PL.Business.Job
 				};
 			}
 
-			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
+			try
+			{
+				Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
 
-			if (jobDetail == null || jobDetail?.Id <= 0)
-			{
-				return new StatusModel()
+				if (jobDetail == null || jobDetail?.Id <= 0)
 				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
-				};
-			}
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.PreconditionFailed,
+						AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
+					};
+				}
+				else if (jobDetail?.Id > 0 && jobDetail.JobCompleted)
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.PreconditionFailed,
+						AdditionalDetail = "Order number passed in the service is already completed in Meridian System, please contact to Meridian support team for any further action."
+					};
+				}
+				else if (jobDetail?.Id > 0 && jobDetail.IsCancelled)
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.PreconditionFailed,
+						AdditionalDetail = "Order number passed in the service is already cancelled in Meridian System, please contact to Meridian support team for any further action."
+					};
+				}
+				else if (jobDetail?.Id > 0 && jobDetail.JobDeliveryDateTimePlanned.HasValue)
+				{
+					string timeZone = string.IsNullOrEmpty(jobDetail.JobDeliveryTimeZone) ? "Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Equals("Unknown", StringComparison.OrdinalIgnoreCase) ?
+						"Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Any(char.IsDigit) ?
+						jobDetail.JobDeliveryTimeZone : string.Format("{0} Standard Time", jobDetail.JobDeliveryTimeZone);
+					TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+					DateTime destinationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo);
+					int jobStatusUpdateValidationHours = M4PBusinessContext.ComponentSettings.JobStatusUpdateValidationHours;
+					if (((DateTime)jobDetail.JobDeliveryDateTimePlanned - destinationTime).TotalHours < jobStatusUpdateValidationHours)
+					{
+						return new StatusModel()
+						{
+							Status = "Failure",
+							StatusCode = (int)HttpStatusCode.PreconditionFailed,
+							AdditionalDetail = string.Format("Order number passed in the service can not be cancelled before {0} hours of delivery, please contact to Meridian support team for any further action.", jobStatusUpdateValidationHours)
+						};
+					}
+				}
 
-			long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail);
-			if (gatewayId > 0)
-			{
-				return new StatusModel()
+				long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+				if (gatewayId > 0)
 				{
-					Status = "Success",
-					StatusCode = (int)HttpStatusCode.OK,
-					AdditionalDetail = string.Empty
-				};
+					return new StatusModel()
+					{
+						Status = "Success",
+						StatusCode = (int)HttpStatusCode.OK,
+						AdditionalDetail = "Order number passed in the service has been cancelled in the Meridian System."
+					};
+				}
+				else
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.InternalServerError,
+						AdditionalDetail = "There is some error occuring while cancelling the order, please try after sometime."
+					};
+				}
 			}
-			else
+			catch(Exception exp)
 			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while cancelling a order from API.", "Cancel  Order", Utilities.Logger.LogType.Error);
 				return new StatusModel()
 				{
 					Status = "Failure",
@@ -389,6 +438,269 @@ namespace M4PL.Business.Job
 					AdditionalDetail = "There is some error occuring while cancelling the order, please try after sometime."
 				};
 			}
+		}
+
+		public OrderLocationCoordinate GetOrderLocationCoordinate(string orderNumber)
+		{
+			if (string.IsNullOrEmpty(orderNumber))
+			{
+				return new OrderLocationCoordinate()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number.",
+					Latitude = decimal.Zero,
+					Longitude = decimal.Zero
+				};
+			}
+
+			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
+
+			if (jobDetail == null || jobDetail?.Id <= 0)
+			{
+				return new OrderLocationCoordinate()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number.",
+					Latitude = decimal.Zero,
+					Longitude = decimal.Zero
+				};
+			}
+			else
+			{
+				return new OrderLocationCoordinate()
+				{
+					Status = "Success",
+					StatusCode = (int)HttpStatusCode.OK,
+					AdditionalDetail = string.IsNullOrEmpty(jobDetail.JobLatitude) && string.IsNullOrEmpty(jobDetail.JobLongitude) ?
+					"Latitude and Longitude are not present for order."
+					: !string.IsNullOrEmpty(jobDetail.JobLatitude) && string.IsNullOrEmpty(jobDetail.JobLongitude) ?
+					"Longitude is not present for order." :
+					string.IsNullOrEmpty(jobDetail.JobLatitude) && !string.IsNullOrEmpty(jobDetail.JobLongitude) ?
+					"Latitude is not present for order." : string.Empty,
+					Latitude = jobDetail.JobLatitude.ToDecimal(),
+					Longitude = jobDetail.JobLongitude.ToDecimal()
+				};
+			}
+		}
+
+		public OrderStatusModel GetOrderStatus(string orderNumber)
+		{
+			if (string.IsNullOrEmpty(orderNumber))
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number."
+				};
+			}
+
+			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
+
+			if (jobDetail == null || jobDetail?.Id <= 0)
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
+				};
+			}
+			else
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Success",
+					StatusCode = (int)HttpStatusCode.OK,
+					AdditionalDetail = string.Empty,
+					OrderStatus = jobDetail.InstallStatus
+				};
+			}
+		}
+
+		public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting)
+		{
+			if (string.IsNullOrEmpty(orderNumber))
+			{
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number."
+				};
+			}
+
+			try
+			{
+				Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
+
+				if (jobDetail == null || jobDetail?.Id <= 0)
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.PreconditionFailed,
+						AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
+					};
+				}
+				else if (jobDetail?.Id > 0 && jobDetail.JobCompleted)
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.PreconditionFailed,
+						AdditionalDetail = "Order number passed in the service is already completed in Meridian System, please contact to Meridian support team for any further action."
+					};
+				}
+				else if (jobDetail?.Id > 0 && jobDetail.IsCancelled)
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.PreconditionFailed,
+						AdditionalDetail = "Order number passed in the service is already cancelled in Meridian System, please contact to Meridian support team for any further action."
+					};
+				}
+
+				JobExceptionInfo selectedJobExceptionInfo = null;
+				JobInstallStatus selectedJobInstallStatus = null;
+				bool isElectroluxOrder = jobDetail.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
+				StatusModel statusModel = JobRescheduleValidation(jobDetail.Id, jobDetail.CustomerId, jobRescheduleDetail, jobDetail.JobDeliveryDateTimePlanned, isElectroluxOrder, out selectedJobExceptionInfo, out selectedJobInstallStatus);
+				if (statusModel != null) { return statusModel; }
+
+				var gatewayResult = RescheduleOrderGateway(jobDetail, selectedJobExceptionInfo, jobRescheduleDetail.RescheduleDate, selectedJobInstallStatus, sysSetting);
+				if (gatewayResult?.Id > 0)
+				{
+					return new StatusModel()
+					{
+						Status = "Success",
+						StatusCode = (int)HttpStatusCode.OK,
+						AdditionalDetail = "Rescheduled date is updated successfully for the order."
+					};
+				}
+				else
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.InternalServerError,
+						AdditionalDetail = "There is some error occuring while rescheduling the order, please try after sometime."
+					};
+				}
+			}
+			catch (Exception exp)
+			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while cancelling a order from API.", "Cancel  Order", Utilities.Logger.LogType.Error);
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.InternalServerError,
+					AdditionalDetail = "There is some error occuring while cancelling the order, please try after sometime."
+				};
+			}
+		}
+
+		private JobGateway RescheduleOrderGateway(Entities.Job.Job jobDetail, JobExceptionInfo jobExceptionInfo, DateTime rescheduleData, JobInstallStatus installStatus, SysSetting sysSetting)
+		{
+			JobGateway result = null;
+			try
+			{
+				var jobGateway = DataAccess.Job.JobGatewayCommands.GetGatewayWithParent(ActiveUser, 0, jobDetail.Id, "Action", false, jobExceptionInfo.ExceptionReferenceCode);
+				jobGateway.GwyDDPNew = rescheduleData;
+				if (jobDetail.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId)
+				{
+					jobGateway.GwyExceptionStatusId = installStatus.InstallStatusId;
+					jobGateway.GwyExceptionTitleId = jobExceptionInfo.ExceptionReasonId;
+				}
+
+				result = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, sysSetting, jobGateway, jobDetail.CustomerId, jobDetail.Id);
+			}
+			catch(Exception exp)
+			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while Rescheduling a order from API.", "Cancel  Order", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
+
+		private StatusModel JobRescheduleValidation(long jobId, long customerId, JobRescheduleDetail jobRescheduleDetail, DateTime? scheduledDate, bool isElectroluxOrder, out JobExceptionInfo selectedJobExceptionInfo, out JobInstallStatus selectedJobInstallStatus)
+		{
+			StatusModel statusModel = null;
+			selectedJobExceptionInfo = null;
+			selectedJobInstallStatus = null;
+			if (jobRescheduleDetail == null)
+			{
+				return new StatusModel() { AdditionalDetail = "Request model can not be empty.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
+			}
+
+			if(!scheduledDate.HasValue)
+			{
+				return new StatusModel() { AdditionalDetail = "Order can not be reschedule as status is not updated to scheduled yet.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
+			}
+
+			if (jobRescheduleDetail.RescheduleDate < new DateTime(1999,1,1))
+			{
+				return new StatusModel() { AdditionalDetail = "Passed reschedule date is not valid.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
+			}
+
+			if (string.IsNullOrEmpty(jobRescheduleDetail.InstallStatus))
+			{
+				return new StatusModel() { AdditionalDetail = "InstallStatus can not be empty, please sent a InstallStatus for processing.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
+			}
+
+			if (string.IsNullOrEmpty(jobRescheduleDetail.RescheduleCode))
+			{
+				return new StatusModel() { AdditionalDetail = "RescheduleCode can not be empty, please sent a RescheduleCode for processing.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
+			}
+
+			if (string.IsNullOrEmpty(jobRescheduleDetail.RescheduleReason))
+			{
+				return new StatusModel() { AdditionalDetail = "RescheduleReason can not be empty, please sent a RescheduleReason for processing.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
+			}
+
+			var jobExceptionDetail = M4PL.DataAccess.Common.CommonCommands.GetJobRescheduledDetail(jobId, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId == customerId ? true : false);
+			if (jobExceptionDetail != null)
+			{
+				if (jobExceptionDetail.JobExceptionInfo != null && jobExceptionDetail.JobExceptionInfo.Count > 0)
+				{
+					var exceptionList = jobExceptionDetail.JobExceptionInfo.Where(x => x.ExceptionReasonCode.Equals(jobRescheduleDetail.RescheduleCode, StringComparison.OrdinalIgnoreCase));
+					if (exceptionList.Any())
+					{
+						selectedJobExceptionInfo = exceptionList.Where(x => x.ExceptionTitle.Equals(jobRescheduleDetail.RescheduleReason, StringComparison.OrdinalIgnoreCase)).Any() ? exceptionList.Where(x => x.ExceptionTitle.Equals(jobRescheduleDetail.RescheduleReason, StringComparison.OrdinalIgnoreCase)).FirstOrDefault() : null;
+						if (selectedJobExceptionInfo == null)
+						{
+							selectedJobExceptionInfo = exceptionList.FirstOrDefault();
+						}
+					}
+				}
+
+				if (jobExceptionDetail.JobInstallStatus != null && jobExceptionDetail.JobInstallStatus.Count > 0)
+				{
+					var installStatusList = jobExceptionDetail.JobInstallStatus.Where(x => x.InstallStatusDescription.Equals(jobRescheduleDetail.InstallStatus, StringComparison.OrdinalIgnoreCase));
+					if (installStatusList.Any())
+					{
+						selectedJobInstallStatus = installStatusList.FirstOrDefault();
+					}
+				}
+			}
+			else
+			{
+				return new StatusModel() { AdditionalDetail = "There is some issue while M4PL API trying to fetch the avaliable reschedule reason list, please try again.", StatusCode = (int)HttpStatusCode.InternalServerError, Status = "Failure" };
+			}
+
+			if (selectedJobInstallStatus == null)
+			{
+				return new StatusModel() { AdditionalDetail = "InstallStatus recieved in the request is not avalible in M4PL.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
+			}
+
+			if (selectedJobExceptionInfo == null)
+			{
+				return new StatusModel() { AdditionalDetail = "RescheduleCode recieved in the request is not avalible in M4PL.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
+			}
+
+			return statusModel;
 		}
 	}
 }
