@@ -34,6 +34,7 @@
         prgStatusDropDownViewModel = Model.Record.InstallStatusId.GetExStatusCodeDropDown("InstallStatusId", Model, Model.Record.PgdProgramID ?? 0,
                                      Model.Record.PgdGatewayCode.ToLower().Contains("-") ? Model.Record.PgdGatewayCode.ToLower().Split('-')[0]
                                    : Model.Record.PgdGatewayCode.ToLower());
+        prgStatusDropDownViewModel.ParentId = Model.Record.CustomerId;
     }
 
    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "MappingId").ColIsVisible = true;
