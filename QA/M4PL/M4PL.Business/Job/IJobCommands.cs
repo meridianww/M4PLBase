@@ -65,5 +65,6 @@ namespace M4PL.Business.Job
 		StatusModel CancelJobByOrderNumber(string orderNumber);
 		OrderLocationCoordinate GetOrderLocationCoordinate(string orderNumber);
 		OrderStatusModel GetOrderStatus(string orderNumber);
+		StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting);
 	}
 }

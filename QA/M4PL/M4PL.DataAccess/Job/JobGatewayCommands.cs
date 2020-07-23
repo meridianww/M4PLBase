@@ -122,8 +122,9 @@ namespace M4PL.DataAccess.Job
 
         public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway,
             long customerId, long? jobId = null)
-        {
+         {
             JobGateway result = null;
+			string test = Newtonsoft.Json.JsonConvert.SerializeObject(jobGateway);
             try
             {
                 var parameters = GetParameters(jobGateway, userSysSetting, jobId);

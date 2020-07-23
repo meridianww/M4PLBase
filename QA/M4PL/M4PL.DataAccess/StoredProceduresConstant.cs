@@ -535,6 +535,7 @@ namespace M4PL.DataAccess
 		public const string GetExceptionStatusDropDown = "dbo.GetExceptionStatusDropDown";
 		public const string InsJobGatewayPODIfPODDocExistsByJobId = "dbo.InsJobGatewayPODIfPODDocExistsByJobId";
 		public const string GetJobExceptionDetail = "dbo.GetJobExceptionDetail";
+		public const string GetJobRescheduleReasonDetail = "dbo.GetJobRescheduleReasonDetail";
 		/* Job Cost Sheet */
 		public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
 		public const string GetJobCostSheet = "dbo.GetJobCostSheet";
