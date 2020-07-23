@@ -485,7 +485,7 @@ namespace M4PL.API.Controllers
 		/// <summary>
 		/// Cancel a Existing Order From Meridian System
 		/// </summary>
-		/// <param name="orderNumber">orderNumbe is a unique identifier for a order of type string.</param>
+		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
 		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
 		[HttpPost]
 		[Route("CancelOrder"), ResponseType(typeof(StatusModel))]
@@ -493,6 +493,32 @@ namespace M4PL.API.Controllers
 		{
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.CancelJobByOrderNumber(orderNumber);
+		}
+
+		/// <summary>
+		/// Return the location cordinates for a Order from Meridian System
+		/// </summary>
+		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+		/// <returns>API returns a Model object which contains the details about success or failure with Latitude and Longitude, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpGet]
+		[Route("LocationCoordinate"), ResponseType(typeof(OrderLocationCoordinate))]
+		public OrderLocationCoordinate LocationCoordinate(string orderNumber)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _jobCommands.GetOrderLocationCoordinate(orderNumber);
+		}
+
+		/// <summary>
+		/// Return the current status of a Order from Meridian System
+		/// </summary>
+		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+		/// <returns>API returns a Model object which contains the details about success or failure with Order Status, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpGet]
+		[Route("OrderStatus"), ResponseType(typeof(OrderStatusModel))]
+		public OrderStatusModel GetOrderStatus(string orderNumber)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _jobCommands.GetOrderStatus(orderNumber);
 		}
 	}
 }

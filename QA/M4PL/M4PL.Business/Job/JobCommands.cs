@@ -369,6 +369,33 @@ namespace M4PL.Business.Job
 					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
 				};
 			}
+			else if (jobDetail?.Id > 0 && jobDetail.JobCompleted)
+			{
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number passed in the service is already completed in Meridian System, please contact to Meridian support team for any further action."
+				};
+			}
+			else if (jobDetail?.Id > 0 && jobDetail.JobDeliveryDateTimePlanned.HasValue)
+			{
+				string timeZone = string.IsNullOrEmpty(jobDetail.JobDeliveryTimeZone) ? "Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Equals("Unknown", StringComparison.OrdinalIgnoreCase) ?
+					"Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Any(char.IsDigit) ?
+					jobDetail.JobDeliveryTimeZone : string.Format("{0} Standard Time", jobDetail.JobDeliveryTimeZone);
+				TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+				DateTime destinationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo);
+				int jobStatusUpdateValidationHours = M4PBusinessContext.ComponentSettings.JobStatusUpdateValidationHours;
+				if (((DateTime)jobDetail.JobDeliveryDateTimePlanned - destinationTime).TotalHours < jobStatusUpdateValidationHours)
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.PreconditionFailed,
+						AdditionalDetail = string.Format("Order number passed in the service can not be canceled before {0} hours of delivery, please contact to Meridian support team for any further action.", jobStatusUpdateValidationHours)
+					};
+				}
+			}
 
 			long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail);
 			if (gatewayId > 0)
@@ -377,7 +404,7 @@ namespace M4PL.Business.Job
 				{
 					Status = "Success",
 					StatusCode = (int)HttpStatusCode.OK,
-					AdditionalDetail = string.Empty
+					AdditionalDetail = "Order number passed in the service has been canceled in the Meridian System."
 				};
 			}
 			else
@@ -387,6 +414,86 @@ namespace M4PL.Business.Job
 					Status = "Failure",
 					StatusCode = (int)HttpStatusCode.InternalServerError,
 					AdditionalDetail = "There is some error occuring while cancelling the order, please try after sometime."
+				};
+			}
+		}
+
+		public OrderLocationCoordinate GetOrderLocationCoordinate(string orderNumber)
+		{
+			if (string.IsNullOrEmpty(orderNumber))
+			{
+				return new OrderLocationCoordinate()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number.",
+					Latitude = decimal.Zero,
+					Longitude = decimal.Zero
+				};
+			}
+
+			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
+
+			if (jobDetail == null || jobDetail?.Id <= 0)
+			{
+				return new OrderLocationCoordinate()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number.",
+					Latitude = decimal.Zero,
+					Longitude = decimal.Zero
+				};
+			}
+			else
+			{
+				return new OrderLocationCoordinate()
+				{
+					Status = "Success",
+					StatusCode = (int)HttpStatusCode.OK,
+					AdditionalDetail = string.IsNullOrEmpty(jobDetail.JobLatitude) && string.IsNullOrEmpty(jobDetail.JobLongitude) ?
+					"Latitude and Longitude are not present for order."
+					: !string.IsNullOrEmpty(jobDetail.JobLatitude) && string.IsNullOrEmpty(jobDetail.JobLongitude) ?
+					"Longitude is not present for order." :
+					string.IsNullOrEmpty(jobDetail.JobLatitude) && !string.IsNullOrEmpty(jobDetail.JobLongitude) ?
+					"Latitude is not present for order." : string.Empty,
+					Latitude = jobDetail.JobLatitude.ToDecimal(),
+					Longitude = jobDetail.JobLongitude.ToDecimal()
+				};
+			}
+		}
+
+		public OrderStatusModel GetOrderStatus(string orderNumber)
+		{
+			if (string.IsNullOrEmpty(orderNumber))
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number."
+				};
+			}
+
+			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
+
+			if (jobDetail == null || jobDetail?.Id <= 0)
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
+				};
+			}
+			else
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Success",
+					StatusCode = (int)HttpStatusCode.OK,
+					AdditionalDetail = string.Empty,
+					OrderStatus = jobDetail.InstallStatus
 				};
 			}
 		}

@@ -266,6 +266,18 @@ namespace M4PL.Business
 			}
 		}
 
+		/// <summary>
+		/// Gets the value of JobStatusUpdateValidationHours.
+		/// </summary>
+		[ConfigurationProperty("JobStatusUpdateValidationHours")]
+		public int JobStatusUpdateValidationHours
+		{
+			get
+			{
+				return (int)this["JobStatusUpdateValidationHours"];
+			}
+		}
+
 		#endregion Properties
 
 		#region Public Methods
