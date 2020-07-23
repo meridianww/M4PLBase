@@ -358,57 +358,79 @@ namespace M4PL.Business.Job
 				};
 			}
 
-			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
+			try
+			{
+				Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
 
-			if (jobDetail == null || jobDetail?.Id <= 0)
-			{
-				return new StatusModel()
-				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
-				};
-			}
-			else if (jobDetail?.Id > 0 && jobDetail.JobCompleted)
-			{
-				return new StatusModel()
-				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Order number passed in the service is already completed in Meridian System, please contact to Meridian support team for any further action."
-				};
-			}
-			else if (jobDetail?.Id > 0 && jobDetail.JobDeliveryDateTimePlanned.HasValue)
-			{
-				string timeZone = string.IsNullOrEmpty(jobDetail.JobDeliveryTimeZone) ? "Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Equals("Unknown", StringComparison.OrdinalIgnoreCase) ?
-					"Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Any(char.IsDigit) ?
-					jobDetail.JobDeliveryTimeZone : string.Format("{0} Standard Time", jobDetail.JobDeliveryTimeZone);
-				TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-				DateTime destinationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo);
-				int jobStatusUpdateValidationHours = M4PBusinessContext.ComponentSettings.JobStatusUpdateValidationHours;
-				if (((DateTime)jobDetail.JobDeliveryDateTimePlanned - destinationTime).TotalHours < jobStatusUpdateValidationHours)
+				if (jobDetail == null || jobDetail?.Id <= 0)
 				{
 					return new StatusModel()
 					{
 						Status = "Failure",
 						StatusCode = (int)HttpStatusCode.PreconditionFailed,
-						AdditionalDetail = string.Format("Order number passed in the service can not be canceled before {0} hours of delivery, please contact to Meridian support team for any further action.", jobStatusUpdateValidationHours)
+						AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
+					};
+				}
+				else if (jobDetail?.Id > 0 && jobDetail.JobCompleted)
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.PreconditionFailed,
+						AdditionalDetail = "Order number passed in the service is already completed in Meridian System, please contact to Meridian support team for any further action."
+					};
+				}
+				else if (jobDetail?.Id > 0 && jobDetail.IsCancelled)
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.PreconditionFailed,
+						AdditionalDetail = "Order number passed in the service is already cancelled in Meridian System, please contact to Meridian support team for any further action."
+					};
+				}
+				else if (jobDetail?.Id > 0 && jobDetail.JobDeliveryDateTimePlanned.HasValue)
+				{
+					string timeZone = string.IsNullOrEmpty(jobDetail.JobDeliveryTimeZone) ? "Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Equals("Unknown", StringComparison.OrdinalIgnoreCase) ?
+						"Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Any(char.IsDigit) ?
+						jobDetail.JobDeliveryTimeZone : string.Format("{0} Standard Time", jobDetail.JobDeliveryTimeZone);
+					TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+					DateTime destinationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo);
+					int jobStatusUpdateValidationHours = M4PBusinessContext.ComponentSettings.JobStatusUpdateValidationHours;
+					if (((DateTime)jobDetail.JobDeliveryDateTimePlanned - destinationTime).TotalHours < jobStatusUpdateValidationHours)
+					{
+						return new StatusModel()
+						{
+							Status = "Failure",
+							StatusCode = (int)HttpStatusCode.PreconditionFailed,
+							AdditionalDetail = string.Format("Order number passed in the service can not be cancelled before {0} hours of delivery, please contact to Meridian support team for any further action.", jobStatusUpdateValidationHours)
+						};
+					}
+				}
+
+				long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+				if (gatewayId > 0)
+				{
+					return new StatusModel()
+					{
+						Status = "Success",
+						StatusCode = (int)HttpStatusCode.OK,
+						AdditionalDetail = "Order number passed in the service has been cancelled in the Meridian System."
+					};
+				}
+				else
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.InternalServerError,
+						AdditionalDetail = "There is some error occuring while cancelling the order, please try after sometime."
 					};
 				}
 			}
-
-			long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail);
-			if (gatewayId > 0)
+			catch(Exception exp)
 			{
-				return new StatusModel()
-				{
-					Status = "Success",
-					StatusCode = (int)HttpStatusCode.OK,
-					AdditionalDetail = "Order number passed in the service has been canceled in the Meridian System."
-				};
-			}
-			else
-			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while cancelling a order from API.", "Cancel  Order", Utilities.Logger.LogType.Error);
 				return new StatusModel()
 				{
 					Status = "Failure",
