@@ -616,13 +616,13 @@ namespace M4PL.Business.Job
 				jobGateway.isScheduleReschedule = true;
 				jobGateway.GwyUprDate = rescheduleData.AddHours(jobGateway.GwyUprWindow.HasValue ? (double)jobGateway.GwyUprWindow : 0);
 				jobGateway.GwyLwrDate = rescheduleData.AddHours(jobGateway.GwyLwrWindow.HasValue ? (double)jobGateway.GwyLwrWindow : 0);
+				jobGateway.StatusCode = codeArray.Length > 1 ? codeArray[1] : jobGateway.StatusCode;
 				if (jobDetail.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId)
 				{
 					jobGateway.GwyTitle = jobExceptionInfo.ExceptionReasonCode;
 					jobGateway.GwyGatewayTitle = jobExceptionInfo.ExceptionReasonCode;
 					jobGateway.GwyExceptionStatusId = installStatus.InstallStatusId;
 					jobGateway.GwyExceptionTitleId = jobExceptionInfo.ExceptionReasonId;
-					jobGateway.StatusCode = codeArray.Length > 1 ? codeArray[1] : jobGateway.StatusCode;
 				}
 				else
 				{
