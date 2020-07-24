@@ -607,12 +607,26 @@ namespace M4PL.Business.Job
 			JobGateway result = null;
 			try
 			{
+				string[] codeArray = jobExceptionInfo.ExceptionReferenceCode.Split('-');
 				var jobGateway = DataAccess.Job.JobGatewayCommands.GetGatewayWithParent(ActiveUser, 0, jobDetail.Id, "Action", false, jobExceptionInfo.ExceptionReferenceCode);
 				jobGateway.GwyDDPNew = rescheduleData;
+				jobGateway.GwyGatewayCode = codeArray[0];
+				jobGateway.GatewayTypeId = 86;
+				jobGateway.GwyCompleted = true;
+				jobGateway.GwyUprDate = rescheduleData.AddHours(jobGateway.GwyUprWindow.HasValue ? (double)jobGateway.GwyUprWindow : 0);
+				jobGateway.GwyLwrDate = rescheduleData.AddHours(jobGateway.GwyLwrWindow.HasValue ? (double)jobGateway.GwyLwrWindow : 0);
 				if (jobDetail.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId)
 				{
+					jobGateway.GwyTitle = jobExceptionInfo.ExceptionReasonCode;
+					jobGateway.GwyGatewayTitle = jobExceptionInfo.ExceptionReasonCode;
 					jobGateway.GwyExceptionStatusId = installStatus.InstallStatusId;
 					jobGateway.GwyExceptionTitleId = jobExceptionInfo.ExceptionReasonId;
+					jobGateway.StatusCode = codeArray.Length > 1 ? codeArray[1] : jobGateway.StatusCode;
+				}
+				else
+				{
+					jobGateway.GwyTitle = jobExceptionInfo.ExceptionTitle;
+					jobGateway.GwyGatewayTitle = jobExceptionInfo.ExceptionTitle;
 				}
 
 				result = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, sysSetting, jobGateway, jobDetail.CustomerId, jobDetail.Id);
