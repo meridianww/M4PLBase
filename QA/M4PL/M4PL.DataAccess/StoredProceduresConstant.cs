@@ -41,6 +41,7 @@ namespace M4PL.DataAccess
 		public const string GetPageAndTabNames = "dbo.GetPageAndTabNames";
 		public const string GetDisplayMessagesByCode = "dbo.GetDisplayMessagesByCode";
 		public const string GetDataForChangeHistory = "dbo.GetDataForChangeHistory";
+		public const string GetJobChangeHistory = "GetJobChangeHistory";
 
 		public const string GetUserSecurities = "dbo.GetUserSecurities";
 		public const string GetComboBoxContacts = "dbo.GetComboBoxContacts";
@@ -534,6 +535,7 @@ namespace M4PL.DataAccess
 		public const string GetExceptionStatusDropDown = "dbo.GetExceptionStatusDropDown";
 		public const string InsJobGatewayPODIfPODDocExistsByJobId = "dbo.InsJobGatewayPODIfPODDocExistsByJobId";
 		public const string GetJobExceptionDetail = "dbo.GetJobExceptionDetail";
+		public const string GetJobRescheduleReasonDetail = "dbo.GetJobRescheduleReasonDetail";
 		/* Job Cost Sheet */
 		public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
 		public const string GetJobCostSheet = "dbo.GetJobCostSheet";

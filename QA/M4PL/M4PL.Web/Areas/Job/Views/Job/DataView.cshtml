@@ -28,6 +28,10 @@
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
     }
+    else
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsFreezed = true;
+    }
     //Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobIsSchedule").ColIsVisible = false;
 }
 @if (Model.IsAccessPermission)
@@ -42,8 +46,8 @@
         settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
         settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
         settings.Settings.VerticalScrollableHeight = 350;
-//settings.Settings.VerticalScrollBarStyle = GridViewVerticalScrollBarStyle.VirtualSmooth;
-settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
+        //settings.Settings.VerticalScrollBarStyle = GridViewVerticalScrollBarStyle.VirtualSmooth;
+        settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
         settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
 
@@ -80,27 +84,27 @@ settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
                     i.ItemStyle.CssClass = "noHover";
                     i.Image.Url = WebExtension.ConvertByteToString(Model.Icon);
                 });
-    //Upload CSV for import order
-    //if (!Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].PagedDataInfo.IsJobParentEntity)
-    //{
-    //    toolbar.Items.Add(j =>
-    //    {
-    //        j.Alignment = MenuItemAlignment.Right;
-    //        j.SetTemplateContent(c =>
-    //        {
-    //            Html.DevExpress().Button(b =>
-    //            {
-    //                b.Name = "btnBack" + "CardView";
-    //                b.Text = "Import Order CSV";
-    //                b.ClientEnabled = true;
-    //                b.ClientSideEvents.Click = string.Format("function(s, e, strRoute){{ M4PLWindow.UploadFileDragDrop.OnImportOrderRequest(s,  e, \'{0}\');}}", Newtonsoft.Json.JsonConvert.SerializeObject(upLoadRoute));
-    //                // new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Job, "ImportOrder", "Job");
-    //                //b.ControlStyle.CssClass = "form-btn";
-    //            }).Render();
-    //        });
-    //    });
-    //}
-});
+                //Upload CSV for import order
+                //if (!Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].PagedDataInfo.IsJobParentEntity)
+                //{
+                //    toolbar.Items.Add(j =>
+                //    {
+                //        j.Alignment = MenuItemAlignment.Right;
+                //        j.SetTemplateContent(c =>
+                //        {
+                //            Html.DevExpress().Button(b =>
+                //            {
+                //                b.Name = "btnBack" + "CardView";
+                //                b.Text = "Import Order CSV";
+                //                b.ClientEnabled = true;
+                //                b.ClientSideEvents.Click = string.Format("function(s, e, strRoute){{ M4PLWindow.UploadFileDragDrop.OnImportOrderRequest(s,  e, \'{0}\');}}", Newtonsoft.Json.JsonConvert.SerializeObject(upLoadRoute));
+                //                // new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Job, "ImportOrder", "Job");
+                //                //b.ControlStyle.CssClass = "form-btn";
+                //            }).Render();
+                //        });
+                //    });
+                //}
+            });
         }
 
         settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
@@ -111,15 +115,15 @@ settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
         settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
         settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
 
-//settings.CustomActionRouteValues = new { Action = "SaveGridLayoutToCache", Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
+        //settings.CustomActionRouteValues = new { Action = "SaveGridLayoutToCache", Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
 
-settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
+        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
         settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
-//settings.ClientSideEvents.ColumnMoving = "M4PLWindow.DataView.OnColumnChanged";
-settings.SettingsResizing.Visualization = ResizingMode.Live;
+        //settings.ClientSideEvents.ColumnMoving = "M4PLWindow.DataView.OnColumnChanged";
+        settings.SettingsResizing.Visualization = ResizingMode.Live;
         settings.ClientSideEvents.SelectionChanged = "M4PLWindow.DataView.OnRowSelectionChanged";
-////settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
-settings.SettingsPager.EnableAdaptivity = true;
+        ////settings.ClientSideEvents.FocusedRowChanged = "M4PLWindow.DataView.OnGridFocusedRowChanged";
+        settings.SettingsPager.EnableAdaptivity = true;
         settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
         settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
         settings.SettingsPager.FirstPageButton.Visible = true;
@@ -187,9 +191,10 @@ settings.SettingsPager.EnableAdaptivity = true;
                             {
                                 Html.DevExpress().HyperLink(hlSettings =>
                                 {
-                                    hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
+                                    hlSettings.Name = "HyperLink__" + Guid.NewGuid().ToString();
                                     hlSettings.NavigateUrl = "javascript:void(0)";
-                                    hlSettings.Properties.Text = Convert.ToString(container.Text);
+                                    hlSettings.Properties.Text = Convert.ToString(DataBinder.Eval(container.DataItem, colSetting.ColColumnName));
+                                    hlSettings.ToolTip = Convert.ToString(DataBinder.Eval(container.DataItem, colSetting.ColColumnName));
                                     hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId, entityFor){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0}, '{1}');}}", container.KeyValue, EntitiesAlias.Job.ToString());
                                 }).Render();
                             }
@@ -284,16 +289,16 @@ settings.SettingsPager.EnableAdaptivity = true;
                         column.SetFilterTemplateContent(lookup =>
                         {
                             var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
-                ////if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
-                ////{
-                ////    var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysStatusesIn);
-                ////    if (!string.IsNullOrWhiteSpace(allStatuses))
-                ////    {
-                ////        var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
-                ////        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-                ////    }
-                ////}
-                var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
+                            ////if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
+                            ////{
+                            ////    var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysStatusesIn);
+                            ////    if (!string.IsNullOrWhiteSpace(allStatuses))
+                            ////    {
+                            ////        var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
+                            ////        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
+                            ////    }
+                            ////}
+                            var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                             string relatedValue = null;
                             allFilters.TryGetValue(column.FieldName, out relatedValue);
 
@@ -336,7 +341,7 @@ settings.SettingsPager.EnableAdaptivity = true;
                             cs.TextField = "LangName";
                             cs.ValueField = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                             cs.ValueType = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
-                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
+                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId).Where(s => s.SysRefId != 0);
                         });
 
                     }
@@ -398,8 +403,8 @@ settings.SettingsPager.EnableAdaptivity = true;
             }
         }
 
-//Saving Layout
-settings.ClientLayout = (sender, e) =>
+        //Saving Layout
+        settings.ClientLayout = (sender, e) =>
         {
             if (e.LayoutMode == ClientLayoutMode.Saving)
                 WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), e.LayoutData);
@@ -408,10 +413,10 @@ settings.ClientLayout = (sender, e) =>
                 var layout = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
             }
         };
-//End saving layout
+        //End saving layout
 
-//For Advanced Filter
-settings.FilterControlOperationVisibility = (sender, e) =>
+        //For Advanced Filter
+        settings.FilterControlOperationVisibility = (sender, e) =>
         {
             WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);
         };
@@ -478,12 +483,26 @@ settings.FilterControlOperationVisibility = (sender, e) =>
         settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
         settings.SetStatusBarTemplateContent(c =>
         {
+            if (!Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].PagedDataInfo.IsJobParentEntity)
+            {
+                @Html.DevExpress().Button(btnCancelCheckBox =>
+                {
+                    btnCancelCheckBox.Name = "btnClearSelection" + Model.GridSetting.GridName;
+                    btnCancelCheckBox.Text = "Clear Selection";
+                    btnCancelCheckBox.EnableTheming = true;
+                    btnCancelCheckBox.ClientSideEvents.Click = "function(s, e) { JobGridView.UnselectRows(); }";
+                    btnCancelCheckBox.AllowFocus = false;
+                    btnCancelCheckBox.ControlStyle.CssClass = "form-btn";
+                }).Render();
+            }
+
             var saveRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;//conversion needed as dyamic has no applicable extension method.
-saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) });
+            saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) });
+
             Html.DevExpress().Button(btnSaveSettings =>
             {
                 btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action and dependency on window.js _setCustomButtonsVisibility
-    btnSaveSettings.EnableTheming = true;
+                btnSaveSettings.EnableTheming = true;
                 btnSaveSettings.Text = Model.Operations[OperationTypeEnum.SaveChanges].LangName;
                 btnSaveSettings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.DataView.OnUpdateEdit(" + Model.GridSetting.GridName + ", e, " + Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) + ");}";
                 btnSaveSettings.AllowFocus = false;
@@ -494,7 +513,7 @@ saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting
             Html.DevExpress().Button(btnCancelSettings =>
             {
                 btnCancelSettings.Name = "btnCancel" + Model.GridSetting.GridName;//dependency on window.js _setCustomButtonsVisibility
-    btnCancelSettings.EnableTheming = true;
+                btnCancelSettings.EnableTheming = true;
                 btnCancelSettings.Text = Model.Operations[OperationTypeEnum.CancelChanges].LangName;
                 btnCancelSettings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.DataView.OnCancelEdit(" + Model.GridSetting.GridName + ", e);}";
                 btnCancelSettings.AllowFocus = false;

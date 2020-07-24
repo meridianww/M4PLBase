@@ -100,12 +100,5 @@ namespace M4PL.APIClient.Job
 				 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobActionCodeByTitle"), ActiveUser)
 				 .AddParameter("jobId", jobId).AddParameter("gwyTitle", gwyTitle)).Content).Results?.FirstOrDefault();
 		}
-
-		public IList<JobGatewayDetails> GetJobGateway(long jobId)
-		{
-			var content = RestClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetJobGateway"), ActiveUser).AddParameter("jobId", jobId)).Content;
-			var apiResult = JsonConvert.DeserializeObject<ApiResult<JobGatewayDetails>>(content);
-			return apiResult.Results;
-		}
 	}
 }

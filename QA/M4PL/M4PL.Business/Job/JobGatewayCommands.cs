@@ -101,29 +101,30 @@ namespace M4PL.Business.Job
         /// <returns></returns>
         public JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
-            var gateway = new JobGateway();
+            var gatewaysIds = string.Empty;
             jobGateway.IsMultiOperation = false;
             if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
             {
                 List<Task> tasks = new List<Task>();
                 jobGateway.IsMultiOperation = true;
+                var gateway = new JobGateway();
                 foreach (var item in jobGateway.JobIds[0].Split(','))
                 {
-                    tasks.Add(Task.Factory.StartNew(() =>
-                    {
-                        gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway,
-                            M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
-                    }));
+                    gateway = new JobGateway();
+                    gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway,
+                        M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
+                    gatewaysIds += gateway.Id + ",";
                 }
-                Task.WaitAll(tasks.ToArray());
+                gateway.GatewayIds = gatewaysIds.Remove(gatewaysIds.Length - 1);
+                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
+                return gateway;
             }
             else
             {
-                gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                var gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
+                return gateway;
             }
-
-            PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
-            return gateway;
         }
 
         /// <summary>
@@ -212,10 +213,6 @@ namespace M4PL.Business.Job
         public JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle)
         {
             return _commands.JobActionCodeByTitle(ActiveUser, jobId, gwyTitle);
-        }
-        public IList<JobGatewayDetails> GetJobGateway(long jobId)
-        {
-            return _commands.GetJobGateway(ActiveUser, jobId);
         }
 
         /// <summary>

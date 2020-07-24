@@ -207,6 +207,8 @@ namespace M4PL.APIClient.Common
 
 		DocumentDataView GetCostCodeReportByJobId(string jobId);
 
+		DocumentDataView GetHistoryReportDocumentByJobId(string jobId);
+
 		DocumentDataView DownloadPOD(string jobId);
 
 		DocumentStatusView GetDocumentStatusByJobId(string jobId);
@@ -215,6 +217,9 @@ namespace M4PL.APIClient.Common
 
 		DocumentStatusView IsCostCodeDataPresentForJob(string jobId);
 
+		DocumentStatusView IsHistoryPresentForJob(string jobId);
+
 		IList<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null);
-	}
+        IList<JobGatewayDetails> GetJobGateway(long parentRecordId);
+    }
 }

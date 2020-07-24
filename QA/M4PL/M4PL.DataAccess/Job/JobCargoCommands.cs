@@ -152,7 +152,7 @@ namespace M4PL.DataAccess.Job
 			return Delete(activeUser, ids, EntitiesAlias.JobCargo, statusId, ReservedKeysEnum.StatusId);
 		}
 
-		public static StatusModel CreateCargoException(long cargoId, JobExceptionInfo selectedJobExceptionInfo, JobInstallStatus selectedJobInstallStatus, ActiveUser activeUser)
+		public static StatusModel CreateCargoException(long cargoId, JobExceptionInfo selectedJobExceptionInfo, JobInstallStatus selectedJobInstallStatus, int cargoQuantity, string cgoReasonCodeOSD, DateTime? cgoDateLastScan, ActiveUser activeUser)
 		{
 			StatusModel statusModel = null;
 			try
@@ -165,10 +165,15 @@ namespace M4PL.DataAccess.Job
 				 new Parameter("@GwyGatewayTitle", selectedJobExceptionInfo.ExceptionReasonCode),
 				 new Parameter("@CreatedDate", Utilities.TimeUtility.GetPacificDateTime()),
 				 new Parameter("@CreatedBy", activeUser.UserName),
-				 new Parameter("@StatusCode", codeArray[1]),
+				 new Parameter("@StatusCode", codeArray != null && codeArray.Length > 1 ? codeArray[1] : string.Empty),
 				 new Parameter("@GwyExceptionTitleId", selectedJobExceptionInfo.ExceptionReasonId),
 				 new Parameter("@GwyExceptionStatusId", selectedJobInstallStatus.InstallStatusId),
-				 new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+				 new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
+				 new Parameter("@CargoQuantity", cargoQuantity),
+				 new Parameter("@CargoField", selectedJobExceptionInfo.CargoField),
+				 new Parameter("@CgoReasonCodeOSD", cgoReasonCodeOSD),
+				 new Parameter("@CgoDateLastScan", cgoDateLastScan)
+
 			 };
 
 				statusModel = SqlSerializer.Default.DeserializeSingleRecord<StatusModel>(StoredProceduresConstant.InsertCargoException, parameters.ToArray(), storedProcedure: true);
@@ -220,7 +225,8 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@cgoLongitude", jobCargo.CgoLongitude),
 			   new Parameter("@cgoProcessingFlags", jobCargo.CgoProcessingFlags),
 			   new Parameter("@statusId", jobCargo.StatusId),
-			   new Parameter("@CgoComment",jobCargo.CgoComment)
+			   new Parameter("@CgoComment",jobCargo.CgoComment),
+			   new Parameter("@CgoDateLastScan", jobCargo.CgoDateLastScan)
 			};
 			return parameters;
 		}

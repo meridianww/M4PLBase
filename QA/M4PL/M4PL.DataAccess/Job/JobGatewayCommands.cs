@@ -122,8 +122,9 @@ namespace M4PL.DataAccess.Job
 
         public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway,
             long customerId, long? jobId = null)
-        {
+         {
             JobGateway result = null;
+			string test = Newtonsoft.Json.JsonConvert.SerializeObject(jobGateway);
             try
             {
                 var parameters = GetParameters(jobGateway, userSysSetting, jobId);
@@ -381,18 +382,6 @@ namespace M4PL.DataAccess.Job
 
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobActionCode>(StoredProceduresConstant.GetJobActionCodes, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobActionCode();
-        }
-
-        public static IList<JobGatewayDetails> GetJobGateway(ActiveUser activeUser, long jobId)
-        {
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@jobId", jobId),
-               new Parameter("@userId", activeUser.UserId),
-               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
-        };
-            var result = SqlSerializer.Default.DeserializeMultiRecords<JobGatewayDetails>(StoredProceduresConstant.GetJobGateways, parameters.ToArray(), storedProcedure: true);
-            return result;
         }
 
         private static List<Parameter> GetContactParameters(Entities.Contact.Contact contact, string conOrgId)

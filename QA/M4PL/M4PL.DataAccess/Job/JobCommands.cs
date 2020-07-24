@@ -290,8 +290,9 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
+		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job, long customerId)
 		{
+			long insertedGatewayId = 0;
 			try
 			{
 				var parameters = new List<Parameter>
@@ -300,10 +301,11 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@ProgramID", job.ProgramID),
 				new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
 				new Parameter("@enteredBy", activeUser.UserName),
-				new Parameter("@userId", activeUser.UserId)
-				};
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@IsGatewayExceptionUpdate", job.CustomerId == customerId ? true : false)
+			};
 
-				long insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
+				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
 				if (insertedGatewayId > 0)
 				{
 					InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
@@ -313,6 +315,8 @@ namespace M4PL.DataAccess.Job
 			{
 				_logger.Log(exp, "Exception is occuring while cancelling a job requested by customer.", "Job Cancellation", Utilities.Logger.LogType.Error);
 			}
+
+			return insertedGatewayId;
 		}
 
 		public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
@@ -835,20 +839,25 @@ namespace M4PL.DataAccess.Job
 			return result;
 		}
 
-		public static List<ChangeHistoryData> GetChangeHistory(long jobId, ActiveUser activeUser)
+		public static List<Entities.Job.Job> GetJobChangeHistory(long jobId)
+		{
+			return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetJobChangeHistory, new Parameter("@JobId", jobId), storedProcedure: true);
+		}
+
+		public static List<ChangeHistoryData> GetJobChangeHistory(long jobId, ActiveUser activeUser)
 		{
 			List<ChangeHistoryData> changedDataList = null;
-			List<ChangeHistory> changeHistoryData = CommonCommands.GetChangeHistory(activeUser, jobId, EntitiesAlias.Job);
-			if (changeHistoryData != null && changeHistoryData.Count > 0)
+			List<Entities.Job.Job> changeHistoryData = GetJobChangeHistory(jobId);
+			if (changeHistoryData != null && changeHistoryData.Count > 1)
 			{
 				changedDataList = new List<ChangeHistoryData>();
 				Entities.Job.Job originalDataModel = null;
 				Entities.Job.Job changedDataModel = null;
-				foreach (var historyData in changeHistoryData)
+				for (int i = 0; i < changeHistoryData.Count - 1; i++)
 				{
-					originalDataModel = JsonConvert.DeserializeObject<Entities.Job.Job>(historyData.OrigionalData);
-					changedDataModel = JsonConvert.DeserializeObject<Entities.Job.Job>(historyData.ChangedData);
-					List<ChangeHistoryData> changedData = CommonCommands.GetChangedValues(originalDataModel, changedDataModel, historyData.ChangedBy, historyData.ChangedDate);
+					originalDataModel = changeHistoryData[i];
+					changedDataModel = changeHistoryData[i + 1];
+					List<ChangeHistoryData> changedData = CommonCommands.GetChangedValues(originalDataModel, changedDataModel, !string.IsNullOrEmpty(changedDataModel.ChangedBy) ? changedDataModel.ChangedBy : changedDataModel.EnteredBy, changedDataModel.DateChanged.HasValue ? (DateTime)changedDataModel.DateChanged : (DateTime)changedDataModel.DateEntered);
 					if (changedData != null && changedData.Count > 0)
 					{
 						changedData.ForEach(x => changedDataList.Add(x));
@@ -1605,7 +1614,7 @@ namespace M4PL.DataAccess.Job
 					row["CgoVolumeUnits"] = jobCargo.CgoVolumeUnitsIdName;
 					row["CgoCubes"] = jobCargo.CgoCubes;
 					row["CgoQtyUnits"] = jobCargo.CgoQtyUnitsIdName;
-					row["CgoQTYOrdered"] = jobCargo.CgoQtyOrdered;
+					row["CgoQtyOrdered"] = jobCargo.CgoQtyOrdered;
 					row["CgoPackagingTypeId"] = jobCargo.CgoPackagingTypeId;
 					row["CgoQtyUnitsId"] = jobCargo.CgoQtyUnitsId;
 					row["CgoWeightUnitsId"] = jobCargo.CgoWeightUnitsId;

@@ -55,6 +55,7 @@ namespace M4PL.Entities.Support
             IsJobParentEntity = pagedDataInfo.IsJobParentEntity;
             IsJobCardEntity = pagedDataInfo.IsJobCardEntity;
             EntityFor = pagedDataInfo.EntityFor;
+            JobCardFilterId = pagedDataInfo.JobCardFilterId;
         }
 
         public long RecordId { get; set; }
@@ -81,6 +82,7 @@ namespace M4PL.Entities.Support
         public bool IsJobCardEntity { get; set; }
         public string EntityFor { get; set; }
         public bool IsDataView { get; set; }
+        public long JobCardFilterId { get; set; }
         public PagedDataInfo Clone()
         {
             return this.MemberwiseClone() as PagedDataInfo;

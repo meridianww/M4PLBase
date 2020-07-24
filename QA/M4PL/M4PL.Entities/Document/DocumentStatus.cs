@@ -16,5 +16,7 @@ namespace M4PL.Entities.Document
 		public bool IsAttachmentPresent { get; set; }
 
 		public bool IsPODPresent { get; set; }
+
+		public bool IsHistoryPresent { get; set; }
 	}
 }

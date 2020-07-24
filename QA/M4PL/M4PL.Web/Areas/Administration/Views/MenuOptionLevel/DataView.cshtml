@@ -191,7 +191,7 @@
                             p.ValueType = typeof(int);
                             p.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{DevExCtrl.ComboBox.MnuClassification_BeginCallback(s, e, {0}, '{1}',{2},{3}); }}", Model.GridSetting.GridName, "MnuRibbon", LookupEnums.MenuClassification.ToInt(), LookupEnums.RibbonClassification.ToInt());
                             p.CallbackRouteValues = new { Controller = Model.GridSetting.CallBackRoute.Controller, Action = "GetLookUps", fieldName = col.ColColumnName, Area = Model.GridSetting.CallBackRoute.Area };
-                            p.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
+                            p.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId).Where(s => s.SysRefId != 0);
                         });
                     }
                     else
@@ -199,15 +199,15 @@
                         column.SetFilterTemplateContent(lookup =>
                         {
                             var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
-                            if (col.ColLookupId == LookupEnums.Status.ToInt())
-                            {
-                                var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
-                                if (!string.IsNullOrWhiteSpace(allStatuses))
-                                {
-                                    var allStatus = allStatuses.SplitComma().ToList();
-                                    allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-                                }
-                            }
+                            //if (col.ColLookupId == LookupEnums.Status.ToInt())
+                            //{
+                            //    var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
+                            //    if (!string.IsNullOrWhiteSpace(allStatuses))
+                            //    {
+                            //        var allStatus = allStatuses.SplitComma().ToList();
+                            //        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
+                            //    }
+                            //}
                             var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                             string relatedValue = null;
                             allFilters.TryGetValue(column.FieldName, out relatedValue);
@@ -250,7 +250,7 @@
                             cs.TextField = "LangName";
                             cs.ValueField = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                             cs.ValueType = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
-                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
+                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId).Where(s => s.SysRefId != 0);
                         });
                     }
                     //column.ReadOnly = col.ColLookupId == 39 ? Model.Permission == Permission.All : false; //For status drop down

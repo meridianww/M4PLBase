@@ -113,6 +113,7 @@
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprDate, new { Name = "GwyUprDate" }).ToHtmlString());
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyLwrDate, new { Name = "GwyLwrDate" }).ToHtmlString());
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.DefaultTime, new { Name = "DefaultTime" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsGatewayCalled, new { Name = "IsGatewayCalled" }).ToHtmlString());
 
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ClosedByContactExist, new { Name = "ClosedByContactExist" }).ToHtmlString());
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
@@ -247,11 +248,12 @@
         }).GetHtml();
     });
 }).GetHtml()
+        if (!Model.Record.IsGatewayCalled) 
+        { 
+            @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
 
-    @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
-
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
-
+            @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
+        }
         if (!Model.IsPopUp)
         {
     <div class="form-btns-block">

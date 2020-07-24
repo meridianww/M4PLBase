@@ -9,6 +9,8 @@
 
 #endregion Copyright
 
+using System;
+
 namespace M4PL.Entities.Job
 {
 	public class JobCargoException
@@ -18,5 +20,11 @@ namespace M4PL.Entities.Job
 		public string ExceptionReason { get; set; }
 
 		public string InstallStatus { get; set; }
+
+		public int CargoQuantity { get; set; }
+
+		public string CgoReasonCodeOSD { get; set; }
+
+		public DateTime? CgoDateLastScan { get; set; }
 	}
 }

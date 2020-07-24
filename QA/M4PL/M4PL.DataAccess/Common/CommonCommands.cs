@@ -25,6 +25,7 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
@@ -34,6 +35,30 @@ namespace M4PL.DataAccess.Common
     public static class CommonCommands
     {
         public static object JsonConvert { get; private set; }
+
+        public static DateTime DayLightSavingStartDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+            }
+        }
+
+        public static DateTime DayLightSavingEndDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+            }
+        }
+
+        public static bool IsDayLightSavingEnable
+        {
+            get
+            {
+                return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+            }
+        }
 
         /// <summary>
         /// Gets UserColumnSettings
@@ -514,7 +539,8 @@ namespace M4PL.DataAccess.Common
                         new Parameter("@refTableName", byteArray.Entity.ToString()),
                         new Parameter("@fieldName", byteArray.FieldName),
                         new Parameter("@type", byteArray.Type.ToString()),
-                        new Parameter("@documentText", byteArray.DocumentText)
+                        new Parameter("@documentText", byteArray.DocumentText),
+                        new Parameter("@gatewayIds", byteArray.JobGatewayIds)
                 };
 
             if (byteArray.Bytes != null)
@@ -1121,7 +1147,7 @@ namespace M4PL.DataAccess.Common
             List<ChangeHistoryData> changeHistoryDataList = new List<ChangeHistoryData>();
             foreach (var oProperty in oType.GetProperties())
             {
-                if (oProperty.Name.Equals("ChangedBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("lastupdated", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("jobIsHavingpermission", StringComparison.OrdinalIgnoreCase))
+                if (oProperty.Name.Equals("ChangedBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("JobDriverAlert", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("DateChanged", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("EnteredBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("DateEntered", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("jobIsHavingpermission", StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 var oOldValue = oProperty.GetValue(oldObject, null);
@@ -1131,8 +1157,8 @@ namespace M4PL.DataAccess.Common
                 if (Equals(oOldValue, oNewValue)) continue;
                 // Handle the display values when the underlying value is null
 
-                var sOldValue = oOldValue == null ? "null" : oOldValue.ToString();
-                var sNewValue = oNewValue == null ? "null" : oNewValue.ToString();
+                string sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
+                string sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
                 changeHistoryDataList.Add(new ChangeHistoryData() { FieldName = oProperty.Name, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate });
             }
 
@@ -1183,7 +1209,7 @@ namespace M4PL.DataAccess.Common
                 var sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
 
                 ////// Dead end/////
-                var columnName = jobColumns?.Where(x => x.ColColumnName == oProperty.Name)?.FirstOrDefault()?.ColAliasName;
+                var columnName = jobColumns?.Where(x => x.ColColumnName == oProperty.Name)?.FirstOrDefault()?.ColGridAliasName;
                 changeHistoryDataList.Add(new Entities.Job.JobHistory() { FieldName = string.IsNullOrEmpty(columnName) ? oProperty.Name : columnName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate, JobID = jobId });
             }
 
@@ -1202,13 +1228,25 @@ namespace M4PL.DataAccess.Common
             return result;
         }
 
-        public static JobExceptionDetail GetJobExceptionDetail()
+        public static IList<JobGatewayDetails> GetJobGateway(ActiveUser activeUser, long jobId)
+        {
+            var parameters = new List<Parameter>()
+            {
+               new Parameter("@jobId", jobId),
+               new Parameter("@userId", activeUser.UserId),
+               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobGatewayDetails>(StoredProceduresConstant.GetJobGateways, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+
+        public static JobExceptionDetail GetJobExceptionDetail(long cargoId)
         {
             JobExceptionDetail jobExceptionDetail = new JobExceptionDetail();
             SetCollection sets = new SetCollection();
             sets.AddSet<JobExceptionInfo>("JobExceptionInfo");
             sets.AddSet<JobInstallStatus>("JobInstallStatus");
-            SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetJobExceptionDetail, parameter: null, storedProcedure: true);
+            SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetJobExceptionDetail, new Parameter("@CargoId", cargoId), storedProcedure: true);
 
             var jobExceptionInfo = sets.GetSet<JobExceptionInfo>("JobExceptionInfo");
             var jobInstallStatus = sets.GetSet<JobInstallStatus>("JobInstallStatus");
@@ -1225,5 +1263,35 @@ namespace M4PL.DataAccess.Common
 
             return jobExceptionDetail;
         }
-    }
+
+		public static JobExceptionDetail GetJobRescheduledDetail(long jobId, bool isSpecificCustomer)
+		{
+			JobExceptionDetail jobExceptionDetail = new JobExceptionDetail();
+			SetCollection sets = new SetCollection();
+			sets.AddSet<JobExceptionInfo>("JobExceptionInfo");
+			sets.AddSet<JobInstallStatus>("JobInstallStatus");
+			var parameters = new List<Parameter>()
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@IsSpecificCustomer", isSpecificCustomer)
+			};
+
+			SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetJobRescheduleReasonDetail, parameters.ToArray(), storedProcedure: true);
+
+			var jobExceptionInfo = sets.GetSet<JobExceptionInfo>("JobExceptionInfo");
+			var jobInstallStatus = sets.GetSet<JobInstallStatus>("JobInstallStatus");
+
+			if (jobExceptionInfo != null && jobExceptionInfo.Count() > 0)
+			{
+				jobExceptionDetail.JobExceptionInfo = jobExceptionInfo.ToList();
+			}
+
+			if (jobInstallStatus != null && jobInstallStatus.Count() > 0)
+			{
+				jobExceptionDetail.JobInstallStatus = jobInstallStatus.ToList();
+			}
+
+			return jobExceptionDetail;
+		}
+	}
 }

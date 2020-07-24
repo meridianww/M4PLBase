@@ -268,15 +268,15 @@
                     column.SetFilterTemplateContent(lookup =>
                     {
                         var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
-                        if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
-                        {
-                            var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
-                            if (!string.IsNullOrWhiteSpace(allStatuses))
-                            {
-                                var allStatus = allStatuses.SplitComma().ToList();
-                                allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-                            }
-                        }
+                        //if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
+                        //{
+                        //    var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
+                        //    if (!string.IsNullOrWhiteSpace(allStatuses))
+                        //    {
+                        //        var allStatus = allStatuses.SplitComma().ToList();
+                        //        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
+                        //    }
+                        //}
                         var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                         string relatedValue = null;
                         allFilters.TryGetValue(column.FieldName, out relatedValue);

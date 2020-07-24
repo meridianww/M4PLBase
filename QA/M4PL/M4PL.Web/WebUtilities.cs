@@ -295,7 +295,7 @@ namespace M4PL.Web
                         var moduleIdToCompare = MainModule.Job.ToInt();
                         var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
                         int? permission = security?.SecMenuAccessLevelId;
-                        if (security?.UserSubSecurities?.Count != null || security.UserSubSecurities.Count > 0)
+                        if (security?.UserSubSecurities != null && security.UserSubSecurities.Count > 0)
                         {
                             var tableRef = commonCommands.Tables[EntitiesAlias.JobGateway];
                             string refTableName = tableRef.SysRefName != null ? Convert.ToString(tableRef.SysRefName).ToUpper() : tableRef.SysRefName;
@@ -304,7 +304,10 @@ namespace M4PL.Web
                             permission = subSecurity != null ? subSecurity.SubsMenuAccessLevelId : permission;
                         }
                         if (permission.HasValue && permission.Value > (int)Permission.ReadOnly)
+                        {
                             gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                            gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                        }
                     }
                     if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly) //action context menu should come after new and edit. So, Have added this here
                     {
@@ -775,6 +778,28 @@ namespace M4PL.Web
             return 80;
         }
 
+        public static int SetJobHistoryGridPixel(APIClient.ViewModels.ColumnSetting columnSetting)
+        {
+            switch (columnSetting.ColColumnName)
+            {
+                case "FieldName":
+                    return columnSetting.MaxLength = 50;
+
+                case "OldValue":
+                    return columnSetting.MaxLength = 80;
+
+                case "NewValue":
+                    return columnSetting.MaxLength = 80;
+
+                case "ChangedDate":
+                    return columnSetting.MaxLength = 100;
+                case "ChangedBy":
+                    return columnSetting.MaxLength = 80;
+            }
+
+            return 80;
+        }
+
         public static string ShouldRenderDetailGrid(object dataItem, ICommonCommands commonCommands, ref MvcRoute currentChildRoute)
         {
             switch (currentChildRoute.Entity)
@@ -935,7 +960,7 @@ namespace M4PL.Web
                                 cs.TextField = "LangName";
                                 cs.ValueField = "SysRefId";
                                 cs.ValueType = typeof(int);
-                                cs.DataSource = commonCommands.GetIdRefLangNames(col.ColLookupId);
+                                cs.DataSource = commonCommands.GetIdRefLangNames(col.ColLookupId).Where(s => s.SysRefId != 0);
                             });
                         }
                         else if (col.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)

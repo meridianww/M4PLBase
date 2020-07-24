@@ -70,12 +70,7 @@ DevExCtrl.Ribbon = function () {
 
         if ((route.Action === "Copy")) {
             var selectedText = M4PLCommon.Control.GetSelectedText();
-            localStorage.setItem("CopiedText", selectedText);
-            //navigator.clipboard.writeText(selectedText).then(function () {
-            //    /* clipboard successfully set */
-            //}, function () {
-            //    /* clipboard write failed */
-            //});
+            M4PLCommon.Clipboard.SetClipboard(selectedText);
             return;
         }
         if ((route.Action === "Cut")) {
@@ -83,12 +78,7 @@ DevExCtrl.Ribbon = function () {
                 var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
                 if (currentControl.GetText() != "") {
                     var selectedText = M4PLCommon.Control.GetSelectedText();
-                    localStorage.setItem("CopiedText", selectedText);
-                    //navigator.clipboard.writeText(selectedText).then(function () {
-                    //    /* clipboard successfully set */
-                    //}, function () {
-                    //    /* clipboard write failed */
-                    //});
+                    M4PLCommon.Clipboard.SetClipboard(selectedText);
                     currentControl.SetText("");
                 }
             }
@@ -103,14 +93,11 @@ DevExCtrl.Ribbon = function () {
                 if (inputcontrol != null && inputcontrol[0] != null) {
                     var str = inputcontrol[0].id;
                     var res = str.substring(0, str.lastIndexOf("_"));
-                    var clipText = localStorage.getItem("CopiedText");
-                    if (ASPxClientControl.GetControlCollection().GetByName(res) == null && clipText != undefined) {
-                        inputcontrol[0].value = clipText;
-                        //navigator.clipboard.readText().then(clipText => inputcontrol[0].value = clipText);
+                    if (ASPxClientControl.GetControlCollection().GetByName(res) == null) {
+                        M4PLCommon.Clipboard.GetClipboard(inputcontrol[0], true)
                     }
                     else {
-                        ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText)
-                        //navigator.clipboard.readText().then(clipText => ASPxClientControl.GetControlCollection().GetByName(res).SetValue(clipText));
+                        M4PLCommon.Clipboard.GetClipboard(inputcontrol[0], false)
                     }
                 }
             }
@@ -265,6 +252,20 @@ DevExCtrl.Ribbon = function () {
                     }
                     else {
                         M4PLCommon.DocumentStatus.JobCostCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
+                case "DownloadJobHistoryReport":
+                    var jobIds = _onJobReportClickMultiSelect();
+                    route = _onJobReportClick(route);
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsHistoryPresentForJob(route.RecordId, jobIds);
+                    else
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobHistoryMissingDisplayMessage("Business Rule", "Please select specific any row");
                     }
                     break;
                 default:
@@ -1013,7 +1014,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount(); i++) {
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1166,14 +1167,12 @@ DevExCtrl.TreeList = function () {
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 if (e.nodeKey.indexOf("_") == -1) {
                     route.ParentRecordId = e.nodeKey;
-                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
                 if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     isJobParentEntity = true;
                     route.IsJobParentEntityUpdated = true;
                     IsDataView = route.Action === "DataView" ? true : false
-                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
                 route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack: true });
@@ -1185,7 +1184,6 @@ DevExCtrl.TreeList = function () {
                     isJobParentEntity = true;
                     route.IsJobParentEntityUpdated = true;
                     IsDataView = route.Action === "DataView" ? true : false
-                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
 
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
@@ -1216,7 +1214,6 @@ DevExCtrl.TreeList = function () {
                 if (contentCbPanel && contentCbPanelRoute && !contentCbPanel.InCallback()) {
                     if (route.EntityName == 'Job' && isJobParentEntity) {
                         IsDataView = route.Action === "DataView" ? true : false
-                        route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                     }
                     contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                     DevExCtrl.Ribbon.DoCallBack(route);
@@ -1859,7 +1856,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

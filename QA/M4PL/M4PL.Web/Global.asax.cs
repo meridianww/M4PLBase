@@ -92,7 +92,7 @@ namespace M4PL.Web
 
 			if (DevExpressHelper.IsCallback) //Devexpress callbacks have to be handled by callbackErrorRedirectUrl
 			{
-				Session["Application_Error"] = exception?.Message;
+				//Session["Application_Error"] = exception?.Message;
 				DevExpress.Web.ASPxWebControl.SetCallbackErrorMessage(exception?.Message);
 				Server.ClearError();
 				return;

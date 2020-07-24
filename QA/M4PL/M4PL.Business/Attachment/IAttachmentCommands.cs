@@ -39,7 +39,7 @@ namespace M4PL.Business.Attachment
 		DocumentData GetPriceCodeReportDocumentByJobId(List<long> jobId);
 
 		DocumentData GetCostCodeReportDocumentByJobId(List<long> jobId);
-
+		DocumentData GetHistoryReportDocumentByJobId(List<long> jobId);
 		DocumentData GetPODDocumentByJobId(List<long> jobId);
 
 		DocumentStatus GetDocumentStatusByJobId(List<long> selectedJobId);
@@ -47,5 +47,6 @@ namespace M4PL.Business.Attachment
 		DocumentStatus IsPriceCodeDataPresentForJob(List<long> selectedJobId);
 
 		DocumentStatus IsCostCodeDataPresentForJob(List<long> selectedJobId);
+		DocumentStatus IsHistoryPresentForJob(List<long> selectedJobId);
 	}
 }

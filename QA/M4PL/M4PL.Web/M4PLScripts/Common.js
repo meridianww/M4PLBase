@@ -128,6 +128,25 @@ M4PLCommon.Common = function () {
         window.close();
     }
 
+    var _arrayRemove = function (arr, value) { return arr.filter(function (ele) { return ele != value; }); }
+
+    var _enableJobGridMultiSelection = function (isEnable) {
+        var sJobGrid = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+        if (sJobGrid != null && sJobGrid != undefined) {
+            var clearBtnCtrl = ASPxClientControl.GetControlCollection().GetByName("btnClearSelectionJobGridView");
+            if (clearBtnCtrl != null && clearBtnCtrl != undefined) {
+                if (!isEnable) {
+                    clearBtnCtrl.SetEnabled(false);
+                    $("#btnClearSelectionJobGridView").addClass("noHover");
+                }
+                else {
+                    clearBtnCtrl.SetEnabled(true);
+                    $("#btnClearSelectionJobGridView").removeClass("noHover");
+                }
+            }
+        }
+    }
+
     return {
         init: init,
         SwitchOrganization: _switchOrganization,
@@ -139,6 +158,8 @@ M4PLCommon.Common = function () {
         LogOut: _onLogOut,
         HideGlobalLoadingPanel: _hideGlobalLoadingPanel,
         BrowserIndexClosed: _browserIndexClosed,
+        ArrayRemove: _arrayRemove,
+        EnableJobGridMultiSelection: _enableJobGridMultiSelection
     };
 }();
 
@@ -166,11 +187,13 @@ M4PLCommon.RichEdit = function () {
         _openDialogCancelClick(s, e, byteArray.IsPopup);
     }
 
-    var _richEditorsPerformCallBack = function (route, byteArray) {
+    var _richEditorsPerformCallBack = function (route, byteArray, gatewayIds) {
+
         $.each(byteArray, function (index, value) {
             if (ASPxClientControl.GetControlCollection().GetByName(value.ControlName)) {
                 M4PLCommon.CurrentByteArrayCount += 1;
                 ASPxClientControl.GetControlCollection().GetByName(value.ControlName).callbackCustomArgs["ByteArrayRecordId"] = route.RecordId;//same callbackCustomArgs name as WebApplicationConstants.ByteArrayRecordId
+                value.JobGatewayIds = gatewayIds;
                 ASPxClientControl.GetControlCollection().GetByName(value.ControlName).PerformCallback({ strByteArray: JSON.stringify(value) });
             }
         });
@@ -660,36 +683,9 @@ M4PLCommon.Control = (function () {
     }
 
     var _updateSelectedText = function () {
-        var clipText = localStorage.getItem("CopiedText");
         if (M4PLCommon.FocusedControlName) {
             var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
-            document.getElementById(currentControl).innerText = clipText
-            //navigator.clipboard.readText().then(clipText => document.getElementById(currentControl).innerText = clipText);
-            //For TextBox
-            //if (currentControl.GetChildElement('I')) {
-            //    var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
-            //    if (textComponent.selectionStart !== undefined) {
-            //        // Standards Compliant Version
-            //        var startPos = textComponent.selectionStart;
-            //        var endPos = textComponent.selectionEnd;
-            //        var currentValue = textComponent.value;
-            //        if (currentControl.GetText() != "")
-            //            currentControl.SetText(textComponent.value.substring(0, startPos) + localStorage.getItem("CopiedText") + textComponent.value.substring(endPos, textComponent.value.length));
-            //        else
-            //            currentControl.SetText(localStorage.getItem("CopiedText"));
-            //        textComponent.focus();
-            //    }
-            //    else if (document.selection !== undefined) {
-            //        // IE Version
-            //        textComponent.focus();
-            //        var sel = document.selection.createRange();
-            //    }
-            //}
-            ////For RichTextBox
-            //if (currentControl.selection && currentControl.document) {
-            //    currentControl.commands.insertText.execute(localStorage.getItem("CopiedText"));
-            //    currentControl.Focus();
-            //}
+            M4PLCommon.Clipboard.GetClipboard(document.getElementById(currentControl), true);
         }
     }
 
@@ -941,7 +937,7 @@ M4PLCommon.CheckHasChanges = (function () {
                     }
                     M4PLCommon.CurrentByteArrayCount = 0;
                     if (response.byteArray && response.byteArray.length > 0 && response.route) {
-                        M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray);
+                        M4PLCommon.RichEdit.RichEditorsPerformCallBack(response.route, response.byteArray, null);
                     }
                     var formInterval = setInterval(function () {
                         if ((M4PLCommon.CurrentByteArrayCount <= 0) && AppCbPanel && !AppCbPanel.InCallback()) {
@@ -1510,10 +1506,6 @@ M4PLCommon.AdvancedReport = (function () {
 
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
 
-        var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
-        if (grdCtrl != null && grdCtrl != undefined)
-            grdCtrl.ClearFilter();
-
         if ($('.errorMessages') != undefined) {
             $('.errorMessages').html('');
         }
@@ -1607,6 +1599,9 @@ M4PLCommon.AdvancedReport = (function () {
 
         if (IsFormValidate) {
             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
+            if (grdCtrl != null && grdCtrl != undefined)
+                grdCtrl.ClearFilter();
         } else {
             return false;
         }
@@ -2411,6 +2406,31 @@ M4PLCommon.DocumentStatus = (function () {
         return isCostCodeDataPresent
     };
 
+    var _isHistoryPresentForJob = function (jobId, jobIds) {
+        var isHistoryDataPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/IsHistoryPresentForJob?jobId=" + jobId + "&jobIds=" + jobIds,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isHistoryDataPresent = response.documentStatus.IsHistoryPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isHistoryDataPresent
+    };
+
     var _podMissingDisplayMessage = function (title, text) {
         var displaymessage =
         {
@@ -2457,15 +2477,29 @@ M4PLCommon.DocumentStatus = (function () {
         DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
     };
 
+    var _jobHistoryMissingDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobHistoryMissing'
+        };
+
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
     return {
         IsPODAttachedForJob: _isPODAttachedForJob,
         IsAttachmentPresentForJob: _isAttachmentPresentForJob,
         IsPriceCodeDataPresentForJob: _isPriceCodeDataPresentForJob,
         IsCostCodeDataPresentForJob: _isCostCodeDataPresentForJob,
+        IsHistoryPresentForJob: _isHistoryPresentForJob,
         PODMissingDisplayMessage: _podMissingDisplayMessage,
         DisplayMessage: _displayMessage,
         JobPriceCodeMissingDisplayMessage: _jobPriceCodeMissingDisplayMessage,
-        JobCostCodeMissingDisplayMessage: _jobCostCodeMissingDisplayMessage
+        JobCostCodeMissingDisplayMessage: _jobCostCodeMissingDisplayMessage,
+        JobHistoryMissingDisplayMessage: _jobHistoryMissingDisplayMessage
     }
 })();
 
@@ -2484,5 +2518,43 @@ M4PLCommon.DisplayMessage = (function () {
 
     return {
         DefaultClientOk: _defaultClientOk
+    }
+})();
+
+M4PLCommon.Clipboard = (function () {
+
+    var _setClipboard = function (text) {
+        if (navigator != undefined && navigator.clipboard != undefined) {
+            navigator.clipboard.writeText(text).then(function () {
+                /* clipboard successfully set */
+            }, function () {
+                /* clipboard write failed */
+            });
+        } else {
+            localStorage.setItem("CopiedText", text);
+        }
+    }
+
+    var _getClipboard = function (ctrl, isInnerText) {
+        if (navigator != undefined && navigator.clipboard != undefined) {
+            if (isInnerText)
+                navigator.clipboard.readText().then(function (clipText) { ctrl.innerText = clipText; ctrl.value = clipText });
+            else
+                navigator.clipboard.readText().then(clipText => ctrl.SetValue(clipText));
+        } else {
+            var copiedText = localStorage.getItem("CopiedText");
+            if (copiedText != undefined && copiedText != '' && copiedText != null)
+                if (isInnerText) {
+                    ctrl.innerText = copiedText;
+                    ctrl.value = copiedText;
+                }
+                else
+                    ctrl.SetValue(clipText)
+        }
+    }
+
+    return {
+        SetClipboard: _setClipboard,
+        GetClipboard: _getClipboard
     }
 })();

@@ -17,6 +17,8 @@
 // Purpose:                                      Contains objects related to JobCargo
 //==========================================================================================================
 
+using System;
+
 namespace M4PL.Entities.Job
 {
 	/// <summary>
@@ -92,17 +94,19 @@ namespace M4PL.Entities.Job
 
 		public decimal CgoCubes { get; set; }
 
-		public decimal CgoQtyExpected { get; set; }
+		public int CgoQtyOrdered { get; set; }
 
-		public decimal CgoQtyOnHand { get; set; }
+		public int CgoQtyExpected { get; set; }
 
-		public decimal CgoQtyDamaged { get; set; }
+		public int CgoQtyOnHand { get; set; }
 
-		public decimal CgoQtyOnHold { get; set; }
+		public int CgoQtyDamaged { get; set; }
 
-		public decimal CgoQtyShortOver { get; set; }
+		public int CgoQtyOnHold { get; set; }
 
-		public decimal CgoQtyOver { get; set; }
+		public int CgoQtyShortOver { get; set; }
+
+		public int CgoQtyOver { get; set; }
 
 		public int? CgoQtyUnitsId { get; set; }
 
@@ -135,8 +139,8 @@ namespace M4PL.Entities.Job
 
 		public string CgoLongitude { get; set; }
 
-		public decimal CgoQtyOrdered { get; set; }
-
 		public string CgoComment { get; set; }
+
+		public DateTime? CgoDateLastScan { get; set; }
 	}
 }

@@ -111,6 +111,7 @@ namespace M4PL.Web.Areas
                 route.IsPBSReport = false;
                 currentPagedDataInfo.RecordId = route.RecordId;
                 var result = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                currentPagedDataInfo.PageSize = result == null ? currentPagedDataInfo.PageSize : result.Count;
                 _gridResult.Records = result;
             }
             else
@@ -154,8 +155,8 @@ namespace M4PL.Web.Areas
             _gridResult.Operations = _commonCommands.GridOperations();
             _gridResult.GridSetting.DataRowType = typeof(TView);
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-            _gridResult.GridViewModel.Pager.PageSize = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize;
-            _gridResult.GridViewModel.Pager.PageIndex = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber - 1;
+            _gridResult.GridViewModel.Pager.PageSize = route.Entity == EntitiesAlias.JobHistory && _gridResult.Records != null ? _gridResult.Records.Count : _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize;
+            _gridResult.GridViewModel.Pager.PageIndex = route.Entity == EntitiesAlias.JobHistory ? 0 : _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber - 1;
 
             ////reset the pageindex when Filter applied and pageing is opted
             if ((ViewData[WebApplicationConstants.ViewDataFilterPageNo] != null) && ((double)_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount / _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize >= (int)ViewData[WebApplicationConstants.ViewDataFilterPageNo]))
@@ -178,39 +179,39 @@ namespace M4PL.Web.Areas
 
         #region Data View
 
-		public virtual PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
-		{
-			RowHashes = new Dictionary<string, Dictionary<string, object>>();
-			TempData["RowHashes"] = RowHashes;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			if (route.Filters != null && (route.Filters.FieldName == "ChildGridRoute" || route.Filters.FieldName == "CdcLocationCode" || route.Filters.FieldName == "VdcLocationCode"))
-				gridName = "";
-			bool isGridSetting = route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard ? true : false;//User for temporaryly for job
-			_gridResult.FocusedRowId = route.RecordId;
-			route.RecordId = 0;
-			if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
-				route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-			if (route.ParentEntity == EntitiesAlias.Common)
-				route.ParentRecordId = 0;
-          
-           
+        public virtual PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+        {
+            RowHashes = new Dictionary<string, Dictionary<string, object>>();
+            TempData["RowHashes"] = RowHashes;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (route.Filters != null && (route.Filters.FieldName == "ChildGridRoute" || route.Filters.FieldName == "CdcLocationCode" || route.Filters.FieldName == "VdcLocationCode"))
+                gridName = "";
+            bool isGridSetting = route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard ? true : false;//User for temporaryly for job
+            _gridResult.FocusedRowId = route.RecordId;
+            route.RecordId = 0;
+            if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
+                route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+            if (route.ParentEntity == EntitiesAlias.Common)
+                route.ParentRecordId = 0;
+
+
             SetGridResult(route, gridName, isGridSetting);
             long expandRowId;
             Int64.TryParse(route.Url, out expandRowId);
-            if(_gridResult.GridSetting.ChildGridRoute != null)
-            _gridResult.GridSetting.ChildGridRoute.ParentRecordId = expandRowId;
+            if (_gridResult.GridSetting.ChildGridRoute != null)
+                _gridResult.GridSetting.ChildGridRoute.ParentRecordId = expandRowId;
             if (SessionProvider.ViewPagedDataSession.Count() > 0
-			&& SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-			&& SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
-			{
-				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
-			}
-			if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel)
-				&& route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)))
-				// || route.Entity == EntitiesAlias.JobAdvanceReport)
-				return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
-			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
-		}
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+            }
+            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel)
+                && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)))
+                // || route.Entity == EntitiesAlias.JobAdvanceReport)
+                return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
 
         public virtual void GetDataRowCount(GridViewCustomBindingGetDataRowCountArgs e)
         {
@@ -441,37 +442,37 @@ namespace M4PL.Web.Areas
             if (string.IsNullOrEmpty(filteringState.FilterExpression) && (filteringState.ModifiedColumns.Count > 0))
                 route.Filters = null;
 
-			//used to reset page index of the grid when Filter applied and pageing is opted
-			ViewData[WebApplicationConstants.ViewDataFilterPageNo] = sessionInfo.PagedDataInfo.PageNumber;
-			sessionInfo.PagedDataInfo.WhereCondition = filteringState.BuildGridFilterWhereCondition(route.Entity, ref filters, _commonCommands);
-			if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
-			   && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-			{
-				sessionInfo.PagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition
-					+ sessionInfo.PagedDataInfo.WhereCondition;
-			}
-			if (sessionInfo.Filters != null && filters.Count > 0 && sessionInfo.Filters.Count != filters.Count)//Have to search from starting if setup filter means from page 1
-				sessionInfo.PagedDataInfo.PageNumber = 1;
-			sessionInfo.Filters = filters;
-			sessionInfo.GridViewFilteringState = filteringState;
-			SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
-			_gridResult.SessionProvider = SessionProvider;
-			SetGridResult(route, gridName);
-			if (route.Entity == EntitiesAlias.SystemReference && _gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
-			{
-				_gridResult.ColumnSettings.ToList().ForEach(c =>
-				{
-					if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
-					{
-						c.ColIsVisible = false;
-					}
-				});
-			}
-			Session["costJobCodeActions"] = null;
-			Session["priceJobCodeActions"] = null;
-			route.Filters = null;
-			return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
-		}
+            //used to reset page index of the grid when Filter applied and pageing is opted
+            ViewData[WebApplicationConstants.ViewDataFilterPageNo] = sessionInfo.PagedDataInfo.PageNumber;
+            sessionInfo.PagedDataInfo.WhereCondition = filteringState.BuildGridFilterWhereCondition(route.Entity, ref filters, _commonCommands);
+            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
+               && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                sessionInfo.PagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition
+                    + sessionInfo.PagedDataInfo.WhereCondition;
+            }
+            if (sessionInfo.Filters != null && filters.Count > 0 && sessionInfo.Filters.Count != filters.Count)//Have to search from starting if setup filter means from page 1
+                sessionInfo.PagedDataInfo.PageNumber = 1;
+            sessionInfo.Filters = filters;
+            sessionInfo.GridViewFilteringState = filteringState;
+            SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
+            _gridResult.SessionProvider = SessionProvider;
+            SetGridResult(route, gridName);
+            if (route.Entity == EntitiesAlias.SystemReference && _gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
+            {
+                _gridResult.ColumnSettings.ToList().ForEach(c =>
+                {
+                    if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        c.ColIsVisible = false;
+                    }
+                });
+            }
+            Session["costJobCodeActions"] = null;
+            Session["priceJobCodeActions"] = null;
+            route.Filters = null;
+            return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
+        }
 
         public virtual PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
@@ -890,7 +891,7 @@ namespace M4PL.Web.Areas
         }
 
         public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
-              bool reloadApplication = false, long newRecordId = 0, string jobGatewayStatus = null, MvcRoute tabRoute = null)
+              bool reloadApplication = false, long newRecordId = 0, string jobGatewayStatus = null, MvcRoute tabRoute = null, string gatewayIds = null)
         {
             var displayMessage = new DisplayMessage();
             displayMessage = recordId > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
@@ -914,6 +915,7 @@ namespace M4PL.Web.Areas
                     reloadApplication = reloadApplication,
                     jobGatewayStatus = jobGatewayStatus,
                     tabRoute = tabRoute,
+                    gatewayIds = gatewayIds,
                 }, JsonRequestBehavior.AllowGet);
             return Json(new
             {
@@ -922,6 +924,7 @@ namespace M4PL.Web.Areas
                 displayMessage = displayMessage,
                 jobGatewayStatus = jobGatewayStatus,
                 tabRoute = tabRoute,
+                gatewayIds = gatewayIds,
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1378,6 +1381,27 @@ namespace M4PL.Web.Areas
                 if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
                 {
                     return File(priceReportDocument.DocumentContent, priceReportDocument.ContentType, priceReportDocument.DocumentName);
+                }
+
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public FileResult DownloadJobHistoryReport(string strRoute, string jobIds = null)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            try
+            {
+                List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+                string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+                var jobHistoryReportDocument = _commonCommands.GetHistoryReportDocumentByJobId(jobId);
+                if (jobHistoryReportDocument != null && !string.IsNullOrEmpty(jobHistoryReportDocument.DocumentName))
+                {
+                    return File(jobHistoryReportDocument.DocumentContent, jobHistoryReportDocument.ContentType, jobHistoryReportDocument.DocumentName);
                 }
 
                 return null;

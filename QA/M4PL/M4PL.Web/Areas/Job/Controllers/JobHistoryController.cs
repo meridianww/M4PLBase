@@ -38,7 +38,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 			route.OwnerCbPanel = "AppCbPanel";
 			route.IsPBSReport = true;
 			SetGridResult(route, gridName, false);
-			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+			return _gridResult?.Records?.Count > 0 ? ProcessCustomBinding(route, MvcConstants.ActionDataView)
+				: PartialView(MvcConstants.ActionDataView, _gridResult);
 		}
 	}
 }
