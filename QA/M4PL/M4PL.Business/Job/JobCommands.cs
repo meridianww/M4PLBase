@@ -613,6 +613,7 @@ namespace M4PL.Business.Job
 				jobGateway.GwyGatewayCode = codeArray[0];
 				jobGateway.GatewayTypeId = 86;
 				jobGateway.GwyCompleted = true;
+				jobGateway.isScheduleReschedule = true;
 				jobGateway.GwyUprDate = rescheduleData.AddHours(jobGateway.GwyUprWindow.HasValue ? (double)jobGateway.GwyUprWindow : 0);
 				jobGateway.GwyLwrDate = rescheduleData.AddHours(jobGateway.GwyLwrWindow.HasValue ? (double)jobGateway.GwyLwrWindow : 0);
 				if (jobDetail.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId)
