@@ -20,7 +20,11 @@ using M4PL.APIClient.Common;
 using M4PL.APIClient.Finance;
 using M4PL.APIClient.ViewModels.Finance;
 using M4PL.Entities;
+using M4PL.Entities.Support;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Finance.Controllers
@@ -53,5 +57,26 @@ namespace M4PL.Web.Areas.Finance.Controllers
 
 			return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 		}
-	}
+       
+        public FileResult DownLoadSalesLineCostFromNav(string strRoute, string jobIds = null)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            try
+            {
+                List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+                string jobId = selectedJobId == null ? route.RecordId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+                var priceReportDocument = _navCostCodeCommands.GetCostCodeReportByJobId(jobId);
+                if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
+                {
+                    return File(priceReportDocument.DocumentContent, priceReportDocument.ContentType, priceReportDocument.DocumentName);
+                }
+
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+    }
 }

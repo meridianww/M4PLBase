@@ -137,5 +137,19 @@ namespace M4PL.API.Controllers
 			_navCostCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navCostCodeCommands.GetAllCostCode();
 		}
-	}
+        [HttpGet]
+        [Route("GetCostCodeReportByJobId")]
+        public virtual Entities.Document.DocumentData GetCostCodeReportByJobId( string jobId)
+        {
+            _navCostCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _navCostCodeCommands.GetCostCodeReportByJobId(jobId);
+        }
+        [HttpGet]
+        [Route("IsCostCodeDataPresentForJobInNAV")]
+        public virtual Entities.Document.DocumentStatus IsCostCodeDataPresentForJobInNAV(string jobId)
+        {
+            _navCostCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _navCostCodeCommands.IsCostCodeDataPresentForJobInNAV(jobId);
+        }
+    }
 }
