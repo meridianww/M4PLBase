@@ -225,6 +225,35 @@ DevExCtrl.Ribbon = function () {
                     else
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     break;
+                case "DownLoadPurchaseLinePriceFromNav":
+                    var jobIds = _onJobReportClickMultiSelect();
+                    route = _onJobReportClick(route);
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsPriceCodeDataPresentForJobInNAV(route.RecordId, jobIds);
+                    else
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobPriceCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
+                case "DownLoadSalesLineCostFromNav":
+                    var jobIds = _onJobReportClickMultiSelect();
+                    route = _onJobReportClick(route);
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result =  M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJobInNAV(route.RecordId, jobIds);
+                    else
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobCostCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
                 case "DownloadPriceReport":
                     var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);

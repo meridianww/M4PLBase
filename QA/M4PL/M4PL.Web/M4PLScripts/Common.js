@@ -1026,7 +1026,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1325,7 +1325,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -2381,6 +2381,58 @@ M4PLCommon.DocumentStatus = (function () {
         return isPriceCodeDataPresent
     };
 
+    var _isPriceCodeDataPresentForJobInNAV = function (jobId,jobIds) {
+       
+        var isPriceCodeDataPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/IsPriceCodeDataPresentForJobInNAV?jobId=" + jobId + "&jobIds=" + jobIds,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isPriceCodeDataPresent = response.documentStatus.IsAttachmentPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+     
+
+        return isPriceCodeDataPresent
+    };
+    var _isCostCodeDataPresentForJobInNAV = function (jobId, jobIds) {
+        var isCostCodeDataPresent = false;
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        $.ajax({
+            type: "GET",
+            url: "/Common/IsCostCodeDataPresentForJobInNAV?jobId=" + jobId + "&jobIds=" + jobIds,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function (response) {
+                if (response && response.status && response.status === true && response.documentStatus != null) {
+                    isPriceCodeDataPresent = response.documentStatus.IsAttachmentPresent;
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                }
+            },
+            error: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            },
+            failure: function (err) {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+
+        return isCostCodeDataPresent
+    };
+
     var _isCostCodeDataPresentForJob = function (jobId, jobIds) {
         var isCostCodeDataPresent = false;
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
@@ -2499,7 +2551,10 @@ M4PLCommon.DocumentStatus = (function () {
         DisplayMessage: _displayMessage,
         JobPriceCodeMissingDisplayMessage: _jobPriceCodeMissingDisplayMessage,
         JobCostCodeMissingDisplayMessage: _jobCostCodeMissingDisplayMessage,
-        JobHistoryMissingDisplayMessage: _jobHistoryMissingDisplayMessage
+        JobHistoryMissingDisplayMessage: _jobHistoryMissingDisplayMessage,
+
+        IsPriceCodeDataPresentForJobInNAV: _isPriceCodeDataPresentForJobInNAV,
+        IsCostCodeDataPresentForJobInNAV: _isCostCodeDataPresentForJobInNAV,
     }
 })();
 

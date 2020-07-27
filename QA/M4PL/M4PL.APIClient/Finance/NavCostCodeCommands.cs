@@ -17,6 +17,7 @@
 // Purpose:                                      Client to consume M4PL API called NavCostCodeCommands
 //===================================================================================================================
 
+using M4PL.APIClient.ViewModels.Document;
 using M4PL.APIClient.ViewModels.Finance;
 using M4PL.Entities;
 using Newtonsoft.Json;
@@ -39,6 +40,14 @@ namespace M4PL.APIClient.Finance
 			var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetAllCostCode"), ActiveUser);
 			var result = RestClient.Execute(request);
 			return JsonConvert.DeserializeObject<ApiResult<List<NavCostCodeView>>>(result.Content).Results?.FirstOrDefault();
+
+
 		}
-	}
+        public DocumentDataView GetCostCodeReportByJobId(string jobId)
+        {
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetCostCodeReportByJobId"), ActiveUser).AddParameter("jobId", jobId);
+            var result = RestClient.Execute(request);
+            return JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(result.Content).Results?.FirstOrDefault();
+        }
+    }
 }
