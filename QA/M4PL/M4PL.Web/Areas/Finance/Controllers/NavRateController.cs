@@ -92,11 +92,28 @@ namespace M4PL.Web.Areas.Finance.Controllers
 					if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
 					{
 						List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
+						StatusModel statusModel = _navRateCommands.GenerateProgramPriceCostCode(navRateList);
 						// To Do: Selected ProgramId need to set with the record.
+						if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
+						{
+							var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+							var route = SessionProvider.ActiveUser.LastRoute;
+							displayMessage.Description = statusModel.AdditionalDetail;
+							return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
+						}
+						else
+						{
+							var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
+							var route = SessionProvider.ActiveUser.LastRoute;
+							return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
+						}
 					}
 					else
 					{
-						// To Do: CSV file columns does not match with the template, through a validation from here.
+						var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+						var route = SessionProvider.ActiveUser.LastRoute;
+						displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
+						return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 					}
 				}
 			}

@@ -120,6 +120,8 @@
     <Compile Include="Customer\ICustReportCommands.cs" />
     <Compile Include="Finance\CostCode\INavCostCodeCommands.cs" />
     <Compile Include="Finance\Customer\INavCustomerCommands.cs" />
+    <Compile Include="Finance\NavRate\INavRateCommands.cs" />
+    <Compile Include="Finance\NavRate\NavRateCommands.cs" />
     <Compile Include="Finance\OrderItem\INavOrderItemCommands.cs" />
     <Compile Include="Finance\OrderItem\NavOrderItemCommands.cs" />
     <Compile Include="Finance\PriceCode\INavPriceCodeCommands.cs" />
