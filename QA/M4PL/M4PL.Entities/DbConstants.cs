@@ -87,5 +87,6 @@ namespace M4PL.Entities
 		public const string JobCostCodeMissing = "JobCostCodeMissing";
 		public const string JobExistSchedule = "JobExistSchedule";
 		public const string JobHistoryMissing = "JobHistoryMissing";
+		public const string NavRate = "NavRate";
 	}
 }

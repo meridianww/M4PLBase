@@ -1734,7 +1734,16 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Download All")
+				if (mnu.MnuTitle == "Upload Price/Cost Code")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Program && route.RecordId > 0)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (mnu.MnuTitle == "Download All")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
@@ -3235,7 +3244,7 @@ namespace M4PL.Web
             MvcRoute route, ICommonCommands _commonCommands)
         {
             var gatewaysContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
-            
+
             if (_gridResult.GridSetting.ContextMenu.Count > 0)
             {
                 var gatewayEntity = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == gatewaysContextMenu.SysRefName);
@@ -3255,7 +3264,7 @@ namespace M4PL.Web
                             route.ParentRecordId = locationIds.FirstOrDefault();
                     }
                     else if (record != null && _gridResult.FocusedRowId > 0)
-                        route.ParentRecordId = _gridResult.FocusedRowId; 
+                        route.ParentRecordId = _gridResult.FocusedRowId;
                 }
 
                 if (gatewayEntity != null && route.ParentRecordId > 0)
@@ -3281,7 +3290,7 @@ namespace M4PL.Web
                             newRoute.Filters = new Entities.Support.Filter();
                             newRoute.Filters.FieldName = singleApptCode.First().GatewayCode;
                             newRoute.Filters.Value = singleApptCode.First().GwyGatewayTitle;
-                            
+
                             newOperation.Route = newRoute;
                             newOperation.Route.IsPBSReport = route.IsPBSReport;
                             gatewayEntity.ChildOperations.Add(newOperation);

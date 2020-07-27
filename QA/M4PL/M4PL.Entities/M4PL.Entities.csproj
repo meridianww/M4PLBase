@@ -68,6 +68,7 @@
     <Compile Include="Document\JobCostReport.cs" />
     <Compile Include="Document\JobPriceReport.cs" />
     <Compile Include="Document\TrackingItem.cs" />
+    <Compile Include="Finance\Customer\NavRate.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
     <Compile Include="Finance\CostCode\NavCostCode.cs" />
     <Compile Include="Finance\CostCode\NavCostCodeResponse.cs" />

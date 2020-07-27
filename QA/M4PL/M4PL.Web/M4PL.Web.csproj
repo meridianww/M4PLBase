@@ -254,6 +254,7 @@
     <Compile Include="Areas\Customer\Controllers\CustReportController.cs" />
     <Compile Include="Areas\Customer\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavRateController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavCostCodeController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavCustomerController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavPriceCodeController.cs" />
@@ -767,6 +768,7 @@
     <Content Include="Areas\Job\Views\JobAdvanceReport\PackagingTypeByJob.cshtml" />
     <Content Include="Areas\Job\Views\JobAdvanceReport\CargoTitleByJob.cshtml" />
     <Content Include="M4PL.Web.licenseheader" />
+    <Content Include="Areas\Finance\Views\NavRate\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -941,6 +943,7 @@
     <Folder Include="Areas\Customer\Views\Dashboard\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Areas\Finance\Models\" />
+    <Folder Include="Areas\Finance\Views\Finance\" />
     <Folder Include="Areas\Finance\Views\NavPurchaseOrder\" />
     <Folder Include="Areas\Finance\Views\NavSalesOrder\" />
     <Folder Include="Areas\Finance\Views\Shared\" />

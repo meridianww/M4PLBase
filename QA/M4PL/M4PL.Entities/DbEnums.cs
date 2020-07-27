@@ -176,6 +176,7 @@ namespace M4PL.Entities
 		NavCostCode,
 		NavPriceCode,
 		NavSalesOrder,
+		NavRate,
 
 		Customer,
 		CustBusinessTerm,
