@@ -1041,8 +1041,22 @@ namespace M4PL.APIClient.Common
 			var response = JsonConvert.DeserializeObject<ApiResult<DocumentStatusView>>(content).Results.FirstOrDefault();
 			return response;
 		}
+        public DocumentStatusView IsPriceCodeDataPresentForJobInNAV(string jobId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", "NavPriceCode", "IsPriceCodeDataPresentForJobInNAV");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+            var response = JsonConvert.DeserializeObject<ApiResult<DocumentStatusView>>(content).Results.FirstOrDefault();
+            return response;
+        }
 
-		public DocumentStatusView IsCostCodeDataPresentForJob(string jobId)
+        public DocumentStatusView IsCostCodeDataPresentForJobInNAV(string jobId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", "NavCostCode", "IsCostCodeDataPresentForJobInNAV");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+            var response = JsonConvert.DeserializeObject<ApiResult<DocumentStatusView>>(content).Results.FirstOrDefault();
+            return response;
+        }
+        public DocumentStatusView IsCostCodeDataPresentForJob(string jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "IsCostCodeDataPresentForJob");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
