@@ -290,6 +290,10 @@
     <Folder Include="EDI\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\M4PL.APIClient\M4PL.APIClient.csproj">
+      <Project>{45432255-74AE-45E3-BEEF-BAF721678C2E}</Project>
+      <Name>M4PL.APIClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\M4PL.DataAccess\M4PL.DataAccess.csproj">
       <Project>{f0d5498e-6d2e-4df0-8d05-bb76516bed81}</Project>
       <Name>M4PL.DataAccess</Name>

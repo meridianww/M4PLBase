@@ -1817,7 +1817,63 @@ namespace M4PL.Web
                         }
                     }
                 }
+                if (mnu.MnuTitle == "Price Codes")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        if (sessionProvider.UserSecurities != null)
+                        {
+                            var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                            UserSubSecurity childSecurity = null;
+                            if (currentSecurity.UserSubSecurities != null)
+                                childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                            if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                          || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                             ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                             (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit)
+                             )))
+                            {
+                                mnu.StatusId = 1;
+                            }
+                        }
+                    }
+                }
 
+                if (mnu.MnuTitle == "Cost Codes")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        if (sessionProvider.UserSecurities != null)
+                        {
+                            var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                            UserSubSecurity childSecurity = null;
+                            if (currentSecurity.UserSubSecurities != null)
+                                childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                            if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                          || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                             ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                             (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit)
+                             )))
+                            {
+                                mnu.StatusId = 1;
+                            }
+                        }
+                    }
+                }
                 if (mnu.MnuTitle == "Cost Code")
                 {
                     mnu.StatusId = 3;
