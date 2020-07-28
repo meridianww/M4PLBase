@@ -537,6 +537,20 @@ namespace M4PL.API.Controllers
 			return _jobCommands.GetOrderStatus(orderNumber);
 		}
 
+		/// <summary>
+		/// Update the special instructions for a Order in Meridian System
+		/// </summary>
+		/// <param name="jobSpecialInstruction">jobSpecialInstruction contains a string where instructions needs to pass.</param>
+		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+		/// <returns>API returns a Model object which contains the details about success or failure with Order Status, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpPost]
+		[Route("specialInstruction"), ResponseType(typeof(StatusModel))]
+		public StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _jobCommands.InsertOrderSpecialInstruction(jobSpecialInstruction, orderNumber);
+		}
+
 		protected SysSetting UpdateActiveUserSettings()
 		{
 			M4PL.Business.Common.CommonCommands.ActiveUser = Models.ApiContext.ActiveUser;

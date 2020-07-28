@@ -602,6 +602,45 @@ namespace M4PL.Business.Job
 			}
 		}
 
+		public StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber)
+		{
+			if (string.IsNullOrEmpty(orderNumber))
+			{
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number."
+				};
+			}
+			else if (jobSpecialInstruction == null || (jobSpecialInstruction != null && string.IsNullOrEmpty(jobSpecialInstruction.SpecialInstruction)))
+			{
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Special instructions are not defined, please pass the valid Instructions."
+				};
+			}
+
+			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
+
+			if (jobDetail == null || jobDetail?.Id <= 0)
+			{
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
+				};
+			}
+
+			JobComment comment = new JobComment() { JobGatewayComment = jobSpecialInstruction.SpecialInstruction, JobGatewayTitle = "Special Instruction", JobId = jobDetail.Id };
+			bool result = _commands.InsertJobComment(ActiveUser, comment, false);
+			if (result) { return new StatusModel() { AdditionalDetail = "", Status = "Success", StatusCode = 200 }; }
+			else { return new StatusModel() { AdditionalDetail = "There is some issue while updating special instructions, please try after sometime.", Status = "Failure", StatusCode = 500 }; }
+		}
+
 		private JobGateway RescheduleOrderGateway(Entities.Job.Job jobDetail, JobExceptionInfo jobExceptionInfo, DateTime rescheduleData, JobInstallStatus installStatus, SysSetting sysSetting)
 		{
 			JobGateway result = null;

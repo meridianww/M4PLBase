@@ -518,7 +518,7 @@ namespace M4PL.DataAccess.Job
 			return createdJobInfo != null ? createdJobInfo.Id : 0;
 		}
 
-		public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
+		public static bool InsertJobComment(ActiveUser activeUser, JobComment comment, bool gwyCompleted = true)
 		{
 			bool result = true;
 			var parameters = new List<Parameter>
@@ -528,7 +528,8 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
 			   new Parameter("@enteredBy", activeUser.UserName),
 			   new Parameter("@userId", activeUser.UserId),
-			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
+			   new Parameter("@GwyCompleted", gwyCompleted)
 			};
 
 			try
@@ -1675,13 +1676,13 @@ namespace M4PL.DataAccess.Job
 		{
 			bool result = true;
 			var parameters = new[]
-			    {
-			            new Parameter("@JobId",jobId),
-			            new Parameter("@JobPurchaseInvoiceNumber",jobInvoiceDetail.JobPurchaseInvoiceNumber),
-			            new Parameter("@JobSalesInvoiceNumber",jobInvoiceDetail.JobSalesInvoiceNumber),
-			            new Parameter("@UpdatedBy",activeUser.UserName),
-			            new Parameter("@UpdatedDate", TimeUtility.GetPacificDateTime())
-			     };
+				{
+						new Parameter("@JobId",jobId),
+						new Parameter("@JobPurchaseInvoiceNumber",jobInvoiceDetail.JobPurchaseInvoiceNumber),
+						new Parameter("@JobSalesInvoiceNumber",jobInvoiceDetail.JobSalesInvoiceNumber),
+						new Parameter("@UpdatedBy",activeUser.UserName),
+						new Parameter("@UpdatedDate", TimeUtility.GetPacificDateTime())
+				 };
 			try
 			{
 				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobInvoiceDetail, parameters, storedProcedure: true);
