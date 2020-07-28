@@ -58,11 +58,12 @@ namespace M4PL.DataAccess.Finance
 
 		private static DataTable GetNavRateListDT(List<Entities.Finance.Customer.NavRate> navRateList)
 		{
-			if (navRateList == null)
+			if (navRateList == null || (navRateList != null && navRateList.Count == 0))
 			{
 				throw new ArgumentNullException("navRateList", "NavRateCommands.GetNavRateListDT() - Argument null Exception");
 			}
 
+			var distinctNavRates = navRateList.GroupBy(p => p.Code).Select(g => g.First()).ToList();
 			using (var navRateUTT = new DataTable("uttNavRate"))
 			{
 				navRateUTT.Locale = CultureInfo.InvariantCulture;
@@ -77,21 +78,24 @@ namespace M4PL.DataAccess.Finance
 				navRateUTT.Columns.Add("BillableElectronicInvoice");
 				navRateUTT.Columns.Add("CostElectronicInvoice");
 
-				foreach (var navRate in navRateList)
+				if (distinctNavRates?.Count > 0)
 				{
-					var row = navRateUTT.NewRow();
-					row["Location"] = navRate.Location;
-					row["Code"] = navRate.Code;
-					row["CustomerCode"] = navRate.CustomerCode;
-					row["VendorCode"] = navRate.VendorCode;
-					row["EffectiveDate"] = navRate.EffectiveDate.ToDate();
-					row["Title"] = navRate.Title;
-					row["BillablePrice"] = navRate.BillablePrice.ToDecimal();
-					row["CostRate"] = navRate.CostRate.ToDecimal();
-					row["BillableElectronicInvoice"] = navRate.BillableElectronicInvoice.ToBoolean();
-					row["CostElectronicInvoice"] = navRate.CostElectronicInvoice.ToBoolean();
-					navRateUTT.Rows.Add(row);
-					navRateUTT.AcceptChanges();
+					foreach (var navRate in distinctNavRates)
+					{
+						var row = navRateUTT.NewRow();
+						row["Location"] = navRate.Location;
+						row["Code"] = navRate.Code;
+						row["CustomerCode"] = navRate.CustomerCode;
+						row["VendorCode"] = navRate.VendorCode;
+						row["EffectiveDate"] = navRate.EffectiveDate.ToDate();
+						row["Title"] = navRate.Title;
+						row["BillablePrice"] = navRate.BillablePrice.ToDecimal();
+						row["CostRate"] = navRate.CostRate.ToDecimal();
+						row["BillableElectronicInvoice"] = navRate.BillableElectronicInvoice.ToBoolean();
+						row["CostElectronicInvoice"] = navRate.CostElectronicInvoice.ToBoolean();
+						navRateUTT.Rows.Add(row);
+						navRateUTT.AcceptChanges();
+					}
 				}
 
 				return navRateUTT;

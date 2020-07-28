@@ -64,12 +64,11 @@ BEGIN
 
 	MERGE [dbo].[PRGRM040ProgramBillableRate] T
 	USING #BillableTemp S
-		ON (S.ProgramLocationId = T.ProgramLocationId)
+		ON (S.ProgramLocationId = T.ProgramLocationId AND S.Code = T.PbrCode)
 	WHEN MATCHED
 		THEN
 			UPDATE
-			SET T.PbrCode = S.Code
-				,T.PbrCustomerCode = S.CustomerCode
+			SET T.PbrCustomerCode = S.CustomerCode
 				,T.PbrEffectiveDate = S.EffectiveDate
 				,T.PbrTitle = S.Title
 				,T.RateCategoryTypeId = S.RateCategoryTypeId
@@ -78,7 +77,7 @@ BEGIN
 				,T.RateUnitTypeId = S.RateUnitTypeId
 				,T.StatusId = 1
 				,T.ChangedBy = @changedBy
-				,T.DateEntered = @dateChanged
+				,T.DateChanged = @dateChanged
 				,T.PbrElectronicBilling = S.BillableElectronicInvoice
 	WHEN NOT MATCHED BY TARGET
 		THEN
@@ -115,18 +114,17 @@ BEGIN
 
 	MERGE [dbo].[PRGRM041ProgramCostRate] T
 	USING #CostTemp S
-		ON (S.ProgramLocationId = T.ProgramLocationId)
+		ON (S.ProgramLocationId = T.ProgramLocationId AND S.Code = T.PcrCode)
 	WHEN MATCHED
 		THEN
 			UPDATE
-			SET T.PcrCode = S.Code
-				,T.PcrVendorCode = S.VendorCode
+			SET T.PcrVendorCode = S.VendorCode
 				,T.PcrEffectiveDate = S.EffectiveDate
 				,T.PcrTitle = S.Title
 				,T.RateCategoryTypeId = S.RateCategoryTypeId
 				,T.RateTypeId = S.RateTypeId
 				,T.PcrCostRate = S.CostRate
-				,T.RateUnitTypeId = RateUnitTypeId
+				,T.RateUnitTypeId = S.RateUnitTypeId
 				,T.StatusId = 1
 				,T.ChangedBy = @changedBy
 				,T.DateChanged = @dateChanged
