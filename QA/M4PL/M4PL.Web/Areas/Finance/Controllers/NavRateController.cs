@@ -80,8 +80,20 @@ namespace M4PL.Web.Areas.Finance.Controllers
 		[HttpPost]
 		public ActionResult ImportOrderPost([ModelBinder(typeof(DragAndDropSupportDemoBinder))]IEnumerable<UploadedFile> ucDragAndDrop, long ParentId = 0)
 		{
+			var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+			var route = SessionProvider.ActiveUser.LastRoute;
+			if (ucDragAndDrop == null || (ucDragAndDrop != null && ucDragAndDrop.FirstOrDefault().FileBytes == null))
+			{
+				displayMessage.Description = "Please select a CSV file for upload.";
+			}
+
 			byte[] uploadedFileData = ucDragAndDrop.FirstOrDefault().FileBytes;
 			string navRateUploadColumns = ConfigurationManager.AppSettings["NavRateUploadColumns"];
+			if (string.IsNullOrEmpty(navRateUploadColumns))
+			{
+				displayMessage.Description = "CSV column list config key is missing, please add the config key in web.config.";
+			}
+
 			string[] arraynavRateUploadColumns = navRateUploadColumns.Split(new string[] { "," }, StringSplitOptions.None);
 			using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArray(uploadedFileData))
 			{
@@ -96,29 +108,25 @@ namespace M4PL.Web.Areas.Finance.Controllers
 						// To Do: Selected ProgramId need to set with the record.
 						if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
 						{
-							var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
-							var route = SessionProvider.ActiveUser.LastRoute;
 							displayMessage.Description = statusModel.AdditionalDetail;
-							return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 						}
 						else
 						{
-							var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
-							var route = SessionProvider.ActiveUser.LastRoute;
-							return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
+							displayMessage.Description = "Records has been uploaded from the selected CSV file.";
 						}
 					}
 					else
 					{
-						var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
-						var route = SessionProvider.ActiveUser.LastRoute;
 						displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
-						return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 					}
+				}
+				else
+				{
+					displayMessage.Description = "There is no record present in the selected file, please select a valid CSV.";
 				}
 			}
 
-			return View();
+			return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 		}
 
 		public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
