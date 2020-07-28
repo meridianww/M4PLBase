@@ -162,6 +162,8 @@ namespace M4PL.Web.Controllers
 
         public virtual ActionResult Index(string errorMsg = null, long jobId = 0, string tabName = "")
         {
+
+            ViewBag.Title = "M4PL";
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
             {
                 UpdateAccessToken(null, false);
