@@ -15,6 +15,10 @@
 @{
     ViewBag.Title = Model.PageName;
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
+    if (Model.Record.PrcRate <= 0)
+    {
+        Model.ColumnSettings.First(x => x.ColColumnName.Equals("PrcRate", StringComparison.CurrentCulture)).ColIsReadOnly = false;
+    }
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
