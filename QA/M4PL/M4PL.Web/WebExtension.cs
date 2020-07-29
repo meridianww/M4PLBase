@@ -22,7 +22,9 @@ using DevExpress.DirectX.Common.Direct2D;
 using DevExpress.Web.Mvc;
 using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
+using M4PL.APIClient.Finance;
 using M4PL.APIClient.Job;
+using M4PL.APIClient.ViewModels.Finance;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
@@ -34,6 +36,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -1736,7 +1739,7 @@ namespace M4PL.Web
 
 				if (mnu.MnuTitle == "Upload Price/Cost Code")
 				{
-					mnu.StatusId = 3;
+					mnu.StatusId = 1;
 					if (route.Entity == EntitiesAlias.Program && route.RecordId > 0)
 					{
 						mnu.StatusId = 1;
@@ -3356,6 +3359,36 @@ namespace M4PL.Web
                 }
             }
             return _gridResult;
+        }
+
+        public static DisplayMessage UploadCSVNavRate(this DisplayMessage displayMessage, long programId, DataTable csvDataTable, string[] arraynavRateUploadColumns, 
+            INavRateCommands navRateCommands, ICommonCommands commonCommands)
+        {
+            string[] columnNames = (from dc in csvDataTable.Columns.Cast<DataColumn>()
+                                    select dc.ColumnName).ToArray();
+            if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
+            {
+                List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
+                StatusModel statusModel = navRateCommands.GenerateProgramPriceCostCode(navRateList);
+                // To Do: Selected ProgramId need to set with the record.
+                if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
+                {
+                    displayMessage = commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+                    displayMessage.Description = statusModel.AdditionalDetail;
+                    return displayMessage;
+                }
+                else
+                {
+                    displayMessage = commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
+                    return displayMessage;
+                }
+            }
+            else
+            {
+                displayMessage = commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+                displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
+                return displayMessage;
+            }
         }
     }
 }
