@@ -3313,7 +3313,7 @@ namespace M4PL.Web
                 if (_gridResult.Records is IList<JobView>)
                 {
                     route.IsPBSReport = true;
-                    route.ParentRecordId = 0;
+                    //route.ParentRecordId = 0;
                     IList<JobView> record = (IList<JobView>)_gridResult.Records;
                     if (record != null && route.Location != null && route.Location.Count() > 0)
                     {
