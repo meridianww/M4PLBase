@@ -242,7 +242,6 @@ namespace M4PL.Business.Finance.CostCode
             writer.Flush();
         }
 
-
         private List<SalesLineCostCode> GetJobCostReportDataFromNav(long jobId)
         {
             string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;

@@ -89,8 +89,8 @@ namespace M4PL.DataAccess.Finance
 						row["VendorCode"] = navRate.VendorCode;
 						row["EffectiveDate"] = navRate.EffectiveDate.ToDate();
 						row["Title"] = navRate.Title;
-						row["BillablePrice"] = navRate.BillablePrice.ToDecimal();
-						row["CostRate"] = navRate.CostRate.ToDecimal();
+						row["BillablePrice"] = decimal.Zero;
+						row["CostRate"] = decimal.Zero;
 						row["BillableElectronicInvoice"] = navRate.BillableElectronicInvoice.ToBoolean();
 						row["CostElectronicInvoice"] = navRate.CostElectronicInvoice.ToBoolean();
 						navRateUTT.Rows.Add(row);
