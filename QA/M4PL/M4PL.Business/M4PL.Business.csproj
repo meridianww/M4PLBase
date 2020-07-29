@@ -137,6 +137,8 @@
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="JobRollup\IJobRollupCommands.cs" />
     <Compile Include="JobRollup\JobRollupCommands.cs" />
+    <Compile Include="JobServices\IJobServiceCommands.cs" />
+    <Compile Include="JobServices\JobServiceCommands.cs" />
     <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
     <Compile Include="Job\IJobAttachmentCommands.cs" />
@@ -293,6 +295,10 @@
     <ProjectReference Include="..\M4PL.DataAccess\M4PL.DataAccess.csproj">
       <Project>{f0d5498e-6d2e-4df0-8d05-bb76516bed81}</Project>
       <Name>M4PL.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\M4PL.EF\M4PL.EF.csproj">
+      <Project>{8289a840-b9fc-480b-85d4-1b22c2e073ff}</Project>
+      <Name>M4PL.EF</Name>
     </ProjectReference>
     <ProjectReference Include="..\M4PL.Entities\M4PL.Entities.csproj">
       <Project>{60651f0d-2334-4372-977a-fdfa87a80372}</Project>

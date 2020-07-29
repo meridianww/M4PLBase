@@ -17,6 +17,8 @@
 // Purpose:                                      Contains Strored procedures of the system
 //=============================================================================================================
 
+using DevExpress.XtraRichEdit.Layout.Engine;
+
 namespace M4PL.DataAccess
 {
 	/// <summary>
@@ -869,5 +871,10 @@ namespace M4PL.DataAccess
 		public const string InsJobSignature = "dbo.InsJobConsigneeSignatureInfo";
 
 		#endregion Signature
+
+		#region JobServices
+		public const string GetSearchJobOrders = "dbo.GetSearchJobOrders";
+		public const string GetOrderDetailsById = "dbo.GetOrderDetailsById";
+		#endregion
 	}
 }
