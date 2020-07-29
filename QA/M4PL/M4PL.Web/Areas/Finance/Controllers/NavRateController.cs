@@ -121,6 +121,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
                         if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
                         {
                             List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
+							navRateList.ForEach(x => x.ProgramId = 10012);
                             StatusModel statusModel = _navRateStaticCommand.GenerateProgramPriceCostCode(navRateList);
                             // To Do: Selected ProgramId need to set with the record.
                             if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
