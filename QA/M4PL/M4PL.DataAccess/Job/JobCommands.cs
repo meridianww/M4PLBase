@@ -1680,6 +1680,7 @@ namespace M4PL.DataAccess.Job
 						new Parameter("@JobId",jobId),
 						new Parameter("@JobPurchaseInvoiceNumber",jobInvoiceDetail.JobPurchaseInvoiceNumber),
 						new Parameter("@JobSalesInvoiceNumber",jobInvoiceDetail.JobSalesInvoiceNumber),
+						new Parameter("@JobInvoicedDate",jobInvoiceDetail.JobInvoicedDate),
 						new Parameter("@UpdatedBy",activeUser.UserName),
 						new Parameter("@UpdatedDate", TimeUtility.GetPacificDateTime())
 				 };
