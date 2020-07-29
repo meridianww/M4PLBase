@@ -15,6 +15,8 @@ using M4PL.APIClient.ViewModels.Finance;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using M4PL.Web.Providers;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,108 +28,117 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Finance.Controllers
 {
-	public class NavRateController : BaseController<NavRateView>
-	{
-		public INavRateCommands _navRateCommands;
+    public class NavRateController : BaseController<NavRateView>
+    {
+        public INavRateCommands _navRateCommands;
 
-		/// <summary>
-		/// Interacts with the interfaces to get the Nav Customer details and renders to the page
-		/// </summary>
-		/// <param name="navRateCommands">navCustomerCommands</param>
-		/// <param name="commonCommands"></param>
-		public NavRateController(INavRateCommands navRateCommands, ICommonCommands commonCommands)
-				: base(navRateCommands)
-		{
-			_commonCommands = commonCommands;
-			_navRateCommands = navRateCommands;
-		}
+        public static INavRateCommands _navRateStaticCommand;
 
-		public override ActionResult FormView(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			_formResult.SessionProvider = SessionProvider;
-			////_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new NavRateView();
+        public static ICommonCommands _commonStaticCommands;
 
-			////_formResult.SetupFormResult(_commonCommands, route);
-			if (SessionProvider.ViewPagedDataSession.Count() > 0
-			&& SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-			&& SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
-			{
-				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
-			}
-			if (_formResult.Record is SysRefModel)
-			{
-				(_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0
-					? new Random().Next(-1000, 0) :
-					(_formResult.Record as SysRefModel).Id;
-			}
+        /// <summary>
+        /// Interacts with the interfaces to get the Nav Customer details and renders to the page
+        /// </summary>
+        /// <param name="navRateCommands">navCustomerCommands</param>
+        /// <param name="commonCommands"></param>
+        public NavRateController(INavRateCommands navRateCommands, ICommonCommands commonCommands)
+                : base(navRateCommands)
+        {
+            _commonCommands = commonCommands;
+            _navRateCommands = navRateCommands;
+        }
 
-			_formResult.IsPopUp = true;
-			return PartialView(_formResult);
-		}
+        public override ActionResult FormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _formResult.SessionProvider = SessionProvider;
+            ////_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new NavRateView();
 
-		public ActionResult ImportOrder(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-			_formResult.SessionProvider = SessionProvider;
-			////_formResult.Record = new JobView();
+            ////_formResult.SetupFormResult(_commonCommands, route);
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
+            }
+            if (_formResult.Record is SysRefModel)
+            {
+                (_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0
+                    ? new Random().Next(-1000, 0) :
+                    (_formResult.Record as SysRefModel).Id;
+            }
+            //_formResult.CallBackRoute = SessionProvider.ActiveUser.LastRoute;
+            _formResult.IsPopUp = true;
 
-			_formResult.IsPopUp = true;
-			_formResult.SetupFormResult(_commonCommands, route);
-			return PartialView("ImportOrder", _formResult);
-		}
+            _navRateStaticCommand = _navRateCommands;
+            _commonStaticCommands = _commonCommands;
+            return PartialView(_formResult);
+        }
 
-		[HttpPost]
-		public ActionResult ImportOrderPost([ModelBinder(typeof(DragAndDropSupportDemoBinder))]IEnumerable<UploadedFile> ucDragAndDrop, long ParentId = 0)
-		{
-			byte[] uploadedFileData = ucDragAndDrop.FirstOrDefault().FileBytes;
-			string navRateUploadColumns = ConfigurationManager.AppSettings["NavRateUploadColumns"];
-			string[] arraynavRateUploadColumns = navRateUploadColumns.Split(new string[] { "," }, StringSplitOptions.None);
-			using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArray(uploadedFileData))
-			{
-				if (csvDataTable != null && csvDataTable.Rows.Count > 0)
-				{
-					string[] columnNames = (from dc in csvDataTable.Columns.Cast<DataColumn>()
-											select dc.ColumnName).ToArray();
-					if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
-					{
-						List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
-						StatusModel statusModel = _navRateCommands.GenerateProgramPriceCostCode(navRateList);
-						// To Do: Selected ProgramId need to set with the record.
-						if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
-						{
-							var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
-							var route = SessionProvider.ActiveUser.LastRoute;
-							displayMessage.Description = statusModel.AdditionalDetail;
-							return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
-						}
-						else
-						{
-							var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
-							var route = SessionProvider.ActiveUser.LastRoute;
-							return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
-						}
-					}
-					else
-					{
-						var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
-						var route = SessionProvider.ActiveUser.LastRoute;
-						displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
-						return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
-					}
-				}
-			}
+        public ActionResult ImportOrder(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+            _formResult.SessionProvider = SessionProvider;
+            ////_formResult.Record = new JobView();
 
-			return View();
-		}
+            _formResult.IsPopUp = true;
+            _formResult.SetupFormResult(_commonCommands, route);
+            return PartialView("ImportOrder", _formResult);
+        }
 
-		public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
-		{
-		    public DragAndDropSupportDemoBinder()
-		    {
-		        //UploadControlBinderSettings.ValidationSettings.Assign(UploadControlDemosHelper.UploadValidationSettings);
-		        //UploadControlBinderSettings.FileUploadCompleteHandler = UploadControlDemosHelper.ucDragAndDrop_FileUploadComplete;
-		    }
-		}
-	}
+        [HttpPost]
+        public ActionResult ImportOrderPost([ModelBinder(typeof(DragAndDropSupportDemoBinder))] IEnumerable<UploadedFile> ucDragAndDrop, long ParentId = 0)
+        {
+            return null;
+        }
+
+        public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
+        {
+            public DragAndDropSupportDemoBinder()
+            {
+                //UploadControlBinderSettings.ValidationSettings.Assign(UploadControlDemosHelper.UploadValidationSettings);
+                UploadControlBinderSettings.FileUploadCompleteHandler = ucDragAndDrop_FileUploadComplete;
+            }
+        }
+
+        public static void ucDragAndDrop_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
+        {
+            var displayMessage = new DisplayMessage();
+            if (e.UploadedFile != null && e.UploadedFile.IsValid && e.UploadedFile.FileBytes != null)
+            {
+                byte[] uploadedFileData = e.UploadedFile.FileBytes;
+                string navRateUploadColumns = ConfigurationManager.AppSettings["NavRateUploadColumns"];
+                string[] arraynavRateUploadColumns = navRateUploadColumns.Split(new string[] { "," }, StringSplitOptions.None);
+                using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArray(uploadedFileData))
+                {
+                    if (csvDataTable != null && csvDataTable.Rows.Count > 0)
+                    {
+                        string[] columnNames = (from dc in csvDataTable.Columns.Cast<DataColumn>()
+                                                select dc.ColumnName).ToArray();
+                        if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
+                        {
+                            List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
+                            StatusModel statusModel = _navRateStaticCommand.GenerateProgramPriceCostCode(navRateList);
+                            // To Do: Selected ProgramId need to set with the record.
+                            if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
+                            {
+                                displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+                                displayMessage.Description = statusModel.AdditionalDetail;
+                            }
+                            else
+                            {
+                                displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
+                            }
+                        }
+                        else
+                        {
+                            displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+                            displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
+                        }
+                    }
+                }
+                e.CallbackData = JsonConvert.SerializeObject(displayMessage);
+            }
+        }
+    }
 }
