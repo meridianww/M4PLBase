@@ -103,11 +103,14 @@ namespace M4PL.Web.Areas.Finance.Controllers
 
         public static void ucDragAndDrop_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
         {
-            var displayMessage = new DisplayMessage();
+            var displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
             if (e.UploadedFile != null && e.UploadedFile.IsValid && e.UploadedFile.FileBytes != null)
             {
                 byte[] uploadedFileData = e.UploadedFile.FileBytes;
                 string navRateUploadColumns = ConfigurationManager.AppSettings["NavRateUploadColumns"];
+                if (string.IsNullOrEmpty(navRateUploadColumns))
+                    displayMessage.Description = "CSV column list config key is missing, please add the config key in web.config.";
+
                 string[] arraynavRateUploadColumns = navRateUploadColumns.Split(new string[] { "," }, StringSplitOptions.None);
                 using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArray(uploadedFileData))
                 {
@@ -121,24 +124,21 @@ namespace M4PL.Web.Areas.Finance.Controllers
                             StatusModel statusModel = _navRateStaticCommand.GenerateProgramPriceCostCode(navRateList);
                             // To Do: Selected ProgramId need to set with the record.
                             if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
-                            {
-                                displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
                                 displayMessage.Description = statusModel.AdditionalDetail;
-                            }
                             else
-                            {
-                                displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
-                            }
+                                displayMessage.Description = "Records has been uploaded from the selected CSV file.";
                         }
                         else
-                        {
-                            displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
                             displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
-                        }
                     }
+                    else
+                        displayMessage.Description = "There is no record present in the selected file, please select a valid CSV.";
                 }
-                e.CallbackData = JsonConvert.SerializeObject(displayMessage);
             }
+            else
+                displayMessage.Description = "Please select a CSV file for upload.";
+
+            e.CallbackData = JsonConvert.SerializeObject(displayMessage);
         }
     }
 }
