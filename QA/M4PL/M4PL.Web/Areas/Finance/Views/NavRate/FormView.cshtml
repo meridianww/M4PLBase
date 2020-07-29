@@ -4,18 +4,19 @@
 
     var uploadCallBackRoute = Model.CallBackRoute;
     Model.IsPopUp = true;
+    var recordId = Model.Record.Id;
+    string upControlName = "ucDragAndDrop" + Convert.ToString(Model.Record.Id);
     //uploadCallBackRoute.OwnerCbPanel = "DisplayMessageControl";
     //uploadCallBackRoute.Action = "ImportOrder";
 }
 
-@Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })
 @using (Html.BeginForm())
 {
     Html.DevExpress().RoundPanel(settings =>
     {
         settings.Name = "pnlImportNavPrice";
-//// settings.CallbackRouteValues = new { Area = "Finance", Controller = "NavRate", Action = "ImportOrder" };
-settings.ClientSideEvents.Init = "M4PLWindow.UploadFileDragDrop.Init";
+        //// settings.CallbackRouteValues = new { Area = "Finance", Controller = "NavRate", Action = "ImportOrder" };
+        settings.ClientSideEvents.Init = "M4PLWindow.UploadFileDragDrop.Init";
         settings.ClientSideEvents.EndCallback = "M4PLWindow.UploadFileDragDrop.EndCallback";
         settings.AllowCollapsingByHeaderClick = true;
         settings.ShowCollapseButton = true;
@@ -27,8 +28,8 @@ settings.ClientSideEvents.Init = "M4PLWindow.UploadFileDragDrop.Init";
             ViewContext.Writer.Write("<div id='dragZone'>");
             ViewContext.Writer.Write("<span class='dragZoneText'>CSV for import order</span>");
             ViewContext.Writer.Write("</div>");
-//ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' onload='M4PLWindow.UploadFileDragDrop.OnImageLoad()' />");
-ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
+            //ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' onload='M4PLWindow.UploadFileDragDrop.OnImageLoad()' />");
+            ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
             ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
             ViewContext.Writer.Write("<span class='dropZoneText'>CSV for import order</span>");
             ViewContext.Writer.Write("</div>");
@@ -36,7 +37,7 @@ ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display:
 
             Html.DevExpress().UploadControl(set =>
             {
-                set.CallbackRouteValues = new { Area = "Finance", Controller = "NavRate", Action = "ImportOrderPost" };
+                set.CallbackRouteValues = new { Area = "Finance", Controller = "NavRate", Action = "ImportOrderPost", RecordId = recordId };
                 set.Name = "ucDragAndDrop";
                 set.UploadMode = UploadControlUploadMode.Auto;
                 set.AutoStartUpload = true;
@@ -47,14 +48,14 @@ ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display:
                 set.AdvancedModeSettings.EnableMultiSelect = false;
                 set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
                 set.AdvancedModeSettings.DropZoneText = "CSV for import order";
-    //set.ValidationSettings.MaxFileSize = 4194304;
-    set.ValidationSettings.AllowedFileExtensions = new string[] { ".xls", ".xlsx", ".csv" };
+                //set.ValidationSettings.MaxFileSize = 4194304;
+                set.ValidationSettings.AllowedFileExtensions = new string[] { ".xls", ".xlsx", ".csv" };
                 set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
                 set.BrowseButton.Text = "Select an CSV for upload...";
                 set.Styles.DropZone.CssClass = "uploadControlDropZone";
-    //set.ClientSideEvents.DropZoneEnter = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
-    //set.ClientSideEvents.DropZoneLeave = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
-    set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(uploadCallBackRoute) + ");}}";
+                //set.ClientSideEvents.DropZoneEnter = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
+                //set.ClientSideEvents.DropZoneLeave = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
+                set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(uploadCallBackRoute) + ");}}";
                 set.ShowProgressPanel = true;
             }).GetHtml();
         });
