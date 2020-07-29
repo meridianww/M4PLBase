@@ -1301,6 +1301,7 @@ namespace M4PL.Web
                 && (route.Entity != EntitiesAlias.JobXcblInfo)
                 && (route.Entity != EntitiesAlias.JobHistory)
                 && (route.Entity != EntitiesAlias.PrgRefGatewayDefault)
+                && (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
                 )
             {
                 var navMenuEnabled = true;
@@ -1412,7 +1413,8 @@ namespace M4PL.Web
                 }
 
                 if ((route.Entity == EntitiesAlias.JobXcblInfo && route.Action == MvcConstants.ActionForm)
-                    || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView))
+                    || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView)
+                    || (route.Entity == EntitiesAlias.NavRate && route.Action == MvcConstants.ActionForm))
                     allNavMenus.Remove(saveMenu);
             }
 
@@ -1739,11 +1741,13 @@ namespace M4PL.Web
 
 				if (mnu.MnuTitle == "Upload Price/Cost Code")
 				{
-					mnu.StatusId = 1;
+					mnu.StatusId = 3;
 					if (route.Entity == EntitiesAlias.Program && route.RecordId > 0)
 					{
+                        mnu.Route.RecordId = route.RecordId;
 						mnu.StatusId = 1;
-					}
+                        mnu.Route.IsPopup = true;
+                    }
 				}
 
 				if (mnu.MnuTitle == "Download All")

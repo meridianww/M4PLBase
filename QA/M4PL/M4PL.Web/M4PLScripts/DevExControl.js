@@ -769,6 +769,10 @@ DevExCtrl.TreeView = function () {
                 if (cplTreeView && !cplTreeView.InCallback()) {
                     e.processOnServer = true;
                     cplTreeView.PerformCallback({ strRoute: JSON.stringify(route) });
+                    var ribbonRoute = route;
+                    ribbonRoute.Action = "RibbonMenu";
+                    ribbonRoute.EntityName = "Common";
+                    DevExCtrl.Ribbon.DoCallBack(ribbonRoute);
                 }
             }
         } else {

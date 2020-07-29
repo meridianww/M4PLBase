@@ -1932,6 +1932,10 @@ M4PLWindow.UploadFileDragDrop = function () {
         }
     }
 
+    var _onUploadControlFilesUploadStart = function (s, e) {
+        console.console(recordId);
+    }
+
     var _onUploadControlFileUploadComplete = function (s, e, callBackRoute) {
         //if (e != null && e != undefined) {
         //    if (e.isValid)

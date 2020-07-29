@@ -35,6 +35,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
         public static INavRateCommands _navRateStaticCommand;
 
         public static ICommonCommands _commonStaticCommands;
+        public static long _ProgramId = 0;
 
         /// <summary>
         /// Interacts with the interfaces to get the Nav Customer details and renders to the page
@@ -54,7 +55,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
             _formResult.SessionProvider = SessionProvider;
             ////_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new NavRateView();
 
-            ////_formResult.SetupFormResult(_commonCommands, route);
+            //_formResult.SetupFormResult(_commonCommands, route);
             if (SessionProvider.ViewPagedDataSession.Count() > 0
             && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
             && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
@@ -72,6 +73,9 @@ namespace M4PL.Web.Areas.Finance.Controllers
 
             _navRateStaticCommand = _navRateCommands;
             _commonStaticCommands = _commonCommands;
+            _formResult.Record = new NavRateView();
+            _formResult.Record.Id = route.RecordId;
+            _ProgramId = route.RecordId;
             return PartialView(_formResult);
         }
 
@@ -121,13 +125,14 @@ namespace M4PL.Web.Areas.Finance.Controllers
                         if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
                         {
                             List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
-							navRateList.ForEach(x => x.ProgramId = 10012);
+							navRateList.ForEach(x => x.ProgramId = _ProgramId);
                             StatusModel statusModel = _navRateStaticCommand.GenerateProgramPriceCostCode(navRateList);
                             // To Do: Selected ProgramId need to set with the record.
                             if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
                                 displayMessage.Description = statusModel.AdditionalDetail;
                             else
                                 displayMessage.Description = "Records has been uploaded from the selected CSV file.";
+                            e.IsValid = true;
                         }
                         else
                             displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
