@@ -87,6 +87,7 @@
     <Compile Include="Finance\NavPriceCodeCommands.cs" />
     <Compile Include="Finance\NavPurchaseOrderCommands.cs" />
     <Compile Include="Finance\NavSalesOrderCommand.cs" />
+    <Compile Include="Finance\NavRateCommands.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="GenericCommands.cs" />
     <Compile Include="JobRollup\JobRollupCommands.cs" />

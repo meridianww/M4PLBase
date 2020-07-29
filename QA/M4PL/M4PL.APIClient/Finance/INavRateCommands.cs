@@ -8,6 +8,7 @@
 #endregion Copyright
 
 using M4PL.APIClient.ViewModels.Finance;
+using M4PL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,6 @@ namespace M4PL.APIClient.Finance
 {
 	public interface INavRateCommands : IBaseCommands<NavRateView>
 	{
+		StatusModel GenerateProgramPriceCostCode(List<NavRateView> navRateList);
 	}
 }

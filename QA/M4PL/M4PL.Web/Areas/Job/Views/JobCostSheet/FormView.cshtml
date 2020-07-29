@@ -14,6 +14,10 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobCostSheetView>
 @{
     ViewBag.Title = Model.PageName;
+    if (Model.Record.CstRate <= 0)
+    {
+        Model.ColumnSettings.First(x => x.ColColumnName.Equals("CstRate", StringComparison.CurrentCulture)).ColIsReadOnly = false;
+    }
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))

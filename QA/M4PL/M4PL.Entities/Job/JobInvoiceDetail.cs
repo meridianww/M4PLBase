@@ -15,6 +15,8 @@
 // Purpose:                                      Contains objects related to JobInvoiceDetail
 //==========================================================================================================
 
+using System;
+
 namespace M4PL.Entities.Job
 {
 	public class JobInvoiceDetail
@@ -22,5 +24,7 @@ namespace M4PL.Entities.Job
 		public string JobSalesInvoiceNumber { get; set; }
 
 		public string JobPurchaseInvoiceNumber { get; set; }
+
+		public DateTime? JobInvoicedDate { get; set; }
 	}
 }

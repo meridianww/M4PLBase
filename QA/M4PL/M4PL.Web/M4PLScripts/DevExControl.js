@@ -153,6 +153,16 @@ DevExCtrl.Ribbon = function () {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges() || (route.Action === "Save")) {
             switch (route.Action) {
                 case "FormView":
+                    if (route.EntityName == "NAV Rate")
+                        RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+                    else {
+                        if (AppCbPanel && !AppCbPanel.InCallback()) {
+                            route.OwnerCbPanel = appCbPanelName;
+                            AppCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+                        }
+                        _doCallBack(route);
+                    }
+                    break;
                 case "DataView":
                 case "Dashboard":
                     if (AppCbPanel && !AppCbPanel.InCallback()) {
@@ -224,6 +234,35 @@ DevExCtrl.Ribbon = function () {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     else
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    break;
+                case "DownLoadPurchaseLinePriceFromNav":
+                    var jobIds = _onJobReportClickMultiSelect();
+                    route = _onJobReportClick(route);
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result = M4PLCommon.DocumentStatus.IsPriceCodeDataPresentForJobInNAV(route.RecordId, jobIds);
+                    else
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobPriceCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
+                    break;
+                case "DownLoadSalesLineCostFromNav":
+                    var jobIds = _onJobReportClickMultiSelect();
+                    route = _onJobReportClick(route);
+                    if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
+                        var result =  M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJobInNAV(route.RecordId, jobIds);
+                    else
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    if (result == true) {
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
+                    }
+                    else {
+                        M4PLCommon.DocumentStatus.JobCostCodeMissingDisplayMessage("Business Rule", "Please select specific any row");
+                    }
                     break;
                 case "DownloadPriceReport":
                     var jobIds = _onJobReportClickMultiSelect();
@@ -730,6 +769,10 @@ DevExCtrl.TreeView = function () {
                 if (cplTreeView && !cplTreeView.InCallback()) {
                     e.processOnServer = true;
                     cplTreeView.PerformCallback({ strRoute: JSON.stringify(route) });
+                    var ribbonRoute = route;
+                    ribbonRoute.Action = "RibbonMenu";
+                    ribbonRoute.EntityName = "Common";
+                    DevExCtrl.Ribbon.DoCallBack(ribbonRoute);
                 }
             }
         } else {

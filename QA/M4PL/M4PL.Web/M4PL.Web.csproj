@@ -400,6 +400,7 @@
     <Compile Include="Providers\FormViewProvider.cs" />
     <Compile Include="Providers\SessionProvider.cs" />
     <Compile Include="Providers\TreeListProvider.cs" />
+    <Compile Include="Providers\UploadControlDemosHelper.cs" />
     <Compile Include="Providers\XtraReportProvider.cs">
       <SubType>Component</SubType>
     </Compile>
