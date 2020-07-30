@@ -17,6 +17,7 @@
 // Purpose:                                      Set of rules for NavPriceCodeCommands
 //=============================================================================================================
 
+using M4PL.APIClient.ViewModels.Document;
 using M4PL.APIClient.ViewModels.Finance;
 using System.Collections.Generic;
 
@@ -25,5 +26,6 @@ namespace M4PL.APIClient.Finance
 	public interface INavPriceCodeCommands : IBaseCommands<NavPriceCodeView>
 	{
 		IList<NavPriceCodeView> GetAllPriceCode();
-	}
+        DocumentDataView GetPriceCodeReportByJobId(string jobId );
+    }
 }

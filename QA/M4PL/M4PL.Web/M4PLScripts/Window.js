@@ -1932,14 +1932,19 @@ M4PLWindow.UploadFileDragDrop = function () {
         }
     }
 
+    var _onUploadControlFilesUploadStart = function (s, e) {
+        console.console(recordId);
+    }
+
     var _onUploadControlFileUploadComplete = function (s, e, callBackRoute) {
-        if (e != null && e != undefined) {
-            if (e.isValid)
-                $("#uploadedImage").attr("src", e.callbackData);
-            //_setElementVisible(s, e, "uploadedImage", e.isValid);
-        }
+        //if (e != null && e != undefined) {
+        //    if (e.isValid)
+        //        $("#uploadedImage").attr("src", e.callbackData);
+        //    //_setElementVisible(s, e, "uploadedImage", e.isValid);
+        //}
         DevExCtrl.PopupControl.Close();
-        ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute) });
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: e.callbackData });
+        //ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute) });
     }
 
     var _onImageLoad = function () {

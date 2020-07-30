@@ -162,6 +162,8 @@ namespace M4PL.Web.Controllers
 
         public virtual ActionResult Index(string errorMsg = null, long jobId = 0, string tabName = "")
         {
+
+            ViewBag.Title = "M4PL";
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
             {
                 UpdateAccessToken(null, false);
@@ -260,11 +262,13 @@ namespace M4PL.Web.Controllers
             //     route = JsonConvert.DeserializeObject<Entities.Job.JobVOCReportRequest>(strRoute);
             //}
 
-            if (route.Action.Equals(MvcConstants.ActionRibbonMenu) && route.Entity == EntitiesAlias.Common)
+            if (route.Action != null && route.Action.Equals(MvcConstants.ActionRibbonMenu) && route.Entity == EntitiesAlias.Common)
             {
                 var arbValue = route.OwnerCbPanel;
+                var recordId = route.Filters != null ? route.RecordId : 0;
                 route = new MvcRoute(GetDefaultRoute());
                 route.OwnerCbPanel = arbValue;
+                route.RecordId = recordId > 0 ? recordId : route.RecordId;
             }
             //if (DevExpress.Web.Mvc.DevExpressHelper.IsCallback)
             //    System.Threading.Thread.Sleep(100);

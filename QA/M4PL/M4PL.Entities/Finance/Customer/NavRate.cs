@@ -24,8 +24,8 @@ namespace M4PL.Entities.Finance.Customer
 		public string VendorCode { get; set; }
 		public string EffectiveDate { get; set; }
 		public string Title { get; set; }
-		public string BillablePrice { get; set; }
-		public string CostRate { get; set; }
+		////public string BillablePrice { get; set; }
+		////public string CostRate { get; set; }
 		public string BillableElectronicInvoice { get; set; }
 		public string CostElectronicInvoice { get; set; }
 	}

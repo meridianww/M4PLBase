@@ -21,6 +21,7 @@ using Autofac;
 using M4PL.Business.Common;
 using M4PL.Business.Finance.CostCode;
 using M4PL.Business.Finance.Customer;
+using M4PL.Business.Finance.NavRate;
 using M4PL.Business.Finance.PriceCode;
 using M4PL.Business.Finance.PurchaseOrder;
 using M4PL.Business.Finance.SalesOrder;
@@ -46,6 +47,7 @@ namespace M4PL.API.IoC
 			builder.RegisterType<NavPriceCodeCommands>().As<INavPriceCodeCommands>().InstancePerRequest();
 			builder.RegisterType<NavSalesOrderCommands>().As<INavSalesOrderCommands>().InstancePerRequest();
 			builder.RegisterType<NavPurchaseOrderCommands>().As<INavPurchaseOrderCommands>().InstancePerRequest();
+			builder.RegisterType<NavRateCommands>().As<INavRateCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}
