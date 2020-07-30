@@ -12,6 +12,7 @@ namespace M4PL.Entities.JobService
         public long JobID { get; set; }
         public string GatewayCode { get; set; }
         public DateTime? ACD { get; set; }
+        public DateTime? PCD { get; set; }
         public int? TypeId { get; set; }
         public string GateWayName { get; set; }
     }

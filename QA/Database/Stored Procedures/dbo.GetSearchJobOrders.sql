@@ -22,7 +22,7 @@ BEGIN
          ,JobGatewayStatus AS GatewayStatus
 		 ,JobDeliveryDateTimePlanned AS DeliveryDatePlanned
 		 ,JobOriginDateTimePlanned AS ArrivalDatePlanned FROM JOBDL000Master 
-   WHERE --StatusId = 1 AND JobCompleted =0 
+   WHERE StatusId = 1 AND --JobCompleted =0 
     (JobCustomerSalesOrder LIKE '%'+ @search +'%'
    OR JobBOL LIKE '%'+ @search +'%'
    OR JobManifestNo LIKE '%'+ @search +'%'
