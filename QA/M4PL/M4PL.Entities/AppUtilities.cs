@@ -48,14 +48,14 @@ namespace M4PL.Entities
 			dictionary.AddOrUpdate(langCode, dimensionValues, (key, oldValue) => dimensionValues);
 		}
 
-		public static void AddOrUpdate(this ConcurrentDictionary<string, NavSalesOrderResponse> dictionary,
-		   string langCode, NavSalesOrderResponse navSalesOrderResponse)
+		public static void AddOrUpdate(this ConcurrentDictionary<string, NavSalesOrderPostedInvoiceResponse> dictionary,
+		   string langCode, NavSalesOrderPostedInvoiceResponse navSalesOrderResponse)
 		{
 			dictionary.AddOrUpdate(langCode, navSalesOrderResponse, (key, oldValue) => navSalesOrderResponse);
 		}
 
-		public static void AddOrUpdate(this ConcurrentDictionary<string, NavPurchaseOrderResponse> dictionary,
-		   string langCode, NavPurchaseOrderResponse navPurchaseOrderResponse)
+		public static void AddOrUpdate(this ConcurrentDictionary<string, NavPurchaseOrderPostedInvoiceResponse> dictionary,
+		   string langCode, NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderResponse)
 		{
 			dictionary.AddOrUpdate(langCode, navPurchaseOrderResponse, (key, oldValue) => navPurchaseOrderResponse);
 		}

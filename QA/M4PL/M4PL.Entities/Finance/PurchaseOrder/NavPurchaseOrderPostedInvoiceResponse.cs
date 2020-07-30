@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
 ******************************************************************************/
 #endregion Copyright
 
@@ -14,14 +14,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace M4PL.Entities.Finance.ShippingItem
+namespace M4PL.Entities.Finance.PurchaseOrder
 {
-	public class NavSalesOrderItemResponse
+	public class NavPurchaseOrderPostedInvoiceResponse
 	{
 		[JsonProperty("@odata.context")]
 		public string ContextData { get; set; }
 
 		[JsonProperty("value")]
-		public List<NavSalesOrderItem> NavSalesOrderItem { get; set; }
+		public List<NavPurchaseOrder> NavPurchaseOrder { get; set; }
 	}
 }

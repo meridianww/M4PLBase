@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -35,6 +35,9 @@ using _commands = M4PL.DataAccess.Finance.NavPriceCodeCommands;
 using _attachmentCommands = M4PL.DataAccess.Attachment.AttachmentCommands;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using _orderItemCommands = M4PL.DataAccess.Finance.NAVOrderItemCommands;
+using M4PL.Entities.Finance.PurchaseOrder;
+using M4PL.Entities.Finance.PurchaseOrderItem;
+using M4PL.Utilities;
 
 namespace M4PL.Business.Finance.PriceCode
 {
@@ -76,23 +79,31 @@ namespace M4PL.Business.Finance.PriceCode
 
         public DocumentData GetPriceCodeReportByJobId(string jobId)
         {
-            List<long> selectedJobId = !string.IsNullOrEmpty(jobId) ? jobId.Split(',').Select(Int64.Parse).ToList() : null;
-            DocumentData documentData = null;
-            List<DocumentData> documentDataList = new List<DocumentData>();
-            List<Task> tasks = new List<Task>();
-            if (selectedJobId != null)
-            {
-                foreach (var currentJobId in selectedJobId)
-                {
-                    tasks.Add(Task.Factory.StartNew(() =>
-                    {
-                        documentDataList.Add(GetPriceCodeReportDataByJobId(currentJobId));
-                    }));
-                }
-            }
-            if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
-            documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
-            if (documentDataList?.Count > 1)
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			List<Task> tasks = new List<Task>();
+			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderPostedInvoiceResponse = CommonCommands.GetCachedNavPurchaseOrderValues();
+			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = CommonCommands.GetCachedNavPurchaseOrderItemValues();
+			DocumentData documentData = null;
+			List<DocumentData> documentDataList = new List<DocumentData>();
+			foreach (var currentJobId in selectedJobId)
+			{
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					var currentNavSalesOrder = navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder.FirstOrDefault(x => x.M4PL_Job_ID.ToLong() == currentJobId);
+					if (currentNavSalesOrder != null && !string.IsNullOrEmpty(currentNavSalesOrder.No))
+					{
+						var currentPurchaseLineItem = navPurchaseOrderItemResponse.NavPurchaseOrderItem.Where(x => x.Document_No.Equals(currentNavSalesOrder.No, StringComparison.OrdinalIgnoreCase));
+						if (currentPurchaseLineItem.Any() && currentPurchaseLineItem.Count() > 0)
+						{
+							documentDataList.Add(GetPriceCodeReportDataByJobId(currentJobId, currentPurchaseLineItem.ToList()));
+						}
+					}
+				}));
+			}
+
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
+			if (documentDataList?.Count > 1)
             {
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
@@ -185,43 +196,28 @@ namespace M4PL.Business.Finance.PriceCode
                     new List<NavPriceCode>();
         }
 
-
-
-        public DocumentData GetPriceCodeReportDataByJobId(long jobId)
+        public DocumentData GetPriceCodeReportDataByJobId(long jobId, List<NavPurchaseOrderItem> navPurchaseOrderItem)
         {
-            DocumentData documentData = null;
-            DataTable tblResultNav = GetJobPriceReportDataTableFromNav(jobId);
-            DataTable tblResultLocal = _attachmentCommands.GetJobPriceReportDataTable(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
-            if (tblResultLocal != null && tblResultNav != null && tblResultLocal.Rows.Count == tblResultNav.Rows.Count)
-            {
-                for (int i = 0; i < tblResultNav.Rows.Count; i++)
-                {
-                    if (tblResultLocal.Rows[i]["Job ID"] == tblResultNav.Rows[i]["Job ID"])
-                    {
-                        tblResultLocal.Rows[i]["Title"] = tblResultNav.Rows[i]["Description"];
-                        tblResultLocal.Rows[i]["Charge Code"] = tblResultNav.Rows[i]["No"];
-                        tblResultLocal.Rows[i]["Rate"] = tblResultNav.Rows[i]["Line Amount"];
-                    }
-                }
-            }
-            if (tblResultLocal != null && tblResultLocal.Rows.Count > 0)
-            {
-                documentData = new DocumentData();
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    using (StreamWriter writer = new StreamWriter(memoryStream))
-                    {
-                        WriteDataTable(tblResultLocal, writer, true);
-                    }
+			DocumentData documentData = null;
+			DataTable tblResultLocal = GetJobPriceReportDataTable(ActiveUser, jobId, navPurchaseOrderItem);
+			if (tblResultLocal != null && tblResultLocal.Rows.Count > 0)
+			{
+				documentData = new DocumentData();
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (StreamWriter writer = new StreamWriter(memoryStream))
+					{
+						WriteDataTable(tblResultLocal, writer, true);
+					}
 
-                    documentData.DocumentContent = memoryStream.ToArray();
-                    documentData.DocumentName = string.Format("PriceCode_{0}.csv", jobId);
-                    documentData.ContentType = "text/csv";
-                }
-            }
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("PriceCode_{0}.csv", jobId);
+					documentData.ContentType = "text/csv";
+				}
+			}
 
-            return documentData;
-        }
+			return documentData;
+		}
 
         public void WriteDataTable(DataTable sourceTable, TextWriter writer, bool includeHeaders)
         {
@@ -242,131 +238,139 @@ namespace M4PL.Business.Finance.PriceCode
             writer.Flush();
         }
 
-
-        private List<PurchaseLinePriceCode> GetJobPriceReportDataFromNav(long jobId)
-        {
-
-            string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-            string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-            string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-            PurchaseLinePriceCodeResponse navPurchaseLinePriceCode = null;
-            try
-            {
-                string serviceCall = string.Format("{0}('{1}')/PurchaseLine?$filter=M4PL_Job_ID eq '{2}'", navAPIUrl, "Meridian", jobId);
-                NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-                request.Credentials = myCredentials;
-                request.KeepAlive = false;
-                WebResponse response = request.GetResponse();
-                using (Stream navPriceCodeResponseStream = response.GetResponseStream())
-                {
-                    using (TextReader txtCarrierSyncReader = new StreamReader(navPriceCodeResponseStream))
-                    {
-                        string responceString = txtCarrierSyncReader.ReadToEnd();
-
-                        using (var stringReader = new StringReader(responceString))
-                        {
-                            navPurchaseLinePriceCode = Newtonsoft.Json.JsonConvert.DeserializeObject<PurchaseLinePriceCodeResponse>(responceString);
-                        }
-                    }
-                }
-            }
-            catch (Exception exp)
-            {
-                _logger.Log(exp, "Error while getting the NAV Price Code Data.", "GetNavPriceCodeData", Utilities.Logger.LogType.Error);
-            }
-
-            return (navPurchaseLinePriceCode?.PurchaseLinePriceCodeList?.Count > 0) ?
-                    navPurchaseLinePriceCode.PurchaseLinePriceCodeList :
-                    new List<PurchaseLinePriceCode>();
-        }
-
-        public DataTable GetJobPriceReportDataTableFromNav(long jobId)
-        {
-            List<PurchaseLinePriceCode> navPriceCodeList = GetJobPriceReportDataFromNav(jobId);
-            using (var priceCodeUTT = new DataTable("PurchaseLinePriceCode"))
-            {
-                priceCodeUTT.Locale = CultureInfo.InvariantCulture;
-                priceCodeUTT.Columns.Add("Job ID");
-                priceCodeUTT.Columns.Add("Description");
-                priceCodeUTT.Columns.Add("No");
-                priceCodeUTT.Columns.Add("Line Amount");
-                foreach (var priceCode in navPriceCodeList)
-                {
-                    var row = priceCodeUTT.NewRow();
-                    row["Job Id"] = priceCode.M4PL_Job_ID;
-                    row["Description"] = priceCode.Description;
-                    row["No"] = priceCode.No;
-                    row["Line Amount"] = priceCode.Line_Amount;
-                    priceCodeUTT.Rows.Add(row);
-                    priceCodeUTT.AcceptChanges();
-                }
-                return priceCodeUTT;
-            }
-        }
         private string QuoteValue(string value)
         {
             return String.Concat("\"",
             value.Replace("\"", "\"\""), "\"");
         }
+
         public DocumentStatus IsPriceCodeDataPresentForJobInNAV(string jobId)
         {
-            string[] selectedJobId = !string.IsNullOrEmpty(jobId) ? jobId.Split(',').ToArray() : null;
-            DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
-            string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-            string filter = "";
-            if (selectedJobId.Length > 1)
-            {
-                for (int i = 0; i < selectedJobId.Length; i++)
-                {
-                    if (i == 0)
-                    {
-                        filter += "M4PL_Job_ID eq '" + selectedJobId[i] + "'";
-                        continue;
-                    }
-                    filter += " or M4PL_Job_ID eq '" + selectedJobId[i] + "'";
-                }
-            }
-            else
-            {
-                filter = "M4PL_Job_ID eq '" + selectedJobId[0] + "'";
-            }
-            string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-            string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-            PurchaseLinePriceCodeResponse navPriceCodeResponse = null;
-            try
-            {
-                string serviceCall = string.Format("{0}('{1}')/PurchaseLine?$filter={2}", navAPIUrl, "Meridian", filter);
-                NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-                request.Credentials = myCredentials;
-                request.KeepAlive = false;
-                WebResponse response = request.GetResponse();
-                using (Stream navPriceCodeResponseStream = response.GetResponseStream())
-                {
-                    using (TextReader txtCarrierSyncReader = new StreamReader(navPriceCodeResponseStream))
-                    {
-                        string responceString = txtCarrierSyncReader.ReadToEnd();
+			if (string.IsNullOrEmpty(jobId))
+			{
+				return new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
+			}
 
-                        using (var stringReader = new StringReader(responceString))
-                        {
-                            navPriceCodeResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<PurchaseLinePriceCodeResponse>(responceString);
-                        }
-                    }
-                }
-            }
-            catch (Exception exp)
-            {
-                _logger.Log(exp, "Error while getting the NAV Price Code Data.", "GetNavPriceCodeData", Utilities.Logger.LogType.Error);
-            }
-            if (navPriceCodeResponse != null && navPriceCodeResponse.PurchaseLinePriceCodeList.Count != 0)
+			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
+			List<Task> tasks = new List<Task>();
+			List<NavPurchaseOrderItem> finalNavPurchaseOrderItem = new List<NavPurchaseOrderItem>();
+			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
+			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderPostedInvoiceResponse = CommonCommands.GetCachedNavPurchaseOrderValues();
+			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = CommonCommands.GetCachedNavPurchaseOrderItemValues();
+			if (navPurchaseOrderPostedInvoiceResponse == null || (navPurchaseOrderPostedInvoiceResponse != null && navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder == null) || (navPurchaseOrderPostedInvoiceResponse != null && navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder != null && navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder.Count == 0))
+			{
+				return documentStatus;
+			}
+			else if (navPurchaseOrderItemResponse == null || (navPurchaseOrderItemResponse != null && navPurchaseOrderItemResponse.NavPurchaseOrderItem == null) || (navPurchaseOrderItemResponse != null && navPurchaseOrderItemResponse.NavPurchaseOrderItem != null && navPurchaseOrderItemResponse.NavPurchaseOrderItem.Count == 0))
+			{
+				return documentStatus;
+			}
+
+			foreach (var currentJob in selectedJobId)
+			{
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					var currentNavSalesOrder = navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder.FirstOrDefault(x => x.M4PL_Job_ID.ToLong() == currentJob);
+					if (currentNavSalesOrder != null && !string.IsNullOrEmpty(currentNavSalesOrder.No))
+					{
+						var currentSalesLineItem = navPurchaseOrderItemResponse.NavPurchaseOrderItem.Where(x => x.Document_No.Equals(currentNavSalesOrder.No, StringComparison.OrdinalIgnoreCase));
+						if (currentSalesLineItem.Any() && currentSalesLineItem.Count() > 0)
+						{
+							finalNavPurchaseOrderItem.AddRange(currentSalesLineItem);
+						}
+					}
+				}));
+			}
+
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			if (finalNavPurchaseOrderItem != null && finalNavPurchaseOrderItem.Count > 0)
             {
                 documentStatus.IsAttachmentPresent = true;
             }
+
             return documentStatus;
         }
 
-    }
+		public static DataTable GetJobPriceReportDataTable(ActiveUser activeUser, long jobId, List<NavPurchaseOrderItem> navPurchaseOrderItem)
+		{
+			Entities.Job.Job jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(activeUser, jobId, 0);
+			DataTable tblJobPriceReport = new DataTable();
+			tblJobPriceReport.Columns.Add("Job ID");
+			tblJobPriceReport.Columns.Add("Delivery Date Planned");
+			tblJobPriceReport.Columns.Add("Arrival Date Planned");
+			tblJobPriceReport.Columns.Add("Job Gateway Scheduled");
+			tblJobPriceReport.Columns.Add("Site Code");
+			tblJobPriceReport.Columns.Add("Contract #");
+			tblJobPriceReport.Columns.Add("Plant Code");
+			tblJobPriceReport.Columns.Add("Quantity Actual");
+			tblJobPriceReport.Columns.Add("Parts Actual");
+			tblJobPriceReport.Columns.Add("Cubes Unit");
+			tblJobPriceReport.Columns.Add("Charge Code");
+			tblJobPriceReport.Columns.Add("Title");
+			tblJobPriceReport.Columns.Add("Rate");
+			tblJobPriceReport.Columns.Add("Service Mode");
+			tblJobPriceReport.Columns.Add("Customer Purchase Order");
+			tblJobPriceReport.Columns.Add("Brand");
+			tblJobPriceReport.Columns.Add("Status");
+			tblJobPriceReport.Columns.Add("Delivery Site POC");
+			tblJobPriceReport.Columns.Add("Delivery Site Phone");
+			tblJobPriceReport.Columns.Add("Delivery Site POC 2");
+			tblJobPriceReport.Columns.Add("Phone POC Email");
+			tblJobPriceReport.Columns.Add("Site Name");
+			tblJobPriceReport.Columns.Add("Delivery Site Name");
+			tblJobPriceReport.Columns.Add("Delivery Address");
+			tblJobPriceReport.Columns.Add("Delivery Address2");
+			tblJobPriceReport.Columns.Add("Delivery City");
+			tblJobPriceReport.Columns.Add("Delivery State");
+			tblJobPriceReport.Columns.Add("Delivery Postal Code");
+			tblJobPriceReport.Columns.Add("Delivery Date Actual");
+			tblJobPriceReport.Columns.Add("Origin Date Actual");
+			tblJobPriceReport.Columns.Add("Ordered Date");
+
+			if (navPurchaseOrderItem?.Count > 0)
+			{
+				foreach (var purchaseOrderItem in navPurchaseOrderItem)
+				{
+					var row = tblJobPriceReport.NewRow();
+					row["Job ID"] = jobDetails.Id;
+					row["Delivery Date Planned"] = jobDetails.JobDeliveryDateTimePlanned;
+					row["Arrival Date Planned"] = jobDetails.JobOriginDateTimePlanned;
+					row["Job Gateway Scheduled"] = jobDetails.JobGatewayStatus;
+					row["Site Code"] = jobDetails.JobSiteCode;
+					row["Contract #"] = jobDetails.JobCustomerSalesOrder;
+					row["Plant Code"] = jobDetails.PlantIDCode;
+					row["Quantity Actual"] = jobDetails.JobQtyActual;
+					row["Parts Actual"] = jobDetails.JobPartsActual;
+					row["Cubes Unit"] = jobDetails.JobTotalCubes;
+					row["Charge Code"] = string.IsNullOrEmpty(purchaseOrderItem.Cross_Reference_No) ? purchaseOrderItem.No : purchaseOrderItem.Cross_Reference_No;
+					row["Title"] = purchaseOrderItem.Description;
+					row["Rate"] = purchaseOrderItem.Direct_Unit_Cost;
+					row["Service Mode"] = jobDetails.JobServiceMode;
+					row["Customer Purchase Order"] = jobDetails.JobCustomerPurchaseOrder;
+					row["Brand"] = jobDetails.JobCarrierContract;
+					row["Status"] = jobDetails.StatusId == 1 ? "Active" : jobDetails.StatusId == 2 ? "InActive" : "Archive";
+					row["Delivery Site POC"] = jobDetails.JobDeliverySitePOC;
+					row["Delivery Site Phone"] = jobDetails.JobDeliverySitePOCPhone;
+					row["Delivery Site POC 2"] = jobDetails.JobDeliverySitePOCPhone2;
+					row["Phone POC Email"] = jobDetails.JobDeliverySitePOCEmail;
+					row["Site Name"] = jobDetails.JobOriginSiteName;
+					row["Delivery Site Name"] = jobDetails.JobDeliverySiteName;
+					row["Delivery Address"] = jobDetails.JobDeliveryStreetAddress;
+					row["Delivery Address2"] = jobDetails.JobDeliveryStreetAddress2;
+					row["Delivery City"] = jobDetails.JobDeliveryCity;
+					row["Delivery State"] = jobDetails.JobDeliveryState;
+					row["Delivery Postal Code"] = jobDetails.JobDeliveryPostalCode;
+					row["Delivery Date Actual"] = jobDetails.JobDeliveryDateTimeActual;
+					row["Origin Date Actual"] = jobDetails.JobOriginDateTimeActual;
+					row["Ordered Date"] = jobDetails.JobOrderedDate;
+					tblJobPriceReport.Rows.Add(row);
+					tblJobPriceReport.AcceptChanges();
+				}
+			}
+
+			return tblJobPriceReport;
+		}
+	}
 
 }
 

@@ -446,13 +446,13 @@ namespace M4PL.Business.Finance.SalesOrder
             return navSalesOrderDimensionValueList;
         }
 
-		public static NavSalesOrderResponse GetNavPostedSalesOrderResponse()
+		public static NavSalesOrderPostedInvoiceResponse GetNavPostedSalesOrderResponse()
 		{
-			NavSalesOrderResponse navSalesOrderResponse = null;
+			NavSalesOrderPostedInvoiceResponse navSalesOrderResponse = null;
 			string serviceCall = string.Format("{0}('{1}')/PostedSalesInvoice", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
 			try
 			{
-				navSalesOrderResponse = new NavSalesOrderResponse();
+				navSalesOrderResponse = new NavSalesOrderPostedInvoiceResponse();
 				NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
@@ -468,7 +468,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 						using (var stringReader = new StringReader(responceString))
 						{
-							navSalesOrderResponse = JsonConvert.DeserializeObject<NavSalesOrderResponse>(responceString);
+							navSalesOrderResponse = JsonConvert.DeserializeObject<NavSalesOrderPostedInvoiceResponse>(responceString);
 						}
 					}
 				}
@@ -481,13 +481,13 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderResponse;
 		}
 
-		public static NavPurchaseOrderResponse GetNavPostedPurchaseOrderResponse()
+		public static NavPurchaseOrderPostedInvoiceResponse GetNavPostedPurchaseOrderResponse()
 		{
-			NavPurchaseOrderResponse navPurchaseOrderResponse = null;
+			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderResponse = null;
 			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoice", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
 			try
 			{
-				navPurchaseOrderResponse = new NavPurchaseOrderResponse();
+				navPurchaseOrderResponse = new NavPurchaseOrderPostedInvoiceResponse();
 				NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
@@ -503,7 +503,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 						using (var stringReader = new StringReader(responceString))
 						{
-							navPurchaseOrderResponse = JsonConvert.DeserializeObject<NavPurchaseOrderResponse>(responceString);
+							navPurchaseOrderResponse = JsonConvert.DeserializeObject<NavPurchaseOrderPostedInvoiceResponse>(responceString);
 						}
 					}
 				}

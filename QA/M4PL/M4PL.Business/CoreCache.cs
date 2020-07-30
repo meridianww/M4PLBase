@@ -50,12 +50,12 @@ namespace M4PL.Business
 		/// <summary>
 		/// To hold CachedNavSalesOrder with available Values
 		/// </summary>
-		public static ConcurrentDictionary<string, NavSalesOrderResponse> CachedNavSalesOrder { get; private set; }
+		public static ConcurrentDictionary<string, NavSalesOrderPostedInvoiceResponse> CachedNavSalesOrder { get; private set; }
 
 		/// <summary>
 		/// To hold CachedNavPurchaseOrder with available Values
 		/// </summary>
-		public static ConcurrentDictionary<string, NavPurchaseOrderResponse> CachedNavPurchaseOrder { get; private set; }
+		public static ConcurrentDictionary<string, NavPurchaseOrderPostedInvoiceResponse> CachedNavPurchaseOrder { get; private set; }
 
 		/// <summary>
 		/// To hold CachedNavSalesLine with available Values
@@ -157,9 +157,9 @@ namespace M4PL.Business
             SysSettings = new ConcurrentDictionary<string, SysSetting>();
             DimensionValues = new ConcurrentDictionary<string, NavSalesOrderDimensionResponse>();
             NAVOrderItemResponse = new ConcurrentDictionary<string, NAVOrderItemResponse>();
-			CachedNavSalesOrder = new ConcurrentDictionary<string, NavSalesOrderResponse>();
+			CachedNavSalesOrder = new ConcurrentDictionary<string, NavSalesOrderPostedInvoiceResponse>();
 			CachedNavSalesLine = new ConcurrentDictionary<string, NavSalesOrderItemResponse>();
-			CachedNavPurchaseOrder = new ConcurrentDictionary<string, NavPurchaseOrderResponse>();
+			CachedNavPurchaseOrder = new ConcurrentDictionary<string, NavPurchaseOrderPostedInvoiceResponse>();
 			CachedNavPurchaseLine = new ConcurrentDictionary<string, NavPurchaseOrderItemResponse>();
         }
 
@@ -180,8 +180,8 @@ namespace M4PL.Business
             MasterTables.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, object>());
             ConditionalOperators.GetOrAdd(langCode, new List<ConditionalOperator>());
             DimensionValues.GetOrAdd(langCode, new NavSalesOrderDimensionResponse());
-			CachedNavSalesOrder.GetOrAdd(langCode, new NavSalesOrderResponse());
-			CachedNavPurchaseOrder.GetOrAdd(langCode, new NavPurchaseOrderResponse());
+			CachedNavSalesOrder.GetOrAdd(langCode, new NavSalesOrderPostedInvoiceResponse());
+			CachedNavPurchaseOrder.GetOrAdd(langCode, new NavPurchaseOrderPostedInvoiceResponse());
 			CachedNavSalesLine.GetOrAdd(langCode, new NavSalesOrderItemResponse());
 			CachedNavPurchaseLine.GetOrAdd(langCode, new NavPurchaseOrderItemResponse());
 			NAVOrderItemResponse.GetOrAdd(langCode, new NAVOrderItemResponse());
@@ -243,19 +243,19 @@ namespace M4PL.Business
             return DimensionValues[langCode];
         }
 
-		public static NavSalesOrderResponse GetCachedNavSalesOrderValues(string langCode, bool forceUpdate = false)
+		public static NavSalesOrderPostedInvoiceResponse GetCachedNavSalesOrderValues(string langCode, bool forceUpdate = false)
 		{
 			if (!CachedNavSalesOrder.ContainsKey(langCode))
-				CachedNavSalesOrder.GetOrAdd(langCode, new NavSalesOrderResponse());
+				CachedNavSalesOrder.GetOrAdd(langCode, new NavSalesOrderPostedInvoiceResponse());
 			if ((CachedNavSalesOrder[langCode].NavSalesOrder == null) || forceUpdate)
 				CachedNavSalesOrder.AddOrUpdate(langCode, _salesOrderCommands.GetNavPostedSalesOrderResponse());
 			return CachedNavSalesOrder[langCode];
 		}
 
-		public static NavPurchaseOrderResponse GetCachedNavPurchaseOrderValues(string langCode, bool forceUpdate = false)
+		public static NavPurchaseOrderPostedInvoiceResponse GetCachedNavPurchaseOrderValues(string langCode, bool forceUpdate = false)
 		{
 			if (!CachedNavPurchaseOrder.ContainsKey(langCode))
-				CachedNavPurchaseOrder.GetOrAdd(langCode, new NavPurchaseOrderResponse());
+				CachedNavPurchaseOrder.GetOrAdd(langCode, new NavPurchaseOrderPostedInvoiceResponse());
 			if ((CachedNavPurchaseOrder[langCode].NavPurchaseOrder == null) || forceUpdate)
 				CachedNavPurchaseOrder.AddOrUpdate(langCode, _salesOrderCommands.GetNavPostedPurchaseOrderResponse());
 			return CachedNavPurchaseOrder[langCode];

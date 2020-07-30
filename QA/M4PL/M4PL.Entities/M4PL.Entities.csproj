@@ -86,6 +86,7 @@
     <Compile Include="Finance\PurchaseOrderItem\PurchaseOrderItem.cs" />
     <Compile Include="Finance\PurchaseOrder\NavJobPurchaseOrder.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrder.cs" />
+    <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderPostedInvoiceResponse.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderRequest.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderResponse.cs" />
     <Compile Include="Finance\CostCode\SalesLineCostCode.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionResponse.cs" />
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionValues.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrderCreationResponse.cs" />
+    <Compile Include="Finance\SalesOrder\NavSalesOrderPostedInvoiceResponse.cs" />
     <Compile Include="Finance\ShippingItem\NavSalesOrderItem.cs" />
     <Compile Include="Finance\ShippingItem\NavSalesOrderItemRequest.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrderRequest.cs" />
