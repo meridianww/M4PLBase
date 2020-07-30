@@ -29,7 +29,7 @@ using System.Web.Http.Description;
 namespace M4PL.API.Controllers
 {
     [CustomAuthorize]
-    [RoutePrefix("api/ProgramCostRates")]
+    [RoutePrefix("api/PrgCostRates")]
 	public class PrgCostRatesController : ApiController
 	{
 		private readonly IPrgCostRateCommands _programCostRateCommands;
