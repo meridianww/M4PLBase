@@ -1477,8 +1477,12 @@ namespace M4PL.Web
             {
                 allNavMenus[0].Text = "Import Order";
             }
+			if (route.Entity == EntitiesAlias.NavRate && route.Action == "FormView")
+			{
+				allNavMenus[0].Text = "Import Price/Cost Code";
+			}
 
-            return allNavMenus;
+			return allNavMenus;
         }
 
         public static DateTime? SubstractFrom(this DateTime? date, double duration, JobGatewayUnit gatewayUnit)
@@ -3365,7 +3369,7 @@ namespace M4PL.Web
             return _gridResult;
         }
 
-        public static DisplayMessage UploadCSVNavRate(this DisplayMessage displayMessage, long programId, DataTable csvDataTable, string[] arraynavRateUploadColumns, 
+        public static DisplayMessage UploadCSVNavRate(this DisplayMessage displayMessage, long programId, DataTable csvDataTable, string[] arraynavRateUploadColumns,
             INavRateCommands navRateCommands, ICommonCommands commonCommands)
         {
             string[] columnNames = (from dc in csvDataTable.Columns.Cast<DataColumn>()

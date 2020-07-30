@@ -1,7 +1,7 @@
 ﻿@using System.Web.UI.WebControls;
 @model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Finance.NavRateView>
 @{
-
+    ViewBag.Title = "Import Price/Cost Code";
     var uploadCallBackRoute = Model.CallBackRoute;
     Model.IsPopUp = true;
     var recordId = Model.Record.Id;
@@ -20,18 +20,19 @@
         settings.ClientSideEvents.EndCallback = "M4PLWindow.UploadFileDragDrop.EndCallback";
         settings.AllowCollapsingByHeaderClick = true;
         settings.ShowCollapseButton = true;
-        settings.HeaderText = "Import Price/Cost code";
+        settings.Enabled = false;
+        settings.HeaderText = "Import Price/Cost Code";
         settings.Collapsed = false;
         settings.SetContent(() =>
         {
             ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
             ViewContext.Writer.Write("<div id='dragZone'>");
-            ViewContext.Writer.Write("<span class='dragZoneText'>CSV for import Price/Cost code</span>");
+            ViewContext.Writer.Write("<span class='dragZoneText'>CSV for import Price/Cost Code</span>");
             ViewContext.Writer.Write("</div>");
             //ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' onload='M4PLWindow.UploadFileDragDrop.OnImageLoad()' />");
             ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
             ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
-            ViewContext.Writer.Write("<span class='dropZoneText'>CSV for import Price/Cost code</span>");
+            ViewContext.Writer.Write("<span class='dropZoneText'>CSV to import Price/Cost Code</span>");
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write("</div>");
 
@@ -47,11 +48,11 @@
                 set.AdvancedModeSettings.EnableFileList = false;
                 set.AdvancedModeSettings.EnableMultiSelect = false;
                 set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
-                set.AdvancedModeSettings.DropZoneText = "CSV for import Price/Cost code";
+                set.AdvancedModeSettings.DropZoneText = "CSV to import Price/Cost Code";
                 //set.ValidationSettings.MaxFileSize = 4194304;
                 set.ValidationSettings.AllowedFileExtensions = new string[] { ".csv" };
                 set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
-                set.BrowseButton.Text = "Select an CSV for upload...";
+                set.BrowseButton.Text = "Select an CSV to import...";
                 set.Styles.DropZone.CssClass = "uploadControlDropZone";
                 //set.ClientSideEvents.DropZoneEnter = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
                 //set.ClientSideEvents.DropZoneLeave = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
