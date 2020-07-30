@@ -20,7 +20,11 @@
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Finance.OrderItem;
+using M4PL.Entities.Finance.PurchaseOrder;
+using M4PL.Entities.Finance.PurchaseOrderItem;
+using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.SalesOrderDimension;
+using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
@@ -66,11 +70,67 @@ namespace M4PL.Business.Common
             return CoreCache.GetNavSalesOrderDimensionValues(lan, forceUpdate);
         }
 
-        /// <summary>
-        /// Gets the list of app menu data
-        /// </summary>
-        /// <returns></returns>
-        public static NAVOrderItemResponse GetNAVOrderItemResponse(bool forceUpdate = false)
+		/// <summary>
+		/// Gets the list of app menu data
+		/// </summary>
+		/// <returns></returns>
+		public static NavSalesOrderResponse GetCachedNavSalesOrderValues(bool forceUpdate = false)
+		{
+			string lan = string.Empty;
+			if (ActiveUser == null)
+				lan = "EN";
+			else
+				lan = ActiveUser.LangCode;
+			return CoreCache.GetCachedNavSalesOrderValues(lan, forceUpdate);
+		}
+
+		/// <summary>
+		/// Gets the list of app menu data
+		/// </summary>
+		/// <returns></returns>
+		public static NavPurchaseOrderResponse GetCachedNavPurchaseOrderValues(bool forceUpdate = false)
+		{
+			string lan = string.Empty;
+			if (ActiveUser == null)
+				lan = "EN";
+			else
+				lan = ActiveUser.LangCode;
+			return CoreCache.GetCachedNavPurchaseOrderValues(lan, forceUpdate);
+		}
+
+		/// <summary>
+		/// Gets the list of app menu data
+		/// </summary>
+		/// <returns></returns>
+		public static NavSalesOrderItemResponse GetCachedNavSalesOrderItemValues(bool forceUpdate = false)
+		{
+			string lan = string.Empty;
+			if (ActiveUser == null)
+				lan = "EN";
+			else
+				lan = ActiveUser.LangCode;
+			return CoreCache.GetCachedNavSalesOrderItemValues(lan, forceUpdate);
+		}
+
+		/// <summary>
+		/// Gets the list of app menu data
+		/// </summary>
+		/// <returns></returns>
+		public static NavPurchaseOrderItemResponse GetCachedNavPurchaseOrderItemValues(bool forceUpdate = false)
+		{
+			string lan = string.Empty;
+			if (ActiveUser == null)
+				lan = "EN";
+			else
+				lan = ActiveUser.LangCode;
+			return CoreCache.GetCachedNavPurchaseOrderItemValues(lan, forceUpdate);
+		}
+
+		/// <summary>
+		/// Gets the list of app menu data
+		/// </summary>
+		/// <returns></returns>
+		public static NAVOrderItemResponse GetNAVOrderItemResponse(bool forceUpdate = false)
         {
             return CoreCache.GetNAVOrderItemResponse(ActiveUser.LangCode, forceUpdate);
         }
