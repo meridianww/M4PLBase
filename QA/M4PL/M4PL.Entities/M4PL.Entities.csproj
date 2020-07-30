@@ -82,6 +82,7 @@
     <Compile Include="Finance\PriceCode\NavPriceCodeResponse.cs" />
     <Compile Include="Finance\PriceCode\PurchaseLinePriceCode.cs" />
     <Compile Include="Finance\PriceCode\PurchaseLinePriceCodeResponse.cs" />
+    <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItemResponse.cs" />
     <Compile Include="Finance\PurchaseOrderItem\PurchaseOrderItem.cs" />
     <Compile Include="Finance\PurchaseOrder\NavJobPurchaseOrder.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrder.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Finance\ShippingItem\NavSalesOrderItemRequest.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrderRequest.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrderResponse.cs" />
+    <Compile Include="Finance\ShippingItem\NavSalesOrderItemResponse.cs" />
     <Compile Include="Finance\ShippingItem\SalesOrderItem.cs" />
     <Compile Include="Finance\Vendor\NavVendor.cs" />
     <Compile Include="Finance\Vendor\NavVendorData.cs" />
