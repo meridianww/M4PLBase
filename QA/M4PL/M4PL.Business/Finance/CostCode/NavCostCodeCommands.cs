@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=============================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -18,11 +18,8 @@
 //==============================================================================================================
 using M4PL.Business.Common;
 using M4PL.Entities.Document;
-using M4PL.Entities.Finance;
 using M4PL.Entities.Finance.CostCode;
 using M4PL.Entities.Finance.OrderItem;
-using M4PL.Entities.Finance.PurchaseOrder;
-using M4PL.Entities.Finance.PurchaseOrderItem;
 using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;
@@ -30,126 +27,124 @@ using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using _attachmentCommands = M4PL.DataAccess.Attachment.AttachmentCommands;
 using _commands = M4PL.DataAccess.Finance.NavCostCodeCommands;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using _orderItemCommands = M4PL.DataAccess.Finance.NAVOrderItemCommands;
 
 namespace M4PL.Business.Finance.CostCode
 {
-    public class NavCostCodeCommands : BaseCommands<NavCostCode>, INavCostCodeCommands
-    {
-        public int Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
+	public class NavCostCodeCommands : BaseCommands<NavCostCode>, INavCostCodeCommands
+	{
+		public int Delete(long id)
+		{
+			throw new NotImplementedException();
+		}
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            throw new NotImplementedException();
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			throw new NotImplementedException();
+		}
 
-        public IList<NavCostCode> GetAllCostCode()
-        {
-            List<NavCostCode> navCostCodeList = null;
-            if (!M4PBusinessContext.ComponentSettings.NavRateReadFromItem)
-            {
-                navCostCodeList = GetNavCostCodeData();
-                if (navCostCodeList != null && navCostCodeList.Count > 0)
-                {
-                    _commands.Put(ActiveUser, navCostCodeList);
-                }
-            }
-            else
-            {
-                NAVOrderItemResponse navOrderItemResponse = CommonCommands.GetNAVOrderItemResponse();
-                if (navOrderItemResponse?.OrderItemList?.Count > 0)
-                {
-                    _orderItemCommands.UpdateNavCostCode(ActiveUser, navOrderItemResponse.OrderItemList);
-                    navCostCodeList = new List<NavCostCode>();
-                }
-            }
+		public IList<NavCostCode> GetAllCostCode()
+		{
+			List<NavCostCode> navCostCodeList = null;
+			if (!M4PBusinessContext.ComponentSettings.NavRateReadFromItem)
+			{
+				navCostCodeList = GetNavCostCodeData();
+				if (navCostCodeList != null && navCostCodeList.Count > 0)
+				{
+					_commands.Put(ActiveUser, navCostCodeList);
+				}
+			}
+			else
+			{
+				NAVOrderItemResponse navOrderItemResponse = CommonCommands.GetNAVOrderItemResponse();
+				if (navOrderItemResponse?.OrderItemList?.Count > 0)
+				{
+					_orderItemCommands.UpdateNavCostCode(ActiveUser, navOrderItemResponse.OrderItemList);
+					navCostCodeList = new List<NavCostCode>();
+				}
+			}
 
-            return navCostCodeList;
-        }
+			return navCostCodeList;
+		}
 
-        public NavCostCode Get(long id)
-        {
-            throw new NotImplementedException();
-        }
+		public NavCostCode Get(long id)
+		{
+			throw new NotImplementedException();
+		}
 
-        public IList<NavCostCode> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            throw new NotImplementedException();
-        }
+		public IList<NavCostCode> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			throw new NotImplementedException();
+		}
 
-        public NavCostCode Patch(NavCostCode entity)
-        {
-            throw new NotImplementedException();
-        }
+		public NavCostCode Patch(NavCostCode entity)
+		{
+			throw new NotImplementedException();
+		}
 
-        public NavCostCode Post(NavCostCode entity)
-        {
-            throw new NotImplementedException();
-        }
+		public NavCostCode Post(NavCostCode entity)
+		{
+			throw new NotImplementedException();
+		}
 
-        public NavCostCode Put(NavCostCode entity)
-        {
-            throw new NotImplementedException();
-        }
+		public NavCostCode Put(NavCostCode entity)
+		{
+			throw new NotImplementedException();
+		}
 
-        private List<NavCostCode> GetNavCostCodeData()
-        {
-            string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-            string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-            string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-            NavCostCodeResponse navCostCodeResponse = null;
-            try
-            {
-                string serviceCall = string.Format("{0}('{1}')/PurchasePrices", navAPIUrl, "Meridian");
-                NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-                request.Credentials = myCredentials;
-                request.KeepAlive = false;
-                WebResponse response = request.GetResponse();
+		private List<NavCostCode> GetNavCostCodeData()
+		{
+			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
+			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			NavCostCodeResponse navCostCodeResponse = null;
+			try
+			{
+				string serviceCall = string.Format("{0}('{1}')/PurchasePrices", navAPIUrl, "Meridian");
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				WebResponse response = request.GetResponse();
 
-                using (Stream navPriceCodeResponseStream = response.GetResponseStream())
-                {
-                    using (TextReader txtCarrierSyncReader = new StreamReader(navPriceCodeResponseStream))
-                    {
-                        string responceString = txtCarrierSyncReader.ReadToEnd();
+				using (Stream navPriceCodeResponseStream = response.GetResponseStream())
+				{
+					using (TextReader txtCarrierSyncReader = new StreamReader(navPriceCodeResponseStream))
+					{
+						string responceString = txtCarrierSyncReader.ReadToEnd();
 
-                        using (var stringReader = new StringReader(responceString))
-                        {
-                            navCostCodeResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavCostCodeResponse>(responceString);
-                        }
-                    }
-                }
-            }
-            catch (Exception exp)
-            {
-                _logger.Log(exp, "Error is occurring when getting the Nav Cost code data.", "GetNavCostCodeData", Utilities.Logger.LogType.Error);
-            }
+						using (var stringReader = new StringReader(responceString))
+						{
+							navCostCodeResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavCostCodeResponse>(responceString);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error is occurring when getting the Nav Cost code data.", "GetNavCostCodeData", Utilities.Logger.LogType.Error);
+			}
 
-            return (navCostCodeResponse?.CostCodeList?.Count > 0) ?
-                    navCostCodeResponse.CostCodeList :
-                    new List<NavCostCode>();
-        }
+			return (navCostCodeResponse?.CostCodeList?.Count > 0) ?
+					navCostCodeResponse.CostCodeList :
+					new List<NavCostCode>();
+		}
 
-        public DocumentData GetCostCodeReportByJobId(string jobId)
-        {
+		public DocumentData GetCostCodeReportByJobId(string jobId)
+		{
 			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
 			List<Task> tasks = new List<Task>();
 			NavSalesOrderPostedInvoiceResponse navSalesOrderPostedInvoiceResponse = CommonCommands.GetCachedNavSalesOrderValues();
 			NavSalesOrderItemResponse navSalesOrderItemResponse = CommonCommands.GetCachedNavSalesOrderItemValues();
-            DocumentData documentData = null;
-            List<DocumentData> documentDataList = new List<DocumentData>();
+			DocumentData documentData = null;
+			List<DocumentData> documentDataList = new List<DocumentData>();
 			foreach (var currentJobId in selectedJobId)
 			{
 				tasks.Add(Task.Factory.StartNew(() =>
@@ -166,90 +161,89 @@ namespace M4PL.Business.Finance.CostCode
 				}));
 			}
 
-            if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
-            documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
-            if (documentDataList?.Count > 1)
-            {
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
-                    {
-                        foreach (var trackingDocument in documentDataList)
-                        {
-                            var entry = archive.CreateEntry(trackingDocument.DocumentName, CompressionLevel.Fastest);
-                            using (var zipStream = entry.Open())
-                            {
-                                zipStream.Write(trackingDocument.DocumentContent, 0, trackingDocument.DocumentContent.Length);
-                            }
-                        }
-                    }
-                    documentData = new DocumentData();
-                    documentData.DocumentContent = memoryStream.ToArray();
-                    documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedCostCode");
-                    documentData.ContentType = "application/zip";
-                }
-            }
-            else if (documentDataList?.Count == 1)
-            {
-                return documentDataList[0];
-            }
-            return documentData;
-        }
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			documentDataList = documentDataList.Where(x => x != null).Any() ? documentDataList.Where(x => x != null).ToList() : new List<DocumentData>();
+			if (documentDataList?.Count > 1)
+			{
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+					{
+						foreach (var trackingDocument in documentDataList)
+						{
+							var entry = archive.CreateEntry(trackingDocument.DocumentName, CompressionLevel.Fastest);
+							using (var zipStream = entry.Open())
+							{
+								zipStream.Write(trackingDocument.DocumentContent, 0, trackingDocument.DocumentContent.Length);
+							}
+						}
+					}
+					documentData = new DocumentData();
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedCostCode");
+					documentData.ContentType = "application/zip";
+				}
+			}
+			else if (documentDataList?.Count == 1)
+			{
+				return documentDataList[0];
+			}
+			return documentData;
+		}
 
+		public DocumentData GetCostCodeReportDataByJobId(long jobId, List<NavSalesOrderItem> navSalesOrderItem)
+		{
+			DocumentData documentData = null;
+			DataTable tblResultLocal = GetJobCostReportDataTable(ActiveUser, jobId, navSalesOrderItem);
+			if (tblResultLocal != null && tblResultLocal.Rows.Count > 0)
+			{
+				documentData = new DocumentData();
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (StreamWriter writer = new StreamWriter(memoryStream))
+					{
+						WriteDataTable(tblResultLocal, writer, true);
+					}
 
-        public DocumentData GetCostCodeReportDataByJobId(long jobId, List<NavSalesOrderItem> navSalesOrderItem)
-        {
-            DocumentData documentData = null;
-            DataTable tblResultLocal = GetJobCostReportDataTable(ActiveUser, jobId, navSalesOrderItem);
-            if (tblResultLocal != null && tblResultLocal.Rows.Count > 0)
-            {
-                documentData = new DocumentData();
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    using (StreamWriter writer = new StreamWriter(memoryStream))
-                    {
-                        WriteDataTable(tblResultLocal, writer, true);
-                    }
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("CostCode_{0}.csv", jobId);
+					documentData.ContentType = "text/csv";
+				}
+			}
 
-                    documentData.DocumentContent = memoryStream.ToArray();
-                    documentData.DocumentName = string.Format("CostCode_{0}.csv", jobId);
-                    documentData.ContentType = "text/csv";
-                }
-            }
+			return documentData;
+		}
 
-            return documentData;
-        }
+		public void WriteDataTable(DataTable sourceTable, TextWriter writer, bool includeHeaders)
+		{
+			if (includeHeaders)
+			{
+				IEnumerable<String> headerValues = sourceTable.Columns
+					.OfType<DataColumn>()
+					.Select(column => QuoteValue(column.ColumnName));
 
-        public void WriteDataTable(DataTable sourceTable, TextWriter writer, bool includeHeaders)
-        {
-            if (includeHeaders)
-            {
-                IEnumerable<String> headerValues = sourceTable.Columns
-                    .OfType<DataColumn>()
-                    .Select(column => QuoteValue(column.ColumnName));
+				writer.WriteLine(String.Join(",", headerValues));
+			}
 
-                writer.WriteLine(String.Join(",", headerValues));
-            }
+			IEnumerable<String> items = null;
 
-            IEnumerable<String> items = null;
+			foreach (DataRow row in sourceTable.Rows)
+			{
+				items = row.ItemArray.Select(o => QuoteValue(o?.ToString() ?? String.Empty));
+				writer.WriteLine(String.Join(",", items));
+			}
 
-            foreach (DataRow row in sourceTable.Rows)
-            {
-                items = row.ItemArray.Select(o => QuoteValue(o?.ToString() ?? String.Empty));
-                writer.WriteLine(String.Join(",", items));
-            }
+			writer.Flush();
+		}
 
-            writer.Flush();
-        }
+		private string QuoteValue(string value)
+		{
+			return String.Concat("\"",
+			value.Replace("\"", "\"\""), "\"");
+		}
 
-        private string QuoteValue(string value)
-        {
-            return String.Concat("\"",
-            value.Replace("\"", "\"\""), "\"");
-        }
-
-        public DocumentStatus IsCostCodeDataPresentForJobInNAV(string jobId)
-        {
+		public DocumentStatus IsCostCodeDataPresentForJobInNAV(string jobId)
+		{
 			if (string.IsNullOrEmpty(jobId))
 			{
 				return new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
@@ -257,18 +251,14 @@ namespace M4PL.Business.Finance.CostCode
 
 			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
 			List<Task> tasks = new List<Task>();
-			List<NavSalesOrderItem> finalNavSalesOrderItem = new List<NavSalesOrderItem>();
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
 			NavSalesOrderPostedInvoiceResponse navSalesOrderPostedInvoiceResponse = CommonCommands.GetCachedNavSalesOrderValues();
 			NavSalesOrderItemResponse navSalesOrderItemResponse = CommonCommands.GetCachedNavSalesOrderItemValues();
-			//NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderPostedInvoiceResponse = CommonCommands.GetCachedNavPurchaseOrderValues();
-			//NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = CommonCommands.GetCachedNavPurchaseOrderItemValues();
-
 			if (navSalesOrderPostedInvoiceResponse == null || (navSalesOrderPostedInvoiceResponse != null && navSalesOrderPostedInvoiceResponse.NavSalesOrder == null) || (navSalesOrderPostedInvoiceResponse != null && navSalesOrderPostedInvoiceResponse.NavSalesOrder != null && navSalesOrderPostedInvoiceResponse.NavSalesOrder.Count == 0))
 			{
 				return documentStatus;
 			}
-			else if(navSalesOrderItemResponse == null || (navSalesOrderItemResponse != null && navSalesOrderItemResponse.NavSalesOrderItem == null) || (navSalesOrderItemResponse != null && navSalesOrderItemResponse.NavSalesOrderItem != null && navSalesOrderItemResponse.NavSalesOrderItem.Count == 0))
+			else if (navSalesOrderItemResponse == null || (navSalesOrderItemResponse != null && navSalesOrderItemResponse.NavSalesOrderItem == null) || (navSalesOrderItemResponse != null && navSalesOrderItemResponse.NavSalesOrderItem != null && navSalesOrderItemResponse.NavSalesOrderItem.Count == 0))
 			{
 				return documentStatus;
 			}
@@ -283,20 +273,16 @@ namespace M4PL.Business.Finance.CostCode
 						var currentSalesLineItem = navSalesOrderItemResponse.NavSalesOrderItem.Where(x => x.Document_No.Equals(currentNavSalesOrder.No, StringComparison.OrdinalIgnoreCase));
 						if (currentSalesLineItem.Any() && currentSalesLineItem.Count() > 0)
 						{
-							finalNavSalesOrderItem.AddRange(currentSalesLineItem);
+							documentStatus.IsAttachmentPresent = true;
 						}
 					}
 				}));
 			}
 
 			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
-			if (finalNavSalesOrderItem != null && finalNavSalesOrderItem.Count > 0)
-			{
-			    documentStatus.IsAttachmentPresent = true;
-			}
 
 			return documentStatus;
-        }
+		}
 
 		public static DataTable GetJobCostReportDataTable(ActiveUser activeUser, long jobId, List<NavSalesOrderItem> navSalesOrderItem)
 		{
