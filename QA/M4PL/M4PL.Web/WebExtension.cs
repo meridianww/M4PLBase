@@ -1743,7 +1743,7 @@ namespace M4PL.Web
                     }
                 }
 
-				if (mnu.MnuTitle == "Upload Price/Cost Code")
+				if (mnu.MnuTitle == "Price/Cost Code")
 				{
 					mnu.StatusId = 3;
 					if (route.Entity == EntitiesAlias.Program && route.RecordId > 0)
@@ -1861,6 +1861,10 @@ namespace M4PL.Web
                              )))
                             {
                                 mnu.StatusId = 1;
+								if (route.Action == "FormView")
+								{
+									mnu.Route.RecordId = route.RecordId;
+								}
                             }
                         }
                     }
@@ -1890,7 +1894,11 @@ namespace M4PL.Web
                              )))
                             {
                                 mnu.StatusId = 1;
-                            }
+								if (route.Action == "FormView")
+								{
+									mnu.Route.RecordId = route.RecordId;
+								}
+							}
                         }
                     }
                 }

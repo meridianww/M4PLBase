@@ -14,14 +14,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace M4PL.Entities.Finance.ShippingItem
+namespace M4PL.Entities.Finance.SalesOrder
 {
-	public class NavSalesOrderItemResponse
+	public class NavSalesOrderPostedInvoiceResponse
 	{
 		[JsonProperty("@odata.context")]
 		public string ContextData { get; set; }
 
 		[JsonProperty("value")]
-		public List<NavSalesOrderItem> NavSalesOrderItem { get; set; }
+		public List<NavSalesOrder> NavSalesOrder { get; set; }
 	}
 }
