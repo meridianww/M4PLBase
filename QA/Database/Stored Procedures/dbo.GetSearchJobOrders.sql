@@ -8,7 +8,7 @@ GO
 -- Author:                    Kamal          
 -- Create date:               07/27/2020      
 -- Description:               Get a Job Details by job id  
--- Exec :					  Exec GetSearchJobOrders 2,14,1, 'In Transit'   
+-- Exec :					  Exec GetSearchJobOrders 'pod'   
 -- ============================================= 
 ALTER PROCEDURE GetSearchJobOrders 
 --@userId BIGINT,
