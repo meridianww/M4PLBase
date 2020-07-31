@@ -1861,6 +1861,10 @@ namespace M4PL.Web
                              )))
                             {
                                 mnu.StatusId = 1;
+								if (route.Action == "FormView")
+								{
+									mnu.Route.RecordId = route.RecordId;
+								}
                             }
                         }
                     }
@@ -1890,7 +1894,11 @@ namespace M4PL.Web
                              )))
                             {
                                 mnu.StatusId = 1;
-                            }
+								if (route.Action == "FormView")
+								{
+									mnu.Route.RecordId = route.RecordId;
+								}
+							}
                         }
                     }
                 }
