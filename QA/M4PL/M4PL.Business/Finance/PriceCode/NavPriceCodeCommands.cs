@@ -94,7 +94,7 @@ namespace M4PL.Business.Finance.PriceCode
 						var currentSalesLineItem = navSalesOrderItemResponse.NavSalesOrderItem.Where(x => x.Document_No.Equals(currentNavSalesOrder.No, StringComparison.OrdinalIgnoreCase));
 						if (currentSalesLineItem.Any() && currentSalesLineItem.Count() > 0)
 						{
-							documentDataList.Add(GetCostCodeReportDataByJobId(currentJobId, currentSalesLineItem.ToList()));
+							documentDataList.Add(GetPriceCodeReportDataByJobId(currentJobId, currentSalesLineItem.ToList()));
 						}
 					}
 				}));
@@ -119,7 +119,7 @@ namespace M4PL.Business.Finance.PriceCode
 					}
 					documentData = new DocumentData();
 					documentData.DocumentContent = memoryStream.ToArray();
-					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedCostCode");
+					documentData.DocumentName = string.Format("{0}.zip", "ConsolidatedPriceCode");
 					documentData.ContentType = "application/zip";
 				}
 			}
@@ -194,10 +194,10 @@ namespace M4PL.Business.Finance.PriceCode
 					new List<NavPriceCode>();
 		}
 
-		public DocumentData GetCostCodeReportDataByJobId(long jobId, List<NavSalesOrderItem> navSalesOrderItem)
+		public DocumentData GetPriceCodeReportDataByJobId(long jobId, List<NavSalesOrderItem> navSalesOrderItem)
 		{
 			DocumentData documentData = null;
-			DataTable tblResultLocal = GetJobCostReportDataTable(ActiveUser, jobId, navSalesOrderItem);
+			DataTable tblResultLocal = GetJobPriceCodeReportDataTable(ActiveUser, jobId, navSalesOrderItem);
 			if (tblResultLocal != null && tblResultLocal.Rows.Count > 0)
 			{
 				documentData = new DocumentData();
@@ -209,7 +209,7 @@ namespace M4PL.Business.Finance.PriceCode
 					}
 
 					documentData.DocumentContent = memoryStream.ToArray();
-					documentData.DocumentName = string.Format("CostCode_{0}.csv", jobId);
+					documentData.DocumentName = string.Format("PriceCode_{0}.csv", jobId);
 					documentData.ContentType = "text/csv";
 				}
 			}
@@ -284,47 +284,47 @@ namespace M4PL.Business.Finance.PriceCode
 			return documentStatus;
 		}
 
-		public static DataTable GetJobCostReportDataTable(ActiveUser activeUser, long jobId, List<NavSalesOrderItem> navSalesOrderItem)
+		public static DataTable GetJobPriceCodeReportDataTable(ActiveUser activeUser, long jobId, List<NavSalesOrderItem> navSalesOrderItem)
 		{
 			Entities.Job.Job jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(activeUser, jobId, 0);
-			DataTable tblJobCostReport = new DataTable();
-			tblJobCostReport.Columns.Add("Job ID");
-			tblJobCostReport.Columns.Add("Delivery Date Planned");
-			tblJobCostReport.Columns.Add("Arrival Date Planned");
-			tblJobCostReport.Columns.Add("Job Gateway Scheduled");
-			tblJobCostReport.Columns.Add("Site Code");
-			tblJobCostReport.Columns.Add("Contract #");
-			tblJobCostReport.Columns.Add("Plant Code");
-			tblJobCostReport.Columns.Add("Quantity Actual");
-			tblJobCostReport.Columns.Add("Parts Actual");
-			tblJobCostReport.Columns.Add("Cubes Unit");
-			tblJobCostReport.Columns.Add("Charge Code");
-			tblJobCostReport.Columns.Add("Title");
-			tblJobCostReport.Columns.Add("Rate");
-			tblJobCostReport.Columns.Add("Service Mode");
-			tblJobCostReport.Columns.Add("Customer Purchase Order");
-			tblJobCostReport.Columns.Add("Brand");
-			tblJobCostReport.Columns.Add("Status");
-			tblJobCostReport.Columns.Add("Delivery Site POC");
-			tblJobCostReport.Columns.Add("Delivery Site Phone");
-			tblJobCostReport.Columns.Add("Delivery Site POC 2");
-			tblJobCostReport.Columns.Add("Phone POC Email");
-			tblJobCostReport.Columns.Add("Site Name");
-			tblJobCostReport.Columns.Add("Delivery Site Name");
-			tblJobCostReport.Columns.Add("Delivery Address");
-			tblJobCostReport.Columns.Add("Delivery Address2");
-			tblJobCostReport.Columns.Add("Delivery City");
-			tblJobCostReport.Columns.Add("Delivery State");
-			tblJobCostReport.Columns.Add("Delivery Postal Code");
-			tblJobCostReport.Columns.Add("Delivery Date Actual");
-			tblJobCostReport.Columns.Add("Origin Date Actual");
-			tblJobCostReport.Columns.Add("Ordered Date");
+			DataTable tblJobPriceCodeReport = new DataTable();
+			tblJobPriceCodeReport.Columns.Add("Job ID");
+			tblJobPriceCodeReport.Columns.Add("Delivery Date Planned");
+			tblJobPriceCodeReport.Columns.Add("Arrival Date Planned");
+			tblJobPriceCodeReport.Columns.Add("Job Gateway Scheduled");
+			tblJobPriceCodeReport.Columns.Add("Site Code");
+			tblJobPriceCodeReport.Columns.Add("Contract #");
+			tblJobPriceCodeReport.Columns.Add("Plant Code");
+			tblJobPriceCodeReport.Columns.Add("Quantity Actual");
+			tblJobPriceCodeReport.Columns.Add("Parts Actual");
+			tblJobPriceCodeReport.Columns.Add("Cubes Unit");
+			tblJobPriceCodeReport.Columns.Add("Charge Code");
+			tblJobPriceCodeReport.Columns.Add("Title");
+			tblJobPriceCodeReport.Columns.Add("Rate");
+			tblJobPriceCodeReport.Columns.Add("Service Mode");
+			tblJobPriceCodeReport.Columns.Add("Customer Purchase Order");
+			tblJobPriceCodeReport.Columns.Add("Brand");
+			tblJobPriceCodeReport.Columns.Add("Status");
+			tblJobPriceCodeReport.Columns.Add("Delivery Site POC");
+			tblJobPriceCodeReport.Columns.Add("Delivery Site Phone");
+			tblJobPriceCodeReport.Columns.Add("Delivery Site POC 2");
+			tblJobPriceCodeReport.Columns.Add("Phone POC Email");
+			tblJobPriceCodeReport.Columns.Add("Site Name");
+			tblJobPriceCodeReport.Columns.Add("Delivery Site Name");
+			tblJobPriceCodeReport.Columns.Add("Delivery Address");
+			tblJobPriceCodeReport.Columns.Add("Delivery Address2");
+			tblJobPriceCodeReport.Columns.Add("Delivery City");
+			tblJobPriceCodeReport.Columns.Add("Delivery State");
+			tblJobPriceCodeReport.Columns.Add("Delivery Postal Code");
+			tblJobPriceCodeReport.Columns.Add("Delivery Date Actual");
+			tblJobPriceCodeReport.Columns.Add("Origin Date Actual");
+			tblJobPriceCodeReport.Columns.Add("Ordered Date");
 
 			if (navSalesOrderItem?.Count > 0)
 			{
 				foreach (var salesOrderItem in navSalesOrderItem)
 				{
-					var row = tblJobCostReport.NewRow();
+					var row = tblJobPriceCodeReport.NewRow();
 					row["Job ID"] = jobDetails.Id;
 					row["Delivery Date Planned"] = jobDetails.JobDeliveryDateTimePlanned;
 					row["Arrival Date Planned"] = jobDetails.JobOriginDateTimePlanned;
@@ -356,12 +356,12 @@ namespace M4PL.Business.Finance.PriceCode
 					row["Delivery Date Actual"] = jobDetails.JobDeliveryDateTimeActual;
 					row["Origin Date Actual"] = jobDetails.JobOriginDateTimeActual;
 					row["Ordered Date"] = jobDetails.JobOrderedDate;
-					tblJobCostReport.Rows.Add(row);
-					tblJobCostReport.AcceptChanges();
+					tblJobPriceCodeReport.Rows.Add(row);
+					tblJobPriceCodeReport.AcceptChanges();
 				}
 			}
 
-			return tblJobCostReport;
+			return tblJobPriceCodeReport;
 		}
 	}
 }
