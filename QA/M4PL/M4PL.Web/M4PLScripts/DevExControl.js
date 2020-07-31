@@ -228,8 +228,8 @@ DevExCtrl.Ribbon = function () {
                     }
                     break;
                 case "DownloadTracking":
-                    route = _onJobReportClick(route);
                     var jobIds = _onJobReportClickMultiSelect();
+                    route = _onJobReportClick(route);
                     if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route) + '&jobIds=' + jobIds;
                     else

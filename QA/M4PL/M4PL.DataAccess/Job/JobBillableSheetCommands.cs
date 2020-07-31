@@ -223,7 +223,7 @@ namespace M4PL.DataAccess.Job
 								ChargeTypeId = currentPrgBillableRate.RateTypeId,
 								StatusId = currentPrgBillableRate.StatusId,
 								PrcElectronicBilling = currentPrgBillableRate.PbrElectronicBilling,
-								PrcQuantity = 1,
+								PrcQuantity = cargoLineItem.CgoQtyOrdered,
 								DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 								EnteredBy = activeUser.UserName
 							});

@@ -2382,7 +2382,7 @@ M4PLCommon.DocumentStatus = (function () {
     };
 
     var _isPriceCodeDataPresentForJobInNAV = function (jobId,jobIds) {
-       
+
         var isPriceCodeDataPresent = false;
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         $.ajax({
@@ -2404,7 +2404,7 @@ M4PLCommon.DocumentStatus = (function () {
             }
         });
 
-     
+
 
         return isPriceCodeDataPresent
     };
@@ -2418,7 +2418,7 @@ M4PLCommon.DocumentStatus = (function () {
             async: false,
             success: function (response) {
                 if (response && response.status && response.status === true && response.documentStatus != null) {
-                    isPriceCodeDataPresent = response.documentStatus.IsAttachmentPresent;
+                    isCostCodeDataPresent = response.documentStatus.IsAttachmentPresent;
                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                 }
             },
