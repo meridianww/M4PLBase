@@ -41,16 +41,14 @@ namespace M4PL.DataAccess.JobServices
             sets.AddSet<OrderGatewayDetails>("OrderGatewayDetails");
             SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetOrderDetailsById, parameters.ToArray(), storedProcedure: true);
             var orderDetailslist = sets.GetSet<OrderDetails>("OrderDetails");
-            var orderGatewayDetailsCollection = sets.GetSet<OrderGatewayDetails>("OrderGatewayDetails");
-            orderDetails = orderDetailslist[0];
+            var orderGatewayCollection = sets.GetSet<OrderGatewayDetails>("OrderGatewayDetails");
+
             if (orderDetailslist?.Count > 0)
             {
-                foreach (var item in orderDetailslist)
+                orderDetails = orderDetailslist[0];
+                if (orderDetails.Id > 0 && orderGatewayCollection != null && orderGatewayCollection.Count > 0)
                 {
-                    if (item.Id > 0 && orderGatewayDetailsCollection != null && orderGatewayDetailsCollection.Count > 0)
-                    {
-                        item.OrderGatewayDetails = orderGatewayDetailsCollection.Where(x => x.JobID == item.Id).ToList();
-                    }
+                    orderDetails.OrderGatewayDetails = orderGatewayCollection.Where(x => x.JobID == orderDetails.Id).ToList();
                 }
             }
             return orderDetails;

@@ -8,6 +8,10 @@ namespace M4PL.Entities.JobService
 {
     public class OrderDetails
     {
+        public OrderDetails()
+        {
+            OrderGatewayDetails = new List<OrderGatewayDetails>();
+        }
         public long Id { get; set; }
         public string CustomerSalesOrder { get; set; }
         public string GatewayStatus { get; set; }
@@ -19,6 +23,6 @@ namespace M4PL.Entities.JobService
         public DateTime? ShipmentDate { get; set; }
         public long? CustomerId { get; set; }
         public string CustomerCode { get; set; }
-        public IList<OrderGatewayDetails> OrderGatewayDetails { get; set; }
-}
+        public List<OrderGatewayDetails> OrderGatewayDetails { get; set; }
+    }
 }
