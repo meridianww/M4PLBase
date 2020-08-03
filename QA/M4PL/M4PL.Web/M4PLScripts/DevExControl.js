@@ -351,7 +351,7 @@ DevExCtrl.Ribbon = function () {
                                     case "AdvancedSortFilter":
                                         if (response.route.Controller == "JobAdvanceReport")
                                             response.route.EntityName = response.route.Controller;
-                                        var currentGrid = ASPxClientControl.GetControlCollection().GetByName(response.route.EntityName + gridNameSuffix);
+                                        var currentGrid = ASPxClientControl.GetControlCollection().GetByName(response.route.Controller + gridNameSuffix);
                                         //currentGrid.SetFilterEnabled(true);
                                         currentGrid.ShowFilterControl();
                                         break;
