@@ -17,6 +17,8 @@ namespace M4PL.Entities.JobService
         public string ManifestNo { get; set; }
         public DateTime? OrderDate { get; set; }
         public DateTime? ShipmentDate { get; set; }
+        public long? CustomerId { get; set; }
+        public string CustomerCode { get; set; }
         public IList<OrderGatewayDetails> OrderGatewayDetails { get; set; }
 }
 }

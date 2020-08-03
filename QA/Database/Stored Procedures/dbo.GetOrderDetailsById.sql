@@ -9,7 +9,7 @@ GO
 -- Author:                    Kamal          
 -- Create date:               07/28/2020      
 -- Description:               Get a Job Details by job id  
--- Exec :					  Exec GetOrderDetailsById 2,14,1, 1234   
+-- Exec :					  Exec GetOrderDetailsById 170712   
 -- =============================================  
 ALTER PROCEDURE GetOrderDetailsById 
 	-- @userId BIGINT
@@ -27,8 +27,14 @@ BEGIN
 		,JOB.JobManifestNo AS ManifestNo
 		,JOB.JobOrderedDate AS OrderDate
 		,JOB.JobShipmentDate as ShipmentDate
-	FROM JOBDL000Master JOB
-	WHERE Id = @id
+		,CUSTOMER.ID AS CustomerId
+		,CUSTOMER.CustCode AS CustomerCode
+	FROM CUST000Master CUSTOMER
+		 INNER JOIN PRGRM000Master PROGRAM ON PROGRAM.PrgCustID = CUSTOMER.ID
+		 INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = PROGRAM.ID
+   WHERE CUSTOMER.StatusId = 1 
+	 AND PROGRAM.StatusId =1 
+	 AND JOB.Id = @id
 		--AND StatusId = 1
 		--AND JobCompleted = 0
 

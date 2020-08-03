@@ -17,16 +17,17 @@ ALTER PROCEDURE GetSearchJobOrders
 @search NVARCHAR(200)
 AS
 BEGIN
-   SELECT Id
-		 ,JobCustomerSalesOrder AS CustomerSalesOrder
-         ,JobGatewayStatus AS GatewayStatus
-		 ,JobDeliveryDateTimePlanned AS DeliveryDatePlanned
-		 ,JobOriginDateTimePlanned AS ArrivalDatePlanned FROM JOBDL000Master 
-   WHERE StatusId = 1 AND --JobCompleted =0 
-    (JobCustomerSalesOrder LIKE '%'+ @search +'%'
-   OR JobBOL LIKE '%'+ @search +'%'
-   OR JobManifestNo LIKE '%'+ @search +'%'
-   OR JobGatewayStatus LIKE '%'+ @search +'%'
-   OR JobSiteCode LIKE '%'+ @search +'%')
+   SELECT JOB.Id
+		 ,JOB.JobCustomerSalesOrder AS CustomerSalesOrder
+         ,JOB.JobGatewayStatus AS GatewayStatus
+		 ,JOB.JobDeliveryDateTimePlanned AS DeliveryDatePlanned
+		 ,JOB.JobOriginDateTimePlanned AS ArrivalDatePlanned 
+		 FROM JOBDL000Master JOB 
+   WHERE JOB.JobCustomerSalesOrder = @search 
+	--JobCompleted =0 
+   --OR JobBOL LIKE '%'+ @search +'%'
+   --OR JobManifestNo LIKE '%'+ @search +'%'
+   --OR JobGatewayStatus LIKE '%'+ @search +'%'
+   --OR JobSiteCode LIKE '%'+ @search +'%')
 END
 
