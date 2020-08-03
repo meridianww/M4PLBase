@@ -202,6 +202,7 @@
     <Compile Include="Program\IPrgVendLocationCommands.cs" />
     <Compile Include="Program\IPrgBillableRateCommands.cs" />
     <Compile Include="Program\IPrgCostLocationCommands.cs" />
+    <Compile Include="Program\IPrgEventManagementCommands.cs" />
     <Compile Include="Program\IProgramCommands.cs" />
     <Compile Include="Program\IPrgCostRateCommands.cs" />
     <Compile Include="Program\IPrgRoleCommands.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Program\PrgVendLocationCommands.cs" />
     <Compile Include="Program\PrgBillableRateCommands.cs" />
     <Compile Include="Program\PrgCostLocationCommands.cs" />
+    <Compile Include="Program\PrgEventManagementCommands.cs" />
     <Compile Include="Program\ProgramCommands.cs" />
     <Compile Include="Program\PrgCostRateCommands.cs" />
     <Compile Include="Program\PrgRoleCommands.cs" />

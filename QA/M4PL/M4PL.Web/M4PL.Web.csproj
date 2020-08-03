@@ -310,6 +310,7 @@
     <Compile Include="Areas\Program\Controllers\PrgShipStatusReasonCodeController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgVendLocationController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgCostLocationController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgEventManagementController.cs" />
     <Compile Include="Areas\Program\Controllers\ProgramController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgEdiConditionController.cs" />
     <Compile Include="Areas\Program\ProgramAreaRegistration.cs" />
@@ -770,6 +771,8 @@
     <Content Include="Areas\Job\Views\JobAdvanceReport\CargoTitleByJob.cshtml" />
     <Content Include="M4PL.Web.licenseheader" />
     <Content Include="Areas\Finance\Views\NavRate\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEventManagement\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEventManagement\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

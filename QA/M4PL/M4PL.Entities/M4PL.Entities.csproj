@@ -154,6 +154,7 @@
     <Compile Include="Program\PrgBillableLocation.cs" />
     <Compile Include="Program\PrgCostLocation.cs" />
     <Compile Include="Program\PrgEdiCondition.cs" />
+    <Compile Include="Program\PrgEventManagement.cs" />
     <Compile Include="Signature\JobSignature.cs" />
     <Compile Include="StatusModel.cs" />
     <Compile Include="Support\CargoComboBox.cs" />

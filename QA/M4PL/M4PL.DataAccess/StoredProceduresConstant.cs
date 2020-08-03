@@ -877,5 +877,15 @@ namespace M4PL.DataAccess
 		public const string GetSearchJobOrders = "dbo.GetSearchJobOrders";
 		public const string GetOrderDetailsById = "dbo.GetOrderDetailsById";
 		#endregion
+
+		#region Program Event Management
+
+		public const string GetProgramEventManagementView = "dbo.GetProgramEventManagementView";
+		public const string GetProgramEventManagement = "dbo.GetProgramEventManagement";
+		public const string InsProgramEventManagement = "dbo.InsProgramEventManagement";
+		public const string UpdProgramEventManagement = "dbo.UpdProgramEventManagement";
+		public const string DeleteProgramEventManagement = "dbo.DeleteProgramEventManagement";
+
+		#endregion
 	}
 }
