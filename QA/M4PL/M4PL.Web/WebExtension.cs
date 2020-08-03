@@ -142,7 +142,9 @@ namespace M4PL.Web
                 if (!(records is IList<APIClient.ViewModels.Administration.ReportView>) || (records as List<APIClient.ViewModels.Administration.ReportView>).Count < 1)
                     return null;
                 reportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault(r => r.RprtIsDefault == true);
-                route.RecordId = reportView.Id;
+                if (reportView == null)
+                    reportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault();
+                route.RecordId = reportView?.Id ?? 0;
             }
             reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionReportInfo);
             reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionReportViewer);
