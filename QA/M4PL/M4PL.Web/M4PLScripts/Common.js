@@ -1600,8 +1600,8 @@ M4PLCommon.AdvancedReport = (function () {
         if (IsFormValidate) {
             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
             var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
-            if (grdCtrl != null && grdCtrl != undefined)
-                grdCtrl.ClearFilter();
+            //if (grdCtrl != null && grdCtrl != undefined)
+            //    grdCtrl.ClearFilter();
         } else {
             return false;
         }
