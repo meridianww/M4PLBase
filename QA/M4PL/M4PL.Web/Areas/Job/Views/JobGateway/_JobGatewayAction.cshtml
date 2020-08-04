@@ -71,6 +71,7 @@
     crgoDropDownViewModel = Model.Record.GwyCargoId.GetCargoDropDown("GwyCargoId", Model, Model.Record.JobID ?? 0);
     exceptionDropDownViewModel = Model.Record.GwyExceptionTitleId.GetExceptionCodeDropDown("GwyExceptionTitleId", Model, Model.Record.JobID ?? 0, Model.Record.CurrentAction + "-" + Model.Record.StatusCode);
     exStatusDropDownViewModel = Model.Record.GwyExceptionStatusId.GetExStatusCodeDropDown("GwyExceptionStatusId", Model, Model.Record.JobID ?? 0, Model.Record.CurrentAction.ToLower());
+    exStatusDropDownViewModel.ParentId = Model.Record.CustomerId;
     // }
 
 }

@@ -22,7 +22,9 @@ using DevExpress.DirectX.Common.Direct2D;
 using DevExpress.Web.Mvc;
 using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
+using M4PL.APIClient.Finance;
 using M4PL.APIClient.Job;
+using M4PL.APIClient.ViewModels.Finance;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
@@ -34,6 +36,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -139,7 +142,9 @@ namespace M4PL.Web
                 if (!(records is IList<APIClient.ViewModels.Administration.ReportView>) || (records as List<APIClient.ViewModels.Administration.ReportView>).Count < 1)
                     return null;
                 reportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault(r => r.RprtIsDefault == true);
-                route.RecordId = reportView.Id;
+                if (reportView == null)
+                    reportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault();
+                route.RecordId = reportView?.Id ?? 0;
             }
             reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionReportInfo);
             reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionReportViewer);
@@ -1298,6 +1303,7 @@ namespace M4PL.Web
                 && (route.Entity != EntitiesAlias.JobXcblInfo)
                 && (route.Entity != EntitiesAlias.JobHistory)
                 && (route.Entity != EntitiesAlias.PrgRefGatewayDefault)
+                && (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
                 )
             {
                 var navMenuEnabled = true;
@@ -1409,7 +1415,8 @@ namespace M4PL.Web
                 }
 
                 if ((route.Entity == EntitiesAlias.JobXcblInfo && route.Action == MvcConstants.ActionForm)
-                    || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView))
+                    || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView)
+                    || (route.Entity == EntitiesAlias.NavRate && route.Action == MvcConstants.ActionForm))
                     allNavMenus.Remove(saveMenu);
             }
 
@@ -1472,8 +1479,12 @@ namespace M4PL.Web
             {
                 allNavMenus[0].Text = "Import Order";
             }
+			if (route.Entity == EntitiesAlias.NavRate && route.Action == "FormView")
+			{
+				allNavMenus[0].Text = "Import Price/Cost Code";
+			}
 
-            return allNavMenus;
+			return allNavMenus;
         }
 
         public static DateTime? SubstractFrom(this DateTime? date, double duration, JobGatewayUnit gatewayUnit)
@@ -1734,7 +1745,18 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Download All")
+				if (mnu.MnuTitle == "Price/Cost Code")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Program && route.RecordId > 0)
+					{
+                        mnu.Route.RecordId = route.RecordId;
+						mnu.StatusId = 1;
+                        mnu.Route.IsPopup = true;
+                    }
+				}
+
+				if (mnu.MnuTitle == "Download All")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
@@ -1817,7 +1839,71 @@ namespace M4PL.Web
                         }
                     }
                 }
+                if (mnu.MnuTitle == "Price Codes")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        if (sessionProvider.UserSecurities != null)
+                        {
+                            var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                            UserSubSecurity childSecurity = null;
+                            if (currentSecurity.UserSubSecurities != null)
+                                childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                            if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                          || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                             ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                             (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit)
+                             )))
+                            {
+                                mnu.StatusId = 1;
+								if (route.Action == "FormView")
+								{
+									mnu.Route.RecordId = route.RecordId;
+								}
+                            }
+                        }
+                    }
+                }
 
+                if (mnu.MnuTitle == "Cost Codes")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
+                    {
+                        if (sessionProvider.UserSecurities != null)
+                        {
+                            var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                            UserSubSecurity childSecurity = null;
+                            if (currentSecurity.UserSubSecurities != null)
+                                childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                            if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                          || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                             currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                             ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                             (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
+                             childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit)
+                             )))
+                            {
+                                mnu.StatusId = 1;
+								if (route.Action == "FormView")
+								{
+									mnu.Route.RecordId = route.RecordId;
+								}
+							}
+                        }
+                    }
+                }
                 if (mnu.MnuTitle == "Cost Code")
                 {
                     mnu.StatusId = 3;
@@ -3235,7 +3321,7 @@ namespace M4PL.Web
             MvcRoute route, ICommonCommands _commonCommands)
         {
             var gatewaysContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
-            
+
             if (_gridResult.GridSetting.ContextMenu.Count > 0)
             {
                 var gatewayEntity = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == gatewaysContextMenu.SysRefName);
@@ -3245,7 +3331,7 @@ namespace M4PL.Web
                 if (_gridResult.Records is IList<JobView>)
                 {
                     route.IsPBSReport = true;
-                    route.ParentRecordId = 0;
+                    //route.ParentRecordId = 0;
                     IList<JobView> record = (IList<JobView>)_gridResult.Records;
                     if (record != null && route.Location != null && route.Location.Count() > 0)
                     {
@@ -3255,7 +3341,7 @@ namespace M4PL.Web
                             route.ParentRecordId = locationIds.FirstOrDefault();
                     }
                     else if (record != null && _gridResult.FocusedRowId > 0)
-                        route.ParentRecordId = _gridResult.FocusedRowId; 
+                        route.ParentRecordId = _gridResult.FocusedRowId;
                 }
 
                 if (gatewayEntity != null && route.ParentRecordId > 0)
@@ -3281,7 +3367,7 @@ namespace M4PL.Web
                             newRoute.Filters = new Entities.Support.Filter();
                             newRoute.Filters.FieldName = singleApptCode.First().GatewayCode;
                             newRoute.Filters.Value = singleApptCode.First().GwyGatewayTitle;
-                            
+
                             newOperation.Route = newRoute;
                             newOperation.Route.IsPBSReport = route.IsPBSReport;
                             gatewayEntity.ChildOperations.Add(newOperation);
@@ -3291,6 +3377,36 @@ namespace M4PL.Web
                 }
             }
             return _gridResult;
+        }
+
+        public static DisplayMessage UploadCSVNavRate(this DisplayMessage displayMessage, long programId, DataTable csvDataTable, string[] arraynavRateUploadColumns,
+            INavRateCommands navRateCommands, ICommonCommands commonCommands)
+        {
+            string[] columnNames = (from dc in csvDataTable.Columns.Cast<DataColumn>()
+                                    select dc.ColumnName).ToArray();
+            if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
+            {
+                List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
+                StatusModel statusModel = navRateCommands.GenerateProgramPriceCostCode(navRateList);
+                // To Do: Selected ProgramId need to set with the record.
+                if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
+                {
+                    displayMessage = commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+                    displayMessage.Description = statusModel.AdditionalDetail;
+                    return displayMessage;
+                }
+                else
+                {
+                    displayMessage = commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
+                    return displayMessage;
+                }
+            }
+            else
+            {
+                displayMessage = commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+                displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
+                return displayMessage;
+            }
         }
     }
 }

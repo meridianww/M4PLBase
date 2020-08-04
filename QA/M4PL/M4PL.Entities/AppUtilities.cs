@@ -18,7 +18,11 @@
 //==========================================================================================================
 
 using M4PL.Entities.Finance.OrderItem;
+using M4PL.Entities.Finance.PurchaseOrder;
+using M4PL.Entities.Finance.PurchaseOrderItem;
+using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.SalesOrderDimension;
+using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Concurrent;
@@ -42,6 +46,30 @@ namespace M4PL.Entities
 		   string langCode, NavSalesOrderDimensionResponse dimensionValues)
 		{
 			dictionary.AddOrUpdate(langCode, dimensionValues, (key, oldValue) => dimensionValues);
+		}
+
+		public static void AddOrUpdate(this ConcurrentDictionary<string, NavSalesOrderPostedInvoiceResponse> dictionary,
+		   string langCode, NavSalesOrderPostedInvoiceResponse navSalesOrderResponse)
+		{
+			dictionary.AddOrUpdate(langCode, navSalesOrderResponse, (key, oldValue) => navSalesOrderResponse);
+		}
+
+		public static void AddOrUpdate(this ConcurrentDictionary<string, NavPurchaseOrderPostedInvoiceResponse> dictionary,
+		   string langCode, NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderResponse)
+		{
+			dictionary.AddOrUpdate(langCode, navPurchaseOrderResponse, (key, oldValue) => navPurchaseOrderResponse);
+		}
+
+		public static void AddOrUpdate(this ConcurrentDictionary<string, NavSalesOrderItemResponse> dictionary,
+		   string langCode, NavSalesOrderItemResponse navSalesOrderItemResponse)
+		{
+			dictionary.AddOrUpdate(langCode, navSalesOrderItemResponse, (key, oldValue) => navSalesOrderItemResponse);
+		}
+
+		public static void AddOrUpdate(this ConcurrentDictionary<string, NavPurchaseOrderItemResponse> dictionary,
+		   string langCode, NavPurchaseOrderItemResponse navPurchaseOrderItemResponse)
+		{
+			dictionary.AddOrUpdate(langCode, navPurchaseOrderItemResponse, (key, oldValue) => navPurchaseOrderItemResponse);
 		}
 
 		public static void AddOrUpdate(this ConcurrentDictionary<string, NAVOrderItemResponse> dictionary,

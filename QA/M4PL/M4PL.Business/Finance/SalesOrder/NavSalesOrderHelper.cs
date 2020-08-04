@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -20,6 +20,8 @@
 using M4PL.Business.Common;
 using M4PL.Entities.Finance.JobOrderMapping;
 using M4PL.Entities.Finance.OrderItem;
+using M4PL.Entities.Finance.PurchaseOrder;
+using M4PL.Entities.Finance.PurchaseOrderItem;
 using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Finance.ShippingItem;
@@ -409,14 +411,14 @@ namespace M4PL.Business.Finance.SalesOrder
         #endregion
 
         #region Dimension
-        public static NavSalesOrderDimensionResponse GetNavSalesOrderDimension()
+        public static NavSalesOrderDimensionResponse GetNavSalesOrderDimension(string userName, string password, string serviceUrl)
         {
             NavSalesOrderDimensionResponse navSalesOrderDimensionValueList = null;
-            string serviceCall = string.Format("{0}('{1}')/DimensionValues", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
+            string serviceCall = string.Format("{0}('{1}')/DimensionValues", serviceUrl, "Meridian");
             try
             {
                 navSalesOrderDimensionValueList = new NavSalesOrderDimensionResponse();
-                NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
+                NetworkCredential myCredentials = new NetworkCredential(userName, password);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
                 request.Credentials = myCredentials;
                 request.KeepAlive = false;
@@ -431,24 +433,164 @@ namespace M4PL.Business.Finance.SalesOrder
 
                         using (var stringReader = new StringReader(responceString))
                         {
-                            navSalesOrderDimensionValueList = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderDimensionResponse>(responceString);
+                            navSalesOrderDimensionValueList = JsonConvert.DeserializeObject<NavSalesOrderDimensionResponse>(responceString);
                         }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception exp)
             {
-                //_logger.Log(exp, string.Format("Error is occuring while Getting the DimensionValue: Request Url is: {0}", serviceCall), "Get the DimensionValue List From NAV.", LogType.Error);
+                _logger.Log(exp, string.Format("Error is occuring while Getting the DimensionValue: Request Url is: {0}", serviceCall), "Get the DimensionValue List From NAV.", LogType.Error);
             }
 
             return navSalesOrderDimensionValueList;
         }
 
-        #endregion
+		public static NavSalesOrderPostedInvoiceResponse GetNavPostedSalesOrderResponse(string username, string password, string serviceUrl)
+		{
+			NavSalesOrderPostedInvoiceResponse navSalesOrderResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/PostedSalesInvoice", serviceUrl, "Meridian");
+			try
+			{
+				navSalesOrderResponse = new NavSalesOrderPostedInvoiceResponse();
+				NetworkCredential myCredentials = new NetworkCredential(username, password);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
 
-        #region NAV Item
+				using (Stream navSalesOrderStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderStream))
+					{
+						string responceString = navSalesOrderReader.ReadToEnd();
 
-        public static NAVOrderItemResponse GetNavNAVOrderItemResponse()
+						using (var stringReader = new StringReader(responceString))
+						{
+							navSalesOrderResponse = JsonConvert.DeserializeObject<NavSalesOrderPostedInvoiceResponse>(responceString);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the PostedSalesInvoice: Request Url is: {0}", serviceCall), "Get the PostedSalesInvoice List From NAV.", LogType.Error);
+			}
+
+			return navSalesOrderResponse;
+		}
+
+		public static NavPurchaseOrderPostedInvoiceResponse GetNavPostedPurchaseOrderResponse(string username, string password, string serviceUrl)
+		{
+			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoice", serviceUrl, "Meridian");
+			try
+			{
+				navPurchaseOrderResponse = new NavPurchaseOrderPostedInvoiceResponse();
+				NetworkCredential myCredentials = new NetworkCredential(username, password);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
+
+				using (Stream navPurchaseOrderStream = response.GetResponseStream())
+				{
+					using (TextReader navPurchaseOrderReader = new StreamReader(navPurchaseOrderStream))
+					{
+						string responceString = navPurchaseOrderReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(responceString))
+						{
+							navPurchaseOrderResponse = JsonConvert.DeserializeObject<NavPurchaseOrderPostedInvoiceResponse>(responceString);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the PostedPurchaseInvoice: Request Url is: {0}", serviceCall), "Get the PostedPurchaseInvoice List From NAV.", LogType.Error);
+			}
+
+			return navPurchaseOrderResponse;
+		}
+
+		public static NavSalesOrderItemResponse GetNavPostedSalesOrderItemResponse(string username, string password, string serviceUrl)
+		{
+			NavSalesOrderItemResponse navSalesOrderItemResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/PostedSalesInvoiceLines", serviceUrl, "Meridian");
+			try
+			{
+				navSalesOrderItemResponse = new NavSalesOrderItemResponse();
+				NetworkCredential myCredentials = new NetworkCredential(username, password);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
+
+				using (Stream navSalesOrderItemStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderItemReader = new StreamReader(navSalesOrderItemStream))
+					{
+						string responceString = navSalesOrderItemReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(responceString))
+						{
+							navSalesOrderItemResponse = JsonConvert.DeserializeObject<NavSalesOrderItemResponse>(responceString);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the PostedSalesInvoiceLines: Request Url is: {0}", serviceCall), "Get the PostedSalesInvoiceLines List From NAV.", LogType.Error);
+			}
+
+			return navSalesOrderItemResponse;
+		}
+
+		public static NavPurchaseOrderItemResponse GetNavPostedPurchaseOrderItemResponse(string username, string password, string serviceUrl)
+		{
+			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoiceLines", serviceUrl, "Meridian");
+			try
+			{
+				navPurchaseOrderItemResponse = new NavPurchaseOrderItemResponse();
+				NetworkCredential myCredentials = new NetworkCredential(username, password);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
+
+				using (Stream navPurchaseOrderItemStream = response.GetResponseStream())
+				{
+					using (TextReader navPurchaseOrderItemReader = new StreamReader(navPurchaseOrderItemStream))
+					{
+						string responceString = navPurchaseOrderItemReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(responceString))
+						{
+							navPurchaseOrderItemResponse = JsonConvert.DeserializeObject<NavPurchaseOrderItemResponse>(responceString);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the PostedPurchaseInvoiceLines: Request Url is: {0}", serviceCall), "Get the PostedPurchaseInvoiceLines List From NAV.", LogType.Error);
+			}
+
+			return navPurchaseOrderItemResponse;
+		}
+
+		#endregion
+
+		#region NAV Item
+
+		public static NAVOrderItemResponse GetNavNAVOrderItemResponse()
         {
             string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
             string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;

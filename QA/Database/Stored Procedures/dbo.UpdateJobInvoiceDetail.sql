@@ -14,6 +14,7 @@ CREATE PROCEDURE [dbo].[UpdateJobInvoiceDetail] (
 	 @JobId BIGINT
 	,@JobPurchaseInvoiceNumber NVARCHAR(50)
 	,@JobSalesInvoiceNumber NVARCHAR(50)
+	,@JobInvoicedDate DateTime2(7)
 	,@UpdatedBy NVARCHAR(50)
 	,@UpdatedDate DATETIME2(7)
 	)
@@ -22,8 +23,9 @@ BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE [dbo].[JOBDL000Master]
-	SET JobPurchaseInvoiceNumber = @JobPurchaseInvoiceNumber
-	   ,JobSalesInvoiceNumber = @JobSalesInvoiceNumber
+	SET JobPurchaseInvoiceNumber = CASE WHEN ISNULL(@JobPurchaseInvoiceNumber,'') <> '' THEN @JobPurchaseInvoiceNumber ELSE JobPurchaseInvoiceNumber END
+	   ,JobSalesInvoiceNumber = CASE WHEN ISNULL(@JobSalesInvoiceNumber,'') <> '' THEN @JobSalesInvoiceNumber ELSE JobSalesInvoiceNumber END
+	   ,JobInvoicedDate = ISNULL(@JobInvoicedDate,JobInvoicedDate)
 	   ,DateEntered = @UpdatedDate
 	   ,ChangedBy = @UpdatedBy
 	WHERE [Id] = @JobId;

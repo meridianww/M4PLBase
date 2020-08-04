@@ -22,6 +22,7 @@ using M4PL.Business.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -485,7 +486,7 @@ namespace M4PL.API.Controllers
 		/// <summary>
 		/// Cancel a Existing Order From Meridian System
 		/// </summary>
-		/// <param name="orderNumber">orderNumbe is a unique identifier for a order of type string.</param>
+		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
 		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
 		[HttpPost]
 		[Route("CancelOrder"), ResponseType(typeof(StatusModel))]
@@ -493,6 +494,88 @@ namespace M4PL.API.Controllers
 		{
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.CancelJobByOrderNumber(orderNumber);
+		}
+
+		/// <summary>
+		/// Reschedule a Existing Order From Meridian System
+		/// </summary>
+		/// <param name="jobRescheduleDetail">jobRescheduleDetail</param>
+		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpPost]
+		[Route("RescheduleOrder"), ResponseType(typeof(StatusModel))]
+		public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			SysSetting sysSetting = UpdateActiveUserSettings();
+			return _jobCommands.RescheduleJobByOrderNumber(jobRescheduleDetail, orderNumber, sysSetting);
+		}
+
+		/// <summary>
+		/// Return the location cordinates for a Order from Meridian System
+		/// </summary>
+		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+		/// <returns>API returns a Model object which contains the details about success or failure with Latitude and Longitude, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpGet]
+		[Route("LocationCoordinate"), ResponseType(typeof(OrderLocationCoordinate))]
+		public OrderLocationCoordinate LocationCoordinate(string orderNumber)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _jobCommands.GetOrderLocationCoordinate(orderNumber);
+		}
+
+		/// <summary>
+		/// Return the current status of a Order from Meridian System
+		/// </summary>
+		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+		/// <returns>API returns a Model object which contains the details about success or failure with Order Status, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpGet]
+		[Route("OrderStatus"), ResponseType(typeof(OrderStatusModel))]
+		public OrderStatusModel GetOrderStatus(string orderNumber)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _jobCommands.GetOrderStatus(orderNumber);
+		}
+
+		/// <summary>
+		/// Update the special instructions for a Order in Meridian System
+		/// </summary>
+		/// <param name="jobSpecialInstruction">jobSpecialInstruction contains a string where instructions needs to pass.</param>
+		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+		/// <returns>API returns a Model object which contains the details about success or failure with Order Status, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpPost]
+		[Route("specialInstruction"), ResponseType(typeof(StatusModel))]
+		public StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _jobCommands.InsertOrderSpecialInstruction(jobSpecialInstruction, orderNumber);
+		}
+
+		protected SysSetting UpdateActiveUserSettings()
+		{
+			M4PL.Business.Common.CommonCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			SysSetting userSysSetting = M4PL.Business.Common.CommonCommands.GetUserSysSettings();
+			IList<RefSetting> refSettings = JsonConvert.DeserializeObject<IList<RefSetting>>(M4PL.Business.Common.CommonCommands.GetSystemSettings().SysJsonSetting);
+			if (!string.IsNullOrEmpty(userSysSetting.SysJsonSetting) && (userSysSetting.Settings == null || !userSysSetting.Settings.Any()))
+				userSysSetting.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSysSetting.SysJsonSetting);
+			else
+				userSysSetting.Settings = new List<RefSetting>();
+			userSysSetting.SysJsonSetting = string.Empty; // To save storage in cache as going to use only Model not json.
+			foreach (var setting in refSettings)
+			{
+				if (!setting.IsSysAdmin)
+				{
+					var userSetting = userSysSetting.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.Value.Equals(setting.Value));
+					if (userSetting == null)
+					{
+						userSysSetting.Settings.Add(new RefSetting { Entity = setting.Entity, Name = setting.Name, Value = setting.Value });
+						continue;
+					}
+					if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable)
+						userSetting.Value = setting.Value;
+				}
+			}
+			return userSysSetting;
 		}
 	}
 }

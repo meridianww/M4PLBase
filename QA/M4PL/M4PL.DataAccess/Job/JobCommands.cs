@@ -290,7 +290,7 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
+		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job, long customerId)
 		{
 			long insertedGatewayId = 0;
 			try
@@ -301,8 +301,9 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@ProgramID", job.ProgramID),
 				new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
 				new Parameter("@enteredBy", activeUser.UserName),
-				new Parameter("@userId", activeUser.UserId)
-				};
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@IsGatewayExceptionUpdate", job.CustomerId == customerId ? true : false)
+			};
 
 				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
 				if (insertedGatewayId > 0)
@@ -517,7 +518,7 @@ namespace M4PL.DataAccess.Job
 			return createdJobInfo != null ? createdJobInfo.Id : 0;
 		}
 
-		public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
+		public static bool InsertJobComment(ActiveUser activeUser, JobComment comment, bool gwyCompleted = true)
 		{
 			bool result = true;
 			var parameters = new List<Parameter>
@@ -527,7 +528,8 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
 			   new Parameter("@enteredBy", activeUser.UserName),
 			   new Parameter("@userId", activeUser.UserId),
-			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
+			   new Parameter("@GwyCompleted", gwyCompleted)
 			};
 
 			try
@@ -931,7 +933,7 @@ namespace M4PL.DataAccess.Job
 						CstUnitId = billableItem.PrcUnitId,
 						ChargeTypeId = billableItem.ChargeTypeId,
 						StatusId = billableItem.StatusId,
-						CstQuantity = 1,
+						CstQuantity = billableItem.PrcQuantity > 1 ? billableItem.PrcQuantity : 1,
 						CstRate = decimal.Zero,
 						CstElectronicBilling = billableItem.PrcElectronicBilling,
 						DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
@@ -951,7 +953,7 @@ namespace M4PL.DataAccess.Job
 						CstUnitId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateUnitTypeId : billableItem.PrcUnitId,
 						ChargeTypeId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateTypeId : billableItem.ChargeTypeId,
 						StatusId = billableItem.StatusId,
-						CstQuantity = 1,
+						CstQuantity = billableItem.PrcQuantity > 1 ? billableItem.PrcQuantity : 1,
 						CstRate = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrCostRate : decimal.Zero,
 						CstElectronicBilling = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrElectronicBilling : billableItem.PrcElectronicBilling,
 						DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
@@ -980,7 +982,7 @@ namespace M4PL.DataAccess.Job
 						ChargeTypeId = costItem.ChargeTypeId,
 						StatusId = costItem.StatusId,
 						PrcRate = decimal.Zero,
-						PrcQuantity = 1,
+						PrcQuantity = costItem.CstQuantity > 1 ? costItem.CstQuantity : 1,
 						PrcElectronicBilling = costItem.CstElectronicBilling,
 						DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 						EnteredBy = costItem.EnteredBy
@@ -1000,7 +1002,7 @@ namespace M4PL.DataAccess.Job
 						ChargeTypeId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateTypeId : costItem.ChargeTypeId,
 						PrcRate = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrBillablePrice : decimal.Zero,
 						StatusId = costItem.StatusId,
-						PrcQuantity = 1,
+						PrcQuantity = costItem.CstQuantity > 1 ? costItem.CstQuantity : 1,
 						PrcElectronicBilling = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrElectronicBilling : costItem.CstElectronicBilling,
 						DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 						EnteredBy = costItem.EnteredBy
@@ -1031,7 +1033,7 @@ namespace M4PL.DataAccess.Job
 							PrcUnitId = costItem.CstUnitId,
 							ChargeTypeId = costItem.ChargeTypeId,
 							StatusId = costItem.StatusId,
-							PrcQuantity = 1,
+							PrcQuantity = costItem.CstQuantity > 1 ? costItem.CstQuantity : 1 ,
 							PrcRate = decimal.Zero,
 							PrcElectronicBilling = costItem.CstElectronicBilling,
 							DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
@@ -1052,7 +1054,7 @@ namespace M4PL.DataAccess.Job
 							ChargeTypeId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateTypeId : costItem.ChargeTypeId,
 							PrcRate = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrBillablePrice : decimal.Zero,
 							StatusId = costItem.StatusId,
-							PrcQuantity = 1,
+							PrcQuantity = costItem.CstQuantity > 1 ? costItem.CstQuantity : 1,
 							PrcElectronicBilling = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrElectronicBilling : costItem.CstElectronicBilling,
 							DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 							EnteredBy = costItem.EnteredBy
@@ -1076,7 +1078,7 @@ namespace M4PL.DataAccess.Job
 							ChargeTypeId = billableItem.ChargeTypeId,
 							StatusId = billableItem.StatusId,
 							CstRate = decimal.Zero,
-							CstQuantity = 1,
+							CstQuantity = billableItem.PrcQuantity > 1 ? billableItem.PrcQuantity : 1,
 							CstElectronicBilling = billableItem.PrcElectronicBilling,
 							DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 							EnteredBy = billableItem.EnteredBy
@@ -1096,7 +1098,7 @@ namespace M4PL.DataAccess.Job
 							ChargeTypeId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateTypeId : billableItem.ChargeTypeId,
 							CstRate = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrCostRate : decimal.Zero,
 							StatusId = billableItem.StatusId,
-							CstQuantity = 1,
+							CstQuantity = billableItem.PrcQuantity > 1 ? billableItem.PrcQuantity : 1,
 							CstElectronicBilling = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrElectronicBilling : billableItem.PrcElectronicBilling,
 							DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 							EnteredBy = billableItem.EnteredBy
@@ -1674,13 +1676,14 @@ namespace M4PL.DataAccess.Job
 		{
 			bool result = true;
 			var parameters = new[]
-			    {
-			            new Parameter("@JobId",jobId),
-			            new Parameter("@JobPurchaseInvoiceNumber",jobInvoiceDetail.JobPurchaseInvoiceNumber),
-			            new Parameter("@JobSalesInvoiceNumber",jobInvoiceDetail.JobSalesInvoiceNumber),
-			            new Parameter("@UpdatedBy",activeUser.UserName),
-			            new Parameter("@UpdatedDate", TimeUtility.GetPacificDateTime())
-			     };
+				{
+						new Parameter("@JobId",jobId),
+						new Parameter("@JobPurchaseInvoiceNumber",jobInvoiceDetail.JobPurchaseInvoiceNumber),
+						new Parameter("@JobSalesInvoiceNumber",jobInvoiceDetail.JobSalesInvoiceNumber),
+						new Parameter("@JobInvoicedDate",jobInvoiceDetail.JobInvoicedDate),
+						new Parameter("@UpdatedBy",activeUser.UserName),
+						new Parameter("@UpdatedDate", TimeUtility.GetPacificDateTime())
+				 };
 			try
 			{
 				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobInvoiceDetail, parameters, storedProcedure: true);

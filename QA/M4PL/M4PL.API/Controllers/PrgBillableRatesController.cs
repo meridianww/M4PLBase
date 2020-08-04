@@ -31,7 +31,7 @@ namespace M4PL.API.Controllers
 {
 
     [CustomAuthorize]
-    [RoutePrefix("api/ProgramBillableRates")]
+    [RoutePrefix("api/PrgBillableRates")]
     public class PrgBillableRatesController : ApiController
 	{
 		private readonly IPrgBillableRateCommands _programBillableRateCommands;

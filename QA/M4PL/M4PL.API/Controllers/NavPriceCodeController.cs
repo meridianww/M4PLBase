@@ -17,13 +17,14 @@ using System.Linq;
 using System.Web.Http;
 using M4PL.API.Filters;
 using System.Web.Http.Description;
+using M4PL.APIClient.ViewModels.Document;
 
 namespace M4PL.API.Controllers
 {
     /// <summary>
     /// Controller For Nav Related Operations
     /// </summary>
-   
+
     [CustomAuthorize]
     [RoutePrefix("api/NavPriceCode")]
     public class NavPriceCodeController : ApiController
@@ -137,6 +138,20 @@ namespace M4PL.API.Controllers
         {
             _navPriceCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navPriceCodeCommands.GetAllPriceCode();
+        }
+        [HttpGet]
+        [Route("GetPriceCodeReportByJobId")]
+        public virtual Entities.Document.DocumentData GetPriceCodeReportByJobId(string jobId)
+        {
+            _navPriceCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _navPriceCodeCommands.GetPriceCodeReportByJobId(jobId);
+        }
+        [HttpGet]
+        [Route("IsPriceCodeDataPresentForJobInNAV")]
+        public virtual Entities.Document.DocumentStatus IsPriceCodeDataPresentForJobInNAV(string jobId)
+        {
+            _navPriceCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _navPriceCodeCommands.IsPriceCodeDataPresentForJobInNAV(jobId);
         }
     }
 }

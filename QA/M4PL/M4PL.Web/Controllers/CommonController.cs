@@ -546,8 +546,21 @@ namespace M4PL.Web.Controllers
             string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
             return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult IsPriceCodeDataPresentForJobInNAV(long jobId, string jobIds)
+        {
+            List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+            string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+            return Json(new { status = true, documentStatus = _commonCommands.IsPriceCodeDataPresentForJobInNAV(requestedJobId) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public ActionResult IsHistoryPresentForJob(long jobId, string jobIds)
+        public ActionResult IsCostCodeDataPresentForJobInNAV(long jobId, string jobIds)
+        {
+            List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+            string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+            return Json(new { status = true, documentStatus = _commonCommands.IsCostCodeDataPresentForJobInNAV(requestedJobId) }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult IsHistoryPresentForJob(long jobId, string jobIds)
 		{
 			List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
 			string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
@@ -653,7 +666,8 @@ namespace M4PL.Web.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CommonIds maxMinFormData = null;
-            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            if (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
+                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
 
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {

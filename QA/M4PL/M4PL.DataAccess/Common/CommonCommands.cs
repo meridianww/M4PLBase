@@ -1263,5 +1263,35 @@ namespace M4PL.DataAccess.Common
 
             return jobExceptionDetail;
         }
-    }
+
+		public static JobExceptionDetail GetJobRescheduledDetail(long jobId, bool isSpecificCustomer)
+		{
+			JobExceptionDetail jobExceptionDetail = new JobExceptionDetail();
+			SetCollection sets = new SetCollection();
+			sets.AddSet<JobExceptionInfo>("JobExceptionInfo");
+			sets.AddSet<JobInstallStatus>("JobInstallStatus");
+			var parameters = new List<Parameter>()
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@IsSpecificCustomer", isSpecificCustomer)
+			};
+
+			SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetJobRescheduleReasonDetail, parameters.ToArray(), storedProcedure: true);
+
+			var jobExceptionInfo = sets.GetSet<JobExceptionInfo>("JobExceptionInfo");
+			var jobInstallStatus = sets.GetSet<JobInstallStatus>("JobInstallStatus");
+
+			if (jobExceptionInfo != null && jobExceptionInfo.Count() > 0)
+			{
+				jobExceptionDetail.JobExceptionInfo = jobExceptionInfo.ToList();
+			}
+
+			if (jobInstallStatus != null && jobInstallStatus.Count() > 0)
+			{
+				jobExceptionDetail.JobInstallStatus = jobInstallStatus.ToList();
+			}
+
+			return jobExceptionDetail;
+		}
+	}
 }

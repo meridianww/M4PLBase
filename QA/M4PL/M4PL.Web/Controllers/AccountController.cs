@@ -20,9 +20,11 @@
 using M4PL.APIClient.Common;
 using M4PL.Entities;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Controllers
@@ -51,6 +53,12 @@ namespace M4PL.Web.Controllers
 			IList<PreferredLocation> preferredLocations = null;
 			IList<UserSecurity> userSecurities = null;
 			SysSetting userSettings = null;
+
+			Response.Cache.SetCacheability(HttpCacheability.NoCache);
+			Response.Cache.SetExpires(DateTime.Now);
+			Response.Cache.SetNoServerCaching();
+			Response.Cache.SetNoStore();
+
 			SessionProvider.ActiveUser = APIClient.Administration.AccountCommands.GetActiveUser(login);
 			if (SessionProvider.ActiveUser.UserId == 0 && string.IsNullOrEmpty(SessionProvider.ActiveUser.SystemMessage))
 			{

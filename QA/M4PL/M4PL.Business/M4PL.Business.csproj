@@ -120,6 +120,8 @@
     <Compile Include="Customer\ICustReportCommands.cs" />
     <Compile Include="Finance\CostCode\INavCostCodeCommands.cs" />
     <Compile Include="Finance\Customer\INavCustomerCommands.cs" />
+    <Compile Include="Finance\NavRate\INavRateCommands.cs" />
+    <Compile Include="Finance\NavRate\NavRateCommands.cs" />
     <Compile Include="Finance\OrderItem\INavOrderItemCommands.cs" />
     <Compile Include="Finance\OrderItem\NavOrderItemCommands.cs" />
     <Compile Include="Finance\PriceCode\INavPriceCodeCommands.cs" />
@@ -137,6 +139,8 @@
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="JobRollup\IJobRollupCommands.cs" />
     <Compile Include="JobRollup\JobRollupCommands.cs" />
+    <Compile Include="JobServices\IJobServiceCommands.cs" />
+    <Compile Include="JobServices\JobServiceCommands.cs" />
     <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
     <Compile Include="Job\IJobAttachmentCommands.cs" />
@@ -290,9 +294,17 @@
     <Folder Include="EDI\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\M4PL.APIClient\M4PL.APIClient.csproj">
+      <Project>{45432255-74AE-45E3-BEEF-BAF721678C2E}</Project>
+      <Name>M4PL.APIClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\M4PL.DataAccess\M4PL.DataAccess.csproj">
       <Project>{f0d5498e-6d2e-4df0-8d05-bb76516bed81}</Project>
       <Name>M4PL.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\M4PL.EF\M4PL.EF.csproj">
+      <Project>{8289a840-b9fc-480b-85d4-1b22c2e073ff}</Project>
+      <Name>M4PL.EF</Name>
     </ProjectReference>
     <ProjectReference Include="..\M4PL.Entities\M4PL.Entities.csproj">
       <Project>{60651f0d-2334-4372-977a-fdfa87a80372}</Project>

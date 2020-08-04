@@ -284,7 +284,7 @@ namespace M4PL.Business.XCBL
 
         private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
         {
-            _jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job);
+            _jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
         }
         private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails, List<SystemReference> systemOptionList)
         {

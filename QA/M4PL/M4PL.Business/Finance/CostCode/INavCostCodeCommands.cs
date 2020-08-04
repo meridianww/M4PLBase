@@ -25,5 +25,7 @@ namespace M4PL.Business.Finance.CostCode
     public interface INavCostCodeCommands : IBaseCommands<NavCostCode>
     {
         IList<NavCostCode> GetAllCostCode();
+        Entities.Document.DocumentData GetCostCodeReportByJobId(string jobId);
+        Entities.Document.DocumentStatus IsCostCodeDataPresentForJobInNAV(string jobId);
     }
 }
