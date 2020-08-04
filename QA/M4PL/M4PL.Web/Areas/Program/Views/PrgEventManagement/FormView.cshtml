@@ -41,6 +41,9 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-30'>" + Html.EditorFor(m => m.Record.CcEMail, "MultilineText").ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.Description, "MultilineText").ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-30'>" + Html.EditorFor(m => m.Record.IsBodyHtml).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
     });
 }).GetHtml()
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
