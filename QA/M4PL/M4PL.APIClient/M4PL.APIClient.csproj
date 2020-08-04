@@ -281,6 +281,7 @@
     <Compile Include="ViewModels\Document\DocumentStatusView.cs" />
     <Compile Include="ViewModels\Document\DocumentView.cs" />
     <Compile Include="ViewModels\DropDownEditViewModel.cs" />
+    <Compile Include="ViewModels\Event\EventSubscriberTypeView.cs" />
     <Compile Include="ViewModels\Finance\NavCostCodeView.cs" />
     <Compile Include="ViewModels\Finance\NavCustomerView.cs" />
     <Compile Include="ViewModels\Finance\NavPriceCodeView.cs" />

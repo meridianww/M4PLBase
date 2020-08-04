@@ -18,6 +18,7 @@
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Program;
+using M4PL.APIClient.ViewModels.Event;
 using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Program;
@@ -32,94 +33,114 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Program.Controllers
 {
-	public class PrgEventManagementController : BaseController<PrgEventManagementView>
-	{
-		protected IPrgEventManagementCommands _prgEventManagementCommands;
+    public class PrgEventManagementController : BaseController<PrgEventManagementView>
+    {
+        protected IPrgEventManagementCommands _prgEventManagementCommands;
 
-		/// <summary>
-		/// Interacts with the interfaces to get the Program details from the system and renders to the page
-		/// Gets the page related information on the cache basis
-		/// </summary>
-		/// <param name="prgEventManagementCommands">prgEventManagementCommands</param>
-		/// <param name="commonCommands">commonCommands</param>
-		public PrgEventManagementController(IPrgEventManagementCommands prgEventManagementCommands, ICommonCommands commonCommands)
-			: base(prgEventManagementCommands)
-		{
-			_commonCommands = commonCommands;
-			_prgEventManagementCommands = prgEventManagementCommands;
-		}
+        /// <summary>
+        /// Interacts with the interfaces to get the Program details from the system and renders to the page
+        /// Gets the page related information on the cache basis
+        /// </summary>
+        /// <param name="prgEventManagementCommands">prgEventManagementCommands</param>
+        /// <param name="commonCommands">commonCommands</param>
+        public PrgEventManagementController(IPrgEventManagementCommands prgEventManagementCommands, ICommonCommands commonCommands)
+            : base(prgEventManagementCommands)
+        {
+            _commonCommands = commonCommands;
+            _prgEventManagementCommands = prgEventManagementCommands;
+        }
 
-		public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
-		{
-			RowHashes = new Dictionary<string, Dictionary<string, object>>();
-			TempData["RowHashes"] = RowHashes;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			if (route.Filters != null && (route.Filters.FieldName == "ChildGridRoute" || route.Filters.FieldName == "CdcLocationCode" || route.Filters.FieldName == "VdcLocationCode"))
-				gridName = "";
-			bool isGridSetting = route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard ? true : false;//User for temporaryly for job
-			_gridResult.FocusedRowId = route.RecordId;
-			route.RecordId = 0;
-			if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
-				route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-			if (route.ParentEntity == EntitiesAlias.Common)
-				route.ParentRecordId = 0;
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+        {
+            RowHashes = new Dictionary<string, Dictionary<string, object>>();
+            TempData["RowHashes"] = RowHashes;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (route.Filters != null && (route.Filters.FieldName == "ChildGridRoute" || route.Filters.FieldName == "CdcLocationCode" || route.Filters.FieldName == "VdcLocationCode"))
+                gridName = "";
+            bool isGridSetting = route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard ? true : false;//User for temporaryly for job
+            _gridResult.FocusedRowId = route.RecordId;
+            route.RecordId = 0;
+            if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
+                route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+            if (route.ParentEntity == EntitiesAlias.Common)
+                route.ParentRecordId = 0;
 
 
-			SetGridResult(route, gridName, isGridSetting);
-			long expandRowId;
-			Int64.TryParse(route.Url, out expandRowId);
-			if (_gridResult.GridSetting.ChildGridRoute != null)
-				_gridResult.GridSetting.ChildGridRoute.ParentRecordId = expandRowId;
-			if (SessionProvider.ViewPagedDataSession.Count() > 0
-			&& SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-			&& SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
-			{
-				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
-			}
-			if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel)
-				&& route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)))
-				// || route.Entity == EntitiesAlias.JobAdvanceReport)
-				return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
-			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
-		}
+            SetGridResult(route, gridName, isGridSetting);
+            long expandRowId;
+            Int64.TryParse(route.Url, out expandRowId);
+            if (_gridResult.GridSetting.ChildGridRoute != null)
+                _gridResult.GridSetting.ChildGridRoute.ParentRecordId = expandRowId;
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+            }
+            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel)
+                && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)))
+                // || route.Entity == EntitiesAlias.JobAdvanceReport)
+                return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
 
-		public override ActionResult FormView(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			CommonIds maxMinFormData = null;
-			maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-			if (maxMinFormData != null)
-			{
-				_formResult.MaxID = maxMinFormData.MaxID;
-				_formResult.MinID = maxMinFormData.MinID;
-			}
-			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-			{
-				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-				if (maxMinFormData != null)
-				{
-					SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
-					SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
-				}
-			}
+        public override ActionResult FormView(string strRoute)
+        {
 
-			_formResult.SessionProvider = SessionProvider;
-			_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new PrgEventManagementView();
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            CommonIds maxMinFormData = null;
+            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            if (maxMinFormData != null)
+            {
+                _formResult.MaxID = maxMinFormData.MaxID;
+                _formResult.MinID = maxMinFormData.MinID;
+            }
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+                if (maxMinFormData != null)
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
+                    SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
+                }
+            }
 
-			_formResult.SetupFormResult(_commonCommands, route);
-			if (SessionProvider.ViewPagedDataSession.Count() > 0
-			&& SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-			&& SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
-			{
-				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
-			}
-			if (_formResult.Record is SysRefModel)
-			{
-				(_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0
-					? new Random().Next(-1000, 0) :
-					(_formResult.Record as SysRefModel).Id;
-			}
-			return PartialView(_formResult);
-		}
-	}
+            _formResult.SessionProvider = SessionProvider;
+            _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new PrgEventManagementView();
+
+            _formResult.SetupFormResult(_commonCommands, route);
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
+            }
+            if (_formResult.Record is SysRefModel)
+            {
+                (_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0
+                    ? new Random().Next(-1000, 0) :
+                    (_formResult.Record as SysRefModel).Id;
+            }
+            return PartialView(_formResult);
+        }
+
+        public PartialViewResult SubscriberType(int Id)
+        {
+
+            var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
+            DropDownEditViewModel.SelectedDropDownStringArray = new string[] { };
+            DropDownEditViewModel.Id = Id;
+
+            List<EventSubscriberTypeView> subscriberTypesList = new List<EventSubscriberTypeView>() {
+                new EventSubscriberTypeView() { Id = 1, EventSubscriberTypeName = "POC" },
+                new EventSubscriberTypeView() { Id = 2, EventSubscriberTypeName = "POC2" },
+                new EventSubscriberTypeView() { Id = 3, EventSubscriberTypeName = "Custom" }
+
+            };
+
+            ViewData["SubscriberTypeList"] = subscriberTypesList;
+            return PartialView("SubscriberType", DropDownEditViewModel);
+        }
+
+    }
 }

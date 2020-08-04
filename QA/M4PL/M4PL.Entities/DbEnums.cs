@@ -213,8 +213,9 @@ namespace M4PL.Entities
 		PrgVendLocation,
 		PrgCostLocation,
 		PrgBillableLocation,
+        
 
-		PrgRefRole,
+        PrgRefRole,
 		ProgramRole,
 		AssignPrgVendor,
 		UnAssignPrgVendor,
