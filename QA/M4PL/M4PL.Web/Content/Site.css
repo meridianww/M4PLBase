@@ -4409,6 +4409,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         width: 12%;
         float: left;
     }
+
+    #CardView .dxbplc {
+        width: 24% !important;
+    }
 }
 
 @media screen and (min-width: 768px) and (max-width:1022px) {
@@ -4838,6 +4842,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 
     div.dxrpCW {
         padding: 0px;
+    }
+
+    #CardView .dxbplc {
+        width: 33% !important;
     }
 }
 
