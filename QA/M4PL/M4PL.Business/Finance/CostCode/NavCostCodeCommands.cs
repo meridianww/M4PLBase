@@ -195,7 +195,7 @@ namespace M4PL.Business.Finance.CostCode
 			return documentData;
 		}
 
-		public DocumentData GetCostCodeReportDataByJobId(long jobId, List<NavPurchaseOrderItem> navPurchaseOrderItem)
+		public DocumentData GetCostCodeReportDataByJobId(long jobId, List<PostedPurchaseOrderItem> navPurchaseOrderItem)
 		{
 			DocumentData documentData = null;
 			DataTable tblResultLocal = GetJobCostCodeReportDataTable(ActiveUser, jobId, navPurchaseOrderItem);
@@ -288,7 +288,7 @@ namespace M4PL.Business.Finance.CostCode
 			return documentStatus;
 		}
 
-		public static DataTable GetJobCostCodeReportDataTable(ActiveUser activeUser, long jobId, List<NavPurchaseOrderItem> navPurchaseOrderItem)
+		public static DataTable GetJobCostCodeReportDataTable(ActiveUser activeUser, long jobId, List<PostedPurchaseOrderItem> navPurchaseOrderItem)
 		{
 			Entities.Job.Job jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(activeUser, jobId, 0);
 			DataTable tblJobCostCodeReport = new DataTable();

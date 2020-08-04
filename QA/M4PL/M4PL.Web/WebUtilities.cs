@@ -1036,7 +1036,7 @@ namespace M4PL.Web
             if (gridCookie == null)
             {
                 gridCookie = new HttpCookie(cookieId);
-                gridCookie.Expires = DateTime.Now.AddDays(14);
+                gridCookie.Expires = DateTime.Now.AddDays(-1);
             }
             if (!string.IsNullOrEmpty(layout))
             {

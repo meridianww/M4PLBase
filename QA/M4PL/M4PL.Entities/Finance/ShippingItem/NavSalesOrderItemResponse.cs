@@ -22,6 +22,19 @@ namespace M4PL.Entities.Finance.ShippingItem
 		public string ContextData { get; set; }
 
 		[JsonProperty("value")]
-		public List<NavSalesOrderItem> NavSalesOrderItem { get; set; }
+		public List<PostedSalesOrderLine> NavSalesOrderItem { get; set; }
+	}
+
+	public class PostedSalesOrderLine
+	{
+		public string No { get; set; }
+
+		public string Document_No { get; set; }
+
+		public string Cross_Reference_No { get; set; }
+
+		public string Description { get; set; }
+
+		public decimal Unit_Price { get; set; }
 	}
 }

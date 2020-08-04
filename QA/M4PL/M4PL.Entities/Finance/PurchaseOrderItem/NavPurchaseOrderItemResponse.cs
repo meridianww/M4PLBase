@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -22,6 +22,19 @@ namespace M4PL.Entities.Finance.PurchaseOrderItem
 		public string ContextData { get; set; }
 
 		[JsonProperty("value")]
-		public List<NavPurchaseOrderItem> NavPurchaseOrderItem { get; set; }
+		public List<PostedPurchaseOrderItem> NavPurchaseOrderItem { get; set; }
+	}
+
+	public class PostedPurchaseOrderItem
+	{
+		public string No { get; set; }
+
+		public string Document_No { get; set; }
+
+		public string Cross_Reference_No { get; set; }
+
+		public string Description { get; set; }
+
+		public decimal Unit_Cost_LCY { get; set; }
 	}
 }

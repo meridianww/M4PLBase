@@ -411,14 +411,14 @@ namespace M4PL.Business.Finance.SalesOrder
         #endregion
 
         #region Dimension
-        public static NavSalesOrderDimensionResponse GetNavSalesOrderDimension()
+        public static NavSalesOrderDimensionResponse GetNavSalesOrderDimension(string userName, string password, string serviceUrl)
         {
             NavSalesOrderDimensionResponse navSalesOrderDimensionValueList = null;
-            string serviceCall = string.Format("{0}('{1}')/DimensionValues", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
+            string serviceCall = string.Format("{0}('{1}')/DimensionValues", serviceUrl, "Meridian");
             try
             {
                 navSalesOrderDimensionValueList = new NavSalesOrderDimensionResponse();
-                NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
+                NetworkCredential myCredentials = new NetworkCredential(userName, password);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
                 request.Credentials = myCredentials;
                 request.KeepAlive = false;
@@ -433,7 +433,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
                         using (var stringReader = new StringReader(responceString))
                         {
-                            navSalesOrderDimensionValueList = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderDimensionResponse>(responceString);
+                            navSalesOrderDimensionValueList = JsonConvert.DeserializeObject<NavSalesOrderDimensionResponse>(responceString);
                         }
                     }
                 }
@@ -446,14 +446,14 @@ namespace M4PL.Business.Finance.SalesOrder
             return navSalesOrderDimensionValueList;
         }
 
-		public static NavSalesOrderPostedInvoiceResponse GetNavPostedSalesOrderResponse()
+		public static NavSalesOrderPostedInvoiceResponse GetNavPostedSalesOrderResponse(string username, string password, string serviceUrl)
 		{
 			NavSalesOrderPostedInvoiceResponse navSalesOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PostedSalesInvoice", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
+			string serviceCall = string.Format("{0}('{1}')/PostedSalesInvoice", serviceUrl, "Meridian");
 			try
 			{
 				navSalesOrderResponse = new NavSalesOrderPostedInvoiceResponse();
-				NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
+				NetworkCredential myCredentials = new NetworkCredential(username, password);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
 				request.KeepAlive = false;
@@ -481,14 +481,14 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderResponse;
 		}
 
-		public static NavPurchaseOrderPostedInvoiceResponse GetNavPostedPurchaseOrderResponse()
+		public static NavPurchaseOrderPostedInvoiceResponse GetNavPostedPurchaseOrderResponse(string username, string password, string serviceUrl)
 		{
 			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoice", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
+			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoice", serviceUrl, "Meridian");
 			try
 			{
 				navPurchaseOrderResponse = new NavPurchaseOrderPostedInvoiceResponse();
-				NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
+				NetworkCredential myCredentials = new NetworkCredential(username, password);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
 				request.KeepAlive = false;
@@ -516,14 +516,14 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navPurchaseOrderResponse;
 		}
 
-		public static NavSalesOrderItemResponse GetNavPostedSalesOrderItemResponse()
+		public static NavSalesOrderItemResponse GetNavPostedSalesOrderItemResponse(string username, string password, string serviceUrl)
 		{
 			NavSalesOrderItemResponse navSalesOrderItemResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PostedSalesInvoiceLines", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
+			string serviceCall = string.Format("{0}('{1}')/PostedSalesInvoiceLines", serviceUrl, "Meridian");
 			try
 			{
 				navSalesOrderItemResponse = new NavSalesOrderItemResponse();
-				NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
+				NetworkCredential myCredentials = new NetworkCredential(username, password);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
 				request.KeepAlive = false;
@@ -551,14 +551,14 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderItemResponse;
 		}
 
-		public static NavPurchaseOrderItemResponse GetNavPostedPurchaseOrderItemResponse()
+		public static NavPurchaseOrderItemResponse GetNavPostedPurchaseOrderItemResponse(string username, string password, string serviceUrl)
 		{
 			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoiceLines", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
+			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoiceLines", serviceUrl, "Meridian");
 			try
 			{
 				navPurchaseOrderItemResponse = new NavPurchaseOrderItemResponse();
-				NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
+				NetworkCredential myCredentials = new NetworkCredential(username, password);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
 				request.KeepAlive = false;
