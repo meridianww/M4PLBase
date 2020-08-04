@@ -22,6 +22,13 @@ namespace M4PL.Entities.Finance.SalesOrder
 		public string ContextData { get; set; }
 
 		[JsonProperty("value")]
-		public List<NavSalesOrder> NavSalesOrder { get; set; }
+		public List<PostedSalesOrder> NavSalesOrder { get; set; }
+	}
+
+	public class PostedSalesOrder
+	{
+		public string No { get; set; }
+
+		public string M4PL_Job_ID { get; set; }
 	}
 }
