@@ -431,11 +431,17 @@
             {
                 foreach (var contexMenu in Model.GridSetting.ContextMenu)
                 {
+
+
                     var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
                     command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
                     command.Enabled = true;
                     command.Items.Clear();
-                    if (contexMenu.ChildOperations.Count > 0)
+                    if (contexMenu.LangName == "Actions" && Model.Records.Count == 0)
+                    {
+                        command.Enabled = false;
+                    }
+                    if (contexMenu.ChildOperations.Count > 0 && command.Enabled)
                     {
                         foreach (var childContextMenu in contexMenu.ChildOperations)
                         {
