@@ -49,13 +49,14 @@ BEGIN
 	LEFT JOIN SYSTM000Ref_Options OPT ON OPT.Id = GATEWAY.GatewayTypeId
 	WHERE GATEWAY.JobID = @id --AND GatewayTypeId =85 --AND StatusId = 194 
 
-	SELECT DOCUMENT.Id,
+	SELECT ATT.Id,
 	       DOCUMENT.JobID,
 		   DOCUMENT.JdrCode ,
 		   DOCUMENT.JdrTitle,
 		   DOCUMENT.DocTypeId ,
 		   OPT.SysOptionName AS DocTypeIdName
 	FROM JOBDL040DocumentReference DOCUMENT 
+	INNER JOIN [dbo].[SYSTM020Ref_Attachments] ATT ON ATT.AttPrimaryRecordID = DOCUMENT.Id AND ATT.AttTableName = 'JobDocReference' 
 	LEFT JOIN SYSTM000Ref_Options OPT ON OPT.Id = DOCUMENT.DocTypeId
-	WHERE DOCUMENT.JobID = @id
+	WHERE DOCUMENT.JobID = @id AND ATT.StatusId = 1 AND DOCUMENT.StatusId = 1
 END
