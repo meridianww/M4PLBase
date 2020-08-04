@@ -48,4 +48,14 @@ BEGIN
 	FROM JOBDL020Gateways GATEWAY 
 	LEFT JOIN SYSTM000Ref_Options OPT ON OPT.Id = GATEWAY.GatewayTypeId
 	WHERE GATEWAY.JobID = @id --AND GatewayTypeId =85 --AND StatusId = 194 
+
+	SELECT DOCUMENT.Id,
+	       DOCUMENT.JobID,
+		   DOCUMENT.JdrCode ,
+		   DOCUMENT.JdrTitle,
+		   DOCUMENT.DocTypeId ,
+		   OPT.SysOptionName AS DocTypeIdName
+	FROM JOBDL040DocumentReference DOCUMENT 
+	LEFT JOIN SYSTM000Ref_Options OPT ON OPT.Id = DOCUMENT.DocTypeId
+	WHERE DOCUMENT.JobID = @id
 END

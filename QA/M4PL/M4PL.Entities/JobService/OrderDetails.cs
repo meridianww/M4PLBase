@@ -11,6 +11,7 @@ namespace M4PL.Entities.JobService
         public OrderDetails()
         {
             OrderGatewayDetails = new List<OrderGatewayDetails>();
+            OrderDocumentDetails = new List<OrderDocumentDetails>();
         }
         public long Id { get; set; }
         public string CustomerSalesOrder { get; set; }
@@ -24,5 +25,6 @@ namespace M4PL.Entities.JobService
         public long? CustomerId { get; set; }
         public string CustomerCode { get; set; }
         public List<OrderGatewayDetails> OrderGatewayDetails { get; set; }
+        public List<OrderDocumentDetails> OrderDocumentDetails { get; set; }
     }
 }

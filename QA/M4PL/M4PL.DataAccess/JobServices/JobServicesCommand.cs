@@ -39,9 +39,11 @@ namespace M4PL.DataAccess.JobServices
             SetCollection sets = new SetCollection();
             sets.AddSet<OrderDetails>("OrderDetails");
             sets.AddSet<OrderGatewayDetails>("OrderGatewayDetails");
+            sets.AddSet<OrderDocumentDetails>("OrderDocumentDetails");
             SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetOrderDetailsById, parameters.ToArray(), storedProcedure: true);
             var orderDetailslist = sets.GetSet<OrderDetails>("OrderDetails");
             var orderGatewayCollection = sets.GetSet<OrderGatewayDetails>("OrderGatewayDetails");
+            var orderDocumentCollection = sets.GetSet<OrderDocumentDetails>("OrderDocumentDetails");
 
             if (orderDetailslist?.Count > 0)
             {
@@ -49,6 +51,10 @@ namespace M4PL.DataAccess.JobServices
                 if (orderDetails.Id > 0 && orderGatewayCollection != null && orderGatewayCollection.Count > 0)
                 {
                     orderDetails.OrderGatewayDetails = orderGatewayCollection.Where(x => x.JobID == orderDetails.Id).ToList();
+                }
+                if (orderDetails.Id > 0 && orderDocumentCollection != null && orderDocumentCollection.Count > 0)
+                {
+                    orderDetails.OrderDocumentDetails = orderDocumentCollection.Where(x => x.JobID == orderDetails.Id).ToList();
                 }
             }
             return orderDetails;
