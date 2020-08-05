@@ -1,0 +1,26 @@
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[EventEntityRelation](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[EventId] [int] NOT NULL,
+	[ParentId] [bigint] NOT NULL,
+ CONSTRAINT [PK_EventEntityRelation] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[EventEntityRelation]  WITH NOCHECK ADD  CONSTRAINT [FK_EventEntityRelation_EventId] FOREIGN KEY([EventId])
+REFERENCES [dbo].[Event] ([ID])
+GO
+
+ALTER TABLE [dbo].[EventEntityRelation] CHECK CONSTRAINT [FK_EventEntityRelation_EventId]
+GO
+
+
