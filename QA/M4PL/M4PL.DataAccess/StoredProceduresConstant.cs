@@ -112,6 +112,7 @@ namespace M4PL.DataAccess
 		public const string GetModuleMenus = "dbo.GetModuleMenus";
 		public const string GetSystemSettings = "dbo.GetSystemSettings";
 		public const string InsertEmailDetail = "dbo.InsertEmailDetail";
+		public const string GetEmailDetail = "dbo.GetEmailDetail";
 
 		#endregion Generic SPs
 

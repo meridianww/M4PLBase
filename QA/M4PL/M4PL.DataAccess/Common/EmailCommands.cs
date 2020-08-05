@@ -1,24 +1,19 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
-using M4PL.DataAccess.Logger;
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
-using M4PL.Entities.Administration;
-using M4PL.Entities.Job;
-using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace M4PL.DataAccess.Common
 {
@@ -40,6 +35,43 @@ namespace M4PL.DataAccess.Common
 			SqlSerializer.Default.Execute(StoredProceduresConstant.InsertEmailDetail, parameters, true);
 
 			return true;
+		}
+
+		public static SMTPEmailDetail GetSMTPEmailDetail(int emailCount, int toHours, int fromHours)
+		{
+			SMTPEmailDetail smtpEmailDetail = null;
+			SetCollection sets = new SetCollection();
+			Parameter[] parameters = new Parameter[]
+			{
+				new Parameter("@emailCount", emailCount),
+				new Parameter("@ToHours", toHours),
+				new Parameter("@FromHours", fromHours)
+			};
+
+			sets.AddSet<EmailDetail>("EmailDetail");
+			sets.AddSet<SMTPServerDetail>("SMTPServerDetail");
+			sets.AddSet<EmailAttachment>("EmailAttachment");
+			SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetEmailDetail, parameters, storedProcedure: true);
+			var emailDetail = sets.GetSet<EmailDetail>("EmailDetail");
+			var smtpServerDetail = sets.GetSet<SMTPServerDetail>("SMTPServerDetail");
+			var emailAttachment = sets.GetSet<EmailAttachment>("EmailAttachment");
+			if (emailDetail != null && emailDetail.Count > 0)
+			{
+				smtpEmailDetail = new SMTPEmailDetail();
+				smtpEmailDetail.EmailDetail = emailDetail;
+				if (emailAttachment != null && emailAttachment.Count > 0)
+				{
+					foreach (var currentEmailDetail in smtpEmailDetail.EmailDetail)
+					{
+						currentEmailDetail.Attachments = emailAttachment.Where(x => x.EmailDetailID == currentEmailDetail.Id).Any() ?
+							emailAttachment.Where(x => x.EmailDetailID == currentEmailDetail.Id).ToList() : null;
+					}
+				}
+
+				smtpEmailDetail.SMTPServerDetail = smtpServerDetail != null && smtpServerDetail.Count > 0 ? smtpServerDetail : null;
+			}
+
+			return smtpEmailDetail;
 		}
 
 		private static string ReplaceNonAsciiCharacters(string sourceString)
