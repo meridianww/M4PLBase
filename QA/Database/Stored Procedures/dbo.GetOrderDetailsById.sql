@@ -42,7 +42,8 @@ BEGIN
 	       GATEWAY.JobID,
 		   GATEWAY.GwyGatewayCode AS GatewayCode,
 		   GATEWAY.GwyGatewayACD AS ACD,
-		   --GATEWAY.GwyGatewayPCD AS PCD,
+		   GATEWAY.GwyDDPCurrent,
+		   GATEWAY.GwyDDPNew,
 		   GATEWAY.GatewayTypeId AS TypeId,
 		   OPT.SysOptionName AS GateWayName
 	FROM JOBDL020Gateways GATEWAY 
