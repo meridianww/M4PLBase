@@ -124,13 +124,12 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(_formResult);
         }
 
-        public PartialViewResult SubscriberType(int Id)
+        public PartialViewResult ToEmailSubscriberType()
         {
 
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
-            DropDownEditViewModel.SelectedDropDownStringArray = new string[] { };
-            DropDownEditViewModel.Id = Id;
-
+            DropDownEditViewModel.SelectedDropDownStringArray = new string[] {"POC" };
+            
             List<EventSubscriberTypeView> subscriberTypesList = new List<EventSubscriberTypeView>() {
                 new EventSubscriberTypeView() { Id = 1, EventSubscriberTypeName = "POC" },
                 new EventSubscriberTypeView() { Id = 2, EventSubscriberTypeName = "POC2" },
@@ -138,8 +137,25 @@ namespace M4PL.Web.Areas.Program.Controllers
 
             };
 
-            ViewData["SubscriberTypeList"] = subscriberTypesList;
-            return PartialView("SubscriberType", DropDownEditViewModel);
+            ViewData["EmailToSubscriberTypeList"] = subscriberTypesList;
+            return PartialView("EmailToAddressSubscriber", DropDownEditViewModel);
+        }
+
+        public PartialViewResult CcEmailSubscriber()
+        {
+
+            var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
+            DropDownEditViewModel.SelectedDropDownStringArray = new string[] { "POC" };
+            
+            List<EventSubscriberTypeView> subscriberTypesList = new List<EventSubscriberTypeView>() {
+                new EventSubscriberTypeView() { Id = 1, EventSubscriberTypeName = "POC" },
+                new EventSubscriberTypeView() { Id = 2, EventSubscriberTypeName = "POC2" },
+                new EventSubscriberTypeView() { Id = 3, EventSubscriberTypeName = "Custom" }
+
+            };
+
+            ViewData["CCEmailSubscriberTypeList"] = subscriberTypesList;
+            return PartialView("EmailCCAddressSubscriber", DropDownEditViewModel);
         }
 
     }

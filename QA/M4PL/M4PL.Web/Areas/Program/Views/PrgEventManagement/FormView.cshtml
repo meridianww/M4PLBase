@@ -34,17 +34,25 @@
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.IsBodyHtml).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-30'>" + Html.EditorFor(m => m.Record.FromMail).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-30'>" + Html.EditorFor(m => m.Record.ToEmail, "MultilineText").ToHtmlString() + "</div>");
+
         ViewContext.Writer.Write("</div>");
+
         ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-30'>" + Html.EditorFor(m => m.Record.CcEMail, "MultilineText").ToHtmlString() + "</div>");
+
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.Description, "MultilineText").ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
+
         ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-30'>" + Html.EditorFor(m => m.Record.IsBodyHtml).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group analyst-responsive' style='padding-bottom: 0px;'> " + Html.Action("SubscriberType", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString(), new {Id =1 }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group analyst-responsive' style='padding-bottom: 0px;'> " + Html.Action("SubscriberType", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString(), new { Id = 2 }) + "</div>");
+
+        ViewContext.Writer.Write("<div class='form-row-group analyst-responsive' style='padding-bottom: 0px;'> " + Html.Action("ToEmailSubscriberType", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString()) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group analyst-responsive' style='padding-bottom: 0px;'> " + Html.Action("CcEmailSubscriber", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString()) + "</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-30'>" + Html.EditorFor(m => m.Record.ToEmail, "MultilineText").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-30'>" + Html.EditorFor(m => m.Record.CcEMail, "MultilineText").ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
     });
 }).GetHtml()

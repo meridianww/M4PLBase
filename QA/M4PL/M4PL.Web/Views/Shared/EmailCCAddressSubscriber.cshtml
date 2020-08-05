@@ -7,29 +7,29 @@
 
 @Html.DevExpress().CallbackPanel(setings =>
 {
-    setings.Name = "ToAddressSubscriberIdCbPanel";
+    setings.Name = "EmailCCAddressSubscriberIdCbPanel";
     setings.ControlStyle.CssClass += "custom-cb-panel-container ";
-    setings.CallbackRouteValues = new { Controller = "PrgEventManagementController", Action = "SubscriberType", Area = "Program", selectedItems = "", programId = 0, shipmentType = "", orderType = "", gatewayType = "" };
+    setings.CallbackRouteValues = new { Controller = "PrgEventManagementController", Action = "CcEmailSubscriber", Area = "Program", selectedItems = "", programId = 0, shipmentType = "", orderType = "", gatewayType = "" };
 
     setings.SetContent(() =>
     {
         Html.DevExpress().Label(
                               settings =>
                               {
-                                  settings.Name = "lblToAddressSubscriberType";
-                                  settings.Text = "To Address";
+                                  settings.Name = "lblCCAddressSubscriberType";
+                                  settings.Text = "CC Address";
                                   settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
                               }).GetHtml();
 
         Html.DevExpress().DropDownEdit(DDEsettings =>
         {
-            DDEsettings.Name = "ToAddressSubscriberId";
+            DDEsettings.Name = "EmailCCAddressSubscriberId";
             DDEsettings.ControlStyle.CssClass += "custom-cb-panel-container ";
             DDEsettings.SetDropDownWindowTemplateContent(set =>
             {
                 Html.DevExpress().ListBox(listBoxSettings =>
                 {
-                    listBoxSettings.Name = "ToAddressSubscriberIdListBox";
+                    listBoxSettings.Name = "EmailCCAddressSubscriberIdListBox";
                     listBoxSettings.ControlStyle.Border.BorderWidth = 0;
                     listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
                     listBoxSettings.Properties.ValueField = "Id";
@@ -39,11 +39,11 @@
                     listBoxSettings.Properties.EnableSelectAll = true;
                     listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
                     listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
-                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.ToAddressSubscriber.OnListBoxSelectionChanged";
-                    listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedNextGateway) {{M4PLCommon.ToAddressSubscriber.InitNextGatewayListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
-                    if (ViewData["SubscriberTypeList"] != null)
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.EmailCCAddressSubscriber.OnListBoxSelectionChanged";
+                    listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedNextGateway) {{M4PLCommon.EmailCCAddressSubscriber.InitNextGatewayListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
+                    if (ViewData["CCEmailSubscriberTypeList"] != null)
                     {
-                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberTypeView>)ViewData["SubscriberTypeList"])
+                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberTypeView>)ViewData["CCEmailSubscriberTypeList"])
                         {
                             listBoxSettings.Properties.Items.Add(item.EventSubscriberTypeName, item.Id.ToString());
                         }
@@ -64,9 +64,9 @@
             });
 
             DDEsettings.Properties.AnimationType = AnimationType.None;
-            DDEsettings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.ToAddressSubscriber.SynchronizeListBoxValues";
-            DDEsettings.Properties.ClientSideEvents.DropDown = "M4PLCommon.ToAddressSubscriber.SynchronizeListBoxValues";
-            DDEsettings.Properties.ClientSideEvents.CloseUp = "M4PLCommon.ToAddressSubscriber.CloseUp";
+            DDEsettings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.EmailCCAddressSubscriber.SynchronizeListBoxValues";
+            DDEsettings.Properties.ClientSideEvents.DropDown = "M4PLCommon.EmailCCAddressSubscriber.SynchronizeListBoxValues";
+            DDEsettings.Properties.ClientSideEvents.CloseUp = "M4PLCommon.EmailCCAddressSubscriber.CloseUp";
             //    DDEsettings.Properties.Caption = "Next Gateway";
 
         }).Render();

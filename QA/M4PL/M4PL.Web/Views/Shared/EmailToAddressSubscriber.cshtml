@@ -9,7 +9,7 @@
 {
     setings.Name = "ToAddressSubscriberIdCbPanel";
     setings.ControlStyle.CssClass += "custom-cb-panel-container ";
-    setings.CallbackRouteValues = new { Controller = "PrgEventManagementController", Action = "SubscriberType", Area = "Program", selectedItems = "", programId = 0, shipmentType = "", orderType = "", gatewayType = "" };
+    setings.CallbackRouteValues = new { Controller = "PrgEventManagementController", Action = "ToEmailSubscriberType", Area = "Program", selectedItems = "", programId = 0, shipmentType = "", orderType = "", gatewayType = "" };
 
     setings.SetContent(() =>
     {
@@ -41,9 +41,9 @@
                     listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
                     listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.ToAddressSubscriber.OnListBoxSelectionChanged";
                     listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedNextGateway) {{M4PLCommon.ToAddressSubscriber.InitNextGatewayListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
-                    if (ViewData["SubscriberTypeList"] != null)
+                    if (ViewData["EmailToSubscriberTypeList"] != null)
                     {
-                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberTypeView>)ViewData["SubscriberTypeList"])
+                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberTypeView>)ViewData["EmailToSubscriberTypeList"])
                         {
                             listBoxSettings.Properties.Items.Add(item.EventSubscriberTypeName, item.Id.ToString());
                         }

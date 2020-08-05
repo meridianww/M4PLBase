@@ -2143,6 +2143,7 @@ M4PLCommon.DropDownEdit = (function () {
 M4PLCommon.PrgGateway = (function () {
     var textSeparator = ",";
     function _onListBoxSelectionChanged(s, args) {
+        ASPxClientControl.GetControlCollection().GetByName('MappingIdListBox');
         _updateText(s);
     }
 
@@ -2253,6 +2254,257 @@ M4PLCommon.PrgGateway = (function () {
         OnGatewayTypeIdChange: _onGatewayTypeIdChange,
     }
 })();
+
+
+////////
+M4PLCommon.ToAddressSubscriber = (function () {
+    var textSeparator = ",";
+    function _onListBoxSelectionChanged(s, args) {
+        _updateText(s);
+    }
+
+    var _initNextGatewayListBox = function (s, e, selectedNextGateway) {
+
+        var toe = document.getElementById('ToEmail');
+        var toeLabel = document.getElementById('ToEmail_CapC');
+
+        if (toe != undefined) {
+
+            if (selectedNextGateway.indexOf("Custom") > -1) {
+                toe.style.display = 'block';
+                toeLabel.style.display = 'block';
+            }
+            else {
+                toe.style.display = 'none';
+                toeLabel.style.display = 'none';
+            }
+        }
+
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('ToAddressSubscriberIdListBox');
+        if (checkListBox != null) {
+            if (selectedNextGateway !== null && selectedNextGateway !== undefined && selectedNextGateway.length > 0 && selectedNextGateway[0] != 'ALL') {
+                checkListBox.SelectValues(selectedNextGateway);
+            }
+
+
+            var selectedItems = checkListBox.GetSelectedItems();
+
+            var NextGateway = ASPxClientControl.GetControlCollection().GetByName("ToAddressSubscriberId");
+            if (NextGateway != null)
+                NextGateway.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
+    var _updateText = function (listBox, Id) {
+        var selectedItems = listBox.GetSelectedItems();
+        var isCustomExists = _isElementExistsInList(selectedItems, 'Custom');
+        var toe = document.getElementById('ToEmail');
+        var toeLabel = document.getElementById('ToEmail_CapC');
+        if (isCustomExists) {
+            toe.style.display = 'block';
+            toeLabel.style.display = 'block';
+        }
+        else {
+            toe.style.display = 'none';
+            toeLabel.style.display = 'none';
+        }
+
+        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
+        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
+        var values = _getSelectedItemsText(selectedItems);
+        dropDownControl.SetText(values);
+    }
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
+        checkListControl.ownerName = dropDown.name;
+
+        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
+        checkListControl.SelectValues(values);
+        _updateText(checkListControl);
+    }
+    var _closeUp = function (s, e) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
+        checkListControl.ownerName = s.name;
+
+        if (checkListControl != null) {
+            var selectedItems = checkListControl.GetSelectedItems();
+        }
+    }
+
+    var _isElementExistsInList = function (list, item) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].text == item)
+                return true;
+        }
+        return false;
+    }
+
+    var _getSelectedItemsValue = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+    var _getSelectedItemsText = function (items, listBox) {
+        var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        //}
+        return texts.join(textSeparator);
+    }
+    var _getValuesByTexts = function (checkListControl, texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListControl.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+
+    return {
+        InitNextGatewayListBox: _initNextGatewayListBox,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        CloseUp: _closeUp
+    }
+})();
+////////
+
+////////
+M4PLCommon.EmailCCAddressSubscriber = (function () {
+    var textSeparator = ",";
+    function _onListBoxSelectionChanged(s, args) {
+        _updateText(s);
+    }
+
+    var _initNextGatewayListBox = function (s, e, selectedNextGateway) {
+
+        var toe = document.getElementById('CcEMail_I');
+        var toeLabel = document.getElementById('CcEMail_CapC');
+        var toeLabelTable = document.getElementById('CcEMail_ET');
+
+
+        if (toe != undefined && toe != null && toeLabel != undefined && toeLabel != null
+           && toeLabelTable != null && toeLabelTable != undefined) {
+            if (selectedNextGateway.indexOf("Custom") > -1) {
+                toe.style.display = 'block';
+                toeLabel.style.display = 'block';
+                toeLabelTable.display = 'block';
+            }
+            else {
+                toe.style.display = 'none';
+                toeLabel.style.display = 'none';
+                toeLabelTable.style.display = 'none';
+            }
+        }
+
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('EmailCCAddressSubscriberIdListBox');
+        if (checkListBox != null) {
+            if (selectedNextGateway !== null && selectedNextGateway !== undefined && selectedNextGateway.length > 0 && selectedNextGateway[0] != 'ALL') {
+                checkListBox.SelectValues(selectedNextGateway);
+            }
+
+
+            var selectedItems = checkListBox.GetSelectedItems();
+
+            var NextGateway = ASPxClientControl.GetControlCollection().GetByName("EmailCCAddressSubscriberId");
+            if (NextGateway != null)
+                NextGateway.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
+    var _updateText = function (listBox, Id) {
+        var selectedItems = listBox.GetSelectedItems();
+        var isCustomExists = _isElementExistsInList(selectedItems, 'Custom');
+        var toe = document.getElementById('CcEMail_I');
+        var toeLabel = document.getElementById('CcEMail_CapC');
+        var toeLabelTable = document.getElementById('CcEMail_ET');
+
+        if (toe != undefined && toe != null && toeLabel != undefined && toeLabel != null
+            && toeLabelTable != null && toeLabelTable != undefined)
+            if (isCustomExists) {
+                toe.style.display = 'block';
+                toeLabel.style.display = 'block';
+                toeLabelTable.style.display = 'block';
+            }
+            else {
+                toe.style.display = 'none';
+                toeLabel.style.display = 'none';
+                toeLabelTable.style.display = 'none';
+            }
+
+        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
+        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
+        var values = _getSelectedItemsText(selectedItems);
+        dropDownControl.SetText(values);
+    }
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
+        checkListControl.ownerName = dropDown.name;
+
+        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
+        checkListControl.SelectValues(values);
+        _updateText(checkListControl);
+    }
+    var _closeUp = function (s, e) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
+        checkListControl.ownerName = s.name;
+
+        if (checkListControl != null) {
+            var selectedItems = checkListControl.GetSelectedItems();
+        }
+    }
+
+    var _isElementExistsInList = function (list, item) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].text == item)
+                return true;
+        }
+        return false;
+    }
+
+    var _getSelectedItemsValue = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+    var _getSelectedItemsText = function (items, listBox) {
+        var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        //}
+        return texts.join(textSeparator);
+    }
+    var _getValuesByTexts = function (checkListControl, texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListControl.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+
+    return {
+        InitNextGatewayListBox: _initNextGatewayListBox,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        CloseUp: _closeUp
+    }
+})();
+////////
 
 M4PLCommon.CardView = (function () {
     var _init = function (s, e) {
@@ -2381,7 +2633,7 @@ M4PLCommon.DocumentStatus = (function () {
         return isPriceCodeDataPresent
     };
 
-    var _isPriceCodeDataPresentForJobInNAV = function (jobId,jobIds) {
+    var _isPriceCodeDataPresentForJobInNAV = function (jobId, jobIds) {
 
         var isPriceCodeDataPresent = false;
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
