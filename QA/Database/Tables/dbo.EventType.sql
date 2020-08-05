@@ -8,7 +8,7 @@ SET ANSI_PADDING ON
 GO
 
 CREATE TABLE [dbo].[EventType](
-	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[ID] [int] NOT NULL,
 	[EventName] [varchar](500) NOT NULL,
 	[EventDisplayName] [varchar](500) NOT NULL,
  CONSTRAINT [PK_EventType] PRIMARY KEY CLUSTERED 
