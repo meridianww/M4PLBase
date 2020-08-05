@@ -1811,7 +1811,7 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Price Code")
+                if (mnu.MnuTitle == "Est.Price Code")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
@@ -1839,7 +1839,7 @@ namespace M4PL.Web
                         }
                     }
                 }
-                if (mnu.MnuTitle == "Price Codes")
+                if (mnu.MnuTitle == "Price Charges")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
@@ -1872,7 +1872,7 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Cost Codes")
+                if (mnu.MnuTitle == "Cost Charges")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
@@ -1904,7 +1904,7 @@ namespace M4PL.Web
                         }
                     }
                 }
-                if (mnu.MnuTitle == "Cost Code")
+                if (mnu.MnuTitle == "Est.Cost Code")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)

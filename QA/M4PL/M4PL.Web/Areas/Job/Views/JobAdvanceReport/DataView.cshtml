@@ -97,7 +97,7 @@
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
-    settings.SettingsEditing.Mode = Model.GridSetting.Mode;
+    //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
