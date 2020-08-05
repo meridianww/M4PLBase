@@ -68,6 +68,8 @@
     <Compile Include="Document\JobCostReport.cs" />
     <Compile Include="Document\JobPriceReport.cs" />
     <Compile Include="Document\TrackingItem.cs" />
+    <Compile Include="EmailAttachment.cs" />
+    <Compile Include="EmailDetail.cs" />
     <Compile Include="Event\EventSubscriberType.cs" />
     <Compile Include="Finance\CostCode\SalesLineCostCodeResponse.cs" />
     <Compile Include="Finance\Customer\NavRate.cs" />
@@ -157,6 +159,8 @@
     <Compile Include="Program\PrgEdiCondition.cs" />
     <Compile Include="Program\PrgEventManagement.cs" />
     <Compile Include="Signature\JobSignature.cs" />
+    <Compile Include="SMTPEmailDetail.cs" />
+    <Compile Include="SMTPServerDetail.cs" />
     <Compile Include="StatusModel.cs" />
     <Compile Include="Support\CargoComboBox.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />

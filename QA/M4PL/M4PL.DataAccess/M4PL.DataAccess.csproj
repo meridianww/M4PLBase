@@ -70,6 +70,7 @@
     <Compile Include="CacheCommands.cs" />
     <Compile Include="Common\AppDashboardCommands.cs" />
     <Compile Include="Common\CommonCommands.cs" />
+    <Compile Include="Common\EmailCommands.cs" />
     <Compile Include="CompanyAddress\CompanyAddressCommands.cs" />
     <Compile Include="Contact\ContactCommands.cs" />
     <Compile Include="Contact\ConReportCommands.cs" />
