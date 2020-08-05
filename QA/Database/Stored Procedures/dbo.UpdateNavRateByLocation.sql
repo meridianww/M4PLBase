@@ -6,7 +6,7 @@ GO
 
 -- =============================================
 -- Author:		Prashant Aggarwal
--- Create date: 07/28/2010
+-- Create date: 07/28/2020
 -- Description:	Update Nav Rate For a Program Location
 -- =============================================
 CREATE PROCEDURE [dbo].[UpdateNavRateByLocation] @programId BIGINT
