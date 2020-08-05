@@ -41,6 +41,7 @@ BEGIN
 		,NR.BillableElectronicInvoice
 	INTO #BillableTemp
 	FROM dbo.PRGRM042ProgramBillableLocations BL
+	INNER JOIN dbo.PRGRM000Master Program ON Program.Id = BL.PblProgramID
 	INNER JOIN @uttNavRate NR ON NR.Location = BL.PblLocationCode
 	WHERE BL.StatusId = 1 AND BL.PblProgramID = @programId
 
