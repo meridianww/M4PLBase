@@ -6,7 +6,7 @@ GO
 
 -- =============================================
 -- Author:		Prashant Aggarwal
--- Create date: 07/28/2020
+-- Create date: 07/28/2010
 -- Description:	Update Nav Rate For a Program Location
 -- =============================================
 CREATE PROCEDURE [dbo].[UpdateNavRateByLocation] @programId BIGINT
@@ -41,6 +41,7 @@ BEGIN
 		,NR.BillableElectronicInvoice
 	INTO #BillableTemp
 	FROM dbo.PRGRM042ProgramBillableLocations BL
+	INNER JOIN dbo.PRGRM000Master Program ON Program.Id = BL.PblProgramID
 	INNER JOIN @uttNavRate NR ON NR.Location = BL.PblLocationCode
 	WHERE BL.StatusId = 1 AND BL.PblProgramID = @programId
 
