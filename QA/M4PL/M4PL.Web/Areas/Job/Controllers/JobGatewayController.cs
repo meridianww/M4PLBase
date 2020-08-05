@@ -1044,7 +1044,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
             var formResult = new FormResult<JobGatewayComplete>();
-            //formResult.Permission = _formResult.Permission;
+            formResult.Permission = _formResult.Permission;
             formResult.CallBackRoute = route;
             formResult.SessionProvider = SessionProvider;
             formResult.FormId = "GatewayComplete" + formResult.FormId;
