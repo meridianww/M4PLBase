@@ -14,7 +14,7 @@ CREATE TABLE [dbo].[EmailDetail](
 	[ToAddress] [varchar](500) NOT NULL,
 	[CCAddress] [varchar](500) NULL,
 	[BCCAddress] [varchar](500) NULL,
-	[Subject] [nvarchar](998) NOT NULL,
+	[Subject] [nvarchar](1000) NOT NULL,
 	[IsBodyHtml] [bit] NOT NULL,
 	[Body] [nvarchar](max) NOT NULL,
 	[EmailPriority] [tinyint] NOT NULL,
@@ -33,16 +33,16 @@ GO
 SET ANSI_PADDING OFF
 GO
 
-ALTER TABLE [dbo].[EmailDetail] ADD  DEFAULT ((1)) FOR [EmailPriority]
+ALTER TABLE [dbo].[EmailDetail] ADD  CONSTRAINT [DF__EmailDeta__Email__0AB36FCB]  DEFAULT ((1)) FOR [EmailPriority]
 GO
 
-ALTER TABLE [dbo].[EmailDetail] ADD  DEFAULT (GetUTCDate()) FOR [QueuedDate]
+ALTER TABLE [dbo].[EmailDetail] ADD  CONSTRAINT [DF__EmailDeta__Queue__0BA79404]  DEFAULT (getdate()) FOR [QueuedDate]
 GO
 
-ALTER TABLE [dbo].[EmailDetail] ADD  DEFAULT ((0)) FOR [Status]
+ALTER TABLE [dbo].[EmailDetail] ADD  CONSTRAINT [DF__EmailDeta__Statu__0C9BB83D]  DEFAULT ((0)) FOR [Status]
 GO
 
-ALTER TABLE [dbo].[EmailDetail] ADD  DEFAULT ((0)) FOR [RetryAttempt]
+ALTER TABLE [dbo].[EmailDetail] ADD  CONSTRAINT [DF__EmailDeta__Retry__0D8FDC76]  DEFAULT ((0)) FOR [RetryAttempt]
 GO
 
 

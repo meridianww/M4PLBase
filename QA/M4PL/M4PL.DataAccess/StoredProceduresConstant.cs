@@ -111,6 +111,7 @@ namespace M4PL.DataAccess
 		public const string GetByteArrayByIdAndEntity = "dbo.GetByteArrayByIdAndEntity";
 		public const string GetModuleMenus = "dbo.GetModuleMenus";
 		public const string GetSystemSettings = "dbo.GetSystemSettings";
+		public const string InsertEmailDetail = "dbo.InsertEmailDetail";
 
 		#endregion Generic SPs
 
