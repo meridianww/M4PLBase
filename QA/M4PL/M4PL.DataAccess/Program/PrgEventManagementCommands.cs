@@ -49,7 +49,7 @@ namespace M4PL.DataAccess.Program
 
 		public static PrgEventManagement Get(ActiveUser activeUser, long id)
 		{
-			return new PrgEventManagement() { Id = 1, EventName = "POD Upload", EventTypeId = 4, StatusId= 1, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" };
+			return new PrgEventManagement() { Id = 1, IsBodyHtml = true, EventName = "POD Upload", EventTypeId = 4, StatusId= 1, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" };
 			////return Get(activeUser, id, StoredProceduresConstant.GetProgramEventManagement);
 		}
 

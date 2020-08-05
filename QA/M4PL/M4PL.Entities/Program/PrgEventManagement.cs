@@ -34,5 +34,7 @@ namespace M4PL.Entities.Program
 		public string ToEmail { get; set; }
 
 		public string CcEMail { get; set; }
+
+        public bool IsBodyHtml { get; set; }
 	}
 }
