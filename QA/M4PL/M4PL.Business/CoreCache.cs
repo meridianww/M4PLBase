@@ -170,60 +170,34 @@ namespace M4PL.Business
 		/// <param name="langCode">1 for EN</param>
 		public static void Initialize(string langCode)
 		{
-			List<Task> tasks = new List<Task>();
 			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			tasks.Add(Task.Factory.StartNew(() =>
-			{
-				RibbonMenus.GetOrAdd(langCode, new List<RibbonMenu>());
-				IdRefLangNames.GetOrAdd(langCode, new ConcurrentDictionary<int, IList<IdRefLangName>>());
-				PageInfos.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<PageInfo>>());
-				Operations.GetOrAdd(langCode, new ConcurrentDictionary<LookupEnums, IList<Operation>>());
-				DisplayMessages.GetOrAdd(langCode, new ConcurrentDictionary<string, DisplayMessage>());
-				ColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
-				GridColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
-				ValidationRegExpressions.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>());
-				MasterTables.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, object>());
-				ConditionalOperators.GetOrAdd(langCode, new List<ConditionalOperator>());
-				NAVOrderItemResponse.GetOrAdd(langCode, new NAVOrderItemResponse());
-				GetRibbonMenus(langCode);
-				GetTables();
-				InitializerOperations(langCode);
-				GetSystemSettings(langCode);
-			}));
-
-			tasks.Add(Task.Factory.StartNew(() =>
-			{
-				DimensionValues.GetOrAdd(langCode, new NavSalesOrderDimensionResponse());
-				GetNavSalesOrderDimensionValues(langCode, username, password, serviceURL);
-			}));
-
-			tasks.Add(Task.Factory.StartNew(() =>
-			{
-				CachedNavSalesOrder.GetOrAdd(langCode, new NavSalesOrderPostedInvoiceResponse());
-				GetCachedNavSalesOrderValues(langCode, username, password, serviceURL);
-			}));
-
-			tasks.Add(Task.Factory.StartNew(() =>
-			{
-				CachedNavPurchaseOrder.GetOrAdd(langCode, new NavPurchaseOrderPostedInvoiceResponse());
-				GetCachedNavPurchaseOrderValues(langCode, username, password, serviceURL);
-			}));
-
-			tasks.Add(Task.Factory.StartNew(() =>
-			{
-				CachedNavSalesLine.GetOrAdd(langCode, new NavSalesOrderItemResponse());
-				GetCachedNavSalesOrderItemValues(langCode, username, password, serviceURL);
-			}));
-
-			tasks.Add(Task.Factory.StartNew(() =>
-			{
-				CachedNavPurchaseLine.GetOrAdd(langCode, new NavPurchaseOrderItemResponse());
-				GetCachedNavPurchaseOrderItemValues(langCode, username, password, serviceURL);
-			}));
-
-			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+			RibbonMenus.GetOrAdd(langCode, new List<RibbonMenu>());
+			IdRefLangNames.GetOrAdd(langCode, new ConcurrentDictionary<int, IList<IdRefLangName>>());
+			PageInfos.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<PageInfo>>());
+			Operations.GetOrAdd(langCode, new ConcurrentDictionary<LookupEnums, IList<Operation>>());
+			DisplayMessages.GetOrAdd(langCode, new ConcurrentDictionary<string, DisplayMessage>());
+			ColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
+			GridColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
+			ValidationRegExpressions.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>());
+			MasterTables.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, object>());
+			ConditionalOperators.GetOrAdd(langCode, new List<ConditionalOperator>());
+			NAVOrderItemResponse.GetOrAdd(langCode, new NAVOrderItemResponse());
+			GetRibbonMenus(langCode);
+			GetTables();
+			InitializerOperations(langCode);
+			GetSystemSettings(langCode);
+			DimensionValues.GetOrAdd(langCode, new NavSalesOrderDimensionResponse());
+			GetNavSalesOrderDimensionValues(langCode, username, password, serviceURL);
+			////CachedNavSalesOrder.GetOrAdd(langCode, new NavSalesOrderPostedInvoiceResponse());
+			////GetCachedNavSalesOrderValues(langCode, username, password, serviceURL);
+			////CachedNavPurchaseOrder.GetOrAdd(langCode, new NavPurchaseOrderPostedInvoiceResponse());
+			////GetCachedNavPurchaseOrderValues(langCode, username, password, serviceURL);
+			////CachedNavSalesLine.GetOrAdd(langCode, new NavSalesOrderItemResponse());
+			////GetCachedNavSalesOrderItemValues(langCode, username, password, serviceURL);
+			////CachedNavPurchaseLine.GetOrAdd(langCode, new NavPurchaseOrderItemResponse());
+			////GetCachedNavPurchaseOrderItemValues(langCode, username, password, serviceURL);
 		}
 
 		private static void InitializerOperations(string langCode)
