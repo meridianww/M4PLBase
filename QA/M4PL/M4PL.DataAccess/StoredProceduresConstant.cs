@@ -883,10 +883,10 @@ namespace M4PL.DataAccess
 
 		#region Program Event Management
 
-		public const string GetProgramEventManagementView = "dbo.GetProgramEventManagementView";
-		public const string GetProgramEventManagement = "dbo.GetProgramEventManagement";
+		public const string GetEventManagementView = "dbo.GetEventView";
+		public const string GetEventManagement = "dbo.GetEventDetail";
 		public const string InsEventManagement = "dbo.InsEvent";
-		public const string UpdProgramEventManagement = "dbo.UpdProgramEventManagement";
+		public const string UpdProgramEventManagement = "dbo.UpdEvent";
 		public const string DeleteProgramEventManagement = "dbo.DeleteProgramEventManagement";
 		public const string GetEventTypeDropDown = "dbo.GetEventTypeDropDown";
 

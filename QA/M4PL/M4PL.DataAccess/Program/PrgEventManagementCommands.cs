@@ -36,10 +36,16 @@ namespace M4PL.DataAccess.Program
         /// <param name="activeUser"></param>
         /// <param name="pagedDataInfo"></param>
         /// <returns></returns>
-        public static IList<PrgEventManagement> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        public static List<PrgEventManagement> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
-            return new List<PrgEventManagement>() { new PrgEventManagement() { Id = 1, EventName = "POD Upload", StatusId = 1, EventTypeId = 4, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" } };
-            ////return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetProgramEventManagementView, EntitiesAlias.Program);
+            ////return new List<PrgEventManagement>() { new PrgEventManagement() { Id = 1, EventName = "POD Upload", StatusId = 1, EventTypeId = 4, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" } };
+            var parameters = new List<Parameter>
+                   {
+                       new Parameter("@EventTypeId", 4)
+                   };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters.ToArray(), storedProcedure: true);
+            return result;
+
         }
 
         /// <summary>
@@ -62,7 +68,7 @@ namespace M4PL.DataAccess.Program
                    {
                        new Parameter("@EventId", id),
                    };
-            SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetBOLDocumentDataByJobId);
+            SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetEventManagement);
             
             var ToEmailEventSubscriberRelation = sets.GetSet<EventSubscriberType>("ToEmailEventSubscriberRelation");
             var CCEmailEventSubscriberRelation = sets.GetSet<EventSubscriberType>("CCEmailEventSubscriberRelation");
@@ -84,7 +90,7 @@ namespace M4PL.DataAccess.Program
 		{
 			var parameters = GetParameters(prgEventManagement);
             var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsEventManagement, parameters.ToArray(), storedProcedure: true);
-            return new PrgEventManagement() { Id = result };
+            return Get(activeUser, result);
 		}
 
         /// <summary>
@@ -98,8 +104,9 @@ namespace M4PL.DataAccess.Program
 		{
 			var parameters = GetParameters(prgEventManagement);
             parameters.Add(new Parameter("@EventId", prgEventManagement.Id));
-			return Put(activeUser, parameters, StoredProceduresConstant.UpdProgramEventManagement);
-		}
+            var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.UpdProgramEventManagement, parameters.ToArray(), storedProcedure: true);
+            return Get(activeUser, result);
+        }
 
         /// <summary>
         /// Deletes a specific Program record
