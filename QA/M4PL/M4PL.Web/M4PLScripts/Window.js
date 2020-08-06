@@ -203,6 +203,8 @@ M4PLWindow.DataView = function () {
                     editor.SetEnabled(true);
             }
         }
+        if(s.name.split("SubSecurityByRoleGridView").length === 2) // as using parent id as suffix in name
+            e.rowValues[s.GetColumnByField("StatusId").index].value = 1; // set status to active
     }
 
     var _onActRoleBatchEditStartEditing = function (s, e, isReadOnly, roleId, orgId, statusIdFieldName, roleTitleFieldName) {

@@ -101,7 +101,7 @@ namespace M4PL.Web.Areas
             //if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
             //    && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             //{
-            else if (currentPagedDataInfo.Entity != EntitiesAlias.JobGateway && (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition)
+            else if ((currentPagedDataInfo.Entity != EntitiesAlias.JobGateway && currentPagedDataInfo.Entity != EntitiesAlias.SubSecurityByRole) && (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition)
                 || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1) && !route.IsJobParentEntityUpdated)
                 currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
             // }
