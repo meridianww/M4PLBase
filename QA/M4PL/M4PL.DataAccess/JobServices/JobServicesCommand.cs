@@ -19,7 +19,7 @@ namespace M4PL.DataAccess.JobServices
         /// <returns></returns>
         public static async Task<List<SearchOrder>> GetSearchOrder(string search, ActiveUser activeUser)
         {
-            var parameters = new List<Parameter>();// activeUser.GetRecordDefaultParams();
+            var parameters = activeUser.GetRecordDefaultParams();
             parameters.Add(new Parameter("@search", search));
             var result = SqlSerializer.Default.DeserializeMultiRecords<SearchOrder>(StoredProceduresConstant.GetSearchJobOrders, parameters.ToArray(), storedProcedure: true);
             return result;
@@ -34,7 +34,7 @@ namespace M4PL.DataAccess.JobServices
         public static async Task<OrderDetails> GetOrderDetailsById(long Id, ActiveUser activeUser)
         {
             OrderDetails orderDetails = new OrderDetails();
-            var parameters = new List<Parameter>();// activeUser.GetRecordDefaultParams();
+            var parameters = activeUser.GetRecordDefaultParams();
             parameters.Add(new Parameter("@Id", Id));
             SetCollection sets = new SetCollection();
             sets.AddSet<OrderDetails>("OrderDetails");
