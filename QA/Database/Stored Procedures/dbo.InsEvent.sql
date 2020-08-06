@@ -7,7 +7,7 @@ GO
 -- Create date: 06/Aug/2020
 -- Description:	Insert Email Event
 -- =============================================
-CREATE PROCEDURE [dbo].[InsEvent]
+ALTER PROCEDURE [dbo].[InsEvent]
 	(
 	  @EventName VARCHAR(250),
 	  @EventShortName VARCHAR(50),
@@ -62,7 +62,7 @@ INSERT INTO [dbo].[Event]
            ,@StatusId
            ,@EventTypeId)
     
-	SELECT @EventId = SCOPE_IDENTITY() 
+	SET @EventId = SCOPE_IDENTITY() 
 	
 INSERT INTO [dbo].[EventEntityRelation]
            ([EventId]
@@ -71,18 +71,20 @@ INSERT INTO [dbo].[EventEntityRelation]
            (@EventId
            ,@ParentId)
 
-  SELECT @EventEntityRelationId = SCOPE_IDENTITY() 
+  SET @EventEntityRelationId = SCOPE_IDENTITY() 
   
 
 INSERT INTO [dbo].[EventEntityContentDetail]
            ([EventEntityRelationId]
            ,[Subject]
            ,[IsBodyHtml]
+		   ,[Body]
            )
      VALUES
            (@EventEntityRelationId
            ,@Subject
            ,@IsBodyHtml
+		   ,''
            )
 
 		   		   
@@ -98,8 +100,10 @@ INSERT INTO [dbo].[EventSubscriberRelation]
 		         WHEN SubscriberId = @CustomSubscriberId AND @CcEmailSubscriberTypeId =  SubscriberTypeId THEN @CCEmailAddress 
 		   ELSE NULL END,
            SubscriberTypeId
-		   FROM dbo.uttEventSubscriber
+		   FROM @uttEventSubscriber
 		   
+
+		   select @EventId
 
 END
 GO
