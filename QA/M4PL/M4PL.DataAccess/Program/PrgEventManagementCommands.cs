@@ -36,7 +36,7 @@ namespace M4PL.DataAccess.Program
         /// <returns></returns>
         public static IList<PrgEventManagement> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
-            return new List<PrgEventManagement>() { new PrgEventManagement() { Id = 1, EventName = "POD Upload", StatusId = 1, EventType = 4, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" } };
+            return new List<PrgEventManagement>() { new PrgEventManagement() { Id = 1, EventName = "POD Upload", StatusId = 1, EventTypeId = 4, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" } };
             ////return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetProgramEventManagementView, EntitiesAlias.Program);
         }
 
@@ -49,7 +49,7 @@ namespace M4PL.DataAccess.Program
 
         public static PrgEventManagement Get(ActiveUser activeUser, long id)
         {
-            return new PrgEventManagement() { Id = 1, IsBodyHtml = true, EventName = "POD Upload", EventType = 4, StatusId = 1, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" };
+            return new PrgEventManagement() { Id = 1, IsBodyHtml = true, EventName = "POD Upload", EventTypeId = 4, StatusId = 1, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" };
             ////return Get(activeUser, id, StoredProceduresConstant.GetProgramEventManagement);
         }
 

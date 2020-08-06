@@ -4791,12 +4791,20 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         width: 749px !important;
     }
 
+     .prgEventManagement-grouping {
+        width: 100%;
+    }
+
     .billable-rate {
         width: 436px;
     }
 
     .prog-castrate-code {
         width: 137px;
+    }
+
+    .prgEventManagement-castrate-code {
+        width: 100%;
     }
 
     .expression01-logic {

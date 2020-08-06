@@ -28,7 +28,7 @@ namespace M4PL.Entities.Program
 
 		public string EventName { get; set; }
 
-		public int? EventType { get; set; }
+		public int? EventTypeId { get; set; }
 
 		public string EventTypeIdName { get; set; }
 
@@ -45,7 +45,7 @@ namespace M4PL.Entities.Program
 		public string CcEMail { get; set; }
 
         public bool IsBodyHtml { get; set; }
-        
+
         public string ToEmailSubscribers { get; set; }
 
         public string CcEMailSubscribers { get; set; }

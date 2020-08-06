@@ -7,7 +7,7 @@
     ViewBag.Title = Model.PageName;
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var programDropdown = Model.Record.ProgramID.GetValueOrDefault().GetJobProgramDropDown("ProgramID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
-    var eventTypeDropDownViewModel = Model.Record.EventType.GetValueOrDefault().GetEventTypeDropDown("EventType", Model.ColumnSettings.FirstOrDefault("EventType").ColAliasName, Model.ColumnSettings.FirstOrDefault("EventType").IsRequired, Model.IsPopUp, Model.Permission);
+    var eventTypeDropDownViewModel = Model.Record.EventTypeId.GetValueOrDefault().GetEventTypeDropDown("EventTypeId", Model.ColumnSettings.FirstOrDefault("EventTypeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("EventTypeId").IsRequired, Model.IsPopUp, Model.Permission);
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -30,36 +30,30 @@
     {
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
-        ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
-        ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>");
+        ViewContext.Writer.Write("<div class='col-lg-16 col-md-16 no-padding prgEventManagement-grouping'>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(eventTypeDropDownViewModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>");
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(programDropdown) }));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>" + Html.EditorFor(m => m.Record.EventName).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(eventTypeDropDownViewModel) }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>" + Html.EditorFor(m => m.Record.EventShortName).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.IsBodyHtml).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.ParentId).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-45'>" + Html.EditorFor(m => m.Record.FromMail).ToHtmlString() + "</div>");
-
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.EventName).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.EventShortName).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-75'>" + Html.EditorFor(m => m.Record.Description, "MultilineText").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='col-lg-16 col-md-16 no-padding prgEventManagement-grouping'>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.Subject).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.FromMail).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'> " + Html.Action("ToEmailSubscriberType", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString()) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'> " + Html.Action("CcEmailSubscriber", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString()) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.IsBodyHtml).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
 
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-32'> " + Html.Action("ToEmailSubscriberType", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString()) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-32'> " + Html.Action("CcEmailSubscriber", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString()) + "</div>");
-        ViewContext.Writer.Write("</div>");
-
-        ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-32'>" + Html.EditorFor(m => m.Record.ToEmail, "MultilineText").ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-32'>" + Html.EditorFor(m => m.Record.CcEMail, "MultilineText").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding prgEventManagement-grouping'>");
+        //ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.Description, "MultilineText").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.ToEmail, "MultilineText").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.CcEMail, "MultilineText").ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
     });
 }).GetHtml()
