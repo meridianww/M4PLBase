@@ -158,5 +158,20 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView("EmailCCAddressSubscriber", DropDownEditViewModel);
         }
 
+        [ValidateInput(false)]
+        public override ActionResult AddOrEdit(PrgEventManagementView prgEventManagement)
+        {
+            var result = prgEventManagement.Id > 0 ? UpdateForm(prgEventManagement) : SaveForm(prgEventManagement);
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            if (result is SysRefModel)
+            {
+                route.RecordId = result.Id;
+                route.PreviousRecordId = prgEventManagement.Id;
+                return SuccessMessageForInsertOrUpdate(prgEventManagement.Id, route);
+            }
+            return ErrorMessageForInsertOrUpdate(prgEventManagement.Id, route);
+
+        }
+
     }
 }

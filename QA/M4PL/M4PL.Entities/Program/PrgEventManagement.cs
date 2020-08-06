@@ -38,5 +38,10 @@ namespace M4PL.Entities.Program
         public bool IsBodyHtml { get; set; }
 
         public bool IsToEmailAddressVisible { get; set; }
+
+        public string ToEmailSubscribers { get; set; }
+
+        public string CcEMailSubscribers { get; set; }
+
     }
 }
