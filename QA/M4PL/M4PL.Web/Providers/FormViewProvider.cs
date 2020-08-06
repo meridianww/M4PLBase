@@ -72,7 +72,8 @@ namespace M4PL.Web.Providers
 					{ EntitiesAlias.JobCargo, new string[] { "Id", "CgoPartNumCode","CgoTitle","CgoSerialNumber" } },
 					{ EntitiesAlias.GwyExceptionCode, new string[] { "Id", "JgeTitle", "JgeReasonCode" } },
 					{ EntitiesAlias.GwyExceptionStatusCode, new string[] { "Id", "ExStatusDescription" } },
-					{ EntitiesAlias.PrgRefGatewayDefault, new string[] { "Id", "PgdGatewayCode" } }
+					{ EntitiesAlias.PrgRefGatewayDefault, new string[] { "Id", "PgdGatewayCode" } },
+					{ EntitiesAlias.EventType, new string[] { "Id", "EventName", "EventDisplayName" } },
 				};
 			}
 		}
@@ -355,6 +356,10 @@ namespace M4PL.Web.Providers
 		public static IntDropDownViewModel GetStateDropDown(this int selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, int parentId = 0)
 		{
 			return GetIntDropDown(selectedId, EntitiesAlias.State, fieldName, controlCaption, isRequired, isPopup, "StateAbbr", permission, parentId);
+		}
+		public static IntDropDownViewModel GetEventTypeDropDown(this int selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, int parentId = 0)
+		{
+			return GetIntDropDown(selectedId, EntitiesAlias.EventType, fieldName, controlCaption, isRequired, isPopup, "EventDisplayName", permission, parentId);
 		}
 
 		public static IntDropDownViewModel GetScheduleDropDown(this int selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, int parentId = 0)

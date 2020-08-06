@@ -1,9 +1,13 @@
 ﻿@using M4PL.Entities
 @using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgEventManagementView>
 @{
     ViewBag.Title = Model.PageName;
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
+    var programDropdown = Model.Record.ProgramID.GetValueOrDefault().GetJobProgramDropDown("ProgramID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
+    var eventTypeDropDownViewModel = Model.Record.EventType.GetValueOrDefault().GetEventTypeDropDown("EventType", Model.ColumnSettings.FirstOrDefault("EventType").ColAliasName, Model.ColumnSettings.FirstOrDefault("EventType").IsRequired, Model.IsPopUp, Model.Permission);
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -28,8 +32,11 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
         ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>");
+        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(programDropdown) }));
+        ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>" + Html.EditorFor(m => m.Record.EventName).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>" + Html.EditorFor(m => m.Record.EventTypeId).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(eventTypeDropDownViewModel) }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group prog-castrate-code'>" + Html.EditorFor(m => m.Record.EventShortName).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");

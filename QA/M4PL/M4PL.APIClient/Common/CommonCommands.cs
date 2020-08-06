@@ -607,6 +607,8 @@ namespace M4PL.APIClient.Common
 
 				case EntitiesAlias.PrgRefGatewayDefault:
 					return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgRefGatewayDefaultView>>(content).Results;
+				case EntitiesAlias.EventType:
+					return JsonConvert.DeserializeObject<ApiResult<Entities.Program.EventType>>(content).Results;
 			}
 			return new object();
 		}

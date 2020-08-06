@@ -17,9 +17,17 @@ namespace M4PL.Entities.Program
 {
 	public class PrgEventManagement : BaseModel
 	{
+		/// <summary>
+		/// Gets or sets the program identifier.
+		/// </summary>
+		/// <value>
+		/// The Program identifier.
+		/// </value>
+		public long? ProgramID { get; set; }
+
 		public string EventName { get; set; }
 
-		public int EventTypeId { get; set; }
+		public int? EventType { get; set; }
 
 		public string EventTypeIdName { get; set; }
 

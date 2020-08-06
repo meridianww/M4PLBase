@@ -325,7 +325,8 @@ namespace M4PL.Entities
 		GwyExceptionStatusCode,
 		JobHistory,
 
-		PrgEventManagement
+		PrgEventManagement,
+		EventType,
 	}
 
 	public enum ErrorMessages

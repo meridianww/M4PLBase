@@ -887,6 +887,7 @@ namespace M4PL.DataAccess
 		public const string InsProgramEventManagement = "dbo.InsProgramEventManagement";
 		public const string UpdProgramEventManagement = "dbo.UpdProgramEventManagement";
 		public const string DeleteProgramEventManagement = "dbo.DeleteProgramEventManagement";
+		public const string GetEventTypeDropDown = "dbo.GetEventTypeDropDown";
 
 		#endregion
 	}

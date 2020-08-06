@@ -153,6 +153,7 @@
     <Compile Include="Job\SelectedJobList.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
+    <Compile Include="Program\EventType.cs" />
     <Compile Include="Program\NextGatewayModel.cs" />
     <Compile Include="Program\PrgBillableLocation.cs" />
     <Compile Include="Program\PrgCostLocation.cs" />
