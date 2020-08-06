@@ -86,7 +86,8 @@ INSERT INTO [dbo].[EventSubscriberRelation]
 		   ELSE NULL END,
            SubscriberTypeId
 		   FROM dbo.uttEventSubscriber
-		   
 
+SELECT 1
+	
 END
 GO

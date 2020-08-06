@@ -7,7 +7,7 @@ GO
 -- =============================================
 -- Author:		Manoj Kumar.S
 -- Create date: 06/Aug/2020
--- Description:	Get Event Event Detail
+-- Description:	Get Event Event Detail exec [dbo].[GetEventDetail] 9
 -- =============================================
 ALTER PROCEDURE [dbo].[GetEventDetail] (@EventId INT)
 AS
@@ -68,7 +68,14 @@ BEGIN
 		AND SubscriberId = @CustomSubscriberId
 
 	-- Event Values
-	SELECT ev.*
+	SELECT 
+	       ev.Id,
+	       ev.EventName,
+	       ev.EventShortName,
+	       ev.FromMail,
+		   ev.[Description],
+		   ev.StatusId,
+		   ev.EventTypeId
 		,eer.ParentId
 		,eecd.[Subject]
 		,eecd.[IsBodyHtml]
