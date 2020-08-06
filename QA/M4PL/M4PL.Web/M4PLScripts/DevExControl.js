@@ -254,7 +254,7 @@ DevExCtrl.Ribbon = function () {
                     var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
                     if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
-                        var result =  M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJobInNAV(route.RecordId, jobIds);
+                        var result = M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJobInNAV(route.RecordId, jobIds);
                     else
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     if (result == true) {
@@ -1907,6 +1907,15 @@ DevExCtrl.ReportDesigner = function () {
         }
     }
 
+    var _endCallback = function (s, e) {
+
+        $("#VOCReport_Splitter_Viewer_ContentFrame")[0].contentWindow.document.body.onclick =
+            function () {
+                if (ASPxClientControl.GetControlCollection().GetByName("CustomerLocationCbPanelClosed")) {
+                    ASPxClientControl.GetControlCollection().GetByName("CustomerLocationCbPanelClosed").HideDropDown();
+                }
+            }
+    }
     var _customizeActions = function (s, e) {
         //add custom action
         e.Actions.push({
@@ -1922,6 +1931,7 @@ DevExCtrl.ReportDesigner = function () {
     return {
         OnExit: _onExit,
         InitViewer: _initViewer,
+        EndCallback: _endCallback,
         CustomizeActions: _customizeActions
     }
 }();
