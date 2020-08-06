@@ -14,6 +14,7 @@ using M4PL.Entities;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System;
 
 namespace M4PL.DataAccess.Common
 {
@@ -33,6 +34,20 @@ namespace M4PL.DataAccess.Common
 			};
 
 			SqlSerializer.Default.Execute(StoredProceduresConstant.InsertEmailDetail, parameters, true);
+
+			return true;
+		}
+
+		public static bool UpdateEmailStatus(int id, short emailStatus, short retryAttampts)
+		{
+			Parameter[] parameters = new Parameter[]
+			{
+				new Parameter("@id", id),
+				new Parameter("@emailStatus", emailStatus),
+				new Parameter("@retryAttampts", retryAttampts),
+			};
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateEmailStatus, parameters, true);
 
 			return true;
 		}

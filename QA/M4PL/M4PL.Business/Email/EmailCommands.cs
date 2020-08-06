@@ -45,6 +45,11 @@ namespace M4PL.Business.Email
 			return _command.GetSMTPEmailDetail(emailCount, toHours, fromHours);
 		}
 
+		public bool UpdateEmailStatus(int id, short emailStatus, short retryAttampts)
+		{
+			return _command.UpdateEmailStatus(id, emailStatus, retryAttampts);
+		}
+
 		public EmailDetail Patch(EmailDetail entity)
 		{
 			throw new NotImplementedException();

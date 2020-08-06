@@ -9,7 +9,7 @@ GO
 -- Create date: 08/05/2020
 -- Description:	Get the Email Details Information From Database
 -- =============================================
-CREATE PROCEDURE [dbo].[GetEmailDetail] (
+CREATE PROCEDURE [dbo].[GetEmailDetail](
 	@emailCount INT
 	,@ToHours INT
 	,@FromHours INT
@@ -63,15 +63,15 @@ BEGIN
 		,[QueuedDate]
 	FROM [dbo].[EmailDetail] WITH (NOLOCK)
 	WHERE [Status] = 2
-		AND QueuedDate >= DATEADD(mi, (@FromHours * - 1), GetUTCDate())
-		AND QueuedDate <= DATEADD(mi, (@ToHours * - 1), GetUTCDate())
+		--AND QueuedDate >= DATEADD(mi, (@FromHours * - 1), GetUTCDate())
+		--AND QueuedDate <= DATEADD(mi, (@ToHours * - 1), GetUTCDate())
 
 	UPDATE [emailDetail]
 	SET [Status] = 1
 	FROM [dbo].[EmailDetail] [ED]
 	INNER JOIN [#TempEmailDetail] [tblED] ON [ED].[ID] = [tblED].[EmailDetailId]
 
-	SELECT [EmailDetailId] AS [ID]
+	SELECT [EmailDetailId] AS Id
 		,[FromAddress]
 		,ISNULL([ToAddress], '') AS [ToAddress]
 		,ISNULL([CCAddress], '') AS [CCAddress]
