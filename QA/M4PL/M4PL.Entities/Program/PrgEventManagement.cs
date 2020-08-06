@@ -7,6 +7,7 @@
 ******************************************************************************/
 #endregion Copyright
 
+using M4PL.Entities.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +45,13 @@ namespace M4PL.Entities.Program
 		public string CcEMail { get; set; }
 
         public bool IsBodyHtml { get; set; }
+        
+        public string ToEmailSubscribers { get; set; }
 
-        public bool IsToEmailAddressVisible { get; set; }
+        public string CcEMailSubscribers { get; set; }
+
+        public string Subject { get; set; }
+        public List<EventSubscriberAndSubscriberType> SubscriberAndSubscriberTypeMappingList { get; set; }
+
     }
 }

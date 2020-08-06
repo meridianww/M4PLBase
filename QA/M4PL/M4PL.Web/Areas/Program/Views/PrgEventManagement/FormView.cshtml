@@ -42,6 +42,7 @@
         ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.IsBodyHtml).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.ParentId).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-45'>" + Html.EditorFor(m => m.Record.FromMail).ToHtmlString() + "</div>");
 
         ViewContext.Writer.Write("</div>");

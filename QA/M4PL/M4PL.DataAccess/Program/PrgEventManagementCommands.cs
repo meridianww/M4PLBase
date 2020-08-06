@@ -60,13 +60,11 @@ namespace M4PL.DataAccess.Program
         /// <param name="prgEventManagement"></param>
         /// <returns></returns>
 
-        public static PrgEventManagement Post(ActiveUser activeUser, PrgEventManagement prgEventManagement)
-        {
-            var parameters = GetParameters(prgEventManagement);
-            // parameters.Add(new Parameter("@langCode", program.LangCode));
-            parameters.AddRange(activeUser.PostDefaultParams(prgEventManagement));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsProgramEventManagement);
-        }
+		public static PrgEventManagement Post(ActiveUser activeUser, PrgEventManagement prgEventManagement)
+		{
+			var parameters = GetParameters(prgEventManagement);
+			return Post(activeUser, parameters, StoredProceduresConstant.InsEventManagement);
+		}
 
         /// <summary>
         /// Updates the existing Program recordrecords
@@ -75,13 +73,12 @@ namespace M4PL.DataAccess.Program
         /// <param name="prgEventManagement"></param>
         /// <returns></returns>
 
-        public static PrgEventManagement Put(ActiveUser activeUser, PrgEventManagement prgEventManagement)
-        {
-            var parameters = GetParameters(prgEventManagement);
-            // parameters.Add(new Parameter("@langCode", program.LangCode));
-            parameters.AddRange(activeUser.PutDefaultParams(prgEventManagement.Id, prgEventManagement));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdProgramEventManagement);
-        }
+		public static PrgEventManagement Put(ActiveUser activeUser, PrgEventManagement prgEventManagement)
+		{
+			var parameters = GetParameters(prgEventManagement);
+            parameters.Add(new Parameter("@EventId", prgEventManagement.Id));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdProgramEventManagement);
+		}
 
         /// <summary>
         /// Deletes a specific Program record
@@ -114,12 +111,27 @@ namespace M4PL.DataAccess.Program
         /// <param name="PrgEventManagement"></param>
         /// <returns></returns>
 
-        private static List<Parameter> GetParameters(Entities.Program.PrgEventManagement PrgEventManagement)
-        {
+		private static List<Parameter> GetParameters(Entities.Program.PrgEventManagement PrgEventManagement)
+		{
+
+            var subscriberAndSubscriberTypeMapping = PrgEventManagement.SubscriberAndSubscriberTypeMappingList.ToDataTable();
             var parameters = new List<Parameter>
-            {
+			{
+                new Parameter("@EventName",PrgEventManagement.EventName),
+                new Parameter("@EventShortName",PrgEventManagement.EventShortName),
+                new Parameter("@FromMail",PrgEventManagement.FromMail),
+                new Parameter("@Description",PrgEventManagement.Description),
+                new Parameter("@XSLTPath",""),
+                new Parameter("@EventTypeId",PrgEventManagement.EventTypeId),
+                new Parameter("@StatusId",PrgEventManagement.StatusId),
+                new Parameter("@ParentId",PrgEventManagement.ParentId),
+                new Parameter("@IsBodyHtml",PrgEventManagement.IsBodyHtml),
+                new Parameter("@Subject",PrgEventManagement.Subject),
+                new Parameter("@ToEmailAddress",PrgEventManagement.ToEmail),
+                new Parameter("@CCEmailAddress",PrgEventManagement.CcEMail),
+                new Parameter("@uttEventSubscriber",subscriberAndSubscriberTypeMapping,"dbo.uttEventSubscriber")
             };
-            return parameters;
-        }
-    }
+			return parameters;
+		}
+	}
 }
