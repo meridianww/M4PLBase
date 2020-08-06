@@ -455,7 +455,8 @@ namespace M4PL.Web
                 gridViewSetting.ContextMenu.Add(Cut);
                 gridViewSetting.ContextMenu.Add(Paste);
             }
-
+            if (currentPermission <= Permission.ReadOnly)
+                gridViewSetting.ContextMenu.Remove(addOperation);
             return gridViewSetting;
         }
 
