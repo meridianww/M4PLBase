@@ -54,5 +54,13 @@ namespace M4PL.API.Controllers
 			_emailCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _emailCommands.GetSMTPEmailDetail(emailCount, toHours, fromHours);
 		}
+
+		[HttpGet]
+		[Route("UpdateEmailStatus")]
+		public bool UpdateEmailStatus(int id, short emailStatus, short retryAttampts)
+		{
+			_emailCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _emailCommands.UpdateEmailStatus(id, emailStatus, retryAttampts);
+		}
 	}
 }

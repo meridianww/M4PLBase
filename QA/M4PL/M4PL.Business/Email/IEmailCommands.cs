@@ -26,5 +26,6 @@ namespace M4PL.Business.Email
     public interface IEmailCommands : IBaseCommands<EmailDetail>
 	{
 		SMTPEmailDetail GetSMTPEmailDetail(int emailCount, int toHours, int fromHours);
+		bool UpdateEmailStatus(int id, short emailStatus, short retryAttampts);
 	}
 }
