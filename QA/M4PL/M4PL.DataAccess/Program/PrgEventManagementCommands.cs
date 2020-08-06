@@ -17,11 +17,13 @@
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
+using M4PL.Entities.Event;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace M4PL.DataAccess.Program
@@ -49,8 +51,26 @@ namespace M4PL.DataAccess.Program
 
         public static PrgEventManagement Get(ActiveUser activeUser, long id)
         {
-            return new PrgEventManagement() { Id = 1, IsBodyHtml = true, EventName = "POD Upload", EventTypeId = 4, StatusId = 1, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" };
-            ////return Get(activeUser, id, StoredProceduresConstant.GetProgramEventManagement);
+           // return new PrgEventManagement() { Id = 1, IsBodyHtml = true, EventName = "POD Upload", EventTypeId = 4, StatusId = 1, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" };
+
+            SetCollection sets = new SetCollection();
+            sets.AddSet<EventSubscriberType>("ToEmailEventSubscriberRelation");
+            sets.AddSet<EventSubscriberType>("CCEmailEventSubscriberRelation");
+            sets.AddSet<PrgEventManagement>("Event");
+
+            var parameters = new List<Parameter>
+                   {
+                       new Parameter("@EventId", id),
+                   };
+            SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetBOLDocumentDataByJobId);
+            
+            var ToEmailEventSubscriberRelation = sets.GetSet<EventSubscriberType>("ToEmailEventSubscriberRelation");
+            var CCEmailEventSubscriberRelation = sets.GetSet<EventSubscriberType>("CCEmailEventSubscriberRelation");
+            var eventDetails = sets.GetSet<PrgEventManagement>("Event").ToList().FirstOrDefault();
+            eventDetails.SubscribersSelectedForToEmail = ToEmailEventSubscriberRelation;
+            eventDetails.SubscribersSelectedForCCEmail = CCEmailEventSubscriberRelation;
+            
+            return eventDetails;
         }
 
         /// <summary>
@@ -60,10 +80,11 @@ namespace M4PL.DataAccess.Program
         /// <param name="prgEventManagement"></param>
         /// <returns></returns>
 
-		public static PrgEventManagement Post(ActiveUser activeUser, PrgEventManagement prgEventManagement)
+        public static PrgEventManagement Post(ActiveUser activeUser, PrgEventManagement prgEventManagement)
 		{
 			var parameters = GetParameters(prgEventManagement);
-			return Post(activeUser, parameters, StoredProceduresConstant.InsEventManagement);
+            var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsEventManagement, parameters.ToArray(), storedProcedure: true);
+            return new PrgEventManagement() { Id = result };
 		}
 
         /// <summary>
@@ -113,6 +134,12 @@ namespace M4PL.DataAccess.Program
 
 		private static List<Parameter> GetParameters(Entities.Program.PrgEventManagement PrgEventManagement)
 		{
+
+            PrgEventManagement.SubscriberAndSubscriberTypeMappingList = new List<Entities.Event.EventSubscriberAndSubscriberType>();
+            PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = 1, SubscriberTypeId = 1 });
+            PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = 1, SubscriberTypeId = 3 });
+            PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = 2, SubscriberTypeId = 1 });
+            PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = 2, SubscriberTypeId = 3 });
 
             var subscriberAndSubscriberTypeMapping = PrgEventManagement.SubscriberAndSubscriberTypeMappingList.ToDataTable();
             var parameters = new List<Parameter>

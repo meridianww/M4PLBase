@@ -161,6 +161,9 @@ namespace M4PL.Web.Areas.Program.Controllers
         [ValidateInput(false)]
         public override ActionResult AddOrEdit(PrgEventManagementView prgEventManagement)
         {
+            
+            prgEventManagement.ParentId = Convert.ToInt64(prgEventManagement.ProgramID);
+            
             var result = prgEventManagement.Id > 0 ? UpdateForm(prgEventManagement) : SaveForm(prgEventManagement);
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)
