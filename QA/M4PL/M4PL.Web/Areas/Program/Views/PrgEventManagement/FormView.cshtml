@@ -28,6 +28,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.Hidden("Id", Model.Record.Id).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='col-lg-16 col-md-16 no-padding prgEventManagement-grouping'>");
