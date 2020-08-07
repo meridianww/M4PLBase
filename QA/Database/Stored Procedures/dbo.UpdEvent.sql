@@ -85,7 +85,7 @@ INSERT INTO [dbo].[EventSubscriberRelation]
 		         WHEN SubscriberId = @CustomSubscriberId AND @CcEmailSubscriberTypeId =  SubscriberTypeId THEN @CCEmailAddress 
 		   ELSE NULL END,
            SubscriberTypeId
-		   FROM dbo.uttEventSubscriber
+		   FROM @uttEventSubscriber
 
 SELECT 1
 	

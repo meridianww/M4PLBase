@@ -133,6 +133,16 @@ namespace M4PL.DataAccess.Program
             return Delete(activeUser, ids, EntitiesAlias.PrgEventManagement, statusId, ReservedKeysEnum.StatusId);
         }
 
+        public static List<EventSubscriberType> GetSubscriber()
+        {
+            var parameters = new List<Parameter>
+                   {
+                   };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<EventSubscriberType>(StoredProceduresConstant.GetEventSubscriber, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+             
+
         /// <summary>
         /// Gets list of parameters required for the Program Module
         /// </summary>
