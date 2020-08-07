@@ -70,6 +70,7 @@
     <Compile Include="Document\TrackingItem.cs" />
     <Compile Include="EmailAttachment.cs" />
     <Compile Include="EmailDetail.cs" />
+    <Compile Include="Event\EventEmailDetail.cs" />
     <Compile Include="Event\EventSubscriberAndSubscriberType.cs" />
     <Compile Include="Event\EventSubscriberType.cs" />
     <Compile Include="Finance\CostCode\SalesLineCostCodeResponse.cs" />

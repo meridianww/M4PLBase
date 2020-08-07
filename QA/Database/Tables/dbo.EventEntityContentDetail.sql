@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[EventEntityContentDetail](
 	[EventEntityRelationId] [int] NULL,
 	[Subject] [varchar](50) NULL,
 	[IsBodyHtml] [bit] NULL,
-	[Body] [varchar](500) NOT NULL,
+	[Body] [varchar](500) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

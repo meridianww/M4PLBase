@@ -42,9 +42,10 @@ SELECT @ToEmailSubscriberTypeId = Id FROM
 SELECT @CcEmailSubscriberTypeId = Id FROM
 [dbo].[EventSubscriberType] Where EventSubscriberTypeName = 'CC'
 
-  
+Select @EventId = ISNULL(Max(Id),0) + 1 From [dbo].[Event]
 INSERT INTO [dbo].[Event]
-           ([EventName]
+           ([Id]
+		   ,[EventName]
            ,[EventShortName]
            ,[FromMail]
            ,[Description]
@@ -53,7 +54,8 @@ INSERT INTO [dbo].[Event]
            ,[StatusId]
            ,[EventTypeId])
      VALUES
-           (@EventName
+           (@EventId
+		   ,@EventName
            ,@EventShortName
            ,@FromMail
            ,@Description
@@ -62,8 +64,6 @@ INSERT INTO [dbo].[Event]
            ,@StatusId
            ,@EventTypeId)
     
-	SELECT @EventId = SCOPE_IDENTITY() 
-	
 INSERT INTO [dbo].[EventEntityRelation]
            ([EventId]
            ,[ParentId])
