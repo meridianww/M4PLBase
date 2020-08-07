@@ -9,7 +9,7 @@ GO
 -- Create date: 06/Aug/2020
 -- Description:	Get Event Event Detail exec [dbo].[GetEventDetail] 9
 -- =============================================
-ALTER PROCEDURE [dbo].[GetEventDetail] (@EventId INT)
+CREATE PROCEDURE [dbo].[GetEventDetail] (@EventId INT)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -55,13 +55,13 @@ BEGIN
 
 	SELECT @CustomToAddressEmail = EmailAddresses
 	FROM dbo.EventSubscriberRelation
-	WHERE EventSubscriberTypeId = @CcEmailSubscriberTypeId
+	WHERE EventSubscriberTypeId = @ToEmailSubscriberTypeId
 		AND EventEntityRelationId = @EventEntityRelationId
 		AND SubscriberId = @CustomSubscriberId
 
 	SELECT @CustomCCAddressEmail = EmailAddresses
 	FROM dbo.EventSubscriberRelation
-	WHERE EventSubscriberTypeId = @ToEmailSubscriberTypeId
+	WHERE EventSubscriberTypeId = @CcEmailSubscriberTypeId
 		AND EventEntityRelationId = @EventEntityRelationId
 		AND SubscriberId = @CustomSubscriberId
 
