@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace M4PL.APIClient.ViewModels.Event
 {
-    public class EventSubscriberTypeView : EventSubscriberType
+    public class EventSubscriberView : EventSubscriber
     {
     }
 }

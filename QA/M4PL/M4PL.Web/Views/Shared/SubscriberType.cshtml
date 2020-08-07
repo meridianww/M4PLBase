@@ -33,7 +33,7 @@
                     listBoxSettings.ControlStyle.Border.BorderWidth = 0;
                     listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
                     listBoxSettings.Properties.ValueField = "Id";
-                    listBoxSettings.Properties.TextField = "EventSubscriberTypeName";
+                    listBoxSettings.Properties.TextField = "SubscriberDescription";
 
                     listBoxSettings.Properties.ValueType = typeof(string);
                     listBoxSettings.Properties.EnableSelectAll = true;
@@ -43,9 +43,9 @@
                     listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedNextGateway) {{M4PLCommon.ToAddressSubscriber.InitNextGatewayListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
                     if (ViewData["SubscriberTypeList"] != null)
                     {
-                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberTypeView>)ViewData["SubscriberTypeList"])
+                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberView>)ViewData["SubscriberTypeList"])
                         {
-                            listBoxSettings.Properties.Items.Add(item.EventSubscriberTypeName, item.Id.ToString());
+                            listBoxSettings.Properties.Items.Add(item.SubscriberDescription, item.Id.ToString());
                         }
                     }
 

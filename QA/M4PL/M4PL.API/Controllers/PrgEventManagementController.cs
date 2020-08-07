@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using M4PL.API.Filters;
+using M4PL.Entities.Event;
 
 namespace M4PL.API.Controllers
 {
@@ -134,5 +135,16 @@ namespace M4PL.API.Controllers
 			_prgEventManagementCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _prgEventManagementCommands.Patch(prgEventManagement);
         }
+
+        /// <summary>
+        /// Get All the Event Susbscriber
+        /// </summary>
+        /// <returns>Event Subscriber List</returns>
+        [HttpGet,Route("GetEventSubscriber")]
+        public IList<EventSubscriber> GetEventSubscriber()
+        {
+            return _prgEventManagementCommands.GetEventSubscriber();
+        }
+
     }
 }

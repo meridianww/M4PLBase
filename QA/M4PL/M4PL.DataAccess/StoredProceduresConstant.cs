@@ -890,6 +890,7 @@ namespace M4PL.DataAccess
 		public const string DeleteProgramEventManagement = "dbo.DeleteProgramEventManagement";
 		public const string GetEventTypeDropDown = "dbo.GetEventTypeDropDown";
         public const string GetEventSubscriber = "dbo.GetEventSubscriber";
+        public const string GetEventSubscriberAndSubscriberType = "dbo.GetEventSubscriberAndSubscriberType";
 
         #endregion
     }

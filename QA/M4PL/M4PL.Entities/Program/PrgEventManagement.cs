@@ -53,9 +53,9 @@ namespace M4PL.Entities.Program
         public string Subject { get; set; }
         public List<EventSubscriberAndSubscriberType> SubscriberAndSubscriberTypeMappingList { get; set; }
 
-        public List<EventSubscriberType> SubscribersSelectedForToEmail { get; set; }
+        public List<EventSubscriber> SubscribersSelectedForToEmail { get; set; }
 
-        public List<EventSubscriberType> SubscribersSelectedForCCEmail { get; set; }
+        public List<EventSubscriber> SubscribersSelectedForCCEmail { get; set; }
 
 
     }

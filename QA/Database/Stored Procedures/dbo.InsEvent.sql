@@ -27,6 +27,7 @@ AS
 BEGIN
 	
 	SET NOCOUNT ON;
+BEGIN TRY
 
 DECLARE @EventId INT, @EventEntityRelationId INT,@CustomSubscriberId INT, @ToEmailSubscriberTypeId INT, @CCEmailSubscriberTypeId INT
 
@@ -105,6 +106,28 @@ INSERT INTO [dbo].[EventSubscriberRelation]
 		   
 
 		   select @EventId
+END TRY
+BEGIN CATCH
+ DECLARE @ErrorMessage VARCHAR(MAX) = (
+			SELECT ERROR_MESSAGE()
+			)
+		,@ErrorSeverity VARCHAR(MAX) = (
+			SELECT ERROR_SEVERITY()
+			)
+		,@RelatedTo VARCHAR(100) = (
+			SELECT OBJECT_NAME(@@PROCID)
+			)
+
+	EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo
+		,NULL
+		,@ErrorMessage
+		,NULL
+		,NULL
+		,@ErrorSeverity
+
+   SELECT 0
+
+END CATCH
 
 END
 GO

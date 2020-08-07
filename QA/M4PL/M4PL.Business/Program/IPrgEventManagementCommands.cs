@@ -16,6 +16,7 @@
 //==============================================================================================================
 
 using M4PL.Entities;
+using M4PL.Entities.Event;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
@@ -28,5 +29,6 @@ namespace M4PL.Business.Program
     /// </summary>
     public interface IPrgEventManagementCommands : IBaseCommands<PrgEventManagement>
     {
+        List<EventSubscriber> GetEventSubscriber();
     }
 }

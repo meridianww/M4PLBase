@@ -37,19 +37,17 @@ BEGIN
 	FROM [dbo].[EventSubscriberType]
 	WHERE EventSubscriberTypeName = 'CC'
 
-	---- All Values to Bind Dropwdown
-	--SELECT *
-	--FROM dbo.EventSubscriber
 
-	-- Selected Values from To Email Address	
-	SELECT es.SubscriberId AS Id,es.SubscriberDescription AS EventSubscriberTypeName
+	SELECT es.SubscriberId AS Id
+		,es.SubscriberDescription
 	FROM dbo.EventSubscriberRelation esr
 	INNER JOIN dbo.EventSubscriber es ON es.SubscriberId = esr.SubscriberId
 	WHERE EventSubscriberTypeId = @ToEmailSubscriberTypeId
 		AND EventEntityRelationId = @EventEntityRelationId
 
 	-- Selected Values from CC Email Address	
-	SELECT es.SubscriberId AS Id,es.SubscriberDescription AS EventSubscriberTypeName
+	SELECT es.SubscriberId AS Id
+		,es.SubscriberDescription
 	FROM dbo.EventSubscriberRelation esr
 	INNER JOIN dbo.EventSubscriber es ON es.SubscriberId = esr.SubscriberId
 	WHERE EventSubscriberTypeId = @CcEmailSubscriberTypeId
@@ -68,14 +66,13 @@ BEGIN
 		AND SubscriberId = @CustomSubscriberId
 
 	-- Event Values
-	SELECT 
-	       ev.Id,
-	       ev.EventName,
-	       ev.EventShortName,
-	       ev.FromMail,
-		   ev.[Description],
-		   ev.StatusId,
-		   ev.EventTypeId
+	SELECT ev.Id
+		,ev.EventName
+		,ev.EventShortName
+		,ev.FromMail
+		,ev.[Description]
+		,ev.StatusId
+		,ev.EventTypeId
 		,eer.ParentId
 		,eecd.[Subject]
 		,eecd.[IsBodyHtml]

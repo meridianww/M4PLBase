@@ -15,6 +15,7 @@
 // Purpose:                                      Client to consume M4PL API called ProgramControllers
 //=================================================================================================================
 
+using M4PL.APIClient.ViewModels.Event;
 using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Program;
@@ -36,5 +37,18 @@ namespace M4PL.APIClient.Program
 		{
 			get { return "PrgEventManagement"; }
 		}
-	}
+        
+        public IList<EventSubscriberView> GetEventSubscriber()
+        {
+            string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
+            RestClient _restClient = new RestClient(new Uri(_baseUri));
+            
+            var content = _restClient.Execute(
+            HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/GetEventSubscriber", ActiveUser)).Content;
+            content = content.Replace("[[", "[").Replace("]]", "]");
+            var desearilizedResult = JsonConvert.DeserializeObject<ApiResult<EventSubscriberView>>(content);
+            return desearilizedResult.Results;
+        }
+
+    }
 }
