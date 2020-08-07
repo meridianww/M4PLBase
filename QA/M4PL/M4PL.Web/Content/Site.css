@@ -704,6 +704,10 @@ label {
     width: 232px;
 }
 
+.col-fixed-35 {
+    width: 280px;
+}
+
 .col-fixed-45 {
     width: 360px;
 }
@@ -734,6 +738,10 @@ label {
 
 .col-fixed-75 {
     width: 553px;
+}
+
+.col-fixed-80 {
+    width: 580px;
 }
 
 .col-fixed-21p {
@@ -4787,12 +4795,20 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         width: 749px !important;
     }
 
+     .prgEventManagement-grouping {
+        width: 100%;
+    }
+
     .billable-rate {
         width: 436px;
     }
 
     .prog-castrate-code {
         width: 137px;
+    }
+
+    .prgEventManagement-castrate-code {
+        width: 100%;
     }
 
     .expression01-logic {

@@ -213,8 +213,9 @@ namespace M4PL.Entities
 		PrgVendLocation,
 		PrgCostLocation,
 		PrgBillableLocation,
+        
 
-		PrgRefRole,
+        PrgRefRole,
 		ProgramRole,
 		AssignPrgVendor,
 		UnAssignPrgVendor,
@@ -322,7 +323,10 @@ namespace M4PL.Entities
 		JobXcblInfo,
 		GwyExceptionCode,
 		GwyExceptionStatusCode,
-		JobHistory
+		JobHistory,
+
+		PrgEventManagement,
+		EventType,
 	}
 
 	public enum ErrorMessages

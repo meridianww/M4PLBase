@@ -92,6 +92,7 @@
         #region Hidden
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ContractNumber, new { Name = "ContractNumber" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsAction, new { Name = "IsAction" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.CurrentAction, new { Name = "CurrentAction" }).ToHtmlString());
         /*Below hidden fields for Gateway non action fields*/

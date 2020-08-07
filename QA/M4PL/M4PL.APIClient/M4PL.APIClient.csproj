@@ -185,6 +185,7 @@
     <Compile Include="Program\IPrgVendLocationCommands.cs" />
     <Compile Include="Program\IPrgBillableRateCommands.cs" />
     <Compile Include="Program\IPrgCostLocationCommands.cs" />
+    <Compile Include="Program\IPrgEventManagementCommands.cs" />
     <Compile Include="Program\IProgramCommands.cs" />
     <Compile Include="Program\IPrgCostRateCommands.cs" />
     <Compile Include="Program\IPrgRoleCommands.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Program\PrgVendLocationCommands.cs" />
     <Compile Include="Program\PrgBillableRateCommands.cs" />
     <Compile Include="Program\PrgCostLocationCommands.cs" />
+    <Compile Include="Program\PrgEventManagementCommands.cs" />
     <Compile Include="Program\ProgramCommands.cs" />
     <Compile Include="Program\PrgCostRateCommands.cs" />
     <Compile Include="Program\PrgRoleCommands.cs" />
@@ -279,6 +281,7 @@
     <Compile Include="ViewModels\Document\DocumentStatusView.cs" />
     <Compile Include="ViewModels\Document\DocumentView.cs" />
     <Compile Include="ViewModels\DropDownEditViewModel.cs" />
+    <Compile Include="ViewModels\Event\EventSubscriberTypeView.cs" />
     <Compile Include="ViewModels\Finance\NavCostCodeView.cs" />
     <Compile Include="ViewModels\Finance\NavCustomerView.cs" />
     <Compile Include="ViewModels\Finance\NavPriceCodeView.cs" />
@@ -299,6 +302,7 @@
     <Compile Include="ViewModels\Program\PrgBillableLocationView.cs" />
     <Compile Include="ViewModels\Program\PrgCostLocationView.cs" />
     <Compile Include="ViewModels\Program\PrgEdiConditionView.cs" />
+    <Compile Include="ViewModels\Program\PrgEventManagementView.cs" />
     <Compile Include="ViewModels\Scanner\AppDashboardView.cs" />
     <Compile Include="ViewModels\Attachment\ContactView.cs" />
     <Compile Include="ViewModels\ColumnSetting.cs" />

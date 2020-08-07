@@ -27,6 +27,7 @@ using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities.Logger;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
 
@@ -515,5 +516,11 @@ namespace M4PL.Business.Common
         {
             return _commands.GetJobGateway(ActiveUser, jobId);
         }
+
+		public static bool InsertErrorLog(M4PLException m4plException)
+		{
+			M4PL.DataAccess.Logger.ErrorLogger.Log(m4plException.Exception, m4plException.AdditionalMessage, m4plException.ErrorRelatedTo, m4plException.LogType);
+			return true;
+		}
     }
 }

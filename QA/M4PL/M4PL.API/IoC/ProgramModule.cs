@@ -50,6 +50,7 @@ namespace M4PL.API.IoC
 			builder.RegisterType<PrgCostLocationCommands>().As<IPrgCostLocationCommands>().InstancePerRequest();
 			builder.RegisterType<PrgBillableLocationCommands>().As<IPrgBillableLocationCommands>().InstancePerRequest();
 			builder.RegisterType<PrgEdiConditionCommands>().As<IPrgEdiConditionCommands>().InstancePerRequest();
+			builder.RegisterType<PrgEventManagementCommands>().As<IPrgEventManagementCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}
