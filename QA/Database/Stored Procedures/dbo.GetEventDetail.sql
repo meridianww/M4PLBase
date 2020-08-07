@@ -76,8 +76,8 @@ BEGIN
 		,eer.ParentId
 		,eecd.[Subject]
 		,eecd.[IsBodyHtml]
-		,@CustomToAddressEmail
-		,@CustomCCAddressEmail
+		,@CustomToAddressEmail ToEmail
+		,@CustomCCAddressEmail CcEMail
 	FROM dbo.[Event] ev
 	INNER JOIN dbo.EventEntityRelation eer ON ev.ID = eer.EventId
 	INNER JOIN dbo.EventEntityContentDetail eecd ON eecd.EventEntityRelationId = eer.ID
