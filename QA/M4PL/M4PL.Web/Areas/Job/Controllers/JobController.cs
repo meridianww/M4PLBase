@@ -704,6 +704,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+            sessionInfo.PagedDataInfo.IsJobParentEntity = route.IsJobParentEntityUpdated;
             sessionInfo.PagedDataInfo.OrderBy = column.BuildGridSortCondition(reset, route.Entity, _commonCommands);
             sessionInfo.GridViewColumnState = column;
             sessionInfo.GridViewColumnStateReset = reset;
