@@ -21,6 +21,7 @@ using M4PL.Entities.Event;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -38,13 +39,23 @@ namespace M4PL.DataAccess.Program
         /// <returns></returns>
         public static List<PrgEventManagement> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
-            ////return new List<PrgEventManagement>() { new PrgEventManagement() { Id = 1, EventName = "POD Upload", StatusId = 1, EventTypeId = 4, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" } };
-            var parameters = new List<Parameter>
-                   {
-                       new Parameter("@EventTypeId", 4)
-                   };
-            var result = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters.ToArray(), storedProcedure: true);
-            return result;
+
+
+            var parameters = pagedDataInfo.PagedDataDefaultParams(activeUser,EntitiesAlias.PrgEventManagement);
+            parameters.Add(new Parameter("@EventTypeId", 4));
+
+            var results = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters.ToArray(), storedProcedure: true);
+            if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
+                pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
+            else pagedDataInfo.TotalCount = 0;
+            return results;
+            
+            //var parameters = new List<Parameter>
+            //       {
+            //           new Parameter("@EventTypeId", 4)
+            //       };
+            //var result = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters.ToArray(), storedProcedure: true);
+            //return result;
 
         }
 

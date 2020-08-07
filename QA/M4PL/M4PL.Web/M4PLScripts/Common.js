@@ -2270,7 +2270,7 @@ M4PLCommon.ToAddressSubscriber = (function () {
 
         if (toe != undefined) {
 
-            if (selectedNextGateway.indexOf("Custom") > -1) {
+            if (selectedNextGateway.indexOf("3") > -1) {
                 toe.style.display = 'block';
                 toeLabel.style.display = 'block';
             }
@@ -2392,7 +2392,7 @@ M4PLCommon.EmailCCAddressSubscriber = (function () {
 
         if (toe != undefined && toe != null && toeLabel != undefined && toeLabel != null
            && toeLabelTable != null && toeLabelTable != undefined) {
-            if (selectedNextGateway.indexOf("Custom") > -1) {
+            if (selectedNextGateway.indexOf("3") > -1) {
                 toe.style.display = 'block';
                 toeLabel.style.display = 'block';
                 toeLabelTable.display = 'block';

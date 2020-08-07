@@ -7,7 +7,7 @@ GO
 -- Create date: 06/Aug/2020
 -- Description:	Insert Email Event
 -- =============================================
-ALTER PROCEDURE [dbo].[UpdEvent]
+CREATE PROCEDURE [dbo].[UpdEvent]
 	(
 	  @EventId INT,
 	  @EventName VARCHAR(250),

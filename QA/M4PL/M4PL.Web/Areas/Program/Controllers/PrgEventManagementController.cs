@@ -107,6 +107,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 
             _formResult.SessionProvider = SessionProvider;
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new PrgEventManagementView();
+
             _formResult.Record.ProgramID = _formResult.Record.ParentId;
             _formResult.Record.ToEmailSubscribers = string.Join(",", _formResult.Record.SubscribersSelectedForToEmail.Select(p => p.Id.ToString()));
             _formResult.Record.CcEMailSubscribers = string.Join(",", _formResult.Record.SubscribersSelectedForCCEmail.Select(p => p.Id.ToString()));
