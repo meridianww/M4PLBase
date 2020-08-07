@@ -205,6 +205,21 @@ DevExCtrl.Ribbon = function () {
                 case "WatchVideo":
                     window.open(window.location.origin + "/m4pltraining");
                     break;
+                case "TrackingOrder":
+                    var newRoute = _onJobReportClick(route);
+                    if (newRoute != null && newRoute != "undefined" && newRoute.RecordId != 'undefined' && newRoute.RecordId > 0) {
+                        //window.open("http://localhost:4200" + "/orderdetails;id=" + newRoute.RecordId);
+                        window.open(window.location.origin + "/orderdetails;id=" + newRoute.RecordId);
+                    }
+                    //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
+                    //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
+                    //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
+                    //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
+                    //}
+                    else
+                        //window.open("http://localhost:4200" + "/order");
+                        window.open(window.location.origin + "/order");
+                    break;
                 case "DownloadBOL":
                     var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
@@ -1057,7 +1072,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1899,7 +1914,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
+        for (var i = 0; i < xportContol.GetItemCount(); i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);
