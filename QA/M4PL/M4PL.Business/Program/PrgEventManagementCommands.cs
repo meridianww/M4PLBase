@@ -61,7 +61,7 @@ namespace M4PL.Business.Program
 		{
 			return _commands.Put(ActiveUser, entity);
 		}
-        public List<EventSubscriberType> GetEventSubscriber()
+        public List<EventSubscriber> GetEventSubscriber()
         {
             return _commands.GetEventSubscriber();
         }

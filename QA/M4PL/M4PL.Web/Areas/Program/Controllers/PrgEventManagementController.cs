@@ -107,7 +107,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 
             _formResult.SessionProvider = SessionProvider;
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new PrgEventManagementView();
-
+            _formResult.Record.ProgramID = _formResult.Record.ParentId;
             _formResult.SetupFormResult(_commonCommands, route);
             if (SessionProvider.ViewPagedDataSession.Count() > 0
             && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
@@ -128,9 +128,9 @@ namespace M4PL.Web.Areas.Program.Controllers
         {
 
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
-            DropDownEditViewModel.SelectedDropDownStringArray = new string[] {"POC" };
+            DropDownEditViewModel.SelectedDropDownStringArray = new string[] {"1" };
 
-            IList<EventSubscriberTypeView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
+            IList<EventSubscriberView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
 
             ViewData["EmailToSubscriberTypeList"] = subscriberTypesList;
             return PartialView("EmailToAddressSubscriber", DropDownEditViewModel);
@@ -142,7 +142,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
             DropDownEditViewModel.SelectedDropDownStringArray = new string[] { "POC" };
             
-            IList<EventSubscriberTypeView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
+            IList<EventSubscriberView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
 
             ViewData["CCEmailSubscriberTypeList"] = subscriberTypesList;
             return PartialView("EmailCCAddressSubscriber", DropDownEditViewModel);

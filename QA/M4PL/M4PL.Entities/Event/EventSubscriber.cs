@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Event
 {
-    public class EventSubscriberType
+    public class EventSubscriber
     {
         public int Id { get; set; }
 
-        public string EventSubscriberTypeName { get; set; }
+        public string SubscriberDescription { get; set; }
     }
 }

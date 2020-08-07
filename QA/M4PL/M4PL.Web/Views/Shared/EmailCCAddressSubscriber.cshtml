@@ -43,7 +43,7 @@
                     listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedNextGateway) {{M4PLCommon.EmailCCAddressSubscriber.InitNextGatewayListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
                     if (ViewData["CCEmailSubscriberTypeList"] != null)
                     {
-                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberTypeView>)ViewData["CCEmailSubscriberTypeList"])
+                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberView>)ViewData["CCEmailSubscriberTypeList"])
                         {
                             listBoxSettings.Properties.Items.Add(item.SubscriberDescription, item.Id.ToString());
                         }

@@ -43,7 +43,7 @@
                     listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedNextGateway) {{M4PLCommon.ToAddressSubscriber.InitNextGatewayListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
                     if (ViewData["EmailToSubscriberTypeList"] != null)
                     {
-                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberTypeView>)ViewData["EmailToSubscriberTypeList"])
+                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberView>)ViewData["EmailToSubscriberTypeList"])
                         {
                             listBoxSettings.Properties.Items.Add(item.SubscriberDescription, item.Id.ToString());
                         }

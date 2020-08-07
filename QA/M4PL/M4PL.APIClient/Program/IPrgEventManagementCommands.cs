@@ -27,7 +27,7 @@ namespace M4PL.APIClient.Program
 	/// </summary>
 	public interface IPrgEventManagementCommands : IBaseCommands<ViewModels.Program.PrgEventManagementView>
 	{
-        IList<EventSubscriberTypeView> GetEventSubscriber();
+        IList<EventSubscriberView> GetEventSubscriber();
 
     }
 }

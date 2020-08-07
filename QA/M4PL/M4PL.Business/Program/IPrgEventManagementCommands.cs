@@ -29,6 +29,6 @@ namespace M4PL.Business.Program
     /// </summary>
     public interface IPrgEventManagementCommands : IBaseCommands<PrgEventManagement>
     {
-        List<EventSubscriberType> GetEventSubscriber();
+        List<EventSubscriber> GetEventSubscriber();
     }
 }

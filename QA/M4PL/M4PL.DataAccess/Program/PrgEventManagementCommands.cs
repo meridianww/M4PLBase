@@ -60,8 +60,8 @@ namespace M4PL.DataAccess.Program
            // return new PrgEventManagement() { Id = 1, IsBodyHtml = true, EventName = "POD Upload", EventTypeId = 4, StatusId = 1, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" };
 
             SetCollection sets = new SetCollection();
-            sets.AddSet<EventSubscriberType>("ToEmailEventSubscriberRelation");
-            sets.AddSet<EventSubscriberType>("CCEmailEventSubscriberRelation");
+            sets.AddSet<EventSubscriber>("ToEmailEventSubscriberRelation");
+            sets.AddSet<EventSubscriber>("CCEmailEventSubscriberRelation");
             sets.AddSet<PrgEventManagement>("Event");
 
             var parameters = new List<Parameter>
@@ -70,8 +70,8 @@ namespace M4PL.DataAccess.Program
                    };
             SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetEventManagement);
             
-            var ToEmailEventSubscriberRelation = sets.GetSet<EventSubscriberType>("ToEmailEventSubscriberRelation");
-            var CCEmailEventSubscriberRelation = sets.GetSet<EventSubscriberType>("CCEmailEventSubscriberRelation");
+            var ToEmailEventSubscriberRelation = sets.GetSet<EventSubscriber>("ToEmailEventSubscriberRelation");
+            var CCEmailEventSubscriberRelation = sets.GetSet<EventSubscriber>("CCEmailEventSubscriberRelation");
             var eventDetails = sets.GetSet<PrgEventManagement>("Event").ToList().FirstOrDefault();
             eventDetails.SubscribersSelectedForToEmail = ToEmailEventSubscriberRelation;
             eventDetails.SubscribersSelectedForCCEmail = CCEmailEventSubscriberRelation;
@@ -133,14 +133,15 @@ namespace M4PL.DataAccess.Program
             return Delete(activeUser, ids, EntitiesAlias.PrgEventManagement, statusId, ReservedKeysEnum.StatusId);
         }
 
-        public static List<EventSubscriberType> GetEventSubscriber()
+        public static List<EventSubscriber> GetEventSubscriber()
         {
             var parameters = new List<Parameter>
                    {
                    };
-            var result = SqlSerializer.Default.DeserializeMultiRecords<EventSubscriberType>(StoredProceduresConstant.GetEventSubscriber, parameters.ToArray(), storedProcedure: true);
+            var result = SqlSerializer.Default.DeserializeMultiRecords<EventSubscriber>(StoredProceduresConstant.GetEventSubscriber, parameters.ToArray(), storedProcedure: true);
             return result;
         }
+        
              
 
         /// <summary>
@@ -153,13 +154,43 @@ namespace M4PL.DataAccess.Program
 		{
 
             PrgEventManagement.SubscriberAndSubscriberTypeMappingList = new List<Entities.Event.EventSubscriberAndSubscriberType>();
-            PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = 1, SubscriberTypeId = 1 });
-            PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = 1, SubscriberTypeId = 3 });
-            PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = 2, SubscriberTypeId = 1 });
-            PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = 2, SubscriberTypeId = 3 });
+            
+            SetCollection sets = new SetCollection();
+            sets.AddSet<EventSubscriber>("EventSubscriber");
+            sets.AddSet<EventSubscriberType>("EventSubscriberType");
+            
+            var parameters = new List<Parameter>
+                   {
+                       
+                   };
+            SetCollection setCollection = GetSetCollection(sets, new ActiveUser(), parameters, StoredProceduresConstant.GetEventSubscriberAndSubscriberType);
+
+            var eventSubscriber = sets.GetSet<EventSubscriber>("EventSubscriber");
+            var eventSubscriberType = sets.GetSet<EventSubscriberType>("EventSubscriberType");
+
+            var toEmailSubscribers = PrgEventManagement.ToEmailSubscribers.Split(',');
+            var ccEmailSubscribers = PrgEventManagement.CcEMailSubscribers.Split(',');
+
+            int toEmailSubscriberTypeId = eventSubscriberType.Find(obj => obj.EventSubscriberTypeName == "To").Id;
+            int ccEmailSubscriberTypeId = eventSubscriberType.Find(obj => obj.EventSubscriberTypeName == "CC").Id;
+
+
+            foreach(var item in toEmailSubscribers)
+            {
+                var subscriberId = eventSubscriber.Find(obj => obj.SubscriberDescription == item).Id;
+                PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = subscriberId, SubscriberTypeId = toEmailSubscriberTypeId });
+            }
+
+            foreach (var item in ccEmailSubscribers)
+            {
+                var subscriberId = eventSubscriber.Find(obj => obj.SubscriberDescription == item).Id;
+                PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = subscriberId, SubscriberTypeId = ccEmailSubscriberTypeId });
+            }
+
+
 
             var subscriberAndSubscriberTypeMapping = PrgEventManagement.SubscriberAndSubscriberTypeMappingList.ToDataTable();
-            var parameters = new List<Parameter>
+            var parameters2 = new List<Parameter>
 			{
                 new Parameter("@EventName",PrgEventManagement.EventName),
                 new Parameter("@EventShortName",PrgEventManagement.EventShortName),
@@ -175,7 +206,7 @@ namespace M4PL.DataAccess.Program
                 new Parameter("@CCEmailAddress",PrgEventManagement.CcEMail),
                 new Parameter("@uttEventSubscriber",subscriberAndSubscriberTypeMapping,"dbo.uttEventSubscriber")
             };
-			return parameters;
+			return parameters2;
 		}
 	}
 }

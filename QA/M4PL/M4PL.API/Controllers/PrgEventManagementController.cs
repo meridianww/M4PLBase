@@ -141,7 +141,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <returns>Event Subscriber List</returns>
         [HttpGet,Route("GetEventSubscriber")]
-        public IList<EventSubscriberType> GetEventSubscriber()
+        public IList<EventSubscriber> GetEventSubscriber()
         {
             return _prgEventManagementCommands.GetEventSubscriber();
         }
