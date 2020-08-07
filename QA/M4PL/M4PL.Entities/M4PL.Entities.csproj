@@ -117,6 +117,7 @@
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
     <Compile Include="JobService\OrderDetails.cs" />
+    <Compile Include="JobService\OrderDocumentDetails.cs" />
     <Compile Include="JobService\OrderGatewayDetails.cs" />
     <Compile Include="JobService\SearchOrder.cs" />
     <Compile Include="Job\BatchJobDetail.cs" />

@@ -19,7 +19,7 @@ namespace M4PL.DataAccess.JobServices
         /// <returns></returns>
         public static async Task<List<SearchOrder>> GetSearchOrder(string search, ActiveUser activeUser)
         {
-            var parameters = new List<Parameter>();// activeUser.GetRecordDefaultParams();
+            var parameters = activeUser.GetRecordDefaultParams();
             parameters.Add(new Parameter("@search", search));
             var result = SqlSerializer.Default.DeserializeMultiRecords<SearchOrder>(StoredProceduresConstant.GetSearchJobOrders, parameters.ToArray(), storedProcedure: true);
             return result;
@@ -34,23 +34,27 @@ namespace M4PL.DataAccess.JobServices
         public static async Task<OrderDetails> GetOrderDetailsById(long Id, ActiveUser activeUser)
         {
             OrderDetails orderDetails = new OrderDetails();
-            var parameters = new List<Parameter>();// activeUser.GetRecordDefaultParams();
+            var parameters = activeUser.GetRecordDefaultParams();
             parameters.Add(new Parameter("@Id", Id));
             SetCollection sets = new SetCollection();
             sets.AddSet<OrderDetails>("OrderDetails");
             sets.AddSet<OrderGatewayDetails>("OrderGatewayDetails");
+            sets.AddSet<OrderDocumentDetails>("OrderDocumentDetails");
             SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetOrderDetailsById, parameters.ToArray(), storedProcedure: true);
             var orderDetailslist = sets.GetSet<OrderDetails>("OrderDetails");
-            var orderGatewayDetailsCollection = sets.GetSet<OrderGatewayDetails>("OrderGatewayDetails");
-            orderDetails = orderDetailslist[0];
+            var orderGatewayCollection = sets.GetSet<OrderGatewayDetails>("OrderGatewayDetails");
+            var orderDocumentCollection = sets.GetSet<OrderDocumentDetails>("OrderDocumentDetails");
+
             if (orderDetailslist?.Count > 0)
             {
-                foreach (var item in orderDetailslist)
+                orderDetails = orderDetailslist[0];
+                if (orderDetails.Id > 0 && orderGatewayCollection != null && orderGatewayCollection.Count > 0)
                 {
-                    if (item.Id > 0 && orderGatewayDetailsCollection != null && orderGatewayDetailsCollection.Count > 0)
-                    {
-                        item.OrderGatewayDetails = orderGatewayDetailsCollection.Where(x => x.JobID == item.Id).ToList();
-                    }
+                    orderDetails.OrderGatewayDetails = orderGatewayCollection.Where(x => x.JobID == orderDetails.Id).ToList();
+                }
+                if (orderDetails.Id > 0 && orderDocumentCollection != null && orderDocumentCollection.Count > 0)
+                {
+                    orderDetails.OrderDocumentDetails = orderDocumentCollection.Where(x => x.JobID == orderDetails.Id).ToList();
                 }
             }
             return orderDetails;
