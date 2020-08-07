@@ -39,24 +39,22 @@ namespace M4PL.DataAccess.Program
         /// <returns></returns>
         public static List<PrgEventManagement> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
-
-
-            var parameters = pagedDataInfo.PagedDataDefaultParams(activeUser,EntitiesAlias.PrgEventManagement);
-            parameters.Add(new Parameter("@EventTypeId", 4));
-
-            var results = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters.ToArray(), storedProcedure: true);
-            if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
-                pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
-            else pagedDataInfo.TotalCount = 0;
-            return results;
             
-            //var parameters = new List<Parameter>
-            //       {
-            //           new Parameter("@EventTypeId", 4)
-            //       };
-            //var result = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters.ToArray(), storedProcedure: true);
-            //return result;
+            //var parameters = pagedDataInfo.PagedDataDefaultParams(activeUser, EntitiesAlias.PrgEventManagement);
+            //parameters.Add(new Parameter("@EventTypeId", 4));
 
+            //var results = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters.ToArray(), storedProcedure: true);
+            //if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
+            //    pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
+            //else pagedDataInfo.TotalCount = 0;
+            
+            var parameters2 = new List<Parameter>
+                   {
+                       new Parameter("@EventTypeId", 4)
+                   };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters2.ToArray(), storedProcedure: true);
+            
+            return result;
         }
 
         /// <summary>

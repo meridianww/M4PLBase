@@ -159,7 +159,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             prgEventManagement.ParentId = Convert.ToInt64(prgEventManagement.ProgramID);
             
             var result = prgEventManagement.Id > 0 ? UpdateForm(prgEventManagement) : SaveForm(prgEventManagement);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionForm);
             if (result is SysRefModel)
             {
                 route.RecordId = result.Id;
