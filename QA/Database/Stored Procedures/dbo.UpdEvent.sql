@@ -7,7 +7,7 @@ GO
 -- Create date: 06/Aug/2020
 -- Description:	Insert Email Event
 -- =============================================
-CREATE PROCEDURE [dbo].[UpdEvent]
+ALTER PROCEDURE [dbo].[UpdEvent]
 	(
 	  @EventId INT,
 	  @EventName VARCHAR(250),
@@ -83,8 +83,8 @@ INSERT INTO [dbo].[EventSubscriberRelation]
      SELECT
            SubscriberId,
            @EventEntityRelationId,
-           CASE WHEN SubscriberId = @CustomSubscriberId AND @ToEmailSubscriberTypeId =  SubscriberTypeId THEN @ToEmailAddress 
-		         WHEN SubscriberId = @CustomSubscriberId AND @CcEmailSubscriberTypeId =  SubscriberTypeId THEN @CCEmailAddress 
+           CASE WHEN SubscriberId =  @ToEmailSubscriberTypeId AND  @CustomSubscriberId =  SubscriberTypeId THEN @ToEmailAddress 
+		         WHEN SubscriberId = @CcEmailSubscriberTypeId AND  @CustomSubscriberId =  SubscriberTypeId THEN @CCEmailAddress 
 		   ELSE NULL END,
            SubscriberTypeId
 		   FROM @uttEventSubscriber
