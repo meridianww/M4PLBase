@@ -22,7 +22,7 @@ namespace M4PL.Entities.Event
         public string ToAddress { get; set; }
 		public string CcAddress { get; set; }
 		public string Body { get; set; }
-		public string IsBodyHtml { get; set; }
+		public bool IsBodyHtml { get; set; }
 		public string XSLTPath { get; set; }
 	}
 }

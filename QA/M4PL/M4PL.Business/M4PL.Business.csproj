@@ -120,6 +120,7 @@
     <Compile Include="Customer\ICustReportCommands.cs" />
     <Compile Include="Email\EmailCommands.cs" />
     <Compile Include="Email\IEmailCommands.cs" />
+    <Compile Include="Event\EventBodyHelper.cs" />
     <Compile Include="Event\EventCommands.cs" />
     <Compile Include="Event\IEventCommands.cs" />
     <Compile Include="Finance\CostCode\INavCostCodeCommands.cs" />
@@ -332,6 +333,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="StyleSheets\CargoException.xslt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="StyleSheets\JobBOL.xslt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
