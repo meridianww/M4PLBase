@@ -24,7 +24,12 @@
     settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
     settings.Styles.Header.Wrap = DefaultBoolean.True;
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    if (Model.GridSetting.GridName != "SecurityByRoleGridView")
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    else
+    {
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(76);
+    }
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
     //settings.Settings.VerticalScrollableHeight = 300;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
