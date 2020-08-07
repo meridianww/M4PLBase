@@ -209,7 +209,7 @@ DevExCtrl.Ribbon = function () {
                     var newRoute = _onJobReportClick(route);
                     if (newRoute != null && newRoute != "undefined" && newRoute.RecordId != 'undefined' && newRoute.RecordId > 0) {
                         //window.open("http://localhost:4200" + "/orderdetails;id=" + newRoute.RecordId);
-                        window.open(window.location.origin + "/orderdetails;id=" + newRoute.RecordId);
+                        window.open(window.location.origin + "/tracking/orderdetails;id=" + newRoute.RecordId);
                     }
                     //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
                     //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
@@ -218,7 +218,7 @@ DevExCtrl.Ribbon = function () {
                     //}
                     else
                         //window.open("http://localhost:4200" + "/order");
-                        window.open(window.location.origin + "/order");
+                        window.open(window.location.origin + "/tracking/order");
                     break;
                 case "DownloadBOL":
                     var jobIds = _onJobReportClickMultiSelect();
