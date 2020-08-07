@@ -18,7 +18,7 @@ GO
 -- Create date: 06/August/2020
 -- Description:	Get Event List by Event Type -- exec [dbo].[GetEventView] 4
 -- =============================================
-ALTER PROCEDURE [dbo].[GetEventView]
+CREATE PROCEDURE [dbo].[GetEventView]
 (
   @EventTypeId INT
 )
@@ -60,12 +60,12 @@ BEGIN
 		,eecd.[IsBodyHtml]
 		,(SELECT EmailAddresses
 	FROM dbo.EventSubscriberRelation
-	WHERE EventSubscriberTypeId = @CcEmailSubscriberTypeId
+	WHERE EventSubscriberTypeId = @ToEmailSubscriberTypeId
 		AND EventEntityRelationId = eer.ID
 		AND SubscriberId = @CustomSubscriberId) As ToEmail
 		,(SELECT EmailAddresses
 	FROM dbo.EventSubscriberRelation
-	WHERE EventSubscriberTypeId = @ToEmailSubscriberTypeId
+	WHERE EventSubscriberTypeId = @CcEmailSubscriberTypeId
 		AND EventEntityRelationId = eer.ID
 		AND SubscriberId = @CustomSubscriberId) AS CcEmail
 	FROM dbo.[Event] ev
