@@ -129,13 +129,8 @@ namespace M4PL.Web.Areas.Program.Controllers
 
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
             DropDownEditViewModel.SelectedDropDownStringArray = new string[] {"POC" };
-            
-            List<EventSubscriberTypeView> subscriberTypesList = new List<EventSubscriberTypeView>() {
-                new EventSubscriberTypeView() { Id = 1, EventSubscriberTypeName = "POC" },
-                new EventSubscriberTypeView() { Id = 2, EventSubscriberTypeName = "POC2" },
-                new EventSubscriberTypeView() { Id = 3, EventSubscriberTypeName = "Custom" }
 
-            };
+            IList<EventSubscriberTypeView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
 
             ViewData["EmailToSubscriberTypeList"] = subscriberTypesList;
             return PartialView("EmailToAddressSubscriber", DropDownEditViewModel);
@@ -147,12 +142,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
             DropDownEditViewModel.SelectedDropDownStringArray = new string[] { "POC" };
             
-            List<EventSubscriberTypeView> subscriberTypesList = new List<EventSubscriberTypeView>() {
-                new EventSubscriberTypeView() { Id = 1, EventSubscriberTypeName = "POC" },
-                new EventSubscriberTypeView() { Id = 2, EventSubscriberTypeName = "POC2" },
-                new EventSubscriberTypeView() { Id = 3, EventSubscriberTypeName = "Custom" }
-
-            };
+            IList<EventSubscriberTypeView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
 
             ViewData["CCEmailSubscriberTypeList"] = subscriberTypesList;
             return PartialView("EmailCCAddressSubscriber", DropDownEditViewModel);

@@ -10,6 +10,6 @@ namespace M4PL.Entities.Event
     {
         public int Id { get; set; }
 
-        public string EventSubscriberTypeName { get; set; }
+        public string SubscriberDescription { get; set; }
     }
 }

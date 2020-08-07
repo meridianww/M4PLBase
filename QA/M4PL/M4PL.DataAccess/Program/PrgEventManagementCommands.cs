@@ -133,7 +133,7 @@ namespace M4PL.DataAccess.Program
             return Delete(activeUser, ids, EntitiesAlias.PrgEventManagement, statusId, ReservedKeysEnum.StatusId);
         }
 
-        public static List<EventSubscriberType> GetSubscriber()
+        public static List<EventSubscriberType> GetEventSubscriber()
         {
             var parameters = new List<Parameter>
                    {

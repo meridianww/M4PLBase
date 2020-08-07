@@ -16,6 +16,7 @@
 //====================================================================================================================
 
 using M4PL.Entities;
+using M4PL.Entities.Event;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System;
@@ -60,5 +61,10 @@ namespace M4PL.Business.Program
 		{
 			return _commands.Put(ActiveUser, entity);
 		}
-	}
+        public List<EventSubscriberType> GetEventSubscriber()
+        {
+            return _commands.GetEventSubscriber();
+        }
+
+    }
 }

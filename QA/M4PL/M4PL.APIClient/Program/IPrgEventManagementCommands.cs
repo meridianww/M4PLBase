@@ -15,6 +15,7 @@
 // Purpose:                                      Set of rules for ProgramCommands
 //=============================================================================================================
 
+using M4PL.APIClient.ViewModels.Event;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using System.Collections.Generic;
@@ -26,5 +27,7 @@ namespace M4PL.APIClient.Program
 	/// </summary>
 	public interface IPrgEventManagementCommands : IBaseCommands<ViewModels.Program.PrgEventManagementView>
 	{
-	}
+        IList<EventSubscriberTypeView> GetEventSubscriber();
+
+    }
 }
