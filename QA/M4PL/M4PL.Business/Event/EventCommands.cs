@@ -16,31 +16,16 @@ using System.Threading.Tasks;
 using _command = M4PL.DataAccess.Common.EmailCommands;
 using M4PL.Entities.Support;
 using M4PL.Entities.Event;
+using M4PL.DataAccess.SQLSerializer.Serializer;
+using M4PL.Utilities;
+using System.Collections;
+using System.Data;
+using System.IO;
 
 namespace M4PL.Business.Event
 {
 	public class EventCommands : BaseCommands<EventEmailDetail>, IEventCommands
 	{
-		public void CreateEventMailNotificationForCargoException(int eventId, long parentId, string contractNumber)
-		{
-			var emailData = DataAccess.Event.EventCommands.GetEventEmailDetail(eventId, parentId);
-			if (emailData != null)
-			{
-				EmailDetail emailDetail = new EmailDetail()
-				{
-					FromAddress = emailData.FromMail,
-					Body = emailData.Body,
-					CCAddress = emailData.CcAddress,
-					EmailPriority = 1,
-					IsBodyHtml = true,
-					Subject = string.Format(emailData.Subject, contractNumber),
-					ToAddress = emailData.ToAddress
-				};
-
-				_command.InsertEmailDetail(emailDetail);
-			}
-		}
-
 		public int Delete(long id)
 		{
 			throw new NotImplementedException();
@@ -75,5 +60,6 @@ namespace M4PL.Business.Event
 		{
 			throw new NotImplementedException();
 		}
+
 	}
 }

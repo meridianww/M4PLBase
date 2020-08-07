@@ -22,8 +22,10 @@ namespace M4PL.DataAccess.Common
 	{
 		public static bool InsertEmailDetail(EmailDetail emaildetail)
 		{
-			Parameter[] parameters = new Parameter[]
+			try
 			{
+				Parameter[] parameters = new Parameter[]
+				{
 				new Parameter("@FromAddress", emaildetail.FromAddress),
 				new Parameter("@ToAddress", emaildetail.ToAddress),
 				new Parameter("@CCAddress", emaildetail.CCAddress),
@@ -31,9 +33,14 @@ namespace M4PL.DataAccess.Common
 				new Parameter("@IsBodyHtml", emaildetail.IsBodyHtml),
 				new Parameter("@Body", ReplaceNonAsciiCharacters(emaildetail.Body != null ? emaildetail.Body : string.Empty)),
 				new Parameter("@EmailAttachment", GetEmailAttachmentsTable(emaildetail.Attachments), "dbo.uttEmailAttachment")
-			};
+				};
 
-			SqlSerializer.Default.Execute(StoredProceduresConstant.InsertEmailDetail, parameters, true);
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertEmailDetail, parameters, true);
+			}
+			catch(Exception exp)
+			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Error while inserting the email detail information.", "InsertEmailDetail", Utilities.Logger.LogType.Error);
+			}
 
 			return true;
 		}

@@ -222,7 +222,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             jobGatewayViewAction.Id = jobGatewayView.Id;
             jobGatewayViewAction.JobID = jobGatewayView.JobID;
-            jobGatewayViewAction.ProgramID = jobGatewayView.ProgramID;
+			jobGatewayViewAction.ContractNumber = jobGatewayView.ContractNumber;
+			jobGatewayViewAction.ProgramID = jobGatewayView.ProgramID;
             jobGatewayViewAction.GwyTitle = jobGatewayView.GwyTitle;
             jobGatewayViewAction.GwyGatewayCode = jobGatewayView.CurrentAction;
             jobGatewayViewAction.GwyPhone = jobGatewayView.GwyPhone;
