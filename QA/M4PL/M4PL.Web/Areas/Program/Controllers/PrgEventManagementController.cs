@@ -108,6 +108,9 @@ namespace M4PL.Web.Areas.Program.Controllers
             _formResult.SessionProvider = SessionProvider;
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new PrgEventManagementView();
             _formResult.Record.ProgramID = _formResult.Record.ParentId;
+            _formResult.Record.ToEmailSubscribers = string.Join(",", _formResult.Record.SubscribersSelectedForToEmail.Select(p => p.Id.ToString()));
+            _formResult.Record.CcEMailSubscribers = string.Join(",", _formResult.Record.SubscribersSelectedForCCEmail.Select(p => p.Id.ToString()));
+            
             _formResult.SetupFormResult(_commonCommands, route);
             if (SessionProvider.ViewPagedDataSession.Count() > 0
             && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
@@ -124,11 +127,11 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(_formResult);
         }
 
-        public PartialViewResult ToEmailSubscriberType()
+        public PartialViewResult ToEmailSubscriberType(string selectedItems)
         {
 
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
-            DropDownEditViewModel.SelectedDropDownStringArray = new string[] {"1" };
+            DropDownEditViewModel.SelectedDropDownStringArray = selectedItems.Split(',');
 
             IList<EventSubscriberView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
 
@@ -136,11 +139,11 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView("EmailToAddressSubscriber", DropDownEditViewModel);
         }
 
-        public PartialViewResult CcEmailSubscriber()
+        public PartialViewResult CcEmailSubscriber(string selectedItems)
         {
 
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
-            DropDownEditViewModel.SelectedDropDownStringArray = new string[] { "POC" };
+            DropDownEditViewModel.SelectedDropDownStringArray = selectedItems.Split(',');
             
             IList<EventSubscriberView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
 

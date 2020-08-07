@@ -44,8 +44,8 @@
         ViewContext.Writer.Write("<div class='col-lg-16 col-md-16 no-padding prgEventManagement-grouping'>");
         ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.Subject).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.FromMail).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'> " + Html.Action("ToEmailSubscriberType", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString()) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'> " + Html.Action("CcEmailSubscriber", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString()) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'> " + Html.Action("ToEmailSubscriberType", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString(), new { selectedItems = Model.Record.ToEmailSubscribers }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'> " + Html.Action("CcEmailSubscriber", M4PL.Entities.EntitiesAlias.PrgEventManagement.ToString(), new { selectedItems = Model.Record.CcEMailSubscribers }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.IsBodyHtml).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
