@@ -40,7 +40,7 @@
                     listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
                     listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
                     listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.EmailCCAddressSubscriber.OnListBoxSelectionChanged";
-                    listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedNextGateway) {{M4PLCommon.EmailCCAddressSubscriber.InitNextGatewayListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
+                    listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedEmailCCAddressSubscriber) {{M4PLCommon.EmailCCAddressSubscriber.InitEmailCCAddressSubscriberListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
                     if (ViewData["CCEmailSubscriberTypeList"] != null)
                     {
                         foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberView>)ViewData["CCEmailSubscriberTypeList"])
@@ -49,7 +49,7 @@
                         }
                     }
 
-                    if (Model.SelectedDropDownStringArray.Length != 0)
+                    if (Model.SelectedDropDownStringArray != null && Model.SelectedDropDownStringArray.Length != 0)
                     {
                         listBoxSettings.Init = (sender, e) =>
                         {

@@ -1026,7 +1026,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1325,7 +1325,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -2255,257 +2255,6 @@ M4PLCommon.PrgGateway = (function () {
     }
 })();
 
-
-////////
-M4PLCommon.ToAddressSubscriber = (function () {
-    var textSeparator = ",";
-    function _onListBoxSelectionChanged(s, args) {
-        _updateText(s);
-    }
-
-    var _initNextGatewayListBox = function (s, e, selectedNextGateway) {
-
-        var toe = document.getElementById('ToEmail');
-        var toeLabel = document.getElementById('ToEmail_CapC');
-
-        if (toe != undefined) {
-
-            if (selectedNextGateway.indexOf("3") > -1) {
-                toe.style.display = 'block';
-                toeLabel.style.display = 'block';
-            }
-            else {
-                toe.style.display = 'none';
-                toeLabel.style.display = 'none';
-            }
-        }
-
-        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('ToAddressSubscriberIdListBox');
-        if (checkListBox != null) {
-            if (selectedNextGateway !== null && selectedNextGateway !== undefined && selectedNextGateway.length > 0 && selectedNextGateway[0] != 'ALL') {
-                checkListBox.SelectValues(selectedNextGateway);
-            }
-
-
-            var selectedItems = checkListBox.GetSelectedItems();
-
-            var NextGateway = ASPxClientControl.GetControlCollection().GetByName("ToAddressSubscriberId");
-            if (NextGateway != null)
-                NextGateway.SetText(_getSelectedItemsText(selectedItems));
-        }
-    }
-
-    var _updateText = function (listBox, Id) {
-        var selectedItems = listBox.GetSelectedItems();
-        var isCustomExists = _isElementExistsInList(selectedItems, 'Custom');
-        var toe = document.getElementById('ToEmail');
-        var toeLabel = document.getElementById('ToEmail_CapC');
-        if (isCustomExists) {
-            toe.style.display = 'block';
-            toeLabel.style.display = 'block';
-        }
-        else {
-            toe.style.display = 'none';
-            toeLabel.style.display = 'none';
-        }
-
-        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
-        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
-        var values = _getSelectedItemsText(selectedItems);
-        dropDownControl.SetText(values);
-    }
-    var _synchronizeListBoxValues = function (dropDown, args) {
-        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
-        checkListControl.ownerName = dropDown.name;
-
-        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
-        checkListControl.SelectValues(values);
-        _updateText(checkListControl);
-    }
-    var _closeUp = function (s, e) {
-        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
-        checkListControl.ownerName = s.name;
-
-        if (checkListControl != null) {
-            var selectedItems = checkListControl.GetSelectedItems();
-        }
-    }
-
-    var _isElementExistsInList = function (list, item) {
-        for (var i = 0; i < list.length; i++) {
-            if (list[i].text == item)
-                return true;
-        }
-        return false;
-    }
-
-    var _getSelectedItemsValue = function (items) {
-        var texts = [];
-        for (var i = 0; i < items.length; i++)
-            texts.push(items[i].value);
-        return texts.join(textSeparator);
-    }
-    var _getSelectedItemsText = function (items, listBox) {
-        var texts = [];
-        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
-        //    texts.push("ALL");
-        //}
-        //else {
-        for (var i = 0; i < items.length; i++)
-            texts.push(items[i].text);
-        //}
-        return texts.join(textSeparator);
-    }
-    var _getValuesByTexts = function (checkListControl, texts) {
-        var actualValues = [];
-        var item;
-        for (var i = 0; i < texts.length; i++) {
-            item = checkListControl.FindItemByText(texts[i]);
-            if (item != null)
-                actualValues.push(item.value);
-        }
-        return actualValues;
-    }
-
-    return {
-        InitNextGatewayListBox: _initNextGatewayListBox,
-        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
-        SynchronizeListBoxValues: _synchronizeListBoxValues,
-        CloseUp: _closeUp
-    }
-})();
-////////
-
-////////
-M4PLCommon.EmailCCAddressSubscriber = (function () {
-    var textSeparator = ",";
-    function _onListBoxSelectionChanged(s, args) {
-        _updateText(s);
-    }
-
-    var _initNextGatewayListBox = function (s, e, selectedNextGateway) {
-
-        var toe = document.getElementById('CcEMail_I');
-        var toeLabel = document.getElementById('CcEMail_CapC');
-        var toeLabelTable = document.getElementById('CcEMail_ET');
-
-
-        if (toe != undefined && toe != null && toeLabel != undefined && toeLabel != null
-           && toeLabelTable != null && toeLabelTable != undefined) {
-            if (selectedNextGateway.indexOf("3") > -1) {
-                toe.style.display = 'block';
-                toeLabel.style.display = 'block';
-                toeLabelTable.display = 'block';
-            }
-            else {
-                toe.style.display = 'none';
-                toeLabel.style.display = 'none';
-                toeLabelTable.style.display = 'none';
-            }
-        }
-
-        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('EmailCCAddressSubscriberIdListBox');
-        if (checkListBox != null) {
-            if (selectedNextGateway !== null && selectedNextGateway !== undefined && selectedNextGateway.length > 0 && selectedNextGateway[0] != 'ALL') {
-                checkListBox.SelectValues(selectedNextGateway);
-            }
-
-
-            var selectedItems = checkListBox.GetSelectedItems();
-
-            var NextGateway = ASPxClientControl.GetControlCollection().GetByName("EmailCCAddressSubscriberId");
-            if (NextGateway != null)
-                NextGateway.SetText(_getSelectedItemsText(selectedItems));
-        }
-    }
-
-    var _updateText = function (listBox, Id) {
-        var selectedItems = listBox.GetSelectedItems();
-        var isCustomExists = _isElementExistsInList(selectedItems, 'Custom');
-        var toe = document.getElementById('CcEMail_I');
-        var toeLabel = document.getElementById('CcEMail_CapC');
-        var toeLabelTable = document.getElementById('CcEMail_ET');
-
-        if (toe != undefined && toe != null && toeLabel != undefined && toeLabel != null
-            && toeLabelTable != null && toeLabelTable != undefined)
-            if (isCustomExists) {
-                toe.style.display = 'block';
-                toeLabel.style.display = 'block';
-                toeLabelTable.style.display = 'block';
-            }
-            else {
-                toe.style.display = 'none';
-                toeLabel.style.display = 'none';
-                toeLabelTable.style.display = 'none';
-            }
-
-        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
-        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
-        var values = _getSelectedItemsText(selectedItems);
-        dropDownControl.SetText(values);
-    }
-    var _synchronizeListBoxValues = function (dropDown, args) {
-        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
-        checkListControl.ownerName = dropDown.name;
-
-        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
-        checkListControl.SelectValues(values);
-        _updateText(checkListControl);
-    }
-    var _closeUp = function (s, e) {
-        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
-        checkListControl.ownerName = s.name;
-
-        if (checkListControl != null) {
-            var selectedItems = checkListControl.GetSelectedItems();
-        }
-    }
-
-    var _isElementExistsInList = function (list, item) {
-        for (var i = 0; i < list.length; i++) {
-            if (list[i].text == item)
-                return true;
-        }
-        return false;
-    }
-
-    var _getSelectedItemsValue = function (items) {
-        var texts = [];
-        for (var i = 0; i < items.length; i++)
-            texts.push(items[i].value);
-        return texts.join(textSeparator);
-    }
-    var _getSelectedItemsText = function (items, listBox) {
-        var texts = [];
-        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
-        //    texts.push("ALL");
-        //}
-        //else {
-        for (var i = 0; i < items.length; i++)
-            texts.push(items[i].text);
-        //}
-        return texts.join(textSeparator);
-    }
-    var _getValuesByTexts = function (checkListControl, texts) {
-        var actualValues = [];
-        var item;
-        for (var i = 0; i < texts.length; i++) {
-            item = checkListControl.FindItemByText(texts[i]);
-            if (item != null)
-                actualValues.push(item.value);
-        }
-        return actualValues;
-    }
-
-    return {
-        InitNextGatewayListBox: _initNextGatewayListBox,
-        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
-        SynchronizeListBoxValues: _synchronizeListBoxValues,
-        CloseUp: _closeUp
-    }
-})();
-////////
-
 M4PLCommon.CardView = (function () {
     var _init = function (s, e) {
         $.each($("#CardView tbody td table tbody td div"), function (key, value) {
@@ -2863,5 +2612,214 @@ M4PLCommon.Clipboard = (function () {
     return {
         SetClipboard: _setClipboard,
         GetClipboard: _getClipboard
+    }
+})();
+
+M4PLCommon.ToAddressSubscriber = (function () {
+    var textSeparator = ",";
+    function _onListBoxSelectionChanged(s, args) {
+        _updateText(s);
+    }
+
+    var _initToAddressSubscriberListBox = function (s, e, selectedToAddressSubscriber) {
+
+        if (selectedToAddressSubscriber != null && selectedToAddressSubscriber.indexOf("3") > -1)
+            $(".isToEmail").show();
+        else
+            $(".isToEmail").hide();
+
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('ToAddressSubscriberIdListBox');
+        if (checkListBox != null) {
+            if (selectedToAddressSubscriber !== null && selectedToAddressSubscriber !== undefined && selectedToAddressSubscriber.length > 0 && selectedToAddressSubscriber[0] != 'ALL') {
+                checkListBox.SelectValues(selectedToAddressSubscriber);
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+
+            var ToAddressSubscriber = ASPxClientControl.GetControlCollection().GetByName("ToAddressSubscriberId");
+            if (ToAddressSubscriber != null)
+                ToAddressSubscriber.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
+    var _updateText = function (listBox, Id) {
+        var selectedItems = listBox.GetSelectedItems();
+        var isCustomExists = _isElementExistsInList(selectedItems, 'Custom');
+        if (isCustomExists)
+            $(".isToEmail").show();
+        else
+            $(".isToEmail").hide();
+
+        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
+        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
+        var values = _getSelectedItemsText(selectedItems);
+        dropDownControl.SetText(values);
+    }
+
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
+        checkListControl.ownerName = dropDown.name;
+
+        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
+        checkListControl.SelectValues(values);
+        _updateText(checkListControl);
+    }
+
+    var _closeUp = function (s, e) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
+        checkListControl.ownerName = s.name;
+
+        if (checkListControl != null) {
+            var selectedItems = checkListControl.GetSelectedItems();
+        }
+    }
+
+    var _isElementExistsInList = function (list, item) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].text == item)
+                return true;
+        }
+        return false;
+    }
+
+    var _getSelectedItemsValue = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+
+    var _getSelectedItemsText = function (items, listBox) {
+        var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        //}
+        return texts.join(textSeparator);
+    }
+
+    var _getValuesByTexts = function (checkListControl, texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListControl.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+
+    return {
+        InitToAddressSubscriberListBox: _initToAddressSubscriberListBox,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        CloseUp: _closeUp
+    }
+})();
+
+M4PLCommon.EmailCCAddressSubscriber = (function () {
+    var textSeparator = ",";
+    function _onListBoxSelectionChanged(s, args) {
+        _updateText(s);
+    }
+
+    var _initEmailCCAddressSubscriberListBox = function (s, e, selectedEmailCCAddressSubscriber) {
+
+        if (selectedEmailCCAddressSubscriber != null && selectedEmailCCAddressSubscriber.indexOf("3") > -1)
+            $(".isCcEMail").show();
+        else
+            $(".isCcEMail").hide();
+
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('EmailCCAddressSubscriberIdListBox');
+        if (checkListBox != null) {
+            if (selectedEmailCCAddressSubscriber !== null && selectedEmailCCAddressSubscriber !== undefined && selectedEmailCCAddressSubscriber.length > 0 && selectedEmailCCAddressSubscriber[0] != 'ALL') {
+                checkListBox.SelectValues(selectedEmailCCAddressSubscriber);
+            }
+
+            var selectedItems = checkListBox.GetSelectedItems();
+            var EmailCCAddressSubscriber = ASPxClientControl.GetControlCollection().GetByName("EmailCCAddressSubscriberId");
+            if (EmailCCAddressSubscriber != null)
+                EmailCCAddressSubscriber.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
+    var _updateText = function (listBox, Id) {
+        var selectedItems = listBox.GetSelectedItems();
+        var isCustomExists = _isElementExistsInList(selectedItems, 'Custom');
+
+        if (isCustomExists)
+            $(".isCcEMail").show();
+        else
+            $(".isCcEMail").hide();
+
+        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
+        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
+        var values = _getSelectedItemsText(selectedItems);
+        dropDownControl.SetText(values);
+    }
+
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
+        checkListControl.ownerName = dropDown.name;
+
+        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
+        checkListControl.SelectValues(values);
+        _updateText(checkListControl);
+    }
+
+    var _closeUp = function (s, e) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
+        checkListControl.ownerName = s.name;
+
+        if (checkListControl != null) {
+            var selectedItems = checkListControl.GetSelectedItems();
+        }
+    }
+
+    var _isElementExistsInList = function (list, item) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].text == item)
+                return true;
+        }
+        return false;
+    }
+
+    var _getSelectedItemsValue = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+
+    var _getSelectedItemsText = function (items, listBox) {
+        var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        //}
+        return texts.join(textSeparator);
+    }
+
+    var _getValuesByTexts = function (checkListControl, texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListControl.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+
+    return {
+        InitEmailCCAddressSubscriberListBox: _initEmailCCAddressSubscriberListBox,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        CloseUp: _closeUp
     }
 })();

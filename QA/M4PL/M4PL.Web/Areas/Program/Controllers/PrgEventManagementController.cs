@@ -109,8 +109,10 @@ namespace M4PL.Web.Areas.Program.Controllers
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new PrgEventManagementView();
 
             _formResult.Record.ProgramID = _formResult.Record.ParentId;
-            _formResult.Record.ToEmailSubscribers = string.Join(",", _formResult.Record.SubscribersSelectedForToEmail.Select(p => p.Id.ToString()));
-            _formResult.Record.CcEMailSubscribers = string.Join(",", _formResult.Record.SubscribersSelectedForCCEmail.Select(p => p.Id.ToString()));
+            _formResult.Record.ToEmailSubscribers = _formResult.Record.SubscribersSelectedForToEmail != null ?
+                string.Join(",", _formResult.Record.SubscribersSelectedForToEmail.Select(p => p.Id.ToString())) : null;
+            _formResult.Record.CcEMailSubscribers = _formResult.Record.SubscribersSelectedForCCEmail != null ?
+                string.Join(",", _formResult.Record.SubscribersSelectedForCCEmail.Select(p => p.Id.ToString())) : null;
             
             _formResult.SetupFormResult(_commonCommands, route);
             if (SessionProvider.ViewPagedDataSession.Count() > 0
@@ -132,7 +134,7 @@ namespace M4PL.Web.Areas.Program.Controllers
         {
 
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
-            DropDownEditViewModel.SelectedDropDownStringArray = selectedItems.Split(',');
+            DropDownEditViewModel.SelectedDropDownStringArray = selectedItems != null ? selectedItems.Split(',') : null;
 
             IList<EventSubscriberView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
 
@@ -144,8 +146,8 @@ namespace M4PL.Web.Areas.Program.Controllers
         {
 
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
-            DropDownEditViewModel.SelectedDropDownStringArray = selectedItems.Split(',');
-            
+            DropDownEditViewModel.SelectedDropDownStringArray = selectedItems != null ? selectedItems.Split(',') : null;
+
             IList<EventSubscriberView> subscriberTypesList = _prgEventManagementCommands.GetEventSubscriber();
 
             ViewData["CCEmailSubscriberTypeList"] = subscriberTypesList;

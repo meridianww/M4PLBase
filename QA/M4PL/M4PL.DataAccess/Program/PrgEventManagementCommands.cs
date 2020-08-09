@@ -37,24 +37,9 @@ namespace M4PL.DataAccess.Program
         /// <param name="activeUser"></param>
         /// <param name="pagedDataInfo"></param>
         /// <returns></returns>
-        public static List<PrgEventManagement> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        public static IList<PrgEventManagement> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
-            
-            //var parameters = pagedDataInfo.PagedDataDefaultParams(activeUser, EntitiesAlias.PrgEventManagement);
-            //parameters.Add(new Parameter("@EventTypeId", 4));
-
-            //var results = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters.ToArray(), storedProcedure: true);
-            //if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
-            //    pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
-            //else pagedDataInfo.TotalCount = 0;
-            
-            var parameters2 = new List<Parameter>
-                   {
-                       new Parameter("@EventTypeId", 4)
-                   };
-            var result = SqlSerializer.Default.DeserializeMultiRecords<PrgEventManagement>(StoredProceduresConstant.GetEventManagementView, parameters2.ToArray(), storedProcedure: true);
-            
-            return result;
+            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetEventManagementView, EntitiesAlias.PrgEventManagement);
         }
 
         /// <summary>
@@ -66,7 +51,7 @@ namespace M4PL.DataAccess.Program
 
         public static PrgEventManagement Get(ActiveUser activeUser, long id)
         {
-           // return new PrgEventManagement() { Id = 1, IsBodyHtml = true, EventName = "POD Upload", EventTypeId = 4, StatusId = 1, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" };
+            // return new PrgEventManagement() { Id = 1, IsBodyHtml = true, EventName = "POD Upload", EventTypeId = 4, StatusId = 1, EventShortName = "PU", FromMail = "prashant.aggarwal@dreamorbit.com", Description = "This is test email.", ToEmail = "kirty.anurag@dreamorbit.com", CcEMail = "Manoj.kumar@dreamorbit.com" };
 
             SetCollection sets = new SetCollection();
             sets.AddSet<EventSubscriber>("ToEmailEventSubscriberRelation");
@@ -78,13 +63,13 @@ namespace M4PL.DataAccess.Program
                        new Parameter("@EventId", id),
                    };
             SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetEventManagement);
-            
+
             var ToEmailEventSubscriberRelation = sets.GetSet<EventSubscriber>("ToEmailEventSubscriberRelation");
             var CCEmailEventSubscriberRelation = sets.GetSet<EventSubscriber>("CCEmailEventSubscriberRelation");
             var eventDetails = sets.GetSet<PrgEventManagement>("Event").ToList().FirstOrDefault();
             eventDetails.SubscribersSelectedForToEmail = ToEmailEventSubscriberRelation;
             eventDetails.SubscribersSelectedForCCEmail = CCEmailEventSubscriberRelation;
-            
+
             return eventDetails;
         }
 
@@ -96,11 +81,11 @@ namespace M4PL.DataAccess.Program
         /// <returns></returns>
 
         public static PrgEventManagement Post(ActiveUser activeUser, PrgEventManagement prgEventManagement)
-		{
-			var parameters = GetParameters(prgEventManagement);
+        {
+            var parameters = GetParameters(prgEventManagement);
             var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsEventManagement, parameters.ToArray(), storedProcedure: true);
             return Get(activeUser, result);
-		}
+        }
 
         /// <summary>
         /// Updates the existing Program recordrecords
@@ -109,9 +94,9 @@ namespace M4PL.DataAccess.Program
         /// <param name="prgEventManagement"></param>
         /// <returns></returns>
 
-		public static PrgEventManagement Put(ActiveUser activeUser, PrgEventManagement prgEventManagement)
-		{
-			var parameters = GetParameters(prgEventManagement);
+        public static PrgEventManagement Put(ActiveUser activeUser, PrgEventManagement prgEventManagement)
+        {
+            var parameters = GetParameters(prgEventManagement);
             parameters.Add(new Parameter("@EventId", prgEventManagement.Id));
             var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.UpdProgramEventManagement, parameters.ToArray(), storedProcedure: true);
             return Get(activeUser, result);
@@ -145,13 +130,13 @@ namespace M4PL.DataAccess.Program
         public static List<EventSubscriber> GetEventSubscriber()
         {
             var parameters = new List<Parameter>
-                   {
-                   };
+            {
+            };
             var result = SqlSerializer.Default.DeserializeMultiRecords<EventSubscriber>(StoredProceduresConstant.GetEventSubscriber, parameters.ToArray(), storedProcedure: true);
             return result;
         }
-        
-             
+
+
 
         /// <summary>
         /// Gets list of parameters required for the Program Module
@@ -159,19 +144,19 @@ namespace M4PL.DataAccess.Program
         /// <param name="PrgEventManagement"></param>
         /// <returns></returns>
 
-		private static List<Parameter> GetParameters(Entities.Program.PrgEventManagement PrgEventManagement)
-		{
+        private static List<Parameter> GetParameters(Entities.Program.PrgEventManagement PrgEventManagement)
+        {
 
             PrgEventManagement.SubscriberAndSubscriberTypeMappingList = new List<Entities.Event.EventSubscriberAndSubscriberType>();
-            
+
             SetCollection sets = new SetCollection();
             sets.AddSet<EventSubscriber>("EventSubscriber");
             sets.AddSet<EventSubscriberType>("EventSubscriberType");
-            
+
             var parameters = new List<Parameter>
-                   {
-                       
-                   };
+            {
+
+            };
             SetCollection setCollection = GetSetCollection(sets, new ActiveUser(), parameters, StoredProceduresConstant.GetEventSubscriberAndSubscriberType);
 
             var eventSubscriber = sets.GetSet<EventSubscriber>("EventSubscriber");
@@ -184,7 +169,7 @@ namespace M4PL.DataAccess.Program
             int ccEmailSubscriberTypeId = eventSubscriberType.Find(obj => obj.EventSubscriberTypeName == "CC").Id;
 
 
-            foreach(var item in toEmailSubscribers)
+            foreach (var item in toEmailSubscribers)
             {
                 var subscriberId = eventSubscriber.Find(obj => obj.SubscriberDescription == item).Id;
                 PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = subscriberId, SubscriberTypeId = toEmailSubscriberTypeId });
@@ -200,7 +185,7 @@ namespace M4PL.DataAccess.Program
 
             var subscriberAndSubscriberTypeMapping = PrgEventManagement.SubscriberAndSubscriberTypeMappingList.ToDataTable();
             var parameters2 = new List<Parameter>
-			{
+            {
                 new Parameter("@EventName",PrgEventManagement.EventName),
                 new Parameter("@EventShortName",PrgEventManagement.EventShortName),
                 new Parameter("@FromMail",PrgEventManagement.FromMail),
@@ -212,10 +197,10 @@ namespace M4PL.DataAccess.Program
                 new Parameter("@IsBodyHtml",PrgEventManagement.IsBodyHtml),
                 new Parameter("@Subject",PrgEventManagement.Subject),
                 new Parameter("@ToEmailAddress",PrgEventManagement.ToEmail),
-                new Parameter("@CCEmailAddress",PrgEventManagement.CcEMail),
+                new Parameter("@CCEmailAddress",PrgEventManagement.CcEmail),
                 new Parameter("@uttEventSubscriber",subscriberAndSubscriberTypeMapping,"dbo.uttEventSubscriber")
             };
-			return parameters2;
-		}
-	}
+            return parameters2;
+        }
+    }
 }

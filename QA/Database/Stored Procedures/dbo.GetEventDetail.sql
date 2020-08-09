@@ -1,9 +1,7 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 -- =============================================
 -- Author:		Manoj Kumar.S
 -- Create date: 06/Aug/2020
@@ -77,7 +75,7 @@ BEGIN
 		,eecd.[Subject]
 		,eecd.[IsBodyHtml]
 		,@CustomToAddressEmail ToEmail
-		,@CustomCCAddressEmail CcEMail
+		,@CustomCCAddressEmail CcEmail
 	FROM dbo.[Event] ev
 	INNER JOIN dbo.EventEntityRelation eer ON ev.ID = eer.EventId
 	INNER JOIN dbo.EventEntityContentDetail eecd ON eecd.EventEntityRelationId = eer.ID
