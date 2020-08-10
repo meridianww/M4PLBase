@@ -83,6 +83,7 @@ namespace M4PL.DataAccess.Program
         public static PrgEventManagement Post(ActiveUser activeUser, PrgEventManagement prgEventManagement)
         {
             var parameters = GetParameters(prgEventManagement);
+            parameters.AddRange(activeUser.GetRecordDefaultParams());
             var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsEventManagement, parameters.ToArray(), storedProcedure: true);
             return Get(activeUser, result);
         }
@@ -97,6 +98,7 @@ namespace M4PL.DataAccess.Program
         public static PrgEventManagement Put(ActiveUser activeUser, PrgEventManagement prgEventManagement)
         {
             var parameters = GetParameters(prgEventManagement);
+            parameters.AddRange(activeUser.GetRecordDefaultParams());
             parameters.Add(new Parameter("@EventId", prgEventManagement.Id));
             var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.UpdProgramEventManagement, parameters.ToArray(), storedProcedure: true);
             return Get(activeUser, result);

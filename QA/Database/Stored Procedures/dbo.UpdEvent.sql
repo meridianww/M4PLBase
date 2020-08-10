@@ -9,6 +9,9 @@ GO
 -- =============================================
 ALTER PROCEDURE [dbo].[UpdEvent]
 	(
+	  @userId BIGINT,
+	  @roleId BIGINT,
+	  @orgId BIGINT,
 	  @EventId INT,
 	  @EventName VARCHAR(250),
 	  @EventShortName VARCHAR(50),
@@ -57,6 +60,8 @@ Update [dbo].[Event] SET
            ,[XSLTPath] = @XSLTPath
            ,[StatusId] = @StatusId
            ,[EventTypeId] = @EventTypeId
+		   ,[ChangedBy] = @userId
+		   ,[DateChanged] = GETUTCDATE()
  WHERE Id = @EventId            
     	
 

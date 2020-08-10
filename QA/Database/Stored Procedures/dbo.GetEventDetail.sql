@@ -7,7 +7,7 @@ GO
 -- Create date: 06/Aug/2020
 -- Description:	Get Event Event Detail exec [dbo].[GetEventDetail] 9
 -- =============================================
-CREATE PROCEDURE [dbo].[GetEventDetail] (@EventId INT)
+ALTER PROCEDURE [dbo].[GetEventDetail] (@EventId INT)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -76,6 +76,10 @@ BEGIN
 		,eecd.[IsBodyHtml]
 		,@CustomToAddressEmail ToEmail
 		,@CustomCCAddressEmail CcEmail
+		,ev.[DateEntered]
+		,ev.[ChangedBy]
+		,ev.[EnteredBy]
+		,ev.[DateChanged]
 	FROM dbo.[Event] ev
 	INNER JOIN dbo.EventEntityRelation eer ON ev.ID = eer.EventId
 	INNER JOIN dbo.EventEntityContentDetail eecd ON eecd.EventEntityRelationId = eer.ID
