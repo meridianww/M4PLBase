@@ -115,6 +115,7 @@
     <Compile Include="Finance\INavCustomerCommands.cs" />
     <Compile Include="Finance\INavPriceCodeCommands.cs" />
     <Compile Include="Finance\INavPurchaseOrderCommands.cs" />
+    <Compile Include="Finance\IGatewayCommands.cs" />
     <Compile Include="Finance\INavRateCommands.cs" />
     <Compile Include="Finance\INavSalesOrderCommands.cs" />
     <Compile Include="Finance\INavVendorCommands.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Finance\NavCustomerCommands.cs" />
     <Compile Include="Finance\NavPriceCodeCommands.cs" />
     <Compile Include="Finance\NavPurchaseOrderCommands.cs" />
+    <Compile Include="Finance\GatewayCommands.cs" />
     <Compile Include="Finance\NavRateCommands.cs" />
     <Compile Include="Finance\NavSalesOrderCommands.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
@@ -282,6 +284,7 @@
     <Compile Include="ViewModels\Document\DocumentView.cs" />
     <Compile Include="ViewModels\DropDownEditViewModel.cs" />
     <Compile Include="ViewModels\Event\EventSubscriberTypeView.cs" />
+    <Compile Include="ViewModels\Finance\GatewayView.cs" />
     <Compile Include="ViewModels\Finance\NavCostCodeView.cs" />
     <Compile Include="ViewModels\Finance\NavCustomerView.cs" />
     <Compile Include="ViewModels\Finance\NavPriceCodeView.cs" />

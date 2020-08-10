@@ -951,6 +951,7 @@
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Areas\Finance\Models\" />
     <Folder Include="Areas\Finance\Views\Finance\" />
+    <Folder Include="Areas\Finance\Views\Gateway\" />
     <Folder Include="Areas\Finance\Views\NavPurchaseOrder\" />
     <Folder Include="Areas\Finance\Views\NavSalesOrder\" />
     <Folder Include="Areas\Finance\Views\Shared\" />
