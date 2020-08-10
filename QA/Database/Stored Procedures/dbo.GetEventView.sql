@@ -69,14 +69,15 @@ SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[EventEntityContentDetail] 
 
   
 SET @TCountQuery = @TCountQuery + ' WHERE '+ @entity +'.EventTypeId = @EventTypeId ' + ISNULL(@where, '')  
-print @TCountQuery
+
 EXEC sp_executesql @TCountQuery, N'@EventTypeId INT, @userId BIGINT, @TotalCount INT OUTPUT', @EventTypeId, @userId, @TotalCount OUTPUT;  
    
 IF(@recordId = 0)  
  BEGIN  
-  SET @sqlCommand = 'SELECT ' + [dbo].[fnGetBaseQueryByUserId](@entity, @userId)   
+  SET @sqlCommand = 'SELECT ' + [dbo].[fnGetBaseQueryByUserId](@entity, @userId)
   SET @sqlCommand = @sqlCommand + (', eer.ParentId , eecd.Subject, eecd.IsBodyHtml,eer.ParentId AS ProgramID');
-  SET @sqlCommand = @sqlCommand + ' , '''+ @ToEmail+''' AS ToEmail, '''+ @CcEmail+''' AS CcEmail ';  
+  SET @sqlCommand = @sqlCommand + ' , '''+ ISNULL(@ToEmail,'')+''' AS ToEmail, '''+ ISNULL(@CcEmail, '')+''' AS CcEmail ';  
+
  END  
 ELSE  
  BEGIN  
@@ -97,7 +98,7 @@ ELSE
 SET @sqlCommand = @sqlCommand + + ' FROM [dbo].[Event] (NOLOCK) '+ @entity  
 SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[EventEntityRelation] eer ON ' + @entity + '.[Id] = eer.[EventId] '
 SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[EventEntityContentDetail] eecd ON eer.[Id] = eecd.[EventEntityRelationId] '
-
+print @sqlCommand
 	IF(ISNULL(@orderBy, '') <> '')
 	BEGIN
 		DECLARE @orderByJoinClause NVARCHAR(500);
