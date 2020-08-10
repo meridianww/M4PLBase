@@ -11,7 +11,7 @@ GO
 -- Execution:                 EXEC [dbo].GetEventView  
 -- =============================================   
 
-ALTER PROCEDURE [dbo].[GetEventView]  
+CREATE PROCEDURE [dbo].[GetEventView]  
 	@userId BIGINT,  
 	@roleId BIGINT,  
 	@orgId BIGINT,  
@@ -39,8 +39,6 @@ BEGIN TRY
 		,@CCEmailSubscriberTypeId INT
 		,@CustomToAddressEmail VARCHAR(200)
 		,@CustomCCAddressEmail VARCHAR(200)
-		,@ToEmail NVARCHAR(400)
-		,@CcEmail NVARCHAR(400)	
 		,@EventTypeId INT = 4
 		
 		SELECT @CustomSubscriberId = SubscriberId
@@ -55,28 +53,33 @@ BEGIN TRY
 	FROM [dbo].[EventSubscriberType]
 	WHERE EventSubscriberTypeName = 'CC'
 
-  SELECT @ToEmail = EmailAddresses FROM dbo.EventSubscriberRelation  ESR INNER JOIN dbo.EventEntityRelation eer
-  ON ESR.EventEntityRelationId = eer.ID WHERE EventSubscriberTypeId = @ToEmailSubscriberTypeId 
-  AND SubscriberId = @CustomSubscriberId
+IF OBJECT_ID('tempdb..#TempSubscriber') IS NOT NULL DROP TABLE #TempSubscriber
+CREATE TABLE #TempSubscriber
+(EmailAddresses varchar(5000),
+ EventSubscriberTypeId INT,
+ EventId INT)
 
-  SELECT @CcEmail = EmailAddresses FROM dbo.EventSubscriberRelation  ESR INNER JOIN dbo.EventEntityRelation eer
-  ON ESR.EventEntityRelationId = eer.ID WHERE EventSubscriberTypeId = @CcEmailSubscriberTypeId 
-  AND SubscriberId = @CustomSubscriberId
+INSERT INTO #TempSubscriber(EmailAddresses, EventSubscriberTypeId, EventId)
+Select ESR.EmailAddresses,ESR.EventSubscriberTypeId, eer.EventId
+FROM dbo.EventSubscriberRelation  ESR 
+INNER JOIN dbo.EventEntityRelation eer
+ON ESR.EventEntityRelationId = eer.ID 
+Where ISNULL(EmailAddresses,'') <> ''
   
 SET @TCountQuery = 'SELECT @TotalCount = COUNT('+ @entity+'.Id) FROM [dbo].[Event] (NOLOCK) '+ @entity     
 SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[EventEntityRelation] eer ON ' + @entity + '.[Id] = eer.[EventId] '
 SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[EventEntityContentDetail] eecd ON eer.[Id] = eecd.[EventEntityRelationId] '
+SET @TCountQuery = @TCountQuery + ' LEFT JOIN #TempSubscriber tmp ON ' + @entity + '.[Id] = tmp.[EventId] AND  tmp.EventSubscriberTypeId = 1 '
+SET @TCountQuery = @TCountQuery + ' LEFT JOIN #TempSubscriber tmp1 ON ' + @entity + '.[Id] = tmp1.[EventId] AND tmp.EventSubscriberTypeId = 2 '
 
   
 SET @TCountQuery = @TCountQuery + ' WHERE '+ @entity +'.EventTypeId = @EventTypeId ' + ISNULL(@where, '')  
-
 EXEC sp_executesql @TCountQuery, N'@EventTypeId INT, @userId BIGINT, @TotalCount INT OUTPUT', @EventTypeId, @userId, @TotalCount OUTPUT;  
-   
+
 IF(@recordId = 0)  
  BEGIN  
   SET @sqlCommand = 'SELECT ' + [dbo].[fnGetBaseQueryByUserId](@entity, @userId)
-  SET @sqlCommand = @sqlCommand + (', eer.ParentId , eecd.Subject, eecd.IsBodyHtml,eer.ParentId AS ProgramID');
-  SET @sqlCommand = @sqlCommand + ' , '''+ ISNULL(@ToEmail,'')+''' AS ToEmail, '''+ ISNULL(@CcEmail, '')+''' AS CcEmail ';  
+  SET @sqlCommand = @sqlCommand + (', eer.ParentId , eecd.Subject, eecd.IsBodyHtml,eer.ParentId AS ProgramID, tmp.EmailAddresses ToEmail, tmp1.EmailAddresses CcEmail');
 
  END  
 ELSE  
@@ -98,6 +101,8 @@ ELSE
 SET @sqlCommand = @sqlCommand + + ' FROM [dbo].[Event] (NOLOCK) '+ @entity  
 SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[EventEntityRelation] eer ON ' + @entity + '.[Id] = eer.[EventId] '
 SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[EventEntityContentDetail] eecd ON eer.[Id] = eecd.[EventEntityRelationId] '
+SET @sqlCommand = @sqlCommand + ' LEFT JOIN #TempSubscriber tmp ON ' + @entity + '.[Id] = tmp.[EventId] AND  tmp.EventSubscriberTypeId = 1 '
+SET @sqlCommand = @sqlCommand + ' LEFT JOIN #TempSubscriber tmp1 ON ' + @entity + '.[Id] = tmp1.[EventId] AND tmp.EventSubscriberTypeId = 2 '
 print @sqlCommand
 	IF(ISNULL(@orderBy, '') <> '')
 	BEGIN
@@ -167,7 +172,9 @@ EXEC sp_executesql @sqlCommand, N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(5
      @orderBy = @orderBy,  
      @where = @where,  
 	 @parentId = @parentId,  
-	 @userId = @userId  
+	 @userId = @userId 
+
+IF OBJECT_ID('tempdb..#TempSubscriber') IS NOT NULL DROP TABLE #TempSubscriber	  
 END TRY   
 BEGIN CATCH                  
  DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                  
