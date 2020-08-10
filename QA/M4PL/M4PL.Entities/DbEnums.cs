@@ -213,7 +213,7 @@ namespace M4PL.Entities
 		PrgVendLocation,
 		PrgCostLocation,
 		PrgBillableLocation,
-        
+
 
         PrgRefRole,
 		ProgramRole,
@@ -1064,5 +1064,12 @@ namespace M4PL.Entities
 		Active = 1,
 		Archive = 2,
 		Delete = 3
+	}
+
+	public enum EventNotification
+	{
+		CargoException = 1,
+		OrderUnCanceled = 2,
+		AwcXcblFailure = 3
 	}
 }
