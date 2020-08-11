@@ -121,12 +121,8 @@ namespace M4PL.Business.Job
 			}
 			else
 			{
-				if (cargoId > 0 && exceptionStatusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
-				{
-					string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobCargoException.ExceptionCode, exceptionStatusModel.JobId, exceptionStatusModel.ContractNumber, Utilities.TimeUtility.GetPacificDateTime(), string.Empty);
-					EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)exceptionStatusModel.ProgramId, exceptionStatusModel.ContractNumber, cargoExceptionBody);
-				}
-
+				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobCargoException.ExceptionCode, exceptionStatusModel.JobId, exceptionStatusModel.ContractNumber, Utilities.TimeUtility.GetPacificDateTime(), string.Empty);
+				EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)exceptionStatusModel.ProgramId, exceptionStatusModel.ContractNumber, cargoExceptionBody);
 				return new StatusModel()
 				{
 					StatusCode = exceptionStatusModel.StatusCode,

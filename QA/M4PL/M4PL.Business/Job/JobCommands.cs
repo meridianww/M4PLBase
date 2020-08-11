@@ -96,7 +96,7 @@ namespace M4PL.Business.Job
 			long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
 			bool isUpdateRequired = customerId == job.CustomerId ? false : true;
 			Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate: isUpdateRequired, isServiceCall: false, customerId: customerId, isManualUpdate: true);
-			if (jobResult != null && jobResult.JobCompleted)
+			if (jobResult != null && jobResult.JobCompleted && job.JobDeliveryDateTimeActual.HasValue && job.JobOriginDateTimeActual.HasValue)
 			{
 				Task.Run(() =>
 				{

@@ -7,11 +7,13 @@ GO
 -- Create date: 06/Aug/2020
 -- Description:	Insert Email Event
 -- =============================================
-ALTER PROCEDURE [dbo].[InsEvent]
+CREATE PROCEDURE [dbo].[InsEvent]
 	( 
 	  @userId BIGINT,
 	  @roleId BIGINT,
-	  @orgId BIGINT,
+	  @entity NVARCHAR(50) = NULL,
+	  @dateEntered DATETIME2(7),
+	  @enteredBy NVARCHAR(50),
 	  @EventName VARCHAR(250),
 	  @EventShortName VARCHAR(50),
 	  @FromMail VARCHAR(200),
@@ -72,8 +74,8 @@ INSERT INTO [dbo].[Event]
            ,@XSLTPath
            ,@StatusId
            ,@EventTypeId
-		   ,GETUTCDATE()
-		   ,@userId
+		   ,ISNULL(@dateEntered,GETUTCDATE())
+		   ,@enteredBy
 		   ,null
 		   ,null)
 	

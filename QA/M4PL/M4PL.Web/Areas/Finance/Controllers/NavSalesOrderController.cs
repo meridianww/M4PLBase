@@ -62,6 +62,21 @@ namespace M4PL.Web.Areas.Finance.Controllers
 				displayMessage.Description = string.IsNullOrEmpty(jobData.JobSONumber) ? string.Format("Sales order creation for JobId: {0} could not proceed, customer is not synced from NAV.", route.RecordId) : string.Format("Sales order updation for JobId: {0} could not proceed, customer is not synced from NAV.", route.RecordId);
 				return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 			}
+			else if(jobData != null && !jobData.JobOriginDateTimeActual.HasValue)
+			{
+				displayMessage.Description = string.IsNullOrEmpty(jobData.JobSONumber) ? string.Format("Sales order creation for JobId: {0} could not proceed, Origin Date Actual can not be empty.", route.RecordId) : string.Format("Sales order updation for JobId: {0} could not proceed, customer is not synced from NAV.", route.RecordId);
+				return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
+			}
+			else if (jobData != null && !jobData.JobDeliveryDateTimeActual.HasValue)
+			{
+				displayMessage.Description = string.IsNullOrEmpty(jobData.JobSONumber) ? string.Format("Sales order creation for JobId: {0} could not proceed, Delivery Date Actual can not be empty.", route.RecordId) : string.Format("Sales order updation for JobId: {0} could not proceed, customer is not synced from NAV.", route.RecordId);
+				return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
+			}
+			else if (jobData != null && !jobData.JobCompleted)
+			{
+				displayMessage.Description = string.IsNullOrEmpty(jobData.JobSONumber) ? string.Format("Sales order creation for JobId: {0} could not proceed, Job is not in completed state.", route.RecordId) : string.Format("Sales order updation for JobId: {0} could not proceed, customer is not synced from NAV.", route.RecordId);
+				return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
+			}
 
 			navSalesOrder = new NavSalesOrderView()
 			{

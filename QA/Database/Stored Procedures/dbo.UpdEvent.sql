@@ -7,11 +7,15 @@ GO
 -- Create date: 06/Aug/2020
 -- Description:	Insert Email Event
 -- =============================================
-ALTER PROCEDURE [dbo].[UpdEvent]
+CREATE PROCEDURE [dbo].[UpdEvent]
 	(
 	  @userId BIGINT,
 	  @roleId BIGINT,
-	  @orgId BIGINT,
+	  @id BIGINT =0,
+	  @entity NVARCHAR(50) = NULL,
+	  @dateChanged DATETIME2(7),
+	  @changedBy NVARCHAR(50),
+	  @isFormView BIT =0,
 	  @EventId INT,
 	  @EventName VARCHAR(250),
 	  @EventShortName VARCHAR(50),
@@ -29,16 +33,11 @@ ALTER PROCEDURE [dbo].[UpdEvent]
 	)
 AS
 BEGIN
-	
-	SET NOCOUNT ON;
-
-BEGIN TRY
+SET NOCOUNT ON;
 
 DECLARE @EventEntityRelationId INT,@CustomSubscriberId INT, @ToEmailSubscriberTypeId INT, @CCEmailSubscriberTypeId INT
 
-
-
-SELECT @EventEntityRelationId = Id FROM dbo.EventEntityRelation WHERE EventId = @EventId
+SELECT @EventEntityRelationId = Id FROM dbo.EventEntityRelation WHERE EventId = @EventId --AND ParentId = @ParentId
 
 SELECT @CustomSubscriberId = SubscriberId FROM
 [dbo].[EventSubscriber] Where SubscriberDescription = 'Custom'
@@ -51,7 +50,6 @@ SELECT @ToEmailSubscriberTypeId = Id FROM
 SELECT @CcEmailSubscriberTypeId = Id FROM
 [dbo].[EventSubscriberType] Where EventSubscriberTypeName = 'CC'
 
-
 Update [dbo].[Event] SET 
             [EventName] = @EventName
            ,[EventShortName] = @EventShortName
@@ -60,14 +58,14 @@ Update [dbo].[Event] SET
            ,[XSLTPath] = @XSLTPath
            ,[StatusId] = @StatusId
            ,[EventTypeId] = @EventTypeId
-		   ,[ChangedBy] = @userId
-		   ,[DateChanged] = GETUTCDATE()
+		   ,[ChangedBy] = @changedBy
+		   ,[DateChanged] = ISNULL(@dateChanged,GETUTCDATE())
  WHERE Id = @EventId            
     	
 
 UPDATE [dbo].[EventEntityRelation]
            SET [ParentId] = @ParentId
-    WHERE  EventId = @EventId
+    WHERE  Id = @EventEntityRelationId
   
 
 UPDATE [dbo].[EventEntityContentDetail]
@@ -77,7 +75,8 @@ UPDATE [dbo].[EventEntityContentDetail]
   WHERE  EventEntityRelationId = @EventEntityRelationId
 
 		   
-DELETE FROM [dbo].[EventSubscriberRelation] WHERE EventEntityRelationId = @EventEntityRelationId		   
+DELETE FROM [dbo].[EventSubscriberRelation] 
+WHERE EventEntityRelationId = @EventEntityRelationId		   
 		   
 		   		   
 INSERT INTO [dbo].[EventSubscriberRelation]
@@ -88,35 +87,11 @@ INSERT INTO [dbo].[EventSubscriberRelation]
      SELECT
            SubscriberId,
            @EventEntityRelationId,
-           CASE WHEN SubscriberId =  @ToEmailSubscriberTypeId AND  @CustomSubscriberId =  SubscriberTypeId THEN @ToEmailAddress 
-		         WHEN SubscriberId = @CcEmailSubscriberTypeId AND  @CustomSubscriberId =  SubscriberTypeId THEN @CCEmailAddress 
+           CASE WHEN SubscriberId =  @CustomSubscriberId AND  SubscriberTypeId =  @ToEmailSubscriberTypeId THEN @ToEmailAddress 
+		         WHEN SubscriberId = @CustomSubscriberId AND  SubscriberTypeId =  @CcEmailSubscriberTypeId THEN @CCEmailAddress 
 		   ELSE NULL END,
            SubscriberTypeId
 		   FROM @uttEventSubscriber
-
-SELECT 1
-
-END TRY
-BEGIN CATCH
-END CATCH
-	DECLARE @ErrorMessage VARCHAR(MAX) = (
-			SELECT ERROR_MESSAGE()
-			)
-		,@ErrorSeverity VARCHAR(MAX) = (
-			SELECT ERROR_SEVERITY()
-			)
-		,@RelatedTo VARCHAR(100) = (
-			SELECT OBJECT_NAME(@@PROCID)
-			)
-
-	EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo
-		,NULL
-		,@ErrorMessage
-		,NULL
-		,NULL
-		,@ErrorSeverity
-
-   SELECT -1
 
 END
 GO
