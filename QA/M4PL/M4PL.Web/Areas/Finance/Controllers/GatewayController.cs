@@ -76,15 +76,6 @@ namespace M4PL.Web.Areas.Finance.Controllers
 			return PartialView(_formResult);
 		}
 
-		public ActionResult ImportOrder(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			_formResult.SessionProvider = SessionProvider;
-			_formResult.IsPopUp = true;
-			_formResult.SetupFormResult(_commonCommands, route);
-			return PartialView("ImportOrder", _formResult);
-		}
-
 		[HttpPost]
 		public ActionResult ImportGateway([ModelBinder(typeof(DragAndDropSupportDemoBinder))] IEnumerable<UploadedFile> ucDragAndDropGateway, long ParentId = 0)
 		{
