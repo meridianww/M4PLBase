@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -169,34 +169,37 @@ namespace M4PL.Business.Finance.SalesOrder
         {
             NavSalesOrderCreationResponse result = null;
             Entities.Job.Job jobResult = _jobCommands.GetJobByProgram(ActiveUser, jobIdList.FirstOrDefault(), 0);
-            bool isDeliveryChargeRemovalRequired = false;
-            if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
-            {
-                isDeliveryChargeRemovalRequired = false;
-            }
-            else
-            {
-                isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
-            }
+			if (jobResult != null && jobResult.JobCompleted && jobResult.JobDeliveryDateTimeActual.HasValue && jobResult.JobOriginDateTimeActual.HasValue)
+			{
+				bool isDeliveryChargeRemovalRequired = false;
+				if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
+				{
+					isDeliveryChargeRemovalRequired = false;
+				}
+				else
+				{
+					isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+				}
 
-            if (isDeliveryChargeRemovalRequired)
-            {
-                _jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Delete);
-            }
+				if (isDeliveryChargeRemovalRequired)
+				{
+					_jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Delete);
+				}
 
-            try
-            {
-                result = CreateSalesOrderForRollup(jobIdList, jobResult);
-            }
-            catch (Exception exp)
-            {
-                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "Error is occuring while create/update the order in NAV from M4PL.", "CreateOrderInNAVFromM4PLJob", Utilities.Logger.LogType.Error);
-            }
+				try
+				{
+					result = CreateSalesOrderForRollup(jobIdList, jobResult);
+				}
+				catch (Exception exp)
+				{
+					M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "Error is occuring while create/update the order in NAV from M4PL.", "CreateOrderInNAVFromM4PLJob", Utilities.Logger.LogType.Error);
+				}
 
-            if (isDeliveryChargeRemovalRequired)
-            {
-                _jobCommands.UpdateJobPriceOrCostCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Active);
-            }
+				if (isDeliveryChargeRemovalRequired)
+				{
+					_jobCommands.UpdateJobPriceOrCostCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Active);
+				}
+			}
 
             return result;
         }
