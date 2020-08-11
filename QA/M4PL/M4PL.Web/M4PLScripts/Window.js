@@ -941,7 +941,7 @@ M4PLWindow.FormView = function () {
 
         var route = JSON.parse(strRoute);
         if (route.Controller == "PrgEventManagement" && route.Action == "DataView") {
-            
+
             var toemailsubscriber = ASPxClientControl.GetControlCollection().GetByName('ToAddressSubscriberIdListBox');
             var toemailsubscribervalues = toemailsubscriber.GetSelectedItems().map(function (el) { return el.text; });
 
@@ -1955,14 +1955,8 @@ M4PLWindow.UploadFileDragDrop = function () {
     }
 
     var _onUploadControlFileUploadComplete = function (s, e, callBackRoute) {
-        //if (e != null && e != undefined) {
-        //    if (e.isValid)
-        //        $("#uploadedImage").attr("src", e.callbackData);
-        //    //_setElementVisible(s, e, "uploadedImage", e.isValid);
-        //}
         DevExCtrl.PopupControl.Close();
         DisplayMessageControl.PerformCallback({ strDisplayMessage: e.callbackData });
-        //ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute) });
     }
 
     var _onImageLoad = function () {

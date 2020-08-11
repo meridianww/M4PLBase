@@ -666,7 +666,7 @@ namespace M4PL.Web.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CommonIds maxMinFormData = null;
-            if (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
+            if ((route.Entity != EntitiesAlias.NavRate || route.Entity != EntitiesAlias.Gateway) && route.Action != MvcConstants.ActionForm)
                 maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
 
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))

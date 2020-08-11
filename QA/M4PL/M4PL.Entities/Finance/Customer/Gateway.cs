@@ -17,6 +17,7 @@ namespace M4PL.Entities.Finance.Customer
 {
 	public class Gateway : BaseModel
 	{
+		public long ProgramId { get; set; }
 		public string Code { get; set; }
 		public string Title { get; set; }
 		public string Units { get; set; }

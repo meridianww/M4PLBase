@@ -19,6 +19,6 @@ namespace M4PL.APIClient.Finance
 {
 	public interface IGatewayCommands : IBaseCommands<GatewayView>
 	{
-		StatusModel GenerateProgramGateway(List<GatewayView> navRateList);
+		StatusModel GenerateProgramGateway(List<GatewayView> gatewayViewList);
 	}
 }
