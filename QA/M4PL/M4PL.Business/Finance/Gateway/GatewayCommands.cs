@@ -37,7 +37,7 @@ namespace M4PL.Business.Finance.Gateway
 
 		public StatusModel GenerateProgramGateway(List<Entities.Finance.Customer.Gateway> gatewayList)
 		{
-			return new StatusModel();
+			return DataAccess.Finance.GatewayCommands.GenerateProgramGateway(gatewayList, ActiveUser);
 		}
 
 		public Entities.Finance.Customer.Gateway Get(long id)

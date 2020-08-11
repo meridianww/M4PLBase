@@ -21,7 +21,7 @@ namespace M4PL.Entities.Finance.Customer
 		public string Code { get; set; }
 		public string Title { get; set; }
 		public string Units { get; set; }
-		public bool Default { get; set; }
+		public string Default { get; set; }
 		public string Type { get; set; }
 		public string DateReference { get; set; }
 		public string StatusReasonCode { get; set; }
@@ -30,9 +30,9 @@ namespace M4PL.Entities.Finance.Customer
 		public string ShipmenType { get; set; }
 		public string GatewayStatusCode { get; set; }
 		public string NextGateway { get; set; }
-		public bool IsDefaultComplete { get; set; }
+		public string IsDefaultComplete { get; set; }
 		public string InstallStatus { get; set; }
 		public string TransitionStatus { get; set; }
-		public bool IsStartGateway { get; set; }
+		public string IsStartGateway { get; set; }
 	}
 }

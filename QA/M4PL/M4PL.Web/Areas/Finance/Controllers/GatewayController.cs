@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -112,7 +112,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 							List<GatewayView> gatewayViewList = Extension.ConvertDataTableToModel<GatewayView>(csvDataTable);
 							gatewayViewList.ForEach(x => x.ProgramId = _ProgramId);
 							StatusModel statusModel = _gatewayStaticCommand.GenerateProgramGateway(gatewayViewList);
-							if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
+							if (statusModel != null && !string.IsNullOrEmpty(statusModel.Status) && !statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
 								displayMessage.Description = statusModel.AdditionalDetail;
 							else
 								displayMessage.Description = "Records has been uploaded from the selected CSV file.";
