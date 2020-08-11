@@ -61,17 +61,8 @@ namespace M4PL.Business.Common
         /// Gets the list of app menu data
         /// </summary>
         /// <returns></returns>
-        public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
+        public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(string username, string password, string serviceURL)
         {
-            string lan = string.Empty;
-			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			if (ActiveUser == null)
-                lan = "EN";
-            else
-                lan = ActiveUser.LangCode;
-
 			return Finance.SalesOrder.NavSalesOrderHelper.GetNavSalesOrderDimension(username, password, serviceURL);
         }
 

@@ -249,7 +249,7 @@ namespace M4PL.Business.Job
                     || string.Equals(gatewayCode, "Will Call", StringComparison.OrdinalIgnoreCase) || (JobTransitionStatusId.HasValue && completedTransitionStatus.Contains((int)JobTransitionStatusId))))
             {
                 var jobResult = _jobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
-                if (jobResult != null && jobResult.JobCompleted)
+                if (jobResult != null && jobResult.JobCompleted && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
                 {
                     Task.Run(() =>
                     {
