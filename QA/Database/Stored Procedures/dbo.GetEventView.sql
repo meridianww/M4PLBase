@@ -70,7 +70,7 @@ SET @TCountQuery = 'SELECT @TotalCount = COUNT('+ @entity+'.Id) FROM [dbo].[Even
 SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[EventEntityRelation] eer ON ' + @entity + '.[Id] = eer.[EventId] '
 SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[EventEntityContentDetail] eecd ON eer.[Id] = eecd.[EventEntityRelationId] '
 SET @TCountQuery = @TCountQuery + ' LEFT JOIN #TempSubscriber tmp ON ' + @entity + '.[Id] = tmp.[EventId] AND  tmp.EventSubscriberTypeId = 1 '
-SET @TCountQuery = @TCountQuery + ' LEFT JOIN #TempSubscriber tmp1 ON ' + @entity + '.[Id] = tmp1.[EventId] AND tmp.EventSubscriberTypeId = 2 '
+SET @TCountQuery = @TCountQuery + ' LEFT JOIN #TempSubscriber tmp1 ON ' + @entity + '.[Id] = tmp1.[EventId] AND tmp1.EventSubscriberTypeId = 2 '
 
   
 SET @TCountQuery = @TCountQuery + ' WHERE '+ @entity +'.EventTypeId = @EventTypeId ' + ISNULL(@where, '')  

@@ -11,7 +11,11 @@ CREATE PROCEDURE [dbo].[UpdEvent]
 	(
 	  @userId BIGINT,
 	  @roleId BIGINT,
-	  @orgId BIGINT,
+	  @id BIGINT =0,
+	  @entity NVARCHAR(50) = NULL,
+	  @dateChanged DATETIME2(7),
+	  @changedBy NVARCHAR(50),
+	  @isFormView BIT =0,
 	  @EventId INT,
 	  @EventName VARCHAR(250),
 	  @EventShortName VARCHAR(50),
@@ -54,8 +58,8 @@ Update [dbo].[Event] SET
            ,[XSLTPath] = @XSLTPath
            ,[StatusId] = @StatusId
            ,[EventTypeId] = @EventTypeId
-		   ,[ChangedBy] = @userId
-		   ,[DateChanged] = GETUTCDATE()
+		   ,[ChangedBy] = @changedBy
+		   ,[DateChanged] = ISNULL(@dateChanged,GETUTCDATE())
  WHERE Id = @EventId            
     	
 
