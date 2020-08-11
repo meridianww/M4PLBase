@@ -34,7 +34,7 @@ namespace M4PL.DataAccess.Finance
 				new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
 		   };
 
-				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateNavRateByLocation, parameters.ToArray(), true);
+				SqlSerializer.Default.Execute(StoredProceduresConstant.ImportGatewayActionForProgram, parameters.ToArray(), true);
 				statusModel = new StatusModel() { Status = "Success", AdditionalDetail = "", StatusCode = 200 };
 			}
 			catch (Exception exp)
