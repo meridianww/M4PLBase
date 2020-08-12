@@ -27,7 +27,7 @@ namespace M4PL.Entities.Finance.Customer
 		public string StatusReasonCode { get; set; }
 		public string AppointmentReasonCode { get; set; }
 		public string OrderType { get; set; }
-		public string ShipmenType { get; set; }
+		public string ShipmentType { get; set; }
 		public string GatewayStatusCode { get; set; }
 		public string NextGateway { get; set; }
 		public string IsDefaultComplete { get; set; }
