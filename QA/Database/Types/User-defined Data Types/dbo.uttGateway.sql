@@ -12,7 +12,7 @@ CREATE TYPE [dbo].[uttGateway] AS TABLE (
 	,[GatewayStatusCode] [nvarchar](20) NULL
 	,[NextGateway] [varchar](5000) NULL
 	,[IsDefaultComplete] [bit] NULL
-	,[InstallStatus] [bigint] NULL
+	,[InstallStatus] [nvarchar](150) NULL
 	,[TransitionStatus] [int] NULL
 	,[IsStartGateway] [bit] NULL
 	)
