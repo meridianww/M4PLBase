@@ -203,6 +203,8 @@ M4PLWindow.DataView = function () {
                     editor.SetEnabled(true);
             }
         }
+        if (s.name.split("SubSecurityByRoleGridView").length === 2) // as using parent id as suffix in name
+            e.rowValues[s.GetColumnByField("StatusId").index].value = 1; // set status to active
     }
 
     var _onActRoleBatchEditStartEditing = function (s, e, isReadOnly, roleId, orgId, statusIdFieldName, roleTitleFieldName) {
@@ -935,6 +937,22 @@ M4PLWindow.FormView = function () {
 
             putOrPostData.push({ name: "IsSecurityDefined", value: totalRecords > 0 });
         }
+
+
+        var route = JSON.parse(strRoute);
+        if (route.Controller == "PrgEventManagement" && route.Action == "DataView") {
+
+            var toemailsubscriber = ASPxClientControl.GetControlCollection().GetByName('ToAddressSubscriberIdListBox');
+            var toemailsubscribervalues = toemailsubscriber.GetSelectedItems().map(function (el) { return el.text; });
+
+            var ccemailsubscriber = ASPxClientControl.GetControlCollection().GetByName('EmailCCAddressSubscriberIdListBox');
+            var ccemailsubscribervalues = ccemailsubscriber.GetSelectedItems().map(function (el) { return el.text; });
+
+            putOrPostData.push({ name: "ToEmailSubscribers", value: toemailsubscribervalues });
+            putOrPostData.push({ name: "CcEMailSubscribers", value: ccemailsubscribervalues });
+
+        }
+
         var conditionsGrid = null;
         if (typeof PrgEdiConditionGridView !== "undefined" && ASPxClientUtils.IsExists(PrgEdiConditionGridView) && ASPxClientUtils.IsExists(PrgEdiConditionGridView)) {
             conditionsGrid = ASPxClientControl.GetControlCollection().GetByName('PrgEdiConditionGridView');
@@ -994,6 +1012,14 @@ M4PLWindow.FormView = function () {
                                 else if (response.reloadApplication && response.reloadApplication === true) {
                                     M4PLCommon.Common.ReloadApplication();
                                     return;
+                                }
+                                if (route.Controller === "PrgEventManagement") {
+                                    route.Action = response.route.Action;
+                                    if (response.displayMessage && route.Action == "FormView") {
+                                        response.displayMessage.HeaderIcon = null;
+                                        response.displayMessage.MessageTypeIcon = null;
+                                        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
+                                    }
                                 }
                                 else if (route.Controller === "PrgEdiHeader") {
                                     if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
@@ -1937,14 +1963,8 @@ M4PLWindow.UploadFileDragDrop = function () {
     }
 
     var _onUploadControlFileUploadComplete = function (s, e, callBackRoute) {
-        //if (e != null && e != undefined) {
-        //    if (e.isValid)
-        //        $("#uploadedImage").attr("src", e.callbackData);
-        //    //_setElementVisible(s, e, "uploadedImage", e.isValid);
-        //}
         DevExCtrl.PopupControl.Close();
         DisplayMessageControl.PerformCallback({ strDisplayMessage: e.callbackData });
-        //ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute) });
     }
 
     var _onImageLoad = function () {

@@ -22,7 +22,7 @@ CREATE PROCEDURE [dbo].[InsertCargoException] (
 	,@CargoQuantity INT = 0
 	,@CargoField VARCHAR(150)
 	,@CgoReasonCodeOSD VARCHAR(30)
-	,@CgoDateLastScan datetime2(7) = NULL
+	,@CgoDateLastScan DATETIME2(7) = NULL
 	)
 AS
 BEGIN
@@ -31,6 +31,8 @@ BEGIN
 	DECLARE @jobId BIGINT
 		,@sqlCommand NVARCHAR(MAX) = NULL
 		,@currentId BIGINT
+		,@ProgramId BIGINT
+		,@ContractNumber VARCHAR(150)
 
 	SELECT @jobId = jobId
 	FROM JOBDL010Cargo
@@ -38,8 +40,7 @@ BEGIN
 
 	IF (ISNULL(@jobId, 0) > 0)
 	BEGIN
-		DECLARE @programId BIGINT
-			,@deliverySitePOC NVARCHAR(75)
+		DECLARE @deliverySitePOC NVARCHAR(75)
 			,@deliverySitePOCPhone NVARCHAR(50)
 			,@deliverySitePOCEmail NVARCHAR(100)
 			,@JobDeliverySitePOC2 NVARCHAR(75)
@@ -64,6 +65,8 @@ BEGIN
 			,@JobDeliverySitePOCEmail2 = job.JobDeliverySitePOCEmail2
 			,@JobPreferredMethod = job.JobPreferredMethod
 			,@JobDeliveryTimeZone = Job.JobDeliveryTimeZone
+			,@ProgramId = ProgramId
+		    ,@ContractNumber = JobCustomerSalesOrder
 			,@IsOnSitePOCExists = CASE 
 				WHEN (
 						ISNULL(job.JobDeliverySitePOC2, '') <> ''
@@ -165,20 +168,24 @@ BEGIN
 			,@StatusCode
 			)
 
-        SET @currentId = SCOPE_IDENTITY();
+		SET @currentId = SCOPE_IDENTITY();
 
-		IF (@currentId > 0 AND @cargoId > 0)
+		IF (
+				@currentId > 0
+				AND @cargoId > 0
+				)
 		BEGIN
-		UPDATE JOBDL010Cargo SET CgoReasonCodeOSD = @CgoReasonCodeOSD , CgoDateLastScan = ISNULL(@CgoDateLastScan,CgoDateLastScan)
-		Where Id = @cargoId
+			UPDATE JOBDL010Cargo
+			SET CgoReasonCodeOSD = @CgoReasonCodeOSD
+				,CgoDateLastScan = ISNULL(@CgoDateLastScan, CgoDateLastScan)
+			WHERE Id = @cargoId
 
-		IF(ISNULL(@CargoField, '') <> '')
-		BEGIN
-			SET @sqlCommand = 'UPDATE JOBDL010Cargo SET ' + @CargoField + ' = ' + CONVERT(NVARCHAR(30), @CargoQuantity) + 
-			' WHERE ID = ' + CONVERT(NVARCHAR(30), @cargoId)
+			IF (ISNULL(@CargoField, '') <> '')
+			BEGIN
+				SET @sqlCommand = 'UPDATE JOBDL010Cargo SET ' + @CargoField + ' = ' + CONVERT(NVARCHAR(30), @CargoQuantity) + ' WHERE ID = ' + CONVERT(NVARCHAR(30), @cargoId)
 
-			EXEC sp_executesql @sqlCommand
-		END
+				EXEC sp_executesql @sqlCommand
+			END
 		END
 	END
 
@@ -197,6 +204,9 @@ BEGIN
 				THEN ''
 			ELSE 'There is no Job Present for the mentioned CargoId.'
 			END [Status]
+        ,@jobId JobId
+		,@ProgramId ProgramId
+		,@ContractNumber ContractNumber
 END
 GO
 

@@ -27,6 +27,7 @@ using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities.Logger;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
 
@@ -60,18 +61,9 @@ namespace M4PL.Business.Common
         /// Gets the list of app menu data
         /// </summary>
         /// <returns></returns>
-        public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
+        public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(string username, string password, string serviceURL)
         {
-            string lan = string.Empty;
-			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			if (ActiveUser == null)
-                lan = "EN";
-            else
-                lan = ActiveUser.LangCode;
-
-			return CoreCache.GetNavSalesOrderDimensionValues(lan, username, password, serviceURL, forceUpdate);
+			return Finance.SalesOrder.NavSalesOrderHelper.GetNavSalesOrderDimension(username, password, serviceURL);
         }
 
 		/// <summary>
@@ -80,16 +72,11 @@ namespace M4PL.Business.Common
 		/// <returns></returns>
 		public static NavSalesOrderPostedInvoiceResponse GetCachedNavSalesOrderValues(bool forceUpdate = false)
 		{
-			string lan = string.Empty;
-			if (ActiveUser == null)
-				lan = "EN";
-			else
-				lan = ActiveUser.LangCode;
 			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
 
-			return CoreCache.GetCachedNavSalesOrderValues(lan, username, password, serviceURL, forceUpdate);
+			return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderResponse(username, password, serviceURL);
 		}
 
 		/// <summary>
@@ -98,15 +85,10 @@ namespace M4PL.Business.Common
 		/// <returns></returns>
 		public static NavPurchaseOrderPostedInvoiceResponse GetCachedNavPurchaseOrderValues(bool forceUpdate = false)
 		{
-			string lan = string.Empty;
 			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			if (ActiveUser == null)
-				lan = "EN";
-			else
-				lan = ActiveUser.LangCode;
-			return CoreCache.GetCachedNavPurchaseOrderValues(lan, username, password, serviceURL, forceUpdate);
+			return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderResponse(username, password, serviceURL);
 		}
 
 		/// <summary>
@@ -115,15 +97,10 @@ namespace M4PL.Business.Common
 		/// <returns></returns>
 		public static NavSalesOrderItemResponse GetCachedNavSalesOrderItemValues(bool forceUpdate = false)
 		{
-			string lan = string.Empty;
 			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			if (ActiveUser == null)
-				lan = "EN";
-			else
-				lan = ActiveUser.LangCode;
-			return CoreCache.GetCachedNavSalesOrderItemValues(lan, username, password, serviceURL, forceUpdate);
+			return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderItemResponse(username, password, serviceURL);
 		}
 
 		/// <summary>
@@ -132,15 +109,10 @@ namespace M4PL.Business.Common
 		/// <returns></returns>
 		public static NavPurchaseOrderItemResponse GetCachedNavPurchaseOrderItemValues(bool forceUpdate = false)
 		{
-			string lan = string.Empty;
 			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			if (ActiveUser == null)
-				lan = "EN";
-			else
-				lan = ActiveUser.LangCode;
-			return CoreCache.GetCachedNavPurchaseOrderItemValues(lan, username, password, serviceURL, forceUpdate);
+			return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderItemResponse(username, password, serviceURL);
 		}
 
 		/// <summary>
@@ -149,10 +121,7 @@ namespace M4PL.Business.Common
 		/// <returns></returns>
 		public static NAVOrderItemResponse GetNAVOrderItemResponse(bool forceUpdate = false)
         {
-			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			return CoreCache.GetNAVOrderItemResponse(ActiveUser.LangCode, username, password, serviceURL, forceUpdate);
+			return Finance.SalesOrder.NavSalesOrderHelper.GetNavNAVOrderItemResponse();
         }
 
         /// <summary>
@@ -515,5 +484,11 @@ namespace M4PL.Business.Common
         {
             return _commands.GetJobGateway(ActiveUser, jobId);
         }
+
+		public static bool InsertErrorLog(M4PLException m4plException)
+		{
+			M4PL.DataAccess.Logger.ErrorLogger.Log(m4plException.Exception, m4plException.AdditionalMessage, m4plException.ErrorRelatedTo, m4plException.LogType);
+			return true;
+		}
     }
 }

@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -17,6 +17,7 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobGatewayCommands
 //====================================================================================================================
 
+using M4PL.Business.Event;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
@@ -91,7 +92,13 @@ namespace M4PL.Business.Job
         {
             var gateway = _commands.Post(ActiveUser, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
             PushDataToNav(gateway.JobID, jobGateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
-            return gateway;
+			if (jobGateway.GwyCargoId > 0)
+			{
+				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyExceptionStatusIdName, (long)jobGateway.JobID, jobGateway.ContractNumber, (DateTime)jobGateway.GwyGatewayACD, jobGateway.GwyAddtionalComment);
+				EventBodyHelper.CreateEventMailNotificationForCargoException((int)EventNotification.CargoException, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
+			}
+
+			return gateway;
         }
 
         /// <summary>
@@ -103,11 +110,12 @@ namespace M4PL.Business.Job
         {
             var gatewaysIds = string.Empty;
             jobGateway.IsMultiOperation = false;
-            if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
+			JobGateway gateway = null;
+			if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
             {
                 List<Task> tasks = new List<Task>();
                 jobGateway.IsMultiOperation = true;
-                var gateway = new JobGateway();
+                gateway = new JobGateway();
                 foreach (var item in jobGateway.JobIds[0].Split(','))
                 {
                     gateway = new JobGateway();
@@ -117,15 +125,21 @@ namespace M4PL.Business.Job
                 }
                 gateway.GatewayIds = gatewaysIds.Remove(gatewaysIds.Length - 1);
                 PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
-                return gateway;
             }
             else
             {
-                var gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
                 PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
-                return gateway;
             }
-        }
+
+			if (jobGateway.GwyCargoId > 0)
+			{
+				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, (DateTime)jobGateway.GwyGatewayACD, jobGateway.GwyAddtionalComment);
+				EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
+			}
+
+			return gateway;
+		}
 
         /// <summary>
         /// Updates an existing jobgateways record
@@ -235,7 +249,7 @@ namespace M4PL.Business.Job
                     || string.Equals(gatewayCode, "Will Call", StringComparison.OrdinalIgnoreCase) || (JobTransitionStatusId.HasValue && completedTransitionStatus.Contains((int)JobTransitionStatusId))))
             {
                 var jobResult = _jobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
-                if (jobResult != null && jobResult.JobCompleted)
+                if (jobResult != null && jobResult.JobCompleted && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
                 {
                     Task.Run(() =>
                     {

@@ -254,6 +254,7 @@
     <Compile Include="Areas\Customer\Controllers\CustReportController.cs" />
     <Compile Include="Areas\Customer\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
+    <Compile Include="Areas\Finance\Controllers\GatewayController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavRateController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavCostCodeController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavCustomerController.cs" />
@@ -310,6 +311,7 @@
     <Compile Include="Areas\Program\Controllers\PrgShipStatusReasonCodeController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgVendLocationController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgCostLocationController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgEventManagementController.cs" />
     <Compile Include="Areas\Program\Controllers\ProgramController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgEdiConditionController.cs" />
     <Compile Include="Areas\Program\ProgramAreaRegistration.cs" />
@@ -770,6 +772,9 @@
     <Content Include="Areas\Job\Views\JobAdvanceReport\CargoTitleByJob.cshtml" />
     <Content Include="M4PL.Web.licenseheader" />
     <Content Include="Areas\Finance\Views\NavRate\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEventManagement\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEventManagement\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\Gateway\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -930,6 +935,9 @@
     <Content Include="Views\Shared\_CardViewPartial.cshtml" />
     <Content Include="Views\Common\_PrefVdcLocationsPartial.cshtml" />
     <Content Include="Views\Shared\_NoAccess.cshtml" />
+    <Content Include="Views\Shared\SubscriberType.cshtml" />
+    <Content Include="Views\Shared\EmailCCAddressSubscriber.cshtml" />
+    <Content Include="Views\Shared\EmailToAddressSubscriber.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\UploadTemp\" />

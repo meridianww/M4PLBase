@@ -63,7 +63,7 @@
 }
 
 @if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity)
-                                        && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
+                                                                                                                && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
 {
     <div class='col-lg-12 col-md-12 col-sm-12 form-group' style='padding-bottom: 0px;height:45px;background-color:#808080;color:#ffffff;line-height:45px;font-weight:bold;font-size:18px;'>
         <div class='col-lg-6 col-md-10 col-sm-6 form-group'>
@@ -128,6 +128,13 @@ else
                        tokensettings.Properties.IncrementalFilteringDelay = 500;
                        tokensettings.Properties.CaptionSettings.ShowColon = false;
                        tokensettings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                       if (Model.Permission <= Permission.ReadOnly)
+                       {
+                           tokensettings.ReadOnly = true;
+                           tokensettings.ControlStyle.CssClass = "readonlyBgColor";
+                           ViewData["jobSiteCode"] = null;
+                       }
+
                        tokensettings.Properties.Caption = columnSetting.ColAliasName;
                        tokensettings.Properties.ClientSideEvents.ValueChanged = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.ValueChanged(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
                        tokensettings.Properties.ClientSideEvents.Init = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.Init(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
@@ -181,9 +188,10 @@ else
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
                    ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobServiceActual).ToHtmlString() + "</div>");
                    ViewContext.Writer.Write("</div>");
-
-                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, "MultilineText").ToHtmlString() + "</div>");
-
+                   if (Model.Permission > Permission.ReadOnly)
+                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, "MultilineText").ToHtmlString() + "</div>");
+                   else
+                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, new { IsReadOnly = true }).ToHtmlString() + "</div>");
                    //ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
 
                    ViewContext.Writer.Write("</div>");
@@ -610,7 +618,7 @@ else
 {
     <script>
         $(document).ready(function () {
-            M4PLCommon.DocumentStatus.DisplayMessage("Invalid", "The job you are trying to search does not exist, please contact system administrator", 2,"NoAccess");
+            M4PLCommon.DocumentStatus.DisplayMessage("Invalid", "The job you are trying to search does not exist, please contact system administrator", 2, "NoAccess");
         })
     </script>
 }

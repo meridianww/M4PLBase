@@ -111,7 +111,10 @@ namespace M4PL.DataAccess
 		public const string GetByteArrayByIdAndEntity = "dbo.GetByteArrayByIdAndEntity";
 		public const string GetModuleMenus = "dbo.GetModuleMenus";
 		public const string GetSystemSettings = "dbo.GetSystemSettings";
-
+		public const string InsertEmailDetail = "dbo.InsertEmailDetail";
+		public const string GetEmailDetail = "dbo.GetEmailDetail";
+		public const string UpdateEmailStatus = "dbo.UpdateEmailStatus";
+		public const string GetEmailDetailsForEvent = "dbo.GetEmailDetailsForEvent";
 		#endregion Generic SPs
 
 		#region Administration
@@ -228,6 +231,7 @@ namespace M4PL.DataAccess
 		public const string UpdateNavCostCode = "dbo.UpdateNavCostCode";
 		public const string UpdateNavCostCodeByItem = "dbo.UpdateNavCostCodeByItem";
 		public const string UpdateNavRateByLocation = "dbo.UpdateNavRateByLocation";
+		public const string ImportGatewayActionForProgram = "dbo.ImportGatewayActionForProgram";
 
 		/* Sync Nav PriceCode */
 		public const string UpdateNavPriceCode = "dbo.UpdateNavPriceCode";
@@ -877,5 +881,18 @@ namespace M4PL.DataAccess
 		public const string GetSearchJobOrders = "dbo.GetSearchJobOrders";
 		public const string GetOrderDetailsById = "dbo.GetOrderDetailsById";
 		#endregion
-	}
+
+		#region Program Event Management
+
+		public const string GetEventManagementView = "dbo.GetEventView";
+		public const string GetEventManagement = "dbo.GetEventDetail";
+		public const string InsEventManagement = "dbo.InsEvent";
+		public const string UpdProgramEventManagement = "dbo.UpdEvent";
+		public const string DeleteProgramEventManagement = "dbo.DeleteProgramEventManagement";
+		public const string GetEventTypeDropDown = "dbo.GetEventTypeDropDown";
+        public const string GetEventSubscriber = "dbo.GetEventSubscriber";
+        public const string GetEventSubscriberAndSubscriberType = "dbo.GetEventSubscriberAndSubscriberType";
+
+        #endregion
+    }
 }

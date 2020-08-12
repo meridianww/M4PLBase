@@ -177,6 +177,7 @@ namespace M4PL.Entities
 		NavPriceCode,
 		NavSalesOrder,
 		NavRate,
+		Gateway,
 
 		Customer,
 		CustBusinessTerm,
@@ -214,7 +215,8 @@ namespace M4PL.Entities
 		PrgCostLocation,
 		PrgBillableLocation,
 
-		PrgRefRole,
+
+        PrgRefRole,
 		ProgramRole,
 		AssignPrgVendor,
 		UnAssignPrgVendor,
@@ -322,7 +324,10 @@ namespace M4PL.Entities
 		JobXcblInfo,
 		GwyExceptionCode,
 		GwyExceptionStatusCode,
-		JobHistory
+		JobHistory,
+
+		PrgEventManagement,
+		EventType,
 	}
 
 	public enum ErrorMessages
@@ -1060,5 +1065,12 @@ namespace M4PL.Entities
 		Active = 1,
 		Archive = 2,
 		Delete = 3
+	}
+
+	public enum EventNotification
+	{
+		CargoException = 1,
+		OrderUnCanceled = 2,
+		AwcXcblFailure = 3
 	}
 }

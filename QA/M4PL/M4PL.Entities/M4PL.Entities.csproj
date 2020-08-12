@@ -57,6 +57,7 @@
     <Compile Include="Administration\Report.cs" />
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="CargoExceptionStatusModel.cs" />
     <Compile Include="ChangeHistory.cs" />
     <Compile Include="ChangeHistoryData.cs" />
     <Compile Include="CommonIds.cs" />
@@ -68,7 +69,14 @@
     <Compile Include="Document\JobCostReport.cs" />
     <Compile Include="Document\JobPriceReport.cs" />
     <Compile Include="Document\TrackingItem.cs" />
+    <Compile Include="EmailAttachment.cs" />
+    <Compile Include="EmailDetail.cs" />
+    <Compile Include="Event\EventEmailDetail.cs" />
+    <Compile Include="Event\EventSubscriberAndSubscriberType.cs" />
+    <Compile Include="Event\EventSubscriber.cs" />
+    <Compile Include="Event\EventSubscriberType.cs" />
     <Compile Include="Finance\CostCode\SalesLineCostCodeResponse.cs" />
+    <Compile Include="Finance\Customer\Gateway.cs" />
     <Compile Include="Finance\Customer\NavRate.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
     <Compile Include="Finance\CostCode\NavCostCode.cs" />
@@ -111,6 +119,7 @@
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
     <Compile Include="JobService\OrderDetails.cs" />
+    <Compile Include="JobService\OrderDocumentDetails.cs" />
     <Compile Include="JobService\OrderGatewayDetails.cs" />
     <Compile Include="JobService\SearchOrder.cs" />
     <Compile Include="Job\BatchJobDetail.cs" />
@@ -150,11 +159,15 @@
     <Compile Include="Job\SelectedJobList.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
+    <Compile Include="Program\EventType.cs" />
     <Compile Include="Program\NextGatewayModel.cs" />
     <Compile Include="Program\PrgBillableLocation.cs" />
     <Compile Include="Program\PrgCostLocation.cs" />
     <Compile Include="Program\PrgEdiCondition.cs" />
+    <Compile Include="Program\PrgEventManagement.cs" />
     <Compile Include="Signature\JobSignature.cs" />
+    <Compile Include="SMTPEmailDetail.cs" />
+    <Compile Include="SMTPServerDetail.cs" />
     <Compile Include="StatusModel.cs" />
     <Compile Include="Support\CargoComboBox.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />

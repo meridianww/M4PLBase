@@ -148,5 +148,6 @@ namespace M4PL.Entities.Job
         public bool IsCargoRequired { get; set; }
         public string CargoField { get; set; }
         public string GatewayIds { get; set; }
-    }
+		public string ContractNumber { get; set; }
+	}
 }

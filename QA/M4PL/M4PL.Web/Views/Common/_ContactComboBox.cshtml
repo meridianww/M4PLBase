@@ -27,7 +27,7 @@
             Html.RenderPartial("_SystemAccountContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });
         else
         {
-            Model.ValueChangedEvent = null;
+            //Model.ValueChangedEvent = null;
             var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
             contactRoute.RecordId = Model.SelectedId == null ? 0 : Model.SelectedId.ToLong();
             contactRoute.IsPopup = true;

@@ -69,7 +69,7 @@ BEGIN
 	WHEN MATCHED
 		THEN
 			UPDATE
-			SET T.PbrCustomerCode = S.CustomerCode
+			SET T.PbrCustomerCode = CASE WHEN ISNULL(S.CustomerCode, '') <> '' THEN S.CustomerCode ELSE S.Code END
 				,T.PbrEffectiveDate = S.EffectiveDate
 				,T.PbrTitle = S.Title
 				,T.RateCategoryTypeId = S.RateCategoryTypeId
@@ -99,7 +99,7 @@ BEGIN
 				)
 			VALUES (
 				S.Code
-				,S.CustomerCode
+				,CASE WHEN ISNULL(S.CustomerCode, '') <> '' THEN S.CustomerCode ELSE S.Code END
 				,S.EffectiveDate
 				,S.Title
 				,S.RateCategoryTypeId
@@ -119,7 +119,7 @@ BEGIN
 	WHEN MATCHED
 		THEN
 			UPDATE
-			SET T.PcrVendorCode = S.VendorCode
+			SET  T.PcrVendorCode = CASE WHEN ISNULL(S.VendorCode, '') <> '' THEN S.VendorCode ELSE S.Code END
 				,T.PcrEffectiveDate = S.EffectiveDate
 				,T.PcrTitle = S.Title
 				,T.RateCategoryTypeId = S.RateCategoryTypeId
@@ -150,7 +150,7 @@ BEGIN
 				)
 			VALUES (
 				S.Code
-				,S.VendorCode
+				,CASE WHEN ISNULL(S.VendorCode, '') <> '' THEN S.VendorCode ELSE S.Code END
 				,S.EffectiveDate
 				,S.Title
 				,S.RateCategoryTypeId

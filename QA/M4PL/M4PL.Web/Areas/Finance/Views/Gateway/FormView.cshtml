@@ -1,0 +1,57 @@
+﻿@using System.Web.UI.WebControls;
+@model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Finance.GatewayView>
+@{
+    ViewBag.Title = "Import Gateway/Action";
+    var uploadCallBackRoute = Model.CallBackRoute;
+    Model.IsPopUp = true;
+    var recordId = Model.Record.Id;
+    string upControlName = "ucDragAndDropGateway" + Convert.ToString(Model.Record.Id);
+}
+
+@using (Html.BeginForm())
+{
+    Html.DevExpress().RoundPanel(settings =>
+    {
+        settings.Name = "pnlImportGatewayAction";
+        settings.ClientSideEvents.Init = "M4PLWindow.UploadFileDragDrop.Init";
+        settings.ClientSideEvents.EndCallback = "M4PLWindow.UploadFileDragDrop.EndCallback";
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.Enabled = false;
+        settings.HeaderText = "Import Gateway/Action";
+        settings.Collapsed = false;
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
+            ViewContext.Writer.Write("<div id='dragZone'>");
+            ViewContext.Writer.Write("<span class='dragZoneText'>CSV for import Gateway/Action</span>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
+            ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
+            ViewContext.Writer.Write("<span class='dropZoneText'>CSV to import Price/Cost Code</span>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+
+            Html.DevExpress().UploadControl(set =>
+            {
+                set.CallbackRouteValues = new { Area = "Finance", Controller = "Gateway", Action = "ImportGateway", RecordId = recordId };
+                set.Name = "ucDragAndDropGateway";
+                set.UploadMode = UploadControlUploadMode.Auto;
+                set.AutoStartUpload = true;
+                set.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                set.DialogTriggerID = "externalDropZone";
+                set.AdvancedModeSettings.EnableDragAndDrop = false;
+                set.AdvancedModeSettings.EnableFileList = false;
+                set.AdvancedModeSettings.EnableMultiSelect = false;
+                set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                set.AdvancedModeSettings.DropZoneText = "CSV to import Gateway/Action";
+                set.ValidationSettings.AllowedFileExtensions = new string[] { ".csv" };
+                set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                set.BrowseButton.Text = "Select an CSV to import...";
+                set.Styles.DropZone.CssClass = "uploadControlDropZone";
+                set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(uploadCallBackRoute) + ");}}";
+                set.ShowProgressPanel = true;
+            }).GetHtml();
+        });
+    }).GetHtml();
+}

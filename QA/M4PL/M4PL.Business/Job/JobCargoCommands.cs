@@ -17,6 +17,7 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobCargoCommands
 //====================================================================================================================
 
+using M4PL.Business.Event;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
@@ -107,11 +108,28 @@ namespace M4PL.Business.Job
 			StatusModel statusModel = CargoExceptionValidation(jobCargoException, cargoId, out selectedJobExceptionInfo, out selectedJobInstallStatus);
 			if (statusModel != null) { return statusModel; }
 
-			statusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, jobCargoException.CargoQuantity, jobCargoException.CgoReasonCodeOSD, jobCargoException.CgoDateLastScan, ActiveUser);
+			var exceptionStatusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, jobCargoException.CargoQuantity, jobCargoException.CgoReasonCodeOSD, jobCargoException.CgoDateLastScan, ActiveUser);
 
-			if (statusModel == null) { return new StatusModel() { AdditionalDetail = "There is some issue while processing the request.", Status = "Failure", StatusCode = 500 };}
-
-			return statusModel;
+			if (exceptionStatusModel == null)
+			{
+				return new StatusModel()
+				{
+					AdditionalDetail = "There is some issue while processing the request.",
+					Status = "Failure",
+					StatusCode = 500
+				};
+			}
+			else
+			{
+				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobCargoException.ExceptionCode, exceptionStatusModel.JobId, exceptionStatusModel.ContractNumber, Utilities.TimeUtility.GetPacificDateTime(), string.Empty);
+				EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)exceptionStatusModel.ProgramId, exceptionStatusModel.ContractNumber, cargoExceptionBody);
+				return new StatusModel()
+				{
+					StatusCode = exceptionStatusModel.StatusCode,
+					Status = exceptionStatusModel.Status,
+					AdditionalDetail = exceptionStatusModel.AdditionalDetail
+				};
+			}
 		}
 
 		private StatusModel CargoExceptionValidation(JobCargoException jobCargoException, long cargoId, out JobExceptionInfo selectedJobExceptionInfo, out JobInstallStatus selectedJobInstallStatus)

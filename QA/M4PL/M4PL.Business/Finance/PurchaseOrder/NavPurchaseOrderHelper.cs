@@ -123,7 +123,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
             {
                 NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
                 if (navPurchaseOrderRequest == null) { return null; }
-                var dimensions = CommonCommands.GetSalesOrderDimensionValues();
+                var dimensions = CommonCommands.GetSalesOrderDimensionValues(navAPIUserName, navAPIPassword, navAPIUrl);
                 if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
                 {
                     divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()
@@ -205,7 +205,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
                 NavPurchaseOrder existingSalesOrderData = GetPurchaseOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, poNumer);
                 NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
                 if (navPurchaseOrderRequest == null) { return null; }
-                var dimensions = CommonCommands.GetSalesOrderDimensionValues();
+                var dimensions = CommonCommands.GetSalesOrderDimensionValues(navAPIUserName, navAPIPassword, navAPIUrl);
                 if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
                 {
                     divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()

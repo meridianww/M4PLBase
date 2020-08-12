@@ -23,6 +23,7 @@ using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities.Logger;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -551,5 +552,14 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = Models.ApiContext.ActiveUser;
             return _command.GetJobGateway(jobId).AsQueryable();
         }
-    }
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("InsertErrorLog")]
+		public bool InsertErrorLog(M4PLException m4plException)
+		{
+			_command.ActiveUser = Models.ApiContext.ActiveUser;
+			return _command.InsertErrorLog(m4plException);
+		}
+	}
 }

@@ -125,7 +125,11 @@
     },
     (ListEditItemRequestedByValueEventArgs args) =>
     {
-
+        if (valueToBind > 0)
+            while (valueToBind > Model.PageSize)
+            {
+                Model.PageSize += Model.PageSize;
+            }
         var dropDownData = new M4PL.Entities.Support.DropDownInfo
         {
             PageSize = Model.PageSize,
