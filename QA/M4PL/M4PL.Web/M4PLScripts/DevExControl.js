@@ -1586,6 +1586,7 @@ DevExCtrl.PopupControl = function () {
                 ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl').Hide();
             } else {
                 RecordPopupControl.Hide();
+                M4PLCommon.IsIgnoreClick = false;
             }
         } else {
             M4PLCommon.CallerNameAndParameters = { "Caller": _close, "Parameters": [] };
