@@ -76,16 +76,8 @@ namespace M4PL.Business.Finance.Gateway
 
 		private StatusModel ValidateGatewayListPassedForUpload(List<Entities.Finance.Customer.Gateway> gatewayList)
 		{
-			var duplicateRecords = gatewayList != null ? gatewayList
-                                  .GroupBy(r => new { r.Code, r.ShipmentType, r.OrderType, r.Type })
-                                  .Select(g => new Entities.Finance.Customer.Gateway
-								  {
-									  Code  = g.Key.Code,
-									  OrderType = g.Key.OrderType,
-									  ShipmentType = g.Key.ShipmentType,
-									  Type = g.Key.Type
-								  })
-								  : null;
+			var duplicateRecords = gatewayList != null ? gatewayList.GroupBy(r => new { r.Code, r.ShipmentType, r.OrderType, r.Type })
+				   .Select(g => new { g.Key.Code, g.Key.ShipmentType, g.Key.OrderType, g.Key.Type, RecordCount = g.Count() }) : null;
 
 			if (gatewayList == null || (gatewayList != null && gatewayList.Count == 0))
 			{
@@ -103,9 +95,11 @@ namespace M4PL.Business.Finance.Gateway
 			{
 				return new StatusModel() { AdditionalDetail = "Your uploaded file data is having some unwanted Gateway Types, valid gateway types accepting by the system are: Gateway and Action.", Status = "Failue", StatusCode = (int)HttpStatusCode.PreconditionFailed };
 			}
-			else if(duplicateRecords != null && duplicateRecords.Count() > 1)
+			else if(duplicateRecords != null && duplicateRecords.Count() > 1 && duplicateRecords.Where(x => x.RecordCount > 1).Any())
 			{
-				return new StatusModel() { AdditionalDetail = "Combination of Code, Type, Shipment Type and Order Type should be unique, please delete the duplicate records from file.", Status = "Failue", StatusCode = (int)HttpStatusCode.PreconditionFailed };
+				var currentDuplicateRecord = duplicateRecords.Where(x => x.RecordCount > 1).FirstOrDefault();
+				string.Format("Combination of Code, Type, Shipment Type and Order Type should be unique, in the sheet there is a duplicate combination found for Code: {0}, OrderType: {1}, ShipmentType: {2}, Type: {3}. Please correct the data and upload again.", currentDuplicateRecord.Code, currentDuplicateRecord.OrderType, currentDuplicateRecord.ShipmentType, currentDuplicateRecord.Type);
+				return new StatusModel() { AdditionalDetail = string.Format("Combination of Code, Type, Shipment Type and Order Type should be unique, in the sheet there is a duplicate combination found for Code: {0}, OrderType: {1}, ShipmentType: {2}, Type: {3}. Please correct the data and upload again.", currentDuplicateRecord.Code, currentDuplicateRecord.OrderType, currentDuplicateRecord.ShipmentType, currentDuplicateRecord.Type), Status = "Failue", StatusCode = (int)HttpStatusCode.PreconditionFailed };
 			}
 
 			return null;
