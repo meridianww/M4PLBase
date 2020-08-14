@@ -62,7 +62,7 @@ namespace M4PL.Business.Event
 				{ "CreatedDate", createdDate.ToString() },
 				{ "Username", activeUser.UserName },
 				{ "JobURL", string.Format("{0}?jobId={1}", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, jobId) },
-				{ "Comment", comment },
+				{ "Comment", string.IsNullOrEmpty(comment) ? string.Empty : comment },
 				{ "IsCommentPresent", string.IsNullOrEmpty(comment) ? "0" : "1" },
 			};
 
