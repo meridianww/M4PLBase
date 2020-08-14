@@ -259,8 +259,8 @@ namespace M4PL.Business.XCBL
 
         public DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId)
         {
-            return ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdate, jobId);
-        }
+			return ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdate, jobId);
+		}
 
         public List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
         {
