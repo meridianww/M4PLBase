@@ -134,7 +134,7 @@ namespace M4PL.Business.Job
 
 			if (jobGateway.GwyCargoId > 0)
 			{
-				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, (DateTime)jobGateway.GwyGatewayACD, jobGateway.GwyAddtionalComment);
+				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, gateway.GwyGatewayACD.HasValue ? (DateTime)gateway.GwyGatewayACD : Utilities.TimeUtility.GetPacificDateTime(), jobGateway.GwyAddtionalComment);
 				EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
 			}
 

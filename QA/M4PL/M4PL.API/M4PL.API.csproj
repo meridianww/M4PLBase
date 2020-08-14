@@ -223,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\GatewayImport\" />
     <Folder Include="Views\JobAttachment\" />
     <Folder Include="Views\JobRollup\" />
     <Folder Include="Views\NavRate\" />
@@ -270,6 +271,7 @@
     <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
     <Compile Include="Controllers\EmailServiceController.cs" />
+    <Compile Include="Controllers\GatewayImportController.cs" />
     <Compile Include="Controllers\NavRateController.cs" />
     <Compile Include="Controllers\JobServicesController.cs" />
     <Compile Include="Controllers\PrgEventManagementController.cs" />

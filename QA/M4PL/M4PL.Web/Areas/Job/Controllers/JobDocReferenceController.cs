@@ -223,7 +223,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 			SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.POD);
 
-			var currentGridName = string.Format("DeliveryPod_{0}", WebUtilities.GetGridName(route));
+			var currentGridName =  WebUtilities.GetGridName(route);
 			base.DataView(strRoute, currentGridName);
 			if (selectedId > 0)
 				_gridResult.FocusedRowId = selectedId;
@@ -262,11 +262,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 			base.DataView(strRoute, WebUtilities.GetGridName(route));
 			if (selectedId > 0)
 				_gridResult.FocusedRowId = selectedId;
-			if (_gridResult.Records.Any(c => c.JobCompleted) || (_gridResult.Records.Count == 0 && _commonCommands.GetIsJobCompleted(route.ParentRecordId)))
-			{
-				_gridResult.Operations.Remove(OperationTypeEnum.New);
-				_gridResult.GridSetting.ContextMenu.Remove(_commonCommands.GetOperation(OperationTypeEnum.New));
-			}
 			_gridResult.GridSetting.GridName = currentGridName;
 			return PartialView(MvcConstants.ActionDataView, _gridResult);
 		}

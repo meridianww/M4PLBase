@@ -33,19 +33,22 @@ namespace M4PL.Web.Areas.Organization.Controllers
 	{
 		protected ReportResult<OrgReportView> _reportResult = new ReportResult<OrgReportView>();
 
-		/// <summary>
-		/// Interacts with the interfaces to get the Organization details from the system and renders to the page
-		/// Gets the page related information on the cache basis
-		/// </summary>
-		/// <param name="orgReportCommands"></param>
-		/// <param name="commonCommands"></param>
-		public OrgReportController(IOrgReportCommands orgReportCommands, ICommonCommands commonCommands)
+
+       
+
+        /// <summary>
+        /// Interacts with the interfaces to get the Organization details from the system and renders to the page
+        /// Gets the page related information on the cache basis
+        /// </summary>
+        /// <param name="orgReportCommands"></param>
+        /// <param name="commonCommands"></param>
+        public OrgReportController(IOrgReportCommands orgReportCommands, ICommonCommands commonCommands)
 			: base(orgReportCommands)
 		{
 			_commonCommands = commonCommands;
 		}
 
-		[HttpGet]
+		
 		public ActionResult Report(string strRoute)
 		{
 			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -60,7 +63,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
 			return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
 		}
 
-		[HttpGet]
+		
 		public ActionResult ReportInfo(string strRoute)
 		{
 			var formResult = new FormResult<OrgReportView>();
@@ -74,7 +77,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
 			return PartialView(MvcConstants.ViewReportInfo, formResult);
 		}
 
-		[HttpGet]
+		
 		public ActionResult ReportViewer(string strRoute)
 		{
 			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -94,7 +97,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
 			return PartialView(MvcConstants.ViewReportViewer, _reportResult);
 		}
 
-		[HttpGet]
+	
 		public override ActionResult AddOrEdit(OrgReportView entityView)
 		{
 			entityView.IsFormView = true;

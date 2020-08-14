@@ -100,7 +100,6 @@ namespace M4PL.Web.Areas.Finance.Controllers
         {
             public DragAndDropSupportDemoBinder()
             {
-                //UploadControlBinderSettings.ValidationSettings.Assign(UploadControlDemosHelper.UploadValidationSettings);
                 UploadControlBinderSettings.FileUploadCompleteHandler = ucDragAndDrop_FileUploadComplete;
             }
         }

@@ -153,7 +153,7 @@ DevExCtrl.Ribbon = function () {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges() || (route.Action === "Save")) {
             switch (route.Action) {
                 case "FormView":
-                    if (route.EntityName == "NAV Rate")
+                    if (route.EntityName == "NAV Rate" || route.EntityName == "Gateway")
                         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
                     else {
                         if (AppCbPanel && !AppCbPanel.InCallback()) {
@@ -1586,6 +1586,7 @@ DevExCtrl.PopupControl = function () {
                 ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl').Hide();
             } else {
                 RecordPopupControl.Hide();
+                M4PLCommon.IsIgnoreClick = false;
             }
         } else {
             M4PLCommon.CallerNameAndParameters = { "Caller": _close, "Parameters": [] };

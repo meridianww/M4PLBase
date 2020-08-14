@@ -249,6 +249,7 @@ namespace M4PL.Web
                     break;
 
                 case EntitiesAlias.JobCard:
+                    gridViewSetting.EnableClientSideExportAPI = true;
                     gridViewSetting.Mode = GridViewEditingMode.Batch;
                     gridViewSetting.ContextMenu.Add(gridRefresh);
                     break;

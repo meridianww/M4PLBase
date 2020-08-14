@@ -278,6 +278,66 @@ namespace M4PL.Business
 			}
 		}
 
+		/// <summary>
+		/// Gets the value of IsFarEyeStatusUpdateProduction.
+		/// </summary>
+		[ConfigurationProperty("IsFarEyeStatusUpdateProduction")]
+		public bool IsFarEyeStatusUpdateProduction
+		{
+			get
+			{
+				return (bool)this["IsFarEyeStatusUpdateProduction"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of FarEyeUpdateProductionAPIURL.
+		/// </summary>
+		[ConfigurationProperty("FarEyeUpdateProductionAPIURL")]
+		public string FarEyeUpdateProductionAPIURL
+		{
+			get
+			{
+				return (string)this["FarEyeUpdateProductionAPIURL"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of FarEyeUpdateTestAPIURL.
+		/// </summary>
+		[ConfigurationProperty("FarEyeUpdateTestAPIURL")]
+		public string FarEyeUpdateTestAPIURL
+		{
+			get
+			{
+				return (string)this["FarEyeUpdateTestAPIURL"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of FarEyeUpdateProductionAPIKey.
+		/// </summary>
+		[ConfigurationProperty("FarEyeUpdateProductionAPIKey")]
+		public string FarEyeUpdateProductionAPIKey
+		{
+			get
+			{
+				return (string)this["FarEyeUpdateProductionAPIKey"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of FarEyeUpdateTestAPIKey.
+		/// </summary>
+		[ConfigurationProperty("FarEyeUpdateTestAPIKey")]
+		public string FarEyeUpdateTestAPIKey
+		{
+			get
+			{
+				return (string)this["FarEyeUpdateTestAPIKey"];
+			}
+		}
+
 		#endregion Properties
 
 		#region Public Methods

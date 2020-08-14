@@ -1313,7 +1313,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1350,7 +1350,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1428,7 +1428,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1465,7 +1465,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1499,7 +1499,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1536,7 +1536,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1881,6 +1881,24 @@ M4PLWindow.ChooseColumns = function () {
                             }
                         }
                     }
+
+                 
+                }
+                if (currentRoute.Action == "ChooseColumns" && currentRoute.Controller == "JobDocReference") {
+                    if (ASPxClientControl.GetControlCollection().GetByName("Document_JobCargoPageControl")) {
+                        var index = ASPxClientControl.GetControlCollection().GetByName("Document_JobCargoPageControl").activeTabIndex;
+                        switch (index) {
+                            case 0:
+                                actionToAssign = "DocumentDataView";
+                                break;
+                            case 1:
+                                actionToAssign = "DocDeliveryPodDataView";
+                                break;
+                            case 2:
+                                actionToAssign = "DocDamagedDataView";
+                                break;
+                        }
+                    }
                 }
                 currentRoute.Action = actionToAssign;
 
@@ -1963,14 +1981,8 @@ M4PLWindow.UploadFileDragDrop = function () {
     }
 
     var _onUploadControlFileUploadComplete = function (s, e, callBackRoute) {
-        //if (e != null && e != undefined) {
-        //    if (e.isValid)
-        //        $("#uploadedImage").attr("src", e.callbackData);
-        //    //_setElementVisible(s, e, "uploadedImage", e.isValid);
-        //}
         DevExCtrl.PopupControl.Close();
         DisplayMessageControl.PerformCallback({ strDisplayMessage: e.callbackData });
-        //ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute) });
     }
 
     var _onImageLoad = function () {

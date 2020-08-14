@@ -498,7 +498,6 @@ namespace M4PL.Business.Job
 			}
 
 			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
-
 			if (jobDetail == null || jobDetail?.Id <= 0)
 			{
 				return new OrderStatusModel()
@@ -515,8 +514,8 @@ namespace M4PL.Business.Job
 					Status = "Success",
 					StatusCode = (int)HttpStatusCode.OK,
 					AdditionalDetail = string.Empty,
-					OrderStatus = jobDetail.InstallStatus
-				};
+					DeliveryUpdate = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobDetail.Id, ActiveUser)
+			};
 			}
 		}
 

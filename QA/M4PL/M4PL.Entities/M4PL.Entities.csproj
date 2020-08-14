@@ -76,6 +76,7 @@
     <Compile Include="Event\EventSubscriber.cs" />
     <Compile Include="Event\EventSubscriberType.cs" />
     <Compile Include="Finance\CostCode\SalesLineCostCodeResponse.cs" />
+    <Compile Include="Finance\Customer\Gateway.cs" />
     <Compile Include="Finance\Customer\NavRate.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
     <Compile Include="Finance\CostCode\NavCostCode.cs" />

@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
@@ -148,9 +149,18 @@ namespace M4PL.Business.XCBL.HelperClasses
             xmlString = !string.IsNullOrEmpty(xmlString) ? xmlString.Replace("&amp;", "&") : xmlString;
             xmlString = !string.IsNullOrEmpty(xmlString) ? xmlString.Replace("&lt;", "<") : xmlString;
             xmlString = !string.IsNullOrEmpty(xmlString) ? xmlString.Replace("&gt;", ">") : xmlString;
+			XDocument doc = XDocument.Parse(xmlString);
+			doc.Descendants("Latitude").Remove();
+			doc.Descendants("Longitude").Remove();
+			using (StringWriter writer = new StringWriter())
+			{
+				doc.Document.Save(writer);
+				xmlString = writer.ToString();
+			}
 
-            return xmlString;
+			return xmlString;
         }
+
         private static DeliveryUpdateResponse GenerateDeliveryUpdateResponseFromString(string updateResponseString)
         {
             updateResponseString = updateResponseString.Replace("NS1:DeliveryUpdateResponse", "DeliveryUpdateResponse");

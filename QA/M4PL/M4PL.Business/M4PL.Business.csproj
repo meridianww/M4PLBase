@@ -125,6 +125,8 @@
     <Compile Include="Event\IEventCommands.cs" />
     <Compile Include="Finance\CostCode\INavCostCodeCommands.cs" />
     <Compile Include="Finance\Customer\INavCustomerCommands.cs" />
+    <Compile Include="Finance\Gateway\IGatewayCommands.cs" />
+    <Compile Include="Finance\Gateway\GatewayCommands.cs" />
     <Compile Include="Finance\NavRate\INavRateCommands.cs" />
     <Compile Include="Finance\NavRate\NavRateCommands.cs" />
     <Compile Include="Finance\OrderItem\INavOrderItemCommands.cs" />
@@ -293,6 +295,7 @@
     <Compile Include="XCBL\ElectroluxOrderMapping\JobBasicDetailMapper.cs" />
     <Compile Include="XCBL\ElectroluxOrderMapping\JobCargoMapper.cs" />
     <Compile Include="XCBL\HelperClasses\ElectroluxHelper.cs" />
+    <Compile Include="XCBL\HelperClasses\FarEyeHelper.cs" />
     <Compile Include="XCBL\IXCBLCommands.cs" />
     <Compile Include="XCBL\XCBLCommands.cs" />
   </ItemGroup>

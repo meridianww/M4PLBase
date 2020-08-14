@@ -387,7 +387,7 @@ namespace M4PL.Web.Controllers
                 });
             }
 
-            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && (defaultRoute.Entity == EntitiesAlias.JobCargo ? true : !GetPrimaryKeyColumns().Contains(c.ColColumnName))).Select(x => x.DeepCopy()).ToList();
+            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && ((defaultRoute.Entity == EntitiesAlias.JobCargo || defaultRoute.Entity == EntitiesAlias.Job) ? true : !GetPrimaryKeyColumns().Contains(c.ColColumnName))).Select(x => x.DeepCopy()).ToList();
             ViewData[MvcConstants.DefaultGroupByColumns] = columnSettingsFromColumnAlias.Where(x => x.ColIsGroupBy).Select(x => x.ColColumnName).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
@@ -666,7 +666,7 @@ namespace M4PL.Web.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CommonIds maxMinFormData = null;
-            if (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
+            if ((route.Entity != EntitiesAlias.NavRate || route.Entity != EntitiesAlias.Gateway) && route.Action != MvcConstants.ActionForm)
                 maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
 
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))

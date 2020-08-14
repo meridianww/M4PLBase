@@ -140,7 +140,7 @@ else
                    }
                    else
                    {
-                       item.ItemStyle.CssClass = CssConstants.BoldHeaderFont;
+                       item.ItemStyle.CssClass = (!string.IsNullOrWhiteSpace(menu.CssClass)) ? String.Format("{0} {1}", CssConstants.BoldHeaderFont, menu.CssClass) : CssConstants.BoldHeaderFont;
                    }
                    item.ClientEnabled = menu.Enabled;
                });

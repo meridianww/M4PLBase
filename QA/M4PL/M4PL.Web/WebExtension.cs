@@ -1304,7 +1304,8 @@ namespace M4PL.Web
                 && (route.Entity != EntitiesAlias.JobHistory)
                 && (route.Entity != EntitiesAlias.PrgRefGatewayDefault)
                 && (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
-                )
+				&& (route.Entity != EntitiesAlias.Gateway && route.Action != MvcConstants.ActionForm)
+				)
             {
                 var navMenuEnabled = true;
                 if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
@@ -1416,7 +1417,8 @@ namespace M4PL.Web
 
                 if ((route.Entity == EntitiesAlias.JobXcblInfo && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView)
-                    || (route.Entity == EntitiesAlias.NavRate && route.Action == MvcConstants.ActionForm))
+                    || (route.Entity == EntitiesAlias.NavRate && route.Action == MvcConstants.ActionForm)
+					|| (route.Entity == EntitiesAlias.Gateway && route.Action == MvcConstants.ActionForm))
                     allNavMenus.Remove(saveMenu);
             }
 
@@ -1475,13 +1477,20 @@ namespace M4PL.Web
             {
                 allNavMenus[0].Text = "Job Gateway";
             }
+
             if (route.Entity == EntitiesAlias.Job && route.Action == "ImportOrder")
             {
                 allNavMenus[0].Text = "Import Order";
             }
+
 			if (route.Entity == EntitiesAlias.NavRate && route.Action == "FormView")
 			{
 				allNavMenus[0].Text = "Import Price/Cost Code";
+			}
+
+			if (route.Entity == EntitiesAlias.Gateway && route.Action == "FormView")
+			{
+				allNavMenus[0].Text = "Import Gateway/Action";
 			}
 
 			return allNavMenus;
@@ -1745,7 +1754,7 @@ namespace M4PL.Web
                     }
                 }
 
-				if (mnu.MnuTitle == "Price/Cost Code")
+				if (mnu.MnuTitle == "Price/Cost Code" || mnu.MnuTitle == "Gateway/Action")
 				{
 					mnu.StatusId = 3;
 					if (route.Entity == EntitiesAlias.Program && route.RecordId > 0)

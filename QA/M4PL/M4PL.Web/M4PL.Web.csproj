@@ -254,6 +254,7 @@
     <Compile Include="Areas\Customer\Controllers\CustReportController.cs" />
     <Compile Include="Areas\Customer\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
+    <Compile Include="Areas\Finance\Controllers\GatewayController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavRateController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavCostCodeController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavCustomerController.cs" />
@@ -773,6 +774,7 @@
     <Content Include="Areas\Finance\Views\NavRate\FormView.cshtml" />
     <Content Include="Areas\Program\Views\PrgEventManagement\DataView.cshtml" />
     <Content Include="Areas\Program\Views\PrgEventManagement\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\Gateway\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
