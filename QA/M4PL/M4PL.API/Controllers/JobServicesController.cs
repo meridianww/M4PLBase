@@ -62,5 +62,18 @@ namespace M4PL.API.Controllers
             else
                 return Request.CreateResponse(HttpStatusCode.NotFound, new OrderDetails());
         }
+
+        /// <summary>
+        /// InsertComment
+        /// </summary>
+        /// <param name="gatwayId"></param>
+        /// <param name="jobGatewayComment"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        [HttpPost]
+        public bool InsertComment(JobGatewayComment jobGatewayComment)
+        {
+            return _jobServicesCommands.InsertComment(jobGatewayComment, Models.ApiContext.ActiveUser);
+        }
     }
 }

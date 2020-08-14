@@ -24,5 +24,12 @@ namespace M4PL.Business.JobServices
         /// <param name="activeUser"></param>
         /// <returns></returns>
         Task<OrderDetails> GetOrderDetailsById(long Id, ActiveUser activeUser);
+        /// <summary>
+        /// InsertComment
+        /// </summary>
+        /// <param name="jobGatewayComment"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        bool InsertComment(JobGatewayComment jobGatewayComment, ActiveUser activeUser);
     }
 }

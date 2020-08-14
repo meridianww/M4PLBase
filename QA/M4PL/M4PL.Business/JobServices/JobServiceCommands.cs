@@ -32,5 +32,15 @@ namespace M4PL.Business.JobServices
         {
             return await _commands.GetOrderDetailsById(Id, activeUser);
         }
+        /// <summary>
+        /// InsertComment
+        /// </summary>
+        /// <param name="jobGatewayComment"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        public bool InsertComment(JobGatewayComment jobGatewayComment, ActiveUser activeUser)
+        {
+            return _commands.InsertComment(jobGatewayComment, activeUser);
+        }
     }
 }

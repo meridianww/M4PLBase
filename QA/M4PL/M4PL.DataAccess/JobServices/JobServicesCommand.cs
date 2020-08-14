@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using M4PL.DataAccess.SQLSerializer.Serializer;
+using DevExpress.XtraRichEdit;
+using M4PL.DataAccess.Common;
+using M4PL.Entities;
 
 namespace M4PL.DataAccess.JobServices
 {
@@ -58,6 +61,35 @@ namespace M4PL.DataAccess.JobServices
                 }
             }
             return orderDetails;
+        }
+
+        public static bool InsertComment(JobGatewayComment jobGatewayComment, ActiveUser activeUser)
+        {
+            bool result = true; 
+            try
+            {
+                RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+                richEditDocumentServer.Document.AppendHtmlText(jobGatewayComment.JobGatewayDescription);
+                ByteArray byteArray = new ByteArray()
+                {
+                    Id = jobGatewayComment.JobGatewayId,
+                    Entity = EntitiesAlias.JobGateway,
+                    FieldName = "GwyGatewayDescription",
+                    IsPopup = false,
+                    FileName = null,
+                    Type = SQLDataTypes.varbinary,
+                    DocumentText = jobGatewayComment.JobGatewayDescription,
+                    Bytes = richEditDocumentServer.OpenXmlBytes
+                };
+
+                CommonCommands.SaveBytes(byteArray, activeUser);
+            }
+            catch (Exception exp)
+            {
+                result = false;
+                Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the comment for job gateway, Parameters was: {0}", jobGatewayComment.JobGatewayId), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
+            }
+            return result;
         }
     }
 }
