@@ -84,7 +84,7 @@
 
                    settings.Properties.ClientSideEvents.GotFocus = "function(s, e){ M4PLCommon.Control.OnGotFocus(s, e, true); }";
 
-               }).BindList(viewResult.ComboBoxProvider[columnSetting.ColLookupId]).GetHtml()
+               }).BindList(viewResult.ComboBoxProvider[columnSetting.ColLookupId].Where(x => x.SysRefId > 0)).GetHtml()
         }
         else
         {
