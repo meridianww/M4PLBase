@@ -1283,14 +1283,6 @@ M4PLCommon.AdvancedReport = (function () {
     var _init = function () {
         $(".isAdditional").hide();
     }
-    //var _isExtrafieldCheckBoxEventChange = function (s, e) {
-    //    if (s.GetValue()) {
-    //        $(".isAdditional").show();
-    //    }
-    //    else {
-    //        $(".isAdditional").hide();
-    //    }
-    //};
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
     }
@@ -1503,12 +1495,12 @@ M4PLCommon.AdvancedReport = (function () {
     var _getSelectedFieldValuesCallbackSinble = function (values) {
         return values;
     }
-
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
 
         if ($('.errorMessages') != undefined) {
             $('.errorMessages').html('');
         }
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         var programCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
         var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
@@ -1528,6 +1520,7 @@ M4PLCommon.AdvancedReport = (function () {
         var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('PackagingTypeByJobCbPanelClosed');
         var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
 
+        rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
         rprtVwrRoute.CustomerId = customerCtrl.GetValue();
 
         if (programCtrl != null) {
@@ -1606,6 +1599,9 @@ M4PLCommon.AdvancedReport = (function () {
             return false;
         }
     }
+    var _reportTypeChangeEvent = function (s) {
+       var result = s.GetValue();
+    }
 
     return {
         Init: _init,
@@ -1632,8 +1628,8 @@ M4PLCommon.AdvancedReport = (function () {
         JobStatus_OnClickViewSelected: _jobStatus_OnClickViewSelected,
         OrderType_OnClickViewSelected: _orderType_OnClickViewSelected,
         Schedule_OnClickViewSelected: _schedule_OnClickViewSelected,
-        //IsExtrafieldCheckBoxEventChange: _isExtrafieldCheckBoxEventChange,
         GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter,
+        ReportTypeChangeEvent: _reportTypeChangeEvent
     }
 })();
 

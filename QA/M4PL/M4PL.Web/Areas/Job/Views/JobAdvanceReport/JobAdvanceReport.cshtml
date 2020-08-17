@@ -18,6 +18,7 @@
 @model  M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 @{
     Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
+    var reportTypeChangeEvent = "M4PLCommon.AdvancedReport.ReportTypeChangeEvent";
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
     customerDropdown.OnInit = "M4PLCommon.AdvancedReport.DefaultSelectedCustomer(s,e);";
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramByCustomerCbPanelChange(s, e)}}");
@@ -26,20 +27,11 @@
     var crgoDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
     crgoDropDownViewModel = Model.Record.CargoId.GetCargoDropDown("CargoId", Model, Model.Record.ProgramId);
 }
-@Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlJobAdvanceReportType";
-    settings.Width = Unit.Percentage(100);
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Report Type";
-    settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout custom-job-report-advance-panel form-layout-pnlJobAdvanceReport";
-    settings.SetContent(() =>
-    {
 
-    });
-}).GetHtml()
+<div class="col-lg-6 col-md-6 col-sm-6 form-group">
+    @Html.EditorFor(m => m.Record.ReportType, new { ReportType = Model.Record.ReportType, OnChange = reportTypeChangeEvent })
+</div>
+
 @Html.DevExpress().RoundPanel(settings =>
 {
     settings.Name = "pnlJobAdvanceReport";
@@ -52,6 +44,7 @@
     settings.ClientSideEvents.Init = "M4PLCommon.AdvancedReport.Init";
     settings.SetContent(() =>
     {
+        //ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.ReportType, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) }));
@@ -117,9 +110,9 @@
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.Manifest).ToHtmlString()));
-        ViewContext.Writer.Write("</div>");
+        //ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
+        //ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.Manifest).ToHtmlString()));
+        //ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-generate-report-btn form-group' style='padding: 7px;'>");
         ViewContext.Writer.Write(Html.DevExpress().Button(set =>
         {

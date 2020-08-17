@@ -81,6 +81,7 @@ namespace M4PL.Entities.Job
 
 		public string CargoIdName { get; set; }
 		public string PackagingCode { get; set; }
+		public int? ReportType { get; set; }
 
 		#endregion Advanced report
 	}
