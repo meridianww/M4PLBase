@@ -74,7 +74,7 @@ namespace M4PL.DataAccess.JobServices
                 {
                     Id = jobGatewayComment.JobGatewayId,
                     Entity = EntitiesAlias.JobGateway,
-                    FieldName = "GwyGatewayDescription",
+                    FieldName = "GwyComment",
                     IsPopup = false,
                     FileName = null,
                     Type = SQLDataTypes.varbinary,
