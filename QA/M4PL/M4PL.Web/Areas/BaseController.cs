@@ -79,7 +79,7 @@ namespace M4PL.Web.Areas
             base.OnActionExecuting(filterContext);
         }
 
-        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null, bool IsJobParentEntity = false)
+        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null, bool IsJobParentEntity = false, int reportTypeId = 0)
         {
             isGridSetting = (route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobCargo || route.Entity == EntitiesAlias.JobGateway) ? true : isGridSetting;
 
@@ -88,7 +88,16 @@ namespace M4PL.Web.Areas
                ? _commonCommands.GetGridColumnSettings(BaseRoute.Entity, true, true)
                : _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
             var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
-            route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData, ((isGroupedGrid && pageSizeChanged) || !isGroupedGrid));
+			if (BaseRoute.Entity == EntitiesAlias.JobAdvanceReport && reportTypeId > 0)
+			{
+				var reportColumnRelation = _commonCommands.GetJobReportColumnRelation(reportTypeId)?.Select(t => t.ColumnId).ToList();
+				if (reportColumnRelation != null && reportColumnRelation.Count > 0)
+				{
+					columnSettings = columnSettings.Where(t => reportColumnRelation.Contains(t.Id)).ToList();
+				}
+			}
+
+			route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData, ((isGroupedGrid && pageSizeChanged) || !isGroupedGrid));
             _gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettings, SessionProvider);
             _gridResult.GridColumnSettings = _gridResult.ColumnSettings;
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));

@@ -363,6 +363,7 @@ namespace M4PL.DataAccess
 		public const string InsertOrgRefRole = "dbo.InsOrgRefRole";
 		public const string UpdateOrgRefRole = "dbo.UpdOrgRefRole";
 		public const string GetRefRoleSecurities = "dbo.GetRefRoleSecurities";
+		public const string GetJobReportColumnRelation = "dbo.GetJobReportColumnRelation";
 
 		/* Get permitted items by userid as per entity */
 		public const string GetCustomEntityIdByEntityName = "dbo.GetCustomEntityIdByEntityName";

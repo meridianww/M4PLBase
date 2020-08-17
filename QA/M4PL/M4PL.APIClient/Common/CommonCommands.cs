@@ -180,6 +180,11 @@ namespace M4PL.APIClient.Common
 			return CoreCache.GridColumnSettings[ActiveUser.LangCode][entity];
 		}
 
+		public virtual IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)
+		{
+			return GetJobReportColumnRelationFromApi(reportTypeId);
+		}
+
 		public virtual IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false)
 		{
 			if (!CoreCache.ValidationRegExpressions.ContainsKey(ActiveUser.LangCode))
@@ -474,6 +479,13 @@ namespace M4PL.APIClient.Common
 					  .AddParameter("entity", entity)
 					  .AddParameter("forceUpdate", forceUpdate)
 					  .AddParameter("isGridSetting", isGridSetting)).Content).Results;
+		}
+
+		private IList<JobReportColumnRelation> GetJobReportColumnRelationFromApi(int reportTypeId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetJobReportColumnRelation");
+			return JsonConvert.DeserializeObject<ApiResult<JobReportColumnRelation>>(_restClient.Execute(
+					  HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("reportTypeId", reportTypeId)).Content).Results;
 		}
 
 		#endregion Private Methods

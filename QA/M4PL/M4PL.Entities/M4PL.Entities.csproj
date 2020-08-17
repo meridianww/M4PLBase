@@ -176,6 +176,7 @@
     <Compile Include="Support\EnumKeyValue.cs" />
     <Compile Include="Support\GwyExceptionCodeComboBox.cs" />
     <Compile Include="Support\GwyExceptionStatusCodeComboBox.cs" />
+    <Compile Include="Support\JobReportColumnRelation.cs" />
     <Compile Include="Support\PreferredLocation.cs" />
     <Compile Include="Support\ProgramRollupBillingJob.cs" />
     <Compile Include="Support\SysSetting.cs" />

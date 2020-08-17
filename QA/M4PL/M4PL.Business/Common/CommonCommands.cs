@@ -30,6 +30,7 @@ using M4PL.Entities.Support;
 using M4PL.Utilities.Logger;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
+using System;
 
 namespace M4PL.Business.Common
 {
@@ -113,6 +114,11 @@ namespace M4PL.Business.Common
 			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
 			return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderItemResponse(username, password, serviceURL);
+		}
+
+		public static IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)
+		{
+			return _commands.GetJobReportColumnRelation(reportTypeId);
 		}
 
 		/// <summary>
