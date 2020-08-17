@@ -254,21 +254,11 @@ namespace M4PL.DataAccess.Job
 				parameters.Add(new Parameter("@reportTypeId", data.ReportType));
 				parameters.Add(new Parameter("@scheduled", data.Scheduled));
 				parameters.Add(new Parameter("@orderType", data.OrderType));
-				parameters.Add(new Parameter("@IsManifest", data.Manifest));
-
-				//if (data.IsAddtionalFilter)
-				//{
-				//if (data.WeightUnit > 0)
-				//    parameters.Add(new Parameter("@WeightUnit", data.WeightUnit));
-				//parameters.Add(new Parameter("@JobPartsOrdered", data.JobPartsOrdered));
-				//if (data.PackagingCode > 0)
+				
 				parameters.Add(new Parameter("@PackagingCode", data.PackagingCode));
 				if (data.CargoId.HasValue)
 					parameters.Add(new Parameter("@CargoId", data.CargoId));
-				//if (data.CgoWeightUnitTypeId.HasValue)
-				//parameters.Add(new Parameter("@WeightUnit", data.CgoWeightUnitTypeId));
-				// }
-
+				
 				if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
 				{
 					parameters.Add(new Parameter("@DateType", data.StartDate == null || data.EndDate == null
@@ -279,8 +269,6 @@ namespace M4PL.DataAccess.Job
 					parameters.Add(new Parameter("@JobStatus", data.JobStatus));
 				else
 					parameters.Add(new Parameter("@JobStatus", "Active"));
-				//if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
-				//    parameters.Add(new Parameter("@SearchText", data.Search));
 				if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
 					parameters.Add(new Parameter("@SearchText", data.Search));
 				if (data.GatewayTitle != null && data.GatewayTitle.Count > 0 && !data.GatewayTitle.Contains("ALL"))
