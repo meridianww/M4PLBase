@@ -110,7 +110,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             //To Add Actions Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            //_gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
 
             if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
@@ -690,7 +690,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             SetGridResult(route, gridName);
             //To Add Actions/Gateways Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            //_gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
             Session["costJobCodeActions"] = null;
             Session["priceJobCodeActions"] = null;
             route.Filters = null;
@@ -711,7 +711,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             SetGridResult(route, gridName);
             //To Add Actions/gateways Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            //_gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
@@ -741,7 +741,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             //To Add Actions/gateways Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            //_gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
 
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }

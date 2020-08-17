@@ -109,7 +109,6 @@ namespace M4PL.Web
             var actionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
             var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
             var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
-            var gatewaysContextMenu = commonCommands.GetOperation(OperationTypeEnum.Gateways);
             var gridRefresh = commonCommands.GetOperation(OperationTypeEnum.Refresh).SetRoute(route, MvcConstants.ActionDataView);
 
             switch (route.Entity)
@@ -307,23 +306,16 @@ namespace M4PL.Web
                         if (permission.HasValue && permission.Value > (int)Permission.ReadOnly)
                         {
                             gridViewSetting.ContextMenu.Add(actionsContextMenu);
-                            gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
                         }
                     }
                     if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly) //action context menu should come after new and edit. So, Have added this here
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
-                        gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
                     }
                 }
                 else if (!hasRecords && !gridViewSetting.IsJobCardEntity)
                 {
-                    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly)
-                    {
-                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
-                        gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
-                    }
-                    if (route.Entity == EntitiesAlias.Job)
+                    if(route.Entity == EntitiesAlias.Job || (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly))
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                     }

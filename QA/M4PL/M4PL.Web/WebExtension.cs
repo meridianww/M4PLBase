@@ -3310,6 +3310,7 @@ namespace M4PL.Web
                         }
                         _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
                     }
+                    WebExtension.AddGatewayInGatewayContextMenu(_gridResult, currentRoute, _commonCommands);
                 }
             }
             else
@@ -3326,21 +3327,17 @@ namespace M4PL.Web
             return _gridResult;
         }
 
-        public static GridResult<TView> AddGatewayInGatewayContextMenu<TView>(this GridResult<TView> _gridResult,
-            MvcRoute route, ICommonCommands _commonCommands)
+        public static void AddGatewayInGatewayContextMenu<TView>(this GridResult<TView> _gridResult,
+         MvcRoute route, ICommonCommands _commonCommands)
         {
-            var gatewaysContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
-
-            if (_gridResult.GridSetting.ContextMenu.Count > 0)
+            if (_gridResult.GridSetting.ContextMenu.Count > 0
+               && _gridResult.GridSetting.ContextMenu.Any(x => x.SysRefName == OperationTypeEnum.Actions.ToString()))
             {
-                var gatewayEntity = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == gatewaysContextMenu.SysRefName);
-
-                if (gatewayEntity != null) _gridResult.GridSetting.ContextMenu.Remove(gatewayEntity);
+                var gatewayEntity = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
 
                 if (_gridResult.Records is IList<JobView>)
                 {
                     route.IsPBSReport = true;
-                    //route.ParentRecordId = 0;
                     IList<JobView> record = (IList<JobView>)_gridResult.Records;
                     if (record != null && route.Location != null && route.Location.Count() > 0)
                     {
@@ -3381,11 +3378,10 @@ namespace M4PL.Web
                             newOperation.Route.IsPBSReport = route.IsPBSReport;
                             gatewayEntity.ChildOperations.Add(newOperation);
                         }
-                        _gridResult.GridSetting.ContextMenu.Add(gatewayEntity);
+                        _gridResult.GridSetting.ContextMenu.FirstOrDefault(x => x.SysRefName == OperationTypeEnum.Actions.ToString()).ChildOperations.Add(gatewayEntity);
                     }
                 }
             }
-            return _gridResult;
         }
 
         public static DisplayMessage UploadCSVNavRate(this DisplayMessage displayMessage, long programId, DataTable csvDataTable, string[] arraynavRateUploadColumns,
