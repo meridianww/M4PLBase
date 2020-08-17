@@ -89,9 +89,8 @@ namespace M4PL.APIClient.Common
 		IList<ConditionalOperator> GetConditionalOperators(bool forceUpdate = false);
 
 		IList<ViewModels.ColumnSetting> GetColumnSettings(EntitiesAlias entity, bool forceUpdate = false);
-
 		IList<ViewModels.ColumnSetting> GetGridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false);
-
+		IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId);
 		IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false);
 
 		void ReloadCacheForAllEntites();

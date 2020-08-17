@@ -375,17 +375,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             requestRout.OwnerCbPanel = "JobAdvanceReportGridView";// "JobAdvanceReportGridView";
             SessionProvider.ActiveUser.ReportRoute = null;
 
-            TimeZoneInfo localTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZone.CurrentTimeZone.StandardName);
-            if (strJobAdvanceReportRequestRoute != null && strJobAdvanceReportRequestRoute.StartDate.HasValue
-                && strJobAdvanceReportRequestRoute.StartDate != null)
-            {
-                strJobAdvanceReportRequestRoute.StartDate = TimeZoneInfo.ConvertTimeFromUtc(strJobAdvanceReportRequestRoute.StartDate.Value, localTimeZone);
-            }
-            if (strJobAdvanceReportRequestRoute != null && strJobAdvanceReportRequestRoute.EndDate.HasValue
-                && strJobAdvanceReportRequestRoute.EndDate != null)
-            {
-                strJobAdvanceReportRequestRoute.EndDate = TimeZoneInfo.ConvertTimeFromUtc(strJobAdvanceReportRequestRoute.EndDate.Value, localTimeZone);
-            }
+            //TimeZoneInfo localTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZone.CurrentTimeZone.StandardName);
+            //if (strJobAdvanceReportRequestRoute != null && strJobAdvanceReportRequestRoute.StartDate.HasValue
+            //    && strJobAdvanceReportRequestRoute.StartDate != null)
+            //{
+            //    strJobAdvanceReportRequestRoute.StartDate = TimeZoneInfo.ConvertTimeFromUtc(strJobAdvanceReportRequestRoute.StartDate.Value, localTimeZone);
+            //}
+            //if (strJobAdvanceReportRequestRoute != null && strJobAdvanceReportRequestRoute.EndDate.HasValue
+            //    && strJobAdvanceReportRequestRoute.EndDate != null)
+            //{
+            //    strJobAdvanceReportRequestRoute.EndDate = TimeZoneInfo.ConvertTimeFromUtc(strJobAdvanceReportRequestRoute.EndDate.Value, localTimeZone);
+            //}
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -413,7 +413,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
 
-            SetGridResult(requestRout, "", false, true, null);
+            SetGridResult(requestRout, "", false, true, null, reportTypeId: 3311);
             if (!strJobAdvanceReportRequestRoute.Manifest)
             {
                 var result = _gridResult.ColumnSettings.Where(x => x.ColColumnName == "PackagingCode" || x.ColColumnName == "CgoPartCode"
