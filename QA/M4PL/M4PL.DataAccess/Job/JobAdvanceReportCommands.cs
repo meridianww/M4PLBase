@@ -245,6 +245,7 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@recordId", pagedDataInfo.RecordId),
 			   new Parameter("@groupBy", pagedDataInfo.GroupBy),
 			   new Parameter("@IsExport", pagedDataInfo.IsJobParentEntity),
+			   new Parameter("@reportTypeId", 3313),
 			   new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition)
 			};
 
