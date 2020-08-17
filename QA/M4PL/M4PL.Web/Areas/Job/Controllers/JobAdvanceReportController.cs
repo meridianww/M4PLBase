@@ -427,14 +427,37 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             _gridResult.Permission = Permission.ReadOnly;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
             sessionInfo.PagedDataInfo.OrderBy = column.BuildGridSortCondition(reset, route.Entity, _commonCommands);
             sessionInfo.GridViewColumnState = column;
             sessionInfo.GridViewColumnStateReset = reset;
+            var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(sessionInfo.PagedDataInfo.Params);
             SetGridResult(route, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
+
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+        public override PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
+        {
+            if (TempData["RowHashes"] != null)
+                TempData.Keep();
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var currentPageSize = GetorSetUserGridPageSize();
+            GetorSetUserGridPageSize(pager.PageSize);
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+            sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+            sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+            sessionInfo.PagedDataInfo.PageNumber = pager.PageIndex + 1;
+            sessionInfo.PagedDataInfo.PageSize = pager.PageSize;
+            var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
+            viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
+            SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+            _gridResult.SessionProvider = SessionProvider;
+            var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(sessionInfo.PagedDataInfo.Params);
+            SetGridResult(route, gridName, (currentPageSize != pager.PageSize), reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
+            _gridResult.GridViewModel.ApplyPagingState(pager);
+            _gridResult.Permission = Permission.ReadOnly;
 
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
@@ -443,8 +466,6 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var filters = new Dictionary<string, string>();
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
-
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition == null)
@@ -479,6 +500,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             sessionInfo.GridViewFilteringState = filteringState;
             SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
             _gridResult.SessionProvider = SessionProvider;
+            var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(sessionInfo.PagedDataInfo.Params);
             SetGridResult(route, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
 
             route.Filters = null;

@@ -7,11 +7,11 @@ GO
 /* Copyright (2018) Meridian Worldwide Transportation Group
    All Rights Reserved Worldwide */
 -- =============================================        
--- Author:                    Prashant Aggarwal          
--- Create date:               01/20/2020      
--- Description:               Get Job Advance Report Data  
+-- Author:                    Kamal         
+-- Create date:               08/18/2020      
+-- Description:               Get Manifest Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetTransactionReportSummaryView] @userId BIGINT
+CREATE PROCEDURE [dbo].[GetManifestReportView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -34,7 +34,7 @@ CREATE PROCEDURE [dbo].[GetTransactionReportSummaryView] @userId BIGINT
 	,@gatewayTitles NVARCHAR(800) = ''
 	,@PackagingCode NVARCHAR(50) = ''
 	,@CargoId BIGINT = NULL
-	,@reportTypeId INT = 0
+	,@reportTypeId INT = NULL
 	,@TotalCount INT OUTPUT
 AS
 BEGIN TRY
@@ -122,7 +122,11 @@ BEGIN TRY
 	END
 
 	------------------------------- Security End---------------------------------------
-	IF ( (
+	SET @TablesQuery = @TablesQuery + ' INNER JOIN JOBDL010Cargo JC ON JC.JobID = ' + @entity + '.Id AND JC.StatusId = 1'
+	SET @TablesQuery = @TablesQuery + ' LEFT JOIN SYSTM000Ref_Options SO ON JC.CgoPackagingTypeId = SO.Id '
+
+	IF (
+			(
 				(
 					ISNULL(@PackagingCode, '') <> ''
 					AND ISNULL(@PackagingCode, '') <> 'ALL'
@@ -141,6 +145,10 @@ BEGIN TRY
 	BEGIN
 		SET @TablesQuery = @TablesQuery + ' LEFT JOIN SYSTM000Ref_Options SO ON JC.CgoPackagingTypeId = SO.Id '
 		SET @TablesQuery = @TablesQuery + ' AND SO.SysOptionName = ''' + @PackagingCode + '''';
+	END
+	ELSE IF (ISNULL(@CargoId, 0) > 0)
+	BEGIN
+		SET @TablesQuery = @TablesQuery + ' AND JC.Id = ' + CONVERT(NVARCHAR(10), @CargoId)
 	END
 
 	IF (
@@ -235,9 +243,17 @@ BEGIN TRY
 
 	IF (ISNULL(@where, '') <> '')
 	BEGIN
+		SET @where = REPLACE(@where, 'JobAdvanceReport.CargoTitle', 'JC.CgoTitle');
+		SET @where = REPLACE(@where, 'JobAdvanceReport.CgoPartCode', 'JC.CgoPartNumCode');
+		SET @where = REPLACE(@where, 'JobAdvanceReport.PackagingCode', 'SO.ID');
+		SET @where = REPLACE(@where, 'JobAdvanceReport.JobTotalWeight', 'JC.CgoWeight');
+		SET @where = REPLACE(@where, 'JobAdvanceReport.JobTotalCubes', 'JC.CgoCubes');
+		SET @where = REPLACE(@where, 'JobAdvanceReport.JobServiceActual', 'CASE WHEN SO.SysOptionName = ''Service'' THEN 1 ELSE 0 END')
+		SET @where = REPLACE(@where, 'JobAdvanceReport.JobPartsActual', 'CASE WHEN SO.SysOptionName = ''Accessory'' THEN 1 ELSE 0 END')
+		SET @where = REPLACE(@where, 'JobAdvanceReport.JobQtyActual', 'CASE WHEN SO.SysOptionName = ''Appliance'' THEN 1 ELSE 0 END')
 		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
 	END
-	
+
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -251,16 +267,6 @@ BEGIN TRY
 		IF (@recordId = 0)
 		BEGIN
 			SET @sqlCommand = 'SELECT ' + [dbo].[fnGetJobReportBaseQuery](@entity, @userId, @reportTypeId)
-			--SET @where = REPLACE(@where, 'JobAdvanceReport.CargoTitle', 'JC.CgoTitle');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Labels', 'ISNULL(Cargo.Labels, 0) Labels');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Inbound', 'ISNULL(Cargo.Inbound,0) Inbound');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.IB', 'CASE WHEN ISNULL(Cargo.Inbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Inbound) END IB');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Outbound', 'ISNULL(Cargo.Outbound,0) Outbound');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.OB', 'CASE WHEN ISNULL(Cargo.Outbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Outbound) END OB');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Delivered', 'ISNULL(Cargo.Delivered,0) Delivered');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.DE', 'CASE WHEN ISNULL(Cargo.Delivered,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Delivered) END DE');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Cabinets', 'ISNULL(Cargo.Cabinets,0) Cabinets ');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Parts', 'ISNULL(Cargo.Parts, 0) Parts');
 		END
 		ELSE
 		BEGIN
@@ -284,10 +290,18 @@ BEGIN TRY
 			END
 		END
 
+		----------------   
+		-------------------------
+		print @sqlCommand
+		SET @sqlCommand = @sqlCommand + ' ,' + @entity + '.JobPartsActual TotalParts, ' + @entity + '.JobQtyActual TotalQuantity, ' + @entity + '.JobProductType ProductType, ' + @entity + '.JobChannel Channel,' + @entity + '.JobTotalWeight '
+		SET @sqlCommand = @sqlCommand + ' ,JobAdvanceReport.DateEntered,prg.PrgCustID CustomerId,cust.CustTitle '
+		SET @sqlCommand += ' , JC.CgoTitle CargoTitle, JC.CgoPackagingTypeId PackagingCode, JC.CgoPartNumCode AS CgoPartCode';
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.JobTotalCubes', 'JC.CgoCubes JobTotalCubes')
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.JobTotalWeight', 'JC.CgoWeight JobTotalWeight')
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.JobServiceActual', 'CASE WHEN SO.SysOptionName = ''Service'' THEN 1 ELSE 0 END JobServiceActual')
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.JobPartsActual TotalParts', 'CASE WHEN SO.SysOptionName = ''Accessory'' THEN 1 ELSE 0 END TotalParts')
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.JobQtyActual TotalQuantity', 'CASE WHEN SO.SysOptionName = ''Appliance'' THEN 1 ELSE 0 END TotalQuantity')
 		SET @sqlCommand += @TablesQuery
-		--SET @sqlCommand += ' LEFT JOIN dbo.PRGRM051VendorLocations PVC ON PVC.PvlProgramID = PRG.Id AND PVC.StatusId = 1 AND PVC.PvlLocationCode = ' + @entity + '.JobSiteCode'
-		--      SET @sqlCommand +=' LEFT JOIN dbo.Vend000Master Vendor On Vendor.Id = PVC.PvlVendorId '
-		SET @sqlCommand += ' LEFT JOIN dbo.JobCargoAdvanceReportView Cargo ON Cargo.JobId =' + @entity + '.Id'
 
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
@@ -405,7 +419,9 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END
-	
+
+	PRINT @sqlCommand
+
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

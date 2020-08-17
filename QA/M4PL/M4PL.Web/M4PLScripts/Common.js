@@ -1587,14 +1587,13 @@ M4PLCommon.AdvancedReport = (function () {
             IsFormValidate = false;
         }
 
-        var manifestCtrl = ASPxClientControl.GetControlCollection().GetByName('Manifest');
-        rprtVwrRoute.Manifest = manifestCtrl != null && manifestCtrl != undefined ? manifestCtrl.GetValue() : false;
-
+        //var manifestCtrl = ASPxClientControl.GetControlCollection().GetByName('Manifest');
+        //rprtVwrRoute.Manifest = manifestCtrl != null && manifestCtrl != undefined ? manifestCtrl.GetValue() : false;
+        //var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
+        //if (grdCtrl != null && grdCtrl != undefined)
+        //    grdCtrl.ClearFilter();
         if (IsFormValidate) {
-            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-            var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
-            //if (grdCtrl != null && grdCtrl != undefined)
-            //    grdCtrl.ClearFilter();
+            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });            
         } else {
             return false;
         }

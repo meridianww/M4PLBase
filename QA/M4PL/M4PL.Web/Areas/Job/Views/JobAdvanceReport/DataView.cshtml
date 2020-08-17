@@ -375,15 +375,16 @@
 
     settings.BeforeGetCallbackResult += (s, e) =>
     {
-        var grid = (MVCxGridView)s;
-        var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
+        MVCxGridView g = (MVCxGridView)s;
+        //var grid = (MVCxGridView)s;
+        //var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
 
-        grid.ClearSort();
+        //grid.ClearSort();
 
-        if (colState != null)
-        {
-            grid.SortBy(grid.Columns[colState.FieldName], colState.SortOrder);
-        }
+        //if (colState != null)
+        //{
+        //    grid.SortBy(grid.Columns[colState.FieldName], colState.SortOrder);
+        //}
     };
     settings.SetStatusBarTemplateContent(c =>
     {

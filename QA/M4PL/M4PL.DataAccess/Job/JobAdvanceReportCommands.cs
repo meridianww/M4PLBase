@@ -245,13 +245,13 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@recordId", pagedDataInfo.RecordId),
 			   new Parameter("@groupBy", pagedDataInfo.GroupBy),
 			   new Parameter("@IsExport", pagedDataInfo.IsJobParentEntity),
-			   new Parameter("@reportTypeId", 3313),
 			   new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition)
 			};
 
 			if (pagedDataInfo.Params != null)
 			{
 				var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
+				parameters.Add(new Parameter("@reportTypeId", data.ReportType));
 				parameters.Add(new Parameter("@scheduled", data.Scheduled));
 				parameters.Add(new Parameter("@orderType", data.OrderType));
 				parameters.Add(new Parameter("@IsManifest", data.Manifest));

@@ -33,7 +33,6 @@ CREATE PROCEDURE [dbo].[GetJobAdvanceReportView] (
 	,@gatewayTitles NVARCHAR(800) = ''
 	,@PackagingCode NVARCHAR(50) = ''
 	,@CargoId BIGINT = NULL
-	,@IsManifest BIT = NULL
 	,@reportTypeId INT = NULL
 	,@TotalCount INT OUTPUT
 	)
@@ -47,10 +46,7 @@ BEGIN
 	FROM SYSTM000Ref_Options
 	WHERE Id = @reportTypeId
 
-	IF (
-			ISNULL(@ReportName, '') = 'Job Advance Report'
-			OR ISNULL(@ReportName, '') = 'Manifest Report'
-			)
+	IF (ISNULL(@ReportName, '') = 'Job Advance Report')
 	BEGIN
 		EXEC dbo.GetJobAdvanceBasicReportView @userId
 			,@roleId
@@ -75,13 +71,12 @@ BEGIN
 			,@gatewayTitles
 			,@PackagingCode
 			,@CargoId
-			,@IsManifest
 			,@reportTypeId
 			,@TotalCount OUTPUT
 	END
-	ELSE IF(ISNULL(@ReportName, '') = 'Transaction Summary')
+	ELSE IF (ISNULL(@ReportName, '') = 'Manifest Report')
 	BEGIN
-	EXEC dbo.GetTransactionReportSummaryView @userId
+		EXEC dbo.GetManifestReportView @userId
 			,@roleId
 			,@orgId
 			,@entity
@@ -104,7 +99,34 @@ BEGIN
 			,@gatewayTitles
 			,@PackagingCode
 			,@CargoId
-			,@IsManifest
+			,@reportTypeId
+			,@TotalCount OUTPUT
+	END
+	ELSE IF (ISNULL(@ReportName, '') = 'Transaction Summary')
+	BEGIN
+		EXEC dbo.GetTransactionReportSummaryView @userId
+			,@roleId
+			,@orgId
+			,@entity
+			,@pageNo
+			,@pageSize
+			,@orderBy
+			,@groupBy
+			,@groupByWhere
+			,@where
+			,@parentId
+			,@isNext
+			,@isEnd
+			,@recordId
+			,@IsExport
+			,@scheduled
+			,@orderType
+			,@DateType
+			,@JobStatus
+			,@SearchText
+			,@gatewayTitles
+			,@PackagingCode
+			,@CargoId
 			,@reportTypeId
 			,@TotalCount OUTPUT
 	END
