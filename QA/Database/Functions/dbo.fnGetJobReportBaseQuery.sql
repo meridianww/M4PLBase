@@ -40,8 +40,8 @@ BEGIN
 		FROM [dbo].[SYSTM000Ref_Table](NOLOCK) tbl
 		INNER JOIN [dbo].[SYSTM000ColumnsAlias](NOLOCK) col ON tbl.[SysRefName] = col.ColTableName
 		INNER JOIN dbo.Job080ReportColumnRelation RL ON RL.ColumnId = Col.Id
-		INNER JOIN sys.columns c ON c.name = col.ColColumnName
-			AND c.object_id = OBJECT_ID(tbl.TblTableName)
+		--INNER JOIN sys.columns c ON c.name = col.ColColumnName
+		--	AND c.object_id = OBJECT_ID(tbl.TblTableName)
 		LEFT JOIN @tempColumnName tcn ON col.ColColumnName <> tcn.ColumnName
 		WHERE tbl.[SysRefName] = @tableName
 			AND col.[ColIsVisible] = 1 AND RL.ReportId = @reportId
