@@ -367,7 +367,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
 
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            //_gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
 
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
 
@@ -574,7 +574,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //AddActionsInActionContextMenu(route);
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            //_gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
 
             _gridResult.GridSetting.GridName = currentGridName;
 
@@ -618,7 +618,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
 
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            //_gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
             _gridResult.GridSetting.GridName = currentGridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
@@ -763,7 +763,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
 
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            //_gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
             _gridResult.GridSetting.GridName = currentGridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
@@ -804,7 +804,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
 
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            //_gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId)?.ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
