@@ -66,6 +66,7 @@ namespace M4PL.Business.Job
 		OrderLocationCoordinate GetOrderLocationCoordinate(string orderNumber);
 		OrderStatusModel GetOrderStatus(string orderNumber);
 		StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting);
-		StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber);
+        StatusModel AddDriver(DriverContact driverContact);
+        StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber);
 	}
 }
