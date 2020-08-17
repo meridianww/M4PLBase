@@ -124,6 +124,7 @@
     <Compile Include="JobService\OrderGatewayDetails.cs" />
     <Compile Include="JobService\SearchOrder.cs" />
     <Compile Include="Job\BatchJobDetail.cs" />
+    <Compile Include="Job\DriverContact.cs" />
     <Compile Include="Job\JobAdditionalInfo.cs" />
     <Compile Include="Job\JobCargoException.cs" />
     <Compile Include="Job\JobExceptionDetail.cs" />
