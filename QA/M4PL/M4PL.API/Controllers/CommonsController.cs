@@ -116,7 +116,7 @@ namespace M4PL.API.Controllers
             return _command.GetColumnSettingsByEntityAlias(entity, forceUpdate).AsQueryable();
         }
 
-        [HttpGet]
+		[HttpGet]
         [CustomQueryable]
         [Route("GridColumnSettings")]
         public IQueryable<ColumnSetting> GridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false)
@@ -125,7 +125,16 @@ namespace M4PL.API.Controllers
             return _command.GetGridColumnSettingsByEntityAlias(entity, forceUpdate, isGridSetting).AsQueryable();
         }
 
-        [HttpGet]
+		[HttpGet]
+		[CustomQueryable]
+		[Route("GetJobReportColumnRelation")]
+		public IQueryable<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)
+		{
+			_command.ActiveUser = ActiveUser;
+			return _command.GetJobReportColumnRelation(reportTypeId).AsQueryable();
+		}
+
+		[HttpGet]
         [CustomQueryable]
         [Route("ValidationRegExps")]
         public IQueryable<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false)

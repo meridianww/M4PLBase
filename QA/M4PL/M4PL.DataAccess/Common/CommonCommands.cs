@@ -133,7 +133,12 @@ namespace M4PL.DataAccess.Common
                 storedProcedure: true);
         }
 
-        public static bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount, ActiveUser activeUser)
+		public static IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)
+		{
+			return SqlSerializer.Default.DeserializeMultiRecords<JobReportColumnRelation>(StoredProceduresConstant.GetJobReportColumnRelation, new Parameter("@reportTypeId", reportTypeId), false, true);
+		}
+
+		public static bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount, ActiveUser activeUser)
         {
             var parameters = new[]
             {
