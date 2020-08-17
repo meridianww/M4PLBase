@@ -511,12 +511,25 @@ namespace M4PL.API.Controllers
 			return _jobCommands.RescheduleJobByOrderNumber(jobRescheduleDetail, orderNumber, sysSetting);
 		}
 
-		/// <summary>
-		/// Return the location cordinates for a Order from Meridian System
+        /// <summary>
+		/// Reschedule a Existing Order From Meridian System
 		/// </summary>
-		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
-		/// <returns>API returns a Model object which contains the details about success or failure with Latitude and Longitude, in case of failure AdditionalDetail property contains the reson of failure.</returns>
-		[HttpGet]
+		/// <param name="driverContact">driverContact</param>
+		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpPost]
+        [Route("AddDriver"), ResponseType(typeof(StatusModel))]
+        public StatusModel AddDriver(DriverContact driverContact)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.AddDriver(driverContact);
+        }
+
+        /// <summary>
+        /// Return the location cordinates for a Order from Meridian System
+        /// </summary>
+        /// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+        /// <returns>API returns a Model object which contains the details about success or failure with Latitude and Longitude, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+        [HttpGet]
 		[Route("LocationCoordinate"), ResponseType(typeof(OrderLocationCoordinate))]
 		public OrderLocationCoordinate LocationCoordinate(string orderNumber)
 		{

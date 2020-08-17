@@ -11,6 +11,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
+
 CREATE PROCEDURE [dbo].[GetTransactionReportSummaryView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -36,6 +37,7 @@ CREATE PROCEDURE [dbo].[GetTransactionReportSummaryView] @userId BIGINT
 	--,@WeightUnit INT = NULL
 	,@CargoId BIGINT = NULL
 	,@IsManifest BIT = NULL
+	,@reportTypeId INT = 0
 	,@TotalCount INT OUTPUT
 AS
 BEGIN TRY
@@ -244,7 +246,7 @@ BEGIN TRY
 	BEGIN
 		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
 	END
-
+	Print @TCountQuery
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -257,16 +259,17 @@ BEGIN TRY
 	BEGIN
 		IF (@recordId = 0)
 		BEGIN
-			SET @sqlCommand = 'SELECT ' + ' JobAdvanceReport.JobGatewayStatus [Status]
-								,ISNULL(Cargo.Labels,0) Labels
-								,ISNULL(Cargo.Inbound,0) Inbound
-								,CASE WHEN ISNULL(Cargo.Inbound,0) = 0 THEN 0 ELSE Cargo.Labels/Cargo.Inbound END IB
-								,ISNULL(Cargo.Outbound,0) Outbound
-								,CASE WHEN ISNULL(Cargo.Outbound,0) = 0 THEN 0 ELSE Cargo.Labels/Cargo.Outbound END OB
-								,ISNULL(Cargo.Delivered, 0) Delivered
-								,CASE WHEN ISNULL(Cargo.Delivered,0) = 0 THEN 0 ELSE Cargo.Labels/Cargo.Delivered END DE
-								,ISNULL(Cargo.Cabinets, 0) Cabinets
-								,ISNULL(Cargo.Parts,0) Parts'
+		SET @sqlCommand = 'SELECT ' + [dbo].[fnGetJobReportBaseQuery](@entity, @userId, @reportTypeId)
+		--SET @where = REPLACE(@where, 'JobAdvanceReport.CargoTitle', 'JC.CgoTitle');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Labels', 'ISNULL(Cargo.Labels, 0) Labels');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Inbound', 'ISNULL(Cargo.Inbound,0) Inbound');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.IB', 'CASE WHEN ISNULL(Cargo.Inbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Inbound) END IB');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Outbound', 'ISNULL(Cargo.Outbound,0) Outbound');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.OB', 'CASE WHEN ISNULL(Cargo.Outbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Outbound) END OB');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Delivered', 'ISNULL(Cargo.Delivered,0) Delivered');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.DE', 'CASE WHEN ISNULL(Cargo.Delivered,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Delivered) END DE');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Cabinets', 'ISNULL(Cargo.Cabinets,0) Cabinets ');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Parts', 'ISNULL(Cargo.Parts, 0) Parts');
 		END
 		ELSE
 		BEGIN
