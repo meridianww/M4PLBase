@@ -1496,7 +1496,17 @@ M4PLCommon.AdvancedReport = (function () {
         return values;
     }
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
+            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        }
+    }
+    var _reportTypeChangeEvent = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
+            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        }
+    }
 
+    function reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute) {
         if ($('.errorMessages') != undefined) {
             $('.errorMessages').html('');
         }
@@ -1578,7 +1588,6 @@ M4PLCommon.AdvancedReport = (function () {
             rprtVwrRoute.PackagingCode = packagingTypeCtrl.GetText();
         if (cargoTitleCtrl != null)
             rprtVwrRoute.CargoId = cargoTitleCtrl.GetValue();
-        // }
         var IsFormValidate = true;
         if ((startDateCtrl.GetValue() != "" && endDateCtrl.GetValue() != "" && startDateCtrl.GetValue() != null && endDateCtrl.GetValue() != null) && new Date(startDateCtrl.GetValue()) > new Date(endDateCtrl.GetValue())) {
             if ($('.errorMessages') != undefined) {
@@ -1586,20 +1595,7 @@ M4PLCommon.AdvancedReport = (function () {
             }
             IsFormValidate = false;
         }
-
-        //var manifestCtrl = ASPxClientControl.GetControlCollection().GetByName('Manifest');
-        //rprtVwrRoute.Manifest = manifestCtrl != null && manifestCtrl != undefined ? manifestCtrl.GetValue() : false;
-        //var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
-        //if (grdCtrl != null && grdCtrl != undefined)
-        //    grdCtrl.ClearFilter();
-        if (IsFormValidate) {
-            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });            
-        } else {
-            return false;
-        }
-    }
-    var _reportTypeChangeEvent = function (s) {
-       var result = s.GetValue();
+        return IsFormValidate;
     }
 
     return {

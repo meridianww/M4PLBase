@@ -722,6 +722,20 @@ namespace M4PL.Web.Areas
                  route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.JobCargo ||
                  route.Entity == EntitiesAlias.JobCard)
                 ? _commonCommands.GetGridColumnSettings(route.Entity, false, true) : _commonCommands.GetColumnSettings(route.Entity);
+            
+            if (route.Entity == EntitiesAlias.JobAdvanceReport)
+            {
+                var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<Entities.Job.JobAdvanceReportRequest>(sessionInfo.PagedDataInfo.Params);
+                var reportTypeId = Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType);
+                if (reportTypeId > 0)
+                {
+                    var reportColumnRelation = _commonCommands.GetJobReportColumnRelation(reportTypeId)?.Select(t => t.ColumnId).ToList();
+                    if (reportColumnRelation != null && reportColumnRelation.Count > 0)
+                    {
+                        colAlias = colAlias.Where(t => reportColumnRelation.Contains(t.Id)).ToList();
+                    }
+                }               
+            }
             if (route.Entity == EntitiesAlias.SystemAccount)
             {
                 colAlias.ToList().ForEach(c =>

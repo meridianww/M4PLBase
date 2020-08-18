@@ -18,7 +18,7 @@
 @model  M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 @{
     Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
-    var reportTypeChangeEvent = "M4PLCommon.AdvancedReport.ReportTypeChangeEvent";
+    var reportTypeChangeEvent = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.ReportTypeChangeEvent(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
     customerDropdown.OnInit = "M4PLCommon.AdvancedReport.DefaultSelectedCustomer(s,e);";
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramByCustomerCbPanelChange(s, e)}}");
