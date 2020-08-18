@@ -44,6 +44,8 @@ BEGIN
 		,JOB.JobShipmentDate AS ShipmentDate
 		,CUSTOMER.ID AS CustomerId
 		,CUSTOMER.CustCode AS CustomerCode
+		,JOB.ShipmentType AS GwyShipmentType
+		,JOB.JobType AS GwyOrderType
 	FROM CUST000Master CUSTOMER
 	INNER JOIN PRGRM000Master PROGRAM ON PROGRAM.PrgCustID = CUSTOMER.ID
 	INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = PROGRAM.ID
