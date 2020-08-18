@@ -5,9 +5,9 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 -- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
+-- Author:		Prashant Aggarwal
+-- Create date: 8/18/2020
+-- Description:	Get Job Advance Report View
 -- =============================================
 CREATE PROCEDURE [dbo].[GetJobAdvanceReportView] (
 	@userId BIGINT
@@ -105,6 +105,62 @@ BEGIN
 	ELSE IF (ISNULL(@ReportName, '') = 'Transaction Summary')
 	BEGIN
 		EXEC dbo.GetTransactionReportSummaryView @userId
+			,@roleId
+			,@orgId
+			,@entity
+			,@pageNo
+			,@pageSize
+			,@orderBy
+			,@groupBy
+			,@groupByWhere
+			,@where
+			,@parentId
+			,@isNext
+			,@isEnd
+			,@recordId
+			,@IsExport
+			,@scheduled
+			,@orderType
+			,@DateType
+			,@JobStatus
+			,@SearchText
+			,@gatewayTitles
+			,@PackagingCode
+			,@CargoId
+			,@reportTypeId
+			,@TotalCount OUTPUT
+	END
+	ELSE IF (ISNULL(@ReportName, '') = 'Transaction Locations')
+	BEGIN
+		EXEC dbo.GetTransactionReportByLocationView @userId
+			,@roleId
+			,@orgId
+			,@entity
+			,@pageNo
+			,@pageSize
+			,@orderBy
+			,@groupBy
+			,@groupByWhere
+			,@where
+			,@parentId
+			,@isNext
+			,@isEnd
+			,@recordId
+			,@IsExport
+			,@scheduled
+			,@orderType
+			,@DateType
+			,@JobStatus
+			,@SearchText
+			,@gatewayTitles
+			,@PackagingCode
+			,@CargoId
+			,@reportTypeId
+			,@TotalCount OUTPUT
+	END
+	ELSE IF (ISNULL(@ReportName, '') = 'Transaction Jobs')
+	BEGIN
+		EXEC dbo.GetTransactionJobReportView @userId
 			,@roleId
 			,@orgId
 			,@entity

@@ -33,9 +33,8 @@ CREATE PROCEDURE [dbo].[GetTransactionJobReportView] @userId BIGINT
 	,@SearchText NVARCHAR(300) = ''
 	,@gatewayTitles NVARCHAR(800) = ''
 	,@PackagingCode NVARCHAR(50) = ''
-	--,@WeightUnit INT = NULL
 	,@CargoId BIGINT = NULL
-	,@IsManifest BIT = NULL
+	,@reportTypeId INT = 0
 	,@TotalCount INT OUTPUT
 AS
 BEGIN TRY
@@ -123,9 +122,7 @@ BEGIN TRY
 	END
 
 	------------------------------- Security End---------------------------------------
-	IF (
-			(ISNULL(@IsManifest, 0) = 0)
-			AND (
+	IF ( (
 				(
 					ISNULL(@PackagingCode, '') <> ''
 					AND ISNULL(@PackagingCode, '') <> 'ALL'
@@ -142,11 +139,7 @@ BEGIN TRY
 			AND ISNULL(@PackagingCode, '') <> 'ALL'
 			)
 	BEGIN
-		IF (ISNULL(@IsManifest, 0) = 0)
-		BEGIN
-			SET @TablesQuery = @TablesQuery + ' LEFT JOIN SYSTM000Ref_Options SO ON JC.CgoPackagingTypeId = SO.Id '
-		END
-
+		SET @TablesQuery = @TablesQuery + ' LEFT JOIN SYSTM000Ref_Options SO ON JC.CgoPackagingTypeId = SO.Id '
 		SET @TablesQuery = @TablesQuery + ' AND SO.SysOptionName = ''' + @PackagingCode + '''';
 	END
 
@@ -244,7 +237,7 @@ BEGIN TRY
 	BEGIN
 		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
 	END
-
+	
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -257,22 +250,17 @@ BEGIN TRY
 	BEGIN
 		IF (@recordId = 0)
 		BEGIN
-			SET @sqlCommand = 'SELECT ' + 'JobAdvanceReport.Id JobNo
-								,JobAdvanceReport.JobCustomerSalesOrder [Contract]
-								,JobAdvanceReport.JobGatewayStatus [Status]
-								,JobAdvanceReport.JobDeliverySiteName Shipper
-								,JobAdvanceReport.JobOriginDateTimeActual Arrived
-								,Gateway.GwyGatewayACD Outbound
-								,JobAdvanceReport.JobDeliveryDateTimeActual Delivered
-								,ISNULL(Cargo.Labels,0) Labels
-								,ISNULL(Cargo.Inbound,0) Inbound
-								,CASE WHEN ISNULL(Cargo.Inbound,0) = 0 THEN 0 ELSE Cargo.Labels/Cargo.Inbound END IB
-								,ISNULL(Cargo.Outbound,0) Outbound
-								,CASE WHEN ISNULL(Cargo.Outbound,0) = 0 THEN 0 ELSE Cargo.Labels/Cargo.Outbound END OB
-								,ISNULL(Cargo.Delivered, 0) Delivered
-								,CASE WHEN ISNULL(Cargo.Delivered,0) = 0 THEN 0 ELSE Cargo.Labels/Cargo.Delivered END DE
-								,ISNULL(Cargo.Cabinets, 0) Cabinets
-								,ISNULL(Cargo.Parts,0) Parts'
+			SET @sqlCommand = 'SELECT ' + [dbo].[fnGetJobReportBaseQuery](@entity, @userId, @reportTypeId)
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.GwyGatewayACD', 'Gateway.GwyGatewayACD');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Labels', 'ISNULL(Cargo.Labels, 0) Labels');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Inbound', 'ISNULL(Cargo.Inbound,0) Inbound');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.IB', 'CASE WHEN ISNULL(Cargo.Inbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Inbound) END IB');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Outbound', 'ISNULL(Cargo.Outbound,0) Outbound');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.OB', 'CASE WHEN ISNULL(Cargo.Outbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Outbound) END OB');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Delivered', 'ISNULL(Cargo.Delivered,0) Delivered');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.DE', 'CASE WHEN ISNULL(Cargo.Delivered,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Delivered) END DE');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Cabinets', 'ISNULL(Cargo.Cabinets,0) Cabinets ');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Parts', 'ISNULL(Cargo.Parts, 0) Parts');
 		END
 		ELSE
 		BEGIN
@@ -295,6 +283,7 @@ BEGIN TRY
 				SET @sqlCommand = 'SELECT TOP 1 ' + @entity + '.Id '
 			END
 		END
+
 		SET @sqlCommand += @TablesQuery
 		SET @sqlCommand += ' LEFT JOIN dbo.JobCargoAdvanceReportView Cargo ON Cargo.JobId =' + @entity + '.Id'
 		SET @sqlCommand += ' LEFT JOIN dbo.JOBDL020Gateways Gateway ON Gateway.JobId = ' + @entity + '.Id ' + 'AND Gateway.StatusId = 194 AND Gateway.GatewayTypeId = 85 AND GwyGatewayCode IN (''DS On Truck'', ''Loaded on Truck'', ''On Truck'')'
@@ -415,9 +404,7 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END
-
-	PRINT @sqlCommand
-
+	Print @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

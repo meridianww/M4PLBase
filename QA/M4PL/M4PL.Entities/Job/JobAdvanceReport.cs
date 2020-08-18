@@ -68,5 +68,6 @@ namespace M4PL.Entities.Job
 		public int? Parts { get; set; }
 		public DateTime? StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
+		public DateTime? GwyGatewayACD { get; set; }
 	}
 }
