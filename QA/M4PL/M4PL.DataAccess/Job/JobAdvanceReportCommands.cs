@@ -39,8 +39,19 @@ namespace M4PL.DataAccess.Job
 		/// <returns></returns>
 		public static IList<JobAdvanceReport> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
 		{
-			var parameters = GetParameters(pagedDataInfo, activeUser, null);
+			JobAdvanceReportRequest jobAdvanceReportRequest = null;
+			if (pagedDataInfo.Params != null)
+			{
+				jobAdvanceReportRequest = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
+			}
+
+			var parameters = GetParameters(pagedDataInfo, activeUser, null, jobAdvanceReportRequest);
 			var results = SqlSerializer.Default.DeserializeMultiRecords<JobAdvanceReport>(StoredProceduresConstant.GetJobAdvanceReportView, parameters.ToArray(), storedProcedure: true);
+			if (results != null && results.Count > 0 && jobAdvanceReportRequest != null)
+			{
+				results.ForEach(x => { x.StartDate = jobAdvanceReportRequest.StartDate; x.EndDate = jobAdvanceReportRequest.EndDate; });
+			}
+
 			if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
 				pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
 			else pagedDataInfo.TotalCount = 0;
@@ -227,7 +238,7 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport)
+		private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport, JobAdvanceReportRequest jobAdvanceReportRequest)
 		{
 			var parameters = new List<Parameter>
 			{
@@ -248,32 +259,31 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition)
 			};
 
-			if (pagedDataInfo.Params != null)
+			if (jobAdvanceReportRequest != null)
 			{
-				var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
-				parameters.Add(new Parameter("@reportTypeId", data.ReportType));
-				parameters.Add(new Parameter("@scheduled", data.Scheduled));
-				parameters.Add(new Parameter("@orderType", data.OrderType));
-				
-				parameters.Add(new Parameter("@PackagingCode", data.PackagingCode));
-				if (data.CargoId.HasValue)
-					parameters.Add(new Parameter("@CargoId", data.CargoId));
-				
-				if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
+				parameters.Add(new Parameter("@reportTypeId", jobAdvanceReportRequest.ReportType));
+				parameters.Add(new Parameter("@scheduled", jobAdvanceReportRequest.Scheduled));
+				parameters.Add(new Parameter("@orderType", jobAdvanceReportRequest.OrderType));
+
+				parameters.Add(new Parameter("@PackagingCode", jobAdvanceReportRequest.PackagingCode));
+				if (jobAdvanceReportRequest.CargoId.HasValue)
+					parameters.Add(new Parameter("@CargoId", jobAdvanceReportRequest.CargoId));
+
+				if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName) && jobAdvanceReportRequest.DateTypeName == "Schedule Date")
 				{
-					parameters.Add(new Parameter("@DateType", data.StartDate == null || data.EndDate == null
+					parameters.Add(new Parameter("@DateType", jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
 			   ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", Utilities.TimeUtility.GetPacificDateTime().Date.AddDays(-1), Utilities.TimeUtility.GetPacificDateTime().Date.AddSeconds(86399))
-			   : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", data.StartDate, data.EndDate)));
+			   : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate)));
 				}
-				if (!string.IsNullOrEmpty(data.JobStatus) && !string.IsNullOrWhiteSpace(data.JobStatus) && Convert.ToString(data.JobStatus).ToLower() != "all")
-					parameters.Add(new Parameter("@JobStatus", data.JobStatus));
+				if (!string.IsNullOrEmpty(jobAdvanceReportRequest.JobStatus) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.JobStatus) && Convert.ToString(jobAdvanceReportRequest.JobStatus).ToLower() != "all")
+					parameters.Add(new Parameter("@JobStatus", jobAdvanceReportRequest.JobStatus));
 				else
 					parameters.Add(new Parameter("@JobStatus", "Active"));
-				if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
-					parameters.Add(new Parameter("@SearchText", data.Search));
-				if (data.GatewayTitle != null && data.GatewayTitle.Count > 0 && !data.GatewayTitle.Contains("ALL"))
+				if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Search) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.Search))
+					parameters.Add(new Parameter("@SearchText", jobAdvanceReportRequest.Search));
+				if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
 				{
-					string gatewayTitles = string.Format(" AND  GWY.GwyGatewayCode IN ('{0}')", string.Join("','", data.GatewayTitle.OfType<string>()));
+					string gatewayTitles = string.Format(" AND  GWY.GwyGatewayCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
 					parameters.Add(new Parameter("@gatewayTitles", gatewayTitles));
 				}
 			}

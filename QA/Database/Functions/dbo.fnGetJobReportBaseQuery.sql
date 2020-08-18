@@ -45,6 +45,7 @@ BEGIN
 		LEFT JOIN @tempColumnName tcn ON col.ColColumnName <> tcn.ColumnName
 		WHERE tbl.[SysRefName] = @tableName
 			AND col.[ColIsVisible] = 1 AND RL.ReportId = @reportId
+			AND Col.ColColumnName NOT IN ('StartDate', 'EndDate')
 		)
 
 	SELECT @query = COALESCE(@query + ', ', '') + @tableName + '.' + ColColumnName
