@@ -251,6 +251,7 @@ BEGIN TRY
 		IF (@recordId = 0)
 		BEGIN
 			SET @sqlCommand = 'SELECT ' + [dbo].[fnGetJobReportBaseQuery](@entity, @userId, @reportTypeId)
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.CustTitle', 'Cust.CustTitle');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Labels', 'ISNULL(Cargo.Labels, 0) Labels');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Inbound', 'ISNULL(Cargo.Inbound,0) Inbound');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.IB', 'CASE WHEN ISNULL(Cargo.Inbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Inbound) END IB');
@@ -260,6 +261,7 @@ BEGIN TRY
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.DE', 'CASE WHEN ISNULL(Cargo.Delivered,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Delivered) END DE');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Cabinets', 'ISNULL(Cargo.Cabinets,0) Cabinets ');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Parts', 'ISNULL(Cargo.Parts, 0) Parts');
+			Print @sqlCommand
 		END
 		ELSE
 		BEGIN
