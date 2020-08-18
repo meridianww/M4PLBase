@@ -420,8 +420,10 @@ BEGIN TRY
 		END
 	END
 
+	
+	SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.CustTitle', 'Cust.CustTitle');
+	SET @where = REPLACE(@where, 'JobAdvanceReport.CustTitle', 'Cust.CustTitle');
 	PRINT @sqlCommand
-
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
