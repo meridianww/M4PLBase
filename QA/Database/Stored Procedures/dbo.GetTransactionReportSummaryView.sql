@@ -251,7 +251,6 @@ BEGIN TRY
 		IF (@recordId = 0)
 		BEGIN
 			SET @sqlCommand = 'SELECT ' + [dbo].[fnGetJobReportBaseQuery](@entity, @userId, @reportTypeId)
-			--SET @where = REPLACE(@where, 'JobAdvanceReport.CargoTitle', 'JC.CgoTitle');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Labels', 'ISNULL(Cargo.Labels, 0) Labels');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Inbound', 'ISNULL(Cargo.Inbound,0) Inbound');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.IB', 'CASE WHEN ISNULL(Cargo.Inbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Inbound) END IB');
@@ -285,8 +284,6 @@ BEGIN TRY
 		END
 
 		SET @sqlCommand += @TablesQuery
-		--SET @sqlCommand += ' LEFT JOIN dbo.PRGRM051VendorLocations PVC ON PVC.PvlProgramID = PRG.Id AND PVC.StatusId = 1 AND PVC.PvlLocationCode = ' + @entity + '.JobSiteCode'
-		--      SET @sqlCommand +=' LEFT JOIN dbo.Vend000Master Vendor On Vendor.Id = PVC.PvlVendorId '
 		SET @sqlCommand += ' LEFT JOIN dbo.JobCargoAdvanceReportView Cargo ON Cargo.JobId =' + @entity + '.Id'
 
 		IF (ISNULL(@orderBy, '') <> '')
@@ -405,7 +402,7 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END
-	
+	Print @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

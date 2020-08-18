@@ -66,5 +66,7 @@ namespace M4PL.Entities.Job
 		public decimal? DE { get; set; }
 		public int? Cabinets { get; set; }
 		public int? Parts { get; set; }
+		public DateTime? StartDate { get; set; }
+		public DateTime? EndDate { get; set; }
 	}
 }
