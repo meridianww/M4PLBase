@@ -29,77 +29,77 @@ using System.Linq;
 
 namespace M4PL.DataAccess.Finance
 {
-	public class NavRateCommands : BaseCommands<Entities.Finance.Customer.NavRate>
-	{
-		public static StatusModel GenerateProgramPriceCostCode(List<Entities.Finance.Customer.NavRate> navRateList, ActiveUser activeUser)
-		{
-			StatusModel statusModel = null;
-			try
-			{
-				var parameters = new List<Parameter>
-		   {
-				new Parameter("@uttNavRate", GetNavRateListDT(navRateList)),
-				new Parameter("@programId", navRateList.First().ProgramId),
-				new Parameter("@changedBy", activeUser.UserName),
-				new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
-		   };
+    public class NavRateCommands : BaseCommands<Entities.Finance.Customer.NavRate>
+    {
+        public static StatusModel GenerateProgramPriceCostCode(List<Entities.Finance.Customer.NavRate> navRateList, ActiveUser activeUser)
+        {
+            StatusModel statusModel = null;
+            try
+            {
+                var parameters = new List<Parameter>
+           {
+                new Parameter("@uttNavRate", GetNavRateListDT(navRateList)),
+                new Parameter("@programId", navRateList.First().ProgramId),
+                new Parameter("@changedBy", activeUser.UserName),
+                new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
+           };
 
-				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateNavRateByLocation, parameters.ToArray(), true);
-				statusModel = new StatusModel() { Status = "Success", AdditionalDetail = "", StatusCode = 200 };
-			}
-			catch (Exception exp)
-			{
-				Logger.ErrorLogger.Log(exp, "Error is occuring while updating the Price/Cost Code Data By Location.", "GenerateProgramPriceCostCode", Utilities.Logger.LogType.Error);
-				statusModel = new StatusModel() { Status = "Failure", StatusCode = 500, AdditionalDetail = exp.Message };
-			}
+                SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateNavRateByLocation, parameters.ToArray(), true);
+                statusModel = new StatusModel() { Status = "Success", AdditionalDetail = "", StatusCode = 200 };
+            }
+            catch (Exception exp)
+            {
+                Logger.ErrorLogger.Log(exp, "Error is occuring while updating the Price/Cost Code Data By Location.", "GenerateProgramPriceCostCode", Utilities.Logger.LogType.Error);
+                statusModel = new StatusModel() { Status = "Failure", StatusCode = 500, AdditionalDetail = exp.Message };
+            }
 
-			return statusModel;
-		}
+            return statusModel;
+        }
 
-		private static DataTable GetNavRateListDT(List<Entities.Finance.Customer.NavRate> navRateList)
-		{
-			if (navRateList == null || (navRateList != null && navRateList.Count == 0))
-			{
-				throw new ArgumentNullException("navRateList", "NavRateCommands.GetNavRateListDT() - Argument null Exception");
-			}
+        private static DataTable GetNavRateListDT(List<Entities.Finance.Customer.NavRate> navRateList)
+        {
+            if (navRateList == null || (navRateList != null && navRateList.Count == 0))
+            {
+                throw new ArgumentNullException("navRateList", "NavRateCommands.GetNavRateListDT() - Argument null Exception");
+            }
 
-			var distinctNavRates = navRateList.GroupBy(p => p.Code).Select(g => g.First()).ToList();
-			using (var navRateUTT = new DataTable("uttNavRate"))
-			{
-				navRateUTT.Locale = CultureInfo.InvariantCulture;
-				navRateUTT.Columns.Add("Location");
-				navRateUTT.Columns.Add("Code");
-				navRateUTT.Columns.Add("CustomerCode");
-				navRateUTT.Columns.Add("VendorCode");
-				navRateUTT.Columns.Add("EffectiveDate");
-				navRateUTT.Columns.Add("Title");
-				navRateUTT.Columns.Add("BillablePrice");
-				navRateUTT.Columns.Add("CostRate");
-				navRateUTT.Columns.Add("BillableElectronicInvoice");
-				navRateUTT.Columns.Add("CostElectronicInvoice");
+            var distinctNavRates = navRateList.GroupBy(p => p.Code).Select(g => g.First()).Where(x => !string.IsNullOrEmpty(x.Code)).ToList();
+            using (var navRateUTT = new DataTable("uttNavRate"))
+            {
+                navRateUTT.Locale = CultureInfo.InvariantCulture;
+                navRateUTT.Columns.Add("Location");
+                navRateUTT.Columns.Add("Code");
+                navRateUTT.Columns.Add("CustomerCode");
+                navRateUTT.Columns.Add("VendorCode");
+                navRateUTT.Columns.Add("EffectiveDate");
+                navRateUTT.Columns.Add("Title");
+                navRateUTT.Columns.Add("BillablePrice");
+                navRateUTT.Columns.Add("CostRate");
+                navRateUTT.Columns.Add("BillableElectronicInvoice");
+                navRateUTT.Columns.Add("CostElectronicInvoice");
 
-				if (distinctNavRates?.Count > 0)
-				{
-					foreach (var navRate in distinctNavRates)
-					{
-						var row = navRateUTT.NewRow();
-						row["Location"] = navRate.Location;
-						row["Code"] = navRate.Code;
-						row["CustomerCode"] = navRate.CustomerCode;
-						row["VendorCode"] = navRate.VendorCode;
-						row["EffectiveDate"] = navRate.EffectiveDate.ToDate();
-						row["Title"] = navRate.Title;
-						row["BillablePrice"] = decimal.Zero;
-						row["CostRate"] = decimal.Zero;
-						row["BillableElectronicInvoice"] = navRate.BillableElectronicInvoice.ToBoolean();
-						row["CostElectronicInvoice"] = navRate.CostElectronicInvoice.ToBoolean();
-						navRateUTT.Rows.Add(row);
-						navRateUTT.AcceptChanges();
-					}
-				}
+                if (distinctNavRates?.Count > 0)
+                {
+                    foreach (var navRate in distinctNavRates)
+                    {
+                        var row = navRateUTT.NewRow();
+                        row["Location"] = navRate.Location;
+                        row["Code"] = navRate.Code;
+                        row["CustomerCode"] = navRate.CustomerCode;
+                        row["VendorCode"] = navRate.VendorCode;
+                        row["EffectiveDate"] = navRate.EffectiveDate.ToDate();
+                        row["Title"] = navRate.Title;
+                        row["BillablePrice"] = decimal.Zero;
+                        row["CostRate"] = decimal.Zero;
+                        row["BillableElectronicInvoice"] = navRate.BillableElectronicInvoice.ToBoolean();
+                        row["CostElectronicInvoice"] = navRate.CostElectronicInvoice.ToBoolean();
+                        navRateUTT.Rows.Add(row);
+                        navRateUTT.AcceptChanges();
+                    }
+                }
 
-				return navRateUTT;
-			}
-		}
-	}
+                return navRateUTT;
+            }
+        }
+    }
 }
