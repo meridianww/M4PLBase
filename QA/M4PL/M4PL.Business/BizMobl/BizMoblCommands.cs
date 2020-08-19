@@ -106,12 +106,13 @@ namespace M4PL.Business.BizMobl
 
 			string pathOnly = Path.GetDirectoryName(path);
 			string fileName = Path.GetFileName(path);
-
+			bool idDriver32Bit = ConfigurationManager.AppSettings["Is32BitOLEDBDriver"] != null ? Convert.ToBoolean(ConfigurationManager.AppSettings["Is32BitOLEDBDriver"]) : false;
 			string sql = @"SELECT * FROM [" + fileName + "]";
-
-			using (OleDbConnection connection = new OleDbConnection(
-					  @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + pathOnly +
-					  ";Extended Properties=\"Text;HDR=" + header + "\""))
+			string connString = idDriver32Bit ? @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + pathOnly +
+					  ";Extended Properties=\"Text;HDR=" + header + "\"" :
+					  @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + pathOnly +
+					  ";Extended Properties=\"Text;HDR=" + header + "\"";
+			using (OleDbConnection connection = new OleDbConnection(connString))
 			using (OleDbCommand command = new OleDbCommand(sql, connection))
 			{
 				using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
