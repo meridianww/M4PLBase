@@ -94,8 +94,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
-                _reportResult.Record.StartDate = Utilities.TimeUtility.GetPacificDateTime().AddDays(-1);
-                _reportResult.Record.EndDate = Utilities.TimeUtility.GetPacificDateTime();
+                _reportResult.Record.StartDate = DateTime.Now.AddDays(-1);
+                _reportResult.Record.EndDate = DateTime.Now;
                 _reportResult.Record.ProgramCode = "ALL";
                 _reportResult.Record.Origin = "ALL";
                 _reportResult.Record.Destination = "ALL";
@@ -104,9 +104,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _reportResult.Record.ServiceMode = "ALL";
                 _reportResult.Record.ProductType = "ALL";
                 _reportResult.Record.PackagingCode = "ALL";
-                //_reportResult.Record.CgoWeightUnitTypeId = 0;
-                //_reportResult.Record.CargoId = "ALL";
-                _reportResult.Record.ProgramId = 0;
                 ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
                 return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
             }
@@ -336,6 +333,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
+            if (!strJobAdvanceReportRequestRoute.StartDate.HasValue)
+                strJobAdvanceReportRequestRoute.StartDate = DateTime.Now.AddDays(-1);
+            if (!strJobAdvanceReportRequestRoute.EndDate.HasValue)
+                strJobAdvanceReportRequestRoute.EndDate = DateTime.Now;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentRecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");

@@ -118,6 +118,7 @@
     <Compile Include="JobGatewayModelforPanel.cs" />
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
+    <Compile Include="JobService\JobDocument.cs" />
     <Compile Include="JobService\JobGatewayComment.cs" />
     <Compile Include="JobService\OrderDetails.cs" />
     <Compile Include="JobService\OrderDocumentDetails.cs" />

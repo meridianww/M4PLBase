@@ -9,7 +9,7 @@ GO
 -- Create date: 8/18/2020
 -- Description:	Get Job Advance Report View
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobAdvanceReportView] (
+ALTER PROCEDURE [dbo].[GetJobAdvanceReportView] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -42,9 +42,17 @@ BEGIN
 
 	DECLARE @ReportName VARCHAR(150)
 
+	IF(ISNULL(@reportTypeId,0) = 0)
+	BEGIN
+	   SELECT TOP 1 @reportTypeId = Id
+		FROM SYSTM000Ref_Options
+		WHERE SysLookupCode ='JobReportType' AND SysDefault = 1
+	END
 	SELECT @ReportName = SysOptionName
 	FROM SYSTM000Ref_Options
 	WHERE Id = @reportTypeId
+	
+	
 
 	IF (ISNULL(@ReportName, '') = 'Job Advance Report')
 	BEGIN
