@@ -223,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\BizMobl\" />
     <Folder Include="Views\GatewayImport\" />
     <Folder Include="Views\JobAttachment\" />
     <Folder Include="Views\JobRollup\" />
@@ -268,6 +269,7 @@
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\AuthService.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\BizMoblController.cs" />
     <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
     <Compile Include="Controllers\EmailServiceController.cs" />
@@ -385,6 +387,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\MetadataHandler.cs" />
+    <Compile Include="IoC\BizMoblModule.cs" />
     <Compile Include="IoC\EmailModule.cs" />
     <Compile Include="IoC\FinanceModule.cs" />
     <Compile Include="IoC\JobRollupModule.cs" />

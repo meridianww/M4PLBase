@@ -92,6 +92,8 @@
     <Compile Include="Attachment\AttachmentCommands.cs" />
     <Compile Include="Attachment\IAttachmentCommands.cs" />
     <Compile Include="BaseCommands.cs" />
+    <Compile Include="BizMobl\BizMoblCommands.cs" />
+    <Compile Include="BizMobl\IBizMoblCommands.cs" />
     <Compile Include="Common\AppDashboardCommands.cs" />
     <Compile Include="Common\CommonCommands.cs" />
     <Compile Include="Common\IAppDashboardCommands.cs" />
