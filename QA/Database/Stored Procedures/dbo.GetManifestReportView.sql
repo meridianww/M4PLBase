@@ -294,8 +294,10 @@ BEGIN TRY
 		-------------------------
 		print @sqlCommand
 		SET @sqlCommand = @sqlCommand + ' ,' + @entity + '.JobPartsActual TotalParts, ' + @entity + '.JobQtyActual TotalQuantity, ' + @entity + '.JobProductType ProductType, ' + @entity + '.JobChannel Channel,' + @entity + '.JobTotalWeight '
-		SET @sqlCommand = @sqlCommand + ' ,JobAdvanceReport.DateEntered,prg.PrgCustID CustomerId,cust.CustTitle '
-		SET @sqlCommand += ' , JC.CgoTitle CargoTitle, JC.CgoPackagingTypeId PackagingCode, JC.CgoPartNumCode AS CgoPartCode';
+		SET @sqlCommand = @sqlCommand + ' ,JobAdvanceReport.DateEntered,prg.PrgCustID CustomerId '
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.CargoTitle', 'JC.CgoTitle CargoTitle');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.CgoPartCode', 'JC.CgoPartNumCode CgoPartCode');
+		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.PackagingCode', 'SO.ID PackagingCode');
 		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.JobTotalCubes', 'JC.CgoCubes JobTotalCubes')
 		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.JobTotalWeight', 'JC.CgoWeight JobTotalWeight')
 		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.JobServiceActual', 'CASE WHEN SO.SysOptionName = ''Service'' THEN 1 ELSE 0 END JobServiceActual')

@@ -43,7 +43,7 @@ BEGIN
 	FROM dbo.PRGRM042ProgramBillableLocations BL
 	INNER JOIN dbo.PRGRM000Master Program ON Program.Id = BL.PblProgramID
 	INNER JOIN @uttNavRate NR ON NR.Location = BL.PblLocationCode
-	WHERE BL.StatusId = 1 AND BL.PblProgramID = @programId
+	WHERE BL.StatusId = 1 AND BL.PblProgramID = @programId  AND ISNULL(NR.Code, '') <> ''
 
 	SELECT CL.Id ProgramLocationId
 		,NR.Location
@@ -61,7 +61,7 @@ BEGIN
 	FROM dbo.PRGRM043ProgramCostLocations CL
 	INNER JOIN dbo.PRGRM000Master Program ON Program.Id = CL.PclProgramID
 	INNER JOIN @uttNavRate NR ON NR.Location = CL.PclLocationCode
-	WHERE CL.StatusId = 1 AND CL.PclProgramID = @programId
+	WHERE CL.StatusId = 1 AND CL.PclProgramID = @programId AND ISNULL(NR.Code, '') <> ''
 
 	MERGE [dbo].[PRGRM040ProgramBillableRate] T
 	USING #BillableTemp S

@@ -32,6 +32,14 @@ INSERT INTO dbo.SYSTM000Ref_Options (SysLookupId, SysLookupCode, SysOptionName, 
 VALUES (@LookupId, 'JobReportType', 'Transaction Jobs', 5, 0,1)
 END
 
+UPDATE SYSTM000ColumnsAlias SET ColisVisible=1,IsGridColumn=1 Where ColTableName='JobAdvanceReport' AND ColColumnName IN ('CustTitle','JobSiteCode')
+
+IF NOT EXISTS(Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'Report' AND ColColumnName= 'ReportType')
+BEGIN
+INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
+VALUES ('EN', 'Report', NULL, 'ReportType', 'Report Type', 'Report Type', @LookupId, 'JobReportType', NULL, 24, 0, 1, 1, 1, NULL, NULL, 0, NULL, 0, 'Report Type')
+END
+
 ---------------------------------------- Insert Columns For Column Alias Table Job Advance Report Entity-------------------------------------------------------
 
 IF NOT EXISTS(Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'StartDate' AND ColAliasName = 'Start Date')
@@ -157,14 +165,14 @@ Select @Report1, Id From dbo.SYSTM000ColumnsAlias
 WHERE ColColumnName = 'JobBOL' AND ColTableName = 'JobAdvanceReport' AND ColAliasName = 'BOL'
 
 
-INSERT INTO dbo.Job080ReportColumnRelation (ReportId, ColumnId)
-Select @Report1, Id From dbo.SYSTM000ColumnsAlias
-WHERE ColColumnName = 'PackagingCode' AND ColTableName = 'JobAdvanceReport' AND ColAliasName = 'Packaging Type'
+--INSERT INTO dbo.Job080ReportColumnRelation (ReportId, ColumnId)
+--Select @Report1, Id From dbo.SYSTM000ColumnsAlias
+--WHERE ColColumnName = 'PackagingCode' AND ColTableName = 'JobAdvanceReport' AND ColAliasName = 'Packaging Type'
 
 
-INSERT INTO dbo.Job080ReportColumnRelation (ReportId, ColumnId)
-Select @Report1, Id From dbo.SYSTM000ColumnsAlias
-WHERE ColColumnName = 'CgoPartCode' AND ColTableName = 'JobAdvanceReport' AND ColAliasName = 'Part Code'
+--INSERT INTO dbo.Job080ReportColumnRelation (ReportId, ColumnId)
+--Select @Report1, Id From dbo.SYSTM000ColumnsAlias
+--WHERE ColColumnName = 'CgoPartCode' AND ColTableName = 'JobAdvanceReport' AND ColAliasName = 'Part Code'
 
 
 INSERT INTO dbo.Job080ReportColumnRelation (ReportId, ColumnId)
@@ -172,9 +180,9 @@ Select @Report1, Id From dbo.SYSTM000ColumnsAlias
 WHERE ColColumnName = 'JobTotalWeight' AND ColTableName = 'JobAdvanceReport'
 
 
-INSERT INTO dbo.Job080ReportColumnRelation (ReportId, ColumnId)
-Select @Report1, Id From dbo.SYSTM000ColumnsAlias
-WHERE ColColumnName = 'CargoTitle' AND ColTableName = 'JobAdvanceReport' AND ColAliasName = 'Cargo Title'
+--INSERT INTO dbo.Job080ReportColumnRelation (ReportId, ColumnId)
+--Select @Report1, Id From dbo.SYSTM000ColumnsAlias
+--WHERE ColColumnName = 'CargoTitle' AND ColTableName = 'JobAdvanceReport' AND ColAliasName = 'Cargo Title'
 
 
 INSERT INTO dbo.Job080ReportColumnRelation (ReportId, ColumnId)
