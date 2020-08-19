@@ -1304,8 +1304,8 @@ namespace M4PL.Web
                 && (route.Entity != EntitiesAlias.JobHistory)
                 && (route.Entity != EntitiesAlias.PrgRefGatewayDefault)
                 && (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
-				&& (route.Entity != EntitiesAlias.Gateway && route.Action != MvcConstants.ActionForm)
-				)
+                && (route.Entity != EntitiesAlias.Gateway && route.Action != MvcConstants.ActionForm)
+                )
             {
                 var navMenuEnabled = true;
                 if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
@@ -1418,7 +1418,7 @@ namespace M4PL.Web
                 if ((route.Entity == EntitiesAlias.JobXcblInfo && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView)
                     || (route.Entity == EntitiesAlias.NavRate && route.Action == MvcConstants.ActionForm)
-					|| (route.Entity == EntitiesAlias.Gateway && route.Action == MvcConstants.ActionForm))
+                    || (route.Entity == EntitiesAlias.Gateway && route.Action == MvcConstants.ActionForm))
                     allNavMenus.Remove(saveMenu);
             }
 
@@ -1483,17 +1483,17 @@ namespace M4PL.Web
                 allNavMenus[0].Text = "Import Order";
             }
 
-			if (route.Entity == EntitiesAlias.NavRate && route.Action == "FormView")
-			{
-				allNavMenus[0].Text = "Import Price/Cost Code";
-			}
+            if (route.Entity == EntitiesAlias.NavRate && route.Action == "FormView")
+            {
+                allNavMenus[0].Text = "Import Price/Cost Code";
+            }
 
-			if (route.Entity == EntitiesAlias.Gateway && route.Action == "FormView")
-			{
-				allNavMenus[0].Text = "Import Gateway/Action";
-			}
+            if (route.Entity == EntitiesAlias.Gateway && route.Action == "FormView")
+            {
+                allNavMenus[0].Text = "Import Gateway/Action";
+            }
 
-			return allNavMenus;
+            return allNavMenus;
         }
 
         public static DateTime? SubstractFrom(this DateTime? date, double duration, JobGatewayUnit gatewayUnit)
@@ -1754,18 +1754,18 @@ namespace M4PL.Web
                     }
                 }
 
-				if (mnu.MnuTitle == "Price/Cost Code" || mnu.MnuTitle == "Gateway/Action")
-				{
-					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Program && route.RecordId > 0)
-					{
+                if (mnu.MnuTitle == "Price/Cost Code" || mnu.MnuTitle == "Gateway/Action")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Program && route.RecordId > 0)
+                    {
                         mnu.Route.RecordId = route.RecordId;
-						mnu.StatusId = 1;
+                        mnu.StatusId = 1;
                         mnu.Route.IsPopup = true;
                     }
-				}
+                }
 
-				if (mnu.MnuTitle == "Download All")
+                if (mnu.MnuTitle == "Download All")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)
@@ -1872,10 +1872,10 @@ namespace M4PL.Web
                              )))
                             {
                                 mnu.StatusId = 1;
-								if (route.Action == "FormView")
-								{
-									mnu.Route.RecordId = route.RecordId;
-								}
+                                if (route.Action == "FormView")
+                                {
+                                    mnu.Route.RecordId = route.RecordId;
+                                }
                             }
                         }
                     }
@@ -1905,11 +1905,11 @@ namespace M4PL.Web
                              )))
                             {
                                 mnu.StatusId = 1;
-								if (route.Action == "FormView")
-								{
-									mnu.Route.RecordId = route.RecordId;
-								}
-							}
+                                if (route.Action == "FormView")
+                                {
+                                    mnu.Route.RecordId = route.RecordId;
+                                }
+                            }
                         }
                     }
                 }
@@ -1957,7 +1957,10 @@ namespace M4PL.Web
                 if (route.Entity == EntitiesAlias.JobReport)
                     mnu.StatusId = 3;
                 if ((route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.JobCard || (route.Entity == EntitiesAlias.Job && route.Action == MvcConstants.ActionDataView))
-                && (mnu.MnuTitle == "Advanced" || mnu.MnuTitle == "Copy" || mnu.MnuTitle == "Paste"))
+                && (mnu.MnuTitle == "Copy" || mnu.MnuTitle == "Paste"))
+                    mnu.StatusId = 1;
+                if ((route.Entity == EntitiesAlias.JobAdvanceReport || (route.Entity == EntitiesAlias.Job && route.Action == MvcConstants.ActionDataView))
+               && (mnu.MnuTitle == "Advanced"))
                     mnu.StatusId = 1;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
@@ -2965,7 +2968,7 @@ namespace M4PL.Web
             string where = string.Empty;
             if (jobAdvanceReportRequest == null)
             {
-                where = string.Format(" AND JobAdvanceReport.DateEntered BETWEEN '{0}' AND '{1}' ", DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399));
+                where = string.Format(" AND CAST(JobAdvanceReport.DateEntered AS DATE) = '{0}' ", DateTime.Now.Date);
                 return where;
             }
             if (jobAdvanceReportRequest.CustomerId > 0)
@@ -2983,9 +2986,6 @@ namespace M4PL.Web
             if (jobAdvanceReportRequest.Brand != null && jobAdvanceReportRequest.Brand.Count > 0 && !jobAdvanceReportRequest.Brand.Contains("ALL"))
                 where += string.Format(" AND JobAdvanceReport.JobCarrierContract IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Brand.OfType<string>()));
 
-            //if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
-            //    where += string.Format(" AND JobAdvanceReport.JobGatewayStatus IN ('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
-
             if (jobAdvanceReportRequest.ServiceMode != null && jobAdvanceReportRequest.ServiceMode.Count > 0 && !jobAdvanceReportRequest.ServiceMode.Contains("ALL"))
                 where += string.Format(" AND JobAdvanceReport.JobServiceMode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.ServiceMode.OfType<string>()));
 
@@ -2996,53 +2996,39 @@ namespace M4PL.Web
                 where += string.Format(" AND JobAdvanceReport.JobChannel IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Channel.OfType<string>()));
 
             string starteDate, endDate = string.Empty;
-            starteDate = jobAdvanceReportRequest.StartDate.HasValue ? jobAdvanceReportRequest.StartDate.Value.ToShortDateString() : string.Empty;
+            starteDate = jobAdvanceReportRequest.StartDate.HasValue ? jobAdvanceReportRequest.StartDate.Value.Date.ToString() : string.Empty;
             endDate = jobAdvanceReportRequest.EndDate.HasValue
-                ? jobAdvanceReportRequest.EndDate.Value.Date.AddSeconds(86399).ToString("M/dd/yyyy hh:mm:ss") : string.Empty;
-
-            //if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "not scheduled")
-            //{
-            //    where += " AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NULL ";
-            //}
-            //if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "scheduled")
-            //{
-            //    where += " AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL ";
-            //}
+                ? jobAdvanceReportRequest.EndDate.Value.Date.ToString() : string.Empty;
 
             if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName))
             {
                 if (jobAdvanceReportRequest.DateTypeName == "Order Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobOrderedDate  IS NOT NULL  AND JobAdvanceReport.JobOrderedDate >= '{0}' AND JobAdvanceReport.JobOrderedDate <= '{1}' ",
-               DateTime.Now.AddDays(-1).Date, DateTime.Now.AddDays(1).Date.AddSeconds(86399))
-               : string.Format(" AND JobAdvanceReport.JobOrderedDate IS NOT NULL  AND JobAdvanceReport.JobOrderedDate >= '{0}' AND JobAdvanceReport.JobOrderedDate <= '{1}' ",
-               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+               ? string.Format(" AND JobAdvanceReport.JobOrderedDate  IS NOT NULL  AND CAST(JobAdvanceReport.JobOrderedDate AS DATE) = '{0}' ", DateTime.Now.Date.ToShortDateString())
+               : string.Format(" AND JobAdvanceReport.JobOrderedDate IS NOT NULL  AND CAST(JobAdvanceReport.JobOrderedDate AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobOrderedDate AS DATE) <= '{1}' ",
+               Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
                 else if (jobAdvanceReportRequest.DateTypeName == "Delivery Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ",
-               DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
-               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ",
-               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)= '{0}'", DateTime.Now.Date.ToShortDateString())
+               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)>= '{0}' AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) <= '{1}' ",
+               Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
                 else if (jobAdvanceReportRequest.DateTypeName == "Shipment Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate >= '{0}' AND JobAdvanceReport.JobShipmentDate <= '{1}' ",
-               DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
-               : string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate >= '{0}' AND JobAdvanceReport.JobShipmentDate <= '{1}' ",
-               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+               ? string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND CAST(JobAdvanceReport.JobShipmentDate AS DATE) = '{0}' ", DateTime.Now.Date.ToShortDateString())
+               : string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND CAST(JobAdvanceReport.JobShipmentDate AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobShipmentDate AS DATE) <= '{1}' ",
+               Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
                 else if (jobAdvanceReportRequest.DateTypeName == "Receive Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  >= '{0}' AND JobAdvanceReport.JobOriginDateTimePlanned <= '{1}' ",
-               DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
-               : string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  >= '{0}' AND JobAdvanceReport.JobOriginDateTimePlanned <= '{1}' ",
-               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+               ? string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND CAST(JobAdvanceReport.JobOriginDateTimePlanned AS DATE) = '{0}'", DateTime.Now.Date.ToShortDateString())
+               : string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND CAST(JobAdvanceReport.JobOriginDateTimePlanned AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobOriginDateTimePlanned AS DATE) <= '{1}'",
+               Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
             }
             else
             {
                 where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ",
-               DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
+               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)= '{0}'", DateTime.Now.Date.ToShortDateString())
                : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ",
-               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+               Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
             }
 
             where += string.IsNullOrEmpty(jobAdvanceReportRequest.Search) ? "" :
@@ -3067,13 +3053,7 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobBOLMaster like '%{0}%')", jobAdvanceReportRequest.Search);
-            //if (jobAdvanceReportRequest.IsAddtionalFilter)
-            //{
-            //    where += jobAdvanceReportRequest.WeightUnit > 0 ?
-            //        string.Format(" AND JobAdvanceReport.JobWeightUnitTypeId = {0}", jobAdvanceReportRequest.WeightUnit) : "";
-            //    where += jobAdvanceReportRequest.JobPartsOrdered >0 ?
-            //        string.Format(" AND JobAdvanceReport.JobPartsOrdered = {0}", jobAdvanceReportRequest.JobPartsOrdered) : "";
-            //}
+
             return where;
         }
 

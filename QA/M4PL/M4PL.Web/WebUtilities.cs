@@ -315,7 +315,7 @@ namespace M4PL.Web
                 }
                 else if (!hasRecords && !gridViewSetting.IsJobCardEntity)
                 {
-                    if(route.Entity == EntitiesAlias.Job || (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly))
+                    if (route.Entity == EntitiesAlias.Job || (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly))
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                     }
@@ -418,7 +418,7 @@ namespace M4PL.Web
                 //editOperation.Route.IsJobCardEntity = true;
                 gridViewSetting.ContextMenu.Add(editOperation);
             }
-            if (route.Entity != EntitiesAlias.JobHistory)
+            if (route.Entity != EntitiesAlias.JobHistory || route.Entity != EntitiesAlias.JobAdvanceReport)
                 gridViewSetting.ContextMenu.Add(chooseColumnOperation);
             if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet
                 || (route.Entity == EntitiesAlias.JobGateway &&

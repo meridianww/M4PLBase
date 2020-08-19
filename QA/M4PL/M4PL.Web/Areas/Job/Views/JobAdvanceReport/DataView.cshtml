@@ -224,15 +224,7 @@
                     column.SetFilterTemplateContent(lookup =>
                     {
                         var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
-                        //if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
-                        //{
-                        //    var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysStatusesIn);
-                        //    if (!string.IsNullOrWhiteSpace(allStatuses))
-                        //    {
-                        //        var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
-                        //        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-                        //    }
-                        //}
+                       
                         var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                         string relatedValue = null;
                         allFilters.TryGetValue(column.FieldName, out relatedValue);
@@ -262,10 +254,6 @@
                                     }
                                 }
                             };
-                            //if (colSetting.ColIsReadOnly)
-                            //{
-                            //    cs.ControlStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
-                            //}
                         }).BindList(allIdRefLangNames).GetHtml().ToHtmlString());
                     });
 
@@ -346,27 +334,7 @@
         WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);
     };
 
-    settings.SettingsContextMenu.Enabled = true;
-    settings.ClientSideEvents.ContextMenuItemClick = "function(s, e){ M4PLWindow.DataView.OnContextMenu(s, e, '" + WebExtension.ConvertByteToString(Model.Icon) + "', '" + MvcConstants.ActionChooseColumn + "', '" + MvcConstants.ActionCopyRecord + "'); }";
-    settings.ClientSideEvents.ContextMenu = "function(s, e){ M4PLWindow.DataView.ContextMenu(s, e, " + Model.GridSetting.GridName + ", '" + "False" + "'); }";
-    settings.FillContextMenuItems = (sender, e) =>
-    {
-        e.Items.Clear();
-        if (e.MenuType == GridViewContextMenuType.Rows)
-        {
-            foreach (var contexMenu in Model.GridSetting.ContextMenu)
-            {
-                var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
-                command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
-                if (command.Text == "Cut" || command.Text == "Paste")
-                    command.Enabled = false;
-                else
-                    command.Enabled = true;
-                e.Items.Add(command);
-            }
-        }
-    };
-
+    settings.SettingsContextMenu.Enabled = false;
     settings.Init += (s, e) =>
     {
         var grid = (MVCxGridView)s;
@@ -376,20 +344,7 @@
     settings.BeforeGetCallbackResult += (s, e) =>
     {
         MVCxGridView g = (MVCxGridView)s;
-        //var grid = (MVCxGridView)s;
-        //var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
-
-        //grid.ClearSort();
-
-        //if (colState != null)
-        //{
-        //    grid.SortBy(grid.Columns[colState.FieldName], colState.SortOrder);
-        //}
     };
-    settings.SetStatusBarTemplateContent(c =>
-    {
-
-    });
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
 
     settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";
@@ -403,41 +358,9 @@
     };
     settings.CustomJSProperties = (s, e) =>
     {
-        e.Properties["cpBatchEditDisplayRoute"] = ViewData[WebApplicationConstants.GridBatchEditDisplayMessage];
         e.Properties["cpCustomerDefaultActiveFilter"] = (Model.GridSetting.CallBackRoute.Filters != null
         && Model.GridSetting.CallBackRoute.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase)) ?
         Model.GridSetting.CallBackRoute.Filters.Value : string.Empty;
-
-        //MVCxGridView grid = s as MVCxGridView;
-        //int startVisibleIndex = grid.VisibleStartIndex;
-        //int endVisibleIndex = startVisibleIndex + grid.SettingsPager.PageSize - 1;
-        //int visibleCount = grid.VisibleRowCount - 1;
-        //if (visibleCount < endVisibleIndex)
-        //{
-        //    endVisibleIndex = visibleCount;
-        //}
-        //Dictionary<string, Dictionary<string, object>> rowHashes = TempData["RowHashes"] as Dictionary<string, Dictionary<string, object>>;
-        //for (int i = startVisibleIndex; i <= endVisibleIndex; i++)
-        //{
-        //    var id = grid.GetRowValues(i, grid.KeyFieldName);
-        //    if (id != null)
-        //    {
-        //        if (!rowHashes.ContainsKey(id.ToString()))
-        //            rowHashes.Add(id.ToString(), new Dictionary<string, object>());
-        //        rowHashes[id.ToString()] = new Dictionary<string, object>();
-        //        foreach (var col in Model.GridColumnSettings)
-        //        {
-
-        //            if (!col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
-        //            && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
-        //            && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
-        //            {
-        //                rowHashes[grid.GetRowValues(i, grid.KeyFieldName).ToString()].Add(col.ColColumnName, grid.GetRowValues(i, col.ColColumnName));
-        //            }
-        //        }
-        //    }
-        //}
-        //TempData["RowHashes"] = rowHashes;
     };
 
     settings.CustomColumnDisplayText = (s, e) =>
