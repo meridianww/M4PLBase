@@ -40,8 +40,8 @@ BEGIN
 		,JOB.JobOriginDateTimePlanned AS ArrivalDatePlanned
 	FROM  CUST000Master CUST
 	INNER JOIN PRGRM000Master PRG ON PRG.PrgCustID = CUST.Id AND CUST.StatusId=1
-	INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = PRG.ID AND PRG.StatusId =1
-	WHERE(  CUST.CustTitle LIKE '%' + @search + '%'
+	INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = PRG.ID AND PRG.StatusId =1 AND JOB.StatusId=1
+	WHERE( CUST.CustTitle LIKE '%' + @search + '%'
 			OR JOB.JobCustomerSalesOrder LIKE '%' + @search + '%'
 			OR JobBOL LIKE '%' + @search + '%'
 			OR JobBOLMaster LIKE '%' + @search + '%'

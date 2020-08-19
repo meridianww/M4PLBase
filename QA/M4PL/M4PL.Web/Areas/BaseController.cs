@@ -83,21 +83,20 @@ namespace M4PL.Web.Areas
         {
             isGridSetting = (route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobCargo || route.Entity == EntitiesAlias.JobGateway) ? true : isGridSetting;
 
-            var columnSettings = //_commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
-            BaseRoute.Entity == EntitiesAlias.JobAdvanceReport
+            var columnSettings = BaseRoute.Entity == EntitiesAlias.JobAdvanceReport
                ? _commonCommands.GetGridColumnSettings(BaseRoute.Entity, true, true)
                : _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
             var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
-			if (BaseRoute.Entity == EntitiesAlias.JobAdvanceReport && reportTypeId > 0)
-			{
-				var reportColumnRelation = _commonCommands.GetJobReportColumnRelation(reportTypeId)?.Select(t => t.ColumnId).ToList();
-				if (reportColumnRelation != null && reportColumnRelation.Count > 0)
-				{
-					columnSettings = columnSettings.Where(t => reportColumnRelation.Contains(t.Id)).ToList();
-				}
-			}
+            if (BaseRoute.Entity == EntitiesAlias.JobAdvanceReport && reportTypeId > 0)
+            {
+                var reportColumnRelation = _commonCommands.GetJobReportColumnRelation(reportTypeId)?.Select(t => t.ColumnId).ToList();
+                if (reportColumnRelation != null && reportColumnRelation.Count > 0)
+                {
+                    columnSettings = columnSettings.Where(t => reportColumnRelation.Contains(t.Id)).ToList();
+                }
+            }
 
-			route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData, ((isGroupedGrid && pageSizeChanged) || !isGroupedGrid));
+            route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData, ((isGroupedGrid && pageSizeChanged) || !isGroupedGrid));
             _gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettings, SessionProvider);
             _gridResult.GridColumnSettings = _gridResult.ColumnSettings;
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
@@ -107,14 +106,11 @@ namespace M4PL.Web.Areas
                 currentPagedDataInfo.IsJobParentEntity = IsJobParentEntity || SessionProvider.IsJobParentEntity;
             if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
                 currentPagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
-            //if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
-            //    && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
-            //{
+
             else if ((currentPagedDataInfo.Entity != EntitiesAlias.JobGateway && currentPagedDataInfo.Entity != EntitiesAlias.SubSecurityByRole) && (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition)
                 || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1) && !route.IsJobParentEntityUpdated)
                 currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
-            // }
-            //currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
+
             if (route.Entity == EntitiesAlias.JobHistory)
             {
                 route.IsPBSReport = false;
@@ -429,19 +425,6 @@ namespace M4PL.Web.Areas
             var filters = new Dictionary<string, string>();
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
-            var whereCondition = string.Empty;
-            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
-                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-                && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition == null)
-            {
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition =
-                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
-            }
-            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
-               && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && route.RecordId > 0)
-            {
-                route.RecordId = 0;
-            }
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
@@ -454,12 +437,6 @@ namespace M4PL.Web.Areas
             //used to reset page index of the grid when Filter applied and pageing is opted
             ViewData[WebApplicationConstants.ViewDataFilterPageNo] = sessionInfo.PagedDataInfo.PageNumber;
             sessionInfo.PagedDataInfo.WhereCondition = filteringState.BuildGridFilterWhereCondition(route.Entity, ref filters, _commonCommands);
-            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
-               && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-            {
-                sessionInfo.PagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition
-                    + sessionInfo.PagedDataInfo.WhereCondition;
-            }
             if (sessionInfo.Filters != null && filters.Count > 0 && sessionInfo.Filters.Count != filters.Count)//Have to search from starting if setup filter means from page 1
                 sessionInfo.PagedDataInfo.PageNumber = 1;
             sessionInfo.Filters = filters;
@@ -495,51 +472,6 @@ namespace M4PL.Web.Areas
             SetGridResult(route, gridName);
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
-
-        //public virtual PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
-        //{
-        //    var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-        //    var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
-        //    sessionInfo.PagedDataInfo.RecordId = route.RecordId;
-        //    sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
-        //    var sortcolumn = column.BuildGridSortCondition(reset, route.Entity, _commonCommands).Trim();
-        //    string oldOrderBy = sessionInfo.PagedDataInfo.OrderBy;
-
-        //    string[] sortcondition = sortcolumn.Split(' ');
-        //    if (oldOrderBy.IndexOf(sortcondition[0]) == 0 && (sessionInfo.PagedDataInfo.OrderBy.Length == sortcolumn.Length + 1 || sessionInfo.PagedDataInfo.OrderBy.Length + 1 == sortcolumn.Length || sessionInfo.PagedDataInfo.OrderBy.Length == sortcolumn.Length))
-        //    {
-        //        sessionInfo.PagedDataInfo.OrderBy = sortcolumn;
-        //        goto Cont;
-
-        //    }
-        //    else if (oldOrderBy.IndexOf(sortcondition[0]) != -1)
-        //    {
-        //        string replacement = "";
-        //        if (sortcondition[1] == "DESC")
-        //        {
-        //            if (oldOrderBy.IndexOf(sortcondition[0]) == 0)
-        //                replacement = sortcondition[0] + " ASC,";
-        //            else
-        //                replacement = "," + sortcondition[0] + " ASC";
-        //            oldOrderBy = oldOrderBy.Replace(replacement, "");
-        //        }
-        //        else
-        //        {
-        //            if (oldOrderBy.IndexOf(sortcondition[0]) == 0)
-        //                replacement = sortcondition[0] + " DESC,";
-        //            else
-        //                replacement = "," + sortcondition[0] + " DESC";
-        //            oldOrderBy = oldOrderBy.Replace(replacement, "");
-        //        }
-        //    }
-        //    sessionInfo.PagedDataInfo.OrderBy = sortcolumn;
-        //    sessionInfo.PagedDataInfo.OrderBy += "," + oldOrderBy;
-        //    Cont:
-        //    sessionInfo.GridViewColumnState = column;
-        //    //sessionInfo.GridViewColumnStateReset = reset;
-        //    SetGridResult(route, gridName);
-        //    return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
-        //}
 
         #endregion Filtering & Sorting
 
@@ -722,7 +654,7 @@ namespace M4PL.Web.Areas
                  route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.JobCargo ||
                  route.Entity == EntitiesAlias.JobCard)
                 ? _commonCommands.GetGridColumnSettings(route.Entity, false, true) : _commonCommands.GetColumnSettings(route.Entity);
-            
+
             if (route.Entity == EntitiesAlias.JobAdvanceReport)
             {
                 var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<Entities.Job.JobAdvanceReportRequest>(sessionInfo.PagedDataInfo.Params);
@@ -734,7 +666,7 @@ namespace M4PL.Web.Areas
                     {
                         colAlias = colAlias.Where(t => reportColumnRelation.Contains(t.Id)).ToList();
                     }
-                }               
+                }
             }
             if (route.Entity == EntitiesAlias.SystemAccount)
             {
