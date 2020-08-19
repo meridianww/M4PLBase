@@ -27,6 +27,7 @@ namespace M4PL.Business.BizMobl
 		public StatusModel GenerateCSVByFileName(string fileName)
 		{
 			string fileExtension = Path.GetExtension(fileName);
+			fileName = string.IsNullOrEmpty(fileExtension) ? fileName + ".csv" : fileName;
 			fileExtension = string.IsNullOrEmpty(fileExtension) ? ".csv" : fileExtension;
 			string directoryPath = ConfigurationManager.AppSettings["BizMoblFileDirectory"];
 			if (!fileExtension.Equals(".csv", StringComparison.OrdinalIgnoreCase))
