@@ -240,7 +240,17 @@ namespace M4PL.Business.Job
 
         public bool InsertJobGateway(long jobId, string gatewayStatusCode)
         {
-            return _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode);
+			bool result = _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode);
+			if (result)
+			{
+				bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+				if (isFarEyePushRequired)
+				{
+					FarEyeHelper.PushStatusUpdateToFarEye(jobId, ActiveUser);
+				}
+			}
+
+			return result;
         }
 
         public long CreateJobFromEDI204(long eshHeaderID)
@@ -411,7 +421,13 @@ namespace M4PL.Business.Job
                 long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
                 if (gatewayId > 0)
                 {
-                    return new StatusModel()
+					bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobDetail.Id, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+					if (isFarEyePushRequired)
+					{
+						FarEyeHelper.PushStatusUpdateToFarEye(jobDetail.Id, ActiveUser);
+					}
+
+					return new StatusModel()
                     {
                         Status = "Success",
                         StatusCode = (int)HttpStatusCode.OK,
@@ -570,9 +586,15 @@ namespace M4PL.Business.Job
                 if (statusModel != null) { return statusModel; }
 
                 var gatewayResult = RescheduleOrderGateway(jobDetail, selectedJobExceptionInfo, jobRescheduleDetail.RescheduleDate, selectedJobInstallStatus, sysSetting);
-                if (gatewayResult?.Id > 0)
+				if (gatewayResult?.Id > 0)
                 {
-                    return new StatusModel()
+					bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobDetail.Id, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+					if (isFarEyePushRequired)
+					{
+						FarEyeHelper.PushStatusUpdateToFarEye(jobDetail.Id, ActiveUser);
+					}
+
+					return new StatusModel()
                     {
                         Status = "Success",
                         StatusCode = (int)HttpStatusCode.OK,

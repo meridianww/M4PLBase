@@ -202,7 +202,8 @@ namespace M4PL.Business.XCBL
                             if (processingJobDetail?.Id > 0)
                             {
                                 InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-                                _jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+								bool isFarEyePushRequired = false;
+								_jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, out isFarEyePushRequired);
                                 List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
                                 if (jobCargos != null && jobCargos.Count > 0)
                                 {
@@ -213,7 +214,12 @@ namespace M4PL.Business.XCBL
                                 {
                                     _jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
                                 }
-                            }
+
+								if (isFarEyePushRequired)
+								{
+									FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
+								}
+							}
                         }
                         else if (jobDetails?.Id > 0 && isJobCancelled)
                         {

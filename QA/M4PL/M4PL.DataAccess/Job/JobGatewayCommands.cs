@@ -110,7 +110,7 @@ namespace M4PL.DataAccess.Job
                 parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
                 new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable);
                 result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-                XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
+				result.IsFarEyePushRequired = XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
             }
             catch (Exception exp)
             {
@@ -135,7 +135,7 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@cargoField", jobGateway.CargoField));
                 parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
                 result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-                XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
+                result.IsFarEyePushRequired =  XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
             }
             catch (Exception exp)
             {
