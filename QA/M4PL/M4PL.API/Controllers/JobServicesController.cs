@@ -87,9 +87,11 @@ namespace M4PL.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [CustomAuthorize]
-        public bool UploadDocument(JobDocument jobDocument)
+        public async Task<bool> UploadDocument(HttpRequestMessage request)
         {
-            return  _jobServicesCommands.UploadDocument(jobDocument, Models.ApiContext.ActiveUser);
+            var response = request.Content.ReadAsStringAsync().Result;
+            JobDocument jobDocument = JsonConvert.DeserializeObject<JobDocument>(response);
+            return _jobServicesCommands.UploadDocument(jobDocument, Models.ApiContext.ActiveUser);
         }
     }
 }

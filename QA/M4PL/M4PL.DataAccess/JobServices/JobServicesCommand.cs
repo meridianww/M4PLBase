@@ -62,7 +62,12 @@ namespace M4PL.DataAccess.JobServices
             }
             return orderDetails;
         }
-
+        /// <summary>
+        /// InsertComment
+        /// </summary>
+        /// <param name="jobGatewayComment"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
         public static bool InsertComment(JobGatewayComment jobGatewayComment, ActiveUser activeUser)
         {
             bool result = true; 
@@ -91,7 +96,12 @@ namespace M4PL.DataAccess.JobServices
             }
             return result;
         }
-
+        /// <summary>
+        /// UploadDocument
+        /// </summary>
+        /// <param name="jobDocument"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
         public static bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser)
         {
             return true;
