@@ -303,6 +303,18 @@ namespace M4PL.Business
 		}
 
 		/// <summary>
+		/// Gets the value of IsFarEyePushRequired.
+		/// </summary>
+		[ConfigurationProperty("IsFarEyePushRequired")]
+		public bool IsFarEyePushRequired
+		{
+			get
+			{
+				return (bool)this["IsFarEyePushRequired"];
+			}
+		}
+
+		/// <summary>
 		/// Gets the value of FarEyeUpdateTestAPIURL.
 		/// </summary>
 		[ConfigurationProperty("FarEyeUpdateTestAPIURL")]

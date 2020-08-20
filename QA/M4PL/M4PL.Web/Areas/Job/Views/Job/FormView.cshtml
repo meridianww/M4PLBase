@@ -17,7 +17,7 @@
     var IsJobDocReferenceTypeActive = false;
 
     ViewBag.Title = Model.PageName;
-    if (!Model.SessionProvider.ActiveUser.IsSysAdmin)
+    if (Model.SessionProvider.ActiveUser.IsSysAdmin)
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOrderedDate").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobShipmentDate").ColIsReadOnly = false;
