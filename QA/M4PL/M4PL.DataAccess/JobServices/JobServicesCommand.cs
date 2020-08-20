@@ -62,7 +62,12 @@ namespace M4PL.DataAccess.JobServices
             }
             return orderDetails;
         }
-
+        /// <summary>
+        /// InsertComment
+        /// </summary>
+        /// <param name="jobGatewayComment"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
         public static bool InsertComment(JobGatewayComment jobGatewayComment, ActiveUser activeUser)
         {
             bool result = true; 
@@ -90,6 +95,16 @@ namespace M4PL.DataAccess.JobServices
                 Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the comment for job gateway, Parameters was: {0}", jobGatewayComment.JobGatewayId), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
             }
             return result;
+        }
+        /// <summary>
+        /// UploadDocument
+        /// </summary>
+        /// <param name="jobDocument"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        public static bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser)
+        {
+            return true;
         }
     }
 }

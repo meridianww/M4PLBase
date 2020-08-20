@@ -13,7 +13,7 @@ namespace M4PL.Entities.JobService
         public int? StatusId { get; set; }
         public string JdrCode { get; set; }
         public string JdrTitle { get; set; }
-        public List<DocumentAttachment> DocumentAttachment { get; set; }
+        public List<string> DocumentAttachment { get; set; }
     }
 
     public class DocumentAttachment

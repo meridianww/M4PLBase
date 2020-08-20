@@ -42,5 +42,10 @@ namespace M4PL.Business.JobServices
         {
             return _commands.InsertComment(jobGatewayComment, activeUser);
         }
+
+        public bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser)
+        {
+            return _commands.UploadDocument(jobDocument, activeUser);
+        }
     }
 }

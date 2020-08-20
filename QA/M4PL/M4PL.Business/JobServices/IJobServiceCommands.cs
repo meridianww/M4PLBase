@@ -31,5 +31,13 @@ namespace M4PL.Business.JobServices
         /// <param name="activeUser"></param>
         /// <returns></returns>
         bool InsertComment(JobGatewayComment jobGatewayComment, ActiveUser activeUser);
+
+        /// <summary>
+        /// UploadDocument
+        /// </summary>
+        /// <param name="jobDocument"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser);
     }
 }
