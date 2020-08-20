@@ -2,13 +2,17 @@
 using M4PL.Business.JobServices;
 using M4PL.Entities.JobService;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 
 namespace M4PL.API.Controllers
 {
@@ -74,6 +78,18 @@ namespace M4PL.API.Controllers
         public bool InsertComment(JobGatewayComment jobGatewayComment)
         {
             return _jobServicesCommands.InsertComment(jobGatewayComment, Models.ApiContext.ActiveUser);
+        }
+
+        /// <summary>
+        /// UploadDocument
+        /// </summary>
+        /// <param name="jobDocument"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [CustomAuthorize]
+        public bool UploadDocument(JobDocument jobDocument)
+        {
+            return  _jobServicesCommands.UploadDocument(jobDocument, Models.ApiContext.ActiveUser);
         }
     }
 }

@@ -91,5 +91,10 @@ namespace M4PL.DataAccess.JobServices
             }
             return result;
         }
+
+        public static bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser)
+        {
+            return true;
+        }
     }
 }
