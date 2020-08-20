@@ -24,6 +24,11 @@
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsFreezed = true;
     }
+
+    if (Model.Records != null && Model.Records.Count > 0 && !Model.Records.Where(x => x.IsIdentityVisible).Any())
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
+    }
 }
 @Html.DevExpress().GridView(settings =>
 {
@@ -224,7 +229,7 @@
                     column.SetFilterTemplateContent(lookup =>
                     {
                         var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
-                       
+
                         var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                         string relatedValue = null;
                         allFilters.TryGetValue(column.FieldName, out relatedValue);

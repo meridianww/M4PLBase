@@ -254,13 +254,11 @@ BEGIN TRY
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.GwyGatewayACD', 'Gateway.GwyGatewayACD');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Labels', 'ISNULL(Cargo.Labels, 0) Labels');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Inbound', 'ISNULL(Cargo.Inbound,0) Inbound');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.IB', 'CASE WHEN ISNULL(Cargo.Inbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Inbound) END IB');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Outbound', 'ISNULL(Cargo.Outbound,0) Outbound');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.OB', 'CASE WHEN ISNULL(Cargo.Outbound,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Outbound) END OB');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Delivered', 'ISNULL(Cargo.Delivered,0) Delivered');
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.DE', 'CASE WHEN ISNULL(Cargo.Delivered,0) = 0 THEN 0.00 ELSE CONVERT(DECIMAL(16,2),Cargo.Labels/Cargo.Delivered) END DE');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Cabinets', 'ISNULL(Cargo.Cabinets,0) Cabinets ');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Parts', 'ISNULL(Cargo.Parts, 0) Parts');
+			SET @sqlCommand = @sqlCommand + ', CAST(1 AS BIT) IsIdentityVisible ';
 		END
 		ELSE
 		BEGIN

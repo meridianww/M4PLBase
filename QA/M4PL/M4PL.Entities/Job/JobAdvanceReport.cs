@@ -59,15 +59,27 @@ namespace M4PL.Entities.Job
 		public int? PackagingCode { get; set; }
 		public int? Labels { get; set; }
 		public int? Inbound { get; set; }
-		public decimal? IB { get; set; }
+		public decimal? IB
+		{
+			get { return Labels.HasValue && Labels.Value > 0 && Inbound.HasValue && Inbound.Value > 0 ? Convert.ToDecimal(Inbound / Labels) : decimal.Zero; }
+		}
+
 		public int? Outbound { get; set; }
-		public decimal? OB { get; set; }
+		public decimal? OB
+		{
+			get { return Labels.HasValue && Labels.Value > 0 && Outbound.HasValue && Outbound.Value > 0 ? Convert.ToDecimal(Outbound / Labels) : decimal.Zero; }
+		}
 		public int? Delivered { get; set; }
-		public decimal? DE { get; set; }
+		public decimal? DE
+		{
+			get { return Labels.HasValue && Labels.Value > 0 && Delivered.HasValue && Delivered.Value > 0 ? Convert.ToDecimal(Delivered / Labels) : decimal.Zero; }
+		}
+
 		public int? Cabinets { get; set; }
 		public int? Parts { get; set; }
 		public DateTime? StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 		public DateTime? GwyGatewayACD { get; set; }
+		public bool IsIdentityVisible { get; set; }
 	}
 }
