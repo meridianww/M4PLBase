@@ -32,9 +32,6 @@
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeActual").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "WindowDelStartTime").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "WindowDelEndTime").ColIsReadOnly = false;
-
-
-
     }
 
     var responsibleContactDropDownModel = Model.Record.JobDeliveryResponsibleContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryResponsibleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
