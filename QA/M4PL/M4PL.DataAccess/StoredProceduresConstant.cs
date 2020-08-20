@@ -883,6 +883,7 @@ namespace M4PL.DataAccess
 		#region JobServices
 		public const string GetSearchJobOrders = "dbo.GetSearchJobOrders";
 		public const string GetOrderDetailsById = "dbo.GetOrderDetailsById";
+		public const string InsJobServiceDocReference = "dbo.InsJobServiceDocReference";
 		#endregion
 
 		#region Program Event Management

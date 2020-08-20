@@ -223,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="UploadedFiles\" />
     <Folder Include="Views\BizMobl\" />
     <Folder Include="Views\GatewayImport\" />
     <Folder Include="Views\JobAttachment\" />

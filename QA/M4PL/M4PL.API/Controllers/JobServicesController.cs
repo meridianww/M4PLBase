@@ -5,6 +5,7 @@ using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -83,14 +84,38 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// UploadDocument
         /// </summary>
-        /// <param name="jobDocument"></param>
         /// <returns></returns>
-        [HttpPost]
         [CustomAuthorize]
-        public async Task<bool> UploadDocument(HttpRequestMessage request)
+        [HttpPost]
+        public bool UploadDocument()
         {
-            var response = request.Content.ReadAsStringAsync().Result;
-            JobDocument jobDocument = JsonConvert.DeserializeObject<JobDocument>(response);
+            var httpRequest = HttpContext.Current.Request;
+            JobDocument jobDocument = new JobDocument();
+            jobDocument.JobId = Convert.ToInt64(httpRequest.Params["JobId"]);
+            jobDocument.JdrCode = httpRequest.Params["JdrCode"];
+            jobDocument.JdrTitle = httpRequest.Params["JdrTitle"];
+            jobDocument.DocTypeId = Convert.ToInt32(httpRequest.Params["DocTypeId"]);
+            jobDocument.StatusId = Convert.ToInt32(httpRequest.Params["StatusId"]);
+
+            if (httpRequest.Files.Count > 0)
+            {
+                List<DocumentAttachment> listDocumentAttachment = new List<DocumentAttachment>();
+                for (var i = 0; i < httpRequest.Files.Count; i++)
+                {
+                    byte[] fileData = null;
+                    var postedFile = httpRequest.Files[i];
+                    using (var binaryReader = new BinaryReader(postedFile.InputStream))
+                    {
+                        fileData = binaryReader.ReadBytes(postedFile.ContentLength);
+                    }
+                    listDocumentAttachment.Add(new DocumentAttachment()
+                    {
+                        Name = postedFile.FileName,
+                        Content = fileData
+                    });
+                }
+                jobDocument.DocumentAttachment = listDocumentAttachment;
+            }
             return _jobServicesCommands.UploadDocument(jobDocument, Models.ApiContext.ActiveUser);
         }
     }
