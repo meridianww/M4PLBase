@@ -24,7 +24,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 		public static void PushStatusUpdateToFarEye(long jobId, ActiveUser activeUser)
 		{
 			bool isFarEyePushNeeded = M4PBusinessContext.ComponentSettings.IsFarEyePushRequired;
-			if (!isFarEyePushNeeded)
+			if (isFarEyePushNeeded)
 			{
 				bool isUpdateRequiredToPushOnProduction = M4PBusinessContext.ComponentSettings.IsElectroluxDeliveryUpdateProduction;
 				string testAPIURL = M4PBusinessContext.ComponentSettings.FarEyeUpdateTestAPIURL;
