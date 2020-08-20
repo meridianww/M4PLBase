@@ -282,8 +282,9 @@ namespace M4PL.DataAccess.Job
             return jobGateway;
         }
 
-        public static bool CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser activeUser, long jobId, long programId, string gatewayCode, long customerId)
+        public static bool CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser activeUser, long jobId, long programId, string gatewayCode, long customerId, out bool isFarEyePushRequired)
         {
+			isFarEyePushRequired = false;
             try
             {
                 var parameters = new List<Parameter>
@@ -299,8 +300,9 @@ namespace M4PL.DataAccess.Job
                 var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBLForElectrolux, parameters.ToArray(), storedProcedure: true);
                 if (result && string.Equals(gatewayCode, "In Transit", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
+                  isFarEyePushRequired =  XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
                 }
+
                 return result;
             }
             catch (Exception)

@@ -156,6 +156,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 			{
 				doc.Document.Save(writer);
 				xmlString = writer.ToString();
+				xmlString = xmlString.Replace("<?xml version=\"1.0\" encoding=\"utf-16\"?>", string.Empty);
 			}
 
 			return xmlString;

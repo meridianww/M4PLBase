@@ -506,6 +506,7 @@ namespace M4PL.DataAccess
 		public const string InsertXcblData = "Xcbl.InsertXcblData";
 		public const string GetXCBLDataBySummaryHeaderId = "Xcbl.GetXCBLDataBySummaryHeaderId";
 		public const string InsertJobDeliveryUpdateLog = "dbo.InsertJobDeliveryUpdateLog";
+		public const string InsertFarEyeJobDeliveryUpdateLog = "dbo.InsertFarEyeJobDeliveryUpdateLog";
 		public const string GetDeliveryUpdateProcessingData = "dbo.GetDeliveryUpdateProcessingData";
 		public const string UpdateDeliveryUpdateProcessingLog = "dbo.UpdateDeliveryUpdateProcessingLog";
 		public const string InsertDeliveryUpdateProcessingLog = "dbo.InsertDeliveryUpdateProcessingLog";

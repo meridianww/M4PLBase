@@ -18,6 +18,7 @@
 //====================================================================================================================
 
 using M4PL.Business.Event;
+using M4PL.Business.XCBL.HelperClasses;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
@@ -98,6 +99,11 @@ namespace M4PL.Business.Job
 				EventBodyHelper.CreateEventMailNotificationForCargoException((int)EventNotification.CargoException, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
 			}
 
+			if (gateway.IsFarEyePushRequired)
+			{
+				FarEyeHelper.PushStatusUpdateToFarEye((long)jobGateway.JobID, ActiveUser);
+			}
+
 			return gateway;
         }
 
@@ -136,6 +142,11 @@ namespace M4PL.Business.Job
 			{
 				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, gateway.GwyGatewayACD.HasValue ? (DateTime)gateway.GwyGatewayACD : Utilities.TimeUtility.GetPacificDateTime(), jobGateway.GwyAddtionalComment);
 				EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
+			}
+
+			if (gateway.IsFarEyePushRequired)
+			{
+				FarEyeHelper.PushStatusUpdateToFarEye((long)jobGateway.JobID, ActiveUser);
 			}
 
 			return gateway;

@@ -187,6 +187,27 @@ namespace M4PL.DataAccess.XCBL
 			}
 		}
 
+		public static void InsertFarEyeJobDeliveryUpdateLog(string deliveryUpdateRequest, string deliveryUpdateResponseString, long jobId)
+		{
+			try
+			{
+				var parameters = new List<Parameter>
+			{
+				new Parameter("@JobId", jobId),
+				new Parameter("@DeliveryUpdateRequest", deliveryUpdateRequest),
+				new Parameter("@DeliveryUpdateResponse", deliveryUpdateResponseString),
+				new Parameter("@IsProcessed", string.IsNullOrEmpty(deliveryUpdateResponseString) ? false : true),
+				new Parameter("@ProcessingDate", Utilities.TimeUtility.GetPacificDateTime())
+			};
+
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertFarEyeJobDeliveryUpdateLog, parameters.ToArray(), true);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error is happening while inserting data for Delivery update log", "InsertJobDeliveryUpdateLog", Utilities.Logger.LogType.Error);
+			}
+		}
+
 		public static DeliveryUpdate GetDeliveryUpdateModel(long jobId, ActiveUser activeUser)
 		{
 			DeliveryUpdate deliveryUpdateModel = null;
@@ -235,7 +256,7 @@ namespace M4PL.DataAccess.XCBL
 
 		public static bool InsertDeliveryUpdateProcessingLog(long jobId, long customerId)
 		{
-			bool result = true;
+			bool result = false;
 			try
 			{
 				var parameters = new List<Parameter>
@@ -243,7 +264,7 @@ namespace M4PL.DataAccess.XCBL
 				new Parameter("@JobId", jobId),
 				new Parameter("@customerId", customerId)
 			};
-				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertDeliveryUpdateProcessingLog, parameters.ToArray(), true);
+				result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.InsertDeliveryUpdateProcessingLog, parameters.ToArray(), false, true);
 			}
 			catch (Exception exp)
 			{
