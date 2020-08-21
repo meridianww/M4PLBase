@@ -59,20 +59,20 @@ namespace M4PL.Entities.Job
 		public int? PackagingCode { get; set; }
 		public int? Labels { get; set; }
 		public int? Inbound { get; set; }
-		public decimal? IB
+		public string IB
 		{
-			get { return Labels.HasValue && Labels.Value > 0 && Inbound.HasValue && Inbound.Value > 0 ? Convert.ToDecimal(Inbound / Labels) : decimal.Zero; }
+			get { return Labels.HasValue && Labels.Value > 0 && Inbound.HasValue && Inbound.Value > 0 ? DisplayPercentage((int)Inbound, (int)Labels) : string.Empty; }
 		}
 
 		public int? Outbound { get; set; }
-		public decimal? OB
+		public string OB
 		{
-			get { return Labels.HasValue && Labels.Value > 0 && Outbound.HasValue && Outbound.Value > 0 ? Convert.ToDecimal(Outbound / Labels) : decimal.Zero; }
+			get { return Labels.HasValue && Labels.Value > 0 && Outbound.HasValue && Outbound.Value > 0 ? DisplayPercentage((int)Outbound, (int)Labels) : string.Empty; }
 		}
 		public int? Delivered { get; set; }
-		public decimal? DE
+		public string DE
 		{
-			get { return Labels.HasValue && Labels.Value > 0 && Delivered.HasValue && Delivered.Value > 0 ? Convert.ToDecimal(Delivered / Labels) : decimal.Zero; }
+			get { return Labels.HasValue && Labels.Value > 0 && Delivered.HasValue && Delivered.Value > 0 ? DisplayPercentage((int)Delivered, (int)Labels) : string.Empty; }
 		}
 
 		public int? Cabinets { get; set; }
@@ -81,5 +81,15 @@ namespace M4PL.Entities.Job
 		public DateTime? EndDate { get; set; }
 		public DateTime? GwyGatewayACD { get; set; }
 		public bool IsIdentityVisible { get; set; }
+
+		public string DisplayPercentage(int top, int bottom)
+		{
+			return GetPercentageString((double)top / bottom);
+		}
+
+		public string GetPercentageString(double ratio)
+		{
+			return string.Format("{0:0.0%}", ratio);
+		}
 	}
 }
