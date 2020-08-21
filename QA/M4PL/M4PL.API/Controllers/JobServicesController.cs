@@ -93,9 +93,9 @@ namespace M4PL.API.Controllers
             JobDocument jobDocument = new JobDocument();
             jobDocument.JobId = Convert.ToInt64(httpRequest.Params["JobId"]);
             jobDocument.JdrCode = httpRequest.Params["JdrCode"];
-            jobDocument.JdrTitle = httpRequest.Params["JdrTitle"];
             jobDocument.DocTypeId = Convert.ToInt32(httpRequest.Params["DocTypeId"]);
-            jobDocument.StatusId = Convert.ToInt32(httpRequest.Params["StatusId"]);
+            jobDocument.StatusId = 1;
+            jobDocument.JdrTitle = !string.IsNullOrEmpty(jobDocument.JdrCode) ? new string(jobDocument.JdrCode.Take(20).ToArray()) : string.Empty;
 
             if (httpRequest.Files.Count > 0)
             {
