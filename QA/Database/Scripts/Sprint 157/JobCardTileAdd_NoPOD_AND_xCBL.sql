@@ -52,7 +52,7 @@ BEGIN
 					BEGIN
 						DELETE FROM DashboardCategoryRelation WHERE DashboardId = @dashboardId AND DashboardCategoryId = @dashboardCategoryId AND DashboardSubCategory = @dashboardSubCategoryId
 						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, 
-						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyTitle = ''xCBL Address Change'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
+						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyGatewayTitle = ''xCBL Address Change'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
 					END
 				END
 				BEGIN
@@ -61,7 +61,7 @@ BEGIN
 					BEGIN
 						DELETE FROM DashboardCategoryRelation WHERE DashboardId = @dashboardId AND DashboardCategoryId = @dashboardCategoryId AND DashboardSubCategory = @dashboardSubCategoryId
 						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, 
-						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyTitle = ''xCBL Schedule Change'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
+						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyGatewayTitle = ''xCBL Schedule Change'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
 					END
 				END
 				BEGIN
@@ -70,7 +70,7 @@ BEGIN
 					BEGIN
 						DELETE FROM DashboardCategoryRelation WHERE DashboardId = @dashboardId AND DashboardCategoryId = @dashboardCategoryId AND DashboardSubCategory = @dashboardSubCategoryId
 						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, 
-						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyTitle = ''xCBL GPS Coordinates'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
+						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyGatewayTitle = ''xCBL GPS Coordinates'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
 					END
 				END
 				BEGIN
@@ -79,7 +79,7 @@ BEGIN
 					BEGIN
 						DELETE FROM DashboardCategoryRelation WHERE DashboardId = @dashboardId AND DashboardCategoryId = @dashboardCategoryId AND DashboardSubCategory = @dashboardSubCategoryId
 						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, 
-						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyTitle = ''xCBL 48Hr Date Change'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
+						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyGatewayTitle = ''xCBL 48Hr Date Change'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
 					END
 				END
 			END
