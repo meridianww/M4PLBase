@@ -69,8 +69,8 @@ BEGIN
 	BEGIN
 		SELECT ATT.Id
 			,DOCUMENT.JobID
-			,DOCUMENT.JdrCode
-			,DOCUMENT.JdrTitle
+			,DOCUMENT.JdrTitle JdrCode
+			,ATT.AttFileName JdrTitle
 			,DOCUMENT.DocTypeId
 			,OPT.SysOptionName AS DocTypeIdName
 		FROM JOBDL040DocumentReference DOCUMENT

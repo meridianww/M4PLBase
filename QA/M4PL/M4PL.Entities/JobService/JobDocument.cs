@@ -8,6 +8,7 @@ namespace M4PL.Entities.JobService
 {
     public class JobDocument
     {
+        public long Id { get; set; }
         public long JobId { get; set; }
         public int? DocTypeId { get; set; }
         public int? StatusId { get; set; }
