@@ -32,6 +32,10 @@ BEGIN
 		,@entity NVARCHAR(100) = 'JobDocReference'
 		,@DocRefId BIGINT = 0
 		,@NextValue BIGINT
+		,@AttachmentCount INT
+
+	SELECT @AttachmentCount = Count(Id)
+	FROM @uttDocumentAttachment
 
 	SELECT @NextValue = NEXT VALUE
 	FOR DocumentReferenceSequence
@@ -86,29 +90,32 @@ BEGIN
 	WHERE Entity = 'DocumentReference'
 		AND SequenceNumber = @DocRefId
 
-	INSERT INTO [dbo].[SYSTM020Ref_Attachments] (
-		 [AttPrimaryRecordID]
-        ,[AttItemNumber]
-		,[AttFileName]
-		,[AttData]
-		,[AttTableName]
-		,[AttTypeId]
-		,[AttTitle]
-		,[StatusId]
-		,[DateEntered]
-	    ,[EnteredBy]
-		)
-	SELECT @DocRefId
-	    ,[ItemNumber]
-		,[FileName]
-		,[Content]
-		,[EntityName]
-		,[Type]
-		,[Title]
-		,[StatusId]
-		,@dateEntered
-		,@enteredBy
-	FROM @uttDocumentAttachment
+	IF (ISNULL(@AttachmentCount, 0) > 0)
+	BEGIN
+		INSERT INTO [dbo].[SYSTM020Ref_Attachments] (
+			[AttPrimaryRecordID]
+			,[AttItemNumber]
+			,[AttFileName]
+			,[AttData]
+			,[AttTableName]
+			,[AttTypeId]
+			,[AttTitle]
+			,[StatusId]
+			,[DateEntered]
+			,[EnteredBy]
+			)
+		SELECT @DocRefId
+			,[ItemNumber]
+			,[FileName]
+			,[Content]
+			,[EntityName]
+			,[Type]
+			,[Title]
+			,[StatusId]
+			,@dateEntered
+			,@enteredBy
+		FROM @uttDocumentAttachment
+	END
 END
 GO
 
