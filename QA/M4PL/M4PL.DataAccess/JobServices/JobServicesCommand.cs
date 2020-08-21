@@ -132,28 +132,23 @@ namespace M4PL.DataAccess.JobServices
 			int recordCount = 1;
 		    using (var documentAttachmentUTT = new DataTable("uttDocumentAttachment"))
 			{
-				documentAttachmentUTT.Locale = CultureInfo.InvariantCulture;
-				documentAttachmentUTT.Columns.Add("Id");
+                Type columnType = System.Type.GetType("System.Byte[]");
+                documentAttachmentUTT.Locale = CultureInfo.InvariantCulture;
 				documentAttachmentUTT.Columns.Add("FileName");
-				documentAttachmentUTT.Columns.Add("Content");
-				documentAttachmentUTT.Columns.Add("EntityName");
-				documentAttachmentUTT.Columns.Add("Type");
-				documentAttachmentUTT.Columns.Add("Title");
+                documentAttachmentUTT.Columns.Add("Content", columnType);
+                documentAttachmentUTT.Columns.Add("EntityName");
 				documentAttachmentUTT.Columns.Add("ItemNumber");
-				documentAttachmentUTT.Columns.Add("StatusId");
-				if (documentAttachment != null && documentAttachment.Count > 0)
+                documentAttachmentUTT.Columns.Add("Title");
+                if (documentAttachment != null && documentAttachment.Count > 0)
 				{
 					foreach (var currentdocument in documentAttachment)
 					{
 						var row = documentAttachmentUTT.NewRow();
-						row["Id"] = recordCount;
 						row["ItemNumber"] = recordCount;
 						row["FileName"] = currentdocument.Name;
-						row["Content"] = currentdocument.Content;
+						row["Content"] =  currentdocument.Content;
 						row["EntityName"] = EntitiesAlias.JobDocReference.ToString();
-						row["Type"] = 1;
 						row["Title"] = Path.GetFileNameWithoutExtension(currentdocument.Name);
-						row["StatusId"] = 1;
 						documentAttachmentUTT.Rows.Add(row);
 						documentAttachmentUTT.AcceptChanges();
 						recordCount = recordCount + 1;
