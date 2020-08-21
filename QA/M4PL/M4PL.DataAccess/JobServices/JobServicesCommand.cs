@@ -139,13 +139,15 @@ namespace M4PL.DataAccess.JobServices
 				documentAttachmentUTT.Columns.Add("EntityName");
 				documentAttachmentUTT.Columns.Add("Type");
 				documentAttachmentUTT.Columns.Add("Title");
+				documentAttachmentUTT.Columns.Add("ItemNumber");
 				documentAttachmentUTT.Columns.Add("StatusId");
 				if (documentAttachment != null && documentAttachment.Count > 0)
 				{
 					foreach (var currentdocument in documentAttachment)
 					{
 						var row = documentAttachmentUTT.NewRow();
-						row["Id"] = recordCount + 1;
+						row["Id"] = recordCount;
+						row["ItemNumber"] = recordCount;
 						row["FileName"] = currentdocument.Name;
 						row["Content"] = currentdocument.Content;
 						row["EntityName"] = EntitiesAlias.JobDocReference.ToString();

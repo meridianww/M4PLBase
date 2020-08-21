@@ -88,6 +88,7 @@ BEGIN
 
 	INSERT INTO [dbo].[SYSTM020Ref_Attachments] (
 		 [AttPrimaryRecordID]
+        ,[AttItemNumber]
 		,[AttFileName]
 		,[AttData]
 		,[AttTableName]
@@ -98,6 +99,7 @@ BEGIN
 	    ,[EnteredBy]
 		)
 	SELECT @DocRefId
+	    ,[ItemNumber]
 		,[FileName]
 		,[Content]
 		,[EntityName]
