@@ -41,10 +41,7 @@
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsFreezed = true;
     }
 }
-
-@using (Html.BeginForm())
-{
-    @Html.DevExpress().GridView(settings =>
+@Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
     settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
@@ -480,8 +477,7 @@
             {
                 if (!rowHashes.ContainsKey(id.ToString()))
                     rowHashes.Add(id.ToString(), new Dictionary<string, object>());
-                rowHashes[id.ToString()] = new Dictionary<string, object>
-    ();
+                rowHashes[id.ToString()] = new Dictionary<string, object>();
                 foreach (var col in Model.GridColumnSettings)
                 {
 
@@ -575,5 +571,5 @@
     }
 
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
-}
+
 
