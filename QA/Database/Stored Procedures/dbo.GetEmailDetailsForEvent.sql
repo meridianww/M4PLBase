@@ -20,13 +20,13 @@ BEGIN
 	FROM dbo.EventSubscriberRelation EC
 	INNER JOIN dbo.EventEntityRelation ER ON ER.Id = EC.EventEntityRelationId
 	INNER JOIN dbo.[Event] E ON E.Id = ER.EventId
-	WHERE E.ID = @EventId AND ER.ParentId = @ParentId AND EC.EventSubscriberTypeId = 1
+	WHERE E.ID = @EventId AND EC.EventSubscriberTypeId = 1 --AND ER.ParentId = @ParentId
 
 	SELECT @CcAddress = EmailAddresses
 	FROM dbo.EventSubscriberRelation EC
 	INNER JOIN dbo.EventEntityRelation ER ON ER.Id = EC.EventEntityRelationId
 	INNER JOIN dbo.[Event] E ON E.Id = ER.EventId
-	WHERE E.ID = @EventId AND ER.ParentId = @ParentId AND EC.EventSubscriberTypeId = 2
+	WHERE E.ID = @EventId  AND EC.EventSubscriberTypeId = 2 --AND ER.ParentId = @ParentId
 
 	SELECT E.FromMail
 		,EC.[Subject]
@@ -39,7 +39,7 @@ BEGIN
 	INNER JOIN dbo.EventEntityRelation ER ON ER.EventId = E.Id
 	INNER JOIN dbo.EventEntityContentDetail EC ON EC.EventEntityRelationId = ER.Id
 	WHERE E.ID = @EventId
-		AND ER.ParentId = @ParentId
+		--AND ER.ParentId = @ParentId
 END
 GO
 
