@@ -34,7 +34,7 @@ BEGIN
 		,@NextValue BIGINT
 		,@AttachmentCount INT
 
-	SELECT @AttachmentCount = Count(Id)
+	SELECT @AttachmentCount = Count(FileName)
 	FROM @uttDocumentAttachment
 
 	SELECT @NextValue = NEXT VALUE
@@ -109,9 +109,9 @@ BEGIN
 			,[FileName]
 			,[Content]
 			,[EntityName]
-			,[Type]
+			,1
 			,[Title]
-			,[StatusId]
+			,1
 			,@dateEntered
 			,@enteredBy
 		FROM @uttDocumentAttachment
