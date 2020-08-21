@@ -1,7 +1,7 @@
 BEGIN
 	IF NOT EXISTS (Select 1 From DashboardCategory Where DashboardCategoryName = 'xCBL')
 	BEGIN
-		INSERT INTO DashboardCategory VALUES('xCBL', 'xCBL Section')
+		INSERT INTO DashboardCategory VALUES('xCBL', 'xCBL Changes')
 	END
 	IF NOT EXISTS (Select 1 From DashboardSubCategory Where DashboardSubCategoryName = 'AddressChange')
 	BEGIN
@@ -17,7 +17,7 @@ BEGIN
 	END
 	IF NOT EXISTS (Select 1 From DashboardSubCategory Where DashboardSubCategoryName = '48HourChange')
 	BEGIN
-		INSERT INTO DashboardSubCategory VALUES('48HourChange ', '48 Hour Change')
+		INSERT INTO DashboardSubCategory VALUES('48HourChange', '48 Hour Change')
 	END
 	IF NOT EXISTS (Select 1 From DashboardSubCategory Where DashboardSubCategoryName = 'ATDCAAPUPUD')
 	BEGIN
@@ -51,7 +51,8 @@ BEGIN
 					IF(@dashboardSubCategoryId > 0)
 					BEGIN
 						DELETE FROM DashboardCategoryRelation WHERE DashboardId = @dashboardId AND DashboardCategoryId = @dashboardCategoryId AND DashboardSubCategory = @dashboardSubCategoryId
-						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, NULL, '#FF0000', '#ffffff')
+						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, 
+						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyTitle = ''xCBL Address Change'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
 					END
 				END
 				BEGIN
@@ -59,7 +60,8 @@ BEGIN
 					IF(@dashboardSubCategoryId > 0)
 					BEGIN
 						DELETE FROM DashboardCategoryRelation WHERE DashboardId = @dashboardId AND DashboardCategoryId = @dashboardCategoryId AND DashboardSubCategory = @dashboardSubCategoryId
-						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, NULL, '#FF0000', '#ffffff')
+						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, 
+						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyTitle = ''xCBL Schedule Change'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
 					END
 				END
 				BEGIN
@@ -67,7 +69,8 @@ BEGIN
 					IF(@dashboardSubCategoryId > 0)
 					BEGIN
 						DELETE FROM DashboardCategoryRelation WHERE DashboardId = @dashboardId AND DashboardCategoryId = @dashboardCategoryId AND DashboardSubCategory = @dashboardSubCategoryId
-						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, NULL, '#FF0000', '#ffffff')
+						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, 
+						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyTitle = ''xCBL GPS Coordinates'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
 					END
 				END
 				BEGIN
@@ -75,7 +78,8 @@ BEGIN
 					IF(@dashboardSubCategoryId > 0)
 					BEGIN
 						DELETE FROM DashboardCategoryRelation WHERE DashboardId = @dashboardId AND DashboardCategoryId = @dashboardCategoryId AND DashboardSubCategory = @dashboardSubCategoryId
-						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, NULL, '#FF0000', '#ffffff')
+						INSERT INTO DashboardCategoryRelation VALUES(@dashboardId, @dashboardCategoryId, @dashboardSubCategoryId, 
+						' AND JOBDL020Gateways.GwyGatewayCode = ''XCBL'' AND JOBDL020Gateways.GwyTitle = ''xCBL 48Hr Date Change'' AND JOBDL020Gateways.GwyCompleted = 0 AND JOBDL000Master.IsCancelled = 0 ', '#FF0000', '#ffffff')
 					END
 				END
 			END

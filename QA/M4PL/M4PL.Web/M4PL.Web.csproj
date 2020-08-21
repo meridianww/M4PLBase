@@ -446,10 +446,15 @@
     <Content Include="Content\Images\exit.png" />
     <Content Include="Content\Images\fm_meridian_branding_logo_filled_small_v1.png" />
     <Content Include="Content\Images\groups.png" />
+    <Content Include="Content\Images\Logistic\48HourChange.png" />
+    <Content Include="Content\Images\Logistic\AddressChange.png" />
+    <Content Include="Content\Images\Logistic\GPSCoordinates.png" />
     <Content Include="Content\Images\Logistic\InTransit.png" />
+    <Content Include="Content\Images\Logistic\NoPODUpload.png" />
     <Content Include="Content\Images\Logistic\OnHand.png" />
     <Content Include="Content\Images\Logistic\LoadOnTruck.png" />
     <Content Include="Content\Images\Logistic\Returns.png" />
+    <Content Include="Content\Images\Logistic\ScheduleChange.png" />
     <Content Include="Content\Images\question.png" />
     <Content Include="Content\Images\setting.png" />
     <Content Include="Content\Images\SupportInbox.png" />
