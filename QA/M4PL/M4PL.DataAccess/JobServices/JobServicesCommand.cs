@@ -10,6 +10,9 @@ using DevExpress.XtraRichEdit;
 using M4PL.DataAccess.Common;
 using M4PL.Entities;
 using _commands = M4PL.DataAccess.Attachment;
+using System.Data;
+using System.Globalization;
+using System.IO;
 
 namespace M4PL.DataAccess.JobServices
 {
@@ -97,49 +100,67 @@ namespace M4PL.DataAccess.JobServices
             }
             return result;
         }
-        /// <summary>
-        /// UploadDocument
-        /// </summary>
-        /// <param name="jobDocument"></param>
-        /// <param name="activeUser"></param>
-        /// <returns></returns>
-        public static bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser)
-        {
-            var parameters = new List<Parameter>()
-            {
-                new Parameter("@userId", activeUser.UserId),
-                new Parameter("@roleId", activeUser.RoleId),
-                new Parameter("@jobId", jobDocument.JobId),
-                new Parameter("@jdrCode", jobDocument.JdrCode),
-                new Parameter("@jdrTitle", jobDocument.JdrTitle),
-                new Parameter("@docTypeId", jobDocument.DocTypeId),
-                new Parameter("@statusId", jobDocument.StatusId),
-                new Parameter("@enteredBy", activeUser.UserName),
-                new Parameter("@dateEntered", DateTime.Now),
-            };
-            var currentId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsJobServiceDocReference, parameters.ToArray(), storedProcedure: true);
-            if (currentId > 0)
-            {
-                List<Task> tasks = new List<Task>();
-                foreach (var item in jobDocument.DocumentAttachment)
-                {
-                    Entities.Attachment attachment = new Entities.Attachment()
-                    {
-                        AttPrimaryRecordID = currentId,
-                        AttFileName = item.Name,
-                        AttData = item.Content,
-                        AttTableName = EntitiesAlias.JobDocReference.ToString(),
-                        StatusId = 1,
-                        AttTypeId = 1
-                    };
-                    tasks.Add(Task.Factory.StartNew(() =>
-                    {
-                        _commands.AttachmentCommands.Post(activeUser, attachment);
-                    }));
-                }
-                Task.WaitAll(tasks.ToArray());
-            }
-            return true;
-        }
-    }
+		/// <summary>
+		/// UploadDocument
+		/// </summary>
+		/// <param name="jobDocument"></param>
+		/// <param name="activeUser"></param>
+		/// <returns></returns>
+		public static bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser)
+		{
+			var parameters = new List<Parameter>()
+			{
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@roleId", activeUser.RoleId),
+				new Parameter("@jobId", jobDocument.JobId),
+				new Parameter("@jdrCode", jobDocument.JdrCode),
+				new Parameter("@jdrTitle", jobDocument.JdrTitle),
+				new Parameter("@docTypeId", jobDocument.DocTypeId),
+				new Parameter("@statusId", jobDocument.StatusId),
+				new Parameter("@enteredBy", activeUser.UserName),
+				new Parameter("@dateEntered", DateTime.Now),
+				new Parameter("@uttDocumentAttachment", GetDocumentAttachmentListDT(jobDocument.DocumentAttachment))
+			};
+
+			var currentId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsJobServiceDocReference, parameters.ToArray(), storedProcedure: true);
+
+			return currentId > 0 ? true : false;
+		}
+
+		private static DataTable GetDocumentAttachmentListDT(List<DocumentAttachment> documentAttachment)
+		{
+			int recordCount = 1;
+		    using (var documentAttachmentUTT = new DataTable("uttDocumentAttachment"))
+			{
+				documentAttachmentUTT.Locale = CultureInfo.InvariantCulture;
+				documentAttachmentUTT.Columns.Add("Id");
+				documentAttachmentUTT.Columns.Add("FileName");
+				documentAttachmentUTT.Columns.Add("Content");
+				documentAttachmentUTT.Columns.Add("EntityName");
+				documentAttachmentUTT.Columns.Add("Type");
+				documentAttachmentUTT.Columns.Add("Title");
+				documentAttachmentUTT.Columns.Add("StatusId");
+				if (documentAttachment != null && documentAttachment.Count > 0)
+				{
+					foreach (var currentdocument in documentAttachment)
+					{
+						var row = documentAttachmentUTT.NewRow();
+						row["Id"] = recordCount + 1;
+						row["FileName"] = currentdocument.Name;
+						row["Content"] = currentdocument.Content;
+						row["EntityName"] = EntitiesAlias.JobDocReference.ToString();
+						row["Type"] = 1;
+						row["Title"] = Path.GetFileNameWithoutExtension(currentdocument.Name);
+						row["StatusId"] = 1;
+						documentAttachmentUTT.Rows.Add(row);
+						documentAttachmentUTT.AcceptChanges();
+						recordCount = recordCount + 1;
+					}
+				}
+
+				return documentAttachmentUTT;
+			}
+		}
+
+	}
 }

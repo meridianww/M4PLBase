@@ -22,6 +22,7 @@ CREATE PROCEDURE [dbo].[InsJobServiceDocReference] (
 	,@statusId INT = 1
 	,@enteredBy NVARCHAR(50)
 	,@dateEntered DATETIME2(7)
+	,@uttDocumentAttachment dbo.uttDocumentAttachment READONLY
 	)
 AS
 BEGIN
@@ -41,7 +42,9 @@ BEGIN
 		,'DocumentReference'
 		,0
 		)
+
 	SET @DocRefId = @NextValue
+
 	SELECT @updatedItemNumber = CASE 
 			WHEN COUNT(jdr.Id) IS NULL
 				THEN 1
@@ -52,7 +55,7 @@ BEGIN
 		AND sro.SysLookupCode = 'JobDocReferenceType'
 	WHERE jdr.JobID = @jobId
 		AND jdr.StatusId = 1
-		 
+
 	INSERT INTO [dbo].[JOBDL040DocumentReference] (
 		[Id]
 		,[JobID]
@@ -82,6 +85,28 @@ BEGIN
 	SET IsUsed = 1
 	WHERE Entity = 'DocumentReference'
 		AND SequenceNumber = @DocRefId
+
+	INSERT INTO [dbo].[SYSTM020Ref_Attachments] (
+		 [AttPrimaryRecordID]
+		,[AttFileName]
+		,[AttData]
+		,[AttTableName]
+		,[AttTypeId]
+		,[AttTitle]
+		,[StatusId]
+		,[DateEntered]
+	    ,[EnteredBy]
+		)
+	SELECT @DocRefId
+		,[FileName]
+		,[Content]
+		,[EntityName]
+		,[Type]
+		,[Title]
+		,[StatusId]
+		,@dateEntered
+		,@enteredBy
+	FROM @uttDocumentAttachment
 END
 GO
 
