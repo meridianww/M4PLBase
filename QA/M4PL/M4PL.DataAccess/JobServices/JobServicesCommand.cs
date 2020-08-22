@@ -31,7 +31,6 @@ namespace M4PL.DataAccess.JobServices
             var result = SqlSerializer.Default.DeserializeMultiRecords<SearchOrder>(StoredProceduresConstant.GetSearchJobOrders, parameters.ToArray(), storedProcedure: true);
             return result;
         }
-
         /// <summary>
         /// GetOrderDetailsById
         /// </summary>
@@ -43,15 +42,13 @@ namespace M4PL.DataAccess.JobServices
             OrderDetails orderDetails = new OrderDetails();
             var parameters = activeUser.GetRecordDefaultParams();
             parameters.Add(new Parameter("@Id", Id));
+
             SetCollection sets = new SetCollection();
             sets.AddSet<OrderDetails>("OrderDetails");
             sets.AddSet<OrderGatewayDetails>("OrderGatewayDetails");
-            sets.AddSet<OrderDocumentDetails>("OrderDocumentDetails");
             SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetOrderDetailsById, parameters.ToArray(), storedProcedure: true);
             var orderDetailslist = sets.GetSet<OrderDetails>("OrderDetails");
             var orderGatewayCollection = sets.GetSet<OrderGatewayDetails>("OrderGatewayDetails");
-            var orderDocumentCollection = sets.GetSet<OrderDocumentDetails>("OrderDocumentDetails");
-
             if (orderDetailslist?.Count > 0)
             {
                 orderDetails = orderDetailslist[0];
@@ -59,12 +56,34 @@ namespace M4PL.DataAccess.JobServices
                 {
                     orderDetails.OrderGatewayDetails = orderGatewayCollection.Where(x => x.JobID == orderDetails.Id).ToList();
                 }
-                if (orderDetails.Id > 0 && orderDocumentCollection != null && orderDocumentCollection.Count > 0)
-                {
-                    orderDetails.OrderDocumentDetails = orderDocumentCollection.Where(x => x.JobID == orderDetails.Id).ToList();
-                }
             }
             return orderDetails;
+        }
+        /// <summary>
+        /// GetDocumentDetailsByJobID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        public static async Task<List<OrderGatewayDetails>> GetGatewayDetailsByJobID(long Id, ActiveUser activeUser)
+        {
+            var parameters = activeUser.GetRecordDefaultParams();
+            parameters.Add(new Parameter("@Id", Id));
+            var result = SqlSerializer.Default.DeserializeMultiRecords<OrderGatewayDetails>(StoredProceduresConstant.GetGatewayDetailsByJobID, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+        /// <summary>
+        /// GetDocumentDetailsByJobID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        public static async Task<List<OrderDocumentDetails>> GetDocumentDetailsByJobID(long Id, ActiveUser activeUser)
+        {
+            var parameters = activeUser.GetRecordDefaultParams();
+            parameters.Add(new Parameter("@Id", Id));
+            var result = SqlSerializer.Default.DeserializeMultiRecords<OrderDocumentDetails>(StoredProceduresConstant.GetDocumentDetailsByJobID, parameters.ToArray(), storedProcedure: true);
+            return result;
         }
         /// <summary>
         /// InsertComment
@@ -100,64 +119,68 @@ namespace M4PL.DataAccess.JobServices
             }
             return result;
         }
-		/// <summary>
-		/// UploadDocument
-		/// </summary>
-		/// <param name="jobDocument"></param>
-		/// <param name="activeUser"></param>
-		/// <returns></returns>
-		public static bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser)
-		{
-			var parameters = new List<Parameter>()
-			{
-				new Parameter("@userId", activeUser.UserId),
-				new Parameter("@roleId", activeUser.RoleId),
-				new Parameter("@jobId", jobDocument.JobId),
-				new Parameter("@jdrCode", jobDocument.JdrCode),
-				new Parameter("@jdrTitle", jobDocument.JdrTitle),
-				new Parameter("@docTypeId", jobDocument.DocTypeId),
-				new Parameter("@statusId", jobDocument.StatusId),
-				new Parameter("@enteredBy", activeUser.UserName),
-				new Parameter("@dateEntered", DateTime.Now),
-				new Parameter("@uttDocumentAttachment", GetDocumentAttachmentListDT(jobDocument.DocumentAttachment))
-			};
+        /// <summary>
+        /// UploadDocument
+        /// </summary>
+        /// <param name="jobDocument"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        public static bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser)
+        {
+            var parameters = new List<Parameter>()
+            {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@jobId", jobDocument.JobId),
+                new Parameter("@jdrCode", jobDocument.JdrCode),
+                new Parameter("@jdrTitle", jobDocument.JdrTitle),
+                new Parameter("@docTypeId", jobDocument.DocTypeId),
+                new Parameter("@statusId", jobDocument.StatusId),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@dateEntered", DateTime.Now),
+                new Parameter("@uttDocumentAttachment", GetDocumentAttachmentListDT(jobDocument.DocumentAttachment))
+            };
 
-			var currentId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsJobServiceDocReference, parameters.ToArray(), storedProcedure: true);
+            var currentId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsJobServiceDocReference, parameters.ToArray(), storedProcedure: true);
 
-			return currentId > 0 ? true : false;
-		}
-
+            return currentId > 0 ? true : false;
+        }
+        /// <summary>
+        /// GetDocumentAttachmentListDT
+        /// </summary>
+        /// <param name="documentAttachment"></param>
+        /// <returns></returns>
 		private static DataTable GetDocumentAttachmentListDT(List<DocumentAttachment> documentAttachment)
-		{
-			int recordCount = 1;
-		    using (var documentAttachmentUTT = new DataTable("uttDocumentAttachment"))
-			{
+        {
+            int recordCount = 1;
+            using (var documentAttachmentUTT = new DataTable("uttDocumentAttachment"))
+            {
                 Type columnType = System.Type.GetType("System.Byte[]");
                 documentAttachmentUTT.Locale = CultureInfo.InvariantCulture;
-				documentAttachmentUTT.Columns.Add("FileName");
+                documentAttachmentUTT.Columns.Add("FileName");
                 documentAttachmentUTT.Columns.Add("Content", columnType);
                 documentAttachmentUTT.Columns.Add("EntityName");
-				documentAttachmentUTT.Columns.Add("ItemNumber");
+                documentAttachmentUTT.Columns.Add("ItemNumber");
                 documentAttachmentUTT.Columns.Add("Title");
                 if (documentAttachment != null && documentAttachment.Count > 0)
-				{
-					foreach (var currentdocument in documentAttachment)
-					{
-						var row = documentAttachmentUTT.NewRow();
-						row["ItemNumber"] = recordCount;
-						row["FileName"] = currentdocument.Name;
-						row["Content"] =  currentdocument.Content;
-						row["EntityName"] = EntitiesAlias.JobDocReference.ToString();
-						row["Title"] = Path.GetFileNameWithoutExtension(currentdocument.Name);
-						documentAttachmentUTT.Rows.Add(row);
-						documentAttachmentUTT.AcceptChanges();
-						recordCount = recordCount + 1;
-					}
-				}
+                {
+                    foreach (var currentdocument in documentAttachment)
+                    {
+                        var row = documentAttachmentUTT.NewRow();
+                        row["ItemNumber"] = recordCount;
+                        row["FileName"] = currentdocument.Name;
+                        row["Content"] = currentdocument.Content;
+                        row["EntityName"] = EntitiesAlias.JobDocReference.ToString();
+                        row["Title"] = Path.GetFileNameWithoutExtension(currentdocument.Name);
+                        documentAttachmentUTT.Rows.Add(row);
+                        documentAttachmentUTT.AcceptChanges();
+                        recordCount = recordCount + 1;
+                    }
+                }
 
-				return documentAttachmentUTT;
-			}
-		}
+                return documentAttachmentUTT;
+            }
+        }
 
-	}
+    }
 }

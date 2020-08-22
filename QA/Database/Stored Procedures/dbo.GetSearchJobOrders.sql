@@ -10,7 +10,7 @@ GO
 -- Author:                    Kamal          
 -- Create date:               07/27/2020      
 -- Description:               Get a Job Details by job id  
--- Exec :					  Exec GetSearchJobOrders 'pod'   
+-- Exec :					  Exec GetSearchJobOrders null,0,0,'july'   
 -- ============================================= 
 ALTER PROCEDURE GetSearchJobOrders @userId BIGINT
 	,@roleId BIGINT

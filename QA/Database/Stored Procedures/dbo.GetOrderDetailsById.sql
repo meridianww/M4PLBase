@@ -18,20 +18,6 @@ ALTER PROCEDURE GetOrderDetailsById @userId BIGINT
 	,@id BIGINT
 AS
 BEGIN
-	DECLARE @IsLoginUser BIT = 0;
-
-	IF (
-			@userId = 0
-			AND @roleId = 0
-			AND @orgId = 0
-			)
-	BEGIN
-		SET @IsLoginUser = 0
-	END
-	ELSE
-	BEGIN
-		SET @IsLoginUser = 1
-	END
 
 	SELECT JOB.Id
 		,JOB.JobCustomerSalesOrder AS CustomerSalesOrder
@@ -63,22 +49,5 @@ BEGIN
 		,OPT.SysOptionName AS GateWayName
 	FROM JOBDL020Gateways GATEWAY
 	LEFT JOIN SYSTM000Ref_Options OPT ON OPT.Id = GATEWAY.GatewayTypeId
-	WHERE GATEWAY.JobID = @id --AND GatewayTypeId =85 --AND StatusId = 194 
-
-	IF (@IsLoginUser = 1)
-	BEGIN
-		SELECT ATT.Id
-			,DOCUMENT.JobID
-			,DOCUMENT.JdrTitle JdrCode
-			,ATT.AttFileName JdrTitle
-			,DOCUMENT.DocTypeId
-			,OPT.SysOptionName AS DocTypeIdName
-		FROM JOBDL040DocumentReference DOCUMENT
-		INNER JOIN [dbo].[SYSTM020Ref_Attachments] ATT ON ATT.AttPrimaryRecordID = DOCUMENT.Id
-			AND ATT.AttTableName = 'JobDocReference'
-		LEFT JOIN SYSTM000Ref_Options OPT ON OPT.Id = DOCUMENT.DocTypeId
-		WHERE DOCUMENT.JobID = @id
-			AND ATT.StatusId = 1
-			AND DOCUMENT.StatusId = 1
-	END
+	WHERE GATEWAY.JobID = @id AND GATEWAY.GatewayTypeId =85
 END
