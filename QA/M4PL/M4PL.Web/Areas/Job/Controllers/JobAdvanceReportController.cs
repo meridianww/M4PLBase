@@ -369,8 +369,11 @@ namespace M4PL.Web.Areas.Job.Controllers
                     strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params);
                 }
             }
-
+            if (!string.IsNullOrEmpty(strJobAdvanceReportRequestRoute.FileName))
+                ViewData["ReportName"] = strJobAdvanceReportRequestRoute.FileName;
             SetGridResult(requestRout, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
+            //if (route.OwnerCbPanel == "JobAdvanceReportGridView")
+            //    _gridResult.Records.OrderBy(x => x.Id);
 
             _gridResult.Permission = Permission.ReadOnly;
 

@@ -1532,6 +1532,7 @@ M4PLCommon.AdvancedReport = (function () {
 
         rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
         rprtVwrRoute.CustomerId = customerCtrl.GetValue();
+        rprtVwrRoute.FileName = reportTypeCtrl.GetText();
 
         if (programCtrl != null) {
             if (programCtrl.GetValue() != null && programCtrl != undefined && programCtrl.GetValue() != "ALL") {

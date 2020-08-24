@@ -29,6 +29,11 @@
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
     }
+    if (Model.Records != null && Model.Records.Count > 0)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayACD").DataType = "datetime2";
+    }
+
 }
 @Html.DevExpress().GridView(settings =>
 {
@@ -67,6 +72,7 @@
             t.Items.Add(GridViewToolbarCommand.ExportToXls);
             t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
         });
+        settings.SettingsExport.FileName = ViewData["ReportName"] != null ? ViewData["ReportName"].ToString() : "Job Advance Report";
     }
     //#endregion
 

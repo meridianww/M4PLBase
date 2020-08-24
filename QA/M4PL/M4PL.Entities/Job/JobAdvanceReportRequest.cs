@@ -36,12 +36,8 @@ namespace M4PL.Entities.Job
         public string DateTypeName { get; set; }
         public bool IsFormRequest { get; set; }
         public bool Manifest { get; set; }
-
-        //public bool IsAddtionalFilter { get; set; }
-        //public int? CgoWeightUnitTypeId { get; set; }
-        //public int? JobPartsOrdered { get; set; }
         public string PackagingCode { get; set; }
-
         public long? CargoId { get; set; }
+        public string FileName { get; set; }
     }
 }
