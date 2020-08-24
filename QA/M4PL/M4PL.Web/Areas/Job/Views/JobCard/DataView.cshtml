@@ -41,7 +41,9 @@
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsFreezed = true;
     }
 }
-@Html.DevExpress().GridView(settings =>
+@using (Html.BeginForm())
+{
+    Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
     settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
@@ -570,6 +572,7 @@
         };
     }
 
-}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
+}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml();
+}
 
 
