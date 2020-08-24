@@ -29,7 +29,7 @@
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
     }
-    if (Model.Records != null && Model.Records.Count > 0)
+    if (Model.ColumnSettings.Where(x => x.ColColumnName == "GwyGatewayACD").Any())
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayACD").DataType = "datetime2";
     }
