@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -47,7 +47,10 @@ namespace M4PL.Business.Finance.Customer
             IList<NavCustomer> navOneToManyCustomerList = new List<NavCustomer>();
             List<NavCustomer> navOneToOneCustomerList = new List<NavCustomer>(); ;
             IList<NavCustomerData> navCustomerData = null;
-            IList<Entities.Customer.Customer> m4PLCustomerData = null;
+			string navCustomerUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
+			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			IList<Entities.Customer.Customer> m4PLCustomerData = null;
             Task[] tasks = new Task[2];
 
             NavCustomer navCustomer = null;
@@ -67,7 +70,7 @@ namespace M4PL.Business.Finance.Customer
             {
                 try
                 {
-                    navCustomerData = GetNavCustomerData();
+                    navCustomerData = GetNavCustomerData(navCustomerUrl, navAPIUserName, navAPIPassword);
                 }
                 catch (Exception exp)
                 {
@@ -99,8 +102,7 @@ namespace M4PL.Business.Finance.Customer
                         {
                             PBS_Customer_Code = customer.CustCode,
                             Name = customer.CustTitle,
-                            M4PLCustomerId = customer.Id,
-                            Id = Convert.ToInt64(navCustomerMatchList.FirstOrDefault().Id)
+                            M4PLCustomerId = customer.Id
                         };
 
                         navCustomer.MatchedCustomer = new List<MatchedCustomer>();
@@ -123,9 +125,8 @@ namespace M4PL.Business.Finance.Customer
                             PBS_Customer_Code = customer.CustCode,
                             Name = customer.SysRefName,
                             M4PLCustomerId = customer.Id,
-                            ERPId = (navCustomerMatchList != null && navCustomerMatchList.Count() > 0) ? navCustomerMatchList.FirstOrDefault().Id : string.Empty,
-                            Id = (navCustomerMatchList != null && navCustomerMatchList.Count() > 0) ? Convert.ToInt64(navCustomerMatchList.FirstOrDefault().Id) : 0
-                        });
+                            ERPId = (navCustomerMatchList != null && navCustomerMatchList.Count() > 0) ? navCustomerMatchList.FirstOrDefault().Id : string.Empty
+						});
                     }
                 }
             }
@@ -143,11 +144,8 @@ namespace M4PL.Business.Finance.Customer
             throw new NotImplementedException();
         }
 
-        private IList<NavCustomerData> GetNavCustomerData()
+        private IList<NavCustomerData> GetNavCustomerData(string navCustomerUrl, string navAPIUserName, string navAPIPassword)
         {
-            string navCustomerUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-            string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-            string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
             NavCustomerResponse naveCustomerResponse = null;
             string serviceCall = string.Format("{0}('{1}')/CustomerList", navCustomerUrl, "Meridian");
             NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);

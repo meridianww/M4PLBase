@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -52,7 +52,10 @@ namespace M4PL.Business.Finance.Vendor
             IList<NavVendor> navOneToManyVendorList = new List<NavVendor>();
             List<NavVendor> navOneToOneVendorList = new List<NavVendor>(); ;
             IList<NavVendorData> navVendorData = null;
-            IList<Entities.Vendor.Vendor> m4PLVendorData = null;
+			string navVendorUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
+			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			IList<Entities.Vendor.Vendor> m4PLVendorData = null;
             Task[] tasks = new Task[2];
 
             NavVendor navVendor = null;
@@ -72,7 +75,7 @@ namespace M4PL.Business.Finance.Vendor
             {
                 try
                 {
-                    navVendorData = GetNavVendorData();
+                    navVendorData = GetNavVendorData(navVendorUrl, navAPIUserName, navAPIPassword);
                 }
                 catch (Exception exp)
                 {
@@ -104,8 +107,7 @@ namespace M4PL.Business.Finance.Vendor
                         {
                             PBS_Vendor_Code = vendor.VendCode,
                             Name = vendor.VendTitle,
-                            M4PLVendorId = vendor.Id,
-                            Id = Convert.ToInt64(vendorMatchList.FirstOrDefault().Id)
+                            M4PLVendorId = vendor.Id
                         };
 
                         navVendor.MatchedVendor = new List<MatchedVendor>();
@@ -129,8 +131,7 @@ namespace M4PL.Business.Finance.Vendor
                             PBS_Vendor_Code = vendor.VendCode,
                             Name = vendor.SysRefName,
                             M4PLVendorId = vendor.Id,
-                            ERPId = matchedNavVendor == null ? string.Empty : matchedNavVendor.Id,
-                            Id = matchedNavVendor == null ? 0 : Convert.ToInt64(matchedNavVendor.Id)
+                            ERPId = matchedNavVendor == null ? string.Empty : matchedNavVendor.Id
                         });
 
                         navVendorData.Remove(matchedNavVendor);
@@ -146,11 +147,8 @@ namespace M4PL.Business.Finance.Vendor
             return navOneToManyVendorList;
         }
 
-        private IList<NavVendorData> GetNavVendorData()
+        private IList<NavVendorData> GetNavVendorData(string navVendorUrl, string navAPIUserName, string navAPIPassword)
         {
-            string navVendorUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-            string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-            string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
             NavVendorResponse naveVendorResponse = null;
             string serviceCall = string.Format("{0}('{1}')/VendorList", navVendorUrl, "Meridian");
             NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);

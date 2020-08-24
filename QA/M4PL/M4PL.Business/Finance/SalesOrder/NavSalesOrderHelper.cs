@@ -630,7 +630,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
         #region Helper Method
 
-        public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
+        public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
         {
             string dimensionCode = string.Empty;
             string divisionCode = string.Empty;
@@ -673,7 +673,7 @@ namespace M4PL.Business.Finance.SalesOrder
             return navSalesOrderResponse;
         }
 
-        public static NavSalesOrder StartOrderUpdationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
+        public static NavSalesOrder StartOrderUpdationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword, string vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
         {
             string dimensionCode = string.Empty;
             string divisionCode = string.Empty;

@@ -114,8 +114,8 @@ BEGIN
 					)
 			END;
 
-	SELECT CAST(ISNULL(Customer.CustERPID, 0) AS BIGINT) CustomerERPId
-		,CAST(ISNULL(Vendor.VendERPID, 0) AS BIGINT) VendorERPId
+	SELECT Customer.CustERPID CustomerERPId
+		,Vendor.VendERPID VendorERPId
 		,JOM.SONumber JobSONumber
 		,JPM.PONumber JobPONumber
 		,EJOM.SONumber JobElectronicInvoiceSONumber

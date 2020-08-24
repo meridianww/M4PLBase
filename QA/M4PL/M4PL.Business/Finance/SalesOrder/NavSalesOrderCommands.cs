@@ -291,7 +291,7 @@ namespace M4PL.Business.Finance.SalesOrder
                 }
             }
 
-            if (jobResult.VendorERPId > 0)
+            if (!string.IsNullOrEmpty(jobResult.VendorERPId))
             {
                 //Task.Run(() =>
                 //{
@@ -392,12 +392,9 @@ namespace M4PL.Business.Finance.SalesOrder
                 }
             }
 
-            if (entity.VendorNo > 0)
+            if (!string.IsNullOrEmpty(entity.VendorNo))
             {
-                //Task.Run(() =>
-                //{
                 NavPurchaseOrderHelper.PurchaseOrderCreationProcessForNAV(ActiveUser, jobIdList, NavAPIUrl, NavAPIUserName, NavAPIPassword, entity.Electronic_Invoice);
-                //});
             }
 
             return manualSalesOrder != null ? manualSalesOrder : electronicSalesOrder;
