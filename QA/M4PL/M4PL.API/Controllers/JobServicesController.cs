@@ -27,7 +27,6 @@ namespace M4PL.API.Controllers
         /// IJobServiceCommands
         /// </summary>
         private readonly IJobServiceCommands _jobServicesCommands;
-
         /// <summary>
         /// JobServicesController constructor
         /// </summary>
@@ -36,7 +35,6 @@ namespace M4PL.API.Controllers
         {
             _jobServicesCommands = jobServiceCommands;
         }
-
         /// <summary>
         /// Get Search Order Result by search string
         /// </summary>
@@ -67,7 +65,36 @@ namespace M4PL.API.Controllers
             else
                 return Request.CreateResponse(HttpStatusCode.NotFound, new OrderDetails());
         }
-
+        /// <summary>
+        /// GetGatewayDetailsByJobID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        public async Task<HttpResponseMessage> GetGatewayDetailsByJobID(long Id)
+        {
+            if (Id <= 0) return Request.CreateResponse(HttpStatusCode.BadRequest, false);
+            var result = await _jobServicesCommands.GetGatewayDetailsByJobID(Id, Models.ApiContext.ActiveUser);
+            if (result != null)
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            else
+                return Request.CreateResponse(HttpStatusCode.NotFound, new OrderGatewayDetails());
+        }
+        /// <summary>
+        /// GetDocumentDetailsByJobID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        public async Task<HttpResponseMessage> GetDocumentDetailsByJobID(long Id)
+        {
+            if (Id <= 0) return Request.CreateResponse(HttpStatusCode.BadRequest, false);
+            var result = await _jobServicesCommands.GetDocumentDetailsByJobID(Id, Models.ApiContext.ActiveUser);
+            if (result != null)
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            else
+                return Request.CreateResponse(HttpStatusCode.NotFound, new OrderDocumentDetails());
+        }
         /// <summary>
         /// InsertComment
         /// </summary>
@@ -80,7 +107,6 @@ namespace M4PL.API.Controllers
         {
             return _jobServicesCommands.InsertComment(jobGatewayComment, Models.ApiContext.ActiveUser);
         }
-
         /// <summary>
         /// UploadDocument
         /// </summary>

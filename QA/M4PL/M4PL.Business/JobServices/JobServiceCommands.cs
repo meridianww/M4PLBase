@@ -22,7 +22,6 @@ namespace M4PL.Business.JobServices
         {
             return await _commands.GetSearchOrder(search, activeUser);
         }
-
         /// <summary>
         /// GetSearchOrder
         /// </summary>
@@ -31,6 +30,26 @@ namespace M4PL.Business.JobServices
         public async Task<OrderDetails> GetOrderDetailsById(long Id, ActiveUser activeUser)
         {
             return await _commands.GetOrderDetailsById(Id, activeUser);
+        }
+        /// <summary>
+        /// GetGatewayDetailsByJobID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        public async Task<List<OrderGatewayDetails>> GetGatewayDetailsByJobID(long Id, ActiveUser activeUser)
+        {
+            return await _commands.GetGatewayDetailsByJobID(Id, activeUser);
+        }
+        /// <summary>
+        /// GetDocumentDetailsByJobID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        public async Task<List<OrderDocumentDetails>> GetDocumentDetailsByJobID(long Id, ActiveUser activeUser)
+        {
+            return await _commands.GetDocumentDetailsByJobID(Id, activeUser);
         }
         /// <summary>
         /// InsertComment
@@ -42,7 +61,12 @@ namespace M4PL.Business.JobServices
         {
             return _commands.InsertComment(jobGatewayComment, activeUser);
         }
-
+        /// <summary>
+        /// UploadDocument
+        /// </summary>
+        /// <param name="jobDocument"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
         public bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser)
         {
             return _commands.UploadDocument(jobDocument, activeUser);
