@@ -4,7 +4,7 @@ SELECT Cargo.JobId
 	,SUM(CASE 
 			WHEN ISNULL(Cargo.CgoSerialNumber, '') = ''
 				THEN 0
-			ELSE 1
+			ELSE CgoQtyOrdered
 			END) Labels
 	,SUM(CASE 
 			WHEN ISNULL(Cargo.CgoSerialNumber, '') <> ''
