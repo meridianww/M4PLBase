@@ -1,6 +1,7 @@
+
+/****** Object:  StoredProcedure [dbo].[GetTransactionJobReportView]    Script Date: 8/24/2020 3:06:08 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -251,7 +252,7 @@ BEGIN TRY
 		IF (@recordId = 0)
 		BEGIN
 			SET @sqlCommand = 'SELECT ' + [dbo].[fnGetJobReportBaseQuery](@entity, @userId, @reportTypeId)
-			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.GwyGatewayACD', 'Gateway.GwyGatewayACD');
+			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.GwyGatewayACD', 'CASE WHEN ISNULL(Gateway.GwyGatewayACD, '''') = '''' THEN GwyGatewayACD ELSE FORMAT(GwyGatewayACD,''MM/dd/yyyy hh:mm tt'') END GwyGatewayACD');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Labels', 'ISNULL(Cargo.Labels, 0) Labels');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Inbound', 'ISNULL(Cargo.Inbound,0) Inbound');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Outbound', 'ISNULL(Cargo.Outbound,0) Outbound');
@@ -455,5 +456,3 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
-GO
-
