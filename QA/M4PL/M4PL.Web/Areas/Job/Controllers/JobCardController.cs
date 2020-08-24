@@ -111,7 +111,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var jobCardRequest = new JobCardRequest();
             TempData["CardTtile"] = null;
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
-            
+
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId =
                     filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
@@ -122,6 +122,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession = viewPagedDataSession;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId =
                     filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
+                route.IsEdit = true;
             }
             if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId > 0)
             {
@@ -244,6 +245,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData.Keep();
             base.GridFilteringView(filteringState, strRoute, gridName);
             route.Filters = null;
+            _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
@@ -265,6 +267,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData.Keep();
             base.GridSortingView(column, reset, strRoute, gridName);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
@@ -285,11 +288,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                 var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute, filterId);
                 TempData["CardTtile"] = jobCardRequest;
             }
-            //TempData.Peek("BackUrl");
-            //TempData["BackUrl"] = TempData["BackUrl"];
-            //TempData.Keep();
             base.GridPagingView(pager, strRoute, gridName);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
