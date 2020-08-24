@@ -57,7 +57,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 				displayMessage.Description = string.Format("There is no data found to create sales order for JobId: {0}.", route.RecordId);
 				return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 			}
-			else if (jobData != null && jobData.CustomerERPId == 0)
+			else if (jobData != null && string.IsNullOrEmpty(jobData.CustomerERPId))
 			{
 				displayMessage.Description = string.IsNullOrEmpty(jobData.JobSONumber) ? string.Format("Sales order creation for JobId: {0} could not proceed, customer is not synced from NAV.", route.RecordId) : string.Format("Sales order updation for JobId: {0} could not proceed, customer is not synced from NAV.", route.RecordId);
 				return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);

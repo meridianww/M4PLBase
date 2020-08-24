@@ -52,7 +52,7 @@ namespace M4PL.DataAccess.Finance
 		{
 			var parameters = new List<Parameter>
 		   {
-				new Parameter("@uttNavVendor", GetNavCustomerDT(vendor)),
+				new Parameter("@uttNavVendor", GetNavVendorDT(vendor)),
 				new Parameter("@changedBy", activeUser.UserName),
 				new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
 		   };
@@ -60,34 +60,29 @@ namespace M4PL.DataAccess.Finance
 			return parameters;
 		}
 
-		/// <summary>
-		/// GetNavCustomerDT - Method to get Vendor in a datatable
-		/// </summary>
-		/// <param name="vendorList">vendorList</param>
-		/// <returns>DataTable</returns>
-		public static DataTable GetNavCustomerDT(List<NavVendor> vendorList)
+		public static DataTable GetNavVendorDT(List<NavVendor> vendorList)
 		{
 			if (vendorList == null)
 			{
-				throw new ArgumentNullException("customer", "NavCustomerCommands.GetNavCustomerDT() - Argument null Exception");
+				throw new ArgumentNullException("customer", "NavVendorCommands.GetNavVendorDT() - Argument null Exception");
 			}
 
-			using (var quoteRequestUTT = new DataTable("uttNavVendor"))
+			using (var uttNavVendor = new DataTable("uttNavVendor"))
 			{
-				quoteRequestUTT.Locale = CultureInfo.InvariantCulture;
-				quoteRequestUTT.Columns.Add("VendorId");
-				quoteRequestUTT.Columns.Add("ERPId");
+				uttNavVendor.Locale = CultureInfo.InvariantCulture;
+				uttNavVendor.Columns.Add("VendorId");
+				uttNavVendor.Columns.Add("ERPId");
 
 				foreach (var vendor in vendorList)
 				{
-					var row = quoteRequestUTT.NewRow();
+					var row = uttNavVendor.NewRow();
 					row["VendorId"] = vendor.M4PLVendorId;
 					row["ERPId"] = string.IsNullOrEmpty(vendor.ERPId) ? null : vendor.ERPId;
-					quoteRequestUTT.Rows.Add(row);
-					quoteRequestUTT.AcceptChanges();
+					uttNavVendor.Rows.Add(row);
+					uttNavVendor.AcceptChanges();
 				}
 
-				return quoteRequestUTT;
+				return uttNavVendor;
 			}
 		}
 	}

@@ -103,7 +103,7 @@ set.SetContent(() =>
         {
             ViewContext.Writer.Write("<div class='row'>");
             ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 rdo-erp'>");
-            ViewContext.Writer.Write("<input class='rdo-erp-id' type='radio' name='" + Model.Record.PBS_Customer_Code + "' value = '" + data.ERPId + "' onclick = '" + string.Format(JsConstants.NavSyncERPIDRadioButtonOnChange, data.ERPId) + "' />");
+            ViewContext.Writer.Write("<input class='rdo-erp-id' id = '" + data.ERPId + "' type='radio' name='" + Model.Record.PBS_Customer_Code + "' value = '" + data.ERPId + "' onchange = " + string.Format("M4PLCommon.NavSync.NAVRadioSelected(\'{0}\')", data.ERPId) + " />");
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 custnav-marg-sub'>");
             ViewContext.Writer.Write(Html.Label(data.ERPId, new { @class = "erpid-" + data.ERPId }));

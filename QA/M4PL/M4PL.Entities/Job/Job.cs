@@ -533,8 +533,8 @@ namespace M4PL.Entities.Job
 		public string JobShipFromSitePOCPhone2 { get; set; }
 		public string JobShipFromSitePOCEmail2 { get; set; }
 
-		public long CustomerERPId { get; set; }
-		public long VendorERPId { get; set; }
+		public string CustomerERPId { get; set; }
+		public string VendorERPId { get; set; }
 
 		public bool JobElectronicInvoice { get; set; }
 		public string JobOriginStreetAddress3 { get; set; }
