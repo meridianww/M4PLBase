@@ -23,5 +23,6 @@ namespace M4PL.Entities.Job
 		public string FontColor { get; set; }
 		public string DashboardCategoryName { get; set; }
 		public string DashboardSubCategoryName { get; set; }
-	}
+        public int SortOrder { get; set; }
+    }
 }

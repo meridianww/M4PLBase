@@ -3103,7 +3103,7 @@ namespace M4PL.Web
                         Id = jobCardTile.DashboardCategoryRelationId,
                         Name = jobCardTile.DashboardSubCategoryDisplayName,
                         CardCount = jobCardTile.RecordCount,
-                        CardType = jobCardTile.DashboardCategoryDisplayName,
+                        CardType = jobCardTile.SortOrder + jobCardTile.DashboardCategoryDisplayName,
                         CustomerId = custId,
                         BackGroundColor = jobCardTile.BackGroundColor,
                         FontColor = jobCardTile.FontColor,

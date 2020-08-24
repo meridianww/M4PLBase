@@ -2254,7 +2254,7 @@ M4PLCommon.CardView = (function () {
         $.each($("#CardView tbody td table tbody td div"), function (key, value) {
             if (value != "" && value != undefined && value.innerText != "" && value.innerText.includes("Card Type:")) {
                 var valueCardType = value.innerText.replace('Card Type: ', '');
-                value.innerText = valueCardType;
+                value.innerText = valueCardType.replace(/[0-9]/g, '');
             }
         });
     };
