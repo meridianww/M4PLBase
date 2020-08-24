@@ -11,7 +11,7 @@ GO
 -- Create date:               08/18/2020      
 -- Description:               Get Manifest Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetManifestReportView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetManifestReportView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -124,27 +124,14 @@ BEGIN TRY
 	------------------------------- Security End---------------------------------------
 	SET @TablesQuery = @TablesQuery + ' INNER JOIN JOBDL010Cargo JC ON JC.JobID = ' + @entity + '.Id AND JC.StatusId = 1'
 	SET @TablesQuery = @TablesQuery + ' LEFT JOIN SYSTM000Ref_Options SO ON JC.CgoPackagingTypeId = SO.Id '
-
-	IF (
-			(
-				(
-					ISNULL(@PackagingCode, '') <> ''
-					AND ISNULL(@PackagingCode, '') <> 'ALL'
-					)
-				OR (ISNULL(@CargoId, 0) > 0)
-				)
-			)
-	BEGIN
-		SET @TablesQuery = @TablesQuery + ' INNER JOIN JOBDL010Cargo JC ON JC.JobID = ' + @entity + '.Id AND JC.StatusId = 1'
-	END
-
+	 
 	IF (
 			ISNULL(@PackagingCode, '') <> ''
 			AND ISNULL(@PackagingCode, '') <> 'ALL'
 			)
 	BEGIN
-		SET @TablesQuery = @TablesQuery + ' LEFT JOIN SYSTM000Ref_Options SO ON JC.CgoPackagingTypeId = SO.Id '
-		SET @TablesQuery = @TablesQuery + ' AND SO.SysOptionName = ''' + @PackagingCode + '''';
+		SET @TablesQuery = @TablesQuery + ' INNER JOIN SYSTM000Ref_Options SOC ON JC.CgoPackagingTypeId = SOC.Id '
+		SET @TablesQuery = @TablesQuery + ' AND SOC.SysOptionName = ''' + @PackagingCode + '''';
 	END
 	ELSE IF (ISNULL(@CargoId, 0) > 0)
 	BEGIN
@@ -240,7 +227,7 @@ BEGIN TRY
 	END
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(' + @entity + '.Id) ' + @TablesQuery
-
+	print @TCountQuery
 	IF (ISNULL(@where, '') <> '')
 	BEGIN
 		SET @where = REPLACE(@where, 'JobAdvanceReport.CargoTitle', 'JC.CgoTitle');
@@ -253,7 +240,7 @@ BEGIN TRY
 		SET @where = REPLACE(@where, 'JobAdvanceReport.JobQtyActual', 'CASE WHEN SO.SysOptionName = ''Appliance'' THEN 1 ELSE 0 END')
 		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
 	END
-
+	
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
