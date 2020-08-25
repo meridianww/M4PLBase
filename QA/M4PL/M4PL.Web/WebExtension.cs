@@ -3207,12 +3207,19 @@ namespace M4PL.Web
                     {
                         var locationIds = route.Location.Select(long.Parse).ToList();
                         var entity = record.Where(t => locationIds.Contains(t.Id));
-                        if (entity.All(t => t.JobIsSchedule == true))
-                            isScheduleAciton = true;
-                        else if (entity.All(t => t.JobIsSchedule == false))
-                            isScheduleAciton = false;
-                        if (entity.Count() == 1)
+
+                        if (entity.GroupBy(t => t.ShipmentType).Count() == 1 && entity.GroupBy(t => t.JobType).Count() == 1)
+                        {
+                            if (entity.All(t => t.JobIsSchedule == true))
+                                isScheduleAciton = true;
+                            else if (entity.All(t => t.JobIsSchedule == false))
+                                isScheduleAciton = false;
                             route.ParentRecordId = locationIds.FirstOrDefault();
+                        }
+                        else
+                        {
+                            route.ParentRecordId = 0;
+                        }
                     }
                     else if (record != null && _gridResult.FocusedRowId > 0)
                     {
@@ -3221,79 +3228,91 @@ namespace M4PL.Web
                         route.ParentRecordId = _gridResult.FocusedRowId;
                     }
                 }
-
-                var allActions = _commonCommands.GetJobAction(route.ParentRecordId, route.Entity.ToString(), isScheduleAciton);
-                _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
-
-                var routeToAssign = new MvcRoute(currentRoute);
-                routeToAssign.Entity = EntitiesAlias.JobGateway;
-                routeToAssign.Action = MvcConstants.ActionGatewayActionForm;
-                routeToAssign.IsPopup = true;
-                routeToAssign.RecordId = _gridResult.FocusedRowId;
-                routeToAssign.IsPBSReport = currentRoute.Entity != EntitiesAlias.JobGateway;
-
-                if (allActions.Count > 0)
+                if (route.ParentRecordId > 0)
                 {
-                    var groupedActions = allActions.GroupBy(x => x.GatewayCode);
+                    var allActions = _commonCommands.GetJobAction(route.ParentRecordId, route.Entity.ToString(), isScheduleAciton);
+                    _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
 
-                    foreach (var singleApptCode in groupedActions)
+                    var routeToAssign = new MvcRoute(currentRoute);
+                    routeToAssign.Entity = EntitiesAlias.JobGateway;
+                    routeToAssign.Action = MvcConstants.ActionGatewayActionForm;
+                    routeToAssign.IsPopup = true;
+                    routeToAssign.RecordId = _gridResult.FocusedRowId;
+                    routeToAssign.IsPBSReport = currentRoute.Entity != EntitiesAlias.JobGateway;
+
+                    if (allActions.Count > 0)
                     {
-                        var newOperation = new Operation();
-                        newOperation.LangName = singleApptCode.First().GatewayCode;
+                        var groupedActions = allActions.GroupBy(x => x.GatewayCode);
 
-                        foreach (var singleReasonCode in singleApptCode)
+                        foreach (var singleApptCode in groupedActions)
                         {
-                            routeToAssign.Filters = new Entities.Support.Filter();
-                            routeToAssign.Filters.FieldName = singleReasonCode.GatewayCode;
+                            var newOperation = new Operation();
+                            newOperation.LangName = singleApptCode.First().GatewayCode;
 
-                            var newChildOperation = new Operation();
-                            var newRoute = new MvcRoute(routeToAssign);
-                            newChildOperation.LangName = singleReasonCode.PgdGatewayTitle;
-                            newRoute.Filters = new Entities.Support.Filter();
-                            newRoute.Filters.FieldName = singleReasonCode.GatewayCode;
-                            newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
+                            foreach (var singleReasonCode in singleApptCode)
+                            {
+                                routeToAssign.Filters = new Entities.Support.Filter();
+                                routeToAssign.Filters.FieldName = singleReasonCode.GatewayCode;
 
-                            #region Add Contact
+                                var newChildOperation = new Operation();
+                                var newRoute = new MvcRoute(routeToAssign);
+                                newChildOperation.LangName = singleReasonCode.PgdGatewayTitle;
+                                newRoute.Filters = new Entities.Support.Filter();
+                                newRoute.Filters.FieldName = singleReasonCode.GatewayCode;
+                                newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
 
-                            //if (singleReasonCode.GatewayCode == "Add Contact")
-                            //{
-                            //    var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
-                            //    contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
-                            //    contactRoute.IsPopup = true;
-                            //    contactRoute.RecordId = 0;
-                            //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
-                            //        = M4PL.Entities.EntitiesAlias.Contact.ToString();
-                            //    contactRoute.OwnerCbPanel = "pnlJobDetail";
-                            //    contactRoute.CompanyId = newRoute.CompanyId;
-                            //    contactRoute.ParentEntity = EntitiesAlias.Job;
-                            //    if (route.Filters != null)
-                            //    {
-                            //        var isValidCode = _commonCommands.IsValidJobSiteCode(Convert.ToString(route.Filters.FieldName), Convert.ToInt64(newRoute.Url));
-                            //        if (string.IsNullOrEmpty(isValidCode))
-                            //        {
-                            //            contactRoute.Filters = new Entities.Support.Filter();
-                            //            contactRoute.Filters = route.Filters;
-                            //            contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
-                            //            //contactRoute.IsJobParentEntity = route.IsJobParentEntity;
-                            //        }
-                            //    }
+                                #region Add Contact
 
-                            //    contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
-                            //    if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
-                            //        contactRoute.ParentRecordId = ContactAction.ProgramId;
-                            //    newChildOperation.Route = contactRoute;
+                                //if (singleReasonCode.GatewayCode == "Add Contact")
+                                //{
+                                //    var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
+                                //    contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
+                                //    contactRoute.IsPopup = true;
+                                //    contactRoute.RecordId = 0;
+                                //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
+                                //        = M4PL.Entities.EntitiesAlias.Contact.ToString();
+                                //    contactRoute.OwnerCbPanel = "pnlJobDetail";
+                                //    contactRoute.CompanyId = newRoute.CompanyId;
+                                //    contactRoute.ParentEntity = EntitiesAlias.Job;
+                                //    if (route.Filters != null)
+                                //    {
+                                //        var isValidCode = _commonCommands.IsValidJobSiteCode(Convert.ToString(route.Filters.FieldName), Convert.ToInt64(newRoute.Url));
+                                //        if (string.IsNullOrEmpty(isValidCode))
+                                //        {
+                                //            contactRoute.Filters = new Entities.Support.Filter();
+                                //            contactRoute.Filters = route.Filters;
+                                //            contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
+                                //            //contactRoute.IsJobParentEntity = route.IsJobParentEntity;
+                                //        }
+                                //    }
 
-                            //}
-                            //else
+                                //    contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
+                                //    if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
+                                //        contactRoute.ParentRecordId = ContactAction.ProgramId;
+                                //    newChildOperation.Route = contactRoute;
 
-                            #endregion Add Contact
+                                //}
+                                //else
 
-                            newChildOperation.Route = newRoute;
-                            newOperation.ChildOperations.Add(newChildOperation);
+                                #endregion Add Contact
+
+                                newChildOperation.Route = newRoute;
+                                newOperation.ChildOperations.Add(newChildOperation);
+                            }
+                            _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
                         }
-                        _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
+                        WebExtension.AddGatewayInGatewayContextMenu(_gridResult, currentRoute, _commonCommands);
                     }
-                    WebExtension.AddGatewayInGatewayContextMenu(_gridResult, currentRoute, _commonCommands);
+                    else
+                    {
+                        if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                            && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                        {
+                            var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                            if (context != null)
+                                _gridResult.GridSetting.ContextMenu.Remove(context);
+                        }
+                    }
                 }
                 else
                 {
@@ -3336,8 +3355,7 @@ namespace M4PL.Web
                     {
                         var locationIds = route.Location.Select(long.Parse).ToList();
                         var entity = record.Where(t => locationIds.Contains(t.Id)).Select(t => t.JobGatewayStatus).Distinct();
-                        if (entity.Count() == 1)
-                            route.ParentRecordId = locationIds.FirstOrDefault();
+                        route.ParentRecordId = locationIds.FirstOrDefault();
                     }
                     else if (record != null && _gridResult.FocusedRowId > 0)
                         route.ParentRecordId = _gridResult.FocusedRowId;
