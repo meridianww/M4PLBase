@@ -78,7 +78,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 			}
 
 			SetGridResult(route);
-			return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
 		public ActionResult TabView(string strRoute)
