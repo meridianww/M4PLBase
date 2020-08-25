@@ -121,8 +121,7 @@ namespace M4PL.Business.Job
 			}
 			else
 			{
-				var jobCargo = _commands.Get(ActiveUser, cargoId);
-				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobCargoException.ExceptionCode, exceptionStatusModel.JobId, exceptionStatusModel.ContractNumber, Utilities.TimeUtility.GetPacificDateTime(), string.Empty, jobCargo.CgoPartNumCode, jobCargo.CgoTitle, jobCargo.CgoSerialNumber, jobCargo.JobGatewayStatus);
+				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobCargoException.ExceptionCode, exceptionStatusModel.JobId, exceptionStatusModel.ContractNumber, Utilities.TimeUtility.GetPacificDateTime(), string.Empty);
 				EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)exceptionStatusModel.ProgramId, exceptionStatusModel.ContractNumber, cargoExceptionBody);
 				return new StatusModel()
 				{
