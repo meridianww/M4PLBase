@@ -256,6 +256,12 @@
                     column.ColumnType = MVCxGridViewColumnType.DateEdit;
                     column.PropertiesEdit.DisplayFormatString = colSetting.ColDisplayFormat;
 
+                    column.EditorProperties().DateEdit(dtEdit =>
+                    {
+                        dtEdit.DisplayFormatString = colSetting.ColDisplayFormat;
+                        if (column.ReadOnly)
+                            column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;                       
+                    });
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands && colSetting.ColColumnName != SysRefTabPageNameColumns.TabTableName.ToString())
                 {

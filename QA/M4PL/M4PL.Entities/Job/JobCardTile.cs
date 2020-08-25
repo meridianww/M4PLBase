@@ -35,10 +35,9 @@ namespace M4PL.Entities.Job
 		public string CardType { get; set; }
 		public string CardBackgroupColor { get; set; }
 		public MvcRoute CardRoute { get; set; }
-
 		public string DashboardCategoryName { get; set; }
 		public string DashboardSubCategoryName { get; set; }
-
+		public int SortOrder { get; set; }
 		private string _formId;
 		private string _cancelClick;
 

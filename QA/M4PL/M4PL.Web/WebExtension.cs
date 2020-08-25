@@ -3103,7 +3103,7 @@ namespace M4PL.Web
                         Id = jobCardTile.DashboardCategoryRelationId,
                         Name = jobCardTile.DashboardSubCategoryDisplayName,
                         CardCount = jobCardTile.RecordCount,
-                        CardType = jobCardTile.DashboardCategoryDisplayName,
+                        CardType = jobCardTile.SortOrder + jobCardTile.DashboardCategoryDisplayName,
                         CustomerId = custId,
                         BackGroundColor = jobCardTile.BackGroundColor,
                         FontColor = jobCardTile.FontColor,
@@ -3211,11 +3211,14 @@ namespace M4PL.Web
                             isScheduleAciton = true;
                         else if (entity.All(t => t.JobIsSchedule == false))
                             isScheduleAciton = false;
+                        if (entity.Count() == 1)
+                            route.ParentRecordId = locationIds.FirstOrDefault();
                     }
                     else if (record != null && _gridResult.FocusedRowId > 0)
                     {
                         var entity = record.FirstOrDefault(t => t.Id == _gridResult.FocusedRowId);
                         isScheduleAciton = entity != null && entity.JobIsSchedule;
+                        route.ParentRecordId = _gridResult.FocusedRowId;
                     }
                 }
 
@@ -3291,6 +3294,16 @@ namespace M4PL.Web
                         _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
                     }
                     WebExtension.AddGatewayInGatewayContextMenu(_gridResult, currentRoute, _commonCommands);
+                }
+                else
+                {
+                    if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                        && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                    {
+                        var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                        if (context != null)
+                            _gridResult.GridSetting.ContextMenu.Remove(context);
+                    }
                 }
             }
             else

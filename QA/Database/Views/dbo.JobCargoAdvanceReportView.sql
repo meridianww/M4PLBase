@@ -21,18 +21,38 @@ SELECT Cargo.JobId
 				THEN ISNULL(Cargo.CgoQtyOnHold, 0)
 			ELSE 0
 			END) Delivered
-	,SUM(CASE 
-			WHEN Options.SysOptionName IN ('CAB', 'CABINET')
-				THEN ISNULL(Cargo.CgoQtyOrdered, 0)
-			ELSE 0
-			END) Cabinets
-	,SUM(CASE 
-			WHEN Options.SysOptionName = 'CABPART'
-				THEN ISNULL(Cargo.CgoQtyOrdered, 0)
-			ELSE 0
-			END) Parts
+	,CASE 
+		WHEN Prg.PrgCustID = 20047
+			THEN SUM(CASE 
+						WHEN Package.SysOptionName = 'Appliance'
+							THEN ISNULL(Cargo.CgoQtyOrdered, 0)
+						ELSE 0
+						END)
+		ELSE SUM(CASE 
+					WHEN Options.SysOptionName IN ('CAB', 'CABINET')
+						THEN ISNULL(Cargo.CgoQtyOrdered, 0)
+					ELSE 0
+					END)
+		END Cabinets
+	,CASE 
+		WHEN Prg.PrgCustID = 20047
+			THEN SUM(CASE 
+						WHEN Package.SysOptionName = 'Accessory'
+							THEN ISNULL(Cargo.CgoQtyOrdered, 0)
+						ELSE 0
+						END)
+		ELSE SUM(CASE 
+					WHEN Options.SysOptionName = 'CABPART'
+						THEN ISNULL(Cargo.CgoQtyOrdered, 0)
+					ELSE 0
+					END)
+		END Parts
 FROM dbo.JobDL010Cargo Cargo
-INNER JOIN dbo.SYSTM000Ref_Options Options ON Options.Id = Cargo.CgoQtyUnitsId
-Where Cargo.StatusId=1
+INNER JOIN dbo.JOBDL000Master Job ON Job.Id = Cargo.JobID
+INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = Job.ProgramID
+LEFT JOIN dbo.SYSTM000Ref_Options Options ON Options.Id = Cargo.CgoQtyUnitsId
+LEFT JOIN dbo.SYSTM000Ref_Options Package ON Package.Id = Cargo.CgoPackagingTypeId
+WHERE Cargo.StatusId = 1
 GROUP BY JobId
+	,PrgCustID
 GO

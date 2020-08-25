@@ -1202,8 +1202,11 @@ M4PLCommon.VocReport = (function () {
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         route.CompanyId = customerCtrl.GetValue();
         M4PLCommon.IsIgnoreCardGridClick = true;
-        if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback())
+        if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
+            route.IsPBSReport = true;
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId });
+        }
+
         //route.Action = "RibbonMenu";
         //route.Entity = "Common";
         DevExCtrl.Ribbon.DoCallBack(route);
@@ -2254,7 +2257,7 @@ M4PLCommon.CardView = (function () {
         $.each($("#CardView tbody td table tbody td div"), function (key, value) {
             if (value != "" && value != undefined && value.innerText != "" && value.innerText.includes("Card Type:")) {
                 var valueCardType = value.innerText.replace('Card Type: ', '');
-                value.innerText = valueCardType;
+                value.innerText = valueCardType.replace(/[0-9]/g, '');
             }
         });
     };
