@@ -1125,6 +1125,9 @@ M4PLWindow.FormView = function () {
                 success: function (response) {
                     if (response && response.status && response.status === true) {
                         var ownerCbPanel = ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel);
+                        if (ownerCbPanel == null) {
+                            ownerCbPanel = ASPxClientControl.GetControlCollection().GetByName(response.route.OwnerCbPanel);
+                        }
                         if (currentRoute.OwnerCbPanel === "pnlJobDetail" && currentRoute.Action === "ContactCardFormView") {
                             if (ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver")) {
                                 var driverpanel = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver");
@@ -1135,8 +1138,8 @@ M4PLWindow.FormView = function () {
                             attachmentGrid.callbackCustomArgs["docRefId"] = response.route.RecordId;
                             attachmentGrid.UpdateEdit();
                         }
-                        if (ownerCbPanel && !ownerCbPanel.InCallback()) {
-                            response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
+                      
+                        if (ownerCbPanel && !ownerCbPanel.InCallback()) {                           
                             response.route.IsPopup = currentRoute.IsPopup;
                             if (!response.route.ParentEntity) {
                                 response.route.ParentEntity = currentRoute.ParentEntity;
@@ -1156,7 +1159,13 @@ M4PLWindow.FormView = function () {
                                                 response.route.Controller = "Job";
                                                 response.route.Entity = "Job";
                                                 response.route.RecordId = currentRoute.ParentRecordId;
-                                                JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                                                if (response.route.OwnerCbPanel == "pnlJobDetail")
+                                                    pnlJobDetail.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                                                else {
+                                                    response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
+                                                    JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                                                }
+
                                                 RecordPopupControl.Hide();
                                                 if (response.displayMessage)
                                                     DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
@@ -1166,6 +1175,7 @@ M4PLWindow.FormView = function () {
                                             // ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
                                         } else if (response.route.Controller === "JobGateway"
                                             || response.route.Controller === "JobDocReference") {
+                                            response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
                                             var resultRoute = response.tabRoute;
                                             if (resultRoute != null) {
                                                 resultRoute.Controller = "Job";
@@ -1193,6 +1203,7 @@ M4PLWindow.FormView = function () {
                                                 ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
                                             }
                                         } else {
+                                            response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
                                             ownerCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route), selectedId: response.route.RecordId, strDropDownViewModel: (!strDropDownViewModel) ? null : JSON.stringify(strDropDownViewModel) });
                                         }
                                     }
@@ -1313,7 +1324,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1350,7 +1361,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1428,7 +1439,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1465,7 +1476,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1499,7 +1510,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1536,7 +1547,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1882,7 +1893,7 @@ M4PLWindow.ChooseColumns = function () {
                         }
                     }
 
-                 
+
                 }
                 if (currentRoute.Action == "ChooseColumns" && currentRoute.Controller == "JobDocReference") {
                     if (ASPxClientControl.GetControlCollection().GetByName("Document_JobCargoPageControl")) {

@@ -59,7 +59,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 					resultRoute.Action = "FormView";
 					resultRoute.RecordId = jobXcblInfoView.JobId;
 					resultRoute.ParentRecordId = preProgramId;
-					resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
+					resultRoute.OwnerCbPanel = "pnlJobDetail";
 
 					resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
 					resRoute.Url = resRoute.ParentRecordId.ToString();
