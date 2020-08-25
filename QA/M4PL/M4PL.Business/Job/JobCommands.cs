@@ -628,11 +628,11 @@ namespace M4PL.Business.Job
         public StatusModel AddDriver(DriverContact driverContact)
         {
             if (driverContact == null
-                || string.IsNullOrEmpty(driverContact.lastName)
-                || string.IsNullOrEmpty(driverContact.firstName)
-                || string.IsNullOrEmpty(driverContact.locationCode)
-                || driverContact.jobId == 0
-                || string.IsNullOrEmpty(driverContact.bizMoblContactID))
+                || string.IsNullOrEmpty(driverContact.LastName)
+                || string.IsNullOrEmpty(driverContact.FirstName)
+                || string.IsNullOrEmpty(driverContact.LocationCode)
+                || driverContact.JobId == 0
+                || string.IsNullOrEmpty(driverContact.BizMoblContactID))
             {
                 return new StatusModel()
                 {
