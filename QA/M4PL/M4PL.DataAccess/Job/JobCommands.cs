@@ -202,14 +202,16 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@userId", activeUser.UserId),
                 new Parameter("@roleId", activeUser.RoleId),
                 new Parameter("@orgId", activeUser.OrganizationId),
-                new Parameter("@bizMoblContactID", driverContact.bizMoblContactID),
-                new Parameter("@locationCode", driverContact.locationCode),
-                new Parameter("@firstName", driverContact.firstName),
-                new Parameter("@lastName", driverContact.lastName),
-                new Parameter("@jobId", driverContact.jobId)
-
-
-            };
+                new Parameter("@bizMoblContactID", driverContact.BizMoblContactID),
+                new Parameter("@locationCode", driverContact.LocationCode),
+                new Parameter("@firstName", driverContact.FirstName),
+                new Parameter("@lastName", driverContact.LastName),
+                new Parameter("@jobId", driverContact.JobId),
+				new Parameter("@routeId", driverContact.JobRouteId),
+				new Parameter("@JobStop", driverContact.JobStop),
+				new Parameter("@enteredBy", activeUser.UserName),
+				new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
+			};
 
             var result = SqlSerializer.Default.DeserializeSingleRecord<DriverContact>(StoredProceduresConstant.InsDriverContact, parameters.ToArray(), storedProcedure: true);
             return result ?? new DriverContact();

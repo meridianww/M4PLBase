@@ -8,11 +8,13 @@ namespace M4PL.Entities.Job
 {
     public class DriverContact
     {
-        private long? id { get; set; }
-        public string locationCode { get; set; }
-        public string firstName { get; set;     }
-        public string lastName { get; set; }
-        public string bizMoblContactID { get; set; }
-        public long? jobId { get; set; }
-    }
+        private long? Id { get; set; }
+        public string LocationCode { get; set; }
+        public string FirstName { get; set;     }
+        public string LastName { get; set; }
+        public string BizMoblContactID { get; set; }
+        public long? JobId { get; set; }
+		public int? JobRouteId { get; set; }
+		public string JobStop { get; set; }
+	}
 }
