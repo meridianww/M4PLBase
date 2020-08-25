@@ -51,7 +51,7 @@ namespace M4PL.Business.Event
 			}
 		}
 
-		public static string GetCargoExceptionMailBody(ActiveUser activeUser, string exceptionCode, long jobId, string contractNo, DateTime createdDate, string comment)
+		public static string GetCargoExceptionMailBody(ActiveUser activeUser, string exceptionCode, long jobId, string contractNo, DateTime createdDate, string comment,string cgoPartNumCode,string cgoitle,string cgoSerialNumber,string currentGateway)
 		{
 			SetCollection setcollection = new SetCollection();
 			Dictionary<string, string> args = new Dictionary<string, string>
@@ -64,6 +64,11 @@ namespace M4PL.Business.Event
 				{ "JobURL", string.Format("{0}?jobId={1}", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, jobId) },
 				{ "Comment", string.IsNullOrEmpty(comment) ? string.Empty : comment },
 				{ "IsCommentPresent", string.IsNullOrEmpty(comment) ? "0" : "1" },
+				{ "CgoPartNumCode", cgoPartNumCode??" " },
+				{ "Cgoitle", cgoitle??" " },
+				{ "CgoSerialNumber", cgoSerialNumber??" " },
+				{ "CurrentGateway", currentGateway??" " },
+
 			};
 
 			Stream stream = GenerateHtmlFile(setcollection, "JobDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\CargoException.xslt", args);
