@@ -452,7 +452,7 @@ M4PLWindow.DataView = function () {
                 if (urlParams.has('strRoute')) {
                     var route = JSON.parse(urlParams.getAll('strRoute'));
                     route.RecordId = 0;
-                    route.Location = s.GetSelectedKeysOnPage();
+                    route.JobIds = s.GetSelectedKeysOnPage();
                     s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                     s.Refresh();
                 }
@@ -468,7 +468,7 @@ M4PLWindow.DataView = function () {
                 if (urlParams.has('strRoute')) {
                     var route = JSON.parse(urlParams.getAll('strRoute'));
                     route.RecordId = selectedJobId;
-                    route.Location = s.GetSelectedKeysOnPage();
+                    route.JobIds = s.GetSelectedKeysOnPage();
                     s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                     s.Refresh();
                 }
@@ -1092,7 +1092,11 @@ M4PLWindow.FormView = function () {
         }
         if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway"
             && (currentRoute.Action == "GatewayActionFormView" || currentRoute.Action == "FormView")) {
-            var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+            var s = null;
+            if (currentRoute.OwnerCbPanel == "AppCbPanel")
+                s = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
+            else
+                s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
             //if (s != null && s != undefined && s.GetSelectedKeysOnPage() != null && s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0)
             if (s != null && s != undefined && M4PLWindow.MultiSelectedJobIds.length > 0)
                 putOrPostData.push({ name: "JobIds", value: M4PLWindow.MultiSelectedJobIds });
@@ -1138,8 +1142,8 @@ M4PLWindow.FormView = function () {
                             attachmentGrid.callbackCustomArgs["docRefId"] = response.route.RecordId;
                             attachmentGrid.UpdateEdit();
                         }
-                      
-                        if (ownerCbPanel && !ownerCbPanel.InCallback()) {                           
+
+                        if (ownerCbPanel && !ownerCbPanel.InCallback()) {
                             response.route.IsPopup = currentRoute.IsPopup;
                             if (!response.route.ParentEntity) {
                                 response.route.ParentEntity = currentRoute.ParentEntity;
@@ -1190,7 +1194,7 @@ M4PLWindow.FormView = function () {
                                                             if (urlParams.has('strRoute')) {
                                                                 var route = JSON.parse(urlParams.getAll('strRoute'));
                                                                 route.RecordId = 0;
-                                                                route.Location = s.GetSelectedKeysOnPage();
+                                                                route.JobIds = s.GetSelectedKeysOnPage();
                                                                 s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                                                                 s.Refresh();
                                                             }

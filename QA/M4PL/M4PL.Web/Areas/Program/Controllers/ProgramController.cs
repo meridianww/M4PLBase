@@ -88,6 +88,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 
 			treeViewBase.Name = "ProgramTree";
 			treeViewBase.Text = "Program Tree";
+			treeViewBase.AllowCopy = true;
 			treeViewBase.EnableCallback = true;
 			treeViewBase.Area = BaseRoute.Area;
 			treeViewBase.Controller = BaseRoute.Controller;
@@ -101,9 +102,9 @@ namespace M4PL.Web.Areas.Program.Controllers
 			treeViewBase.EnableNodeClick = true;
 
 			treeViewBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
-			//treeViewBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
+            treeViewBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
 
-			treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.Program, Area = BaseRoute.Area };
+            treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.Program, Area = BaseRoute.Area };
 
 			treeViewBase.Command = _programCommands;
 

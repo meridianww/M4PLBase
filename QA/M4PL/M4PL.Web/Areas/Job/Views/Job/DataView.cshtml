@@ -431,8 +431,6 @@
             {
                 foreach (var contexMenu in Model.GridSetting.ContextMenu)
                 {
-
-
                     var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
                     command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
                     command.Enabled = true;

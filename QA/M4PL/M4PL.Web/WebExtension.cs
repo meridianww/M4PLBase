@@ -3203,9 +3203,9 @@ namespace M4PL.Web
                 if (route.Entity == EntitiesAlias.Job)
                 {
                     var record = (IList<JobView>)_gridResult.Records;
-                    if (record != null && route.Location != null && route.Location.Count() > 0)
+                    if (record != null && route.JobIds != null && route.JobIds.Count() > 0)
                     {
-                        var locationIds = route.Location.Select(long.Parse).ToList();
+                        var locationIds = route.JobIds.Select(long.Parse).ToList();
                         var entity = record.Where(t => locationIds.Contains(t.Id));
 
                         if (entity.GroupBy(t => t.ShipmentType).Count() == 1 && entity.GroupBy(t => t.JobType).Count() == 1)
@@ -3214,12 +3214,46 @@ namespace M4PL.Web
                                 isScheduleAciton = true;
                             else if (entity.All(t => t.JobIsSchedule == false))
                                 isScheduleAciton = false;
-                            route.ParentRecordId = locationIds.FirstOrDefault();
+                            if (isScheduleAciton != null)
+                                route.ParentRecordId = locationIds.FirstOrDefault();
+                            else
+                                route.ParentRecordId = 0;
                         }
                         else
                         {
                             route.ParentRecordId = 0;
                         }
+                    }
+                    else if (record != null && _gridResult.FocusedRowId > 0)
+                    {
+                        var entity = record.FirstOrDefault(t => t.Id == _gridResult.FocusedRowId);
+                        isScheduleAciton = entity != null && entity.JobIsSchedule;
+                        route.ParentRecordId = _gridResult.FocusedRowId;
+                    }
+                }
+                if (route.Entity == EntitiesAlias.JobCard)
+                {
+                    route.ParentRecordId = 0;
+                    var record = (IList<JobCardView>)_gridResult.Records;
+                    if (record != null && route.JobIds != null && route.JobIds.Count() > 0)
+                    {
+                        var locationIds = route.JobIds.Select(long.Parse).ToList();
+                        var entity = record.Where(t => locationIds.Contains(t.Id));
+
+                        if (entity.GroupBy(t => t.ShipmentType).Count() == 1
+                            && entity.GroupBy(t => t.JobType).Count() == 1)
+                        {
+                            if (entity.All(t => t.JobIsSchedule == true))
+                                isScheduleAciton = true;
+                            else if (entity.All(t => t.JobIsSchedule == false))
+                                isScheduleAciton = false;
+                            if (isScheduleAciton != null)
+                                route.ParentRecordId = locationIds.FirstOrDefault();
+                            else
+                                route.ParentRecordId = 0;
+                        }
+                        else
+                            route.ParentRecordId = 0;
                     }
                     else if (record != null && _gridResult.FocusedRowId > 0)
                     {
@@ -3301,7 +3335,8 @@ namespace M4PL.Web
                             }
                             _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
                         }
-                        WebExtension.AddGatewayInGatewayContextMenu(_gridResult, currentRoute, _commonCommands);
+                        if (currentRoute.Entity != EntitiesAlias.JobCard)
+                            WebExtension.AddGatewayInGatewayContextMenu(_gridResult, currentRoute, _commonCommands);
                     }
                     else
                     {
@@ -3351,9 +3386,9 @@ namespace M4PL.Web
                 {
                     route.IsPBSReport = true;
                     IList<JobView> record = (IList<JobView>)_gridResult.Records;
-                    if (record != null && route.Location != null && route.Location.Count() > 0)
+                    if (record != null && route.JobIds != null && route.JobIds.Count() > 0)
                     {
-                        var locationIds = route.Location.Select(long.Parse).ToList();
+                        var locationIds = route.JobIds.Select(long.Parse).ToList();
                         var entity = record.Where(t => locationIds.Contains(t.Id)).Select(t => t.JobGatewayStatus).Distinct();
                         route.ParentRecordId = locationIds.FirstOrDefault();
                     }

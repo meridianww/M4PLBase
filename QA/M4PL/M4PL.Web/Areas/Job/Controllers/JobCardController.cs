@@ -182,6 +182,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _gridResult.SessionProvider = SessionProvider;
 
             base.DataView(JsonConvert.SerializeObject(route));
+            //To Add Actions Operation in ContextMenu
+            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
+            _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             _gridResult.GridHeading = jobCardRequest != null ? jobCardRequest.CardType + " " + jobCardRequest.CardName : _gridResult.GridSetting.GridName;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
@@ -244,6 +247,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["BackUrl"] = TempData["BackUrl"];
             TempData.Keep();
             base.GridFilteringView(filteringState, strRoute, gridName);
+            //To Add Actions Operation in ContextMenu
+            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
+
             route.Filters = null;
             _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -267,6 +273,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData.Keep();
             base.GridSortingView(column, reset, strRoute, gridName);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            //To Add Actions Operation in ContextMenu
+            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
+
             _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
@@ -290,6 +299,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             base.GridPagingView(pager, strRoute, gridName);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            //To Add Actions Operation in ContextMenu
+            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
+
             _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
