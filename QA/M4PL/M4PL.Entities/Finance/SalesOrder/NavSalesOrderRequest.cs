@@ -29,17 +29,17 @@ namespace M4PL.Entities.Finance.SalesOrder
 		public string Cust_Reference_No { get; set; }
 		public string M4PL_Job_ID { get; set; }
 		public string Ship_from_Code { get; set; }
-		public string Ship_from_Name { get; set; }
-		public string Ship_from_Name_2 { get; set; }
-		public string Ship_from_Address { get; set; }
-		public string Ship_from_Address_2 { get; set; }
+		////public string Ship_from_Name { get; set; }
+		////public string Ship_from_Name_2 { get; set; }
+		////public string Ship_from_Address { get; set; }
+		////public string Ship_from_Address_2 { get; set; }
 		public string Ship_from_City { get; set; }
 		public string Ship_from_County { get; set; }
-		public string Ship_from_Post_Code { get; set; }
-		public string Ship_from_Contact { get; set; }
-		public string Ship_from_Phone { get; set; }
-		public string Ship_from_Mobile { get; set; }
-		public string Ship_from_Email { get; set; }
+		////public string Ship_from_Post_Code { get; set; }
+		////public string Ship_from_Contact { get; set; }
+		////public string Ship_from_Phone { get; set; }
+		////public string Ship_from_Mobile { get; set; }
+		////public string Ship_from_Email { get; set; }
 		public string Ship_to_Code { get; set; }
 		public string Ship_to_Name { get; set; }
 		public string Ship_to_Address { get; set; }

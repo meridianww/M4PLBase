@@ -91,6 +91,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 			treeViewBase.AllowCopy = true;
 			treeViewBase.EnableCallback = true;
 			treeViewBase.Area = BaseRoute.Area;
+			treeViewBase.AllowCopy = true;
 			treeViewBase.Controller = BaseRoute.Controller;
 			treeViewBase.Action = MvcConstants.ActionTreeViewCallback;
 			treeViewBase.AllowSelectNode = true;
@@ -182,7 +183,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 			_formResult.Operations[OperationTypeEnum.New].Route.Action = MvcConstants.ActionAddOrEdit;
 			_formResult.Operations[OperationTypeEnum.Edit].Route.Action = MvcConstants.ActionAddOrEdit;
 			_formResult.Operations[OperationTypeEnum.Cancel].Route.Action = MvcConstants.ActionTreeView;
-			
+
 			_formResult.SessionProvider = SessionProvider;
 
 			_formResult.ColumnSettings = WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(BaseRoute.Entity), SessionProvider);
