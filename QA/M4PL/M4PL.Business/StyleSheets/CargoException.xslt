@@ -9,10 +9,6 @@
   <xsl:param name="JobURL"/>
   <xsl:param name="Comment"/>
   <xsl:param name="IsCommentPresent"/>
-  <xsl:param name="CgoPartNumCode"/>
-  <xsl:param name="CgoTitle"/>
-  <xsl:param name="CgoSerialNumber"/>
-  <xsl:param name="CurrentGateway"/>
   <xsl:template match="/">
     <html>
       <head>
@@ -53,35 +49,6 @@
             <b>Comment add by user: </b>
               <xsl:value-of select="$Comment" />
           </xsl:if>
-          <br></br>
-          <br></br>
-          <b>Details-</b>
-          <table>
-            <tr>
-              <td>Cargo Part code -</td>
-              <td>
-                <xsl:value-of select="$CgoPartNumCode" />
-              </td>
-            </tr>
-            <tr>
-              <td>Title -</td>
-              <td>
-                <xsl:value-of select="$CgoTitle" />
-              </td>
-            </tr>
-            <tr>
-              <td>Serial number -</td>
-              <td>
-                <xsl:value-of select="$CgoSerialNumber" />
-              </td>
-            </tr>
-            <tr>
-              <td>Current Gateway -</td>
-              <td>
-                <xsl:value-of select="$CurrentGateway" />
-              </td>
-            </tr>
-          </table>
         </div>
       </body>
     </html>

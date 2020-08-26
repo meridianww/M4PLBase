@@ -142,6 +142,5 @@ namespace M4PL.Entities.Job
 		public string CgoComment { get; set; }
 
 		public DateTime? CgoDateLastScan { get; set; }
-		public string JobGatewayStatus { get; set; }
 	}
 }
