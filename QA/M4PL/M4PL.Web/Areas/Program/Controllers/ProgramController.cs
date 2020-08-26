@@ -91,7 +91,6 @@ namespace M4PL.Web.Areas.Program.Controllers
 			treeViewBase.AllowCopy = true;
 			treeViewBase.EnableCallback = true;
 			treeViewBase.Area = BaseRoute.Area;
-			treeViewBase.AllowCopy = true;
 			treeViewBase.Controller = BaseRoute.Controller;
 			treeViewBase.Action = MvcConstants.ActionTreeViewCallback;
 			treeViewBase.AllowSelectNode = true;
