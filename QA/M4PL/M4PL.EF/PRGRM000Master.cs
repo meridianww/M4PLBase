@@ -62,6 +62,9 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
+        public Nullable<bool> PrgRollUpBilling { get; set; }
+        public Nullable<long> PrgRollUpBillingJobFieldId { get; set; }
+        public bool PrgElectronicInvoice { get; set; }
     
         public virtual CUST000Master CUST000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

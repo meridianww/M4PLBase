@@ -38,14 +38,23 @@ namespace M4PL.EF
             this.CUST040DCLocations = new HashSet<CUST040DCLocations>();
             this.CUST050Finacial_Cal = new HashSet<CUST050Finacial_Cal>();
             this.CUST050Finacial_Cal1 = new HashSet<CUST050Finacial_Cal>();
+            this.Events = new HashSet<Event>();
             this.JOBDL000Master = new HashSet<JOBDL000Master>();
             this.JOBDL000Master1 = new HashSet<JOBDL000Master>();
+            this.JOBDL000Master2 = new HashSet<JOBDL000Master>();
+            this.JOBDL000Master3 = new HashSet<JOBDL000Master>();
+            this.JOBDL000Master4 = new HashSet<JOBDL000Master>();
             this.JOBDL010Cargo = new HashSet<JOBDL010Cargo>();
+            this.JOBDL010Cargo1 = new HashSet<JOBDL010Cargo>();
+            this.JOBDL010Cargo2 = new HashSet<JOBDL010Cargo>();
+            this.JOBDL010Cargo3 = new HashSet<JOBDL010Cargo>();
+            this.JOBDL010Cargo4 = new HashSet<JOBDL010Cargo>();
             this.JOBDL020Gateways = new HashSet<JOBDL020Gateways>();
             this.JOBDL020Gateways1 = new HashSet<JOBDL020Gateways>();
             this.JOBDL020Gateways2 = new HashSet<JOBDL020Gateways>();
             this.JOBDL020Gateways3 = new HashSet<JOBDL020Gateways>();
             this.JOBDL020Gateways4 = new HashSet<JOBDL020Gateways>();
+            this.JOBDL020Gateways5 = new HashSet<JOBDL020Gateways>();
             this.JOBDL030Attributes = new HashSet<JOBDL030Attributes>();
             this.JOBDL030Attributes1 = new HashSet<JOBDL030Attributes>();
             this.JOBDL040DocumentReference = new HashSet<JOBDL040DocumentReference>();
@@ -59,6 +68,9 @@ namespace M4PL.EF
             this.JOBDL061BillableSheet1 = new HashSet<JOBDL061BillableSheet>();
             this.JOBDL062CostSheet = new HashSet<JOBDL062CostSheet>();
             this.JOBDL062CostSheet1 = new HashSet<JOBDL062CostSheet>();
+            this.JOBDL062CostSheet2 = new HashSet<JOBDL062CostSheet>();
+            this.JOBDL070ElectronicDataTransactions = new HashSet<JOBDL070ElectronicDataTransactions>();
+            this.JOBDL070ElectronicDataTransactions1 = new HashSet<JOBDL070ElectronicDataTransactions>();
             this.MVOC000Program = new HashSet<MVOC000Program>();
             this.MVOC010Ref_Questions = new HashSet<MVOC010Ref_Questions>();
             this.MVOC010Ref_Questions1 = new HashSet<MVOC010Ref_Questions>();
@@ -75,6 +87,7 @@ namespace M4PL.EF
             this.PRGRM010Ref_GatewayDefaults1 = new HashSet<PRGRM010Ref_GatewayDefaults>();
             this.PRGRM010Ref_GatewayDefaults2 = new HashSet<PRGRM010Ref_GatewayDefaults>();
             this.PRGRM010Ref_GatewayDefaults3 = new HashSet<PRGRM010Ref_GatewayDefaults>();
+            this.PRGRM010Ref_GatewayDefaults4 = new HashSet<PRGRM010Ref_GatewayDefaults>();
             this.PRGRM020Program_Role = new HashSet<PRGRM020Program_Role>();
             this.PRGRM020Program_Role1 = new HashSet<PRGRM020Program_Role>();
             this.PRGRM020Ref_AttributesDefault = new HashSet<PRGRM020Ref_AttributesDefault>();
@@ -121,9 +134,11 @@ namespace M4PL.EF
             this.SYSTM000ProcessorMaster = new HashSet<SYSTM000ProcessorMaster>();
             this.SYSTM000Ref_Dashboard = new HashSet<SYSTM000Ref_Dashboard>();
             this.SYSTM000Ref_Dashboard1 = new HashSet<SYSTM000Ref_Dashboard>();
-            this.SYSTM000Ref_Options1 = new HashSet<SYSTM000Ref_Options>();
             this.SYSTM000Ref_Report = new HashSet<SYSTM000Ref_Report>();
             this.SYSTM000Ref_Report1 = new HashSet<SYSTM000Ref_Report>();
+            this.SYSTM000Ref_Options1 = new HashSet<SYSTM000Ref_Options>();
+            this.SYSTM000Ref_Report2 = new HashSet<SYSTM000Ref_Report>();
+            this.SYSTM000Ref_Report3 = new HashSet<SYSTM000Ref_Report>();
             this.SYSTM000Ref_Settings = new HashSet<SYSTM000Ref_Settings>();
             this.SYSTM000Ref_States = new HashSet<SYSTM000Ref_States>();
             this.SYSTM000Ref_States1 = new HashSet<SYSTM000Ref_States>();
@@ -132,6 +147,7 @@ namespace M4PL.EF
             this.SYSTM000SecurityByRole1 = new HashSet<SYSTM000SecurityByRole>();
             this.SYSTM000SecurityByRole2 = new HashSet<SYSTM000SecurityByRole>();
             this.SYSTM000SecurityByRole3 = new HashSet<SYSTM000SecurityByRole>();
+            this.SYSTM000VdcLocationPreferences = new HashSet<SYSTM000VdcLocationPreferences>();
             this.SYSTM010SubSecurityByRole = new HashSet<SYSTM010SubSecurityByRole>();
             this.SYSTM010SubSecurityByRole1 = new HashSet<SYSTM010SubSecurityByRole>();
             this.SYSTM010SubSecurityByRole2 = new HashSet<SYSTM010SubSecurityByRole>();
@@ -204,11 +220,27 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST050Finacial_Cal> CUST050Finacial_Cal1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Event> Events { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL000Master> JOBDL000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL000Master> JOBDL000Master1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL000Master> JOBDL000Master2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL000Master> JOBDL000Master3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL000Master> JOBDL000Master4 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL010Cargo> JOBDL010Cargo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL010Cargo> JOBDL010Cargo1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL010Cargo> JOBDL010Cargo2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL010Cargo> JOBDL010Cargo3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL010Cargo> JOBDL010Cargo4 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL020Gateways> JOBDL020Gateways { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -219,6 +251,8 @@ namespace M4PL.EF
         public virtual ICollection<JOBDL020Gateways> JOBDL020Gateways3 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL020Gateways> JOBDL020Gateways4 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL020Gateways> JOBDL020Gateways5 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL030Attributes> JOBDL030Attributes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -245,6 +279,12 @@ namespace M4PL.EF
         public virtual ICollection<JOBDL062CostSheet> JOBDL062CostSheet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL062CostSheet> JOBDL062CostSheet1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL062CostSheet> JOBDL062CostSheet2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL070ElectronicDataTransactions> JOBDL070ElectronicDataTransactions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL070ElectronicDataTransactions> JOBDL070ElectronicDataTransactions1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MVOC000Program> MVOC000Program { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -277,6 +317,8 @@ namespace M4PL.EF
         public virtual ICollection<PRGRM010Ref_GatewayDefaults> PRGRM010Ref_GatewayDefaults2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM010Ref_GatewayDefaults> PRGRM010Ref_GatewayDefaults3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRGRM010Ref_GatewayDefaults> PRGRM010Ref_GatewayDefaults4 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM020Program_Role> PRGRM020Program_Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -371,12 +413,16 @@ namespace M4PL.EF
         public virtual ICollection<SYSTM000Ref_Dashboard> SYSTM000Ref_Dashboard1 { get; set; }
         public virtual SYSTM000Ref_Lookup SYSTM000Ref_Lookup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYSTM000Ref_Options> SYSTM000Ref_Options1 { get; set; }
-        public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000Ref_Report> SYSTM000Ref_Report { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000Ref_Report> SYSTM000Ref_Report1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SYSTM000Ref_Options> SYSTM000Ref_Options1 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SYSTM000Ref_Report> SYSTM000Ref_Report2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SYSTM000Ref_Report> SYSTM000Ref_Report3 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000Ref_Settings> SYSTM000Ref_Settings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -393,6 +439,8 @@ namespace M4PL.EF
         public virtual ICollection<SYSTM000SecurityByRole> SYSTM000SecurityByRole2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000SecurityByRole> SYSTM000SecurityByRole3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SYSTM000VdcLocationPreferences> SYSTM000VdcLocationPreferences { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM010SubSecurityByRole> SYSTM010SubSecurityByRole { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

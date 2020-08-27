@@ -14,6 +14,12 @@ namespace M4PL.EF
     
     public partial class JOBDL010Cargo
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public JOBDL010Cargo()
+        {
+            this.JOBDL020Gateways = new HashSet<JOBDL020Gateways>();
+        }
+    
         public long Id { get; set; }
         public Nullable<long> JobID { get; set; }
         public Nullable<int> CgoLineItem { get; set; }
@@ -31,15 +37,15 @@ namespace M4PL.EF
         public string CgoVolumeUnits { get; set; }
         public Nullable<decimal> CgoCubes { get; set; }
         public byte[] CgoNotes { get; set; }
-        public Nullable<decimal> CgoQtyExpected { get; set; }
-        public Nullable<decimal> CgoQtyOnHand { get; set; }
-        public Nullable<decimal> CgoQtyDamaged { get; set; }
-        public Nullable<decimal> CgoQtyOnHold { get; set; }
+        public Nullable<int> CgoQtyExpected { get; set; }
+        public Nullable<int> CgoQtyOnHand { get; set; }
+        public Nullable<int> CgoQtyDamaged { get; set; }
+        public Nullable<int> CgoQtyOnHold { get; set; }
         public string CgoQtyUnits { get; set; }
-        public Nullable<decimal> CgoQTYOrdered { get; set; }
+        public Nullable<int> CgoQtyOrdered { get; set; }
         public Nullable<decimal> CgoQtyCounted { get; set; }
-        public Nullable<decimal> CgoQtyShortOver { get; set; }
-        public Nullable<decimal> CgoQtyOver { get; set; }
+        public Nullable<int> CgoQtyShortOver { get; set; }
+        public Nullable<int> CgoQtyOver { get; set; }
         public string CgoLongitude { get; set; }
         public string CgoLatitude { get; set; }
         public string CgoReasonCodeOSD { get; set; }
@@ -70,8 +76,22 @@ namespace M4PL.EF
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
+        public Nullable<int> CgoPackagingTypeId { get; set; }
+        public Nullable<int> CgoWeightUnitsId { get; set; }
+        public Nullable<int> CgoVolumeUnitsId { get; set; }
+        public Nullable<int> CgoQtyUnitsId { get; set; }
+        public string CgoComment { get; set; }
+        public Nullable<System.DateTime> CgoDateLastScan { get; set; }
+        public Nullable<bool> Test { get; set; }
+        public string CgoWhLoc { get; set; }
     
         public virtual JOBDL000Master JOBDL000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options3 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options4 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL020Gateways> JOBDL020Gateways { get; set; }
     }
 }

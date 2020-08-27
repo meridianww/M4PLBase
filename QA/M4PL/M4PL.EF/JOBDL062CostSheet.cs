@@ -37,10 +37,11 @@ namespace M4PL.EF
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public Nullable<int> LineNumber { get; set; }
+        public bool CstElectronicBilling { get; set; }
+        public bool IsProblem { get; set; }
     
-        public virtual JOBDL000Master JOBDL000Master { get; set; }
-        public virtual PRGRM041ProgramCostRate PRGRM041ProgramCostRate { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
     }
 }

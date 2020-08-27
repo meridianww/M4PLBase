@@ -17,16 +17,15 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public JOBDL000Master()
         {
-            this.JOBDL061BillableSheet = new HashSet<JOBDL061BillableSheet>();
-            this.JOBDL062CostSheet = new HashSet<JOBDL062CostSheet>();
             this.JOBDL010Cargo = new HashSet<JOBDL010Cargo>();
             this.JOBDL020Gateways = new HashSet<JOBDL020Gateways>();
             this.JOBDL030Attributes = new HashSet<JOBDL030Attributes>();
             this.JOBDL040DocumentReference = new HashSet<JOBDL040DocumentReference>();
             this.JOBDL050Ref_Status = new HashSet<JOBDL050Ref_Status>();
             this.JOBDL060Ref_CostSheetJob = new HashSet<JOBDL060Ref_CostSheetJob>();
-            this.NAV000JobOrderMapping = new HashSet<NAV000JobOrderMapping>();
             this.NAV000JobOrderItemMapping = new HashSet<NAV000JobOrderItemMapping>();
+            this.NAV000JobOrderMapping = new HashSet<NAV000JobOrderMapping>();
+            this.NAV000JobSalesOrderMapping = new HashSet<NAV000JobSalesOrderMapping>();
             this.SYSTM000_StatusLog = new HashSet<SYSTM000_StatusLog>();
         }
     
@@ -42,11 +41,11 @@ namespace M4PL.EF
         public string JobCustomerPurchaseOrder { get; set; }
         public string JobCarrierContract { get; set; }
         public string JobManifestNo { get; set; }
-        public Nullable<decimal> JobQtyOrdered { get; set; }
-        public Nullable<decimal> JobQtyActual { get; set; }
+        public Nullable<int> JobQtyOrdered { get; set; }
+        public Nullable<int> JobQtyActual { get; set; }
         public Nullable<int> JobQtyUnitTypeId { get; set; }
-        public Nullable<decimal> JobPartsOrdered { get; set; }
-        public Nullable<decimal> JobPartsActual { get; set; }
+        public Nullable<int> JobPartsOrdered { get; set; }
+        public Nullable<int> JobPartsActual { get; set; }
         public Nullable<decimal> JobTotalCubes { get; set; }
         public string JobServiceMode { get; set; }
         public string JobChannel { get; set; }
@@ -60,7 +59,7 @@ namespace M4PL.EF
         public Nullable<long> JobDeliveryAnalystContactID { get; set; }
         public Nullable<long> JobDeliveryResponsibleContactID { get; set; }
         public string PlantIDCode { get; set; }
-        public Nullable<int> JobRouteId { get; set; }
+        public string JobRouteId { get; set; }
         public Nullable<long> JobDriverId { get; set; }
         public string JobStop { get; set; }
         public string CarrierID { get; set; }
@@ -174,27 +173,42 @@ namespace M4PL.EF
         public string JobShipFromSitePOC2 { get; set; }
         public string JobShipFromSitePOCPhone2 { get; set; }
         public string JobShipFromSitePOCEmail2 { get; set; }
-		public bool JobElectronicInvoice { get; set; }
-		public string JobOriginStreetAddress3 { get; set; }
-		public string JobOriginStreetAddress4 { get; set; }
-		public string JobDeliveryStreetAddress3 { get; set; }
-		public string JobDeliveryStreetAddress4 { get; set; }
-		public string JobSellerStreetAddress3 { get; set; }
-		public string JobSellerStreetAddress4 { get; set; }
-		public string JobShipFromStreetAddress3 { get; set; }
-		public string JobShipFromStreetAddress4 { get; set; }
-
-		public virtual CONTC000Master CONTC000Master { get; set; }
+        public Nullable<long> VendDCLocationId { get; set; }
+        public bool JobElectronicInvoice { get; set; }
+        public string JobOriginStreetAddress3 { get; set; }
+        public string JobOriginStreetAddress4 { get; set; }
+        public string JobDeliveryStreetAddress3 { get; set; }
+        public string JobDeliveryStreetAddress4 { get; set; }
+        public string JobSellerStreetAddress3 { get; set; }
+        public string JobSellerStreetAddress4 { get; set; }
+        public string JobShipFromStreetAddress3 { get; set; }
+        public string JobShipFromStreetAddress4 { get; set; }
+        public Nullable<int> JobCubesUnitTypeId { get; set; }
+        public Nullable<int> JobWeightUnitTypeId { get; set; }
+        public Nullable<decimal> JobTotalWeight { get; set; }
+        public decimal JobMileage { get; set; }
+        public Nullable<int> JobPreferredMethod { get; set; }
+        public Nullable<int> JobServiceOrder { get; set; }
+        public Nullable<int> JobServiceActual { get; set; }
+        public Nullable<bool> IsCancelled { get; set; }
+        public Nullable<bool> IsJobVocSurvey { get; set; }
+        public Nullable<int> JobTransitionStatusId { get; set; }
+        public string JobDriverAlert { get; set; }
+        public Nullable<bool> JobIsSchedule { get; set; }
+        public string JobSalesInvoiceNumber { get; set; }
+        public string JobPurchaseInvoiceNumber { get; set; }
+        public string UdcWhLoc { get; set; }
+    
+        public virtual CONTC000Master CONTC000Master { get; set; }
         public virtual CONTC000Master CONTC000Master1 { get; set; }
         public virtual CONTC000Master CONTC000Master2 { get; set; }
         public virtual CONTC000Master CONTC000Master3 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<JOBDL061BillableSheet> JOBDL061BillableSheet { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<JOBDL062CostSheet> JOBDL062CostSheet { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
-        public virtual PRGRM000Master PRGRM000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options3 { get; set; }
+        public virtual PRGRM000Master PRGRM000Master { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options4 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL010Cargo> JOBDL010Cargo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -208,9 +222,11 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL060Ref_CostSheetJob> JOBDL060Ref_CostSheetJob { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NAV000JobOrderItemMapping> NAV000JobOrderItemMapping { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NAV000JobOrderMapping> NAV000JobOrderMapping { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NAV000JobOrderItemMapping> NAV000JobOrderItemMapping { get; set; }
+        public virtual ICollection<NAV000JobSalesOrderMapping> NAV000JobSalesOrderMapping { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000_StatusLog> SYSTM000_StatusLog { get; set; }
     }

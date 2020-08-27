@@ -125,17 +125,22 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
-        public string eshShipToName { get; set; }
-        public Nullable<long> eshShipToNameID { get; set; }
-        public string eshShipToAddress1 { get; set; }
-        public string eshShipToAddress2 { get; set; }
-        public string eshShipToCity { get; set; }
-        public string eshShipToState { get; set; }
-        public string eshShipToPostalCode { get; set; }
-        public string eshShipToCountryCode { get; set; }
-        public string eshShipToContactName { get; set; }
-        public string eshShipToContactNumber { get; set; }
-        public string eshShipToAltContName { get; set; }
-        public string eshShipToAltContNumber { get; set; }
+        public string eshConsigneeStreetAddress3 { get; set; }
+        public string eshConsigneeStreetAddress4 { get; set; }
+        public string eshInterConsigneeStreetAddress3 { get; set; }
+        public string eshInterConsigneeStreetAddress4 { get; set; }
+        public string eshBillToStreetAddress3 { get; set; }
+        public string eshBillToStreetAddress4 { get; set; }
+        public string eshShipFromStreetAddress3 { get; set; }
+        public string eshShipFromStreetAddress4 { get; set; }
+        public Nullable<System.DateTime> eshOrderedDate { get; set; }
+        public string eshConsigneeContactEmail { get; set; }
+        public string eshConsigneeAltContEmail { get; set; }
+        public string eshInterConsigneeContactEmail { get; set; }
+        public string eshInterConsigneeAltContEmail { get; set; }
+        public string eshShipFromContactEmail { get; set; }
+        public string eshShipFromAltContEmail { get; set; }
+        public string eshBillToContactEmail { get; set; }
+        public string eshBillToAltContEmail { get; set; }
     }
 }

@@ -14,6 +14,12 @@ namespace M4PL.EF
     
     public partial class PRGRM040ProgramBillableRate
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PRGRM040ProgramBillableRate()
+        {
+            this.JOBDL061BillableSheet = new HashSet<JOBDL061BillableSheet>();
+        }
+    
         public long Id { get; set; }
         public string PbrCode { get; set; }
         public string PbrCustomerCode { get; set; }
@@ -42,7 +48,10 @@ namespace M4PL.EF
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public Nullable<long> ProgramLocationId { get; set; }
+        public bool PbrElectronicBilling { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL061BillableSheet> JOBDL061BillableSheet { get; set; }
         public virtual PRGRM042ProgramBillableLocations PRGRM042ProgramBillableLocations { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }

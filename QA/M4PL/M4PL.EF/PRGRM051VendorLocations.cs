@@ -34,6 +34,7 @@ namespace M4PL.EF
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
+        public Nullable<long> VendDCLocationId { get; set; }
     
         public virtual CONTC000Master CONTC000Master { get; set; }
         public virtual PRGRM000Master PRGRM000Master { get; set; }

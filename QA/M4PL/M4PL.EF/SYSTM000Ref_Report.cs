@@ -26,9 +26,13 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
+        public Nullable<int> Scheduled { get; set; }
+        public Nullable<int> OrderType { get; set; }
     
         public virtual ORGAN000Master ORGAN000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options3 { get; set; }
     }
 }
