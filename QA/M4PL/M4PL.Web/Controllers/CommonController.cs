@@ -561,13 +561,13 @@ namespace M4PL.Web.Controllers
         }
 
         public ActionResult IsHistoryPresentForJob(long jobId, string jobIds)
-		{
-			List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
-			string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
-			return Json(new { status = true, documentStatus = _commonCommands.IsHistoryPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
-		}
+        {
+            List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+            string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+            return Json(new { status = true, documentStatus = _commonCommands.IsHistoryPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public ActionResult GetContactType(string lookupName)
+        public ActionResult GetContactType(string lookupName)
         {
             return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
         }
@@ -744,6 +744,10 @@ namespace M4PL.Web.Controllers
                 tableRef = _commonCommands.Tables[route.Entity];
 
             route.EntityName = tableRef.TblLangName;
+            if (route.Entity.Equals(M4PL.Entities.EntitiesAlias.JobXcblInfo) && route.Controller == "JobXcblInfo")
+            {
+                route.EntityName = _commonCommands.GetGatewayTypeByJobID(route.RecordId).Title;
+            }
 
             var moduleIdToCompare = (route.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
             var security = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);

@@ -34,6 +34,9 @@ CREATE PROCEDURE [dbo].[GetJobAdvanceReportView] (
 	,@PackagingCode NVARCHAR(50) = ''
 	,@CargoId BIGINT = NULL
 	,@reportTypeId INT = NULL
+	,@StartDate DateTime2(7) = NULL
+	,@EndDate DateTime2(7) = NULL
+	,@CustomerId BIGINT = 0
 	,@TotalCount INT OUTPUT
 	)
 AS
@@ -220,6 +223,37 @@ BEGIN
 			,@PackagingCode
 			,@CargoId
 			,@reportTypeId
+			,@TotalCount OUTPUT
+	END
+	ELSE IF(ISNULL(@ReportName, '') = 'Driver Scrub Report' AND ISNULL(@CustomerId, 0) = 10007)
+	BEGIN
+	EXEC dbo.GetAWCDriverScrubReportView @userId
+			,@roleId
+			,@orgId
+			,@entity
+			,@pageNo
+			,@pageSize
+			,@orderBy
+			,@groupBy
+			,@groupByWhere
+			,@where
+			,@parentId
+			,@isNext
+			,@isEnd
+			,@recordId
+			,@IsExport
+			,@scheduled
+			,@orderType
+			,@DateType
+			,@JobStatus
+			,@SearchText
+			,@gatewayTitles
+			,@PackagingCode
+			,@CargoId
+			,@reportTypeId
+			,@StartDate
+	        ,@EndDate
+	        ,@CustomerId
 			,@TotalCount OUTPUT
 	END
 END

@@ -28,6 +28,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.Job.JobGatewayCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
+using _jobCargoCommands = M4PL.DataAccess.Job.JobCargoCommands;
 
 namespace M4PL.Business.Job
 {
@@ -93,18 +94,19 @@ namespace M4PL.Business.Job
         {
             var gateway = _commands.Post(ActiveUser, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
             PushDataToNav(gateway.JobID, jobGateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
-			if (jobGateway.GwyCargoId > 0)
-			{
-				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyExceptionStatusIdName, (long)jobGateway.JobID, jobGateway.ContractNumber, (DateTime)jobGateway.GwyGatewayACD, jobGateway.GwyAddtionalComment);
-				EventBodyHelper.CreateEventMailNotificationForCargoException((int)EventNotification.CargoException, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
-			}
+            if (jobGateway.GwyCargoId > 0)
+            {
+                var jobCargo = _jobCargoCommands.Get(ActiveUser, jobGateway.GwyCargoId);
+                string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyExceptionStatusIdName, (long)jobGateway.JobID, jobGateway.ContractNumber, (DateTime)jobGateway.GwyGatewayACD, jobGateway.GwyAddtionalComment, jobCargo.CgoPartNumCode, jobCargo.CgoTitle, jobCargo.CgoSerialNumber, jobCargo.JobGatewayStatus);
+                EventBodyHelper.CreateEventMailNotificationForCargoException((int)EventNotification.CargoException, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
+            }
 
-			if (gateway.IsFarEyePushRequired)
-			{
-				FarEyeHelper.PushStatusUpdateToFarEye((long)jobGateway.JobID, ActiveUser);
-			}
+            if (gateway.IsFarEyePushRequired)
+            {
+                FarEyeHelper.PushStatusUpdateToFarEye((long)jobGateway.JobID, ActiveUser);
+            }
 
-			return gateway;
+            return gateway;
         }
 
         /// <summary>
@@ -116,8 +118,8 @@ namespace M4PL.Business.Job
         {
             var gatewaysIds = string.Empty;
             jobGateway.IsMultiOperation = false;
-			JobGateway gateway = null;
-			if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
+            JobGateway gateway = null;
+            if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
             {
                 List<Task> tasks = new List<Task>();
                 jobGateway.IsMultiOperation = true;
@@ -138,19 +140,20 @@ namespace M4PL.Business.Job
                 PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
             }
 
-			if (jobGateway.GwyCargoId > 0)
-			{
-				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, gateway.GwyGatewayACD.HasValue ? (DateTime)gateway.GwyGatewayACD : Utilities.TimeUtility.GetPacificDateTime(), jobGateway.GwyAddtionalComment);
-				EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
-			}
+            if (jobGateway.GwyCargoId > 0)
+            {
+                var jobCargo = _jobCargoCommands.Get(ActiveUser, jobGateway.GwyCargoId);
+                string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, gateway.GwyGatewayACD.HasValue ? (DateTime)gateway.GwyGatewayACD : Utilities.TimeUtility.GetPacificDateTime(), jobGateway.GwyAddtionalComment, jobCargo.CgoPartNumCode, jobCargo.CgoTitle, jobCargo.CgoSerialNumber, jobCargo.JobGatewayStatus);
+                EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
+            }
 
-			if (gateway.IsFarEyePushRequired)
-			{
-				FarEyeHelper.PushStatusUpdateToFarEye((long)jobGateway.JobID, ActiveUser);
-			}
+            if (gateway.IsFarEyePushRequired)
+            {
+                FarEyeHelper.PushStatusUpdateToFarEye((long)jobGateway.JobID, ActiveUser);
+            }
 
-			return gateway;
-		}
+            return gateway;
+        }
 
         /// <summary>
         /// Updates an existing jobgateways record
