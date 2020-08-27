@@ -14,7 +14,7 @@ namespace M4PL.Entities.Job
         public string LastName { get; set; }
         public string BizMoblContactID { get; set; }
         public long? JobId { get; set; }
-		public int? JobRouteId { get; set; }
+		public string JobRouteId { get; set; }
 		public string JobStop { get; set; }
 	}
 }

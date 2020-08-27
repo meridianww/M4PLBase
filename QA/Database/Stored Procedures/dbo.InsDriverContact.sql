@@ -15,7 +15,7 @@ CREATE PROCEDURE [dbo].[InsDriverContact] @userId BIGINT = NULL
 	,@firstName NVARCHAR(50)
 	,@lastName NVARCHAR(50)
 	,@jobId BIGINT
-	,@routeId INT = NULL
+	,@routeId NVARCHAR(20) = NULL
 	,@JobStop NVARCHAR(20) = NULL
 	,@enteredBy NVARCHAR(50)
 	,@dateEntered DateTime2(7)
