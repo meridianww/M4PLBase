@@ -420,18 +420,18 @@ M4PLWindow.DataView = function () {
 
         var callbackUrl = s.callbackUrl;
         if (selectedRowCount > 0) {
-
             if (selectedRowCount == 1 && e.isSelected)
                 M4PLWindow.MultiSelectedJobIds = [];
 
-            if (e.isSelected)
+            if (e.isSelected) {
                 M4PLWindow.MultiSelectedJobIds.push(s.GetItemKey(s.GetFocusedRowIndex()));
+                M4PLCommon.Common.EnableJobGridMultiSelection(true);
+            }
             else
                 M4PLWindow.MultiSelectedJobIds = M4PLCommon.Common.ArrayRemove(M4PLWindow.MultiSelectedJobIds, s.GetItemKey(s.GetFocusedRowIndex()));
         }
         else
             M4PLWindow.MultiSelectedJobIds = [];
-
         if (callbackUrl != undefined && callbackUrl != "" ) {
             var callbackUri = new URL(callbackUrl, window.location.origin);
             var urlParams = new URLSearchParams(callbackUri.search);
