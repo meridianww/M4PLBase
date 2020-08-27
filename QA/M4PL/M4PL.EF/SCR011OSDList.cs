@@ -21,7 +21,6 @@ namespace M4PL.EF
         public string OSDTitle { get; set; }
         public string OSDType { get; set; }
         public string OSDNote { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

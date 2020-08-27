@@ -15,8 +15,6 @@ namespace M4PL.EF
     public partial class CUST050Finacial_Cal
     {
         public long Id { get; set; }
-        public Nullable<long> OrgID { get; set; }
-        public Nullable<long> CustID { get; set; }
         public Nullable<int> FclPeriod { get; set; }
         public string FclPeriodCode { get; set; }
         public Nullable<System.DateTime> FclPeriodStart { get; set; }
@@ -24,8 +22,6 @@ namespace M4PL.EF
         public string FclPeriodTitle { get; set; }
         public string FclAutoShortCode { get; set; }
         public Nullable<int> FclWorkDays { get; set; }
-        public Nullable<int> FinCalendarTypeId { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public byte[] FclDescription { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }

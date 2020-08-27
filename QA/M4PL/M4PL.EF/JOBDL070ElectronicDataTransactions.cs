@@ -18,9 +18,7 @@ namespace M4PL.EF
         public long JobId { get; set; }
         public string EdtCode { get; set; }
         public string EdtTitle { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EdtData { get; set; }
-        public int EdtTypeId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

@@ -17,13 +17,13 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public EventSubscriber()
         {
-            this.EventSubscriberRelations = new HashSet<EventSubscriberRelation>();
+            this.EventSubscriberRelation = new HashSet<EventSubscriberRelation>();
         }
     
         public int SubscriberId { get; set; }
         public string SubscriberDescription { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EventSubscriberRelation> EventSubscriberRelations { get; set; }
+        public virtual ICollection<EventSubscriberRelation> EventSubscriberRelation { get; set; }
     }
 }

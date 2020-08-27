@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class SYSTM040ProcessorConfig
     {
         public long ID { get; set; }
-        public Nullable<long> PrcProcessorID { get; set; }
         public string PrcConfigKey { get; set; }
         public string PrcConfigValue { get; set; }
         public string EnteredBy { get; set; }

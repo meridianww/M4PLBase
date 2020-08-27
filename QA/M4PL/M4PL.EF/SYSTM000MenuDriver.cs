@@ -16,8 +16,6 @@ namespace M4PL.EF
     {
         public long Id { get; set; }
         public string LangCode { get; set; }
-        public Nullable<int> MnuModuleId { get; set; }
-        public string MnuTableName { get; set; }
         public string MnuBreakDownStructure { get; set; }
         public string MnuTitle { get; set; }
         public byte[] MnuDescription { get; set; }
@@ -30,14 +28,9 @@ namespace M4PL.EF
         public byte[] MnuIconMedium { get; set; }
         public byte[] MnuIconLarge { get; set; }
         public string MnuExecuteProgram { get; set; }
-        public Nullable<int> MnuClassificationId { get; set; }
-        public Nullable<int> MnuProgramTypeId { get; set; }
-        public Nullable<int> MnuOptionLevelId { get; set; }
-        public Nullable<int> MnuAccessLevelId { get; set; }
         public byte[] MnuHelpFile { get; set; }
         public string MnuHelpBookMark { get; set; }
         public Nullable<int> MnuHelpPageNumber { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

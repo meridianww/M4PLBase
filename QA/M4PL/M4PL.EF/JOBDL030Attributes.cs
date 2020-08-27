@@ -15,16 +15,13 @@ namespace M4PL.EF
     public partial class JOBDL030Attributes
     {
         public long Id { get; set; }
-        public Nullable<long> JobID { get; set; }
         public Nullable<int> AjbLineOrder { get; set; }
         public string AjbAttributeCode { get; set; }
         public string AjbAttributeTitle { get; set; }
         public byte[] AjbAttributeDescription { get; set; }
         public byte[] AjbAttributeComments { get; set; }
         public Nullable<decimal> AjbAttributeQty { get; set; }
-        public Nullable<int> AjbUnitTypeId { get; set; }
         public Nullable<bool> AjbDefault { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string ProFlags01 { get; set; }
         public string ProFlags02 { get; set; }
         public string ProFlags03 { get; set; }

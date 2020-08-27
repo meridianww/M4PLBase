@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class XcblSummaryDetail
     {
         public long xcblDetailID { get; set; }
-        public Nullable<long> xcblHeaderID { get; set; }
         public string xcblTradingPartner { get; set; }
         public string xcblBOLNo { get; set; }
         public string xcblManifestNo { get; set; }

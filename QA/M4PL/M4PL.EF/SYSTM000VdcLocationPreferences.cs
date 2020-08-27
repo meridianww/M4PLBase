@@ -15,9 +15,6 @@ namespace M4PL.EF
     public partial class SYSTM000VdcLocationPreferences
     {
         public long Id { get; set; }
-        public long OrganizationId { get; set; }
-        public long UserId { get; set; }
-        public int ContactType { get; set; }
         public string LangCode { get; set; }
         public string VdcLocationCode { get; set; }
     

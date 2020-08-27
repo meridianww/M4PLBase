@@ -21,7 +21,6 @@ namespace M4PL.EF
         }
     
         public long JobSalesOrderMappingId { get; set; }
-        public long JobId { get; set; }
         public string SONumber { get; set; }
         public bool IsElectronicInvoiced { get; set; }
         public System.DateTime DateEntered { get; set; }

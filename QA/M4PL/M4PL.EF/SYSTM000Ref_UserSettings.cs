@@ -15,8 +15,6 @@ namespace M4PL.EF
     public partial class SYSTM000Ref_UserSettings
     {
         public long Id { get; set; }
-        public long OrganizationId { get; set; }
-        public long UserId { get; set; }
         public string LangCode { get; set; }
         public bool GlobalSetting { get; set; }
         public string SysJsonSetting { get; set; }

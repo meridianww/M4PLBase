@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class EventEntityContentDetail
     {
         public int Id { get; set; }
-        public Nullable<int> EventEntityRelationId { get; set; }
         public string Subject { get; set; }
         public Nullable<bool> IsBodyHtml { get; set; }
         public string Body { get; set; }

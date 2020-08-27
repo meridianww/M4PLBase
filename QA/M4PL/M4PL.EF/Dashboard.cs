@@ -17,16 +17,15 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Dashboard()
         {
-            this.DashboardCategoryRelations = new HashSet<DashboardCategoryRelation>();
+            this.DashboardCategoryRelation = new HashSet<DashboardCategoryRelation>();
         }
     
         public long DashboardId { get; set; }
-        public int DashboardTypeId { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public string DashboardName { get; set; }
     
         public virtual DashboardType DashboardType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DashboardCategoryRelation> DashboardCategoryRelations { get; set; }
+        public virtual ICollection<DashboardCategoryRelation> DashboardCategoryRelation { get; set; }
     }
 }

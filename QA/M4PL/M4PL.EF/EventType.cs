@@ -17,7 +17,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public EventType()
         {
-            this.Events = new HashSet<Event>();
+            this.Event = new HashSet<Event>();
         }
     
         public int ID { get; set; }
@@ -25,6 +25,6 @@ namespace M4PL.EF
         public string EventDisplayName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<Event> Event { get; set; }
     }
 }

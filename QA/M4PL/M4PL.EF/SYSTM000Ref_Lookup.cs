@@ -22,7 +22,6 @@ namespace M4PL.EF
     
         public int Id { get; set; }
         public string LkupCode { get; set; }
-        public string LkupTableName { get; set; }
     
         public virtual SYSTM000Ref_Table SYSTM000Ref_Table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

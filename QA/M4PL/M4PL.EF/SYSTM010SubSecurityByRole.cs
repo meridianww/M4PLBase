@@ -15,11 +15,6 @@ namespace M4PL.EF
     public partial class SYSTM010SubSecurityByRole
     {
         public long Id { get; set; }
-        public Nullable<long> SecByRoleId { get; set; }
-        public string RefTableName { get; set; }
-        public Nullable<int> SubsMenuOptionLevelId { get; set; }
-        public Nullable<int> SubsMenuAccessLevelId { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

@@ -17,7 +17,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DashboardType()
         {
-            this.Dashboards = new HashSet<Dashboard>();
+            this.Dashboard = new HashSet<Dashboard>();
         }
     
         public int DashboardTypeId { get; set; }
@@ -25,6 +25,6 @@ namespace M4PL.EF
         public string DashboardDisplayName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Dashboard> Dashboards { get; set; }
+        public virtual ICollection<Dashboard> Dashboard { get; set; }
     }
 }

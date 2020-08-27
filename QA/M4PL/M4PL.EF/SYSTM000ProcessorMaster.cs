@@ -29,7 +29,6 @@ namespace M4PL.EF
         public Nullable<bool> ProEnabled { get; set; }
         public string ProFrequency { get; set; }
         public string ProIntervalValue { get; set; }
-        public Nullable<int> ProIntervalUnit { get; set; }
         public Nullable<System.DateTime> ProStartTime { get; set; }
         public Nullable<System.DateTime> ProEndTime { get; set; }
         public Nullable<bool> ProSunday { get; set; }

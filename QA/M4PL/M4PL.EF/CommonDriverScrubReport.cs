@@ -12,7 +12,7 @@ namespace M4PL.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class AWCDriverScrubReport
+    public partial class CommonDriverScrubReport
     {
         public long Id { get; set; }
         public string QMSShippedOn { get; set; }

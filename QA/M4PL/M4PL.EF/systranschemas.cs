@@ -12,16 +12,11 @@ namespace M4PL.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class AUTH040_Messages
+    public partial class systranschemas
     {
-        public int Id { get; set; }
-        public int LangId { get; set; }
-        public string MessageCode { get; set; }
-        public string MsgType { get; set; }
-        public string MessageScreenTitle { get; set; }
-        public string MessageTitle { get; set; }
-        public string MessageDescription { get; set; }
-        public string MessageInstruction { get; set; }
-        public Nullable<int> MessageButtonSelection { get; set; }
+        public int tabid { get; set; }
+        public byte[] startlsn { get; set; }
+        public byte[] endlsn { get; set; }
+        public int typeid { get; set; }
     }
 }

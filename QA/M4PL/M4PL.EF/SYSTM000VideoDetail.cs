@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class SYSTM000VideoDetail
     {
         public int Id { get; set; }
-        public Nullable<int> CategoryId { get; set; }
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string URL { get; set; }

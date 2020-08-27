@@ -21,27 +21,21 @@ namespace M4PL.EF
             this.CUST030DocumentReference = new HashSet<CUST030DocumentReference>();
             this.CUST040DCLocations = new HashSet<CUST040DCLocations>();
             this.CUST050Finacial_Cal = new HashSet<CUST050Finacial_Cal>();
-            this.DriverScrubReportMasters = new HashSet<DriverScrubReportMaster>();
+            this.DriverScrubReportMaster = new HashSet<DriverScrubReportMaster>();
             this.PRGRM000Master = new HashSet<PRGRM000Master>();
             this.PRGRM041ProgramCostRate = new HashSet<PRGRM041ProgramCostRate>();
         }
     
         public long Id { get; set; }
         public string CustERPID { get; set; }
-        public Nullable<long> CustOrgId { get; set; }
         public Nullable<int> CustItemNumber { get; set; }
         public string CustCode { get; set; }
         public string CustTitle { get; set; }
         public byte[] CustDescription { get; set; }
-        public Nullable<long> CustWorkAddressId { get; set; }
-        public Nullable<long> CustBusinessAddressId { get; set; }
-        public Nullable<long> CustCorporateAddressId { get; set; }
         public Nullable<int> CustContacts { get; set; }
         public byte[] CustLogo { get; set; }
         public byte[] CustNotes { get; set; }
-        public Nullable<int> CustTypeId { get; set; }
         public string CustWebPage { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
@@ -62,7 +56,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST050Finacial_Cal> CUST050Finacial_Cal { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DriverScrubReportMaster> DriverScrubReportMasters { get; set; }
+        public virtual ICollection<DriverScrubReportMaster> DriverScrubReportMaster { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM000Master> PRGRM000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -21,7 +21,6 @@ namespace M4PL.EF
         public Nullable<double> ZipLongitude { get; set; }
         public Nullable<double> ZipTimezone { get; set; }
         public Nullable<double> ZipDST { get; set; }
-        public Nullable<long> MrktID { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

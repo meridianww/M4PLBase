@@ -15,15 +15,8 @@ namespace M4PL.EF
     public partial class PRGRM020Program_Role
     {
         public long Id { get; set; }
-        public Nullable<long> OrgID { get; set; }
-        public Nullable<long> ProgramID { get; set; }
         public Nullable<int> PrgRoleSortOrder { get; set; }
-        public Nullable<long> OrgRefRoleId { get; set; }
-        public Nullable<long> PrgRoleId { get; set; }
         public string PrgRoleTitle { get; set; }
-        public Nullable<long> PrgRoleContactID { get; set; }
-        public Nullable<int> RoleTypeId { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<bool> PrxJobDefaultAnalyst { get; set; }
         public Nullable<bool> PrxJobDefaultResponsible { get; set; }
         public Nullable<bool> PrxJobGWDefaultAnalyst { get; set; }

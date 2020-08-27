@@ -16,7 +16,6 @@ namespace M4PL.EF
     {
         public long Id { get; set; }
         public string IdText { get; set; }
-        public Nullable<long> CatalogProgramID { get; set; }
         public string CatalogProgramIDText { get; set; }
         public Nullable<int> CatalogItemNumber { get; set; }
         public string CatalogCode { get; set; }
@@ -29,9 +28,6 @@ namespace M4PL.EF
         public Nullable<decimal> CatalogWidth { get; set; }
         public Nullable<decimal> CatalogLength { get; set; }
         public Nullable<decimal> CatalogHeight { get; set; }
-        public Nullable<int> CatalogWeight { get; set; }
-        public Nullable<int> CatalogWLHUoM { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

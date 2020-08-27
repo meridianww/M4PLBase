@@ -14,17 +14,8 @@ namespace M4PL.EF
     
     public partial class DashboardSubCategory
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DashboardSubCategory()
-        {
-            this.DashboardCategoryRelations = new HashSet<DashboardCategoryRelation>();
-        }
-    
         public int DashboardSubCategoryId { get; set; }
         public string DashboardSubCategoryName { get; set; }
         public string DashboardSubCategoryDisplayName { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DashboardCategoryRelation> DashboardCategoryRelations { get; set; }
     }
 }

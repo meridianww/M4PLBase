@@ -14,13 +14,22 @@ namespace M4PL.EF
     
     public partial class DriverScrubReportMaster
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public DriverScrubReportMaster()
+        {
+            this.AWCDriverScrubReport = new HashSet<AWCDriverScrubReport>();
+            this.CommonDriverScrubReport = new HashSet<CommonDriverScrubReport>();
+        }
+    
         public int Id { get; set; }
-        public long CustomerId { get; set; }
         public System.DateTime StartDate { get; set; }
         public System.DateTime EndDate { get; set; }
         public string Description { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AWCDriverScrubReport> AWCDriverScrubReport { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CommonDriverScrubReport> CommonDriverScrubReport { get; set; }
         public virtual CUST000Master CUST000Master { get; set; }
-        public virtual AWCDriverScrubReport AWCDriverScrubReport { get; set; }
     }
 }

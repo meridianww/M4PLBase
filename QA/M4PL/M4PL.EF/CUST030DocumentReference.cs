@@ -15,19 +15,14 @@ namespace M4PL.EF
     public partial class CUST030DocumentReference
     {
         public long Id { get; set; }
-        public Nullable<long> CdrOrgID { get; set; }
-        public Nullable<long> CdrCustomerID { get; set; }
         public Nullable<int> CdrItemNumber { get; set; }
         public string CdrCode { get; set; }
         public string CdrTitle { get; set; }
-        public Nullable<int> DocRefTypeId { get; set; }
-        public Nullable<int> DocCategoryTypeId { get; set; }
         public byte[] CdrDescription { get; set; }
         public Nullable<int> CdrAttachment { get; set; }
         public Nullable<System.DateTime> CdrDateStart { get; set; }
         public Nullable<System.DateTime> CdrDateEnd { get; set; }
         public Nullable<bool> CdrRenewal { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

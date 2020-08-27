@@ -17,7 +17,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Event()
         {
-            this.EventEntityRelations = new HashSet<EventEntityRelation>();
+            this.EventEntityRelation = new HashSet<EventEntityRelation>();
         }
     
         public int ID { get; set; }
@@ -27,8 +27,6 @@ namespace M4PL.EF
         public string Description { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public string XSLTPath { get; set; }
-        public Nullable<int> StatusId { get; set; }
-        public Nullable<int> EventTypeId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
@@ -37,6 +35,6 @@ namespace M4PL.EF
         public virtual EventType EventType { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EventEntityRelation> EventEntityRelations { get; set; }
+        public virtual ICollection<EventEntityRelation> EventEntityRelation { get; set; }
     }
 }

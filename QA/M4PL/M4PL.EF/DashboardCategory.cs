@@ -17,7 +17,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DashboardCategory()
         {
-            this.DashboardCategoryRelations = new HashSet<DashboardCategoryRelation>();
+            this.DashboardCategoryRelation = new HashSet<DashboardCategoryRelation>();
         }
     
         public int DashboardCategoryId { get; set; }
@@ -26,6 +26,6 @@ namespace M4PL.EF
         public Nullable<int> SortOrder { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DashboardCategoryRelation> DashboardCategoryRelations { get; set; }
+        public virtual ICollection<DashboardCategoryRelation> DashboardCategoryRelation { get; set; }
     }
 }

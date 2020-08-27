@@ -17,7 +17,6 @@ namespace M4PL.EF
         public long Id { get; set; }
         public Nullable<long> JobID { get; set; }
         public string PrcLineItem { get; set; }
-        public Nullable<long> PrcChargeID { get; set; }
         public string PrcChargeCode { get; set; }
         public string PrcTitle { get; set; }
         public Nullable<long> PrcSurchargeOrder { get; set; }
@@ -26,12 +25,10 @@ namespace M4PL.EF
         public Nullable<int> PrcNumberUsed { get; set; }
         public Nullable<decimal> PrcDuration { get; set; }
         public Nullable<decimal> PrcQuantity { get; set; }
-        public Nullable<int> PrcUnitId { get; set; }
         public Nullable<decimal> PrcRate { get; set; }
         public Nullable<decimal> PrcAmount { get; set; }
         public Nullable<double> PrcMarkupPercent { get; set; }
         public byte[] PrcComments { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
