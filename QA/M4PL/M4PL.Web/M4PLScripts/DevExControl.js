@@ -690,53 +690,43 @@ DevExCtrl.ComboBox = function () {
     }
 
     var _onProgramByCustomerCbPanelChange = function (s, e) {
-        if (ProgramByCustomerCbPanel && !ProgramByCustomerCbPanel.InCallback()) {
-            ProgramByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        if (reportTypeCtrl != null && (reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316)) {
+            if (customerCtrl != null && customerCtrl.GetText() != "ALL" && parseInt(customerCtrl.GetValue()) > 0) {
+                $(".isDriverImport").show();
+                $(".isDriverbtnScrubreport").show();
+            } else {
+                $(".isDriverImport").hide();
+                $(".isDriverbtnScrubreport").hide();
+            }
         }
-        if (OrginByCustomerCbPanel && !OrginByCustomerCbPanel.InCallback()) {
-            OrginByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        else {
+            if (ProgramByCustomerCbPanel && !ProgramByCustomerCbPanel.InCallback()) {
+                ProgramByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (OrginByCustomerCbPanel && !OrginByCustomerCbPanel.InCallback()) {
+                OrginByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
+                DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (BrandByCustomerProgramCbPanel && !BrandByCustomerProgramCbPanel.InCallback()) {
+                BrandByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
+                GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (ServiceModeByCustomerCbPanel && !ServiceModeByCustomerCbPanel.InCallback()) {
+                ServiceModeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (ProductTypeByCustomerCbPanel && !ProductTypeByCustomerCbPanel.InCallback()) {
+                ProductTypeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (JobChannelByProgramCustomerCbPanel && !JobChannelByProgramCustomerCbPanel.InCallback()) {
+                JobChannelByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
         }
-        if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
-            DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        if (BrandByCustomerProgramCbPanel && !BrandByCustomerProgramCbPanel.InCallback()) {
-            BrandByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
-            GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        if (ServiceModeByCustomerCbPanel && !ServiceModeByCustomerCbPanel.InCallback()) {
-            ServiceModeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        if (ProductTypeByCustomerCbPanel && !ProductTypeByCustomerCbPanel.InCallback()) {
-            ProductTypeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        //if (JobStatusIdByCustomerProgramCbPanel && !JobStatusIdByCustomerProgramCbPanel.InCallback()) {
-        //    JobStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        //if (OrderTypeByCustomerProgramCbPanel && !OrderTypeByCustomerProgramCbPanel.InCallback()) {
-        //    OrderTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        //if (ScheduledByCustomerProgramCbPanel && !ScheduledByCustomerProgramCbPanel.InCallback()) {
-        //    ScheduledByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        if (JobChannelByProgramCustomerCbPanel && !JobChannelByProgramCustomerCbPanel.InCallback()) {
-            JobChannelByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        //if (DateTypeByCustomerProgramCbPanel && !DateTypeByCustomerProgramCbPanel.InCallback()) {
-        //    DateTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-    };
-    var _onDestinationByProgramCustomerCbPanelChange = function (s, e) {
-        //if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
-        //    DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        //if (ServiceModeByCustomerProgramCbPanel && !ServiceModeByCustomerProgramCbPanel.InCallback()) {
-        //    ServiceModeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        //if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
-        //    GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
     };
     return {
         OnComboBoxInit: _onComboBoxInit,
@@ -760,7 +750,6 @@ DevExCtrl.ComboBox = function () {
         CustomerLocationCbPanelChange: _onCustomerLocationCbPanelChange,
         CustomerCardTileCbPanelChange: _onCustomerCardTileCbPanelChange,
         ProgramByCustomerCbPanelChange: _onProgramByCustomerCbPanelChange,
-        DestinationByProgramCustomerCbPanelChange: _onDestinationByProgramCustomerCbPanelChange,
     };
 }();
 
