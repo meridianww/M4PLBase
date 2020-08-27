@@ -294,8 +294,11 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@reportTypeId", jobAdvanceReportRequest.ReportType));
                 parameters.Add(new Parameter("@scheduled", jobAdvanceReportRequest.Scheduled));
                 parameters.Add(new Parameter("@orderType", jobAdvanceReportRequest.OrderType));
+				parameters.Add(new Parameter("@StartDate", jobAdvanceReportRequest.StartDate));
+				parameters.Add(new Parameter("@EndDate", jobAdvanceReportRequest.EndDate));
+				parameters.Add(new Parameter("@CustomerId", jobAdvanceReportRequest.CustomerId));
 
-                parameters.Add(new Parameter("@PackagingCode", jobAdvanceReportRequest.PackagingCode));
+				parameters.Add(new Parameter("@PackagingCode", jobAdvanceReportRequest.PackagingCode));
                 if (jobAdvanceReportRequest.CargoId.HasValue)
                     parameters.Add(new Parameter("@CargoId", jobAdvanceReportRequest.CargoId));
 
