@@ -11,7 +11,7 @@ GO
 -- Create date:               08/18/2020      
 -- Description:               Get Manifest Report Data  
 -- =============================================
-ALTER PROCEDURE [dbo].[GetManifestReportView] @userId BIGINT
+CREATE PROCEDURE [dbo].[GetManifestReportView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -227,7 +227,7 @@ BEGIN TRY
 	END
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(' + @entity + '.Id) ' + @TablesQuery
-	print @TCountQuery
+
 	IF (ISNULL(@where, '') <> '')
 	BEGIN
 		SET @where = REPLACE(@where, 'JobAdvanceReport.CargoTitle', 'JC.CgoTitle');
@@ -279,7 +279,7 @@ BEGIN TRY
 
 		----------------   
 		-------------------------
-		print @sqlCommand
+		
 		SET @sqlCommand = @sqlCommand + ' ,' + @entity + '.JobPartsActual TotalParts, ' + @entity + '.JobQtyActual TotalQuantity, ' + @entity + '.JobProductType ProductType, ' + @entity + '.JobChannel Channel,' + @entity + '.JobTotalWeight '
 		SET @sqlCommand = @sqlCommand + ' ,JobAdvanceReport.DateEntered,prg.PrgCustID CustomerId '
 		SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.CargoTitle', 'JC.CgoTitle CargoTitle');
@@ -378,25 +378,6 @@ BEGIN TRY
 				SET @sqlCommand = @sqlCommand + ' OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
 			END
 		END
-		ELSE
-		BEGIN
-			IF (@orderBy IS NULL)
-			BEGIN
-				IF (
-						(
-							(@isNext = 1)
-							AND (@isEnd = 1)
-							)
-						OR (
-							(@isNext = 0)
-							AND (@isEnd = 0)
-							)
-						)
-				BEGIN
-					SET @sqlCommand = @sqlCommand + ' DESC'
-				END
-			END
-		END
 	END
 	ELSE
 	BEGIN
@@ -413,7 +394,7 @@ BEGIN TRY
 	
 	SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.CustTitle', 'Cust.CustTitle');
 	SET @where = REPLACE(@where, 'JobAdvanceReport.CustTitle', 'Cust.CustTitle');
-	PRINT @sqlCommand
+
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
