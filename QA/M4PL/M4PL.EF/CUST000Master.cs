@@ -21,6 +21,7 @@ namespace M4PL.EF
             this.CUST030DocumentReference = new HashSet<CUST030DocumentReference>();
             this.CUST040DCLocations = new HashSet<CUST040DCLocations>();
             this.CUST050Finacial_Cal = new HashSet<CUST050Finacial_Cal>();
+            this.DriverScrubReportMasters = new HashSet<DriverScrubReportMaster>();
             this.PRGRM000Master = new HashSet<PRGRM000Master>();
             this.PRGRM041ProgramCostRate = new HashSet<PRGRM041ProgramCostRate>();
         }
@@ -60,6 +61,8 @@ namespace M4PL.EF
         public virtual ICollection<CUST040DCLocations> CUST040DCLocations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST050Finacial_Cal> CUST050Finacial_Cal { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DriverScrubReportMaster> DriverScrubReportMasters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM000Master> PRGRM000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

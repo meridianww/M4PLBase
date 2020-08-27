@@ -17,7 +17,7 @@ namespace M4PL.EF
         public long Id { get; set; }
         public Nullable<long> JobID { get; set; }
         public string PrcLineItem { get; set; }
-        public Nullable<int> PrcChargeID { get; set; }
+        public Nullable<long> PrcChargeID { get; set; }
         public string PrcChargeCode { get; set; }
         public string PrcTitle { get; set; }
         public Nullable<long> PrcSurchargeOrder { get; set; }
@@ -37,8 +37,10 @@ namespace M4PL.EF
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public Nullable<int> LineNumber { get; set; }
+        public bool PrcElectronicBilling { get; set; }
+        public bool IsProblem { get; set; }
     
-        public virtual JOBDL000Master JOBDL000Master { get; set; }
+        public virtual PRGRM040ProgramBillableRate PRGRM040ProgramBillableRate { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
     }

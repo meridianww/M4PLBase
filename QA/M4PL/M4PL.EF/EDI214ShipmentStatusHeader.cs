@@ -31,8 +31,8 @@ namespace M4PL.EF
         public string eshTerminalCountryCode { get; set; }
         public string eshStatus { get; set; }
         public string eshStatusReason { get; set; }
-        public Nullable<System.DateTime> eshStatusDate { get; set; }
-        public Nullable<System.DateTime> eshStatusTime { get; set; }
+        public string eshStatusDate { get; set; }
+        public string eshStatusTime { get; set; }
         public string eshLocationCity { get; set; }
         public string eshLocationState { get; set; }
         public string eshLocationCountryCode { get; set; }
@@ -61,5 +61,14 @@ namespace M4PL.EF
         public string ProFlags18 { get; set; }
         public string ProFlags19 { get; set; }
         public string ProFlags20 { get; set; }
+        public string eshEquipmentNumber { get; set; }
+        public string eshOrderType { get; set; }
+        public string eshWeightQualifier { get; set; }
+        public string eshWeightUnitCode { get; set; }
+        public Nullable<decimal> eshWeight { get; set; }
+        public Nullable<long> eshQuanity { get; set; }
+        public Nullable<long> eshParts { get; set; }
+        public string eshVolumeQualifier { get; set; }
+        public Nullable<decimal> eshVolume { get; set; }
     }
 }

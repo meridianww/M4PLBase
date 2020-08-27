@@ -12,12 +12,11 @@ namespace M4PL.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class MVOC040QuestionOptions
+    public partial class AWCDriverScrubReport
     {
-        public long Id { get; set; }
-        public Nullable<long> Question_Id { get; set; }
-        public Nullable<long> Option_choice_id { get; set; }
+        public Nullable<long> Id { get; set; }
+        public int DriverScrubReportMasterId { get; set; }
     
-        public virtual MVOC030Optionchoices MVOC030Optionchoices { get; set; }
+        public virtual DriverScrubReportMaster DriverScrubReportMaster { get; set; }
     }
 }

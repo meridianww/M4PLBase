@@ -12,14 +12,16 @@ namespace M4PL.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class MVOC020Answers
+    public partial class AUTH010_RefreshToken
     {
-        public long Id { get; set; }
-        public long AnsJobId { get; set; }
-        public System.DateTime AnsDateTime { get; set; }
-        public long AnsQuestionNumber { get; set; }
-        public string AnsQuestionCode { get; set; }
-        public string AnsQuestionText { get; set; }
-        public string AnsResponse { get; set; }
+        public string Id { get; set; }
+        public string Username { get; set; }
+        public string AuthClientId { get; set; }
+        public System.DateTime IssuedUtc { get; set; }
+        public System.DateTime ExpiresUtc { get; set; }
+        public string ProtectedTicket { get; set; }
+        public string UserAuthTokenId { get; set; }
+    
+        public virtual AUTH000_Client AUTH000_Client { get; set; }
     }
 }

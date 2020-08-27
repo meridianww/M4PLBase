@@ -38,13 +38,21 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
+        public Nullable<bool> PgdGatewayDefaultComplete { get; set; }
+        public Nullable<long> InstallStatusId { get; set; }
+        public string MappingId { get; set; }
+        public string PgdGatewayStatusCode { get; set; }
+        public Nullable<bool> PgdGatewayDefaultForJob { get; set; }
+        public Nullable<int> TransitionStatusId { get; set; }
     
         public virtual CONTC000Master CONTC000Master { get; set; }
         public virtual CONTC000Master CONTC000Master1 { get; set; }
+        public virtual JOBDL023GatewayInstallStatusMaster JOBDL023GatewayInstallStatusMaster { get; set; }
         public virtual PRGRM000Master PRGRM000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options3 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options4 { get; set; }
     }
 }

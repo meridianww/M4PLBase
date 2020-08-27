@@ -59,6 +59,11 @@ namespace M4PL.EF
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
+        public string PehFtpServerUrl { get; set; }
+        public string PehFtpUsername { get; set; }
+        public string PehFtpPassword { get; set; }
+        public string PehFtpPort { get; set; }
+        public bool IsSFTPUsed { get; set; }
     
         public virtual PRGRM000Master PRGRM000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }

@@ -33,6 +33,7 @@ namespace M4PL.EF
         public string LocationCode { get; set; }
         public string DriverId { get; set; }
         public string ContractNumber { get; set; }
+        public string CustName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SVYANS000Master> SVYANS000Master { get; set; }

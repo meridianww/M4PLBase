@@ -14,7 +14,6 @@ namespace M4PL.EF
     
     public partial class JOBDL040DocumentReference
     {
-        public long Id { get; set; }
         public Nullable<long> JobID { get; set; }
         public Nullable<int> JdrItemNumber { get; set; }
         public string JdrCode { get; set; }
@@ -30,6 +29,7 @@ namespace M4PL.EF
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
+        public long Id { get; set; }
     
         public virtual JOBDL000Master JOBDL000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
