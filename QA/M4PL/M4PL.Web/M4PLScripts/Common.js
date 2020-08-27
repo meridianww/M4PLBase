@@ -1285,6 +1285,8 @@ M4PLCommon.VocReport = (function () {
 M4PLCommon.AdvancedReport = (function () {
     var _init = function () {
         $(".isAdditional").hide();
+        $(".isDriverImport").hide();
+        $(".isDriverbtnScrubreport").hide();
     }
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
@@ -1504,11 +1506,19 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _reportTypeChangeEvent = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
-        if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
-            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        $(".isDriverImport").hide();
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        if (reportTypeCtrl != null && (reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316)) {
+            $(".isDriverScrubreport").hide();
+            $(".isDriverbtnScrubreport").hide();
+        } else {
+            $(".isDriverScrubreport").show();
+            $(".isDriverbtnScrubreport").show();
+            if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
+                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            }
         }
     }
-
     function reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute) {
         if ($('.errorMessages') != undefined) {
             $('.errorMessages').html('');
@@ -1603,7 +1613,9 @@ M4PLCommon.AdvancedReport = (function () {
         }
         return IsFormValidate;
     }
-
+    var _importDriverScrub = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        console.log("kirty");
+    }
     return {
         Init: _init,
         DefaultSelectedCustomer: _defaultSelectedCustomer,
@@ -1630,7 +1642,8 @@ M4PLCommon.AdvancedReport = (function () {
         OrderType_OnClickViewSelected: _orderType_OnClickViewSelected,
         Schedule_OnClickViewSelected: _schedule_OnClickViewSelected,
         GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter,
-        ReportTypeChangeEvent: _reportTypeChangeEvent
+        ReportTypeChangeEvent: _reportTypeChangeEvent,
+        ImportDriverScrub: _importDriverScrub
     }
 })();
 

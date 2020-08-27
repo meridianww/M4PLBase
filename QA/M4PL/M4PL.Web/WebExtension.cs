@@ -3241,7 +3241,8 @@ namespace M4PL.Web
                         var entity = record.Where(t => locationIds.Contains(t.Id));
 
                         if (entity.GroupBy(t => t.ShipmentType).Count() == 1
-                            && entity.GroupBy(t => t.JobType).Count() == 1)
+                            && entity.GroupBy(t => t.JobType).Count() == 1
+                            && entity.GroupBy(t => t.ProgramID).Count() == 1)
                         {
                             if (entity.All(t => t.JobIsSchedule == true))
                                 isScheduleAciton = true;
