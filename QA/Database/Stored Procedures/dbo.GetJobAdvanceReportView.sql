@@ -9,7 +9,7 @@ GO
 -- Create date: 8/18/2020
 -- Description:	Get Job Advance Report View
 -- =============================================
-ALTER PROCEDURE [dbo].[GetJobAdvanceReportView] (
+CREATE PROCEDURE [dbo].[GetJobAdvanceReportView] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -169,6 +169,34 @@ BEGIN
 	ELSE IF (ISNULL(@ReportName, '') = 'Transaction Jobs')
 	BEGIN
 		EXEC dbo.GetTransactionJobReportView @userId
+			,@roleId
+			,@orgId
+			,@entity
+			,@pageNo
+			,@pageSize
+			,@orderBy
+			,@groupBy
+			,@groupByWhere
+			,@where
+			,@parentId
+			,@isNext
+			,@isEnd
+			,@recordId
+			,@IsExport
+			,@scheduled
+			,@orderType
+			,@DateType
+			,@JobStatus
+			,@SearchText
+			,@gatewayTitles
+			,@PackagingCode
+			,@CargoId
+			,@reportTypeId
+			,@TotalCount OUTPUT
+	END
+	ELSE IF (ISNULL(@ReportName, '') = 'Pride Metric Report')
+	BEGIN
+		EXEC dbo.GetPrideMatrixReportView @userId
 			,@roleId
 			,@orgId
 			,@entity
