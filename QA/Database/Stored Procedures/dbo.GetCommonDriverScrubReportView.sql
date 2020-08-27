@@ -7,7 +7,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[GetAWCDriverScrubReportView]
+CREATE PROCEDURE [dbo].[GetCommonDriverScrubReportView]
 @userId BIGINT
 ,@roleId BIGINT
 ,@orgId BIGINT
@@ -61,13 +61,13 @@ Select AD.Id,CASE
 			THEN DriverContact.ConFirstName
 		ELSE ''
 		END DriverName INTO #TempDriverScrub
-FROM dbo.AWCDriverScrubReport AD
+FROM dbo.CommonDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
 INNER JOIN dbo.JobDL000Master Job ON dbo.udf_GetNumeric(Job.JobCustomerSalesOrder) = AD.ActualControlId
 LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
 Where DM.CustomerId = @CustomerId AND CAST(DM.StartDate AS DATE) <= CAST(@StartDate AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST(@EndDate AS DATE)
 
-SET @TCountQuery = 'SELECT @TotalCount = COUNT(AD.Id) FROM dbo.AWCDriverScrubReport AD
+SET @TCountQuery = 'SELECT @TotalCount = COUNT(AD.Id) FROM dbo.CommonDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
 LEFT JOIN #TempDriverScrub Tmp  ON Tmp.Id = AD.Id
 Where DM.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND CAST(DM.StartDate AS DATE) <= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE)'
@@ -118,7 +118,7 @@ EXEC sp_executesql @TCountQuery
 	,CAST(0 AS BIT) IsIdentityVisible
 	,AD.Id
 	,CAST(1 AS BIT) IsFilterSortDisable
-FROM dbo.AWCDriverScrubReport AD
+FROM dbo.CommonDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
 LEFT JOIN #TempDriverScrub Tmp  ON Tmp.Id = AD.Id '
 SET @sqlCommand = @sqlCommand + ' Where DM.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND CAST(DM.StartDate AS DATE) <= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE) ORDER BY AD.Id'
