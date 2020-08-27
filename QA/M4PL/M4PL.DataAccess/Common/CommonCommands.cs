@@ -1163,7 +1163,9 @@ namespace M4PL.DataAccess.Common
                 var oNewValue = oProperty.GetValue(newObject, null);
                 // this will handle the scenario where either value is null
 
-                if (Equals(oOldValue, oNewValue)) continue;
+                //if (Equals(oOldValue, oNewValue)) continue;
+                if (string.Equals(Convert.ToString(oOldValue), Convert.ToString(oNewValue), StringComparison.OrdinalIgnoreCase))
+                    continue;
                 // Handle the display values when the underlying value is null
 
                 string sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
