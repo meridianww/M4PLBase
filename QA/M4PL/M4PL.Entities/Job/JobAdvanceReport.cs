@@ -70,9 +70,37 @@ namespace M4PL.Entities.Job
 			get { return Labels.HasValue && Labels.Value > 0 && Outbound.HasValue && Outbound.Value > 0 ? DisplayPercentage((int)Outbound, (int)Labels) : string.Empty; }
 		}
 		public int? Delivered { get; set; }
+
+		public int? FivePMDeliveryWindow { get; set; }
+		public int? JobCount { get; set; }
+		public int? ApptScheduledReceiving { get; set; }
+		public int? OverallScore { get; set; }
+
 		public string DE
 		{
 			get { return Labels.HasValue && Labels.Value > 0 && Delivered.HasValue && Delivered.Value > 0 ? DisplayPercentage((int)Delivered, (int)Labels) : string.Empty; }
+		}
+
+		public string ManualScanningVsTotal
+		{
+			get { return Labels.HasValue && Labels.Value > 0 && Delivered.HasValue && Delivered.Value > 0 ? DisplayPercentage((int)Delivered, (int)Labels) : string.Empty; }
+		}
+
+		public string ApptScheduledBeforeReceiving
+		{
+			get { return ApptScheduledReceiving.HasValue && ApptScheduledReceiving.Value > 0 && JobCount.HasValue && JobCount.Value > 0 ? DisplayPercentage((int)ApptScheduledReceiving, (int)JobCount) : string.Empty; }
+		}
+
+		public string Before5PMDeliveryWindow
+		{
+			get { return FivePMDeliveryWindow.HasValue && FivePMDeliveryWindow.Value > 0 && JobCount.HasValue && JobCount.Value > 0 ? DisplayPercentage((int)FivePMDeliveryWindow, (int)JobCount) : string.Empty; }
+		}
+
+		public string FourHrWindowDeliveryCompliance { get; set; }
+
+		public string OverallRating
+		{
+			get { return OverallScore.HasValue && OverallScore.Value > 0 ? GetPercentageString((double)OverallScore) : string.Empty; }
 		}
 
 		public int? Cabinets { get; set; }
