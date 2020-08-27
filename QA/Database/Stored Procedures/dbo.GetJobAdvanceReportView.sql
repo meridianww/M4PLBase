@@ -225,7 +225,9 @@ BEGIN
 			,@reportTypeId
 			,@TotalCount OUTPUT
 	END
-	ELSE IF(ISNULL(@ReportName, '') = 'Driver Scrub Report' AND ISNULL(@CustomerId, 0) = 10007)
+	ELSE IF(ISNULL(@ReportName, '') = 'Driver Scrub Report')
+	BEGIN
+	IF(ISNULL(@CustomerId, 0) = 10007)
 	BEGIN
 	EXEC dbo.GetAWCDriverScrubReportView @userId
 			,@roleId
@@ -255,6 +257,38 @@ BEGIN
 	        ,@EndDate
 	        ,@CustomerId
 			,@TotalCount OUTPUT
+    END
+	ELSE
+	BEGIN
+	EXEC dbo.GetCommonDriverScrubReportView @userId
+			,@roleId
+			,@orgId
+			,@entity
+			,@pageNo
+			,@pageSize
+			,@orderBy
+			,@groupBy
+			,@groupByWhere
+			,@where
+			,@parentId
+			,@isNext
+			,@isEnd
+			,@recordId
+			,@IsExport
+			,@scheduled
+			,@orderType
+			,@DateType
+			,@JobStatus
+			,@SearchText
+			,@gatewayTitles
+			,@PackagingCode
+			,@CargoId
+			,@reportTypeId
+			,@StartDate
+	        ,@EndDate
+	        ,@CustomerId
+			,@TotalCount OUTPUT
+	END
 	END
 END
 GO
