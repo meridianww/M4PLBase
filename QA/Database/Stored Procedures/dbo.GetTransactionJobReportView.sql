@@ -372,25 +372,6 @@ BEGIN TRY
 				SET @sqlCommand = @sqlCommand + ' OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
 			END
 		END
-		ELSE
-		BEGIN
-			IF (@orderBy IS NULL)
-			BEGIN
-				IF (
-						(
-							(@isNext = 1)
-							AND (@isEnd = 1)
-							)
-						OR (
-							(@isNext = 0)
-							AND (@isEnd = 0)
-							)
-						)
-				BEGIN
-					SET @sqlCommand = @sqlCommand + ' DESC'
-				END
-			END
-		END
 	END
 	ELSE
 	BEGIN
