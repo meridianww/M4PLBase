@@ -109,6 +109,27 @@ namespace M4PL.Entities.Job
 		public DateTime? EndDate { get; set; }
 		public DateTime? GwyGatewayACD { get; set; }
 		public bool IsIdentityVisible { get; set; }
+		public string LevelGrouped { get; set; }
+		public string Remarks { get; set; }
+		public string OriginalThirdPartyCarrier { get; set; }
+		public string OriginalOrderNumber { get; set; }
+		public string Description { get; set; }
+		public int? QtyShipped { get; set; }
+		public decimal? QMSTotalPrice { get; set; }
+		public string CabOrPart { get; set; }
+		public string DriverName { get; set; }
+		public string InitialedPackingSlip { get; set; }
+		public string Scanned { get; set; }
+		public string Month { get; set; }
+		public string ShortageDamage { get; set; }
+		public string Year { get; set; }
+		public string ProductSubCategory { get; set; }
+		public string Customer { get; set; }
+		public bool IsFilterSortDisable { get; set; }
+		public string CustomerExtendedList
+		{
+			get { return QMSTotalPrice.HasValue && QMSTotalPrice.Value > 0 ? string.Format("${0:0.00}", QMSTotalPrice) : string.Empty; }
+		}
 
 		public string DisplayPercentage(int top, int bottom)
 		{

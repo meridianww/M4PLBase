@@ -53,7 +53,7 @@ INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterI
 LEFT JOIN dbo.JobDL000Master Job ON Job.JobCustomerSalesOrder LIKE ''%'' + AD.ActualControlId + ''%''
 LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
 Where CAST(DM.StartDate AS DATE) <= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE)'
-
+Print @TCountQuery
 EXEC sp_executesql @TCountQuery
 		,N'@StartDate DateTime2(7),@EndDate DateTime2(7),@TotalCount INT OUTPUT'
 		,@StartDate
@@ -61,14 +61,14 @@ EXEC sp_executesql @TCountQuery
 		,@TotalCount OUTPUT;
 
 
-			SET @sqlCommand = 'SELECT SELECT AD.QRCDescription LevelGrouped
+			SET @sqlCommand = 'SELECT AD.QRCDescription LevelGrouped
 	,AD.QMSRemark Remarks
 	,AD.ThirdParty OriginalThirdPartyCarrier
 	,AD.ActualControlId OriginalOrderNumber
 	,AD.ModelName Description
 	,AD.QMSTotalUnit QtyShipped
-	,AD.QMSTotalPrice CustomerExtendedList
-	,'' CabOrPart
+	,AD.QMSTotalPrice
+	,'''' CabOrPart
 	,CASE 
 		WHEN ISNULL(DriverContact.ConFirstName, '''') <> ''''
 			AND ISNULL(DriverContact.ConLastName, '''') <> ''''
@@ -111,11 +111,12 @@ EXEC sp_executesql @TCountQuery
 	,AD.CustomerName Customer
 	,CAST(0 AS BIT) IsIdentityVisible
 	,AD.Id
+	,CAST(1 AS BIT) IsFilterSortDisable
 FROM dbo.AWCDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
 LEFT JOIN dbo.JobDL000Master Job ON Job.JobCustomerSalesOrder LIKE ''%'' + AD.ActualControlId + ''%''
 LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId '
-SET @sqlCommand = @sqlCommand + ' Where CAST(DM.StartDate AS DATE) <= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE)'
+SET @sqlCommand = @sqlCommand + ' Where CAST(DM.StartDate AS DATE) <= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE) ORDER BY AD.Id'
 		IF (
 				@recordId = 0
 				AND @IsExport = 0
@@ -131,7 +132,7 @@ SET @sqlCommand = @sqlCommand + ' Where CAST(DM.StartDate AS DATE) <= CAST('''+C
 			END
 		END
 	
-
+	Print @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@StartDate DateTime2(7),@EndDate DateTime2(7)'
 		,@pageNo = @pageNo
