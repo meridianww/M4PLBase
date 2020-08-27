@@ -25,7 +25,10 @@
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
     var crgoDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
-    crgoDropDownViewModel = Model.Record.CargoId.GetCargoDropDown("CargoId", Model, Model.Record.ProgramId);
+    crgoDropDownViewModel = Model.Record.CargoId.GetCargoDropDown("CargoId", Model, Model.Record.ProgramId); 
+
+    var scrubReportmodel = Model.CallBackRoute;
+    scrubReportmodel.Action = "FormView";
 }
 
 <div class="col-lg-4 col-md-4 col-sm-4 form-group">
@@ -40,7 +43,7 @@
         sett.AllowFocus = false;
         sett.ControlStyle.CssClass = "form-btn";
         sett.Width = 90;
-        sett.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.ImportDriverScrub(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+        sett.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.ImportDriverScrub(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(scrubReportmodel));
     }).GetHtml()
 </div>
 
@@ -61,23 +64,23 @@
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) }));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group isDriverScrubreport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("ProgramByCustomer", Model));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group isDriverScrubreport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("OrginByCustomer", Model));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group isDriverScrubreport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("DestinationByProgramCustomer", Model));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group isDriverScrubreport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("BrandByProgramCustomer", Model));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group isDriverScrubreport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("GatewayStatusByProgramCustomer", Model));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row isDriverScrubreport'>");
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("ServiceModeByCustomer", Model));
         ViewContext.Writer.Write("</div>");
@@ -98,7 +101,7 @@
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isDriverScrubreport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("DateTypeByCustomer", Model));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
@@ -107,14 +110,14 @@
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.EndDate));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isDriverScrubreport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.Search));
         ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isDriverScrubreport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("PackagingTypeByJob", Model));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isDriverScrubreport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
@@ -134,7 +137,9 @@
         ViewContext.Writer.Write("</div>");
     });
 }).GetHtml()
+
 @using (Html.BeginForm())
 {
     @Html.Partial("JobAdvanceReportGridPartial")
 }
+

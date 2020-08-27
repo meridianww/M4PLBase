@@ -18,6 +18,7 @@
 //=============================================================================================================
 
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using System.Collections.Generic;
 
@@ -29,5 +30,7 @@ namespace M4PL.APIClient.Job
 	public interface IJobAdvanceReportCommands : IBaseCommands<JobAdvanceReportView>
 	{
 		IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerID, string entity);
+
+		StatusModel ImportScrubDriverDetails(List<JobDriverScrubReportData> scriberDriverViewLst);
 	}
 }

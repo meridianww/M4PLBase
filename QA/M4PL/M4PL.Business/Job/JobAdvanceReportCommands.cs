@@ -17,6 +17,7 @@
 // Purpose:                                      Set of rules for JobAdvanceReportCommands
 //====================================================================================================================
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
@@ -63,7 +64,12 @@ namespace M4PL.Business.Job
         }
         public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, long customerId, string entity)
         {
-            return _commands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
+            return _commands.GetDropDownDataForProgram(activeUser, customerId, entity);
+        }
+        public StatusModel GenerateScrubDriverDetails(ActiveUser activeUser, List<JobDriverScrubReportData> scriberDriverViewLst)
+        {
+            return new StatusModel();
+            //return _commands.InsertDriverScrubReportRawData(scriberDriverViewLst, activeUser);
         }
     }
 }

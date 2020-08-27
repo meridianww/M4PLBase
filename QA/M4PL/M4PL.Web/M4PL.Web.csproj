@@ -780,6 +780,7 @@
     <Content Include="Areas\Program\Views\PrgEventManagement\DataView.cshtml" />
     <Content Include="Areas\Program\Views\PrgEventManagement\FormView.cshtml" />
     <Content Include="Areas\Finance\Views\Gateway\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

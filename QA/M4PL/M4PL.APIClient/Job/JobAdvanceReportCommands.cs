@@ -22,26 +22,38 @@ using M4PL.Entities;
 using M4PL.Entities.Job;
 using Newtonsoft.Json;
 using RestSharp;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace M4PL.APIClient.Job
 {
-	public class JobAdvanceReportCommands : BaseCommands<JobAdvanceReportView>, IJobAdvanceReportCommands
-	{
-		/// <summary>
-		/// Route to call JobAdvanceReport
-		/// </summary>
-		public override string RouteSuffix
-		{
-			get { return "JobAdvanceReport"; }
-		}
+    public class JobAdvanceReportCommands : BaseCommands<JobAdvanceReportView>, IJobAdvanceReportCommands
+    {
+        /// <summary>
+        /// Route to call JobAdvanceReport
+        /// </summary>
+        public override string RouteSuffix
+        {
+            get { return "JobAdvanceReport"; }
+        }
 
-		public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
-		{
-			var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "AdvanceReport"), ActiveUser).AddParameter("customerId", customerId).AddParameter("entity", entity);
-			var result = RestClient.Execute(request);
-			return JsonConvert.DeserializeObject<ApiResult<List<JobAdvanceReportFilter>>>(result.Content).Results?.FirstOrDefault();
-		}
-	}
+        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
+        {
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "AdvanceReport"), ActiveUser).AddParameter("customerId", customerId).AddParameter("entity", entity);
+            var result = RestClient.Execute(request);
+            return JsonConvert.DeserializeObject<ApiResult<List<JobAdvanceReportFilter>>>(result.Content).Results?.FirstOrDefault();
+        }
+
+        public StatusModel ImportScrubDriverDetails(List<JobDriverScrubReportData> scriberDriverViewLst)
+        {
+            string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
+            RestClient _restClient = new RestClient(new Uri(_baseUri));
+            var route = string.Format("{0}/{1}", RouteSuffix, "GenerateScrubDriverDetails");
+            var result = JsonConvert.DeserializeObject<ApiResult<StatusModel>>(_restClient.Execute(
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(scriberDriverViewLst)).Content).Results?.FirstOrDefault();
+            return result;
+        }
+    }
 }

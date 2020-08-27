@@ -1,0 +1,56 @@
+﻿@using System.Web.UI.WebControls;
+@model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobAdvanceReportView>
+@{
+    ViewBag.Title = "Import Scrub Driver Details";
+    var uploadCallBackRoute = Model.CallBackRoute;
+    Model.IsPopUp = true;
+    var recordId = Model.Record.Id;
+    string upControlName = "ucDragAndDropImportDriver" + Convert.ToString(Model.Record.Id);
+}
+@using (Html.BeginForm())
+{
+    Html.DevExpress().RoundPanel(settings =>
+    {
+        settings.Name = "pnlImportScrubDriverDetails";
+        settings.ClientSideEvents.Init = "M4PLWindow.UploadFileDragDrop.Init";
+        settings.ClientSideEvents.EndCallback = "M4PLWindow.UploadFileDragDrop.EndCallback";
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.Enabled = false;
+        settings.HeaderText = "Import Scrub Driver Details";
+        settings.Collapsed = false;
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
+            ViewContext.Writer.Write("<div id='dragZone'>");
+            ViewContext.Writer.Write("<span class='dragZoneText'>CSV for import Scrub Driver</span>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
+            ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
+            ViewContext.Writer.Write("<span class='dropZoneText'>CSV to import Scrub Driver</span>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+
+            Html.DevExpress().UploadControl(set =>
+            {
+                set.CallbackRouteValues = new { Area = "Job", Controller = "JobAdvanceReport", Action = "ImportScrubDriver", RecordId = Model.Record.CompanyId };
+                set.Name = "ucDragAndDropImportDriver";
+                set.UploadMode = UploadControlUploadMode.Auto;
+                set.AutoStartUpload = true;
+                set.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                set.DialogTriggerID = "externalDropZone";
+                set.AdvancedModeSettings.EnableDragAndDrop = false;
+                set.AdvancedModeSettings.EnableFileList = false;
+                set.AdvancedModeSettings.EnableMultiSelect = false;
+                set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                set.AdvancedModeSettings.DropZoneText = "CSV to import Scrub Driver";
+                set.ValidationSettings.AllowedFileExtensions = new string[] { ".csv" };
+                set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                set.BrowseButton.Text = "Select an CSV to import...";
+                set.Styles.DropZone.CssClass = "uploadControlDropZone";
+                set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(uploadCallBackRoute) + ");}}";
+                set.ShowProgressPanel = true;
+            }).GetHtml();
+        });
+    }).GetHtml();
+}

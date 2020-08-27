@@ -19,6 +19,7 @@
 
 using M4PL.API.Filters;
 using M4PL.Business.Job;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
@@ -150,5 +151,19 @@ namespace M4PL.API.Controllers
 			_jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser; 
 			return _jobAdvanceReportCommands.GetDropDownDataForProgram(Models.ApiContext.ActiveUser, customerId, entity);
 		}
-	}
+
+        /// <summary>
+        /// GenerateScrubDriverDetails
+        /// </summary>
+        /// <param name="scriberDriverViewLst"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("AdvanceReport"), ResponseType(typeof(StatusModel))]
+        public StatusModel GenerateScrubDriverDetails(List<JobDriverScrubReportData> scriberDriverViewLst)
+        {
+            _jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobAdvanceReportCommands.GenerateScrubDriverDetails(Models.ApiContext.ActiveUser, scriberDriverViewLst);
+        }        
+    }
 }

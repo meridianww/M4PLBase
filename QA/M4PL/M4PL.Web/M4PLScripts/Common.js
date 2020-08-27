@@ -1286,7 +1286,6 @@ M4PLCommon.AdvancedReport = (function () {
     var _init = function () {
         $(".isAdditional").hide();
         $(".isDriverImport").hide();
-        $(".isDriverbtnScrubreport").hide();
     }
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
@@ -1509,9 +1508,13 @@ M4PLCommon.AdvancedReport = (function () {
         $(".isDriverImport").hide();
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         if (reportTypeCtrl != null && (reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316)) {
+            controlEnabledDisabled(false);
             $(".isDriverScrubreport").hide();
             $(".isDriverbtnScrubreport").hide();
+            var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+            customerCtrl.SetValue(0);
         } else {
+            controlEnabledDisabled(true);
             $(".isDriverScrubreport").show();
             $(".isDriverbtnScrubreport").show();
             if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
@@ -1613,8 +1616,57 @@ M4PLCommon.AdvancedReport = (function () {
         }
         return IsFormValidate;
     }
+
+    function controlEnabledDisabled(isEnabled) {
+        var prgmCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
+        var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
+        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+        var brandCtrl = ASPxClientControl.GetControlCollection().GetByName('BrandByCustomerProgramCbPanelClosed');
+        var gatewayCtrl = ASPxClientControl.GetControlCollection().GetByName('GatewayStatusIdByCustomerProgramCbPanelClosed');
+        var serviceModeCtrl = ASPxClientControl.GetControlCollection().GetByName('ServiceModeByCustomerCbPanelforClosed');
+        var productTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ProductTypeByCustomerCbPanelforClosed');
+        var scheduleTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ScheduleByCustomerProgramCbPanelClosed');
+        var orderTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('OrderTypeByCustomerProgramCbPanelClosed');
+        var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
+        var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
+        var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
+        var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
+        var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('PackagingTypeByJobCbPanelClosed');
+        var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
+
+        prgmCtrl.SetEnabled(isEnabled);
+        originCtrl.SetEnabled(isEnabled);
+        destinationCtrl.SetEnabled(isEnabled);
+        brandCtrl.SetEnabled(isEnabled);
+        gatewayCtrl.SetEnabled(isEnabled);
+        serviceModeCtrl.SetEnabled(isEnabled);
+        productTypeCtrl.SetEnabled(isEnabled);
+        jobChannelCtrl.SetEnabled(isEnabled);
+        searchCtrl.SetEnabled(isEnabled);
+        cargoTitleCtrl.SetEnabled(isEnabled);
+
+        jobStatusCtrl.SetEnabled(isEnabled);
+        dateTypeCtrl.SetEnabled(isEnabled);
+        packagingTypeCtrl.SetEnabled(isEnabled);
+        scheduleTypeCtrl.SetEnabled(isEnabled);
+        orderTypeCtrl.SetEnabled(isEnabled);
+
+        var bgColor = !isEnabled ? "#9BEBF2" : '#fff';
+        packagingTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+        dateTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+        jobStatusCtrl.GetInputElement().style.backgroundColor = bgColor;
+        orderTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+        scheduleTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+    }
     var _importDriverScrub = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
-        console.log("kirty");
+        rprtVwrRoute.Action = "FormView";
+        rprtVwrRoute.OwnerCbPanel = "JobAdvanceReportCbPanel";
+        rprtVwrRoute.IsPopup = true;
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        if (customerCtrl != null)
+            rprtVwrRoute.RecordId = customerCtrl.GetValue() != null && customerCtrl.GetValue() > 0
+                ? parseInt(customerCtrl.GetValue()) : 0;
+        RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
     }
     return {
         Init: _init,
