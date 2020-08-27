@@ -17,7 +17,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public XcblSummaryHeader()
         {
-            this.XcblSummaryDetails = new HashSet<XcblSummaryDetail>();
+            this.XcblSummaryDetail = new HashSet<XcblSummaryDetail>();
         }
     
         public long xcblHeaderID { get; set; }
@@ -146,6 +146,6 @@ namespace M4PL.EF
         public string ChangedBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<XcblSummaryDetail> XcblSummaryDetails { get; set; }
+        public virtual ICollection<XcblSummaryDetail> XcblSummaryDetail { get; set; }
     }
 }

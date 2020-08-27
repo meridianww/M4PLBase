@@ -17,18 +17,17 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public EventEntityRelation()
         {
-            this.EventEntityContentDetails = new HashSet<EventEntityContentDetail>();
-            this.EventSubscriberRelations = new HashSet<EventSubscriberRelation>();
+            this.EventEntityContentDetail = new HashSet<EventEntityContentDetail>();
+            this.EventSubscriberRelation = new HashSet<EventSubscriberRelation>();
         }
     
         public int ID { get; set; }
-        public int EventId { get; set; }
         public long ParentId { get; set; }
     
         public virtual Event Event { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EventEntityContentDetail> EventEntityContentDetails { get; set; }
+        public virtual ICollection<EventEntityContentDetail> EventEntityContentDetail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EventSubscriberRelation> EventSubscriberRelations { get; set; }
+        public virtual ICollection<EventSubscriberRelation> EventSubscriberRelation { get; set; }
     }
 }

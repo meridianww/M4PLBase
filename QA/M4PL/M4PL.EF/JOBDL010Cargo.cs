@@ -21,7 +21,6 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> JobID { get; set; }
         public Nullable<int> CgoLineItem { get; set; }
         public string CgoPartNumCode { get; set; }
         public string CgoTitle { get; set; }
@@ -51,7 +50,6 @@ namespace M4PL.EF
         public string CgoReasonCodeOSD { get; set; }
         public string CgoReasonCodeHold { get; set; }
         public Nullable<int> CgoSeverityCode { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string ProFlags01 { get; set; }
         public string ProFlags02 { get; set; }
         public string ProFlags03 { get; set; }
@@ -76,13 +74,8 @@ namespace M4PL.EF
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
-        public Nullable<int> CgoPackagingTypeId { get; set; }
-        public Nullable<int> CgoWeightUnitsId { get; set; }
-        public Nullable<int> CgoVolumeUnitsId { get; set; }
-        public Nullable<int> CgoQtyUnitsId { get; set; }
         public string CgoComment { get; set; }
         public Nullable<System.DateTime> CgoDateLastScan { get; set; }
-        public Nullable<bool> Test { get; set; }
         public string CgoWhLoc { get; set; }
     
         public virtual JOBDL000Master JOBDL000Master { get; set; }

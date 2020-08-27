@@ -15,14 +15,10 @@ namespace M4PL.EF
     public partial class PRGRM051VendorLocations
     {
         public long Id { get; set; }
-        public Nullable<long> PvlProgramID { get; set; }
-        public Nullable<long> PvlVendorID { get; set; }
         public Nullable<int> PvlItemNumber { get; set; }
         public string PvlLocationCode { get; set; }
         public string PvlLocationCodeCustomer { get; set; }
         public string PvlLocationTitle { get; set; }
-        public Nullable<long> PvlContactMSTRID { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> PvlDateStart { get; set; }
         public Nullable<System.DateTime> PvlDateEnd { get; set; }
         public string PvlUserCode1 { get; set; }

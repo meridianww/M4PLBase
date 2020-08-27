@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class NAV000JobOrderItemMapping
     {
         public long JobOrderItemMappingId { get; set; }
-        public long JobId { get; set; }
         public string EntityName { get; set; }
         public Nullable<int> LineNumber { get; set; }
         public System.DateTime DateEntered { get; set; }

@@ -15,35 +15,26 @@ namespace M4PL.EF
     public partial class PRGRM010Ref_GatewayDefaults
     {
         public long Id { get; set; }
-        public Nullable<long> PgdProgramID { get; set; }
         public Nullable<int> PgdGatewaySortOrder { get; set; }
         public string PgdGatewayCode { get; set; }
         public string PgdGatewayTitle { get; set; }
         public byte[] PgdGatewayDescription { get; set; }
         public Nullable<decimal> PgdGatewayDuration { get; set; }
-        public Nullable<int> UnitTypeId { get; set; }
         public Nullable<bool> PgdGatewayDefault { get; set; }
-        public Nullable<int> GatewayTypeId { get; set; }
-        public Nullable<int> GatewayDateRefTypeId { get; set; }
         public Nullable<bool> Scanner { get; set; }
         public string PgdShipStatusReasonCode { get; set; }
         public string PgdShipApptmtReasonCode { get; set; }
         public string PgdOrderType { get; set; }
         public string PgdShipmentType { get; set; }
-        public Nullable<long> PgdGatewayResponsible { get; set; }
-        public Nullable<long> PgdGatewayAnalyst { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public byte[] PgdGatewayComment { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<bool> PgdGatewayDefaultComplete { get; set; }
-        public Nullable<long> InstallStatusId { get; set; }
         public string MappingId { get; set; }
         public string PgdGatewayStatusCode { get; set; }
         public Nullable<bool> PgdGatewayDefaultForJob { get; set; }
-        public Nullable<int> TransitionStatusId { get; set; }
     
         public virtual CONTC000Master CONTC000Master { get; set; }
         public virtual CONTC000Master CONTC000Master1 { get; set; }

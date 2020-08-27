@@ -21,7 +21,6 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> OrgID { get; set; }
         public Nullable<int> MrkOrder { get; set; }
         public string MrkCode { get; set; }
         public string MrkTitle { get; set; }

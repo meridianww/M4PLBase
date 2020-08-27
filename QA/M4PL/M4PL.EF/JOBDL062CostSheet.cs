@@ -22,16 +22,13 @@ namespace M4PL.EF
         public string CstTitle { get; set; }
         public Nullable<long> CstSurchargeOrder { get; set; }
         public Nullable<double> CstSurchargePercent { get; set; }
-        public Nullable<int> ChargeTypeId { get; set; }
         public Nullable<int> CstNumberUsed { get; set; }
         public Nullable<decimal> CstDuration { get; set; }
         public Nullable<decimal> CstQuantity { get; set; }
-        public Nullable<int> CstUnitId { get; set; }
         public Nullable<decimal> CstRate { get; set; }
         public Nullable<decimal> CstAmount { get; set; }
         public Nullable<double> CstMarkupPercent { get; set; }
         public byte[] CstComments { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

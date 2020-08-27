@@ -15,8 +15,6 @@ namespace M4PL.EF
     public partial class DashboardCategoryRelation
     {
         public long DashboardCategoryRelationId { get; set; }
-        public long DashboardId { get; set; }
-        public int DashboardCategoryId { get; set; }
         public int DashboardSubCategory { get; set; }
         public string CustomQuery { get; set; }
         public string BackGroundColor { get; set; }
@@ -24,6 +22,5 @@ namespace M4PL.EF
     
         public virtual Dashboard Dashboard { get; set; }
         public virtual DashboardCategory DashboardCategory { get; set; }
-        public virtual DashboardSubCategory DashboardSubCategory1 { get; set; }
     }
 }

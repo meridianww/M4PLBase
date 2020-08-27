@@ -14,17 +14,14 @@ namespace M4PL.EF
     
     public partial class JOBDL040DocumentReference
     {
-        public Nullable<long> JobID { get; set; }
         public Nullable<int> JdrItemNumber { get; set; }
         public string JdrCode { get; set; }
         public string JdrTitle { get; set; }
-        public Nullable<int> DocTypeId { get; set; }
         public byte[] JdrDescription { get; set; }
         public Nullable<int> JdrAttachment { get; set; }
         public Nullable<System.DateTime> JdrDateStart { get; set; }
         public Nullable<System.DateTime> JdrDateEnd { get; set; }
         public Nullable<bool> JdrRenewal { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

@@ -21,8 +21,6 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> PclProgramID { get; set; }
-        public Nullable<long> PclVendorID { get; set; }
         public Nullable<int> PclItemNumber { get; set; }
         public string PclLocationCode { get; set; }
         public string PclLocationCodeCustomer { get; set; }

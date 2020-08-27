@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class NAV000JobPurchaseOrderMapping
     {
         public long JobPurchaseOrderMappingId { get; set; }
-        public long JobSalesOrderMappingId { get; set; }
         public string PONumber { get; set; }
         public bool IsElectronicInvoiced { get; set; }
         public System.DateTime DateEntered { get; set; }

@@ -20,7 +20,6 @@ namespace M4PL.EF
         public string ReturnReasonCode { get; set; }
         public string ReturnReasonTitle { get; set; }
         public byte[] ReturnReasonDesc { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

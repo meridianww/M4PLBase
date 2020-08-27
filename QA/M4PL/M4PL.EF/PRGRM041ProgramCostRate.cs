@@ -19,10 +19,7 @@ namespace M4PL.EF
         public string PcrVendorCode { get; set; }
         public Nullable<System.DateTime> PcrEffectiveDate { get; set; }
         public string PcrTitle { get; set; }
-        public Nullable<int> RateCategoryTypeId { get; set; }
-        public Nullable<int> RateTypeId { get; set; }
         public Nullable<decimal> PcrCostRate { get; set; }
-        public Nullable<int> RateUnitTypeId { get; set; }
         public string PcrFormat { get; set; }
         public byte[] PcrDescription { get; set; }
         public string PcrExpression01 { get; set; }
@@ -35,13 +32,10 @@ namespace M4PL.EF
         public string PcrLogic04 { get; set; }
         public string PcrExpression05 { get; set; }
         public string PcrLogic05 { get; set; }
-        public Nullable<int> StatusId { get; set; }
-        public Nullable<long> PcrCustomerID { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
-        public Nullable<long> ProgramLocationId { get; set; }
         public bool PcrElectronicBilling { get; set; }
     
         public virtual CUST000Master CUST000Master { get; set; }

@@ -36,8 +36,6 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> PrgOrgID { get; set; }
-        public Nullable<long> PrgCustID { get; set; }
         public string PrgItemNumber { get; set; }
         public string PrgProgramCode { get; set; }
         public string PrgProjectCode { get; set; }
@@ -50,7 +48,6 @@ namespace M4PL.EF
         public Nullable<decimal> PckEarliest { get; set; }
         public Nullable<decimal> PckLatest { get; set; }
         public Nullable<bool> PckDay { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> PrgDateStart { get; set; }
         public Nullable<System.DateTime> PrgDateEnd { get; set; }
         public Nullable<System.DateTime> PrgDeliveryTimeDefault { get; set; }

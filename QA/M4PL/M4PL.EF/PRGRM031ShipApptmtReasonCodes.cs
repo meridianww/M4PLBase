@@ -15,8 +15,6 @@ namespace M4PL.EF
     public partial class PRGRM031ShipApptmtReasonCodes
     {
         public long Id { get; set; }
-        public Nullable<long> PacOrgID { get; set; }
-        public Nullable<long> PacProgramID { get; set; }
         public Nullable<int> PacApptItem { get; set; }
         public string PacApptReasonCode { get; set; }
         public Nullable<int> PacApptLength { get; set; }
@@ -31,7 +29,6 @@ namespace M4PL.EF
         public string PacApptUser03Code { get; set; }
         public string PacApptUser04Code { get; set; }
         public string PacApptUser05Code { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

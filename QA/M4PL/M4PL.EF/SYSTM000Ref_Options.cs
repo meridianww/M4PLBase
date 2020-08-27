@@ -38,7 +38,7 @@ namespace M4PL.EF
             this.CUST040DCLocations = new HashSet<CUST040DCLocations>();
             this.CUST050Finacial_Cal = new HashSet<CUST050Finacial_Cal>();
             this.CUST050Finacial_Cal1 = new HashSet<CUST050Finacial_Cal>();
-            this.Events = new HashSet<Event>();
+            this.Event = new HashSet<Event>();
             this.JOBDL000Master = new HashSet<JOBDL000Master>();
             this.JOBDL000Master1 = new HashSet<JOBDL000Master>();
             this.JOBDL000Master2 = new HashSet<JOBDL000Master>();
@@ -165,13 +165,11 @@ namespace M4PL.EF
         }
     
         public int Id { get; set; }
-        public Nullable<int> SysLookupId { get; set; }
         public string SysLookupCode { get; set; }
         public string SysOptionName { get; set; }
         public Nullable<int> SysSortOrder { get; set; }
         public Nullable<bool> SysDefault { get; set; }
         public bool IsSysAdmin { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
@@ -220,7 +218,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST050Finacial_Cal> CUST050Finacial_Cal1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<Event> Event { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL000Master> JOBDL000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

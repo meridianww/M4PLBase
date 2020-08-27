@@ -31,7 +31,6 @@ namespace M4PL.EF
     
         public long Id { get; set; }
         public Nullable<long> JobMITJobID { get; set; }
-        public Nullable<long> ProgramID { get; set; }
         public string JobSiteCode { get; set; }
         public string JobConsigneeCode { get; set; }
         public string JobCustomerSalesOrder { get; set; }
@@ -43,7 +42,6 @@ namespace M4PL.EF
         public string JobManifestNo { get; set; }
         public Nullable<int> JobQtyOrdered { get; set; }
         public Nullable<int> JobQtyActual { get; set; }
-        public Nullable<int> JobQtyUnitTypeId { get; set; }
         public Nullable<int> JobPartsOrdered { get; set; }
         public Nullable<int> JobPartsActual { get; set; }
         public Nullable<decimal> JobTotalCubes { get; set; }
@@ -51,16 +49,12 @@ namespace M4PL.EF
         public string JobChannel { get; set; }
         public string JobProductType { get; set; }
         public string JobGatewayStatus { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> JobStatusedDate { get; set; }
         public Nullable<bool> JobCompleted { get; set; }
         public string JobType { get; set; }
         public string ShipmentType { get; set; }
-        public Nullable<long> JobDeliveryAnalystContactID { get; set; }
-        public Nullable<long> JobDeliveryResponsibleContactID { get; set; }
         public string PlantIDCode { get; set; }
         public string JobRouteId { get; set; }
-        public Nullable<long> JobDriverId { get; set; }
         public string JobStop { get; set; }
         public string CarrierID { get; set; }
         public string JobSignText { get; set; }
@@ -89,7 +83,6 @@ namespace M4PL.EF
         public string JobDeliveryRecipientEmail { get; set; }
         public string JobLatitude { get; set; }
         public string JobLongitude { get; set; }
-        public Nullable<long> JobOriginResponsibleContactID { get; set; }
         public string JobOriginSiteCode { get; set; }
         public string JobOriginSitePOC { get; set; }
         public string JobOriginSitePOCPhone { get; set; }
@@ -183,20 +176,17 @@ namespace M4PL.EF
         public string JobSellerStreetAddress4 { get; set; }
         public string JobShipFromStreetAddress3 { get; set; }
         public string JobShipFromStreetAddress4 { get; set; }
-        public Nullable<int> JobCubesUnitTypeId { get; set; }
-        public Nullable<int> JobWeightUnitTypeId { get; set; }
         public Nullable<decimal> JobTotalWeight { get; set; }
         public decimal JobMileage { get; set; }
-        public Nullable<int> JobPreferredMethod { get; set; }
         public Nullable<int> JobServiceOrder { get; set; }
         public Nullable<int> JobServiceActual { get; set; }
         public Nullable<bool> IsCancelled { get; set; }
         public Nullable<bool> IsJobVocSurvey { get; set; }
         public Nullable<int> JobTransitionStatusId { get; set; }
         public string JobDriverAlert { get; set; }
-        public Nullable<bool> JobIsSchedule { get; set; }
         public string JobSalesInvoiceNumber { get; set; }
         public string JobPurchaseInvoiceNumber { get; set; }
+        public Nullable<bool> JobIsSchedule { get; set; }
         public string UdcWhLoc { get; set; }
     
         public virtual CONTC000Master CONTC000Master { get; set; }

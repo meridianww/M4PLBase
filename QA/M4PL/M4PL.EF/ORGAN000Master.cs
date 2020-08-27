@@ -50,19 +50,14 @@ namespace M4PL.EF
         public long Id { get; set; }
         public string OrgCode { get; set; }
         public string OrgTitle { get; set; }
-        public Nullable<int> OrgGroupId { get; set; }
         public Nullable<int> OrgSortOrder { get; set; }
         public byte[] OrgDescription { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public System.DateTime DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<long> OrgContactId { get; set; }
         public byte[] OrgImage { get; set; }
-        public Nullable<long> OrgWorkAddressId { get; set; }
-        public Nullable<long> OrgBusinessAddressId { get; set; }
-        public Nullable<long> OrgCorporateAddressId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<COMP000Master> COMP000Master { get; set; }

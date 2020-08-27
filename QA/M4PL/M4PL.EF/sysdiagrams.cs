@@ -12,16 +12,12 @@ namespace M4PL.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class AUTH010_RefreshToken
+    public partial class sysdiagrams
     {
-        public string Id { get; set; }
-        public string Username { get; set; }
-        public string AuthClientId { get; set; }
-        public System.DateTime IssuedUtc { get; set; }
-        public System.DateTime ExpiresUtc { get; set; }
-        public string ProtectedTicket { get; set; }
-        public string UserAuthTokenId { get; set; }
-    
-        public virtual AUTH000_Client AUTH000_Client { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

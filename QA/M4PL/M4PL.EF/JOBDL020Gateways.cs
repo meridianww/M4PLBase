@@ -15,17 +15,12 @@ namespace M4PL.EF
     public partial class JOBDL020Gateways
     {
         public long Id { get; set; }
-        public Nullable<long> JobID { get; set; }
-        public Nullable<long> ProgramID { get; set; }
         public Nullable<int> GwyGatewaySortOrder { get; set; }
         public string GwyGatewayCode { get; set; }
         public string GwyGatewayTitle { get; set; }
         public byte[] GwyGatewayDescription { get; set; }
         public Nullable<decimal> GwyGatewayDuration { get; set; }
         public Nullable<bool> GwyGatewayDefault { get; set; }
-        public Nullable<int> GatewayTypeId { get; set; }
-        public Nullable<long> GwyGatewayAnalyst { get; set; }
-        public Nullable<long> GwyGatewayResponsible { get; set; }
         public string GwyPerson { get; set; }
         public string GwyPhone { get; set; }
         public string GwyEmail { get; set; }
@@ -40,18 +35,14 @@ namespace M4PL.EF
         public Nullable<System.DateTime> GwyGatewayECD { get; set; }
         public Nullable<System.DateTime> GwyGatewayACD { get; set; }
         public Nullable<bool> GwyCompleted { get; set; }
-        public Nullable<int> GatewayUnitId { get; set; }
         public Nullable<int> GwyAttachments { get; set; }
         public byte[] GwyComment { get; set; }
         public string GwyProcessingFlags { get; set; }
-        public Nullable<int> GwyDateRefTypeId { get; set; }
         public Nullable<bool> Scanner { get; set; }
         public string GwyShipStatusReasonCode { get; set; }
         public string GwyShipApptmtReasonCode { get; set; }
         public string GwyOrderType { get; set; }
         public string GwyShipmentType { get; set; }
-        public Nullable<int> StatusId { get; set; }
-        public Nullable<int> GwyUpdatedById { get; set; }
         public Nullable<System.DateTime> GwyClosedOn { get; set; }
         public string GwyClosedBy { get; set; }
         public string ProFlags01 { get; set; }
@@ -79,11 +70,7 @@ namespace M4PL.EF
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
         public bool isActionAdded { get; set; }
-        public Nullable<int> GwyPreferredMethod { get; set; }
         public Nullable<long> xCBLHeaderId { get; set; }
-        public Nullable<long> GwyCargoId { get; set; }
-        public Nullable<long> GwyExceptionTitleId { get; set; }
-        public Nullable<long> GwyExceptionStatusId { get; set; }
         public string GwyAddtionalComment { get; set; }
         public Nullable<System.DateTime> GwyDateCancelled { get; set; }
         public Nullable<bool> GwyCancelOrder { get; set; }

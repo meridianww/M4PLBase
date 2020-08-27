@@ -25,10 +25,7 @@ namespace M4PL.EF
         public string PbrCustomerCode { get; set; }
         public Nullable<System.DateTime> PbrEffectiveDate { get; set; }
         public string PbrTitle { get; set; }
-        public Nullable<int> RateCategoryTypeId { get; set; }
-        public Nullable<int> RateTypeId { get; set; }
         public Nullable<decimal> PbrBillablePrice { get; set; }
-        public Nullable<int> RateUnitTypeId { get; set; }
         public string PbrFormat { get; set; }
         public byte[] PbrDescription { get; set; }
         public string PbrExpression01 { get; set; }
@@ -41,13 +38,10 @@ namespace M4PL.EF
         public string PbrLogic04 { get; set; }
         public string PbrExpression05 { get; set; }
         public string PbrLogic05 { get; set; }
-        public Nullable<int> StatusId { get; set; }
-        public Nullable<long> PbrVendLocationID { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
-        public Nullable<long> ProgramLocationId { get; set; }
         public bool PbrElectronicBilling { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

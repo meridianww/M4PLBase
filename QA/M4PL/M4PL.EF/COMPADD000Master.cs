@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class COMPADD000Master
     {
         public long Id { get; set; }
-        public long AddCompId { get; set; }
         public Nullable<int> AddItemNumber { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
@@ -23,7 +22,6 @@ namespace M4PL.EF
         public Nullable<int> StateId { get; set; }
         public string ZipPostal { get; set; }
         public Nullable<int> CountryId { get; set; }
-        public Nullable<int> AddTypeId { get; set; }
         public System.DateTime DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

@@ -15,10 +15,7 @@ namespace M4PL.EF
     public partial class EventSubscriberRelation
     {
         public int Id { get; set; }
-        public int SubscriberId { get; set; }
-        public int EventEntityRelationId { get; set; }
         public string EmailAddresses { get; set; }
-        public int EventSubscriberTypeId { get; set; }
     
         public virtual EventEntityRelation EventEntityRelation { get; set; }
         public virtual EventSubscriber EventSubscriber { get; set; }
