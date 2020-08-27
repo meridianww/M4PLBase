@@ -47,11 +47,29 @@ DECLARE @sqlCommand NVARCHAR(MAX)
 	DECLARE @AdvanceFilter NVARCHAR(MAX) = ''
 		,@JobStatusId INT = 0;
 
+IF OBJECT_ID('tempdb..#TempDriverScrub') IS NOT NULL DROP TABLE #TempDriverScrub
+Select AD.Id,CASE 
+		WHEN ISNULL(DriverContact.ConFirstName, '') <> ''
+			AND ISNULL(DriverContact.ConLastName, '') <> ''
+			THEN CONCAT (
+					DriverContact.ConFirstName
+					,' '
+					,DriverContact.ConLastName
+					)
+		WHEN ISNULL(DriverContact.ConFirstName, '') <> ''
+			AND ISNULL(DriverContact.ConLastName, '') = ''
+			THEN DriverContact.ConFirstName
+		ELSE ''
+		END DriverName INTO #TempDriverScrub
+FROM dbo.AWCDriverScrubReport AD
+INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
+INNER JOIN dbo.JobDL000Master Job ON dbo.udf_GetNumeric(Job.JobCustomerSalesOrder) = AD.ActualControlId
+LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
+Where CAST(DM.StartDate AS DATE) <= CAST(@StartDate AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST(@EndDate AS DATE)
 
 SET @TCountQuery = 'SELECT @TotalCount = COUNT(AD.Id) FROM dbo.AWCDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
-LEFT JOIN dbo.JobDL000Master Job ON Job.JobCustomerSalesOrder LIKE ''%'' + AD.ActualControlId + ''%''
-LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
+LEFT JOIN #TempDriverScrub Tmp  ON Tmp.Id = AD.Id
 Where CAST(DM.StartDate AS DATE) <= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE)'
 Print @TCountQuery
 EXEC sp_executesql @TCountQuery
@@ -69,19 +87,7 @@ EXEC sp_executesql @TCountQuery
 	,AD.QMSTotalUnit QtyShipped
 	,AD.QMSTotalPrice
 	,'''' CabOrPart
-	,CASE 
-		WHEN ISNULL(DriverContact.ConFirstName, '''') <> ''''
-			AND ISNULL(DriverContact.ConLastName, '''') <> ''''
-			THEN CONCAT (
-					DriverContact.ConFirstName
-					,'' ''
-					,DriverContact.ConLastName
-					)
-		WHEN ISNULL(DriverContact.ConFirstName, '''') <> ''''
-			AND ISNULL(DriverContact.ConLastName, '''') = ''''
-			THEN DriverContact.ConFirstName
-		ELSE ''''
-		END DriverName
+	,Tmp.DriverName
 	,'''' InitialedPackingSlip
 	,'''' Scanned
 	,(
@@ -114,8 +120,7 @@ EXEC sp_executesql @TCountQuery
 	,CAST(1 AS BIT) IsFilterSortDisable
 FROM dbo.AWCDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
-LEFT JOIN dbo.JobDL000Master Job ON Job.JobCustomerSalesOrder LIKE ''%'' + AD.ActualControlId + ''%''
-LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId '
+LEFT JOIN #TempDriverScrub Tmp  ON Tmp.Id = AD.Id '
 SET @sqlCommand = @sqlCommand + ' Where CAST(DM.StartDate AS DATE) <= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE) ORDER BY AD.Id'
 		IF (
 				@recordId = 0
@@ -139,5 +144,7 @@ SET @sqlCommand = @sqlCommand + ' Where CAST(DM.StartDate AS DATE) <= CAST('''+C
 		,@pageSize = @pageSize
 		,@StartDate = @StartDate
 		,@EndDate = @EndDate
+
+DROP TABLE #TempDriverScrub
 END
 GO
