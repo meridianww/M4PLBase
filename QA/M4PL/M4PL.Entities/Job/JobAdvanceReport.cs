@@ -131,6 +131,30 @@ namespace M4PL.Entities.Job
 			get { return QMSTotalPrice.HasValue && QMSTotalPrice.Value > 0 ? string.Format("${0:0.00}", QMSTotalPrice) : string.Empty; }
 		}
 
+		public int? ProjectedCount { get; set; }
+
+		public int? ProjectedYear { get; set; }
+
+		public string Location { get; set; }
+
+		public string FootprintPercantage
+		{
+			get
+			{
+				return Cabinets.HasValue && Cabinets.Value > 0 && ProjectedCount.HasValue && ProjectedCount.Value > 0 ?
+				  GetPercentageString((double)(((double)Cabinets.Value / ProjectedCount.Value) * 50)) : string.Empty;
+			}
+		}
+
+		public string EstimatedSquareFeet
+		{
+			get
+			{
+				return Cabinets.HasValue && Cabinets.Value > 0 ?
+				  GetPercentageString((double)(((double)Cabinets.Value / 205) * 2050)) : string.Empty;
+			}
+		}
+
 		public string DisplayPercentage(int top, int bottom)
 		{
 			return GetPercentageString((double)top / bottom);

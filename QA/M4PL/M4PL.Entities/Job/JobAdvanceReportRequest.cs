@@ -39,5 +39,6 @@ namespace M4PL.Entities.Job
         public string PackagingCode { get; set; }
         public long? CargoId { get; set; }
         public string FileName { get; set; }
-    }
+		public int? ProjectedYear { get; set; }
+	}
 }

@@ -51,7 +51,7 @@ namespace M4PL.DataAccess.Job
             var results = SqlSerializer.Default.DeserializeMultiRecords<JobAdvanceReport>(StoredProceduresConstant.GetJobAdvanceReportView, parameters.ToArray(), storedProcedure: true);
             if (results != null && results.Count > 0 && jobAdvanceReportRequest != null)
             {
-                results.ForEach(x => { x.StartDate = jobAdvanceReportRequest.StartDate; x.EndDate = jobAdvanceReportRequest.EndDate; });
+                results.ForEach(x => { x.StartDate = jobAdvanceReportRequest.StartDate; x.EndDate = jobAdvanceReportRequest.EndDate; x.ProjectedYear = jobAdvanceReportRequest.ProjectedYear; });
             }
 
             if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
@@ -286,7 +286,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@recordId", pagedDataInfo.RecordId),
                new Parameter("@groupBy", pagedDataInfo.GroupBy),
                new Parameter("@IsExport", pagedDataInfo.IsJobParentEntity),
-               new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition)
+               new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition),
             };
 
             if (jobAdvanceReportRequest != null)
@@ -297,8 +297,9 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@StartDate", jobAdvanceReportRequest.StartDate));
                 parameters.Add(new Parameter("@EndDate", jobAdvanceReportRequest.EndDate));
                 parameters.Add(new Parameter("@CustomerId", jobAdvanceReportRequest.CustomerId));
+				parameters.Add(new Parameter("@ProjectedYear", 2019));
 
-                parameters.Add(new Parameter("@PackagingCode", jobAdvanceReportRequest.PackagingCode));
+				parameters.Add(new Parameter("@PackagingCode", jobAdvanceReportRequest.PackagingCode));
                 if (jobAdvanceReportRequest.CargoId.HasValue)
                     parameters.Add(new Parameter("@CargoId", jobAdvanceReportRequest.CargoId));
 

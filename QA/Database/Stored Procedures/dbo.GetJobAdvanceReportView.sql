@@ -37,6 +37,7 @@ CREATE PROCEDURE [dbo].[GetJobAdvanceReportView] (
 	,@StartDate DateTime2(7) = NULL
 	,@EndDate DateTime2(7) = NULL
 	,@CustomerId BIGINT = 0
+	,@ProjectedYear INT = 0
 	,@TotalCount INT OUTPUT
 	)
 AS
@@ -289,6 +290,38 @@ BEGIN
 	        ,@CustomerId
 			,@TotalCount OUTPUT
 	END
+	END
+	ELSE IF(ISNULL(@ReportName, '') = 'Capacity Report')
+	BEGIN
+		EXEC dbo.GetProjectedCapacitybReportView @userId
+			,@roleId
+			,@orgId
+			,@entity
+			,@pageNo
+			,@pageSize
+			,@orderBy
+			,@groupBy
+			,@groupByWhere
+			,@where
+			,@parentId
+			,@isNext
+			,@isEnd
+			,@recordId
+			,@IsExport
+			,@scheduled
+			,@orderType
+			,@DateType
+			,@JobStatus
+			,@SearchText
+			,@gatewayTitles
+			,@PackagingCode
+			,@CargoId
+			,@reportTypeId
+			,@StartDate
+	        ,@EndDate
+	        ,@CustomerId
+			,@ProjectedYear
+			,@TotalCount OUTPUT
 	END
 END
 GO
