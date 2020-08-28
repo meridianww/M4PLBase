@@ -60,12 +60,20 @@ Select AD.Id,CASE
 			AND ISNULL(DriverContact.ConLastName, '') = ''
 			THEN DriverContact.ConFirstName
 		ELSE ''
-		END DriverName INTO #TempDriverScrub
+		END DriverName
+		,Job.Id JobId
+		,'N' Scanned
+		,AD.ModelName INTO #TempDriverScrub
 FROM dbo.CommonDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
 INNER JOIN dbo.JobDL000Master Job ON dbo.udf_GetNumeric(Job.JobCustomerSalesOrder) = AD.ActualControlId
 LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
 Where DM.CustomerId = @CustomerId AND CAST(DM.StartDate AS DATE) <= CAST(@StartDate AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST(@EndDate AS DATE)
+
+UPDATE tmp
+SET Scanned = CASE WHEN ISNULL(Cargo.CgoDateLastScan, '') = '' THEN Scanned ELSE 'Y' END
+From #TempDriverScrub tmp
+INNER JOIN dbo.JOBDL010Cargo Cargo ON Cargo.JobId = tmp.JobId AND tmp.ModelName like '%' + Cargo.CgoPartNumCode + '%' AND Cargo.StatusId=1
 
 SET @TCountQuery = 'SELECT @TotalCount = COUNT(AD.Id) FROM dbo.CommonDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
