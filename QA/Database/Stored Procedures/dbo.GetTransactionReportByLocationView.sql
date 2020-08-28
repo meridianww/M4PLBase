@@ -254,7 +254,8 @@ BEGIN TRY
 	SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Delivered', 'SUM(Cargo.Delivered) Delivered');
 	SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Cabinets', 'SUM(Cargo.Cabinets) Cabinets ');
 	SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Parts', 'SUM(Cargo.Parts) Parts');
-	SET @sqlCommand = @sqlCommand + ', CAST(0 AS BIT) IsIdentityVisible ';
+	SET @sqlCommand = @sqlCommand + ', CAST(0 AS BIT) IsIdentityVisible ';	
+	SET @sqlCommand = @sqlCommand + ', CAST(1 AS BIT) IsFilterSortDisable ';
 
 	PRINT @sqlCommand
 
