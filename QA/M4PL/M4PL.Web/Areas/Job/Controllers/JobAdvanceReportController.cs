@@ -540,7 +540,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
                 catch (Exception ex)
                 {
-                    displayMessage.Description = ex.Message;
+                    displayMessage.Description = "Please select a valid CSV file for upload.";
                 }
             }
             else
