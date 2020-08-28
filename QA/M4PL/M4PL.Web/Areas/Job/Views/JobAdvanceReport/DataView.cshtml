@@ -33,6 +33,11 @@
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayACD").DataType = "datetime2";
     }
+    var filterSortingEnable = true;
+    if (Model.Records.FirstOrDefault() == null || (Model.Records.FirstOrDefault() != null && Model.Records.FirstOrDefault().IsFilterSortDisable))
+    {
+        filterSortingEnable = false;
+    }
 
 }
 @Html.DevExpress().GridView(settings =>
@@ -46,9 +51,6 @@
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
     settings.Settings.VerticalScrollableHeight = 350;
-    settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
-    settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
-    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
     settings.SettingsBehavior.AllowFocusedRow = true;
     settings.SettingsBehavior.AllowEllipsisInText = true;
     settings.SettingsBehavior.AllowDragDrop = false;
@@ -56,8 +58,8 @@
 
     settings.SettingsCookies.Enabled = false;
     settings.SettingsCookies.StoreColumnsWidth = false;
-    settings.SettingsCookies.StorePaging = true;
-    settings.SettingsCookies.StoreGroupingAndSorting = true;
+    settings.SettingsCookies.StorePaging = filterSortingEnable;
+    settings.SettingsCookies.StoreGroupingAndSorting = filterSortingEnable;
 
     //#region Export functionality
     if (Model.GridSetting.EnableClientSideExportAPI)
@@ -94,8 +96,6 @@
 
     settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
-    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
-    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
 
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
     settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
@@ -110,6 +110,8 @@
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
     //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
+
+
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
@@ -126,7 +128,14 @@
                 column.ToolTip = colSetting.ColCaption;
                 column.ReadOnly = true;// colSetting.ColIsReadOnly;
                 column.Visible = colSetting.ColIsVisible;
-                column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+                if (filterSortingEnable)
+                    column.Settings.AllowSort = DefaultBoolean.True;
+                else
+                    column.Settings.AllowSort = DefaultBoolean.False;
+                if (filterSortingEnable)
+                    column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
                 var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
                 if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -340,10 +349,9 @@
     }
 
     //For Advanced Filter
-    settings.FilterControlOperationVisibility = (sender, e) =>
-    {
-        WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);
-    };
+
+
+
 
     settings.SettingsContextMenu.Enabled = false;
     settings.Init += (s, e) =>
@@ -367,12 +375,26 @@
         ASPxEdit editor = (ASPxEdit)e.Editor;
         editor.ValidationSettings.Display = Display.None;
     };
-    settings.CustomJSProperties = (s, e) =>
+    settings.Settings.ShowFilterRow = filterSortingEnable;
+    settings.Settings.ShowFilterRowMenu = filterSortingEnable;
+    if (filterSortingEnable)
     {
-        e.Properties["cpCustomerDefaultActiveFilter"] = (Model.GridSetting.CallBackRoute.Filters != null
-        && Model.GridSetting.CallBackRoute.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase)) ?
-        Model.GridSetting.CallBackRoute.Filters.Value : string.Empty;
-    };
+        settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
+        settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
+        settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
+        settings.FilterControlOperationVisibility = (sender, e) =>
+        {
+            WebUtilities.ChangeFilterControlOperationVisibility((MVCxGridViewColumn)((MVCxGridView)sender).Columns[e.PropertyInfo.PropertyName], e);
+        };
+        settings.CustomJSProperties = (s, e) =>
+        {
+            e.Properties["cpCustomerDefaultActiveFilter"] = (Model.GridSetting.CallBackRoute.Filters != null
+            && Model.GridSetting.CallBackRoute.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase)) ?
+            Model.GridSetting.CallBackRoute.Filters.Value : string.Empty;
+        };
+    }
 
     settings.CustomColumnDisplayText = (s, e) =>
     {
