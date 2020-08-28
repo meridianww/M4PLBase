@@ -66,10 +66,15 @@ namespace M4PL.Business.Job
         {
             return _commands.GetDropDownDataForProgram(activeUser, customerId, entity);
         }
-        public StatusModel GenerateScrubDriverDetails(ActiveUser activeUser, List<JobDriverScrubReportData> scriberDriverViewLst)
+        public StatusModel GenerateScrubDriverDetails(ActiveUser activeUser, JobDriverScrubReportData scriberDriverView)
         {
-            return new StatusModel();
-            //return _commands.InsertDriverScrubReportRawData(scriberDriverViewLst, activeUser);
+            var result = _commands.InsertDriverScrubReportRawData(scriberDriverView, activeUser);
+            return new StatusModel
+            {
+                Status = result ? "Success" : "Fail",
+                StatusCode = result ? 200 : 500,
+                AdditionalDetail = result ? "Record has been uploaded successfully" : "Failed to uploaded record"
+            };
         }
     }
 }

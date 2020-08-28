@@ -519,33 +519,25 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (e.UploadedFile != null && e.UploadedFile.IsValid && e.UploadedFile.FileBytes != null)
             {
                 byte[] uploadedFileData = e.UploadedFile.FileBytes;
-                string gatewayUploadColumns = ConfigurationManager.AppSettings["GatewayUploadColumns"];
-                if (string.IsNullOrEmpty(gatewayUploadColumns))
-                    displayMessage.Description = "CSV column list config key is missing, please add the config key in web.config.";
-
-                string[] arraygatewayUploadColumns = gatewayUploadColumns.Split(new string[] { "," }, StringSplitOptions.None);
-                using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArray(uploadedFileData))
+                try
                 {
-                    if (csvDataTable != null && csvDataTable.Rows.Count > 0)
+                    DateTime startDate, endDate; string filterDescription;
+                    using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
                     {
-                        string[] columnNames = (from dc in csvDataTable.Columns.Cast<DataColumn>()
-                                                select dc.ColumnName).ToArray();
-                        if (!arraygatewayUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
-                        {
-                            List<JobDriverScrubReportData> scriberDriverViewLst = Extension.ConvertDataTableToModel<JobDriverScrubReportData>(csvDataTable);
-                            scriberDriverViewLst.ForEach(x => x.CustomerId = _CustomerId);
-                            StatusModel statusModel = _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(scriberDriverViewLst);
-                            if (statusModel != null && !string.IsNullOrEmpty(statusModel.Status) && !statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
-                                displayMessage.Description = statusModel.AdditionalDetail;
-                            else
-                                displayMessage.Description = "Records has been uploaded from the selected CSV file.";
-                            e.IsValid = true;
-                        }
-                        else
-                            displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
+                        var awcDriverScrubReport = csvDataTable.GetObjectByAWCDriverScrubReportDatatable();
+                        _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(new JobDriverScrubReportData {
+                            CustomerId = _CustomerId,
+                            Description = filterDescription,
+                            StartDate = startDate,
+                            EndDate = endDate,
+                            AWCDriverScrubReportRawData = awcDriverScrubReport,
+                            CommonDriverScrubReportRawData = null
+                        });
                     }
-                    else
-                        displayMessage.Description = "There is no record present in the selected file, please select a valid CSV.";
+                }
+                catch (Exception ex)
+                {
+                    displayMessage.Description = ex.Message;
                 }
             }
             else

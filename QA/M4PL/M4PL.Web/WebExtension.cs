@@ -3465,5 +3465,44 @@ namespace M4PL.Web
                 return displayMessage;
             }
         }
+
+        public static List<AWCDriverScrubReportRawData> GetObjectByAWCDriverScrubReportDatatable(this DataTable datatable)
+        {
+            try
+            {
+                if (datatable != null && datatable.Rows.Count > 0)
+                    return datatable.AsEnumerable().Select(row => new AWCDriverScrubReportRawData()
+                    {
+                        QMSShippedOn = row.Field<string>("QMS ShippedOn"),
+                        QMSPSDisposition = row.Field<string>("QMAPSDisposition"),
+                        QMSStatusDescription = row.Field<string>("QMSStatusDescription"),
+                        FouthParty = row.Field<string>("4P"),
+                        ThirdParty = row.Field<string>("3P"),
+                        ActualControlId = row.Field<string>("Original ControlID"),
+                        QMSControlId = row.Field<string>("QMS ControlID"),
+                        QRCGrouping = row.Field<string>("QRC Grouping"),
+                        QRCDescription = row.Field<string>("QRC Description"),
+                        ProductCategory = row.Field<string>("ProductCategory"),
+                        ProductSubCategory = row.Field<string>("ProductSubCategory"),
+                        ProductSubCategory2 = row.Field<string>("ProductSubCategory2"),
+                        ModelName = row.Field<string>("ModelName"),
+                        CustomerBusinessType = row.Field<string>("CustomerBusinessType"),
+                        ChannelCD = row.Field<string>("ChannelCD"),
+                        NationalAccountName = row.Field<string>("NationalAccountName"),
+                        CustomerName = row.Field<string>("CustomerName"),
+                        ShipFromLocation = row.Field<string>("Ship From Location"),
+                        QMSRemark = row.Field<string>("QMS Remarks"),
+                        DaysToAccept = row.Field<string>("Days Between Original Delivered to QMS Accepted"),
+                        QMSTotalUnit = row.Field<string>("Sum of QMSUnits"),
+                        QMSTotalPrice = row.Field<string>("Sum of QMSDollars"),
+                    }).ToList();
+                else
+                    throw new Exception("There is no record present in the selected file, please select a valid CSV.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
+            }
+        }
     }
 }
