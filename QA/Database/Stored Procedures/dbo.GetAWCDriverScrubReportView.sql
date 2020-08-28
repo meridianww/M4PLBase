@@ -3,9 +3,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
+-- Author:		Kamal
+-- Create date: 27-08-2020
+-- Description:	AWC driver scrub report
 -- =============================================
 CREATE PROCEDURE [dbo].[GetAWCDriverScrubReportView]
 @userId BIGINT
@@ -69,7 +69,7 @@ INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterI
 INNER JOIN dbo.JobDL000Master Job ON dbo.udf_GetNumeric(Job.JobCustomerSalesOrder) = AD.ActualControlId
 LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
 LEFT JOIN dbo.JOBDL010Cargo Cargo ON Cargo.JobId = Job.Id AND Cargo.CgoPartNumCode = AD.ModelName AND Cargo.StatusId=1
-Where DM.CustomerId = @CustomerId AND CAST(DM.StartDate AS DATE) <= CAST(@StartDate AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST(@EndDate AS DATE)
+Where DM.CustomerId = @CustomerId AND CAST(DM.StartDate AS DATE) >= CAST(@StartDate AS DATE) AND CAST(DM.EndDate AS DATE) <= CAST(@EndDate AS DATE)
 
 UPDATE tmp
 SET Scanned = CASE WHEN ISNULL(Cargo.CgoDateLastScan, '') = '' THEN Scanned ELSE 'Y' END
@@ -79,8 +79,8 @@ INNER JOIN dbo.JOBDL010Cargo Cargo ON Cargo.JobId = tmp.JobId AND tmp.ModelName 
 SET @TCountQuery = 'SELECT @TotalCount = COUNT(AD.Id) FROM dbo.AWCDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
 LEFT JOIN #TempDriverScrub Tmp  ON Tmp.Id = AD.Id
-Where DM.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND CAST(DM.StartDate AS DATE) <= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE)'
-Print @TCountQuery
+Where DM.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND CAST(DM.StartDate AS DATE) >= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) <= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE)'
+
 EXEC sp_executesql @TCountQuery
 		,N'@StartDate DateTime2(7),@EndDate DateTime2(7),@TotalCount INT OUTPUT'
 		,@StartDate
@@ -130,7 +130,7 @@ EXEC sp_executesql @TCountQuery
 FROM dbo.AWCDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
 LEFT JOIN #TempDriverScrub Tmp  ON Tmp.Id = AD.Id '
-SET @sqlCommand = @sqlCommand + ' Where DM.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND CAST(DM.StartDate AS DATE) <= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) >= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE) ORDER BY AD.Id'
+SET @sqlCommand = @sqlCommand + ' Where DM.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND CAST(DM.StartDate AS DATE) >= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) <= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE) ORDER BY AD.Id'
 		IF (
 				@recordId = 0
 				AND @IsExport = 0
@@ -146,7 +146,7 @@ SET @sqlCommand = @sqlCommand + ' Where DM.CustomerId = '+ CAST(@CustomerId AS V
 			END
 		END
 	
-	Print @sqlCommand
+	
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@StartDate DateTime2(7),@EndDate DateTime2(7)'
 		,@pageNo = @pageNo

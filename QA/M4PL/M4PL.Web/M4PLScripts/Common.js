@@ -1500,8 +1500,26 @@ M4PLCommon.AdvancedReport = (function () {
         return values;
     }
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
-        if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        if (reportTypeCtrl != null && (reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316)) {
+            var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+            var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+            var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+            rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
+            rprtVwrRoute.CustomerId = customerCtrl.GetValue();
+            var startDate = startDateCtrl.GetValue();
+            rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+            var endDate = endDateCtrl.GetValue();
+            rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+            rprtVwrRoute.IsFormRequest = true;
+            rprtVwrRoute.FileName = reportTypeCtrl.GetText();
+            $(".isDriverScrubreport").show();
+            $(".isDriverbtnScrubreport").show();
             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        } else {
+            if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
+                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            }
         }
     }
     var _reportTypeChangeEvent = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
