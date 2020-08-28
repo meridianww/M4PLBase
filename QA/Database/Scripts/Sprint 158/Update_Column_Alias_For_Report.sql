@@ -13,6 +13,12 @@ INSERT INTO dbo.SYSTM000Ref_Options (SysLookupId, SysLookupCode, SysOptionName, 
 VALUES (@SysLookupId, 'JobReportType', 'Pride Metric Report', 7, 0, 0, 1, GetDate(), NULL, NULL, NULL)
 END
 
+IF NOT EXISTS(Select 1 From dbo.SYSTM000Ref_Options Where SysLookupId = @SysLookupId AND SysOptionName = 'Capacity Report')
+BEGIN
+INSERT INTO dbo.SYSTM000Ref_Options (SysLookupId, SysLookupCode, SysOptionName, SysSortOrder, SysDefault, IsSysAdmin, StatusId, DateEntered, EnteredBy, DateChanged, ChangedBy)
+VALUES (@SysLookupId, 'JobReportType', 'Capacity Report', 8, 0, 0, 1, GetDate(), NULL, NULL, NULL)
+END
+
 IF NOT EXISTS(Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'ManualScanningVsTotal')
 BEGIN
 INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
@@ -124,7 +130,31 @@ INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTable
 VALUES ('EN', 'JobAdvanceReport', NULL, 'Customer', 'Customer', 'Customer', NULL, NULL, '', 75, 1, 1, 1, 1, NULL, 0, 0, NULL, 1, 'Customer')
 END
 
-Declare @ColumnId1 INT,@ColumnId2 INT,@ColumnId3 INT,@ColumnId4 INT,@ColumnId5 INT,@ColumnId6 INT,@ReportType INT,@ColumnId7 INT,@ReportType2 INT
+IF NOT EXISTS(Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'Location')
+BEGIN
+INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
+VALUES ('EN', 'JobAdvanceReport', NULL, 'Location', 'Location', 'Location', NULL, NULL, '', 76, 1, 1, 1, 1, NULL, 0, 0, NULL, 1, 'Location')
+END
+
+IF NOT EXISTS(Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'ProjectedCount')
+BEGIN
+INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
+VALUES ('EN', 'JobAdvanceReport', NULL, 'ProjectedCount', 'Projected Count', 'Projected Count', NULL, NULL, '', 77, 1, 1, 1, 1, NULL, 0, 0, NULL, 1, 'Projected Count')
+END
+
+IF NOT EXISTS(Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'FootprintPercantage')
+BEGIN
+INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
+VALUES ('EN', 'JobAdvanceReport', NULL, 'FootprintPercantage', 'FP%', 'FP%', NULL, NULL, '', 78, 1, 1, 1, 1, NULL, 0, 0, NULL, 1, 'FP%')
+END
+
+IF NOT EXISTS(Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'EstimatedSquareFeet')
+BEGIN
+INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
+VALUES ('EN', 'JobAdvanceReport', NULL, 'EstimatedSquareFeet', 'ESFU', 'ESFU', NULL, NULL, '', 79, 1, 1, 1, 1, NULL, 0, 0, NULL, 1, 'ESFU')
+END
+
+Declare @ColumnId1 INT,@ColumnId2 INT,@ColumnId3 INT,@ColumnId4 INT,@ColumnId5 INT,@ColumnId6 INT,@ReportType INT,@ColumnId7 INT,@ReportType2 INT,@ReportType3 INT
 Select @ColumnId1 = Id From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'JobSiteCode'
 Select @ColumnId2 = Id From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'ManualScanningVsTotal'
 Select @ColumnId3 = Id From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'FourHrWindowDeliveryCompliance'
@@ -134,11 +164,15 @@ Select @ColumnId6 = Id From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAd
 Select @ColumnId7 = Id From dbo.SYSTM000ColumnsAlias Where ColTableName = 'JobAdvanceReport' AND ColColumnName = 'Id'
 Select @ReportType =Id From dbo.SYSTM000Ref_Options Where SysLookupId = @SysLookupId AND SysOptionName = 'Pride Metric Report'
 Select @ReportType2 =Id From dbo.SYSTM000Ref_Options Where SysLookupId = @SysLookupId AND SysOptionName = 'Driver Scrub Report'
+Select @ReportType3 = Id From dbo.SYSTM000Ref_Options Where SysLookupId = @SysLookupId AND SysOptionName = 'Capacity Report'
 
 DELETE FROM [dbo].[Job080ReportColumnRelation] Where ReportId = @ReportType2
+DELETE FROM [dbo].[Job080ReportColumnRelation] Where ReportId = @ReportType3
 INSERT INTO [dbo].[Job080ReportColumnRelation] (ReportId, ColumnId)
 Select @ReportType2,Id From dbo.SYSTM000ColumnsAlias Where ColTableName='JobAdvanceReport' AND ColColumnName IN ('Id','LevelGrouped','Remarks','OriginalThirdPartyCarrier','OriginalOrderNumber','Description','QtyShipped','CustomerExtendedList','CabOrPart','DriverName','InitialedPackingSlip','Scanned','Month','ShortageDamage','Year','ProductSubCategory','Customer')
 
+INSERT INTO [dbo].[Job080ReportColumnRelation] (ReportId, ColumnId)
+Select @ReportType3,Id From dbo.SYSTM000ColumnsAlias Where ColTableName='JobAdvanceReport' AND ColColumnName IN ('Id','Location','ProjectedCount','Cabinets','FootprintPercantage','EstimatedSquareFeet')
 
 IF NOT EXISTS(Select 1 FROM [dbo].[Job080ReportColumnRelation] Where [ReportId] = @ReportType AND [ColumnId] = @ColumnId1)
 BEGIN
