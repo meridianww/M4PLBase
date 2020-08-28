@@ -15,6 +15,7 @@
 //// Date Programmed:                              13/05/2020
 ////====================================================================================================================================================
 using System;
+using System.Configuration;
 
 namespace M4PL.Utilities
 {
@@ -28,6 +29,7 @@ namespace M4PL.Utilities
 
         private static SingleInstance Instance = null;
         public static string BundleConfigKey = string.Empty;
+        public static string[] GatewayUploadColumns = null;
 
         public static SingleInstance GetInstance
         {
@@ -36,6 +38,9 @@ namespace M4PL.Utilities
                 if (Instance == null)
                 {
                     BundleConfigKey = Guid.NewGuid().ToString();
+                    var gatewayUploadColumns = ConfigurationManager.AppSettings["GatewayUploadColumns"];
+                    if (!string.IsNullOrEmpty(gatewayUploadColumns))
+                        GatewayUploadColumns = gatewayUploadColumns.Split(',');
                 }
                 return Instance;
             }

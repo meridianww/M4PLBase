@@ -46,13 +46,12 @@ namespace M4PL.APIClient.Job
             return JsonConvert.DeserializeObject<ApiResult<List<JobAdvanceReportFilter>>>(result.Content).Results?.FirstOrDefault();
         }
 
-        public StatusModel ImportScrubDriverDetails(List<JobDriverScrubReportData> scriberDriverViewLst)
+        public StatusModel ImportScrubDriverDetails(JobDriverScrubReportData scriberDriverView)
         {
-            string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
-            RestClient _restClient = new RestClient(new Uri(_baseUri));
-            var route = string.Format("{0}/{1}", RouteSuffix, "GenerateScrubDriverDetails");
-            var result = JsonConvert.DeserializeObject<ApiResult<StatusModel>>(_restClient.Execute(
-               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(scriberDriverViewLst)).Content).Results?.FirstOrDefault();
+            var request = HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, 
+                "GenerateScrubDriverDetails"), ActiveUser).AddJsonBody(scriberDriverView);
+            var result = JsonConvert.DeserializeObject<ApiResult<StatusModel>>(RestClient.Execute(request).Content)
+                .Results?.FirstOrDefault();
             return result;
         }
     }

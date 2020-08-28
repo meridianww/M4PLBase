@@ -155,15 +155,15 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// GenerateScrubDriverDetails
         /// </summary>
-        /// <param name="scriberDriverViewLst"></param>
+        /// <param name="scriberDriverView"></param>
         /// <returns></returns>
         [CustomAuthorize]
-        [HttpGet]
-        [Route("AdvanceReport"), ResponseType(typeof(StatusModel))]
-        public StatusModel GenerateScrubDriverDetails(List<JobDriverScrubReportData> scriberDriverViewLst)
+        [HttpPost]
+        [Route("GenerateScrubDriverDetails"), ResponseType(typeof(StatusModel))]
+        public StatusModel GenerateScrubDriverDetails(JobDriverScrubReportData scriberDriverView)
         {
             _jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobAdvanceReportCommands.GenerateScrubDriverDetails(Models.ApiContext.ActiveUser, scriberDriverViewLst);
+            return _jobAdvanceReportCommands.GenerateScrubDriverDetails(Models.ApiContext.ActiveUser, scriberDriverView);
         }        
     }
 }
