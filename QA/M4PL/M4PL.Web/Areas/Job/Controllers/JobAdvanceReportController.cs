@@ -515,7 +515,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public static void ucDragAndDrop_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
         {
-            var displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+            var displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.DriverScrubReport);
             if (e.UploadedFile != null && e.UploadedFile.IsValid && e.UploadedFile.FileBytes != null)
             {
                 byte[] uploadedFileData = e.UploadedFile.FileBytes;
@@ -525,14 +525,17 @@ namespace M4PL.Web.Areas.Job.Controllers
                     using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
                     {
                         var awcDriverScrubReport = csvDataTable.GetObjectByAWCDriverScrubReportDatatable();
-                        _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(new JobDriverScrubReportData {
+                        var commonDriverScrubReport = csvDataTable.GetObjectByCommonDriverScrubReportDatatable();
+                        var result = _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(new JobDriverScrubReportData
+                        {
                             CustomerId = _CustomerId,
                             Description = filterDescription,
                             StartDate = startDate,
                             EndDate = endDate,
                             AWCDriverScrubReportRawData = awcDriverScrubReport,
-                            CommonDriverScrubReportRawData = null
+                            CommonDriverScrubReportRawData = commonDriverScrubReport
                         });
+                        displayMessage.Description = result.AdditionalDetail;
                     }
                 }
                 catch (Exception ex)
