@@ -260,10 +260,8 @@ BEGIN TRY
 				AND JobAdvanceReport.JobOriginDateTimeActual > Gateway.GwyGatewayACD
 				THEN 1
 			ELSE 0
-			END) ApptScheduledReceiving, Max(ISNULL(SL.OverallScore, 0)) OverallScore ';
-
-	PRINT @sqlCommand
-
+			END) ApptScheduledReceiving,,CAST(1 AS BIT) IsFilterSortDisable, Max(ISNULL(SL.OverallScore, 0)) OverallScore ';
+			
 	SET @sqlCommand += @TablesQuery
 	SET @sqlCommand += ' LEFT JOIN dbo.JobCargoAdvanceReportView Cargo ON Cargo.JobId =' + @entity + '.Id'
 	SET @sqlCommand += ' LEFT JOIN [dbo].[JobSurveyByLocationView] SL ON SL.JobId =' + @entity + '.Id'
@@ -289,8 +287,6 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
 		END
 	END
-
-	PRINT @sqlCommand
 
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'

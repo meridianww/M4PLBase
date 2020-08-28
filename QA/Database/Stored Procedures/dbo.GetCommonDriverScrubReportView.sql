@@ -3,9 +3,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
+-- Author:		Kamal
+-- Create date: 28-8-2020
+-- Description:	
 -- =============================================
 CREATE PROCEDURE [dbo].[GetCommonDriverScrubReportView]
 @userId BIGINT
