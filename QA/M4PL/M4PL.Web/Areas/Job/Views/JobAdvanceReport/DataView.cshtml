@@ -24,7 +24,6 @@
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsFreezed = true;
     }
-
     if (Model.Records != null && Model.Records.Count > 0 && !Model.Records.Where(x => x.IsIdentityVisible).Any())
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
@@ -37,10 +36,8 @@
     if (Model.Records.FirstOrDefault() == null || (Model.Records.FirstOrDefault() != null && Model.Records.FirstOrDefault().IsFilterSortDisable))
     {
         filterSortingEnable = false;
-    }
-
-}
-@Html.DevExpress().GridView(settings =>
+    }}
+    @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
     settings.SettingsDataSecurity.AllowReadUnlistedFieldsFromClientApi = DefaultBoolean.True;
@@ -55,12 +52,20 @@
     settings.SettingsBehavior.AllowEllipsisInText = true;
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.ControlStyle.CssClass = "gridfields-text-visible";
-
     settings.SettingsCookies.Enabled = false;
     settings.SettingsCookies.StoreColumnsWidth = false;
     settings.SettingsCookies.StorePaging = filterSortingEnable;
     settings.SettingsCookies.StoreGroupingAndSorting = filterSortingEnable;
-
+    if (filterSortingEnable)
+    {
+        settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowFilterRowMenu = true;
+    }
+    else
+    {
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowFilterRowMenu = false;
+    }
     //#region Export functionality
     if (Model.GridSetting.EnableClientSideExportAPI)
     {
@@ -77,7 +82,6 @@
         settings.SettingsExport.FileName = ViewData["ReportName"] != null ? ViewData["ReportName"].ToString() : "Job Advance Report";
     }
     //#endregion
-
     if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
     {
         settings.Toolbars.Add(toolbar =>
@@ -90,17 +94,13 @@
 
         });
     }
-
     settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
     settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
-
     settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
-
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
     settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
     settings.SettingsResizing.Visualization = ResizingMode.Live;
-
     settings.SettingsPager.EnableAdaptivity = true;
     settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
     settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
@@ -110,11 +110,7 @@
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
     //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
-
-
-
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
-
     foreach (var colSetting in Model.ColumnSettings)
     {
         if (colSetting.ColIsVisible
@@ -127,15 +123,20 @@
                 column.Caption = colSetting.ColGridAliasName;
                 column.ToolTip = colSetting.ColCaption;
                 column.ReadOnly = true;// colSetting.ColIsReadOnly;
-                column.Visible = colSetting.ColIsVisible;
+                column.Visible = colSetting.ColIsVisible; S
 
                 if (filterSortingEnable)
+                {
                     column.Settings.AllowSort = DefaultBoolean.True;
-                else
-                    column.Settings.AllowSort = DefaultBoolean.False;
-                if (filterSortingEnable)
+                    column.Settings.AllowAutoFilter = DefaultBoolean.True;
                     column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-
+                }
+                else
+                {
+                    column.Settings.AllowSort = DefaultBoolean.False;
+                    column.Settings.AllowAutoFilter = DefaultBoolean.False;
+                    column.Settings.AutoFilterCondition = AutoFilterCondition.Default;
+                }
                 var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
                 if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -165,13 +166,11 @@
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
                     column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.SetJobGridPixel(colSetting));
                 column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
-
                 if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber)
                 || colSetting.ColColumnName.EndsWith(WebApplicationConstants.SortOrder)
                 || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineOrder)
                 || colSetting.ColColumnName == "JobSiteCode")
                     column.ReadOnly = true;
-
                 if (colSetting.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     column.FieldName = string.Concat(colSetting.ColColumnName, SQLDataTypes.Name.ToString());
@@ -218,7 +217,6 @@
                     }
                     column.Settings.ShowInFilterControl = DefaultBoolean.False;
                 }
-
                 else if (colSetting.DataType.Equals(SQLDataTypes.bit.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     column.EditorProperties().CheckBox(chckBx =>
@@ -292,7 +290,7 @@
 
                 }
                 else if (colSetting.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)
-        || colSetting.DataType.Equals(SQLDataTypes.varchar.ToString(), StringComparison.OrdinalIgnoreCase))
+                || colSetting.DataType.Equals(SQLDataTypes.varchar.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     column.EditorProperties().TextBox(txtBox =>
                     {
@@ -323,7 +321,6 @@
                         }
                     });
                 }
-
                 else if (colSetting.DataType.Equals(SQLDataTypes.Decimal.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     column.EditorProperties().SpinEdit(spn =>
@@ -347,41 +344,27 @@
             });
         }
     }
-
-    //For Advanced Filter
-
-
-
-
     settings.SettingsContextMenu.Enabled = false;
     settings.Init += (s, e) =>
     {
         var grid = (MVCxGridView)s;
         grid.ForceDataRowType(Model.GridSetting.DataRowType);
     };
-
     settings.BeforeGetCallbackResult += (s, e) =>
     {
         MVCxGridView g = (MVCxGridView)s;
     };
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
-
     settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";
     settings.ClientSideEvents.EndCallback = "function(s, e){ M4PLWindow.DataView.OnEndCallback }";
     settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
-
     settings.CellEditorInitialize = (s, e) =>
     {
         ASPxEdit editor = (ASPxEdit)e.Editor;
         editor.ValidationSettings.Display = Display.None;
     };
-    settings.Settings.ShowFilterRow = filterSortingEnable;
-    settings.Settings.ShowFilterRowMenu = filterSortingEnable;
     if (filterSortingEnable)
     {
-        settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
-        settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
-        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
         settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
         settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
         settings.FilterControlOperationVisibility = (sender, e) =>
@@ -395,19 +378,15 @@
             Model.GridSetting.CallBackRoute.Filters.Value : string.Empty;
         };
     }
-
     settings.CustomColumnDisplayText = (s, e) =>
     {
-
         if (e.Column.FieldName.Equals(WebApplicationConstants.PehSendReceive, StringComparison.OrdinalIgnoreCase))
         {
             e.DisplayText = e.Value.ToBoolean() ? "Receive" : "Send";
             e.Column.ReadOnly = true;
             e.Column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
         }
-
     };
-
     settings.PreRender = (s, e) =>
     {
         var grid = (MVCxGridView)s;
@@ -418,5 +397,4 @@
         if (Model.FocusedRowId > 0)
             grid.FocusedRowIndex = grid.FindVisibleIndexByKeyValue(Model.FocusedRowId);
     };
-
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
