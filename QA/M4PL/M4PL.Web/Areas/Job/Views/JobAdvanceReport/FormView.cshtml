@@ -6,6 +6,24 @@
     Model.IsPopUp = true;
     var recordId = Model.Record.Id;
     string upControlName = "ucDragAndDropImportDriver" + Convert.ToString(Model.Record.Id);
+
+    var isCapacityReport = (Model.Record.ParentId == 3318 || Model.Record.ReportName == "Capacity Report") ? true : false;
+    var isDriverReport = (Model.Record.ParentId == 3316 || Model.Record.ReportName == "Driver Scrub Report") ? true : false;
+
+    var ReportText = string.Empty;
+    if (isDriverReport)
+    {
+        ReportText = "Import Scrub Driver Details";
+    }
+    else if (isCapacityReport)
+    {
+        ReportText = "Import Projected Capacity";
+    }
+    else
+    {
+        ReportText = "Import Report";
+    }
+
 }
 @using (Html.BeginForm())
 {
@@ -17,17 +35,17 @@
         settings.AllowCollapsingByHeaderClick = true;
         settings.ShowCollapseButton = true;
         settings.Enabled = false;
-        settings.HeaderText = "Import Scrub Driver Details";
+        settings.HeaderText = ReportText;
         settings.Collapsed = false;
         settings.SetContent(() =>
         {
             ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
             ViewContext.Writer.Write("<div id='dragZone'>");
-            ViewContext.Writer.Write("<span class='dragZoneText'>CSV for import Scrub Driver</span>");
+            ViewContext.Writer.Write("<span class='dragZoneText'>CSV for " + ReportText + "</span>");
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
             ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
-            ViewContext.Writer.Write("<span class='dropZoneText'>CSV to import Scrub Driver</span>");
+            ViewContext.Writer.Write("<span class='dropZoneText'>CSV to " + ReportText + "</span>");
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write("</div>");
 
@@ -43,7 +61,7 @@
                 set.AdvancedModeSettings.EnableFileList = false;
                 set.AdvancedModeSettings.EnableMultiSelect = false;
                 set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
-                set.AdvancedModeSettings.DropZoneText = "CSV to import Scrub Driver";
+                set.AdvancedModeSettings.DropZoneText = "CSV to " + ReportText;
                 set.ValidationSettings.AllowedFileExtensions = new string[] { ".csv" };
                 set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
                 set.BrowseButton.Text = "Select an CSV to import...";

@@ -1495,7 +1495,8 @@ namespace M4PL.Web
             }
             if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
             {
-                allNavMenus[0].Text = "Import Scrub Driver Details";
+                allNavMenus[0].Text = (route.ParentRecordId == 3316 || route.Location.FirstOrDefault() == "Driver Scrub Report") ? "Import Scrub Driver Details"
+                     : ((route.ParentRecordId == 3318 || route.Location.FirstOrDefault() == "Capacity Report") ? "Import Projected Capacity" :"Import report");
             }
 
             return allNavMenus;

@@ -46,6 +46,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         private static IJobAdvanceReportCommands _jobAdvanceReportStaticCommands;
         public static ICommonCommands _commonStaticCommands;
         public static long _CustomerId = 0;
+        public static long _ReportId = 0;
 
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
@@ -482,20 +483,16 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
             }
 
-            if (_formResult.Record is SysRefModel)
-            {
-                (_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0
-                    ? new Random().Next(-1000, 0) :
-                    (_formResult.Record as SysRefModel).Id;
-            }
-
             _formResult.IsPopUp = true;
 
             _jobAdvanceReportStaticCommands = _jobAdvanceReportCommands;
             _commonStaticCommands = _commonCommands;
             _formResult.Record = new JobAdvanceReportView();
             _formResult.Record.Id = route.RecordId;
+            _formResult.Record.ParentId = route.ParentRecordId;
+            _formResult.Record.ReportName = route.Location.FirstOrDefault();
             _CustomerId = route.RecordId;
+            _ReportId = route.ParentRecordId;
             return PartialView(_formResult);
         }
 
@@ -522,20 +519,27 @@ namespace M4PL.Web.Areas.Job.Controllers
                 try
                 {
                     DateTime startDate, endDate; string filterDescription;
-                    using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
+                    if (_ReportId == 3316)
                     {
-                        var awcDriverScrubReport = csvDataTable.GetObjectByAWCDriverScrubReportDatatable();
-                        var commonDriverScrubReport = csvDataTable.GetObjectByCommonDriverScrubReportDatatable();
-                        var result = _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(new JobDriverScrubReportData
+                        using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
                         {
-                            CustomerId = _CustomerId,
-                            Description = filterDescription,
-                            StartDate = startDate,
-                            EndDate = endDate,
-                            AWCDriverScrubReportRawData = awcDriverScrubReport,
-                            CommonDriverScrubReportRawData = commonDriverScrubReport
-                        });
-                        displayMessage.Description = result.AdditionalDetail;
+                            var awcDriverScrubReport = csvDataTable.GetObjectByAWCDriverScrubReportDatatable();
+                            var commonDriverScrubReport = csvDataTable.GetObjectByCommonDriverScrubReportDatatable();
+                            var result = _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(new JobDriverScrubReportData
+                            {
+                                CustomerId = _CustomerId,
+                                Description = filterDescription,
+                                StartDate = startDate,
+                                EndDate = endDate,
+                                AWCDriverScrubReportRawData = awcDriverScrubReport,
+                                CommonDriverScrubReportRawData = commonDriverScrubReport
+                            });
+                            displayMessage.Description = result.AdditionalDetail;
+                        }
+                    }
+                    else if (_ReportId == 3318)
+                    {
+
                     }
                 }
                 catch (Exception ex)

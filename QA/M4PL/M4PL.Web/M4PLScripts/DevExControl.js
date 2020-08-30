@@ -692,10 +692,21 @@ DevExCtrl.ComboBox = function () {
     var _onProgramByCustomerCbPanelChange = function (s, e) {
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-        if (reportTypeCtrl != null && (reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316)) {
+        if (reportTypeCtrl != null &&
+            ((reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316))
+            || (reportTypeCtrl.GetText() == "Capacity Report" || reportTypeCtrl.GetValue() == 3318)) {
             if (customerCtrl != null && customerCtrl.GetText() != "ALL" && parseInt(customerCtrl.GetValue()) > 0) {
                 $(".isDriverImport").show();
                 $(".isDriverbtnScrubreport").show();
+                var btnReportCtrl = ASPxClientControl.GetControlCollection().GetByName('btnImportReport');
+                if (btnReportCtrl != null && btnReportCtrl != undefined) {
+                    if (reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316)
+                        btnReportCtrl.SetText("Import Scrub Driver");
+                    else if (reportTypeCtrl.GetText() == "Capacity Report" || reportTypeCtrl.GetValue() == 3318)
+                        btnReportCtrl.SetText("Import Projected Capacity");
+                    else
+                        btnReportCtrl.SetText("Import Report");
+                }
             } else {
                 $(".isDriverImport").hide();
                 $(".isDriverbtnScrubreport").hide();
