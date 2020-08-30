@@ -51,7 +51,7 @@
 
             Html.DevExpress().UploadControl(set =>
             {
-                set.CallbackRouteValues = new { Area = "Job", Controller = "JobAdvanceReport", Action = "ImportScrubDriver", RecordId = Model.Record.CompanyId };
+                set.CallbackRouteValues = new { Area = "Job", Controller = "JobAdvanceReport", Action = "ImportScrubDriver", RecordId = Model.Record.Id };
                 set.Name = "ucDragAndDropImportDriver";
                 set.UploadMode = UploadControlUploadMode.Auto;
                 set.AutoStartUpload = true;

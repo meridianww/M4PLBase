@@ -163,6 +163,8 @@
     <Compile Include="Job\JobXcblInfo.cs" />
     <Compile Include="Job\OrderLocationCoordinate.cs" />
     <Compile Include="Job\OrderStatusModel.cs" />
+    <Compile Include="Job\ProjectedCapacityData.cs" />
+    <Compile Include="Job\ProjectedCapacityRawData.cs" />
     <Compile Include="Job\SelectedJobList.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />

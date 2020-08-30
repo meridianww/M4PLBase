@@ -31,5 +31,6 @@ namespace M4PL.Business.Job
     {
         IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, long customerID, string entity);
         StatusModel GenerateScrubDriverDetails(ActiveUser activeUser, JobDriverScrubReportData scriberDriverView);
+        StatusModel GenerateProjectedCapacityDetails(ActiveUser activeUser, ProjectedCapacityData projectedCapacityView);
     }
 }

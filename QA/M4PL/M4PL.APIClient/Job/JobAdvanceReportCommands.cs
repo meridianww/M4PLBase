@@ -54,5 +54,13 @@ namespace M4PL.APIClient.Job
                 .Results?.FirstOrDefault();
             return result;
         }
+        public StatusModel ImportProjectedCapacityDetails(ProjectedCapacityData projectedCapacityView)
+        {
+            var request = HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix,
+                "GenerateProjectedCapacityDetails"), ActiveUser).AddJsonBody(projectedCapacityView);
+            var result = JsonConvert.DeserializeObject<ApiResult<StatusModel>>(RestClient.Execute(request).Content)
+                .Results?.FirstOrDefault();
+            return result;
+        }       
     }
 }

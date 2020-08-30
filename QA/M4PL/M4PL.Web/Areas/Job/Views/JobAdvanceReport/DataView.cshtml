@@ -123,7 +123,7 @@
                 column.Caption = colSetting.ColGridAliasName;
                 column.ToolTip = colSetting.ColCaption;
                 column.ReadOnly = true;// colSetting.ColIsReadOnly;
-                column.Visible = colSetting.ColIsVisible; 
+                column.Visible = colSetting.ColIsVisible;
 
                 if (filterSortingEnable)
                 {
@@ -397,4 +397,31 @@
         if (Model.FocusedRowId > 0)
             grid.FocusedRowIndex = grid.FindVisibleIndexByKeyValue(Model.FocusedRowId);
     };
+
+    if(ViewData["ReportName"] != null && ViewData["ReportName"].ToString() == "Capacity Report")
+    {
+        settings.HtmlRowPrepared= (s, e) =>
+        {
+            if(e.GetValue("FootprintPercantage") != null)
+            {
+                var percentage = Convert.ToInt32(e.GetValue("FootprintPercantage") ?? 0);
+                if(percentage <= 100)
+                {
+                    e.Row.BackColor = System.Drawing.Color.Green;
+                }
+                else if (100> percentage || percentage <= 115)
+                {
+                    e.Row.BackColor = System.Drawing.Color.Yellow;
+                }
+                else if (115 > percentage || percentage <= 125)
+                {
+                    e.Row.BackColor = System.Drawing.Color.Orange;
+                }
+                else
+                {
+                    e.Row.BackColor = System.Drawing.Color.Red;
+                }
+            }
+        };
+    }
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()

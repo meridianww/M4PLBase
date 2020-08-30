@@ -383,11 +383,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!string.IsNullOrEmpty(strJobAdvanceReportRequestRoute.FileName))
                 ViewData["ReportName"] = strJobAdvanceReportRequestRoute.FileName;
             SetGridResult(requestRout, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
-            //if (route.OwnerCbPanel == "JobAdvanceReportGridView")
-            //    _gridResult.Records.OrderBy(x => x.Id);
-
             _gridResult.Permission = Permission.ReadOnly;
-
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
@@ -539,7 +535,18 @@ namespace M4PL.Web.Areas.Job.Controllers
                     }
                     else if (_ReportId == 3318)
                     {
-
+                        int year = 0;
+                        using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayProjectedCapacity(uploadedFileData, out year))
+                        {
+                            var projectedCapacityReport = csvDataTable.GetObjectByProjectedCapacityReportDatatable();
+                            var result = _jobAdvanceReportStaticCommands.ImportProjectedCapacityDetails(new ProjectedCapacityData
+                            {
+                                CustomerId = _CustomerId,
+                                Year = year,
+                                ProjectedCapacityRawData = projectedCapacityReport
+                            });
+                            displayMessage.Description = result.AdditionalDetail;
+                        }
                     }
                 }
                 catch (Exception ex)

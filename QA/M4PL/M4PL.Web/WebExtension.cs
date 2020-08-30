@@ -1496,7 +1496,7 @@ namespace M4PL.Web
             if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
             {
                 allNavMenus[0].Text = (route.ParentRecordId == 3316 || route.Location.FirstOrDefault() == "Driver Scrub Report") ? "Import Scrub Driver Details"
-                     : ((route.ParentRecordId == 3318 || route.Location.FirstOrDefault() == "Capacity Report") ? "Import Projected Capacity" :"Import report");
+                     : ((route.ParentRecordId == 3318 || route.Location.FirstOrDefault() == "Capacity Report") ? "Import Projected Capacity" : "Import report");
             }
 
             return allNavMenus;
@@ -3590,6 +3590,25 @@ namespace M4PL.Web
                         DaysToAccept = row.Field<string>("Days Between Original Delivered to QMS Accepted"),
                         QMSTotalUnit = row.Field<string>("Sum of QMSUnits"),
                         QMSTotalPrice = row.Field<string>("Sum of QMSDollars"),
+                    }).ToList();
+                else
+                    throw new Exception("There is no record present in the selected file, please select a valid CSV.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
+            }
+        }
+
+        public static List<ProjectedCapacityRawData> GetObjectByProjectedCapacityReportDatatable(this DataTable datatable)
+        {
+            try
+            {
+                if (datatable != null && datatable.Rows.Count > 0)
+                    return datatable.AsEnumerable().Select(row => new ProjectedCapacityRawData()
+                    {
+                        Location = row.Field<string>("Location"),
+                        ProjectedCapacity = row.Field<string>("Projected")
                     }).ToList();
                 else
                     throw new Exception("There is no record present in the selected file, please select a valid CSV.");

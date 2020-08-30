@@ -76,5 +76,15 @@ namespace M4PL.Business.Job
                 AdditionalDetail = result ? "Record has been uploaded successfully" : "Failed to uploaded record"
             };
         }
+        public StatusModel GenerateProjectedCapacityDetails(ActiveUser activeUser, ProjectedCapacityData projectedCapacityView)
+        {
+            var result = _commands.InsertProjectedCapacityRawData(projectedCapacityView, activeUser);
+            return new StatusModel
+            {
+                Status = result ? "Success" : "Fail",
+                StatusCode = result ? 200 : 500,
+                AdditionalDetail = result ? "Record has been uploaded successfully" : "Failed to uploaded record"
+            };
+        }
     }
 }

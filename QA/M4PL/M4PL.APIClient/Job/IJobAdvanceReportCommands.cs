@@ -32,5 +32,7 @@ namespace M4PL.APIClient.Job
 		IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerID, string entity);
 
 		StatusModel ImportScrubDriverDetails(JobDriverScrubReportData scriberDriverView);
+
+		StatusModel ImportProjectedCapacityDetails(ProjectedCapacityData projectedCapacityView);
 	}
 }
