@@ -65,7 +65,7 @@ namespace M4PL.Business.Event
 				{ "Comment", string.IsNullOrEmpty(comment) ? string.Empty : comment },
 				{ "IsCommentPresent", string.IsNullOrEmpty(comment) ? "0" : "1" },
 				{ "CgoPartNumCode", cgoPartNumCode??" " },
-				{ "Cgoitle", cgoitle??" " },
+				{ "CgoTitle", cgoitle??" " },
 				{ "CgoSerialNumber", cgoSerialNumber??" " },
 				{ "CurrentGateway", currentGateway??" " },
 
