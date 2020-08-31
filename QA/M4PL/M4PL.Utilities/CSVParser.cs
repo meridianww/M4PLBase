@@ -38,7 +38,7 @@ namespace M4PL.Utilities
 
             return dtUploadedOrders;
         }
-        
+
         public static DataTable Parse(string data, bool headers, bool isDriverScrubReport)
         {
             using (StringReader strData = new StringReader(data))
@@ -103,7 +103,6 @@ namespace M4PL.Utilities
             }
         }
 
-        public static string _DatatableColumns = "QMS ShippedOn,QMAPSDisposition,QMSStatusDescription,4P,3P,Original ControlID,QMS ControlID,QRC Grouping,QRC Description,ProductCategory,ProductSubCategory,ProductSubCategory2,ModelName,CustomerBusinessType,ChannelCD,NationalAccountName,CustomerName,Ship From Location,QMS Remarks,Days Between,Original Delivered to QMS Accepted,Sum of QMSUnits,Sum of QMSDollars";
         public static DataTable GetDataTableForCSVByteArrayDriverScrubReport(byte[] fileContent, out string filterDescription, out DateTime startDate, out DateTime endDate)
         {
             DataTable dtUploadedOrders = null;
@@ -142,6 +141,71 @@ namespace M4PL.Utilities
                         return null;
                     if (headers)
                     {
+                        foreach (string header in row)
+                        {
+                            if (header != null && header.Length > 0 && !table.Columns.Contains(header))
+                                table.Columns.Add(header, typeof(string));
+                            else
+                                table.Columns.Add(GetNextColumnHeader(table), typeof(string));
+                        }
+
+                        row = csv.GetNextRow();
+                    }
+
+                    while (row != null)
+                    {
+                        while (row.Length > table.Columns.Count)
+                            table.Columns.Add(GetNextColumnHeader(table), typeof(string));
+                        table.Rows.Add(row);
+                        row = csv.GetNextRow();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
+            }
+
+            return table;
+        }
+
+        public static DataTable GetDataTableForCSVByteArrayProjectedCapacity(byte[] fileContent, out int year)
+        {
+            DataTable dtUploadedOrders = null;
+            using (MemoryStream msUplodedfile = new MemoryStream(fileContent))
+            {
+                StreamReader stream = new StreamReader(msUplodedfile);
+                dtUploadedOrders = CSVParser.ParseProjectedCapacityReport(stream.ReadToEnd(), true, out year);
+                dtUploadedOrders.Locale = System.Globalization.CultureInfo.InvariantCulture;
+            }
+
+            return dtUploadedOrders;
+        }
+        public static DataTable ParseProjectedCapacityReport(string data, bool headers, out int year)
+        {
+            using (StringReader strData = new StringReader(data))
+                return ParseProjectedCapacityReport(strData, headers, out year);
+        }
+        public static DataTable ParseProjectedCapacityReport(TextReader stream, bool headers, out int year)
+        {
+            DataTable table = new DataTable();
+            int count = 0;
+            year = 0;
+            try
+            {
+                using (table)
+                {
+                    table.Locale = System.Globalization.CultureInfo.InvariantCulture;
+                    CsvStream csv = new CsvStream(stream);
+                    string[] row = csv.GetNextRow();
+                    if (row == null)
+                        return null;
+                    if (headers)
+                    {
+                        if (row[1].Contains("Projected"))
+                        {
+                            int.TryParse(row[1].Split(' ')[0], out year);
+                        }
                         foreach (string header in row)
                         {
                             if (header != null && header.Length > 0 && !table.Columns.Contains(header))

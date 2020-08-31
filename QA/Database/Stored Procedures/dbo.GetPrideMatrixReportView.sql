@@ -238,9 +238,7 @@ BEGIN TRY
 	BEGIN
 		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
 	END
-
-	PRINT @TCountQuery
-
+	
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -260,7 +258,7 @@ BEGIN TRY
 				AND JobAdvanceReport.JobOriginDateTimeActual > Gateway.GwyGatewayACD
 				THEN 1
 			ELSE 0
-			END) ApptScheduledReceiving,,CAST(1 AS BIT) IsFilterSortDisable, Max(ISNULL(SL.OverallScore, 0)) OverallScore ';
+			END) ApptScheduledReceiving,CAST(1 AS BIT) IsFilterSortDisable, Max(ISNULL(SL.OverallScore, 0)) OverallScore ';
 			
 	SET @sqlCommand += @TablesQuery
 	SET @sqlCommand += ' LEFT JOIN dbo.JobCargoAdvanceReportView Cargo ON Cargo.JobId =' + @entity + '.Id'

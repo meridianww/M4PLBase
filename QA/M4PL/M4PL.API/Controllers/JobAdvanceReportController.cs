@@ -164,6 +164,15 @@ namespace M4PL.API.Controllers
         {
             _jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobAdvanceReportCommands.GenerateScrubDriverDetails(Models.ApiContext.ActiveUser, scriberDriverView);
-        }        
+        }
+
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("GenerateProjectedCapacityDetails"), ResponseType(typeof(StatusModel))]
+        public StatusModel GenerateProjectedCapacityDetails(ProjectedCapacityData projectedCapacityView)
+        {
+            _jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobAdvanceReportCommands.GenerateProjectedCapacityDetails(Models.ApiContext.ActiveUser, projectedCapacityView);
+        }
     }
 }

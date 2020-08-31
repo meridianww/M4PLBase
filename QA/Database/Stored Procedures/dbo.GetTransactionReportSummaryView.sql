@@ -11,7 +11,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetTransactionReportSummaryView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetTransactionReportSummaryView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)

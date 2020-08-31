@@ -268,6 +268,31 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
+        public static bool InsertProjectedCapacityRawData(ProjectedCapacityData projectedCapacityView, ActiveUser activeUser)
+        {
+            bool result = true;
+            try
+            {
+                var parameters = new List<Parameter>
+               {
+                    new Parameter("@CustomerId", projectedCapacityView.CustomerId),
+                    new Parameter("@Year", projectedCapacityView.ProjectedCapacityRawData.FirstOrDefault().Year),
+                    new Parameter("@EnteredBy", activeUser.UserName),
+                    new Parameter("@EnteredDate", TimeUtility.GetPacificDateTime()),
+                    new Parameter("@uttProjectedCapacityReport", GetProjectedCapacityReportDataTable(projectedCapacityView.ProjectedCapacityRawData)),
+               };
+
+                SqlSerializer.Default.Execute(StoredProceduresConstant.InsertProjectedCapacityRawData, parameters.ToArray(), true);
+            }
+            catch (Exception exp)
+            {
+                result = false;
+                Logger.ErrorLogger.Log(exp, "Error occured while inserting the Raw data for Projected Capacity Report", "InsertDriverScrumReportRawData", Utilities.Logger.LogType.Error);
+            }
+
+            return result;
+        }
+
         private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport, JobAdvanceReportRequest jobAdvanceReportRequest)
         {
             var parameters = new List<Parameter>
@@ -297,9 +322,9 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@StartDate", jobAdvanceReportRequest.StartDate));
                 parameters.Add(new Parameter("@EndDate", jobAdvanceReportRequest.EndDate));
                 parameters.Add(new Parameter("@CustomerId", jobAdvanceReportRequest.CustomerId));
-				parameters.Add(new Parameter("@ProjectedYear", 2019));
+                parameters.Add(new Parameter("@ProjectedYear", jobAdvanceReportRequest.ProjectedYear));
 
-				parameters.Add(new Parameter("@PackagingCode", jobAdvanceReportRequest.PackagingCode));
+                parameters.Add(new Parameter("@PackagingCode", jobAdvanceReportRequest.PackagingCode));
                 if (jobAdvanceReportRequest.CargoId.HasValue)
                     parameters.Add(new Parameter("@CargoId", jobAdvanceReportRequest.CargoId));
 
@@ -451,6 +476,28 @@ namespace M4PL.DataAccess.Job
                 }
 
                 return uttCommonDriverScrubReport;
+            }
+        }
+
+        public static DataTable GetProjectedCapacityReportDataTable(List<ProjectedCapacityRawData> projectedCapacityRawDataList)
+        {
+            using (var uttProjectedCapacityReport = new DataTable("uttProjectedCapacityReport"))
+            {
+                uttProjectedCapacityReport.Locale = CultureInfo.InvariantCulture;
+                uttProjectedCapacityReport.Columns.Add("ProjectedCapacity");
+                uttProjectedCapacityReport.Columns.Add("Location");
+                if (projectedCapacityRawDataList != null && projectedCapacityRawDataList.Count() > 0)
+                {
+                    foreach (var currentReportData in projectedCapacityRawDataList)
+                    {
+                        var row = uttProjectedCapacityReport.NewRow();
+                        row["ProjectedCapacity"] = string.IsNullOrEmpty(currentReportData.ProjectedCapacity) ? 0 : currentReportData.ProjectedCapacity.ToInt();
+                        row["Location"] = currentReportData.Location;
+                        uttProjectedCapacityReport.Rows.Add(row);
+                        uttProjectedCapacityReport.AcceptChanges();
+                    }
+                }
+                return uttProjectedCapacityReport;
             }
         }
     }

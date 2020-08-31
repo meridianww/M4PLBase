@@ -46,6 +46,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         private static IJobAdvanceReportCommands _jobAdvanceReportStaticCommands;
         public static ICommonCommands _commonStaticCommands;
         public static long _CustomerId = 0;
+        public static string _ReportText = string.Empty;
 
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
@@ -382,11 +383,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!string.IsNullOrEmpty(strJobAdvanceReportRequestRoute.FileName))
                 ViewData["ReportName"] = strJobAdvanceReportRequestRoute.FileName;
             SetGridResult(requestRout, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
-            //if (route.OwnerCbPanel == "JobAdvanceReportGridView")
-            //    _gridResult.Records.OrderBy(x => x.Id);
-
             _gridResult.Permission = Permission.ReadOnly;
-
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
@@ -482,29 +479,23 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
             }
 
-            if (_formResult.Record is SysRefModel)
-            {
-                (_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0
-                    ? new Random().Next(-1000, 0) :
-                    (_formResult.Record as SysRefModel).Id;
-            }
-
             _formResult.IsPopUp = true;
 
             _jobAdvanceReportStaticCommands = _jobAdvanceReportCommands;
             _commonStaticCommands = _commonCommands;
             _formResult.Record = new JobAdvanceReportView();
             _formResult.Record.Id = route.RecordId;
+            _formResult.Record.ParentId = route.ParentRecordId;
+            _formResult.Record.ReportName = route.Location.FirstOrDefault();
             _CustomerId = route.RecordId;
+            _ReportText = route.Location.FirstOrDefault();
             return PartialView(_formResult);
         }
-
         [HttpPost]
         public ActionResult ImportScrubDriver([ModelBinder(typeof(DragAndDropSupportDemoBinder))] IEnumerable<UploadedFile> ucDragAndDropImportDriver, long ParentId = 0)
         {
             return null;
         }
-
         public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
         {
             public DragAndDropSupportDemoBinder()
@@ -512,7 +503,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 UploadControlBinderSettings.FileUploadCompleteHandler = ucDragAndDrop_FileUploadComplete;
             }
         }
-
         public static void ucDragAndDrop_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
         {
             var displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.DriverScrubReport);
@@ -522,20 +512,38 @@ namespace M4PL.Web.Areas.Job.Controllers
                 try
                 {
                     DateTime startDate, endDate; string filterDescription;
-                    using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
+                    if (_ReportText.Equals("Driver Scrub Report",StringComparison.OrdinalIgnoreCase))
                     {
-                        var awcDriverScrubReport = csvDataTable.GetObjectByAWCDriverScrubReportDatatable();
-                        var commonDriverScrubReport = csvDataTable.GetObjectByCommonDriverScrubReportDatatable();
-                        var result = _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(new JobDriverScrubReportData
+                        using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
                         {
-                            CustomerId = _CustomerId,
-                            Description = filterDescription,
-                            StartDate = startDate,
-                            EndDate = endDate,
-                            AWCDriverScrubReportRawData = awcDriverScrubReport,
-                            CommonDriverScrubReportRawData = commonDriverScrubReport
-                        });
-                        displayMessage.Description = result.AdditionalDetail;
+                            var awcDriverScrubReport = csvDataTable.GetObjectByAWCDriverScrubReportDatatable();
+                            var commonDriverScrubReport = csvDataTable.GetObjectByCommonDriverScrubReportDatatable();
+                            var result = _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(new JobDriverScrubReportData
+                            {
+                                CustomerId = _CustomerId,
+                                Description = filterDescription,
+                                StartDate = startDate,
+                                EndDate = endDate,
+                                AWCDriverScrubReportRawData = awcDriverScrubReport,
+                                CommonDriverScrubReportRawData = commonDriverScrubReport
+                            });
+                            displayMessage.Description = result.AdditionalDetail;
+                        }
+                    }
+                    if (_ReportText.Equals("Capacity Report", StringComparison.OrdinalIgnoreCase))
+                    {
+                        int year = 0;
+                        using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayProjectedCapacity(uploadedFileData, out year))
+                        {
+                            var projectedCapacityReport = csvDataTable.GetObjectByProjectedCapacityReportDatatable();
+                            var result = _jobAdvanceReportStaticCommands.ImportProjectedCapacityDetails(new ProjectedCapacityData
+                            {
+                                CustomerId = _CustomerId,
+                                Year = year,
+                                ProjectedCapacityRawData = projectedCapacityReport
+                            });
+                            displayMessage.Description = result.AdditionalDetail;
+                        }
                     }
                 }
                 catch (Exception ex)

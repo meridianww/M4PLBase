@@ -319,6 +319,8 @@ M4PLWindow.DataView = function () {
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }
         M4PLCommon.Error.CheckServerError();
+        //if (s.name == "JobAdvanceReportGridView")
+        //    $(".isDriverScrubreport").show();
     }
 
     var _onComboBoxValueChanged = function (s, e, currentGridControl, nameFieldName) {
@@ -432,7 +434,7 @@ M4PLWindow.DataView = function () {
         }
         else
             M4PLWindow.MultiSelectedJobIds = [];
-        if (callbackUrl != undefined && callbackUrl != "" ) {
+        if (callbackUrl != undefined && callbackUrl != "") {
             var callbackUri = new URL(callbackUrl, window.location.origin);
             var urlParams = new URLSearchParams(callbackUri.search);
             if (urlParams.has('strRoute')) {
@@ -442,7 +444,7 @@ M4PLWindow.DataView = function () {
                 s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                 s.Refresh();
             }
-        }      
+        }
     }
 
     function GetSelectedFieldValuesCallback(values) {

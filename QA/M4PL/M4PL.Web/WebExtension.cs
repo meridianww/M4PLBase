@@ -1495,7 +1495,8 @@ namespace M4PL.Web
             }
             if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
             {
-                allNavMenus[0].Text = "Import Scrub Driver Details";
+                allNavMenus[0].Text = (route.ParentRecordId == 3316 || route.Location.FirstOrDefault() == "Driver Scrub Report") ? "Import Scrub Driver Details"
+                     : ((route.ParentRecordId == 3318 || route.Location.FirstOrDefault() == "Capacity Report") ? "Import Projected Capacity" : "Import report");
             }
 
             return allNavMenus;
@@ -3341,8 +3342,6 @@ namespace M4PL.Web
                             }
                             _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
                         }
-                        if (currentRoute.Entity != EntitiesAlias.JobCard)
-                            WebExtension.AddGatewayInGatewayContextMenu(_gridResult, currentRoute, _commonCommands);
                     }
                     else
                     {
@@ -3380,32 +3379,58 @@ namespace M4PL.Web
             return _gridResult;
         }
 
-        public static void AddGatewayInGatewayContextMenu<TView>(this GridResult<TView> _gridResult,
-         MvcRoute route, ICommonCommands _commonCommands)
+        public static GridResult<TView> AddGatewayInGatewayContextMenu<TView>(this GridResult<TView> _gridResult,
+           MvcRoute currentRoute, ICommonCommands _commonCommands, bool isParentEntity)
         {
-            if (_gridResult.GridSetting.ContextMenu.Count > 0
-               && _gridResult.GridSetting.ContextMenu.Any(x => x.SysRefName == OperationTypeEnum.Actions.ToString()))
-            {
-                var gatewayEntity = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
+            var route = currentRoute;
+            route.ParentRecordId = 0;
+            var gatewaysContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
 
-                if (_gridResult.Records is IList<JobView>)
+            var gatewaysContextMenuAvailable = false;
+            var gatewaysContextMenuIndex = -1;
+
+            if (_gridResult.GridSetting.ContextMenu.Count > 0)
+            {
+                for (var i = 0; i < _gridResult.GridSetting.ContextMenu.Count; i++)
+                {
+                    if (_gridResult.GridSetting.ContextMenu[i].SysRefName.EqualsOrdIgnoreCase(gatewaysContextMenu.SysRefName))
+                    {
+                        gatewaysContextMenuAvailable = true;
+                        gatewaysContextMenuIndex = i;
+                        break;
+                    }
+                }
+            }
+            if (gatewaysContextMenuAvailable && !isParentEntity)
+            {
+                if (route.Entity == EntitiesAlias.Job && _gridResult.Records is IList<JobView>)
                 {
                     route.IsPBSReport = true;
+                    //route.ParentRecordId = 0;
                     IList<JobView> record = (IList<JobView>)_gridResult.Records;
                     if (record != null && route.JobIds != null && route.JobIds.Count() > 0)
                     {
-                        var locationIds = route.JobIds.Select(long.Parse).ToList();
-                        var entity = record.Where(t => locationIds.Contains(t.Id)).Select(t => t.JobGatewayStatus).Distinct();
-                        route.ParentRecordId = locationIds.FirstOrDefault();
+                        var jobIds = route.JobIds.Select(long.Parse).ToList();
+                        var entity = record.Where(t => jobIds.Contains(t.Id));
+
+                        if (entity.GroupBy(t => t.ShipmentType).Count() == 1
+                           && entity.GroupBy(t => t.JobType).Count() == 1
+                           && entity.GroupBy(t => t.JobGatewayStatus).Count() == 1)
+                        {
+                            route.ParentRecordId = jobIds.FirstOrDefault();
+                        }
+                        else
+                        {
+                            route.ParentRecordId = 0;
+                        }
                     }
                     else if (record != null && _gridResult.FocusedRowId > 0)
                         route.ParentRecordId = _gridResult.FocusedRowId;
                 }
-
-                if (gatewayEntity != null && route.ParentRecordId > 0)
+                if (route.ParentRecordId > 0)
                 {
                     var allGateways = _commonCommands.GetJobGateway((long)route.ParentRecordId);
-                    gatewayEntity.ChildOperations = new List<Operation>();
+                    _gridResult.GridSetting.ContextMenu[gatewaysContextMenuIndex].ChildOperations = new List<Operation>();
 
                     var routeToAssign = new MvcRoute(route);
                     routeToAssign.Entity = EntitiesAlias.JobGateway;
@@ -3428,12 +3453,43 @@ namespace M4PL.Web
 
                             newOperation.Route = newRoute;
                             newOperation.Route.IsPBSReport = route.IsPBSReport;
-                            gatewayEntity.ChildOperations.Add(newOperation);
+                            _gridResult.GridSetting.ContextMenu[gatewaysContextMenuIndex].ChildOperations.Add(newOperation);
                         }
-                        _gridResult.GridSetting.ContextMenu.FirstOrDefault(x => x.SysRefName == OperationTypeEnum.Actions.ToString()).ChildOperations.Add(gatewayEntity);
+                    }
+                    else
+                    {
+                        if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                            && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                        {
+                            var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                            if (context != null)
+                                _gridResult.GridSetting.ContextMenu.Remove(context);
+                        }
+                    }
+                }
+                else
+                {
+                    if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                        && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Gateways"))
+                    {
+                        var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Gateways");
+                        if (context != null)
+                            _gridResult.GridSetting.ContextMenu.Remove(context);
                     }
                 }
             }
+            else
+            {
+                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Gateways"))
+                {
+                    var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Gateways");
+                    if (context != null)
+                        _gridResult.GridSetting.ContextMenu.Remove(context);
+                }
+            }
+
+            return _gridResult;
         }
 
         public static DisplayMessage UploadCSVNavRate(this DisplayMessage displayMessage, long programId, DataTable csvDataTable, string[] arraynavRateUploadColumns,
@@ -3543,5 +3599,36 @@ namespace M4PL.Web
                 throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
             }
         }
+
+        public static List<ProjectedCapacityRawData> GetObjectByProjectedCapacityReportDatatable(this DataTable datatable)
+        {
+			List<ProjectedCapacityRawData> rawData = null;
+			int projectedYear = 0;
+			try
+            {
+				if (datatable == null || (datatable != null && datatable.Rows == null) || (datatable != null && datatable.Rows != null && datatable.Rows.Count == 0))
+				{
+					throw new Exception("There is no record present in the selected file, please select a valid CSV.");
+				}
+				else if (datatable != null && datatable.Columns != null && datatable.Columns.Count > 1 && !Int32.TryParse(datatable.Columns[1].ToString(), out projectedYear))
+				{
+					throw new Exception("Please select a valid CSV file for upload.");
+				}
+				else if (datatable != null && datatable.Rows.Count > 0)
+				{
+					rawData = new List<ProjectedCapacityRawData>();
+					for (int i = 0; i < datatable.Rows.Count; i++)
+					{
+						rawData.Add(new ProjectedCapacityRawData() { Year = projectedYear, Location = datatable.Rows[i][0].ToString(), ProjectedCapacity = datatable.Rows[i][1].ToString() });
+					}
+				}
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
+            }
+
+			return rawData;
+		}
     }
 }
