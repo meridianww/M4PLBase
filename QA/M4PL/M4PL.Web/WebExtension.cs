@@ -3208,6 +3208,7 @@ namespace M4PL.Web
                 bool? isScheduleAciton = null;
                 if (route.Entity == EntitiesAlias.Job)
                 {
+                    route.ParentRecordId = 0;
                     var record = (IList<JobView>)_gridResult.Records;
                     if (record != null && route.JobIds != null && route.JobIds.Count() > 0)
                     {
@@ -3383,7 +3384,6 @@ namespace M4PL.Web
            MvcRoute currentRoute, ICommonCommands _commonCommands, bool isParentEntity)
         {
             var route = currentRoute;
-            route.ParentRecordId = 0;
             var gatewaysContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
 
             var gatewaysContextMenuAvailable = false;
@@ -3406,7 +3406,7 @@ namespace M4PL.Web
                 if (route.Entity == EntitiesAlias.Job && _gridResult.Records is IList<JobView>)
                 {
                     route.IsPBSReport = true;
-                    //route.ParentRecordId = 0;
+                    route.ParentRecordId = 0;
                     IList<JobView> record = (IList<JobView>)_gridResult.Records;
                     if (record != null && route.JobIds != null && route.JobIds.Count() > 0)
                     {
