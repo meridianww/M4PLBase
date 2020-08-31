@@ -645,7 +645,7 @@ namespace M4PL.Business.Job
             try
             {
                 DriverContact addedDriverContact = _commands.AddDriver(ActiveUser, driverContact);
-                if (addedDriverContact != null)
+                if (addedDriverContact != null && addedDriverContact.Id.HasValue && addedDriverContact.Id.Value > 0)
                 {
                     return new StatusModel()
                     {
@@ -658,16 +658,11 @@ namespace M4PL.Business.Job
                 {
                     return new StatusModel()
                     {
-
-
                         Status = "Success",
                         StatusCode = (int)HttpStatusCode.OK,
                         AdditionalDetail = "JobId or location with respect to Job not found."
                     };
-
-
                 }
-
             }
             catch (Exception exp)
             {
