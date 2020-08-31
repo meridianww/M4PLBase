@@ -696,7 +696,7 @@ DevExCtrl.ComboBox = function () {
             ((reportTypeCtrl.GetText() == "Driver Scrub Report"))
             || (reportTypeCtrl.GetText() == "Capacity Report")) {
             if (customerCtrl != null && customerCtrl.GetText() != "ALL" && parseInt(customerCtrl.GetValue()) > 0) {
-                //$(".isDriverImport").show();
+                $(".isDriverImport").show();
                 $(".isDriverbtnScrubreport").show();
                 var btnReportCtrl = ASPxClientControl.GetControlCollection().GetByName('btnImportReport');
                 if (btnReportCtrl != null && btnReportCtrl != undefined) {
