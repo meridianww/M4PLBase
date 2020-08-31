@@ -1286,6 +1286,7 @@ M4PLCommon.AdvancedReport = (function () {
     var _init = function () {
         $(".isAdditional").hide();
         $(".isDriverImport").hide();
+        $(".isVisibleCapacityReport").hide();
     }
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
@@ -1502,17 +1503,23 @@ M4PLCommon.AdvancedReport = (function () {
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         if (reportTypeCtrl != null &&
-            ((reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316)
-                || (reportTypeCtrl.GetText() == "Capacity Report" || reportTypeCtrl.GetValue() == 3318))) {
+            ((reportTypeCtrl.GetText() == "Driver Scrub Report")
+                || (reportTypeCtrl.GetText() == "Capacity Report"))) {
             var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-            var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
-            var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+            if (reportTypeCtrl.GetText() == "Driver Scrub Report") {
+                var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+                var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+                var startDate = startDateCtrl.GetValue();
+                rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+                var endDate = endDateCtrl.GetValue();
+                rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+            }
+            if (reportTypeCtrl.GetText() == "Capacity Report") {
+                var yearCtrl = ASPxClientControl.GetControlCollection().GetByName('Year');
+                rprtVwrRoute.ProjectedYear = yearCtrl.GetText() != null ? parseInt(yearCtrl.GetText()) : yearCtrl.GetText();
+            }
             rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
             rprtVwrRoute.CustomerId = customerCtrl.GetValue();
-            var startDate = startDateCtrl.GetValue();
-            rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
-            var endDate = endDateCtrl.GetValue();
-            rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
             rprtVwrRoute.IsFormRequest = true;
             rprtVwrRoute.FileName = reportTypeCtrl.GetText();
             $(".isDriverScrubreport").show();
@@ -1525,18 +1532,33 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
     var _reportTypeChangeEvent = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        $(".isVisibleCapacityReport").hide();
         $(".isDriverImport").hide();
+        var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+        var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         if (reportTypeCtrl != null &&
-            ((reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316))
-            || (reportTypeCtrl.GetText() == "Capacity Report" || reportTypeCtrl.GetValue() == 3318)) {
+            ((reportTypeCtrl.GetText() == "Driver Scrub Report"))
+            || (reportTypeCtrl.GetText() == "Capacity Report")) {
             controlEnabledDisabled(false);
+            if (reportTypeCtrl.GetText() == "Capacity Report") {
+                startDateCtrl.SetEnabled(false);
+                endDateCtrl.SetEnabled(false);
+                $(".isVisibleCapacityReport").show();
+            } else {
+                startDateCtrl.SetEnabled(true);
+                endDateCtrl.SetEnabled(true);
+                $(".isVisibleCapacityReport").hide();
+            }
             $(".isDriverScrubreport").hide();
             $(".isDriverbtnScrubreport").hide();
             var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
             customerCtrl.SetValue(0);
         } else {
             controlEnabledDisabled(true);
+            startDateCtrl.SetEnabled(true);
+            endDateCtrl.SetEnabled(true);
+            $(".isVisibleCapacityReport").hide();
             $(".isDriverScrubreport").show();
             $(".isDriverbtnScrubreport").show();
             if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {

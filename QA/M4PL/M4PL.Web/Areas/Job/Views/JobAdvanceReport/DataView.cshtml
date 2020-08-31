@@ -404,16 +404,18 @@
         {
             if(e.GetValue("FootprintPercantage") != null)
             {
-                var percentage = Convert.ToInt32(e.GetValue("FootprintPercantage") ?? 0);
+                var percentage = e.GetValue("FootprintPercantage") != null
+                && e.GetValue("FootprintPercantage").ToString() != string.Empty
+                ? Convert.ToInt32(e.GetValue("FootprintPercantage")) : 0;
                 if(percentage <= 100)
                 {
                     e.Row.BackColor = System.Drawing.Color.Green;
                 }
-                else if (100> percentage || percentage <= 115)
+                else if (100 > percentage && percentage <= 115)
                 {
                     e.Row.BackColor = System.Drawing.Color.Yellow;
                 }
-                else if (115 > percentage || percentage <= 125)
+                else if (115 > percentage && percentage <= 125)
                 {
                     e.Row.BackColor = System.Drawing.Color.Orange;
                 }

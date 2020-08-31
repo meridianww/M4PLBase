@@ -322,7 +322,7 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@StartDate", jobAdvanceReportRequest.StartDate));
                 parameters.Add(new Parameter("@EndDate", jobAdvanceReportRequest.EndDate));
                 parameters.Add(new Parameter("@CustomerId", jobAdvanceReportRequest.CustomerId));
-                parameters.Add(new Parameter("@ProjectedYear", 2019));
+                parameters.Add(new Parameter("@ProjectedYear", jobAdvanceReportRequest.ProjectedYear));
 
                 parameters.Add(new Parameter("@PackagingCode", jobAdvanceReportRequest.PackagingCode));
                 if (jobAdvanceReportRequest.CargoId.HasValue)

@@ -7,8 +7,8 @@
     var recordId = Model.Record.Id;
     string upControlName = "ucDragAndDropImportDriver" + Convert.ToString(Model.Record.Id);
 
-    var isCapacityReport = (Model.Record.ParentId == 3318 || Model.Record.ReportName == "Capacity Report") ? true : false;
-    var isDriverReport = (Model.Record.ParentId == 3316 || Model.Record.ReportName == "Driver Scrub Report") ? true : false;
+    var isCapacityReport = Model.Record.ReportName == "Capacity Report" ? true : false;
+    var isDriverReport = Model.Record.ReportName == "Driver Scrub Report" ? true : false;
 
     var ReportText = string.Empty;
     if (isDriverReport)

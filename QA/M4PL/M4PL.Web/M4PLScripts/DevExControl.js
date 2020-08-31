@@ -693,16 +693,16 @@ DevExCtrl.ComboBox = function () {
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         if (reportTypeCtrl != null &&
-            ((reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316))
-            || (reportTypeCtrl.GetText() == "Capacity Report" || reportTypeCtrl.GetValue() == 3318)) {
+            ((reportTypeCtrl.GetText() == "Driver Scrub Report"))
+            || (reportTypeCtrl.GetText() == "Capacity Report")) {
             if (customerCtrl != null && customerCtrl.GetText() != "ALL" && parseInt(customerCtrl.GetValue()) > 0) {
-                $(".isDriverImport").show();
+                //$(".isDriverImport").show();
                 $(".isDriverbtnScrubreport").show();
                 var btnReportCtrl = ASPxClientControl.GetControlCollection().GetByName('btnImportReport');
                 if (btnReportCtrl != null && btnReportCtrl != undefined) {
-                    if (reportTypeCtrl.GetText() == "Driver Scrub Report" || reportTypeCtrl.GetValue() == 3316)
+                    if (reportTypeCtrl.GetText() == "Driver Scrub Report")
                         btnReportCtrl.SetText("Import Scrub Driver");
-                    else if (reportTypeCtrl.GetText() == "Capacity Report" || reportTypeCtrl.GetValue() == 3318)
+                    else if (reportTypeCtrl.GetText() == "Capacity Report")
                         btnReportCtrl.SetText("Import Projected Capacity");
                     else
                         btnReportCtrl.SetText("Import Report");

@@ -46,7 +46,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         private static IJobAdvanceReportCommands _jobAdvanceReportStaticCommands;
         public static ICommonCommands _commonStaticCommands;
         public static long _CustomerId = 0;
-        public static long _ReportId = 0;
+        public static string _ReportText = string.Empty;
 
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
@@ -488,16 +488,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record.ParentId = route.ParentRecordId;
             _formResult.Record.ReportName = route.Location.FirstOrDefault();
             _CustomerId = route.RecordId;
-            _ReportId = route.ParentRecordId;
+            _ReportText = route.Location.FirstOrDefault();
             return PartialView(_formResult);
         }
-
         [HttpPost]
         public ActionResult ImportScrubDriver([ModelBinder(typeof(DragAndDropSupportDemoBinder))] IEnumerable<UploadedFile> ucDragAndDropImportDriver, long ParentId = 0)
         {
             return null;
         }
-
         public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
         {
             public DragAndDropSupportDemoBinder()
@@ -505,7 +503,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 UploadControlBinderSettings.FileUploadCompleteHandler = ucDragAndDrop_FileUploadComplete;
             }
         }
-
         public static void ucDragAndDrop_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
         {
             var displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.DriverScrubReport);
@@ -515,7 +512,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 try
                 {
                     DateTime startDate, endDate; string filterDescription;
-                    if (_ReportId == 3316)
+                    if (_ReportText.Equals("Driver Scrub Report",StringComparison.OrdinalIgnoreCase))
                     {
                         using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
                         {
@@ -533,7 +530,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                             displayMessage.Description = result.AdditionalDetail;
                         }
                     }
-                    else if (_ReportId == 3318)
+                    if (_ReportText.Equals("Capacity Report", StringComparison.OrdinalIgnoreCase))
                     {
                         int year = 0;
                         using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayProjectedCapacity(uploadedFileData, out year))
