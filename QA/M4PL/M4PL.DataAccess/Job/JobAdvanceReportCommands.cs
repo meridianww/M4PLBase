@@ -276,10 +276,10 @@ namespace M4PL.DataAccess.Job
                 var parameters = new List<Parameter>
                {
                     new Parameter("@CustomerId", projectedCapacityView.CustomerId),
-                    new Parameter("@Year", projectedCapacityView.Year),
+                    new Parameter("@Year", projectedCapacityView.ProjectedCapacityRawData.FirstOrDefault().Year),
                     new Parameter("@EnteredBy", activeUser.UserName),
                     new Parameter("@EnteredDate", TimeUtility.GetPacificDateTime()),
-                    new Parameter("@uttAWCDriverScrubReport", GetProjectedCapacityReportDataTable(projectedCapacityView.ProjectedCapacityRawData)),
+                    new Parameter("@uttProjectedCapacityReport", GetProjectedCapacityReportDataTable(projectedCapacityView.ProjectedCapacityRawData)),
                };
 
                 SqlSerializer.Default.Execute(StoredProceduresConstant.InsertProjectedCapacityRawData, parameters.ToArray(), true);

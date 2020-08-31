@@ -54,7 +54,7 @@ SET @TCountQuery = 'SELECT @TotalCount = Count(Id) From
 FROM dbo.LocationProjectedCapacity PC
 LEFT JOIN JobDL000Master Job ON Job.JobSiteCode = PC.Location
 LEFT JOIN dbo.Prgrm000Master Prg ON Prg.Id = Job.ProgramId
-Where Prg.PrgCustId = '+ CAST(@CustomerId AS Varchar(50)) +' AND PC.[Year] = '+ CAST(@ProjectedYear AS Varchar(50)) +'
+Where PC.StatusId = 1 AND Prg.PrgCustId = '+ CAST(@CustomerId AS Varchar(50)) +' AND PC.[Year] = '+ CAST(@ProjectedYear AS Varchar(50)) +'
 GROUP BY PC.Location,PC.ProjectedCapacity,Prg.PrgCustID
 )temp'
 
@@ -89,7 +89,7 @@ LEFT JOIN dbo.JOBDL020Gateways OnHandGateway ON OnHandGateway.JobId = Job.Id AND
 LEFT JOIN dbo.JOBDL020Gateways OnTrunckGateway ON OnTrunckGateway.JobId = Job.Id AND OnTrunckGateway.GwyGatewayCode = ''On Truck'' AND OnTrunckGateway.StatusId = 1
 LEFT JOIN SYSTM000Ref_Options OP ON OP.Id = Cargo.CgoQtyUnitsId AND OP.SysLookupCode=''CargoUnit''
 LEFT JOIN SYSTM000Ref_Options CP ON CP.Id = Cargo.CgoPackagingTypeId AND CP.SysLookupCode = ''PackagingCode'' '
-SET @sqlCommand = @sqlCommand + ' Where Prg.PrgCustId = '+ CAST(@CustomerId AS Varchar(50)) +' AND PC.[Year] = '+ CAST(@ProjectedYear AS Varchar(50)) + +' GROUP BY PC.Location,PC.ProjectedCapacity,Prg.PrgCustID' + ' ORDER BY Max(PC.Id)'
+SET @sqlCommand = @sqlCommand + ' Where PC.StatusId = 1 AND Prg.PrgCustId = '+ CAST(@CustomerId AS Varchar(50)) +' AND PC.[Year] = '+ CAST(@ProjectedYear AS Varchar(50)) + +' GROUP BY PC.Location,PC.ProjectedCapacity,Prg.PrgCustID' + ' ORDER BY Max(PC.Id)'
 		IF (
 				@recordId = 0
 				AND @IsExport = 0

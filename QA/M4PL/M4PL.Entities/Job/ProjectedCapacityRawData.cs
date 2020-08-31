@@ -10,5 +10,6 @@ namespace M4PL.Entities.Job
     {
         public string ProjectedCapacity { get; set; }
         public string Location { get; set; }
-    }
+		public int Year { get; set; }
+	}
 }
