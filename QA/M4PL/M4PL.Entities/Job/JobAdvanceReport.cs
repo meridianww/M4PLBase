@@ -14,7 +14,7 @@ using System;
 namespace M4PL.Entities.Job
 {
 	public class JobAdvanceReport : BaseModel
-	{ 
+	{
 		public string CustTitle { get; set; }
 		public DateTime? JobOrderedDate { get; set; }
 		public string JobBOL { get; set; }
@@ -133,7 +133,7 @@ namespace M4PL.Entities.Job
 			get
 			{
 				return Cabinets.HasValue && Cabinets.Value > 0 ?
-				  GetPercentageString((double)(((double)Cabinets.Value / 205) * 2050)) : string.Empty;
+				  Convert.ToString(((double)Cabinets.Value / 205) * 2050) : string.Empty;
 			}
 		}
 		public string DisplayPercentage(int top, int bottom)
