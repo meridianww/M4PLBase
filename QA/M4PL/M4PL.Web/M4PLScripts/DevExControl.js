@@ -1588,7 +1588,25 @@ DevExCtrl.PopupControl = function () {
                 RecordPopupControl.Hide();
                 M4PLCommon.IsIgnoreClick = false;
             }
-        } else {
+        }
+
+        else if (RecordPopupControl.cpRoute.Entity == "JobXcblInfo")
+        {
+            for (var gridName in M4PLWindow.SubDataViewsHaveChanges) {
+                var currentGrid = ASPxClientControl.GetControlCollection().GetByName(gridName);
+                if (currentGrid) {
+                    var listOfElements = document.getElementsByClassName("dxgvBatchEditModifiedCell_Office2010Black"); 
+                    var currentElementIndex= $('#' + listOfElements[listOfElements.length - 1].closest('tr').id).next('tr').attr('id').match(/\d+$/)[0]-1;
+                    currentGrid.CancelEdit(currentElementIndex);
+                    M4PLWindow.PopupDataViewHasChanges[currentGrid] = false;
+                    M4PLWindow.DataViewsHaveChanges[currentGrid] = false;
+                }
+            }
+            RecordPopupControl.Hide();
+            M4PLCommon.IsIgnoreClick = false;
+        }
+        
+        else {
             M4PLCommon.CallerNameAndParameters = { "Caller": _close, "Parameters": [] };
             M4PLCommon.CheckHasChanges.ShowConfirmation();
         }

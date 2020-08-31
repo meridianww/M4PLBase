@@ -1150,10 +1150,22 @@ namespace M4PL.DataAccess.Common
             return SqlSerializer.Default.DeserializeMultiRecords<ChangeHistory>(StoredProceduresConstant.GetDataForChangeHistory, parameters, storedProcedure: true);
         }
 
+        public static IList<ColumnAlias> GetColumnAliasesByTblName(string langCode, string tableName)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@langCode", langCode),
+                new Parameter("@tableName", tableName)
+            };
+            return
+                SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(
+                    StoredProceduresConstant.GetColumnAliasesByTableName, parameters, storedProcedure: true);
+        }
         public static List<ChangeHistoryData> GetChangedValues(object oldObject, object newObject, string changedBy, DateTime changedDate)
         {
             var oType = oldObject.GetType();
             List<ChangeHistoryData> changeHistoryDataList = new List<ChangeHistoryData>();
+            var columnAliasList = GetColumnAliasesByTblName("EN", oType.Name).ToList<ColumnAlias>();
             foreach (var oProperty in oType.GetProperties())
             {
                 if (oProperty.Name.Equals("ChangedBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("JobDriverAlert", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("DateChanged", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("EnteredBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("DateEntered", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("jobIsHavingpermission", StringComparison.OrdinalIgnoreCase))
@@ -1170,7 +1182,8 @@ namespace M4PL.DataAccess.Common
 
                 string sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
                 string sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
-                changeHistoryDataList.Add(new ChangeHistoryData() { FieldName = oProperty.Name, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate });
+                var colName=columnAliasList.Find(x => x.ColColumnName == oProperty.Name)?.ColAliasName?? oProperty.Name;
+                changeHistoryDataList.Add(new ChangeHistoryData() { FieldName = colName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate });
             }
 
             return changeHistoryDataList;
