@@ -67,6 +67,7 @@ namespace M4PL.Entities.Job
 		public int? FivePMDeliveryWindow { get; set; }
 		public int? JobCount { get; set; }
 		public int? ApptScheduledReceiving { get; set; }
+		public int? FourHrWindowDelivery { get; set; }
 		public int? OverallScore { get; set; }
 		public string DE
 		{
@@ -80,11 +81,17 @@ namespace M4PL.Entities.Job
 		{
 			get { return ApptScheduledReceiving.HasValue && ApptScheduledReceiving.Value > 0 && JobCount.HasValue && JobCount.Value > 0 ? DisplayPercentage((int)ApptScheduledReceiving, (int)JobCount) : string.Empty; }
 		}
+
 		public string Before5PMDeliveryWindow
 		{
 			get { return FivePMDeliveryWindow.HasValue && FivePMDeliveryWindow.Value > 0 && JobCount.HasValue && JobCount.Value > 0 ? DisplayPercentage((int)FivePMDeliveryWindow, (int)JobCount) : string.Empty; }
 		}
-		public string FourHrWindowDeliveryCompliance { get; set; }
+
+		public string FourHrWindowDeliveryCompliance
+		{
+			get { return FourHrWindowDelivery.HasValue && FourHrWindowDelivery.Value > 0 && JobCount.HasValue && JobCount.Value > 0 ? DisplayPercentage((int)FourHrWindowDelivery, (int)JobCount) : string.Empty; }
+		}
+
 		public string OverallRating
 		{
 			get { return OverallScore.HasValue && OverallScore.Value > 0 ? GetPercentageString((double)OverallScore) : string.Empty; }
