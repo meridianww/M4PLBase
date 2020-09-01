@@ -15,10 +15,12 @@
 // Purpose:                                      Utility Class For CSV Parser
 //==========================================================================================================
 
+using System;
 using System.Collections;
 using System.Data;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace M4PL.Utilities
 {
@@ -30,14 +32,14 @@ namespace M4PL.Utilities
             using (MemoryStream msUplodedfile = new MemoryStream(fileContent))
             {
                 StreamReader stream = new StreamReader(msUplodedfile);
-                dtUploadedOrders = CSVParser.Parse(stream.ReadToEnd(), true);
+                dtUploadedOrders = CSVParser.Parse(stream.ReadToEnd(), true, false);
                 dtUploadedOrders.Locale = System.Globalization.CultureInfo.InvariantCulture;
             }
 
             return dtUploadedOrders;
         }
 
-        public static DataTable Parse(string data, bool headers)
+        public static DataTable Parse(string data, bool headers, bool isDriverScrubReport)
         {
             using (StringReader strData = new StringReader(data))
                 return Parse(strData, headers);
@@ -101,6 +103,137 @@ namespace M4PL.Utilities
             }
         }
 
+        public static DataTable GetDataTableForCSVByteArrayDriverScrubReport(byte[] fileContent, out string filterDescription, out DateTime startDate, out DateTime endDate)
+        {
+            DataTable dtUploadedOrders = null;
+            using (MemoryStream msUplodedfile = new MemoryStream(fileContent))
+            {
+                StreamReader stream = new StreamReader(msUplodedfile);
+                dtUploadedOrders = CSVParser.ParseDriverScrubReport(stream.ReadToEnd(), true, out filterDescription, out startDate, out endDate);
+                dtUploadedOrders.Locale = System.Globalization.CultureInfo.InvariantCulture;
+            }
+
+            return dtUploadedOrders;
+        }
+
+        public static DataTable ParseDriverScrubReport(string data, bool headers, out string filterDescription, out DateTime startDate, out DateTime endDate)
+        {
+            using (StringReader strData = new StringReader(data))
+                return ParseDriverScrubReport(strData, headers, out filterDescription, out startDate, out endDate);
+        }
+
+        public static DataTable ParseDriverScrubReport(TextReader stream, bool headers, out string filterDescription, out DateTime startDate, out DateTime endDate)
+        {
+            DataTable table = new DataTable();
+            try
+            {
+                using (table)
+                {
+                    table.Locale = System.Globalization.CultureInfo.InvariantCulture;
+
+                    CsvStream csv = new CsvStream(stream);
+                    filterDescription = csv.GetNextRow()[0];
+                    string[] dates = csv.GetNextRow();
+                    startDate = DateTime.Parse(dates[0]);
+                    endDate = DateTime.Parse(dates[1]);
+                    string[] row = csv.GetNextRow();
+                    if (row == null)
+                        return null;
+                    if (headers)
+                    {
+                        foreach (string header in row)
+                        {
+                            if (header != null && header.Length > 0 && !table.Columns.Contains(header))
+                                table.Columns.Add(header, typeof(string));
+                            else
+                                table.Columns.Add(GetNextColumnHeader(table), typeof(string));
+                        }
+
+                        row = csv.GetNextRow();
+                    }
+
+                    while (row != null)
+                    {
+                        while (row.Length > table.Columns.Count)
+                            table.Columns.Add(GetNextColumnHeader(table), typeof(string));
+                        table.Rows.Add(row);
+                        row = csv.GetNextRow();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
+            }
+
+            return table;
+        }
+
+        public static DataTable GetDataTableForCSVByteArrayProjectedCapacity(byte[] fileContent, out int year)
+        {
+            DataTable dtUploadedOrders = null;
+            using (MemoryStream msUplodedfile = new MemoryStream(fileContent))
+            {
+                StreamReader stream = new StreamReader(msUplodedfile);
+                dtUploadedOrders = CSVParser.ParseProjectedCapacityReport(stream.ReadToEnd(), true, out year);
+                dtUploadedOrders.Locale = System.Globalization.CultureInfo.InvariantCulture;
+            }
+
+            return dtUploadedOrders;
+        }
+        public static DataTable ParseProjectedCapacityReport(string data, bool headers, out int year)
+        {
+            using (StringReader strData = new StringReader(data))
+                return ParseProjectedCapacityReport(strData, headers, out year);
+        }
+        public static DataTable ParseProjectedCapacityReport(TextReader stream, bool headers, out int year)
+        {
+            DataTable table = new DataTable();
+            int count = 0;
+            year = 0;
+            try
+            {
+                using (table)
+                {
+                    table.Locale = System.Globalization.CultureInfo.InvariantCulture;
+                    CsvStream csv = new CsvStream(stream);
+                    string[] row = csv.GetNextRow();
+                    if (row == null)
+                        return null;
+                    if (headers)
+                    {
+                        if (row[1].Contains("Projected"))
+                        {
+                            int.TryParse(row[1].Split(' ')[0], out year);
+                        }
+                        foreach (string header in row)
+                        {
+                            if (header != null && header.Length > 0 && !table.Columns.Contains(header))
+                                table.Columns.Add(header, typeof(string));
+                            else
+                                table.Columns.Add(GetNextColumnHeader(table), typeof(string));
+                        }
+
+                        row = csv.GetNextRow();
+                    }
+
+                    while (row != null)
+                    {
+                        while (row.Length > table.Columns.Count)
+                            table.Columns.Add(GetNextColumnHeader(table), typeof(string));
+                        table.Rows.Add(row);
+                        row = csv.GetNextRow();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
+            }
+
+            return table;
+        }
+
         private class CsvStream
         {
             private TextReader stream;
@@ -128,6 +261,29 @@ namespace M4PL.Utilities
                     if (item == null)
                         return row.Count == 0 ? null : (string[])row.ToArray(typeof(string));
                     row.Add(item);
+                }
+            }
+
+            public string GetDriverScrubReportFilter()
+            {
+                while (true)
+                {
+                    return GetNextItem();
+                }
+            }
+
+            public string[] GetDriverScrubReportDates()
+            {
+                ArrayList row = new ArrayList();
+                int count = 0;
+                while (true)
+                {
+                    string item = GetNextItem();
+                    if (item == null || count > 1)
+                        return row.Count == 0 ? null : (string[])row.ToArray(typeof(string));
+                    row.Add(item);
+
+                    count++;
                 }
             }
 

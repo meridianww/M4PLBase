@@ -19,6 +19,8 @@
     };
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row isDriverScrubreport'>");
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDataView, M4PL.Entities.EntitiesAlias.JobAdvanceReport.ToString()));
+        ViewContext.Writer.Write("</div>");
     });
 }).GetHtml()

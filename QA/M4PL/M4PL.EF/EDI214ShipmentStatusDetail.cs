@@ -19,7 +19,9 @@ namespace M4PL.EF
         public string esdTradingPartner { get; set; }
         public string esdShipmentID { get; set; }
         public string esdMasterCartonBarCode { get; set; }
-        public string esdOverageParitalDamage { get; set; }
+        public string esdOSDQty { get; set; }
+        public string esdExceptionNote { get; set; }
+        public string esdOverageShortageDamage { get; set; }
         public string ProFlags02 { get; set; }
         public string ProFlags03 { get; set; }
         public string ProFlags04 { get; set; }

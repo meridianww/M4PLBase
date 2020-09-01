@@ -15,18 +15,15 @@ namespace M4PL.EF
     public partial class JOBDL060Ref_CostSheetJob
     {
         public long Id { get; set; }
-        public Nullable<long> JobID { get; set; }
         public string CstLineItem { get; set; }
         public Nullable<int> CstChargeID { get; set; }
         public string CstChargeCode { get; set; }
         public string CstTitle { get; set; }
         public Nullable<long> CstSurchargeOrder { get; set; }
         public Nullable<double> CstSurchargePercent { get; set; }
-        public Nullable<int> ChargeTypeId { get; set; }
         public Nullable<int> CstNumberUsed { get; set; }
         public Nullable<decimal> CstDuration { get; set; }
         public Nullable<decimal> CstQuantity { get; set; }
-        public Nullable<int> CostUnitId { get; set; }
         public Nullable<decimal> CstCostRate { get; set; }
         public Nullable<decimal> CstCost { get; set; }
         public Nullable<double> CstMarkupPercent { get; set; }
@@ -35,7 +32,6 @@ namespace M4PL.EF
         public Nullable<decimal> CstRevQuantity { get; set; }
         public Nullable<decimal> CstRevBillable { get; set; }
         public byte[] CstComments { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

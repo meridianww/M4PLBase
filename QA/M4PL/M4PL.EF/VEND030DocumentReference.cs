@@ -15,19 +15,14 @@ namespace M4PL.EF
     public partial class VEND030DocumentReference
     {
         public long Id { get; set; }
-        public Nullable<long> VdrOrgID { get; set; }
-        public Nullable<long> VdrVendorID { get; set; }
         public Nullable<int> VdrItemNumber { get; set; }
         public string VdrCode { get; set; }
         public string VdrTitle { get; set; }
-        public Nullable<int> DocRefTypeId { get; set; }
-        public Nullable<int> DocCategoryTypeId { get; set; }
         public byte[] VdrDescription { get; set; }
         public Nullable<int> VdrAttachment { get; set; }
         public Nullable<System.DateTime> VdrDateStart { get; set; }
         public Nullable<System.DateTime> VdrDateEnd { get; set; }
         public Nullable<bool> VdrRenewal { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

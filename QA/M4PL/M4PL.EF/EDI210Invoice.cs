@@ -19,11 +19,11 @@ namespace M4PL.EF
         public string einShipmentID { get; set; }
         public string einPaymentType { get; set; }
         public string einCurrencyCode { get; set; }
-        public Nullable<System.DateTime> einInvoiceDate { get; set; }
+        public string einInvoiceDate { get; set; }
         public Nullable<decimal> einTotalAmountDue { get; set; }
-        public Nullable<System.DateTime> einDeliveryDate { get; set; }
+        public string einDeliveryDate { get; set; }
         public string einSCACCode { get; set; }
-        public Nullable<System.DateTime> einPickupDate { get; set; }
+        public string einPickupDate { get; set; }
         public Nullable<decimal> einTotalWeight { get; set; }
         public string einShipperName { get; set; }
         public Nullable<long> einShipperNameID { get; set; }
@@ -121,5 +121,36 @@ namespace M4PL.EF
         public string ProFlags18 { get; set; }
         public string ProFlags19 { get; set; }
         public string ProFlags20 { get; set; }
+        public string einInvoiceNumber { get; set; }
+        public Nullable<int> einFuelSurchargeQty { get; set; }
+        public Nullable<int> einAdditionalHandlingQty { get; set; }
+        public Nullable<int> einCabinetReturnQty { get; set; }
+        public Nullable<int> einGoodSalesTaxQty { get; set; }
+        public Nullable<int> einHarmonizedServiceTaxQty { get; set; }
+        public Nullable<int> einInsideDeliveryQty { get; set; }
+        public Nullable<int> einMinimumChargeQty { get; set; }
+        public Nullable<int> einOutOfRangeMilesQty { get; set; }
+        public Nullable<int> einPickupChargeQty { get; set; }
+        public Nullable<int> einReconsignmentQty { get; set; }
+        public Nullable<int> einRedeliveryAttemptQty { get; set; }
+        public Nullable<int> einHolidayOrWeekendDeliveryQty { get; set; }
+        public Nullable<int> einSpecialDeliveryQty { get; set; }
+        public Nullable<int> einStairsExcessDeliveryQty { get; set; }
+        public Nullable<int> einStorageQty { get; set; }
+        public Nullable<int> einStanisciHandlingQty { get; set; }
+        public Nullable<int> einUnloadingFeeQty { get; set; }
+        public Nullable<int> einBridgeTollQty { get; set; }
+        public Nullable<int> einExtraLaborQty { get; set; }
+        public Nullable<int> einHighwayTollQty { get; set; }
+        public Nullable<int> einAccessorial1Qty { get; set; }
+        public Nullable<int> einAccessorial2Qty { get; set; }
+        public Nullable<int> einAccessorial3Qty { get; set; }
+        public Nullable<int> einAccessorial4Qty { get; set; }
+        public Nullable<int> einAccessorial5Qty { get; set; }
+        public Nullable<int> einAccessorial6Qty { get; set; }
+        public Nullable<int> einAccessorial7Qty { get; set; }
+        public Nullable<int> einAccessorial8Qty { get; set; }
+        public Nullable<int> einAccessorial9Qty { get; set; }
+        public Nullable<int> einAccessorial10Qty { get; set; }
     }
 }

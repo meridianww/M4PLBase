@@ -88,6 +88,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 
 			treeViewBase.Name = "ProgramTree";
 			treeViewBase.Text = "Program Tree";
+			treeViewBase.AllowCopy = true;
 			treeViewBase.EnableCallback = true;
 			treeViewBase.Area = BaseRoute.Area;
 			treeViewBase.Controller = BaseRoute.Controller;
@@ -101,9 +102,9 @@ namespace M4PL.Web.Areas.Program.Controllers
 			treeViewBase.EnableNodeClick = true;
 
 			treeViewBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
-			//treeViewBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
+            treeViewBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
 
-			treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.Program, Area = BaseRoute.Area };
+            treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.Program, Area = BaseRoute.Area };
 
 			treeViewBase.Command = _programCommands;
 
@@ -181,7 +182,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 			_formResult.Operations[OperationTypeEnum.New].Route.Action = MvcConstants.ActionAddOrEdit;
 			_formResult.Operations[OperationTypeEnum.Edit].Route.Action = MvcConstants.ActionAddOrEdit;
 			_formResult.Operations[OperationTypeEnum.Cancel].Route.Action = MvcConstants.ActionTreeView;
-			
+
 			_formResult.SessionProvider = SessionProvider;
 
 			_formResult.ColumnSettings = WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(BaseRoute.Entity), SessionProvider);

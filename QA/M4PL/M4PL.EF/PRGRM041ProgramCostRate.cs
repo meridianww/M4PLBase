@@ -14,21 +14,12 @@ namespace M4PL.EF
     
     public partial class PRGRM041ProgramCostRate
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PRGRM041ProgramCostRate()
-        {
-            this.JOBDL062CostSheet = new HashSet<JOBDL062CostSheet>();
-        }
-    
         public long Id { get; set; }
         public string PcrCode { get; set; }
         public string PcrVendorCode { get; set; }
         public Nullable<System.DateTime> PcrEffectiveDate { get; set; }
         public string PcrTitle { get; set; }
-        public Nullable<int> RateCategoryTypeId { get; set; }
-        public Nullable<int> RateTypeId { get; set; }
         public Nullable<decimal> PcrCostRate { get; set; }
-        public Nullable<int> RateUnitTypeId { get; set; }
         public string PcrFormat { get; set; }
         public byte[] PcrDescription { get; set; }
         public string PcrExpression01 { get; set; }
@@ -41,17 +32,13 @@ namespace M4PL.EF
         public string PcrLogic04 { get; set; }
         public string PcrExpression05 { get; set; }
         public string PcrLogic05 { get; set; }
-        public Nullable<int> StatusId { get; set; }
-        public Nullable<long> PcrCustomerID { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
-        public Nullable<long> ProgramLocationId { get; set; }
+        public bool PcrElectronicBilling { get; set; }
     
         public virtual CUST000Master CUST000Master { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<JOBDL062CostSheet> JOBDL062CostSheet { get; set; }
         public virtual PRGRM043ProgramCostLocations PRGRM043ProgramCostLocations { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }

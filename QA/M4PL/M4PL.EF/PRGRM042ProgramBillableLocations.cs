@@ -21,8 +21,6 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> PblProgramID { get; set; }
-        public Nullable<long> PblVendorID { get; set; }
         public Nullable<int> PblItemNumber { get; set; }
         public string PblLocationCode { get; set; }
         public string PblLocationCodeVendor { get; set; }
@@ -37,6 +35,8 @@ namespace M4PL.EF
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public int StatusId { get; set; }
+        public Nullable<long> PblVenderLocationId { get; set; }
+        public Nullable<long> PblVenderDCLocationId { get; set; }
     
         public virtual PRGRM000Master PRGRM000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -16,7 +16,6 @@ namespace M4PL.EF
     {
         public long Id { get; set; }
         public string LangCode { get; set; }
-        public string ValTableName { get; set; }
         public long RefTabPageId { get; set; }
         public string ValFieldName { get; set; }
         public Nullable<bool> ValRequired { get; set; }

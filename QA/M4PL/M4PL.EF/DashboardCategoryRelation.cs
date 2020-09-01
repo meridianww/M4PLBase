@@ -12,14 +12,15 @@ namespace M4PL.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class MVOC020Answers
+    public partial class DashboardCategoryRelation
     {
-        public long Id { get; set; }
-        public long AnsJobId { get; set; }
-        public System.DateTime AnsDateTime { get; set; }
-        public long AnsQuestionNumber { get; set; }
-        public string AnsQuestionCode { get; set; }
-        public string AnsQuestionText { get; set; }
-        public string AnsResponse { get; set; }
+        public long DashboardCategoryRelationId { get; set; }
+        public int DashboardSubCategory { get; set; }
+        public string CustomQuery { get; set; }
+        public string BackGroundColor { get; set; }
+        public string FontColor { get; set; }
+    
+        public virtual Dashboard Dashboard { get; set; }
+        public virtual DashboardCategory DashboardCategory { get; set; }
     }
 }

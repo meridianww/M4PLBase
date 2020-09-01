@@ -16,19 +16,15 @@ namespace M4PL.EF
     {
         public long Id { get; set; }
         public string LangCode { get; set; }
-        public Nullable<long> VbtOrgID { get; set; }
-        public Nullable<long> VbtVendorID { get; set; }
         public Nullable<int> VbtItemNumber { get; set; }
         public string VbtCode { get; set; }
         public string VbtTitle { get; set; }
         public byte[] VbtDescription { get; set; }
-        public Nullable<int> BusinessTermTypeId { get; set; }
         public Nullable<System.DateTime> VbtActiveDate { get; set; }
         public Nullable<decimal> VbtValue { get; set; }
         public Nullable<decimal> VbtHiThreshold { get; set; }
         public Nullable<decimal> VbtLoThreshold { get; set; }
         public Nullable<int> VbtAttachment { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

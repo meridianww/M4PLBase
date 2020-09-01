@@ -21,12 +21,9 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> VocOrgID { get; set; }
-        public Nullable<long> VocProgramID { get; set; }
         public string VocSurveyCode { get; set; }
         public string VocSurveyTitle { get; set; }
         public byte[] VocDescription { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> VocDateOpen { get; set; }
         public Nullable<System.DateTime> VocDateClose { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }

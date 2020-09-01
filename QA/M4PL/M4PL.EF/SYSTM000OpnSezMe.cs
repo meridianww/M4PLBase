@@ -18,15 +18,13 @@ namespace M4PL.EF
         public SYSTM000OpnSezMe()
         {
             this.SYSTM000Ref_UserSettings = new HashSet<SYSTM000Ref_UserSettings>();
+            this.SYSTM000VdcLocationPreferences = new HashSet<SYSTM000VdcLocationPreferences>();
         }
     
         public long Id { get; set; }
-        public Nullable<long> SysUserContactID { get; set; }
         public string SysScreenName { get; set; }
         public string SysPassword { get; set; }
         public byte[] SysComments { get; set; }
-        public Nullable<long> SysOrgId { get; set; }
-        public Nullable<long> SysOrgRefRoleId { get; set; }
         public bool IsSysAdmin { get; set; }
         public int SysAttempts { get; set; }
         public Nullable<bool> SysLoggedIn { get; set; }
@@ -34,7 +32,6 @@ namespace M4PL.EF
         public Nullable<System.DateTime> SysDateLastAttempt { get; set; }
         public Nullable<System.DateTime> SysLoggedInStart { get; set; }
         public Nullable<System.DateTime> SysLoggedInEnd { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public System.DateTime DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
@@ -46,5 +43,7 @@ namespace M4PL.EF
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000Ref_UserSettings> SYSTM000Ref_UserSettings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SYSTM000VdcLocationPreferences> SYSTM000VdcLocationPreferences { get; set; }
     }
 }

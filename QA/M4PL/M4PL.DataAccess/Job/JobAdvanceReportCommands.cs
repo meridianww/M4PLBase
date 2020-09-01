@@ -21,10 +21,12 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 
 namespace M4PL.DataAccess.Job
@@ -49,7 +51,7 @@ namespace M4PL.DataAccess.Job
             var results = SqlSerializer.Default.DeserializeMultiRecords<JobAdvanceReport>(StoredProceduresConstant.GetJobAdvanceReportView, parameters.ToArray(), storedProcedure: true);
             if (results != null && results.Count > 0 && jobAdvanceReportRequest != null)
             {
-                results.ForEach(x => { x.StartDate = jobAdvanceReportRequest.StartDate; x.EndDate = jobAdvanceReportRequest.EndDate; });
+                results.ForEach(x => { x.StartDate = jobAdvanceReportRequest.StartDate; x.EndDate = jobAdvanceReportRequest.EndDate; x.ProjectedYear = jobAdvanceReportRequest.ProjectedYear; });
             }
 
             if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
@@ -238,6 +240,59 @@ namespace M4PL.DataAccess.Job
             }
         }
 
+        public static bool InsertDriverScrubReportRawData(JobDriverScrubReportData jobDriverScrubReportData, ActiveUser activeUser)
+        {
+            bool result = true;
+            try
+            {
+                var parameters = new List<Parameter>
+               {
+                    new Parameter("@CustomerId", jobDriverScrubReportData.CustomerId),
+                    new Parameter("@Description", jobDriverScrubReportData.Description),
+                    new Parameter("@StartDate", jobDriverScrubReportData.StartDate),
+                    new Parameter("@EndDate", jobDriverScrubReportData.EndDate),
+                    new Parameter("@EnteredBy", activeUser.UserName),
+                    new Parameter("@EnteredDate", TimeUtility.GetPacificDateTime()),
+                    new Parameter("@uttAWCDriverScrubReport", GetAWCDriverScrubReportTable(jobDriverScrubReportData.AWCDriverScrubReportRawData)),
+                    new Parameter("@uttCommonDriverScrubReport", GetCommonDriverScrubReportTable(jobDriverScrubReportData.CommonDriverScrubReportRawData))
+               };
+
+                SqlSerializer.Default.Execute(StoredProceduresConstant.InsertDriverScrubReportRawData, parameters.ToArray(), true);
+            }
+            catch (Exception exp)
+            {
+                result = false;
+                Logger.ErrorLogger.Log(exp, "Error occured while inserting the Raw data for Driver Scrub Report", "InsertDriverScrumReportRawData", Utilities.Logger.LogType.Error);
+            }
+
+            return result;
+        }
+
+        public static bool InsertProjectedCapacityRawData(ProjectedCapacityData projectedCapacityView, ActiveUser activeUser)
+        {
+            bool result = true;
+            try
+            {
+                var parameters = new List<Parameter>
+               {
+                    new Parameter("@CustomerId", projectedCapacityView.CustomerId),
+                    new Parameter("@Year", projectedCapacityView.ProjectedCapacityRawData.FirstOrDefault().Year),
+                    new Parameter("@EnteredBy", activeUser.UserName),
+                    new Parameter("@EnteredDate", TimeUtility.GetPacificDateTime()),
+                    new Parameter("@uttProjectedCapacityReport", GetProjectedCapacityReportDataTable(projectedCapacityView.ProjectedCapacityRawData)),
+               };
+
+                SqlSerializer.Default.Execute(StoredProceduresConstant.InsertProjectedCapacityRawData, parameters.ToArray(), true);
+            }
+            catch (Exception exp)
+            {
+                result = false;
+                Logger.ErrorLogger.Log(exp, "Error occured while inserting the Raw data for Projected Capacity Report", "InsertDriverScrumReportRawData", Utilities.Logger.LogType.Error);
+            }
+
+            return result;
+        }
+
         private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport, JobAdvanceReportRequest jobAdvanceReportRequest)
         {
             var parameters = new List<Parameter>
@@ -256,7 +311,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@recordId", pagedDataInfo.RecordId),
                new Parameter("@groupBy", pagedDataInfo.GroupBy),
                new Parameter("@IsExport", pagedDataInfo.IsJobParentEntity),
-               new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition)
+               new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition),
             };
 
             if (jobAdvanceReportRequest != null)
@@ -264,6 +319,10 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@reportTypeId", jobAdvanceReportRequest.ReportType));
                 parameters.Add(new Parameter("@scheduled", jobAdvanceReportRequest.Scheduled));
                 parameters.Add(new Parameter("@orderType", jobAdvanceReportRequest.OrderType));
+                parameters.Add(new Parameter("@StartDate", jobAdvanceReportRequest.StartDate));
+                parameters.Add(new Parameter("@EndDate", jobAdvanceReportRequest.EndDate));
+                parameters.Add(new Parameter("@CustomerId", jobAdvanceReportRequest.CustomerId));
+                parameters.Add(new Parameter("@ProjectedYear", jobAdvanceReportRequest.ProjectedYear));
 
                 parameters.Add(new Parameter("@PackagingCode", jobAdvanceReportRequest.PackagingCode));
                 if (jobAdvanceReportRequest.CargoId.HasValue)
@@ -292,6 +351,154 @@ namespace M4PL.DataAccess.Job
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
 
             return parameters;
+        }
+
+        public static DataTable GetAWCDriverScrubReportTable(List<AWCDriverScrubReportRawData> driverScrubReportRawDataList)
+        {
+            using (var uttAWCDriverScrubReport = new DataTable("uttAWCDriverScrubReport"))
+            {
+                uttAWCDriverScrubReport.Locale = CultureInfo.InvariantCulture;
+                uttAWCDriverScrubReport.Columns.Add("QMSShippedOn");
+                uttAWCDriverScrubReport.Columns.Add("QMSPSDisposition");
+                uttAWCDriverScrubReport.Columns.Add("QMSStatusDescription");
+                uttAWCDriverScrubReport.Columns.Add("FouthParty");
+                uttAWCDriverScrubReport.Columns.Add("ThirdParty");
+                uttAWCDriverScrubReport.Columns.Add("ActualControlId");
+                uttAWCDriverScrubReport.Columns.Add("QMSControlId");
+                uttAWCDriverScrubReport.Columns.Add("QRCGrouping");
+                uttAWCDriverScrubReport.Columns.Add("QRCDescription");
+                uttAWCDriverScrubReport.Columns.Add("ProductCategory");
+                uttAWCDriverScrubReport.Columns.Add("ProductSubCategory");
+                uttAWCDriverScrubReport.Columns.Add("ProductSubCategory2");
+                uttAWCDriverScrubReport.Columns.Add("ModelName");
+                uttAWCDriverScrubReport.Columns.Add("CustomerBusinessType");
+                uttAWCDriverScrubReport.Columns.Add("ChannelCD");
+                uttAWCDriverScrubReport.Columns.Add("NationalAccountName");
+                uttAWCDriverScrubReport.Columns.Add("CustomerName");
+                uttAWCDriverScrubReport.Columns.Add("ShipFromLocation");
+                uttAWCDriverScrubReport.Columns.Add("QMSRemark");
+                uttAWCDriverScrubReport.Columns.Add("DaysToAccept");
+                uttAWCDriverScrubReport.Columns.Add("QMSTotalUnit");
+                uttAWCDriverScrubReport.Columns.Add("QMSTotalPrice");
+                if (driverScrubReportRawDataList != null && driverScrubReportRawDataList.Count > 0)
+                {
+                    foreach (var currentReportData in driverScrubReportRawDataList)
+                    {
+                        var row = uttAWCDriverScrubReport.NewRow();
+                        row["QMSShippedOn"] = currentReportData.QMSShippedOn;
+                        row["QMSPSDisposition"] = currentReportData.QMSPSDisposition;
+                        row["QMSStatusDescription"] = currentReportData.QMSStatusDescription;
+                        row["FouthParty"] = currentReportData.FouthParty;
+                        row["ThirdParty"] = currentReportData.ThirdParty;
+                        row["ActualControlId"] = currentReportData.ActualControlId;
+                        row["QMSControlId"] = currentReportData.QMSControlId;
+                        row["QRCGrouping"] = currentReportData.QRCGrouping;
+                        row["QRCDescription"] = currentReportData.QRCDescription;
+                        row["ProductCategory"] = currentReportData.ProductCategory;
+                        row["ProductSubCategory"] = currentReportData.ProductSubCategory;
+                        row["ProductSubCategory2"] = currentReportData.ProductSubCategory2;
+                        row["ModelName"] = currentReportData.ModelName;
+                        row["CustomerBusinessType"] = currentReportData.CustomerBusinessType;
+                        row["ChannelCD"] = currentReportData.ChannelCD;
+                        row["NationalAccountName"] = currentReportData.NationalAccountName;
+                        row["CustomerName"] = currentReportData.CustomerName;
+                        row["ShipFromLocation"] = currentReportData.ShipFromLocation;
+                        row["QMSRemark"] = currentReportData.QMSRemark;
+                        row["DaysToAccept"] = string.IsNullOrEmpty(currentReportData.DaysToAccept) ? 0 : currentReportData.DaysToAccept.ToInt();
+                        row["QMSTotalUnit"] = string.IsNullOrEmpty(currentReportData.QMSTotalUnit) ? 0 : currentReportData.QMSTotalUnit.ToInt();
+                        row["QMSTotalPrice"] = string.IsNullOrEmpty(currentReportData.QMSTotalPrice) ? decimal.Zero : currentReportData.QMSTotalPrice.Replace("$", string.Empty).ToDecimal();
+                        uttAWCDriverScrubReport.Rows.Add(row);
+                        uttAWCDriverScrubReport.AcceptChanges();
+                    }
+                }
+
+                return uttAWCDriverScrubReport;
+            }
+        }
+
+        public static DataTable GetCommonDriverScrubReportTable(List<CommonDriverScrubReportRawData> driverScrubReportRawDataList)
+        {
+            using (var uttCommonDriverScrubReport = new DataTable("uttCommonDriverScrubReport"))
+            {
+                uttCommonDriverScrubReport.Locale = CultureInfo.InvariantCulture;
+                uttCommonDriverScrubReport.Columns.Add("QMSShippedOn");
+                uttCommonDriverScrubReport.Columns.Add("QMSPSDisposition");
+                uttCommonDriverScrubReport.Columns.Add("QMSStatusDescription");
+                uttCommonDriverScrubReport.Columns.Add("FouthParty");
+                uttCommonDriverScrubReport.Columns.Add("ThirdParty");
+                uttCommonDriverScrubReport.Columns.Add("ActualControlId");
+                uttCommonDriverScrubReport.Columns.Add("QMSControlId");
+                uttCommonDriverScrubReport.Columns.Add("QRCGrouping");
+                uttCommonDriverScrubReport.Columns.Add("QRCDescription");
+                uttCommonDriverScrubReport.Columns.Add("ProductCategory");
+                uttCommonDriverScrubReport.Columns.Add("ProductSubCategory");
+                uttCommonDriverScrubReport.Columns.Add("ProductSubCategory2");
+                uttCommonDriverScrubReport.Columns.Add("ModelName");
+                uttCommonDriverScrubReport.Columns.Add("CustomerBusinessType");
+                uttCommonDriverScrubReport.Columns.Add("ChannelCD");
+                uttCommonDriverScrubReport.Columns.Add("NationalAccountName");
+                uttCommonDriverScrubReport.Columns.Add("CustomerName");
+                uttCommonDriverScrubReport.Columns.Add("ShipFromLocation");
+                uttCommonDriverScrubReport.Columns.Add("QMSRemark");
+                uttCommonDriverScrubReport.Columns.Add("DaysToAccept");
+                uttCommonDriverScrubReport.Columns.Add("QMSTotalUnit");
+                uttCommonDriverScrubReport.Columns.Add("QMSTotalPrice");
+                if (driverScrubReportRawDataList != null && driverScrubReportRawDataList.Count > 0)
+                {
+                    foreach (var currentReportData in driverScrubReportRawDataList)
+                    {
+                        var row = uttCommonDriverScrubReport.NewRow();
+                        row["QMSShippedOn"] = currentReportData.QMSShippedOn;
+                        row["QMSPSDisposition"] = currentReportData.QMSPSDisposition;
+                        row["QMSStatusDescription"] = currentReportData.QMSStatusDescription;
+                        row["FouthParty"] = currentReportData.FouthParty;
+                        row["ThirdParty"] = currentReportData.ThirdParty;
+                        row["ActualControlId"] = currentReportData.ActualControlId;
+                        row["QMSControlId"] = currentReportData.QMSControlId;
+                        row["QRCGrouping"] = currentReportData.QRCGrouping;
+                        row["QRCDescription"] = currentReportData.QRCDescription;
+                        row["ProductCategory"] = currentReportData.ProductCategory;
+                        row["ProductSubCategory"] = currentReportData.ProductSubCategory;
+                        row["ProductSubCategory2"] = currentReportData.ProductSubCategory2;
+                        row["ModelName"] = currentReportData.ModelName;
+                        row["CustomerBusinessType"] = currentReportData.CustomerBusinessType;
+                        row["ChannelCD"] = currentReportData.ChannelCD;
+                        row["NationalAccountName"] = currentReportData.NationalAccountName;
+                        row["CustomerName"] = currentReportData.CustomerName;
+                        row["ShipFromLocation"] = currentReportData.ShipFromLocation;
+                        row["QMSRemark"] = currentReportData.QMSRemark;
+                        row["DaysToAccept"] = string.IsNullOrEmpty(currentReportData.DaysToAccept) ? 0 : currentReportData.DaysToAccept.ToInt();
+                        row["QMSTotalUnit"] = string.IsNullOrEmpty(currentReportData.QMSTotalUnit) ? 0 : currentReportData.QMSTotalUnit.ToInt();
+                        row["QMSTotalPrice"] = string.IsNullOrEmpty(currentReportData.QMSTotalPrice) ? decimal.Zero : currentReportData.QMSTotalPrice.Replace("$", string.Empty).ToDecimal();
+                        uttCommonDriverScrubReport.Rows.Add(row);
+                        uttCommonDriverScrubReport.AcceptChanges();
+                    }
+                }
+
+                return uttCommonDriverScrubReport;
+            }
+        }
+
+        public static DataTable GetProjectedCapacityReportDataTable(List<ProjectedCapacityRawData> projectedCapacityRawDataList)
+        {
+            using (var uttProjectedCapacityReport = new DataTable("uttProjectedCapacityReport"))
+            {
+                uttProjectedCapacityReport.Locale = CultureInfo.InvariantCulture;
+                uttProjectedCapacityReport.Columns.Add("ProjectedCapacity");
+                uttProjectedCapacityReport.Columns.Add("Location");
+                if (projectedCapacityRawDataList != null && projectedCapacityRawDataList.Count() > 0)
+                {
+                    foreach (var currentReportData in projectedCapacityRawDataList)
+                    {
+                        var row = uttProjectedCapacityReport.NewRow();
+                        row["ProjectedCapacity"] = string.IsNullOrEmpty(currentReportData.ProjectedCapacity) ? 0 : currentReportData.ProjectedCapacity.ToInt();
+                        row["Location"] = currentReportData.Location;
+                        uttProjectedCapacityReport.Rows.Add(row);
+                        uttProjectedCapacityReport.AcceptChanges();
+                    }
+                }
+                return uttProjectedCapacityReport;
+            }
         }
     }
 }

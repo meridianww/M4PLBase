@@ -1305,7 +1305,7 @@ namespace M4PL.Web
                 && (route.Entity != EntitiesAlias.PrgRefGatewayDefault)
                 && (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
                 && (route.Entity != EntitiesAlias.Gateway && route.Action != MvcConstants.ActionForm)
-                )
+                && (route.Entity != EntitiesAlias.JobAdvanceReport && route.Action != MvcConstants.ActionForm))
             {
                 var navMenuEnabled = true;
                 if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
@@ -1318,18 +1318,18 @@ namespace M4PL.Web
 
                 defaultFormNavMenu.Enabled = navMenuEnabled;
                 allNavMenus = new List<FormNavMenu> {
-                   defaultFormNavMenu,
-                   new FormNavMenu ( defaultFormNavMenu, false, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray, 1, enabled:navMenuEnabled),
-                   new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
-                   new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
-                   new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
-                    };
+                       defaultFormNavMenu,
+                       new FormNavMenu ( defaultFormNavMenu, false, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray, 1, enabled:navMenuEnabled),
+                       new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
+                       new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
+                       new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
+                        };
             }
             else
             {
                 allNavMenus = new List<FormNavMenu> {
-                  new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
-                   };
+                      new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
+                       };
             }
 
             if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
@@ -1418,7 +1418,8 @@ namespace M4PL.Web
                 if ((route.Entity == EntitiesAlias.JobXcblInfo && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView)
                     || (route.Entity == EntitiesAlias.NavRate && route.Action == MvcConstants.ActionForm)
-                    || (route.Entity == EntitiesAlias.Gateway && route.Action == MvcConstants.ActionForm))
+                    || (route.Entity == EntitiesAlias.Gateway && route.Action == MvcConstants.ActionForm)
+                    || (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == MvcConstants.ActionForm))
                     allNavMenus.Remove(saveMenu);
             }
 
@@ -1491,6 +1492,11 @@ namespace M4PL.Web
             if (route.Entity == EntitiesAlias.Gateway && route.Action == "FormView")
             {
                 allNavMenus[0].Text = "Import Gateway/Action";
+            }
+            if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
+            {
+                allNavMenus[0].Text = (route.ParentRecordId == 3316 || route.Location.FirstOrDefault() == "Driver Scrub Report") ? "Import Scrub Driver Details"
+                     : ((route.ParentRecordId == 3318 || route.Location.FirstOrDefault() == "Capacity Report") ? "Import Projected Capacity" : "Import report");
             }
 
             return allNavMenus;
@@ -3202,10 +3208,11 @@ namespace M4PL.Web
                 bool? isScheduleAciton = null;
                 if (route.Entity == EntitiesAlias.Job)
                 {
+                    route.ParentRecordId = 0;
                     var record = (IList<JobView>)_gridResult.Records;
-                    if (record != null && route.Location != null && route.Location.Count() > 0)
+                    if (record != null && route.JobIds != null && route.JobIds.Count() > 0)
                     {
-                        var locationIds = route.Location.Select(long.Parse).ToList();
+                        var locationIds = route.JobIds.Select(long.Parse).ToList();
                         var entity = record.Where(t => locationIds.Contains(t.Id));
 
                         if (entity.GroupBy(t => t.ShipmentType).Count() == 1 && entity.GroupBy(t => t.JobType).Count() == 1)
@@ -3214,12 +3221,47 @@ namespace M4PL.Web
                                 isScheduleAciton = true;
                             else if (entity.All(t => t.JobIsSchedule == false))
                                 isScheduleAciton = false;
-                            route.ParentRecordId = locationIds.FirstOrDefault();
+                            if (isScheduleAciton != null)
+                                route.ParentRecordId = locationIds.FirstOrDefault();
+                            else
+                                route.ParentRecordId = 0;
                         }
                         else
                         {
                             route.ParentRecordId = 0;
                         }
+                    }
+                    else if (record != null && _gridResult.FocusedRowId > 0)
+                    {
+                        var entity = record.FirstOrDefault(t => t.Id == _gridResult.FocusedRowId);
+                        isScheduleAciton = entity != null && entity.JobIsSchedule;
+                        route.ParentRecordId = _gridResult.FocusedRowId;
+                    }
+                }
+                if (route.Entity == EntitiesAlias.JobCard)
+                {
+                    route.ParentRecordId = 0;
+                    var record = (IList<JobCardView>)_gridResult.Records;
+                    if (record != null && route.JobIds != null && route.JobIds.Count() > 0)
+                    {
+                        var locationIds = route.JobIds.Select(long.Parse).ToList();
+                        var entity = record.Where(t => locationIds.Contains(t.Id));
+
+                        if (entity.GroupBy(t => t.ShipmentType).Count() == 1
+                            && entity.GroupBy(t => t.JobType).Count() == 1
+                            && entity.GroupBy(t => t.ProgramID).Count() == 1)
+                        {
+                            if (entity.All(t => t.JobIsSchedule == true))
+                                isScheduleAciton = true;
+                            else if (entity.All(t => t.JobIsSchedule == false))
+                                isScheduleAciton = false;
+                            if (isScheduleAciton != null)
+                                route.ParentRecordId = locationIds.FirstOrDefault();
+                            else
+                                route.ParentRecordId = 0;
+                        }
+                        else
+                            route.ParentRecordId = 0;
                     }
                     else if (record != null && _gridResult.FocusedRowId > 0)
                     {
@@ -3301,7 +3343,6 @@ namespace M4PL.Web
                             }
                             _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
                         }
-                        WebExtension.AddGatewayInGatewayContextMenu(_gridResult, currentRoute, _commonCommands);
                     }
                     else
                     {
@@ -3339,32 +3380,57 @@ namespace M4PL.Web
             return _gridResult;
         }
 
-        public static void AddGatewayInGatewayContextMenu<TView>(this GridResult<TView> _gridResult,
-         MvcRoute route, ICommonCommands _commonCommands)
+        public static GridResult<TView> AddGatewayInGatewayContextMenu<TView>(this GridResult<TView> _gridResult,
+           MvcRoute currentRoute, ICommonCommands _commonCommands, bool isParentEntity)
         {
-            if (_gridResult.GridSetting.ContextMenu.Count > 0
-               && _gridResult.GridSetting.ContextMenu.Any(x => x.SysRefName == OperationTypeEnum.Actions.ToString()))
-            {
-                var gatewayEntity = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
+            var route = currentRoute;
+            var gatewaysContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Gateways);
 
-                if (_gridResult.Records is IList<JobView>)
+            var gatewaysContextMenuAvailable = false;
+            var gatewaysContextMenuIndex = -1;
+
+            if (_gridResult.GridSetting.ContextMenu.Count > 0)
+            {
+                for (var i = 0; i < _gridResult.GridSetting.ContextMenu.Count; i++)
+                {
+                    if (_gridResult.GridSetting.ContextMenu[i].SysRefName.EqualsOrdIgnoreCase(gatewaysContextMenu.SysRefName))
+                    {
+                        gatewaysContextMenuAvailable = true;
+                        gatewaysContextMenuIndex = i;
+                        break;
+                    }
+                }
+            }
+            if (gatewaysContextMenuAvailable && !isParentEntity)
+            {
+                if (route.Entity == EntitiesAlias.Job && _gridResult.Records is IList<JobView>)
                 {
                     route.IsPBSReport = true;
+                    route.ParentRecordId = 0;
                     IList<JobView> record = (IList<JobView>)_gridResult.Records;
-                    if (record != null && route.Location != null && route.Location.Count() > 0)
+                    if (record != null && route.JobIds != null && route.JobIds.Count() > 0)
                     {
-                        var locationIds = route.Location.Select(long.Parse).ToList();
-                        var entity = record.Where(t => locationIds.Contains(t.Id)).Select(t => t.JobGatewayStatus).Distinct();
-                        route.ParentRecordId = locationIds.FirstOrDefault();
+                        var jobIds = route.JobIds.Select(long.Parse).ToList();
+                        var entity = record.Where(t => jobIds.Contains(t.Id));
+
+                        if (entity.GroupBy(t => t.ShipmentType).Count() == 1
+                           && entity.GroupBy(t => t.JobType).Count() == 1
+                           && entity.GroupBy(t => t.JobGatewayStatus).Count() == 1)
+                        {
+                            route.ParentRecordId = jobIds.FirstOrDefault();
+                        }
+                        else
+                        {
+                            route.ParentRecordId = 0;
+                        }
                     }
                     else if (record != null && _gridResult.FocusedRowId > 0)
                         route.ParentRecordId = _gridResult.FocusedRowId;
                 }
-
-                if (gatewayEntity != null && route.ParentRecordId > 0)
+                if (route.ParentRecordId > 0)
                 {
                     var allGateways = _commonCommands.GetJobGateway((long)route.ParentRecordId);
-                    gatewayEntity.ChildOperations = new List<Operation>();
+                    _gridResult.GridSetting.ContextMenu[gatewaysContextMenuIndex].ChildOperations = new List<Operation>();
 
                     var routeToAssign = new MvcRoute(route);
                     routeToAssign.Entity = EntitiesAlias.JobGateway;
@@ -3387,12 +3453,43 @@ namespace M4PL.Web
 
                             newOperation.Route = newRoute;
                             newOperation.Route.IsPBSReport = route.IsPBSReport;
-                            gatewayEntity.ChildOperations.Add(newOperation);
+                            _gridResult.GridSetting.ContextMenu[gatewaysContextMenuIndex].ChildOperations.Add(newOperation);
                         }
-                        _gridResult.GridSetting.ContextMenu.FirstOrDefault(x => x.SysRefName == OperationTypeEnum.Actions.ToString()).ChildOperations.Add(gatewayEntity);
+                    }
+                    else
+                    {
+                        if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                            && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                        {
+                            var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                            if (context != null)
+                                _gridResult.GridSetting.ContextMenu.Remove(context);
+                        }
+                    }
+                }
+                else
+                {
+                    if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                        && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Gateways"))
+                    {
+                        var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Gateways");
+                        if (context != null)
+                            _gridResult.GridSetting.ContextMenu.Remove(context);
                     }
                 }
             }
+            else
+            {
+                if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
+                    && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Gateways"))
+                {
+                    var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Gateways");
+                    if (context != null)
+                        _gridResult.GridSetting.ContextMenu.Remove(context);
+                }
+            }
+
+            return _gridResult;
         }
 
         public static DisplayMessage UploadCSVNavRate(this DisplayMessage displayMessage, long programId, DataTable csvDataTable, string[] arraynavRateUploadColumns,
@@ -3424,5 +3521,114 @@ namespace M4PL.Web
                 return displayMessage;
             }
         }
+
+        public static List<AWCDriverScrubReportRawData> GetObjectByAWCDriverScrubReportDatatable(this DataTable datatable)
+        {
+            try
+            {
+                if (datatable != null && datatable.Rows.Count > 0)
+                    return datatable.AsEnumerable().Select(row => new AWCDriverScrubReportRawData()
+                    {
+                        QMSShippedOn = row.Field<string>("QMS ShippedOn"),
+                        QMSPSDisposition = row.Field<string>("QMAPSDisposition"),
+                        QMSStatusDescription = row.Field<string>("QMSStatusDescription"),
+                        FouthParty = row.Field<string>("4P"),
+                        ThirdParty = row.Field<string>("3P"),
+                        ActualControlId = row.Field<string>("Original ControlID"),
+                        QMSControlId = row.Field<string>("QMS ControlID"),
+                        QRCGrouping = row.Field<string>("QRC Grouping"),
+                        QRCDescription = row.Field<string>("QRC Description"),
+                        ProductCategory = row.Field<string>("ProductCategory"),
+                        ProductSubCategory = row.Field<string>("ProductSubCategory"),
+                        ProductSubCategory2 = row.Field<string>("ProductSubCategory2"),
+                        ModelName = row.Field<string>("ModelName"),
+                        CustomerBusinessType = row.Field<string>("CustomerBusinessType"),
+                        ChannelCD = row.Field<string>("ChannelCD"),
+                        NationalAccountName = row.Field<string>("NationalAccountName"),
+                        CustomerName = row.Field<string>("CustomerName"),
+                        ShipFromLocation = row.Field<string>("Ship From Location"),
+                        QMSRemark = row.Field<string>("QMS Remarks"),
+                        DaysToAccept = row.Field<string>("Days Between Original Delivered to QMS Accepted"),
+                        QMSTotalUnit = row.Field<string>("Sum of QMSUnits"),
+                        QMSTotalPrice = row.Field<string>("Sum of QMSDollars"),
+                    }).ToList();
+                else
+                    throw new Exception("There is no record present in the selected file, please select a valid CSV.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
+            }
+        }
+
+        public static List<CommonDriverScrubReportRawData> GetObjectByCommonDriverScrubReportDatatable(this DataTable datatable)
+        {
+            try
+            {
+                if (datatable != null && datatable.Rows.Count > 0)
+                    return datatable.AsEnumerable().Select(row => new CommonDriverScrubReportRawData()
+                    {
+                        QMSShippedOn = row.Field<string>("QMS ShippedOn"),
+                        QMSPSDisposition = row.Field<string>("QMAPSDisposition"),
+                        QMSStatusDescription = row.Field<string>("QMSStatusDescription"),
+                        FouthParty = row.Field<string>("4P"),
+                        ThirdParty = row.Field<string>("3P"),
+                        ActualControlId = row.Field<string>("Original ControlID"),
+                        QMSControlId = row.Field<string>("QMS ControlID"),
+                        QRCGrouping = row.Field<string>("QRC Grouping"),
+                        QRCDescription = row.Field<string>("QRC Description"),
+                        ProductCategory = row.Field<string>("ProductCategory"),
+                        ProductSubCategory = row.Field<string>("ProductSubCategory"),
+                        ProductSubCategory2 = row.Field<string>("ProductSubCategory2"),
+                        ModelName = row.Field<string>("ModelName"),
+                        CustomerBusinessType = row.Field<string>("CustomerBusinessType"),
+                        ChannelCD = row.Field<string>("ChannelCD"),
+                        NationalAccountName = row.Field<string>("NationalAccountName"),
+                        CustomerName = row.Field<string>("CustomerName"),
+                        ShipFromLocation = row.Field<string>("Ship From Location"),
+                        QMSRemark = row.Field<string>("QMS Remarks"),
+                        DaysToAccept = row.Field<string>("Days Between Original Delivered to QMS Accepted"),
+                        QMSTotalUnit = row.Field<string>("Sum of QMSUnits"),
+                        QMSTotalPrice = row.Field<string>("Sum of QMSDollars"),
+                    }).ToList();
+                else
+                    throw new Exception("There is no record present in the selected file, please select a valid CSV.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
+            }
+        }
+
+        public static List<ProjectedCapacityRawData> GetObjectByProjectedCapacityReportDatatable(this DataTable datatable)
+        {
+			List<ProjectedCapacityRawData> rawData = null;
+			int projectedYear = 0;
+			try
+            {
+				if (datatable == null || (datatable != null && datatable.Rows == null) || (datatable != null && datatable.Rows != null && datatable.Rows.Count == 0))
+				{
+					throw new Exception("There is no record present in the selected file, please select a valid CSV.");
+				}
+				else if (datatable != null && datatable.Columns != null && datatable.Columns.Count > 1 && !Int32.TryParse(datatable.Columns[1].ToString(), out projectedYear))
+				{
+					throw new Exception("Please select a valid CSV file for upload.");
+				}
+				else if (datatable != null && datatable.Rows.Count > 0)
+				{
+					rawData = new List<ProjectedCapacityRawData>();
+					for (int i = 0; i < datatable.Rows.Count; i++)
+					{
+						rawData.Add(new ProjectedCapacityRawData() { Year = projectedYear, Location = datatable.Rows[i][0].ToString(), ProjectedCapacity = datatable.Rows[i][1].ToString() });
+					}
+				}
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
+            }
+
+			return rawData;
+		}
     }
 }

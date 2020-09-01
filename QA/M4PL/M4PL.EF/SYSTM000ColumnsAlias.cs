@@ -33,5 +33,7 @@ namespace M4PL.EF
         public Nullable<bool> ColAllowNegativeValue { get; set; }
         public bool ColIsGroupBy { get; set; }
         public string ColMask { get; set; }
+        public Nullable<bool> IsGridColumn { get; set; }
+        public string ColGridAliasName { get; set; }
     }
 }

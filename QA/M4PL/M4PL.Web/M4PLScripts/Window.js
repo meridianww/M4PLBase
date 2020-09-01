@@ -319,6 +319,8 @@ M4PLWindow.DataView = function () {
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }
         M4PLCommon.Error.CheckServerError();
+        //if (s.name == "JobAdvanceReportGridView")
+        //    $(".isDriverScrubreport").show();
     }
 
     var _onComboBoxValueChanged = function (s, e, currentGridControl, nameFieldName) {
@@ -420,58 +422,27 @@ M4PLWindow.DataView = function () {
 
         var callbackUrl = s.callbackUrl;
         if (selectedRowCount > 0) {
-
             if (selectedRowCount == 1 && e.isSelected)
                 M4PLWindow.MultiSelectedJobIds = [];
 
-            if (e.isSelected)
+            if (e.isSelected) {
                 M4PLWindow.MultiSelectedJobIds.push(s.GetItemKey(s.GetFocusedRowIndex()));
+                M4PLCommon.Common.EnableJobGridMultiSelection(true);
+            }
             else
                 M4PLWindow.MultiSelectedJobIds = M4PLCommon.Common.ArrayRemove(M4PLWindow.MultiSelectedJobIds, s.GetItemKey(s.GetFocusedRowIndex()));
         }
         else
             M4PLWindow.MultiSelectedJobIds = [];
-
-        var isJobIsScheduled = M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule');
-        var isJobGatewayStatus = M4PLWindow.JobGatewayStatus != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobGatewayStatus');
-
-        if (selectedRowCount == 1 && !e.isSelected) {
-            M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValueByKey(M4PLWindow.MultiSelectedJobIds[0], 'JobIsSchedule', '')
-            M4PLWindow.JobGatewayStatus = s.batchEditApi.GetCellValueByKey(M4PLWindow.MultiSelectedJobIds[0], 'JobGatewayStatus', '')
-        }
-
-        if (selectedRowCount == 1 && e.isSelected) {
-            M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
-            M4PLWindow.JobGatewayStatus = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobGatewayStatus');
-            M4PLCommon.Common.EnableJobGridMultiSelection(true);
-        }
-        else if (selectedRowCount != 0 && (isJobIsScheduled || isJobGatewayStatus)) {
-            if (callbackUrl != undefined && callbackUrl != "") {
-                var callbackUri = new URL(callbackUrl, window.location.origin);
-                var urlParams = new URLSearchParams(callbackUri.search);
-                if (urlParams.has('strRoute')) {
-                    var route = JSON.parse(urlParams.getAll('strRoute'));
-                    route.RecordId = 0;
-                    route.Location = s.GetSelectedKeysOnPage();
-                    s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
-                    s.Refresh();
-                }
-            }
-            return;
-        }
-        if (selectedRowCount <= 1 && selectedRowCount >= 0) {
-            var selectedJobId = selectedRowCount == 0 ? 0
-                : (selectedRowCount == 1 && !e.isSelected ? M4PLWindow.MultiSelectedJobIds[0] : s.GetItemKey(s.GetFocusedRowIndex()));
-            if (callbackUrl != undefined && callbackUrl != "") {
-                var callbackUri = new URL(callbackUrl, window.location.origin);
-                var urlParams = new URLSearchParams(callbackUri.search);
-                if (urlParams.has('strRoute')) {
-                    var route = JSON.parse(urlParams.getAll('strRoute'));
-                    route.RecordId = selectedJobId;
-                    route.Location = s.GetSelectedKeysOnPage();
-                    s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
-                    s.Refresh();
-                }
+        if (callbackUrl != undefined && callbackUrl != "") {
+            var callbackUri = new URL(callbackUrl, window.location.origin);
+            var urlParams = new URLSearchParams(callbackUri.search);
+            if (urlParams.has('strRoute')) {
+                var route = JSON.parse(urlParams.getAll('strRoute'));
+                route.RecordId = 0;
+                route.JobIds = M4PLWindow.MultiSelectedJobIds;
+                s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
+                s.Refresh();
             }
         }
     }
@@ -1092,7 +1063,11 @@ M4PLWindow.FormView = function () {
         }
         if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway"
             && (currentRoute.Action == "GatewayActionFormView" || currentRoute.Action == "FormView")) {
-            var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+            var s = null;
+            if (currentRoute.OwnerCbPanel == "AppCbPanel")
+                s = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
+            else
+                s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
             //if (s != null && s != undefined && s.GetSelectedKeysOnPage() != null && s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0)
             if (s != null && s != undefined && M4PLWindow.MultiSelectedJobIds.length > 0)
                 putOrPostData.push({ name: "JobIds", value: M4PLWindow.MultiSelectedJobIds });
@@ -1138,8 +1113,8 @@ M4PLWindow.FormView = function () {
                             attachmentGrid.callbackCustomArgs["docRefId"] = response.route.RecordId;
                             attachmentGrid.UpdateEdit();
                         }
-                      
-                        if (ownerCbPanel && !ownerCbPanel.InCallback()) {                           
+
+                        if (ownerCbPanel && !ownerCbPanel.InCallback()) {
                             response.route.IsPopup = currentRoute.IsPopup;
                             if (!response.route.ParentEntity) {
                                 response.route.ParentEntity = currentRoute.ParentEntity;
@@ -1190,7 +1165,7 @@ M4PLWindow.FormView = function () {
                                                             if (urlParams.has('strRoute')) {
                                                                 var route = JSON.parse(urlParams.getAll('strRoute'));
                                                                 route.RecordId = 0;
-                                                                route.Location = s.GetSelectedKeysOnPage();
+                                                                route.JobIds = s.GetSelectedKeysOnPage();
                                                                 s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                                                                 s.Refresh();
                                                             }

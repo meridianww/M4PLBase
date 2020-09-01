@@ -16,12 +16,10 @@ namespace M4PL.EF
     {
         public long Id { get; set; }
         public string LangCode { get; set; }
-        public int SysRefId { get; set; }
         public string SysMsgtypeTitle { get; set; }
         public byte[] SysMsgTypeDescription { get; set; }
         public byte[] SysMsgTypeHeaderIcon { get; set; }
         public byte[] SysMsgTypeIcon { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

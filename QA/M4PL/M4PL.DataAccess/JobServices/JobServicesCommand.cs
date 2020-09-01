@@ -166,12 +166,17 @@ namespace M4PL.DataAccess.JobServices
                 {
                     foreach (var currentdocument in documentAttachment)
                     {
+                        var pathName = Path.GetFileNameWithoutExtension(currentdocument.Name); ;
                         var row = documentAttachmentUTT.NewRow();
                         row["ItemNumber"] = recordCount;
-                        row["FileName"] = currentdocument.Name;
+                        row["FileName"] = !string.IsNullOrEmpty(currentdocument.Name) && currentdocument.Name.Length > 50
+                            ? currentdocument.Name.Substring(0, 49) : currentdocument.Name;
                         row["Content"] = currentdocument.Content;
                         row["EntityName"] = EntitiesAlias.JobDocReference.ToString();
-                        row["Title"] = Path.GetFileNameWithoutExtension(currentdocument.Name);
+                        row["Title"] = !string.IsNullOrEmpty(pathName) && pathName.Length > 50
+                            ? pathName.Substring(0, 49) : pathName;
+
+                        Path.GetFileNameWithoutExtension(currentdocument.Name);
                         documentAttachmentUTT.Rows.Add(row);
                         documentAttachmentUTT.AcceptChanges();
                         recordCount = recordCount + 1;

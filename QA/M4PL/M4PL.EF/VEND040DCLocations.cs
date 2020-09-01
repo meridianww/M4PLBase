@@ -21,13 +21,10 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> VdcVendorID { get; set; }
         public Nullable<int> VdcItemNumber { get; set; }
         public string VdcLocationCode { get; set; }
         public string VdcCustomerCode { get; set; }
         public string VdcLocationTitle { get; set; }
-        public Nullable<long> VdcContactMSTRID { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

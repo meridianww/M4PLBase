@@ -21,8 +21,6 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> OrgID { get; set; }
-        public Nullable<long> ProgramID { get; set; }
         public string PrgRoleCode { get; set; }
         public string PrgRoleTitle { get; set; }
         public Nullable<int> StatusId { get; set; }

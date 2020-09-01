@@ -23,7 +23,6 @@ namespace M4PL.EF
         public long Id { get; set; }
         public string Name { get; set; }
         public Nullable<int> Age { get; set; }
-        public Nullable<int> GenderId { get; set; }
         public string EntityTypeId { get; set; }
         public string EntityType { get; set; }
         public Nullable<long> UserId { get; set; }
@@ -33,6 +32,7 @@ namespace M4PL.EF
         public string LocationCode { get; set; }
         public string DriverId { get; set; }
         public string ContractNumber { get; set; }
+        public string CustName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SVYANS000Master> SVYANS000Master { get; set; }

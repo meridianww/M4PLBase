@@ -15,13 +15,11 @@ namespace M4PL.EF
     public partial class ORGAN030Credentials
     {
         public long Id { get; set; }
-        public Nullable<long> OrgID { get; set; }
         public Nullable<int> CreItemNumber { get; set; }
         public string CreCode { get; set; }
         public string CreTitle { get; set; }
         public byte[] CreDescription { get; set; }
         public Nullable<System.DateTime> CreExpDate { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

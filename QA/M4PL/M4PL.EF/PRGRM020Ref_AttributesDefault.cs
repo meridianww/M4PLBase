@@ -15,16 +15,13 @@ namespace M4PL.EF
     public partial class PRGRM020Ref_AttributesDefault
     {
         public long Id { get; set; }
-        public Nullable<long> ProgramID { get; set; }
         public Nullable<int> AttItemNumber { get; set; }
         public string AttCode { get; set; }
         public string AttTitle { get; set; }
         public byte[] AttDescription { get; set; }
         public byte[] AttComments { get; set; }
         public Nullable<int> AttQuantity { get; set; }
-        public Nullable<int> UnitTypeId { get; set; }
         public Nullable<bool> AttDefault { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

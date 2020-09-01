@@ -16,7 +16,6 @@ namespace M4PL.EF
     {
         public long Id { get; set; }
         public Nullable<long> ColUserId { get; set; }
-        public string ColTableName { get; set; }
         public string ColSortOrder { get; set; }
         public string ColNotVisible { get; set; }
         public string ColIsFreezed { get; set; }

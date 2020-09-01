@@ -118,7 +118,8 @@ namespace M4PL.Business.Finance.SalesOrder
             NavSalesOrder navSalesOrderResponse = null;
             string navSalesOrderJson = string.Empty;
             string proFlag = null;
-            string serviceCall = string.Format("{0}('{1}')/SalesOrder", navAPIUrl, "Meridian");
+			Newtonsoft.Json.Linq.JObject jsonObject = null;
+			string serviceCall = string.Format("{0}('{1}')/SalesOrder", navAPIUrl, "Meridian");
             try
             {
                 NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -129,8 +130,12 @@ namespace M4PL.Business.Finance.SalesOrder
                 request.Method = "POST";
                 using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
-                    navSalesOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrder);
-                    streamWriter.Write(navSalesOrderJson);
+                    navSalesOrderJson = JsonConvert.SerializeObject(navSalesOrder);
+					jsonObject = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(navSalesOrderJson);
+					jsonObject.Property("Ship_from_City").Remove();
+					jsonObject.Property("Ship_from_County").Remove();
+					navSalesOrderJson = jsonObject.ToString();
+					streamWriter.Write(navSalesOrderJson);
                 }
 
                 WebResponse response = request.GetResponse();
@@ -166,15 +171,11 @@ namespace M4PL.Business.Finance.SalesOrder
             NavSalesOrder navSalesOrderResponse = null;
             string navSalesOrderJson = string.Empty;
             string proFlag = null;
-            string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
+			Newtonsoft.Json.Linq.JObject jsonObject = null;
+			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
             try
             {
                 NavSalesOrder existingSalesOrderData = GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
-                //if (!string.IsNullOrEmpty(navSalesOrder.Received_Date))
-                //{
-                //    navSalesOrder.Delivery_Date = null;
-                //}
-
                 NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
                 request.Credentials = myCredentials;
@@ -185,8 +186,12 @@ namespace M4PL.Business.Finance.SalesOrder
                 request.Headers.Add(HttpRequestHeader.IfMatch, existingSalesOrderData.DataETag);
                 using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
-                    navSalesOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrder);
-                    streamWriter.Write(navSalesOrderJson);
+					navSalesOrderJson = JsonConvert.SerializeObject(navSalesOrder);
+					jsonObject = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(navSalesOrderJson);
+					jsonObject.Property("Ship_from_City").Remove();
+					jsonObject.Property("Ship_from_County").Remove();
+					navSalesOrderJson = jsonObject.ToString();
+					streamWriter.Write(navSalesOrderJson);
                 }
 
                 WebResponse response = request.GetResponse();

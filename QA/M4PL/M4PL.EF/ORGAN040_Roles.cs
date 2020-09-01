@@ -15,11 +15,9 @@ namespace M4PL.EF
     public partial class ORGAN040_Roles
     {
         public long Id { get; set; }
-        public Nullable<long> OrgID { get; set; }
         public string OrgRoleCode { get; set; }
         public string OrgRoleTitle { get; set; }
         public Nullable<bool> OrgRoleDefault { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public System.DateTime DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

@@ -45,10 +45,7 @@ namespace M4PL.EF
     
         public long Id { get; set; }
         public string ConERPId { get; set; }
-        public Nullable<long> ConOrgId { get; set; }
-        public Nullable<long> ConCompanyId { get; set; }
         public string ConCompanyName { get; set; }
-        public Nullable<int> ConTitleId { get; set; }
         public string ConLastName { get; set; }
         public string ConFirstName { get; set; }
         public string ConMiddleName { get; set; }
@@ -64,24 +61,17 @@ namespace M4PL.EF
         public string ConBusinessAddress1 { get; set; }
         public string ConBusinessAddress2 { get; set; }
         public string ConBusinessCity { get; set; }
-        public Nullable<int> ConBusinessStateId { get; set; }
         public string ConBusinessZipPostal { get; set; }
-        public Nullable<int> ConBusinessCountryId { get; set; }
         public string ConHomeAddress1 { get; set; }
         public string ConHomeAddress2 { get; set; }
         public string ConHomeCity { get; set; }
-        public Nullable<int> ConHomeStateId { get; set; }
         public string ConHomeZipPostal { get; set; }
-        public Nullable<int> ConHomeCountryId { get; set; }
         public Nullable<int> ConAttachments { get; set; }
         public string ConWebPage { get; set; }
         public string ConNotes { get; set; }
-        public Nullable<int> StatusId { get; set; }
-        public Nullable<int> ConTypeId { get; set; }
         public string ConFullName { get; set; }
         public string ConFileAs { get; set; }
         public string ConOutlookId { get; set; }
-        public Nullable<int> ConUDF01 { get; set; }
         public string ConUDF02 { get; set; }
         public string ConUDF03 { get; set; }
         public string ConUDF04 { get; set; }

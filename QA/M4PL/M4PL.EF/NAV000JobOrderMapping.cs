@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class NAV000JobOrderMapping
     {
         public long JobOrderMappingId { get; set; }
-        public long JobId { get; set; }
         public string SONumber { get; set; }
         public string PONumber { get; set; }
         public System.DateTime DateEntered { get; set; }

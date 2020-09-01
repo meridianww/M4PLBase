@@ -26,10 +26,25 @@
     Model.ReportRoute.EndDate = Model.Record.EndDate;
     var crgoDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
     crgoDropDownViewModel = Model.Record.CargoId.GetCargoDropDown("CargoId", Model, Model.Record.ProgramId);
+
+    var scrubReportmodel = Model.CallBackRoute;
+    scrubReportmodel.Action = "FormView";
 }
 
-<div class="col-lg-6 col-md-6 col-sm-6 form-group">
+<div class="col-lg-4 col-md-4 col-sm-4 form-group">
     @Html.EditorFor(m => m.Record.ReportType, new { ReportType = Model.Record.ReportType, OnChange = reportTypeChangeEvent })
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6 form-group isDriverImport">
+    @Html.DevExpress().Button(sett =>
+{
+    sett.Name = "btnImportReport";
+    sett.Text = "Import Report";
+    sett.EnableTheming = true;
+    sett.AllowFocus = false;
+    sett.ControlStyle.CssClass = "form-btn";
+    sett.Width = 90;
+    sett.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.ImportDriverScrub(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(scrubReportmodel));
+}).GetHtml()
 </div>
 
 @Html.DevExpress().RoundPanel(settings =>
@@ -98,9 +113,6 @@
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.Search));
         ViewContext.Writer.Write("</div>");
-        //ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
-        //ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.IsEnabledAddtionalfield, new { CheckedChanged = "M4PLCommon.AdvancedReport.IsExtrafieldCheckBoxEventChange(s,e);" }).ToHtmlString()));
-        //ViewContext.Writer.Write("</div>");
 
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("PackagingTypeByJob", Model));
@@ -108,11 +120,11 @@
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }));
         ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isVisibleCapacityReport style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write((Html.EditorFor(t => t.Record.Year, new { Year = Model.Record.Year }).ToHtmlString()));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
-        //ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
-        //ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.Manifest).ToHtmlString()));
-        //ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row isDriverbtnScrubreport'>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-generate-report-btn form-group' style='padding: 7px;'>");
         ViewContext.Writer.Write(Html.DevExpress().Button(set =>
         {
@@ -126,10 +138,11 @@
         }).GetHtml());
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
-        ////
     });
 }).GetHtml()
+
 @using (Html.BeginForm())
 {
     @Html.Partial("JobAdvanceReportGridPartial")
 }
+

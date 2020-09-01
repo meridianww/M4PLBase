@@ -15,11 +15,12 @@ namespace M4PL.EF
     public partial class NAV000JobOrderItemMapping
     {
         public long JobOrderItemMappingId { get; set; }
-        public long JobId { get; set; }
         public string EntityName { get; set; }
         public Nullable<int> LineNumber { get; set; }
         public System.DateTime DateEntered { get; set; }
         public string EnteredBy { get; set; }
+        public Nullable<long> M4PLItemId { get; set; }
+        public string Document_Number { get; set; }
     
         public virtual JOBDL000Master JOBDL000Master { get; set; }
     }

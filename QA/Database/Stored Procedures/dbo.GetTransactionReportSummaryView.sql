@@ -11,7 +11,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetTransactionReportSummaryView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetTransactionReportSummaryView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -256,9 +256,8 @@ BEGIN TRY
 	SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Cabinets', 'SUM(Cargo.Cabinets) Cabinets ');
 	SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Parts', 'SUM(Cargo.Parts) Parts');
 	SET @sqlCommand = @sqlCommand + ', CAST(0 AS BIT) IsIdentityVisible ';
-
-	PRINT @sqlCommand
-
+	SET @sqlCommand = @sqlCommand + ', CAST(1 AS BIT) IsFilterSortDisable ';
+	
 	SET @sqlCommand += @TablesQuery
 	SET @sqlCommand += ' LEFT JOIN dbo.JobCargoAdvanceReportView Cargo ON Cargo.JobId =' + @entity + '.Id'
 
@@ -283,9 +282,7 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
 		END
 	END
-
-	PRINT @sqlCommand
-
+	
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

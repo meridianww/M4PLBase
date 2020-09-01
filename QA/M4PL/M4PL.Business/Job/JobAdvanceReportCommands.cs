@@ -17,6 +17,7 @@
 // Purpose:                                      Set of rules for JobAdvanceReportCommands
 //====================================================================================================================
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
@@ -63,7 +64,27 @@ namespace M4PL.Business.Job
         }
         public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, long customerId, string entity)
         {
-            return _commands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
+            return _commands.GetDropDownDataForProgram(activeUser, customerId, entity);
+        }
+        public StatusModel GenerateScrubDriverDetails(ActiveUser activeUser, JobDriverScrubReportData scriberDriverView)
+        {
+            var result = _commands.InsertDriverScrubReportRawData(scriberDriverView, activeUser);
+            return new StatusModel
+            {
+                Status = result ? "Success" : "Fail",
+                StatusCode = result ? 200 : 500,
+                AdditionalDetail = result ? "Record has been uploaded successfully" : "Failed to uploaded record"
+            };
+        }
+        public StatusModel GenerateProjectedCapacityDetails(ActiveUser activeUser, ProjectedCapacityData projectedCapacityView)
+        {
+            var result = _commands.InsertProjectedCapacityRawData(projectedCapacityView, activeUser);
+            return new StatusModel
+            {
+                Status = result ? "Success" : "Fail",
+                StatusCode = result ? 200 : 500,
+                AdditionalDetail = result ? "Record has been uploaded successfully" : "Failed to uploaded record"
+            };
         }
     }
 }

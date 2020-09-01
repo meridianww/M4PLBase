@@ -22,11 +22,9 @@ namespace M4PL.EF
         }
     
         public int Id { get; set; }
-        public int StateCountryId { get; set; }
         public string StateAbbr { get; set; }
         public string StateName { get; set; }
         public Nullable<bool> StateIsDefault { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public System.DateTime DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

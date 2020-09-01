@@ -29,77 +29,77 @@ using _commands = M4PL.DataAccess.Job.JobCargoCommands;
 
 namespace M4PL.Business.Job
 {
-    public class JobCargoCommands : BaseCommands<JobCargo>, IJobCargoCommands
-    {
-        /// <summary>
-        /// Get list of job cargo data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<JobCargo> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class JobCargoCommands : BaseCommands<JobCargo>, IJobCargoCommands
+	{
+		/// <summary>
+		/// Get list of job cargo data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<JobCargo> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific job cargo record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific job cargo record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public JobCargo Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public JobCargo Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Creates a newjob cargo record
-        /// </summary>
-        /// <param name="jobCargo"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a newjob cargo record
+		/// </summary>
+		/// <param name="jobCargo"></param>
+		/// <returns></returns>
 
-        public JobCargo Post(JobCargo jobCargo)
-        {
-            return _commands.Post(ActiveUser, jobCargo);
-        }
+		public JobCargo Post(JobCargo jobCargo)
+		{
+			return _commands.Post(ActiveUser, jobCargo);
+		}
 
-        /// <summary>
-        /// Updates an existing job cargo record
-        /// </summary>
-        /// <param name="jobCargo"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing job cargo record
+		/// </summary>
+		/// <param name="jobCargo"></param>
+		/// <returns></returns>
 
-        public JobCargo Put(JobCargo jobCargo)
-        {
-            return _commands.Put(ActiveUser, jobCargo);
-        }
+		public JobCargo Put(JobCargo jobCargo)
+		{
+			return _commands.Put(ActiveUser, jobCargo);
+		}
 
-        /// <summary>
-        /// Deletes a specific job cargo record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific job cargo record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of job cargo record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of job cargo record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
-        public JobCargo Patch(JobCargo entity)
-        {
-            throw new NotImplementedException();
-        }
+		public JobCargo Patch(JobCargo entity)
+		{
+			throw new NotImplementedException();
+		}
 
 		public StatusModel CreateCargoException(JobCargoException jobCargoException, long cargoId)
 		{
@@ -121,7 +121,8 @@ namespace M4PL.Business.Job
 			}
 			else
 			{
-				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobCargoException.ExceptionCode, exceptionStatusModel.JobId, exceptionStatusModel.ContractNumber, Utilities.TimeUtility.GetPacificDateTime(), string.Empty);
+				var jobCargo = _commands.Get(ActiveUser, cargoId);
+				string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobCargoException.ExceptionCode, exceptionStatusModel.JobId, exceptionStatusModel.ContractNumber, Utilities.TimeUtility.GetPacificDateTime(), string.Empty, jobCargo.CgoPartNumCode, jobCargo.CgoTitle, jobCargo.CgoSerialNumber, jobCargo.JobGatewayStatus);
 				EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)exceptionStatusModel.ProgramId, exceptionStatusModel.ContractNumber, cargoExceptionBody);
 				return new StatusModel()
 				{
