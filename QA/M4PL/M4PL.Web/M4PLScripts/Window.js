@@ -1165,8 +1165,8 @@ M4PLWindow.FormView = function () {
                                                     response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
                                                     JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
                                                 }
-
                                                 RecordPopupControl.Hide();
+                                                _resetCustomBatchView();
                                                 if (response.displayMessage)
                                                     DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
                                                 DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
@@ -1278,11 +1278,13 @@ M4PLWindow.FormView = function () {
                             RecordSubPopupControl.Hide();
                         else
                             RecordPopupControl.Hide();
-
+                        
                         DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                         if (ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel)) {
                             var grid = ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel);
                             var rowIndex = grid.GetFocusedRowIndex();
+                            M4PLWindow.PopupDataViewHasChanges[grid] = false;
+                            M4PLWindow.DataViewsHaveChanges[grid] = false;
                             if (grid.batchEditApi.GetColumnIndex("GwyCompleted") !== null)
                                 grid.batchEditApi.SetCellValue(rowIndex, 'GwyCompleted', true);
 
@@ -1308,6 +1310,7 @@ M4PLWindow.FormView = function () {
                             if (ASPxClientControl.GetControlCollection().GetByName("GwyShipApptmtReasonCode" + "_popup") !== null)
                                 ASPxClientControl.GetControlCollection().GetByName("GwyShipApptmtReasonCode" + "_popup").SetValue(response.record.GwyShipApptmtReasonCode);
                         }
+                        _resetCustomBatchView();
                     }
 
                     else if (response.status === false && response.errMessages && (response.errMessages.length > 0)) {
@@ -1646,6 +1649,14 @@ M4PLWindow.FormView = function () {
             //if (CountryDropDown !== null)
             //    CountryDropDown.SetSelectedItem(null);
         }
+    }
+
+    var _resetCustomBatchView = function () {
+        $('td.dxgvBatchEditModifiedCell_Office2010Black').removeClass('dxgvBatchEditModifiedCell_Office2010Black');
+        ASPxClientControl.GetControlCollection().GetByName("btnSaveJobGatewayGridView").SetEnabled(false);
+        ASPxClientControl.GetControlCollection().GetByName("btnCancelJobGatewayGridView").SetEnabled(false);
+        $("#btnSaveJobGatewayGridView").addClass("noHover");
+        $("#btnCancelJobGatewayGridView").addClass("noHover");
     }
 
     return {
@@ -2019,6 +2030,7 @@ M4PLWindow.UploadFileDragDrop = function () {
             }
         }
     }
+    
 
     return {
         Init: _init,
