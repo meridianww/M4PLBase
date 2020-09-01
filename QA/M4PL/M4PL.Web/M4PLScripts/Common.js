@@ -1627,9 +1627,13 @@ M4PLCommon.AdvancedReport = (function () {
             if (productTypeCtrl.GetValue() != null && productTypeCtrl.GetValue() != undefined)
                 rprtVwrRoute.ProductType = productTypeCtrl.GetValue().split(',').map(String);//resetVal(productTypeCtrl.GetValue(), checkListBoxProductTypeByCustomerCbPanelforClosed);
 
-        if (dateTypeCtrl != null)
-            rprtVwrRoute.DateTypeName = dateTypeCtrl.GetText();
-
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        if (reportTypeCtrl != null && reportTypeCtrl.GetText() == "Pride Metric Report") {
+            rprtVwrRoute.DateTypeName = null;
+        } else {
+            if (dateTypeCtrl != null)
+                rprtVwrRoute.DateTypeName = dateTypeCtrl.GetText();
+        }
         if (scheduleTypeCtrl != null)
             rprtVwrRoute.Scheduled = scheduleTypeCtrl.GetText();
         if (orderTypeCtrl != null)
@@ -1689,17 +1693,23 @@ M4PLCommon.AdvancedReport = (function () {
         cargoTitleCtrl.SetEnabled(isEnabled);
 
         jobStatusCtrl.SetEnabled(isEnabled);
-        dateTypeCtrl.SetEnabled(isEnabled);
         packagingTypeCtrl.SetEnabled(isEnabled);
         scheduleTypeCtrl.SetEnabled(isEnabled);
         orderTypeCtrl.SetEnabled(isEnabled);
 
         var bgColor = !isEnabled ? "#9BEBF2" : '#fff';
         packagingTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
-        dateTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
         jobStatusCtrl.GetInputElement().style.backgroundColor = bgColor;
         orderTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
         scheduleTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        if (reportTypeCtrl != null && reportTypeCtrl.GetText() == "Pride Metric Report") {
+            dateTypeCtrl.SetEnabled(false);
+            dateTypeCtrl.GetInputElement().style.backgroundColor = "#9BEBF2";
+        } else {
+            dateTypeCtrl.SetEnabled(isEnabled);
+            dateTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+        }
     }
     var _importDriverScrub = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
         rprtVwrRoute.Action = "FormView";

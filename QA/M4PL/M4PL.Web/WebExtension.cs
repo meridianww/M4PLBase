@@ -3031,10 +3031,20 @@ namespace M4PL.Web
             }
             else
             {
-                where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)= '{0}'", DateTime.Now.Date.ToShortDateString())
-               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND CAST(JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) <= '{1}' ",
-               Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
+                if (jobAdvanceReportRequest.FileName == "Pride Metric Report" || jobAdvanceReportRequest.ReportType == 3317)
+                {
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
+                  ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimeActual  IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimeActual AS DATE)= '{0}'", DateTime.Now.Date.ToShortDateString())
+                  : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimeActual  IS NOT NULL  AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) <= '{1}' ",
+                  Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
+                }
+                else
+                {
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
+                   ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)= '{0}'", DateTime.Now.Date.ToShortDateString())
+                   : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND CAST(JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) <= '{1}' ",
+                   Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
+                }
             }
 
             where += string.IsNullOrEmpty(jobAdvanceReportRequest.Search) ? "" :
@@ -3602,33 +3612,33 @@ namespace M4PL.Web
 
         public static List<ProjectedCapacityRawData> GetObjectByProjectedCapacityReportDatatable(this DataTable datatable)
         {
-			List<ProjectedCapacityRawData> rawData = null;
-			int projectedYear = 0;
-			try
+            List<ProjectedCapacityRawData> rawData = null;
+            int projectedYear = 0;
+            try
             {
-				if (datatable == null || (datatable != null && datatable.Rows == null) || (datatable != null && datatable.Rows != null && datatable.Rows.Count == 0))
-				{
-					throw new Exception("There is no record present in the selected file, please select a valid CSV.");
-				}
-				else if (datatable != null && datatable.Columns != null && datatable.Columns.Count > 1 && !Int32.TryParse(datatable.Columns[1].ToString(), out projectedYear))
-				{
-					throw new Exception("Please select a valid CSV file for upload.");
-				}
-				else if (datatable != null && datatable.Rows.Count > 0)
-				{
-					rawData = new List<ProjectedCapacityRawData>();
-					for (int i = 0; i < datatable.Rows.Count; i++)
-					{
-						rawData.Add(new ProjectedCapacityRawData() { Year = projectedYear, Location = datatable.Rows[i][0].ToString(), ProjectedCapacity = datatable.Rows[i][1].ToString() });
-					}
-				}
+                if (datatable == null || (datatable != null && datatable.Rows == null) || (datatable != null && datatable.Rows != null && datatable.Rows.Count == 0))
+                {
+                    throw new Exception("There is no record present in the selected file, please select a valid CSV.");
+                }
+                else if (datatable != null && datatable.Columns != null && datatable.Columns.Count > 1 && !Int32.TryParse(datatable.Columns[1].ToString(), out projectedYear))
+                {
+                    throw new Exception("Please select a valid CSV file for upload.");
+                }
+                else if (datatable != null && datatable.Rows.Count > 0)
+                {
+                    rawData = new List<ProjectedCapacityRawData>();
+                    for (int i = 0; i < datatable.Rows.Count; i++)
+                    {
+                        rawData.Add(new ProjectedCapacityRawData() { Year = projectedYear, Location = datatable.Rows[i][0].ToString(), ProjectedCapacity = datatable.Rows[i][1].ToString() });
+                    }
+                }
             }
             catch (Exception ex)
             {
                 throw new Exception("Incorrect format of CSV, Error: " + ex.Message);
             }
 
-			return rawData;
-		}
+            return rawData;
+        }
     }
 }
