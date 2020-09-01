@@ -40,7 +40,6 @@ CREATE PROCEDURE [dbo].[GetProjectedCapacitybReportView]
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @LastFridayDate DATETIME = DATEADD(day, (DATEDIFF(day, '19800104', CURRENT_TIMESTAMP) / 7) * 7, '19800104')
 DECLARE @sqlCommand NVARCHAR(MAX)
 		,@TCountQuery NVARCHAR(MAX)
 		,@TablesQuery NVARCHAR(MAX)
@@ -52,75 +51,45 @@ DECLARE @sqlCommand NVARCHAR(MAX)
 IF OBJECT_ID('tempdb..#TempProjectedCapacity') IS NOT NULL DROP TABLE #TempProjectedCapacity
 CREATE TABLE #TempProjectedCapacity
 (
-JobId BIGINT,
-ProgramId BIGINT,
+JobId BIGINT
+,CapacityId INT,
 ProjectedYear INT,
 Location Varchar(150),
 ProjectedCapacity INT,
 CustomerId BIGINT,
-OnHandACD DateTime2(7),
-OnTruckACD DateTime2(7)
+Cabinets INT
 )
 
-CREATE NONCLUSTERED INDEX IX_TempProjectedCapacity_ProgramId
-ON #TempProjectedCapacity ([ProgramId])
 
-CREATE NONCLUSTERED INDEX IX_TempProjectedCapacity_ProjectedYear_CustomerId
-ON #TempProjectedCapacity ([ProjectedYear],[CustomerId])
-INCLUDE ([JobId],[Location],[ProjectedCapacity],[OnHandACD],[OnTruckACD])
+INSERT INTO #TempProjectedCapacity(JobId,ProjectedCapacity,Location,ProjectedYear,CustomerId,CapacityId)
+Select DISTINCT Job.id,PC.ProjectedCapacity,PC.Location,PC.[Year],PC.CustomerId,PC.Id
+From dbo.LocationProjectedCapacity PC
+LEFT JOIN  dbo.JOBDL000Master Job ON Job.JobSiteCode = PC.Location AND ISNULL(Job.IsCancelled,0) = 0
+Where PC.StatusId=1 AND PC.[Year] = @ProjectedYear AND PC.CustomerId = @CustomerId
 
-INSERT INTO #TempProjectedCapacity(JobId,ProgramId,ProjectedCapacity,Location,ProjectedYear)
-Select DISTINCT Job.id,Job.ProgramId,PC.ProjectedCapacity,PC.Location,PC.[Year] From dbo.JOBDL000Master Job
-INNER JOIN dbo.LocationProjectedCapacity PC ON PC.Location = Job.JobSiteCode
-Where ISNULL(Job.IsCancelled,0) = 0 AND PC.StatusId=1
+UPDATE TempCapacity
+SET TempCapacity.Cabinets = ISNULL(RT.Cabinets,0)
+From #TempProjectedCapacity TempCapacity
+INNER JOIN (Select T.Id, SUM(ISNULL(T.Cabinets,0)) Cabinets 
+From vwJobCapacityReport T
+INNER JOIN #TempProjectedCapacity Temp ON temp.JobId = T.Id
+Where Temp.jobId IS NOT NULL
+Group BY T.id)RT ON RT.Id = TempCapacity.JobId
 
-UPDATE Temp
-SET Temp.CustomerId = Prg.PrgCustId
-From #TempProjectedCapacity Temp
-INNER JOIN dbo.Prgrm000Master Prg ON Prg.Id = Temp.ProgramId
-
-UPDATE Temp
-SET Temp.OnHandACD = OnHandGateway.GwyGatewayACD,
-Temp.OnTruckACD = OnTruckGateway.GwyGatewayACD
-From #TempProjectedCapacity Temp
-LEFT JOIN dbo.JOBDL020Gateways OnHandGateway ON OnHandGateway.JobId = Temp.JobId AND OnHandGateway.GwyGatewayCode IN ('On Hand','Onhand')
-LEFT JOIN dbo.JOBDL020Gateways OnTruckGateway ON OnTruckGateway.JobId = Temp.JobId AND OnTruckGateway.GwyGatewayCode IN ('Loaded on Truck', 'On Truck')
-
-SET @TCountQuery = 'SELECT @TotalCount = Count(Id) From
-(SELECT Max(PC.JobId) Id
-FROM #TempProjectedCapacity PC
-Where PC.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND PC.ProjectedYear = '+ CAST(@ProjectedYear AS Varchar(50)) +'
-GROUP BY PC.Location,PC.ProjectedCapacity,PC.CustomerId,PC.OnHandACD, PC.OnTruckACD
-)temp'
+SET @TCountQuery = 'SELECT @TotalCount = Count(Distinct Location) From #TempProjectedCapacity'
 
 Print @TCountQuery
 EXEC sp_executesql @TCountQuery
-		,N'@CustomerId BIGINT,@ProjectedYear INT,@TotalCount INT OUTPUT'
-		,@CustomerId
-		,@ProjectedYear
+		,N'@TotalCount INT OUTPUT'
 		,@TotalCount OUTPUT;
 
 
-SET @sqlCommand = 'SELECT Max(Job.JobId) Id, Job.Location
-    ,Job.ProjectedCapacity ProjectedCount
-	,CASE 
-	WHEN @LastFridayDate  < OnHandACD AND 
-		@LastFridayDate  > OnTruckACD
-     THEN 
-	 CASE WHEN Job.CustomerId = 20047 THEN SUM(CASE 
-		  WHEN Package.SysOptionName = ''Appliance''
-		  THEN ISNULL(Cargo.CgoQtyOnHand, 0)
-		  ELSE 0 END) ELSE 
-		  SUM(CASE WHEN Options.SysOptionName IN (''CAB'', ''CABINET'')
-		  THEN ISNULL(Cargo.CgoQtyOnHand, 0)
-		  ELSE 0 END) END
-							ELSE 0
-		END Cabinets
+SET @sqlCommand = 'SELECT Max(Job.CapacityId) Id, Job.Location
+,Job.ProjectedCapacity ProjectedCount
+,SUM(ISNULL(Cabinets,0)) Cabinets
 FROM #TempProjectedCapacity Job
-LEFT JOIN dbo.JobDL010Cargo Cargo ON Cargo.JobID = Job.JobId AND Cargo.StatusId=1
-LEFT JOIN dbo.SYSTM000Ref_Options Options ON Options.Id = Cargo.CgoQtyUnitsId
-LEFT JOIN dbo.SYSTM000Ref_Options Package ON Package.Id = Cargo.CgoPackagingTypeId'
-SET @sqlCommand = @sqlCommand + ' Where Job.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND Job.[ProjectedYear] = '+ CAST(@ProjectedYear AS Varchar(50)) + +' GROUP BY Job.Location,Job.ProjectedCapacity,Job.CustomerId,Job.OnHandACD, Job.OnTruckACD ' + ' ORDER BY Max(Job.JobId)'
+GROUP BY Job.Location,Job.ProjectedCapacity '
+SET @sqlCommand = @sqlCommand + ' ORDER BY Max(Job.CapacityId)'
 		IF (
 				@recordId = 0
 				AND @IsExport = 0
@@ -138,12 +107,9 @@ SET @sqlCommand = @sqlCommand + ' Where Job.CustomerId = '+ CAST(@CustomerId AS 
 	
 	Print @sqlCommand
 	EXEC sp_executesql @sqlCommand
-		,N'@pageNo INT, @pageSize INT,@LastFridayDate DateTime,@CustomerId BIGINT,@ProjectedYear INT'
+		,N'@pageNo INT, @pageSize INT'
 		,@pageNo = @pageNo
 		,@pageSize = @pageSize
-		,@LastFridayDate = @LastFridayDate
-		,@CustomerId = @CustomerId
-		,@ProjectedYear = @ProjectedYear
 
 DROP TABLE #TempProjectedCapacity
 
