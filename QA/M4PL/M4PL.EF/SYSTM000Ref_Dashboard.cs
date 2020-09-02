@@ -15,13 +15,10 @@ namespace M4PL.EF
     public partial class SYSTM000Ref_Dashboard
     {
         public long Id { get; set; }
-        public Nullable<long> OrganizationId { get; set; }
-        public Nullable<int> DshMainModuleId { get; set; }
         public string DshName { get; set; }
         public byte[] DshTemplate { get; set; }
         public string DshDescription { get; set; }
         public bool DshIsDefault { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

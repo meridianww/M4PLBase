@@ -15,8 +15,6 @@ namespace M4PL.EF
     public partial class SVYANS000Master
     {
         public long Id { get; set; }
-        public long SurveyUserId { get; set; }
-        public Nullable<long> QuestionId { get; set; }
         public string SelectedAnswer { get; set; }
         public System.DateTime DateEntered { get; set; }
     

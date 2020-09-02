@@ -21,12 +21,7 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public long OrgRefRoleId { get; set; }
         public Nullable<int> SecLineOrder { get; set; }
-        public Nullable<int> SecMainModuleId { get; set; }
-        public Nullable<int> SecMenuOptionLevelId { get; set; }
-        public Nullable<int> SecMenuAccessLevelId { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public System.DateTime DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

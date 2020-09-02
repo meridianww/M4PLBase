@@ -20,7 +20,6 @@ namespace M4PL.EF
         public string ServiceCode { get; set; }
         public string ServiceTitle { get; set; }
         public byte[] ServiceDescription { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

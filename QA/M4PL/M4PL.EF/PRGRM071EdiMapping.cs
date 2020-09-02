@@ -15,15 +15,12 @@ namespace M4PL.EF
     public partial class PRGRM071EdiMapping
     {
         public long Id { get; set; }
-        public Nullable<long> PemHeaderID { get; set; }
         public string PemEdiTableName { get; set; }
         public string PemEdiFieldName { get; set; }
         public string PemEdiFieldDataType { get; set; }
         public string PemSysTableName { get; set; }
         public string PemSysFieldName { get; set; }
         public string PemSysFieldDataType { get; set; }
-        public Nullable<int> StatusId { get; set; }
-        public Nullable<int> PemInsertUpdate { get; set; }
         public Nullable<System.DateTime> PemDateStart { get; set; }
         public Nullable<System.DateTime> PemDateEnd { get; set; }
         public string EnteredBy { get; set; }

@@ -15,19 +15,12 @@ namespace M4PL.EF
     public partial class CONTC010Bridge
     {
         public long Id { get; set; }
-        public long ConOrgId { get; set; }
-        public Nullable<long> ContactMSTRID { get; set; }
-        public string ConTableName { get; set; }
         public Nullable<long> ConPrimaryRecordId { get; set; }
         public Nullable<int> ConItemNumber { get; set; }
         public string ConTitle { get; set; }
-        public Nullable<long> ConCodeId { get; set; }
-        public Nullable<int> ConTypeId { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<bool> ConIsDefault { get; set; }
         public byte[] ConDescription { get; set; }
         public byte[] ConInstruction { get; set; }
-        public Nullable<int> ConTableTypeId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

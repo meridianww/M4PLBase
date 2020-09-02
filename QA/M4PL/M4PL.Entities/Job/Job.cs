@@ -490,7 +490,7 @@ namespace M4PL.Entities.Job
 		public DateTime? WindowDelEndTime { get; set; }
 		public DateTime? WindowPckStartTime { get; set; }
 		public DateTime? WindowPckEndTime { get; set; }
-		public int? JobRouteId { get; set; }
+		public string JobRouteId { get; set; }
 		public string JobStop { get; set; }
 		public string JobSignText { get; set; }
 		public string JobSignLatitude { get; set; }

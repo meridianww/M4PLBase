@@ -1,0 +1,74 @@
+﻿@using System.Web.UI.WebControls;
+@model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobAdvanceReportView>
+@{
+    ViewBag.Title = "Import Scrub Driver Details";
+    var uploadCallBackRoute = Model.CallBackRoute;
+    Model.IsPopUp = true;
+    var recordId = Model.Record.Id;
+    string upControlName = "ucDragAndDropImportDriver" + Convert.ToString(Model.Record.Id);
+
+    var isCapacityReport = Model.Record.ReportName == "Capacity Report" ? true : false;
+    var isDriverReport = Model.Record.ReportName == "Driver Scrub Report" ? true : false;
+
+    var ReportText = string.Empty;
+    if (isDriverReport)
+    {
+        ReportText = "Import Scrub Driver Details";
+    }
+    else if (isCapacityReport)
+    {
+        ReportText = "Import Projected Capacity";
+    }
+    else
+    {
+        ReportText = "Import Report";
+    }
+
+}
+@using (Html.BeginForm())
+{
+    Html.DevExpress().RoundPanel(settings =>
+    {
+        settings.Name = "pnlImportScrubDriverDetails";
+        settings.ClientSideEvents.Init = "M4PLWindow.UploadFileDragDrop.Init";
+        settings.ClientSideEvents.EndCallback = "M4PLWindow.UploadFileDragDrop.EndCallback";
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.Enabled = false;
+        settings.HeaderText = ReportText;
+        settings.Collapsed = false;
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
+            ViewContext.Writer.Write("<div id='dragZone'>");
+            ViewContext.Writer.Write("<span class='dragZoneText'>CSV for " + ReportText + "</span>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
+            ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
+            ViewContext.Writer.Write("<span class='dropZoneText'>CSV to " + ReportText + "</span>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+
+            Html.DevExpress().UploadControl(set =>
+            {
+                set.CallbackRouteValues = new { Area = "Job", Controller = "JobAdvanceReport", Action = "ImportScrubDriver", RecordId = Model.Record.Id };
+                set.Name = "ucDragAndDropImportDriver";
+                set.UploadMode = UploadControlUploadMode.Auto;
+                set.AutoStartUpload = true;
+                set.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                set.DialogTriggerID = "externalDropZone";
+                set.AdvancedModeSettings.EnableDragAndDrop = false;
+                set.AdvancedModeSettings.EnableFileList = false;
+                set.AdvancedModeSettings.EnableMultiSelect = false;
+                set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                set.AdvancedModeSettings.DropZoneText = "CSV to " + ReportText;
+                set.ValidationSettings.AllowedFileExtensions = new string[] { ".csv" };
+                set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                set.BrowseButton.Text = "Select an CSV to import...";
+                set.Styles.DropZone.CssClass = "uploadControlDropZone";
+                set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(uploadCallBackRoute) + ");}}";
+                set.ShowProgressPanel = true;
+            }).GetHtml();
+        });
+    }).GetHtml();
+}

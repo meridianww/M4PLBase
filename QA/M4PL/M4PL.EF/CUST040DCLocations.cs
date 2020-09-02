@@ -15,13 +15,10 @@ namespace M4PL.EF
     public partial class CUST040DCLocations
     {
         public long Id { get; set; }
-        public Nullable<long> CdcCustomerID { get; set; }
         public Nullable<int> CdcItemNumber { get; set; }
         public string CdcLocationCode { get; set; }
         public string CdcCustomerCode { get; set; }
         public string CdcLocationTitle { get; set; }
-        public Nullable<long> CdcContactMSTRID { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

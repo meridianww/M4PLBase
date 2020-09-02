@@ -125,10 +125,13 @@
     <Compile Include="JobService\OrderDocumentDetails.cs" />
     <Compile Include="JobService\OrderGatewayDetails.cs" />
     <Compile Include="JobService\SearchOrder.cs" />
+    <Compile Include="Job\AWCDriverScrubReportRawData.cs" />
     <Compile Include="Job\BatchJobDetail.cs" />
+    <Compile Include="Job\CommonDriverScrubReportRawData.cs" />
     <Compile Include="Job\DriverContact.cs" />
     <Compile Include="Job\JobAdditionalInfo.cs" />
     <Compile Include="Job\JobCargoException.cs" />
+    <Compile Include="Job\JobDriverScrubReportData.cs" />
     <Compile Include="Job\JobExceptionDetail.cs" />
     <Compile Include="Job\JobActionCode.cs" />
     <Compile Include="Job\JobAdvanceReport.cs" />
@@ -160,6 +163,8 @@
     <Compile Include="Job\JobXcblInfo.cs" />
     <Compile Include="Job\OrderLocationCoordinate.cs" />
     <Compile Include="Job\OrderStatusModel.cs" />
+    <Compile Include="Job\ProjectedCapacityData.cs" />
+    <Compile Include="Job\ProjectedCapacityRawData.cs" />
     <Compile Include="Job\SelectedJobList.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />

@@ -12,12 +12,15 @@ namespace M4PL.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class MVOC040QuestionOptions
+    public partial class Sys000AuditTrail
     {
-        public long Id { get; set; }
-        public Nullable<long> Question_Id { get; set; }
-        public Nullable<long> Option_choice_id { get; set; }
-    
-        public virtual MVOC030Optionchoices MVOC030Optionchoices { get; set; }
+        public long EntityId { get; set; }
+        public string EntityType { get; set; }
+        public int EntityTypeId { get; set; }
+        public string OrigionalData { get; set; }
+        public string ChangedData { get; set; }
+        public Nullable<long> ChangedByUserId { get; set; }
+        public string ChangedBy { get; set; }
+        public System.DateTime ChangedDate { get; set; }
     }
 }

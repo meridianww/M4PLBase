@@ -17,7 +17,6 @@ namespace M4PL.EF
         public long Id { get; set; }
         public Nullable<int> SysSessionTimeOut { get; set; }
         public Nullable<int> SysWarningTime { get; set; }
-        public Nullable<int> SysMainModuleId { get; set; }
         public string SysDefaultAction { get; set; }
         public string SysStatusesIn { get; set; }
         public string SysGridViewPageSizes { get; set; }

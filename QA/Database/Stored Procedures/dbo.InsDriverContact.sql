@@ -6,7 +6,7 @@
 -- Description:               Ins a Driver Contact To Job
 -- Execution:                 EXEC [dbo].[InsDriverContact]
 -- ============================================= 
-CREATE PROCEDURE [dbo].[InsDriverContact] @userId BIGINT = NULL
+ALTER PROCEDURE [dbo].[InsDriverContact] @userId BIGINT = NULL
 	,@roleId BIGINT = NULL
 	,@entity NVARCHAR(100) = NULL
 	,@orgId BIGINT = 1
@@ -15,12 +15,18 @@ CREATE PROCEDURE [dbo].[InsDriverContact] @userId BIGINT = NULL
 	,@firstName NVARCHAR(50)
 	,@lastName NVARCHAR(50)
 	,@jobId BIGINT
-	,@routeId INT = NULL
+	,@routeId NVARCHAR(20) = NULL
 	,@JobStop NVARCHAR(20) = NULL
 	,@enteredBy NVARCHAR(50)
 	,@dateEntered DateTime2(7)
 AS
 BEGIN TRY
+		DECLARE @conBusinessAddress1 VARCHAR(MAX) = NULL
+		,@conBusinessAddress2 VARCHAR(200) = NULL
+		,@conBusinessCity VARCHAR(MAX) = NULL
+		,@conBusinessStateId INT = NULL
+		,@conBusinessZipPostal VARCHAR(MAX) = NULL
+		,@conBusinessCountryId INT = NULL
 	IF EXISTS (
 			SELECT 1
 			FROM [dbo].[JOBDL000Master]
@@ -34,10 +40,11 @@ BEGIN TRY
 			)
 	BEGIN
 		DECLARE @driverId BIGINT = 0
-		DECLARE @conCodeId INT = 0
-		DECLARE @conTypeId INT = 0
-		DECLARE @dcLocationId INT = 0
-		DECLARE @masterContactId BIGINT = 0
+		,@conCodeId INT = 0
+		,@conTypeId INT = 0
+		,@dcLocationId INT = 0
+		,@masterContactId BIGINT = 0
+		
 
 		SELECT @conCodeId = ID
 		FROM [dbo].[ORGAN010Ref_Roles]
@@ -50,14 +57,21 @@ BEGIN TRY
 		WHERE SysLookupCode = 'ContactType'
 			AND SysOptionName LIKE '%DRIVER%'
 
-		SELECT @dcLocationId = VDCL.ID
+		SELECT TOP 1 @dcLocationId = VDCL.ID
+		,@conBusinessAddress1 = COMPADD.Address1
+		,@conBusinessAddress2 = COMPADD.Address2
+		,@conBusinessCity = COMPADD.City
+		,@conBusinessStateId = COMPADD.StateId
+		,@conBusinessZipPostal = COMPADD.ZipPostal
+		,@conBusinessCountryId = COMPADD.CountryId
 		FROM [JOBDL000Master] JB
 		INNER JOIN PRGRM051VendorLocations PVL ON PVL.PvlProgramID = JB.ProgramID
-		INNER JOIN VEND040DCLocations VDCL ON VDCL.ID = PVL.VendDCLocationId
-		WHERE VDCL.VdcLocationCode = @locationCode
-			AND JB.Id = @jobId
-			AND VDCL.StatusId = 1
-			AND PVL.StatusId = 1
+		INNER JOIN VEND040DCLocations VDCL ON VDCL.ID = PVL.VendDCLocationId 
+		INNER JOIN VEND000Master VEND ON VEND.Id = VDCL.VdcVendorID
+		INNER JOIN COMP000Master COMP ON COMP.CompPrimaryRecordId = VEND.Id AND COMP.CompTableName = 'Vendor'
+		LEFT JOIN COMPADD000Master COMPADD ON COMPADD.AddCompId = COMP.Id
+		INNER JOIN SYSTM000Ref_Options OPT ON OPT.Id = COMPADD.AddTypeId AND SYSOPTIONNAME = 'BUSINESS'
+		WHERE JB.Id = @jobId AND VDCL.VdcLocationCode = @locationCode
 
 		IF (ISNULL(@dcLocationId, 0) <> 0)
 		BEGIN
@@ -113,7 +127,7 @@ BEGIN TRY
 					INNER JOIN VEND040DCLocations VDCL ON COMP.CompPrimaryRecordId = VDCL.VdcVendorID
 						AND VDCL.StatusId = 1
 						AND VDCL.Id = @dcLocationId
-
+					
 					INSERT INTO CONTC000Master (
 						[ConOrgId]
 						,[ConLastName]
@@ -125,6 +139,12 @@ BEGIN TRY
 						,[ConCompanyId]
 						,[ConCompanyName]
 						,[ConJobTitle]
+						,[ConBusinessAddress1]
+						,[ConBusinessAddress2]
+						,[ConBusinessCity]
+						,[ConBusinessStateId]
+						,[ConBusinessZipPostal]
+						,[ConBusinessCountryId]
 						)
 					VALUES (
 						@orgId
@@ -144,6 +164,12 @@ BEGIN TRY
 						,@compId
 						,@compTitle
 						,'Driver'
+						,@conBusinessAddress1
+						,@conBusinessAddress2
+						,@conBusinessCity
+						,@conBusinessStateId
+						,@conBusinessZipPostal
+						,@conBusinessCountryId
 						)
 
 					SET @masterContactId = SCOPE_IDENTITY();

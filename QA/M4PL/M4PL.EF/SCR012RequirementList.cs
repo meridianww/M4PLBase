@@ -20,7 +20,6 @@ namespace M4PL.EF
         public string RequirementCode { get; set; }
         public string RequirementTitle { get; set; }
         public byte[] RequirementDesc { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

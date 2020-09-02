@@ -15,8 +15,6 @@ namespace M4PL.EF
     public partial class PRGRM030ShipStatusReasonCodes
     {
         public long Id { get; set; }
-        public Nullable<long> PscOrgID { get; set; }
-        public Nullable<long> PscProgramID { get; set; }
         public Nullable<int> PscShipItem { get; set; }
         public string PscShipReasonCode { get; set; }
         public Nullable<int> PscShipLength { get; set; }
@@ -31,7 +29,6 @@ namespace M4PL.EF
         public string PscShipUser03Code { get; set; }
         public string PscShipUser04Code { get; set; }
         public string PscShipUser05Code { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

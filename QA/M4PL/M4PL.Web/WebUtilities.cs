@@ -107,6 +107,7 @@ namespace M4PL.Web
             var chooseColumnOperation = commonCommands.GetOperation(OperationTypeEnum.ChooseColumn).SetRoute(route, MvcConstants.ActionChooseColumn);
             chooseColumnOperation.Route.IsPopup = route.IsPopup;
             var actionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
+            var gatewaysContextMenu = commonCommands.GetOperation(OperationTypeEnum.Gateways);
             var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
             var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
             var gridRefresh = commonCommands.GetOperation(OperationTypeEnum.Refresh).SetRoute(route, MvcConstants.ActionDataView);
@@ -279,6 +280,7 @@ namespace M4PL.Web
                     gridViewSetting.IsJobCardEntity = true;
                     //editOperation.Route.IsJobCardEntity = true;
                     gridViewSetting.ContextMenu.Add(editOperation);
+                    gridViewSetting.ContextMenu.Add(actionsContextMenu);
                 }
                 else if (hasRecords
                     && route.Entity != EntitiesAlias.PrgCostLocation
@@ -306,16 +308,24 @@ namespace M4PL.Web
                         if (permission.HasValue && permission.Value > (int)Permission.ReadOnly)
                         {
                             gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                            gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
                         }
                     }
-                    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly) //action context menu should come after new and edit. So, Have added this here
+                    if ((route.Entity == EntitiesAlias.JobGateway || route.Entity == EntitiesAlias.JobCard) && currentPermission > Permission.ReadOnly) //action context menu should come after new and edit. So, Have added this here
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                        if (route.Entity != EntitiesAlias.JobCard)
+                            gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
                     }
                 }
                 else if (!hasRecords && !gridViewSetting.IsJobCardEntity)
                 {
-                    if (route.Entity == EntitiesAlias.Job || (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly))
+                    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly)
+                    {
+                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                        gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                    }
+                    if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard)
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                     }

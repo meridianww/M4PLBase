@@ -15,13 +15,10 @@ namespace M4PL.EF
     public partial class SYSTM000Ref_Report
     {
         public long Id { get; set; }
-        public Nullable<long> OrganizationId { get; set; }
-        public Nullable<int> RprtMainModuleId { get; set; }
         public string RprtName { get; set; }
         public byte[] RprtTemplate { get; set; }
         public string RprtDescription { get; set; }
         public bool RprtIsDefault { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
@@ -30,5 +27,7 @@ namespace M4PL.EF
         public virtual ORGAN000Master ORGAN000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options3 { get; set; }
     }
 }

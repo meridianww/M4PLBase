@@ -118,7 +118,8 @@ namespace M4PL.Business.Finance.PurchaseOrder
             string proFlag = null;
             string dimensionCode = string.Empty;
             string divisionCode = string.Empty;
-            string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
+			Newtonsoft.Json.Linq.JObject jsonObject = null;
+			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
             try
             {
                 NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
@@ -152,8 +153,12 @@ namespace M4PL.Business.Finance.PurchaseOrder
                 request.Method = "POST";
                 using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
-                    navPurchaseOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navPurchaseOrderRequest);
-                    streamWriter.Write(navPurchaseOrderJson);
+                    navPurchaseOrderJson = JsonConvert.SerializeObject(navPurchaseOrderRequest);
+					jsonObject = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(navPurchaseOrderJson);
+					jsonObject.Property("Ship_from_City").Remove();
+					jsonObject.Property("Ship_from_County").Remove();
+					navPurchaseOrderJson = jsonObject.ToString();
+					streamWriter.Write(navPurchaseOrderJson);
                 }
 
                 WebResponse response = request.GetResponse();
@@ -199,7 +204,8 @@ namespace M4PL.Business.Finance.PurchaseOrder
             string divisionCode = string.Empty;
             NavPurchaseOrder navPurchaseOrderResponse = null;
             string proFlag = null;
-            string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumer);
+			Newtonsoft.Json.Linq.JObject jsonObject = null;
+			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumer);
             try
             {
                 NavPurchaseOrder existingSalesOrderData = GetPurchaseOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, poNumer);
@@ -235,8 +241,12 @@ namespace M4PL.Business.Finance.PurchaseOrder
                 request.Headers.Add(HttpRequestHeader.IfMatch, existingSalesOrderData.DataETag);
                 using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
-                    navPurchaseOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navPurchaseOrderRequest);
-                    streamWriter.Write(navPurchaseOrderJson);
+                    navPurchaseOrderJson = JsonConvert.SerializeObject(navPurchaseOrderRequest);
+					jsonObject = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(navPurchaseOrderJson);
+					jsonObject.Property("Ship_from_City").Remove();
+					jsonObject.Property("Ship_from_County").Remove();
+					navPurchaseOrderJson = jsonObject.ToString();
+					streamWriter.Write(navPurchaseOrderJson);
                 }
 
                 WebResponse response = request.GetResponse();

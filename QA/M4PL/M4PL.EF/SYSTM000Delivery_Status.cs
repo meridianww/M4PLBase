@@ -15,13 +15,10 @@ namespace M4PL.EF
     public partial class SYSTM000Delivery_Status
     {
         public long Id { get; set; }
-        public Nullable<long> OrganizationId { get; set; }
         public Nullable<int> ItemNumber { get; set; }
         public string DeliveryStatusCode { get; set; }
         public string DeliveryStatusTitle { get; set; }
-        public Nullable<int> SeverityId { get; set; }
         public byte[] DeliveryStatusDescription { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public System.DateTime DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

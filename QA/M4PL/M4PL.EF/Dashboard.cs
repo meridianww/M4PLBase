@@ -12,22 +12,20 @@ namespace M4PL.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class MVOC030Optionchoices
+    public partial class Dashboard
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public MVOC030Optionchoices()
+        public Dashboard()
         {
-            this.MVOC040QuestionOptions = new HashSet<MVOC040QuestionOptions>();
+            this.DashboardCategoryRelation = new HashSet<DashboardCategoryRelation>();
         }
     
-        public long Id { get; set; }
-        public Nullable<long> QuesId { get; set; }
-        public string LangCode { get; set; }
-        public string OptionText { get; set; }
-        public Nullable<int> OptionTypeRdDdRefTypeId { get; set; }
+        public long DashboardId { get; set; }
+        public System.DateTime CreatedDate { get; set; }
+        public string DashboardName { get; set; }
     
-        public virtual MVOC010Questions MVOC010Questions { get; set; }
+        public virtual DashboardType DashboardType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MVOC040QuestionOptions> MVOC040QuestionOptions { get; set; }
+        public virtual ICollection<DashboardCategoryRelation> DashboardCategoryRelation { get; set; }
     }
 }

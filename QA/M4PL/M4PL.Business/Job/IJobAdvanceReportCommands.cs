@@ -17,6 +17,7 @@
 // Purpose:                                      Set of rules for JobAdvanceReportCommands
 //==============================================================================================================
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
@@ -29,5 +30,7 @@ namespace M4PL.Business.Job
     public interface IJobAdvanceReportCommands : IBaseCommands<JobAdvanceReport>
     {
         IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, long customerID, string entity);
+        StatusModel GenerateScrubDriverDetails(ActiveUser activeUser, JobDriverScrubReportData scriberDriverView);
+        StatusModel GenerateProjectedCapacityDetails(ActiveUser activeUser, ProjectedCapacityData projectedCapacityView);
     }
 }

@@ -17,17 +17,22 @@
 //Purpose:                                      Contains Actions to render view on Jobs's AdvanceReport page
 //====================================================================================================================================================*/
 
+using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.EF;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -37,6 +42,12 @@ namespace M4PL.Web.Areas.Job.Controllers
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
         private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
+
+        private static IJobAdvanceReportCommands _jobAdvanceReportStaticCommands;
+        public static ICommonCommands _commonStaticCommands;
+        public static long _CustomerId = 0;
+        public static string _ReportText = string.Empty;
+
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
         /// Gets the page related information on the cache basis
@@ -372,11 +383,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!string.IsNullOrEmpty(strJobAdvanceReportRequestRoute.FileName))
                 ViewData["ReportName"] = strJobAdvanceReportRequestRoute.FileName;
             SetGridResult(requestRout, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
-            //if (route.OwnerCbPanel == "JobAdvanceReportGridView")
-            //    _gridResult.Records.OrderBy(x => x.Id);
-
             _gridResult.Permission = Permission.ReadOnly;
-
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
@@ -460,6 +467,94 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             route.Filters = null;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+        public override ActionResult FormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _formResult.SessionProvider = SessionProvider;
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
+            }
+
+            _formResult.IsPopUp = true;
+
+            _jobAdvanceReportStaticCommands = _jobAdvanceReportCommands;
+            _commonStaticCommands = _commonCommands;
+            _formResult.Record = new JobAdvanceReportView();
+            _formResult.Record.Id = route.RecordId;
+            _formResult.Record.ParentId = route.ParentRecordId;
+            _formResult.Record.ReportName = route.Location.FirstOrDefault();
+            _CustomerId = route.RecordId;
+            _ReportText = route.Location.FirstOrDefault();
+            return PartialView(_formResult);
+        }
+        [HttpPost]
+        public ActionResult ImportScrubDriver([ModelBinder(typeof(DragAndDropSupportDemoBinder))] IEnumerable<UploadedFile> ucDragAndDropImportDriver, long ParentId = 0)
+        {
+            return null;
+        }
+        public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
+        {
+            public DragAndDropSupportDemoBinder()
+            {
+                UploadControlBinderSettings.FileUploadCompleteHandler = ucDragAndDrop_FileUploadComplete;
+            }
+        }
+        public static void ucDragAndDrop_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
+        {
+            var displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.DriverScrubReport);
+            if (e.UploadedFile != null && e.UploadedFile.IsValid && e.UploadedFile.FileBytes != null)
+            {
+                byte[] uploadedFileData = e.UploadedFile.FileBytes;
+                try
+                {
+                    DateTime startDate, endDate; string filterDescription;
+                    if (_ReportText.Equals("Driver Scrub Report",StringComparison.OrdinalIgnoreCase))
+                    {
+                        using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
+                        {
+                            var awcDriverScrubReport = csvDataTable.GetObjectByAWCDriverScrubReportDatatable();
+                            var commonDriverScrubReport = csvDataTable.GetObjectByCommonDriverScrubReportDatatable();
+                            var result = _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(new JobDriverScrubReportData
+                            {
+                                CustomerId = _CustomerId,
+                                Description = filterDescription,
+                                StartDate = startDate,
+                                EndDate = endDate,
+                                AWCDriverScrubReportRawData = awcDriverScrubReport,
+                                CommonDriverScrubReportRawData = commonDriverScrubReport
+                            });
+                            displayMessage.Description = result.AdditionalDetail;
+                        }
+                    }
+                    if (_ReportText.Equals("Capacity Report", StringComparison.OrdinalIgnoreCase))
+                    {
+                        int year = 0;
+                        using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayProjectedCapacity(uploadedFileData, out year))
+                        {
+                            var projectedCapacityReport = csvDataTable.GetObjectByProjectedCapacityReportDatatable();
+                            var result = _jobAdvanceReportStaticCommands.ImportProjectedCapacityDetails(new ProjectedCapacityData
+                            {
+                                CustomerId = _CustomerId,
+                                Year = year,
+                                ProjectedCapacityRawData = projectedCapacityReport
+                            });
+                            displayMessage.Description = result.AdditionalDetail;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    displayMessage.Description = "Please select a valid CSV file for upload.";
+                }
+            }
+            else
+                displayMessage.Description = "Please select a CSV file for upload.";
+
+            e.CallbackData = JsonConvert.SerializeObject(displayMessage);
         }
     }
 }

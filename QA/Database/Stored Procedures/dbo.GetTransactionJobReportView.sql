@@ -260,6 +260,7 @@ BEGIN TRY
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Cabinets', 'ISNULL(Cargo.Cabinets,0) Cabinets ');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.Parts', 'ISNULL(Cargo.Parts, 0) Parts');
 			SET @sqlCommand = @sqlCommand + ', CAST(1 AS BIT) IsIdentityVisible ';
+			SET @sqlCommand = @sqlCommand + ', CAST(1 AS BIT) IsFilterSortDisable ';
 		END
 		ELSE
 		BEGIN
@@ -372,25 +373,6 @@ BEGIN TRY
 				SET @sqlCommand = @sqlCommand + ' OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
 			END
 		END
-		ELSE
-		BEGIN
-			IF (@orderBy IS NULL)
-			BEGIN
-				IF (
-						(
-							(@isNext = 1)
-							AND (@isEnd = 1)
-							)
-						OR (
-							(@isNext = 0)
-							AND (@isEnd = 0)
-							)
-						)
-				BEGIN
-					SET @sqlCommand = @sqlCommand + ' DESC'
-				END
-			END
-		END
 	END
 	ELSE
 	BEGIN
@@ -403,7 +385,7 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END
-	Print @sqlCommand
+
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

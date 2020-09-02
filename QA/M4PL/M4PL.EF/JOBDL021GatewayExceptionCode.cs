@@ -12,22 +12,24 @@ namespace M4PL.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class MVOC010Questions
+    public partial class JOBDL021GatewayExceptionCode
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public MVOC010Questions()
+        public JOBDL021GatewayExceptionCode()
         {
-            this.MVOC030Optionchoices = new HashSet<MVOC030Optionchoices>();
+            this.JOBDL022GatewayExceptionReason = new HashSet<JOBDL022GatewayExceptionReason>();
         }
     
         public long Id { get; set; }
-        public Nullable<long> ParentId { get; set; }
-        public string LangCode { get; set; }
-        public string QuestionText { get; set; }
-        public Nullable<int> CategoryLikePPPorJob { get; set; }
-        public int Input_type_id { get; set; }
+        public long CustomerId { get; set; }
+        public string JgeReferenceCode { get; set; }
+        public string JgeReasonCode { get; set; }
+        public Nullable<int> ActionType { get; set; }
+        public string CustomerReferenceCode { get; set; }
+        public Nullable<bool> IsCargoRequired { get; set; }
+        public string CargoField { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MVOC030Optionchoices> MVOC030Optionchoices { get; set; }
+        public virtual ICollection<JOBDL022GatewayExceptionReason> JOBDL022GatewayExceptionReason { get; set; }
     }
 }
