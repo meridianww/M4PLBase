@@ -3469,9 +3469,9 @@ namespace M4PL.Web
                     else
                     {
                         if (_gridResult.GridSetting.ContextMenu != null && _gridResult.GridSetting.ContextMenu.Count() > 0
-                            && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Actions"))
+                            && _gridResult.GridSetting.ContextMenu.Any(t => t.SysRefName == "Gateways"))
                         {
-                            var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Actions");
+                            var context = _gridResult.GridSetting.ContextMenu.FirstOrDefault(t => t.SysRefName == "Gateways");
                             if (context != null)
                                 _gridResult.GridSetting.ContextMenu.Remove(context);
                         }
