@@ -1504,9 +1504,10 @@ M4PLCommon.AdvancedReport = (function () {
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         if (reportTypeCtrl != null &&
             ((reportTypeCtrl.GetText() == "Driver Scrub Report")
-                || (reportTypeCtrl.GetText() == "Capacity Report"))) {
+                || (reportTypeCtrl.GetText() == "Capacity Report")
+                || (reportTypeCtrl.GetText() == "Pride Metric Report"))) {
             var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-            if (reportTypeCtrl.GetText() == "Driver Scrub Report") {
+            if (reportTypeCtrl.GetText() == "Driver Scrub Report" || (reportTypeCtrl.GetText() == "Pride Metric Report")) {
                 var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
                 var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
                 var startDate = startDateCtrl.GetValue();
@@ -1520,6 +1521,7 @@ M4PLCommon.AdvancedReport = (function () {
             }
             rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
             rprtVwrRoute.CustomerId = customerCtrl.GetValue();
+
             rprtVwrRoute.IsFormRequest = true;
             rprtVwrRoute.FileName = reportTypeCtrl.GetText();
             $(".isDriverScrubreport").show();
@@ -1551,7 +1553,7 @@ M4PLCommon.AdvancedReport = (function () {
                 endDateCtrl.SetEnabled(true);
                 $(".isVisibleCapacityReport").hide();
             }
-            
+
             if ((reportTypeCtrl.GetText() != "Pride Metric Report")) {
                 $(".isDriverScrubreport").hide();
                 $(".isDriverbtnScrubreport").hide();
