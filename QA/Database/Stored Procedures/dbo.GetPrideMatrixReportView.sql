@@ -53,16 +53,22 @@ BEGIN TRY
 
 	DECLARE @sqlTempTable VARCHAR(max)
 	IF OBJECT_ID('tempdb..##JobTemp') IS NOT NULL DROP TABLE ##JobTemp
-	SET @sqlTempTable = 'CREATE TABLE ##JobTemp (JobId BIGINT, JobSiteCode Nvarchar(150)) INSERT INTO ##JobTemp (JobId, JobSiteCode) Select JobAdvanceReport.Id,JobAdvanceReport.JobSiteCode '
+	SET @sqlTempTable = 'CREATE TABLE ##JobTemp (Id INT IDENTITY(1,1),JobCount INT,JobSiteCode NVARCHAR (50),FivePMDeliveryWindow INT,ApptScheduledReceiving INT,FourHrWindowDelivery INT,Labels INT,Delivered INT,IsIdentityVisible BIT,IsFilterSortDisable BIT)'
+	SET @sqlTempTable =  @sqlTempTable +' INSERT INTO ##JobTemp (JobCount, JobSiteCode, FivePMDeliveryWindow, ApptScheduledReceiving, FourHrWindowDelivery, Labels, Delivered, IsIdentityVisible, IsFilterSortDisable) '
+	SET @sqlTempTable =  @sqlTempTable +' Select Count(JobAdvanceReport.Id) JobCount, JobAdvanceReport.JobSiteCode,SUM(V.FivePMDeliveryWindow) FivePMDeliveryWindow, SUM(V.ApptScheduledReceiving) ApptScheduledReceiving,SUM(V.FourHrWindowDelivery) FourHrWindowDelivery,SUM(ISNULL(Cargo.Labels,0)) Labels,SUM(ISNULL(Cargo.Delivered,0)) Delivered, CAST(0 AS BIT) IsIdentityVisible,CAST(1 AS BIT) IsFilterSortDisable '
 	SET @sqlTempTable = @sqlTempTable + @TablesQuery
-
+	SET @sqlTempTable =  @sqlTempTable +'INNER JOIN dbo.vwJobPrideMatrixReport V ON V.JobId =JobAdvanceReport.Id LEFT JOIN dbo.JobCargoAdvanceReportView Cargo ON Cargo.JobId = JobAdvanceReport.Id'
 	IF (ISNULL(@where, '') <> '')
 	BEGIN
 		SET @sqlTempTable = @sqlTempTable + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
 	END
+
+	SET @sqlTempTable = @sqlTempTable + 'Group BY JobAdvanceReport.JobSiteCode'
+
+	Print @sqlTempTable
 	EXEC (@sqlTempTable)
 
-	SET @TCountQuery = 'SELECT @TotalCount = COUNT(Distinct JobSiteCode) From ##JobTemp'
+	SET @TCountQuery = 'SELECT @TotalCount = COUNT(Id) From ##JobTemp'
 
 	PRINT @TCountQuery
 
@@ -70,27 +76,20 @@ BEGIN TRY
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
 		,@TotalCount OUTPUT;
-	SET @sqlCommand = 'Select Max(Temp.JobId) Id, 
-	Temp.JobSiteCode, 
-	SUM(ISNULL(Cargo.Labels,0)) Labels,
-	SUM(ISNULL(Cargo.Delivered,0)) Delivered, 
-	CAST(0 AS BIT) IsIdentityVisible, 
-	SUM(V.FivePMDeliveryWindow) FivePMDeliveryWindow, 
-	SUM(V.ApptScheduledReceiving) ApptScheduledReceiving,
-	SUM(V.FourHrWindowDelivery) FourHrWindowDelivery,
-	CAST(1 AS BIT) IsFilterSortDisable, 
-	Max(ISNULL(SL.OverallScore, 0)) OverallScore ';
-	SET @sqlCommand += ' From ##JobTemp Temp'
-	SET @sqlCommand += ' INNER JOIN dbo.vwJobPrideMatrixReport V ON V.JobId =Temp.JobId'
-	SET @sqlCommand += ' LEFT JOIN dbo.JobCargoAdvanceReportView Cargo ON Cargo.JobId = Temp.JobId'
-	SET @sqlCommand += ' LEFT JOIN [dbo].[JobSurveyByLocationView] SL ON SL.JobId =Temp.JobId'
-	Print @sqlCommand
-	IF (ISNULL(@where, '') <> '')
-	BEGIN
-		SET @sqlCommand = @sqlCommand + ' Group by Temp.JobSiteCode'
-	END
 
-	SET @sqlCommand = @sqlCommand + ' ORDER BY Temp.JobSiteCode '
+	SET @sqlCommand = 'Select Id, 
+	JobCount,
+	JobSiteCode, 
+	Labels,
+	Delivered, 
+	IsIdentityVisible, 
+	FivePMDeliveryWindow, 
+	ApptScheduledReceiving,
+	FourHrWindowDelivery,
+	IsFilterSortDisable From ##JobTemp ' ;
+	Print @sqlCommand
+
+	SET @sqlCommand = @sqlCommand + ' ORDER BY Id '
 
 	IF (
 			@recordId = 0
@@ -119,28 +118,6 @@ BEGIN TRY
 		,@orgId = @orgId
 		,@userId = @userId
 		,@groupBy = @groupBy
-
-	IF (
-			(
-				ISNULL(@orderType, '') <> ''
-				AND ISNULL(@orderType, '') <> 'ALL'
-				)
-			OR (
-				ISNULL(@DateType, '') <> ''
-				AND ISNULL(@DateType, '') <> 'ALL'
-				)
-			OR (
-				ISNULL(@gatewayTitles, '') <> ''
-				AND ISNULL(@gatewayTitles, '') <> 'ALL'
-				)
-			OR (
-				ISNULL(@scheduled, '') <> ''
-				AND ISNULL(@scheduled, '') <> 'ALL'
-				)
-			)
-	BEGIN
-		DROP TABLE #JOBDLGateways
-	END
 
 	IF OBJECT_ID('tempdb..##JobTemp') IS NOT NULL DROP TABLE ##JobTemp
 END TRY
