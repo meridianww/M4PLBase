@@ -1521,8 +1521,8 @@ M4PLCommon.AdvancedReport = (function () {
             }
             rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
             rprtVwrRoute.CustomerId = customerCtrl.GetValue();
-            if (reportTypeCtrl.GetText() != "Pride Metric Report")
-                rprtVwrRoute.IsFormRequest = true;
+
+            rprtVwrRoute.IsFormRequest = true;
             rprtVwrRoute.FileName = reportTypeCtrl.GetText();
             $(".isDriverScrubreport").show();
             $(".isDriverbtnScrubreport").show();

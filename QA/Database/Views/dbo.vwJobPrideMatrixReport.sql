@@ -1,4 +1,11 @@
-CREATE VIEW dbo.vwJobPrideMatrixReport
+/****** Object:  View [dbo].[vwJobPrideMatrixReport]    Script Date: 9/1/2020 7:21:14 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [dbo].[vwJobPrideMatrixReport]
 AS
 SELECT Job.Id JobId
 	,CASE 
@@ -26,4 +33,7 @@ FROM JobDL000Master Job
 LEFT JOIN (SELECT  JobId,MAX(CgoDateLastScan) MaxDate FROM dbo.JobDL010Cargo GROUP BY JobId) Cargo ON Cargo.JobId = Job.Id
 LEFT JOIN dbo.JOBDL020Gateways Gateway ON Gateway.JobId = Job.Id
 	AND GwyGatewayCode = 'Schedule'
-	AND Gateway.StatusId = 1
+	AND Gateway.StatusId = 194
+GO
+
+
