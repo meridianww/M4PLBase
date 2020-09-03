@@ -25,6 +25,13 @@
     cancelRoute.OwnerCbPanel = "AppCbPanel";
     cancelRoute.EntityName = "JobCard";
     cancelRoute.Url = string.Empty;
+
+    if (Model != null && Model.Records != null && Model.Records.Count() > 0
+        && Model.Records.FirstOrDefault(x => x.DashboardCategoryName == "ScheduledForToday" && x.DashboardSubCategoryName == "OnHand").CardCount > 0)
+    {
+        Model.Records.FirstOrDefault(x => x.DashboardCategoryName == "ScheduledForToday" && x.DashboardSubCategoryName == "OnHand").BackGroundColor = "#FFFF00";
+        Model.Records.FirstOrDefault(x => x.DashboardCategoryName == "ScheduledForToday" && x.DashboardSubCategoryName == "OnHand").FontColor = "#000000";
+    }
 }
 
 @Html.DevExpress().CardView(settings =>
