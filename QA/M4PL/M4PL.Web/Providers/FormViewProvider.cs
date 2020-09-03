@@ -219,7 +219,7 @@ namespace M4PL.Web.Providers
 				TextString = textString,
 				IsRequired = isRequired,
 				ParentId = parentId,
-				IsReadOnly = permission < Permission.EditAll,
+				IsReadOnly = permission < Permission.EditActuals,
 				MaxLengthField = maxLengthField,
 				Filter = isFilterModel
 			};
@@ -241,7 +241,7 @@ namespace M4PL.Web.Providers
 				TextString = textString,
 				IsRequired = colSetting.IsRequired,
 				ParentId = parentId,
-				IsReadOnly = viewResult.Permission < Permission.EditAll,
+				IsReadOnly = viewResult.Permission < Permission.EditActuals,
 				MaxLengthField = maxLengthField,
 				CompanyId = companyId,
 				IsRequiredAll = isRequiredAll,
@@ -268,7 +268,7 @@ namespace M4PL.Web.Providers
 				PageSize = 10,
 				IsRequired = isRequired,
 				TextString = "ColColumnName",
-				IsReadOnly = permission < Permission.EditAll,
+				IsReadOnly = permission < Permission.EditActuals,
 				ParentCondition = parentCondition
 			};
 		}
@@ -287,7 +287,7 @@ namespace M4PL.Web.Providers
 				PageSize = 10,
 				IsRequired = isRequired,
 				TextString = "ColColumnName",
-				IsReadOnly = permission < Permission.EditAll,
+				IsReadOnly = permission < Permission.EditActuals,
 				ParentCondition = parentCondition
 			};
 		}
@@ -319,7 +319,7 @@ namespace M4PL.Web.Providers
 				PageSize = 10,
 				IsRequired = isRequired,
 				TextString = textString,
-				IsReadOnly = permission < Permission.EditAll,
+				IsReadOnly = permission < Permission.EditActuals,
 				ParentId = parentId,
 				HideClearButton = hideClearBtn
 			};
@@ -390,7 +390,7 @@ namespace M4PL.Web.Providers
 				PageSize = 10,
 				TextString = textString,
 				IsRequired = isRequired,
-				IsReadOnly = permission < Permission.EditAll,
+				IsReadOnly = permission < Permission.EditActuals,
 				ParentId = parentId
 			};
 		}

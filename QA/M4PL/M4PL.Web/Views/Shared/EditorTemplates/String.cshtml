@@ -27,7 +27,7 @@
         if (columnSetting != null && columnSetting.ColLookupId > 0)
         {
             var isReadOnly = false;
-            if (!columnSetting.ColIsReadOnly) { columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll; }
+            if (!columnSetting.ColIsReadOnly) { columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditActuals; }
             if ((ViewData[MvcConstants.IsReadOnly] != null)) { isReadOnly = Convert.ToBoolean(ViewData[MvcConstants.IsReadOnly]); }
             var isRecordEdit = (ViewData[MvcConstants.IsRecordEdit] != null) ? Convert.ToBoolean(ViewData[MvcConstants.IsRecordEdit]) : false;
             isReadOnly = !columnSetting.ColIsReadOnly ? isReadOnly : columnSetting.ColIsReadOnly;
@@ -79,7 +79,7 @@
         else if (columnSetting != null)
         {
             var isReadOnly = false;
-            if (!columnSetting.ColIsReadOnly) { columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll; }
+            if (!columnSetting.ColIsReadOnly) { columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditActuals; }
             if ((ViewData[MvcConstants.IsReadOnly] != null)) { isReadOnly = Convert.ToBoolean(ViewData[MvcConstants.IsReadOnly]); }
             isReadOnly = !columnSetting.ColIsReadOnly ? isReadOnly : columnSetting.ColIsReadOnly;
 

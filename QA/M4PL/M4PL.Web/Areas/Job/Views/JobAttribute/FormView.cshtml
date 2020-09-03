@@ -114,7 +114,7 @@
                settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
                settings.AllowFocus = false;
                settings.ControlStyle.CssClass = "form-btn pull-right";
-               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditActuals) : !(Model.Permission < Permission.EditActuals);
                settings.ClientSideEvents.Click = Model.SubmitClick;
                settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
            }).GetHtml()

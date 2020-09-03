@@ -56,7 +56,7 @@
             settings.Text = "Accept";
             settings.AllowFocus = false;
             settings.ControlStyle.CssClass = "form-btn pull-right";
-            settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+            settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditActuals) : !(Model.Permission < Permission.EditActuals);
             settings.ClientSideEvents.Click = "function(s, e){ "
             + string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(Model.CallBackRoute.Controller, "Form"), "_popup",
             Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute), true, null) + "}";
