@@ -34,8 +34,6 @@
       </head>
       <body>
         <div id="MyContent" runat="server" width="100%" class="FullScreen" style="font-family : Calibri;">
-          Hi,
-          <br></br>
           There was a cargo exception(<b>
             <xsl:value-of select="$ExceptionCode" />
           </b>) has been created

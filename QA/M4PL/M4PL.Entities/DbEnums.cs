@@ -693,7 +693,10 @@ namespace M4PL.Entities
 	{
 		Document = 205,
 		POD = 206,
-		Damaged = 207
+		Damaged = 207,
+		Approval = 3285,
+		Image = 3286,
+		Signature = 3307
 	}
 
 	public enum ValidationEnum
