@@ -496,13 +496,26 @@ namespace M4PL.API.Controllers
             return _jobCommands.CancelJobByOrderNumber(orderNumber);
 		}
 
-		/// <summary>
-		/// Reschedule a Existing Order From Meridian System
-		/// </summary>
-		/// <param name="jobRescheduleDetail">jobRescheduleDetail</param>
-		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
-		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
-		[HttpPost]
+        /// <summary>
+        /// Uncancel an existing Order from Meridian System
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+        [HttpPost]
+        [Route("UnCancelOrder"), ResponseType(typeof(StatusModel))]
+        public StatusModel UnCancelOrder(string orderNumber)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.UnCancelJobByOrderNumber(orderNumber);
+        }
+
+        /// <summary>
+        /// Reschedule a Existing Order From Meridian System
+        /// </summary>
+        /// <param name="jobRescheduleDetail">jobRescheduleDetail</param>
+        /// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+        /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+        [HttpPost]
 		[Route("RescheduleOrder"), ResponseType(typeof(StatusModel))]
 		public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber)
 		{

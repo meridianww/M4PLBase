@@ -438,6 +438,7 @@ namespace M4PL.DataAccess
 		public const string GetJobUpdateDecisionMaker = "dbo.GetJobUpdateDecisionMaker";
 		public const string UpdatexCBLRejected = "xcbl.UpdatexCBLRejected";
 		public const string CancelExistingJobAsRequestByCustomer = "dbo.CancelExistingJobAsRequestByCustomer";
+		public const string UnCancelExistingJobAsRequestByCustomer = "dbo.Uncancelpreviouslycancelledjob";
 		public const string InsertJobCargoData = "dbo.InsertJobCargoData";
 		public const string GetJobComments = "dbo.GetJobComments";
 		public const string GetJobGatewayCode = "dbo.GetJobGatewayCode";
