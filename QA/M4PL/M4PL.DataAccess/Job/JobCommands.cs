@@ -207,11 +207,11 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@firstName", driverContact.FirstName),
                 new Parameter("@lastName", driverContact.LastName),
                 new Parameter("@jobId", driverContact.JobId),
-				new Parameter("@routeId", driverContact.JobRouteId),
-				new Parameter("@JobStop", driverContact.JobStop),
-				new Parameter("@enteredBy", activeUser.UserName),
-				new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
-			};
+                new Parameter("@routeId", driverContact.JobRouteId),
+                new Parameter("@JobStop", driverContact.JobStop),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
+            };
 
             var result = SqlSerializer.Default.DeserializeSingleRecord<DriverContact>(StoredProceduresConstant.InsDriverContact, parameters.ToArray(), storedProcedure: true);
             return result ?? new DriverContact();
@@ -286,7 +286,7 @@ namespace M4PL.DataAccess.Job
 
         public static bool CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser activeUser, long jobId, long programId, string gatewayCode, long customerId, out bool isFarEyePushRequired)
         {
-			isFarEyePushRequired = false;
+            isFarEyePushRequired = false;
             try
             {
                 var parameters = new List<Parameter>
@@ -302,7 +302,7 @@ namespace M4PL.DataAccess.Job
                 var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBLForElectrolux, parameters.ToArray(), storedProcedure: true);
                 if (result && string.Equals(gatewayCode, "In Transit", StringComparison.InvariantCultureIgnoreCase))
                 {
-                  isFarEyePushRequired =  XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
+                    isFarEyePushRequired = XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
                 }
 
                 return result;
@@ -445,6 +445,13 @@ namespace M4PL.DataAccess.Job
                 parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
                 updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
+                if (existingJobDetail.StatusId != updatedJobDetails.StatusId && updatedJobDetails.StatusIdName == "Cancel")
+                {
+                    JobGateway jobGateway = JobGatewayCommands.GetGatewayWithParent(activeUser, 0, updatedJobDetails.Id);
+                    jobGateway.StatusId = updatedJobDetails.StatusId;
+                    JobGatewayCommands.PostWithSettings(activeUser, null, jobGateway,
+                    updatedJobDetails.CustomerId, updatedJobDetails.Id);
+                }
                 if (existingJobDetail != null && updatedJobDetails != null)
                 {
                     CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
