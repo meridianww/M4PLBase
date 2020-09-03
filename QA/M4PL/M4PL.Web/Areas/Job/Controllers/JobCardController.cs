@@ -108,8 +108,18 @@ namespace M4PL.Web.Areas.Job.Controllers
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
 
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                if (filterId > 0)
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Empty;
+                    if (SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState != null &&
+                        ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState) != null)
+                        ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression = string.Empty;
+
+                }
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId =
-                    filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
+                        filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
+            }
             else
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -157,11 +167,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = false;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = 30;
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = destinationSiteWhereCondition;
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition += destinationSiteWhereCondition;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
-                if (SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState != null &&
-                    ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState) != null)
-                    ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression = string.Empty;
+                //if (SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState != null &&
+                //    ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState) != null)
+                //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition += 
+                //        ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression;
             }
             var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "CardView", "Job");
             cancelRoute.OwnerCbPanel = "AppCbPanel";
