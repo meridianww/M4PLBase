@@ -94,7 +94,7 @@ namespace M4PL.Entities.Job
 
 		public string OverallRating
 		{
-			get { return OverallScore.HasValue && OverallScore.Value > 0 ? GetPercentageString((double)OverallScore) : string.Empty; }
+			get { return OverallScore.HasValue && OverallScore.Value > 0 && JobCount.HasValue && JobCount.Value > 0 ? DisplayPercentage((int)OverallScore, (int)JobCount) : string.Empty; }
 		}
 		public int? Cabinets { get; set; }
 		public int? Parts { get; set; }

@@ -157,6 +157,9 @@ namespace M4PL.Web
 		public const string ActionDeliveryPodDataView = "DeliveryPodDataView";
 		public const string ActionDocDamagedDataView = "DocDamagedDataView";
 		public const string ActionDocDeliveryPodDataView = "DocDeliveryPodDataView";
+		public const string ActionDocApprovalsDataView = "DocApprovalsDataView";
+		public const string ActionDocImageDataView = "DocImageDataView";
+		public const string ActionDocSignatureDataView = "DocSignatureDataView";
 
 		public const string ActionCopyTo = "CopyTo";
 		public const string ActionCopyFrom = "CopyFrom";
