@@ -18,6 +18,7 @@
 //==========================================================================================================
 
 using System;
+using System.Collections.Generic;
 
 namespace M4PL.Entities.Job
 {
@@ -575,5 +576,7 @@ namespace M4PL.Entities.Job
 		public string InstallStatus { get; set; }
 		public bool IsCancelled { get; set; }
 		public string StatusIdName { get; set; }
+
+		public IList<JobsSiteCode> JobsSiteCodeList { get; set; }
 	}
 }

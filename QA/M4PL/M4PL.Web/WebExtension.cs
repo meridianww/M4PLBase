@@ -128,7 +128,7 @@ namespace M4PL.Web
                     if (formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
                         formResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
                     else
-                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, true).Where(s => s.SysRefId > 0).ToList());
+                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, false).Where(s => s.SysRefId > 0).ToList());
                 }
         }
 
