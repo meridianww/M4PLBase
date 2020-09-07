@@ -386,6 +386,37 @@ namespace M4PL.DataAccess.Job
             return insertedGatewayId;
         }
 
+        public static UnCancelJobResponse UnCancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string salesOrderNumber)
+        {
+            long insertedGatewayId = 0;
+            long jobId = 0;
+            string errorMessage = string.Empty;
+            bool isSuccess=false;
+            UnCancelJobResponse result = new UnCancelJobResponse();
+            try
+            {
+                var parameters = new List<Parameter>
+            {
+                new Parameter("@JobCustomerSalesOrder", salesOrderNumber),
+                new Parameter("@dateEntered", TimeUtility.GetPacificDateTime()),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@userId", activeUser.UserId)
+            };
+
+                result = SqlSerializer.Default.DeserializeSingleRecord<UnCancelJobResponse>(StoredProceduresConstant.UnCancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
+                insertedGatewayId = result.CurrentGatewayId;
+                jobId = result.JobId;
+                errorMessage = result.ErrorMessage;
+                isSuccess = result.IsSuccess;
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Exception is occuring while cancelling a job requested by customer.", "Job Cancellation", Utilities.Logger.LogType.Error);
+            }
+
+            return result;
+        }
+
         public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
         {
             var parameters = new List<Parameter>

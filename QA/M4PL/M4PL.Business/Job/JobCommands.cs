@@ -17,6 +17,7 @@
 // Purpose:                                      Contains commands to call DAL logic for {Namespace:Class name} like M4PL.DAL.Job.JobCommands
 //====================================================================================================================
 
+using M4PL.Business.Event;
 using M4PL.Business.XCBL.HelperClasses;
 using M4PL.Entities;
 using M4PL.Entities.Job;
@@ -416,6 +417,64 @@ namespace M4PL.Business.Job
                 };
             }
         }
+        public StatusModel UnCancelJobByOrderNumber(string orderNumber)
+        {
+            if (string.IsNullOrEmpty(orderNumber))
+            {
+                return new StatusModel()
+                {
+                    Status = "Failure",
+                    StatusCode = (int)HttpStatusCode.PreconditionFailed,
+                    AdditionalDetail = "Order number can not be empty while calling the unCancel job service, please pass a order number."
+                };
+            }
+            try
+            {
+                var result = _commands.UnCancelJobByCustomerSalesOrderNumber(ActiveUser,orderNumber);
+                long jobId = result.JobId;
+                long gatewayId = result.CurrentGatewayId;
+                string errorMessage = result.ErrorMessage;
+                if (gatewayId > 0 && result.IsSuccess)
+                {
+                    bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                    if (isFarEyePushRequired)
+                    {
+                        FarEyeHelper.PushStatusUpdateToFarEye(jobId, ActiveUser);
+                    }
+
+                    var DateEntered=TimeUtility.GetPacificDateTime();
+                    string emailBody = EventBodyHelper.GetJobReactivationMailBody(jobId,DateEntered.ToString("MM/dd/yyyy"),DateEntered.ToString("hh:mm tt"), orderNumber,result.JobOriginDateTimePlanned==null?"NA": result.JobOriginDateTimePlanned.Value.ToString("MM/dd/yyyy hh:mm tt"), result.JobDeliveryDateTimePlanned == null ? "NA" : result.JobDeliveryDateTimePlanned.Value.ToString("MM/dd/yyyy hh:mm tt"));
+                    EventBodyHelper.CreateEventMailNotification(20200903, result.ProgramId, orderNumber, emailBody);
+                    return new StatusModel()
+                    {
+                        Status = "Success",
+                        StatusCode = (int)HttpStatusCode.OK,
+                        AdditionalDetail = "Order number passed in the service has been uncanceled in the Meridian System."
+                    };
+                }
+                else
+                {
+                    return new StatusModel()
+                    {
+                        Status = "Failure",
+                        StatusCode = (int)HttpStatusCode.InternalServerError,
+                        AdditionalDetail = errorMessage
+                    };
+                }
+            }
+            catch (Exception exp)
+            {
+                DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while revoking cancelation of order from API.", "UnCancel  Order", Utilities.Logger.LogType.Error);
+                return new StatusModel()
+                {
+                    Status = "Failure",
+                    StatusCode = (int)HttpStatusCode.InternalServerError,
+                    AdditionalDetail = "There is some error occuring while revoking cancelation of order, please try after sometime."
+                };
+            }
+        }
+
+
         public OrderLocationCoordinate GetOrderLocationCoordinate(string orderNumber)
         {
             if (string.IsNullOrEmpty(orderNumber))

@@ -51,6 +51,33 @@ namespace M4PL.Business.Event
 			}
 		}
 
+		public static void CreateEventMailNotification(int eventId, long parentId, string subjectParams, string body)
+		{
+			var emailData = DataAccess.Event.EventCommands.GetEventEmailDetail(eventId, parentId);
+			if (emailData != null)
+			{
+				EmailDetail emailDetail = new EmailDetail()
+				{
+					FromAddress = emailData.FromMail,
+					Body = string.IsNullOrEmpty(body) ? emailData.Body : body,
+					CCAddress = emailData.CcAddress,
+					EmailPriority = 1,
+					IsBodyHtml = true,
+					Subject = string.Format(emailData.Subject, subjectParams),
+					ToAddress = emailData.ToAddress
+				};
+
+				if (emailDetail != null && !string.IsNullOrEmpty(emailDetail.ToAddress))
+				{
+					DataAccess.Common.EmailCommands.InsertEmailDetail(emailDetail);
+				}
+				else
+				{
+					DataAccess.Logger.ErrorLogger.Log(new Exception(), "To Email address can not be empty to sent event Notification.", "CreateEventMailNotification", Utilities.Logger.LogType.Informational);
+				}
+			}
+		}
+
 		public static string GetCargoExceptionMailBody(ActiveUser activeUser, string exceptionCode, long jobId, string contractNo, DateTime createdDate, string comment, string cgoPartNumCode, string cgoitle, string cgoSerialNumber, string currentGateway)
 		{
 			SetCollection setcollection = new SetCollection();
@@ -72,6 +99,35 @@ namespace M4PL.Business.Event
 			};
 
 			Stream stream = GenerateHtmlFile(setcollection, "JobDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\CargoException.xslt", args);
+			StringBuilder stringBuilder = new StringBuilder();
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				string line = string.Empty;
+				while ((line = reader.ReadLine()) != null)
+				{
+					stringBuilder.Append(line);
+				}
+			}
+
+			return stringBuilder.ToString();
+		}
+
+		public static string GetJobReactivationMailBody(long JobId,string Date, string Time, string ContactNumber,string JobOriginDateTimePlanned, string JobDeliveryDateTimePlanned)
+		{
+			SetCollection setcollection = new SetCollection();
+			Dictionary<string, string> args = new Dictionary<string, string>
+			{
+				{ "JobId", JobId.ToString() },
+				{ "Date", Date },
+				{ "Time", Time},
+				{ "ContactNumber", ContactNumber },
+				{ "JobURL", string.Format("{0}?jobId={1}", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, JobId) },
+				{ "JobOriginDateTimePlanned", JobOriginDateTimePlanned },
+				{ "JobDeliveryDateTimePlanned", JobDeliveryDateTimePlanned },
+
+			};
+
+			Stream stream = GenerateHtmlFile(setcollection, "JobDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobReactivation.xslt", args);
 			StringBuilder stringBuilder = new StringBuilder();
 			using (StreamReader reader = new StreamReader(stream))
 			{
