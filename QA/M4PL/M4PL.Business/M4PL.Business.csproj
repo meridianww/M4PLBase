@@ -344,6 +344,9 @@
     <Content Include="StyleSheets\JobBOL.xslt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="StyleSheets\JobReactivation.xslt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="StyleSheets\JobTracking.xslt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
