@@ -128,7 +128,7 @@ namespace M4PL.Web
                     if (formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
                         formResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
                     else
-                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, true).Where(s => s.SysRefId > 0).ToList());
+                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, false).Where(s => s.SysRefId > 0).ToList());
                 }
         }
 
@@ -669,7 +669,10 @@ namespace M4PL.Web
                 case MvcConstants.ActionDeliveryPodDataView:
                 case MvcConstants.ActionDocDamagedDataView:
                 case MvcConstants.ActionDocDeliveryPodDataView:
-                    pageInfo.Route.RecordId = 0;
+				case MvcConstants.ActionDocApprovalsDataView:
+				case MvcConstants.ActionDocImageDataView:
+				case MvcConstants.ActionDocSignatureDataView:
+					pageInfo.Route.RecordId = 0;
                     break;
             }
 
@@ -1493,7 +1496,38 @@ namespace M4PL.Web
             {
                 allNavMenus[0].Text = "Import Gateway/Action";
             }
-            if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
+
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocumentDataView1AllCbPanel")
+			{
+				allNavMenus[0].Text = "All Job Document";
+			}
+
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocApprovalsDataView2ApprovalsCbPanel")
+			{
+				allNavMenus[0].Text = "Approvals";
+			}
+
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDamagedDataView3DamagedCbPanel")
+			{
+				allNavMenus[0].Text = "Damaged";
+			}
+
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocImageDataView4ImageCbPanel")
+			{
+				allNavMenus[0].Text = "Image";
+			}
+
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDeliveryPodDataView5PODCbPanel")
+			{
+				allNavMenus[0].Text = "Proof Of Delivery";
+			}
+
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocSignatureDataView6SignatureCbPanel")
+			{
+				allNavMenus[0].Text = "Signature";
+			}
+
+			if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
             {
                 allNavMenus[0].Text = (route.ParentRecordId == 3316 || route.Location.FirstOrDefault() == "Driver Scrub Report") ? "Import Scrub Driver Details"
                      : ((route.ParentRecordId == 3318 || route.Location.FirstOrDefault() == "Capacity Report") ? "Import Projected Capacity" : "Import report");

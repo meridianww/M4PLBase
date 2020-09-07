@@ -40,17 +40,14 @@ namespace M4PL.Business.Job
         {
             get { return M4PBusinessContext.ComponentSettings.NavAPIUrl; }
         }
-
         public string NavAPIUserName
         {
             get { return M4PBusinessContext.ComponentSettings.NavAPIUserName; }
         }
-
         public string NavAPIPassword
         {
             get { return M4PBusinessContext.ComponentSettings.NavAPIPassword; }
         }
-
         /// <summary>
         /// Get list of job data
         /// </summary>
@@ -60,37 +57,31 @@ namespace M4PL.Business.Job
         {
             return _commands.GetPagedData(ActiveUser, pagedDataInfo);
         }
-
         /// <summary>
         /// Gets specific job record based on the userid
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-
         public Entities.Job.Job Get(long id)
         {
             return _commands.Get(ActiveUser, id);
         }
-
         /// <summary>
         /// Creates a new job record
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-
         public Entities.Job.Job Post(Entities.Job.Job job)
         {
             long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
             bool isUpdateRequired = customerId == job.CustomerId ? false : true;
             return _commands.Post(ActiveUser, job, isUpdateRequired, isManualUpdate: true);
         }
-
         /// <summary>
         /// Updates an existing job record
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-
         public Entities.Job.Job Put(Entities.Job.Job job)
         {
             ActiveUser activeUser = ActiveUser;
@@ -134,111 +125,90 @@ namespace M4PL.Business.Job
 
             return jobResult;
         }
-
         /// <summary>
         /// Deletes a specific job record based on the userid
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-
         public int Delete(long id)
         {
             return _commands.Delete(ActiveUser, id);
         }
-
         /// <summary>
         /// Deletes a list of job record
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
         }
-
         public JobDestination GetJobDestination(long id, long parentId)
         {
             return _commands.GetJobDestination(ActiveUser, id, parentId);
         }
-
         public Job2ndPoc GetJob2ndPoc(long id, long parentId)
         {
             return _commands.GetJob2ndPoc(ActiveUser, id, parentId);
         }
-
         public JobSeller GetJobSeller(long id, long parentId)
         {
             return _commands.GetJobSeller(ActiveUser, id, parentId);
         }
-
         public JobSeller UpdateJobAttributes(long id, long parentId)
         {
             return _commands.GetJobSeller(ActiveUser, id, parentId);
         }
-
         public JobMapRoute GetJobMapRoute(long id)
         {
             return _commands.GetJobMapRoute(ActiveUser, id);
         }
-
         public JobPod GetJobPod(long id)
         {
             return _commands.GetJobPod(ActiveUser, id);
         }
-
         public JobDestination PutJobDestination(JobDestination jobDestination)
         {
             return _commands.PutJobDestination(ActiveUser, jobDestination);
         }
-
         public Job2ndPoc PutJob2ndPoc(Job2ndPoc job2ndPoc)
         {
             return _commands.PutJob2ndPoc(ActiveUser, job2ndPoc);
         }
-
         public JobSeller PutJobSeller(JobSeller jobSeller)
         {
             return _commands.PutJobSeller(ActiveUser, jobSeller);
         }
-
         public JobMapRoute PutJobMapRoute(JobMapRoute jobMapRoute)
         {
             return _commands.PutJobMapRoute(ActiveUser, jobMapRoute);
         }
-
         public Entities.Job.Job GetJobByProgram(long id, long parentId)
         {
             return _commands.GetJobByProgram(ActiveUser, id, parentId);
         }
-
         public Entities.Job.Job Patch(Entities.Job.Job entity)
         {
             throw new NotImplementedException();
         }
-
         public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false)
         {
             return _commands.GetJobsSiteCodeByProgram(ActiveUser, id, parentId, isNullFIlter);
         }
-
         public bool GetIsJobDataViewPermission(long recordId)
         {
             var permittedProgramEntity = _commands.GetCustomEntityIdByEntityName(ActiveUser, EntitiesAlias.Program, true);
             if (permittedProgramEntity == null) return false;
             return permittedProgramEntity.Any(t => t.EntityId == -1 || t.EntityId == recordId);
         }
-
         public bool UpdateJobAttributes(long jobId)
         {
             return _commands.UpdateJobAttributes(ActiveUser, jobId);
         }
-
         public bool InsertJobComment(JobComment comment)
         {
             return _commands.InsertJobComment(ActiveUser, comment);
         }
-
         public bool InsertJobGateway(long jobId, string gatewayStatusCode)
         {
             bool result = _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode);
@@ -253,12 +223,10 @@ namespace M4PL.Business.Job
 
             return result;
         }
-
         public long CreateJobFromEDI204(long eshHeaderID)
         {
             return _commands.CreateJobFromEDI204(ActiveUser, eshHeaderID);
         }
-
         public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
         {
             bool result = true;
@@ -280,12 +248,10 @@ namespace M4PL.Business.Job
 
             return result;
         }
-
         public List<ChangeHistoryData> GetChangeHistory(long jobId)
         {
             return _commands.GetJobChangeHistory(jobId, ActiveUser);
         }
-
         public bool UpdateJobInvoiceDetail(JobInvoiceData jobInvoiceData)
         {
             bool result = false;
@@ -311,7 +277,6 @@ namespace M4PL.Business.Job
 
             return result;
         }
-
         private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
         {
             int noOfThreads = 10;
@@ -341,22 +306,18 @@ namespace M4PL.Business.Job
 
             return true;
         }
-
         public int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser)
         {
             return _commands.UpdateJobCompleted(custId, programId, jobId, deliveryDate, includeNullableDeliveryDate, ActiveUser);
         }
-
         public List<Entities.Job.Job> GetActiveJobByProgramId(long programId)
         {
             return _commands.GetActiveJobByProgramId(programId);
         }
-
         public bool UpdateJobInvoiceDetail(long jobId, JobInvoiceDetail jobInvoiceDetail)
         {
             return _commands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail, ActiveUser);
         }
-
         public StatusModel CancelJobByOrderNumber(string orderNumber)
         {
             if (string.IsNullOrEmpty(orderNumber))
@@ -558,7 +519,6 @@ namespace M4PL.Business.Job
                 };
             }
         }
-
         public OrderStatusModel GetOrderStatus(string orderNumber)
         {
             if (string.IsNullOrEmpty(orderNumber))
@@ -592,7 +552,6 @@ namespace M4PL.Business.Job
                 };
             }
         }
-
         public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting)
         {
             if (string.IsNullOrEmpty(orderNumber))
@@ -680,9 +639,6 @@ namespace M4PL.Business.Job
                 };
             }
         }
-
-
-
         public StatusModel AddDriver(DriverContact driverContact)
         {
             if (!(driverContact != null
@@ -771,7 +727,6 @@ namespace M4PL.Business.Job
             if (result) { return new StatusModel() { AdditionalDetail = "", Status = "Success", StatusCode = 200 }; }
             else { return new StatusModel() { AdditionalDetail = "There is some issue while updating special instructions, please try after sometime.", Status = "Failure", StatusCode = 500 }; }
         }
-
         private JobGateway RescheduleOrderGateway(Entities.Job.Job jobDetail, JobExceptionInfo jobExceptionInfo, DateTime rescheduleData, JobInstallStatus installStatus, SysSetting sysSetting)
         {
             JobGateway result = null;
@@ -809,7 +764,6 @@ namespace M4PL.Business.Job
 
             return result;
         }
-
         private StatusModel JobRescheduleValidation(long jobId, long customerId, JobRescheduleDetail jobRescheduleDetail, DateTime? scheduledDate, bool isElectroluxOrder, out JobExceptionInfo selectedJobExceptionInfo, out JobInstallStatus selectedJobInstallStatus)
         {
             StatusModel statusModel = null;

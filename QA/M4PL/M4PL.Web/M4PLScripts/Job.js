@@ -359,6 +359,16 @@ M4PLJob.FormView = function () {
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(strRoute) });
         }
     };
+
+    var _onDocTypeChange = function (s, e) {
+        var codeCtrl = ASPxClientControl.GetControlCollection().GetByName("JdrCode_popup");
+        var titleCtrl = ASPxClientControl.GetControlCollection().GetByName("JdrTitle_popup");
+        var setText = s.GetText();
+        if (codeCtrl != null)
+            codeCtrl.SetText(setText);
+        if (titleCtrl != null)
+            titleCtrl.SetText(setText);
+    };
     return {
         OnAddOrEdit: _onAddOrEdit,
         SetJobOriginDestinationCtrlValues: _setJobOriginDestinationCtrlValues,
@@ -372,7 +382,8 @@ M4PLJob.FormView = function () {
         OnGatewayCompleteClick: _onGatewayCompleteClick,
         SetJobOriginDestinationCtrlValuesAnsSetWindowTime: _setJobOriginDestinationCtrlValuesAnsSetWindowTime,
         OpenJobFormViewByID: _openJobFormViewByID,
-        JobHistoryPopUpClick: _jobHistoryPopUpClick
+        JobHistoryPopUpClick: _jobHistoryPopUpClick,
+        OnDocTypeChange: _onDocTypeChange
     }
 }();
 

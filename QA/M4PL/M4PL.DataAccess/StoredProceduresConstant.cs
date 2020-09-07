@@ -367,6 +367,7 @@ namespace M4PL.DataAccess
 
 		/* Get permitted items by userid as per entity */
 		public const string GetCustomEntityIdByEntityName = "dbo.GetCustomEntityIdByEntityName";
+		public const string IsJobPermissionPresentForUser = "dbo.IsJobPermissionPresentForUser";
 
 		#endregion Organization
 
