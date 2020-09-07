@@ -50,6 +50,8 @@ namespace M4PL.Entities.Job
 		public string CargoTitle { get; set; }
 		public string CgoPartCode { get; set; }
 		public decimal JobTotalWeight { get; set; }
+		public int? JobPartsActual { get; set; }
+		public int? JobQtyActual { get; set; }
 		public string JobBOLMaster { get; set; }
 		public int? PackagingCode { get; set; }
 		public int? Labels { get; set; }
