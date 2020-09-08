@@ -11,7 +11,7 @@ GO
 -- Create date:               08/18/2020      
 -- Description:               Get Manifest Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetManifestReportView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetManifestReportView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -44,7 +44,12 @@ BEGIN TRY
 		,@TCountQuery NVARCHAR(MAX)
 		,@TablesQuery NVARCHAR(MAX)
 		,@GatewayTypeId INT = 0
-		,@GatewayActionTypeId INT = 0;
+		,@GatewayActionTypeId INT = 0
+		,@GatewayStatus NVARCHAR(MAX) = NULL
+		IF(@gatewayTitles IS NOT NULL AND @gatewayTitles <> '')
+		BEGIN
+		  SET @GatewayStatus = REPLACE(@gatewayTitles, ' GWY.GwyGatewayCode ', ' JobAdvanceReport.JobGatewayStatus ');
+		END
 	DECLARE @AdvanceFilter NVARCHAR(MAX) = ''
 		,@JobStatusId INT = 0;
 
@@ -311,7 +316,10 @@ BEGIN TRY
 		BEGIN
 			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		END
-
+		IF(ISNULL(@GatewayStatus, '') <> '')
+		BEGIN 
+		   SET @sqlCommand += @GatewayStatus
+		END
 		IF (
 				(@recordId > 0)
 				AND (
