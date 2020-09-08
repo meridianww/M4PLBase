@@ -1285,7 +1285,6 @@ M4PLWindow.FormView = function () {
                             if (ASPxClientControl.GetControlCollection().GetByName("GwyShipApptmtReasonCode" + "_popup") !== null)
                                 ASPxClientControl.GetControlCollection().GetByName("GwyShipApptmtReasonCode" + "_popup").SetValue(response.record.GwyShipApptmtReasonCode);
                         }
-                        _resetCustomBatchView();
                     }
 
                     else if (response.status === false && response.errMessages && (response.errMessages.length > 0)) {
