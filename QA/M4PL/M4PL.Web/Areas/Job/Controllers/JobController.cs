@@ -485,6 +485,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);
         }
 
+        public PartialViewResult Tracking(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            return PartialView(route);
+        }
+
         public ActionResult DeliveryTabView(string strRoute)
         {
             //var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);

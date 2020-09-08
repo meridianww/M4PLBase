@@ -1,0 +1,16 @@
+﻿@model M4PL.Entities.Support.MvcRoute
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "MiniAppCbPanel";
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Tracking, Cargo, Documents, Notes";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.CallbackRouteValues = new { Controller = "Job", Action = "Tracking", Area = "Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
+    settings.SetContent(() =>
+    {
+        Html.RenderAction(MvcConstants.ActionTabViewCallBack, "Job", new { Area = "Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) });
+    });
+}).GetHtml()
