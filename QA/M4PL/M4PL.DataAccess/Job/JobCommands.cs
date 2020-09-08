@@ -1481,7 +1481,6 @@ namespace M4PL.DataAccess.Job
                  new Parameter("@jobOriginState", job.JobOriginState),
                  new Parameter("@jobOriginCountry", job.JobOriginCountry),
                  new Parameter("@jobOriginPostalCode", job.JobOriginPostalCode),
-                 new Parameter("@jobOriginTimeZone", job.JobOriginTimeZone),
                  new Parameter("@jobDeliverySiteName", job.JobDeliverySiteName),
                  new Parameter("@jobDeliverySitePOC", job.JobDeliverySitePOC),
                  new Parameter("@jobDeliverySitePOCPhone", job.JobDeliverySitePOCPhone),
@@ -1494,7 +1493,6 @@ namespace M4PL.DataAccess.Job
                  new Parameter("@jobDeliveryState", job.JobDeliveryState),
                  new Parameter("@jobDeliveryCountry", job.JobDeliveryCountry),
                  new Parameter("@jobDeliveryPostalCode", job.JobDeliveryPostalCode),
-                 new Parameter("@jobDeliveryTimeZone", job.JobDeliveryTimeZone),
                  new Parameter("@jobDeliverySitePOC2", job.JobDeliverySitePOC2),
                  new Parameter("@jobDeliverySitePOCPhone2", job.JobDeliverySitePOCPhone2),
                  new Parameter("@jobDeliverySitePOCEmail2", job.JobDeliverySitePOCEmail2),
@@ -1538,7 +1536,10 @@ namespace M4PL.DataAccess.Job
                  new Parameter("@jobLongitude", job.JobLongitude),
                  new Parameter("@JobMileage", job.JobMileage),
                  new Parameter("@IsSellerTabEdited", job.IsSellerTabEdited),
-                 new Parameter("@IsPODTabEdited", job.IsPODTabEdited)
+                 new Parameter("@IsPODTabEdited", job.IsPODTabEdited),
+				 new Parameter("@jobSignText", job.JobSignText),
+				 new Parameter("@jobSignLatitude", job.JobSignLatitude),
+				 new Parameter("@jobSignLongitude", job.JobSignLongitude)
 			};
 
 			return parameters;

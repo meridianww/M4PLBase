@@ -115,6 +115,8 @@ BEGIN
 		,@OldOriginUTCValue INT
 		,@OldIsOriginDayLightSaving BIT
 
+  IF(ISNULL(@JobIsDirtyDestination, 1) = 1)
+  BEGIN
 	SET @OldjobDeliveryTimeZone = @jobDeliveryTimeZone
 	SET @OldjobOriginTimeZone = @jobOriginTimeZone
 
@@ -311,7 +313,7 @@ BEGIN
 				ELSE @JobOriginDateTimeBaseline
 				END
 	END
-
+END
 	UPDATE [dbo].[JOBDL000Master]
 	SET [JobMITJobID] = CASE 
 			WHEN (@isFormView = 1)
@@ -405,7 +407,7 @@ BEGIN
 			ELSE ISNULL(@jobDeliveryResponsibleContactID, JobDeliveryResponsibleContactID)
 			END
 		,[JobDeliveryTimeZone] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND ISNULL(@JobIsDirtyDestination, 0) = 1)
 				THEN CASE 
 						WHEN ISNULL(@jobDeliveryTimeZone, '') <> ''
 							AND ISNULL(@jobDeliveryPostalCode, '') <> ''
@@ -442,7 +444,7 @@ BEGIN
 			ELSE ISNULL(@jobOriginResponsibleContactID, JobOriginResponsibleContactID)
 			END
 		,[JobOriginTimeZone] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND ISNULL(@JobIsDirtyDestination, 0) = 1)
 				THEN CASE 
 						WHEN ISNULL(@jobOriginTimeZone, '') <> ''
 							AND ISNULL(@jobOriginPostalCode, '') <> ''
