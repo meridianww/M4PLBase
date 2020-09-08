@@ -90,6 +90,9 @@ CREATE PROCEDURE [dbo].[UpdateJobLocationInformation] (
 	,@jobSignText NVARCHAR(75) = NULL
 	,@jobSignLatitude NVARCHAR(50) = NULL
 	,@jobSignLongitude NVARCHAR(50) = NULL
+	,@isDayLightSavingEnable BIT = 0
+	,@isManualUpdate BIT = 1
+	,@IsRelatedAttributeUpdate BIT = 1
 	)
 AS
 BEGIN
