@@ -494,7 +494,7 @@ namespace M4PL.DataAccess.Job
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
             bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, long customerId = 0, bool isManualUpdate = false)
         {
-            Entities.Job.Job updatedJobDetails = null;
+            Entities.Job.Job updatedJobDetails = job;
 			List<Task> jobUpdateTasks = new List<Task>();
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
             bool isExistsRecord = true;
