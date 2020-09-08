@@ -201,6 +201,7 @@ namespace M4PL.Business.XCBL
 						}
 						else if (jobDetails?.Id > 0 && !isJobCancelled)
 						{
+							jobDetails.JobIsDirtyDestination = true;
 							processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
 							if (processingJobDetail?.Id > 0)
 							{
@@ -950,6 +951,7 @@ namespace M4PL.Business.XCBL
 				// Update the Job Data If Any change is there.
 				if (isChanged)
 				{
+					existingJobData.JobIsDirtyDestination = true;
 					_jobCommands.Put(ActiveUser, existingJobData, isLatLongUpdatedFromXCBL);
 				}
 			}

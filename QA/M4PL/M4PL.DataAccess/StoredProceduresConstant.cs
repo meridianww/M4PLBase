@@ -450,6 +450,8 @@ namespace M4PL.DataAccess
 		public const string InsertJob = "dbo.InsJob";
 		public const string UpdateJob = "dbo.UpdJob";
 		public const string DeleteJob = "dbo.DeleteJob";
+		public const string UpdateJobHeaderInformation = "dbo.UpdateJobHeaderInformation";
+		public const string UpdateJobLocationInformation = "dbo.UpdateJobLocationInformation";
 
 		/* Job Destination */
 		public const string GetJobDestination = "dbo.GetJobDestination";
