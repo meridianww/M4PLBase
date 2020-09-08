@@ -10,4 +10,6 @@ INCLUDE ([EdtCode],[EdtTitle],[StatusId],[EdtData],[EdtTypeId],[TransactionDate]
 CREATE NONCLUSTERED INDEX IX_JOBDL061BillableSheet_JobId_StatusId
 ON [dbo].[JOBDL061BillableSheet] ([JobID],[StatusId])
 
+CREATE NONCLUSTERED INDEX IX_JOBDL062CostSheet_JobId_StatusId
+ON [dbo].[JOBDL062CostSheet] ([JobID],[StatusId])
 
