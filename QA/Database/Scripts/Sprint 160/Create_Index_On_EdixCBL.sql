@@ -7,4 +7,7 @@ CREATE NONCLUSTERED INDEX IX_JobId_EdtCode_EdtTitle_StatusId_EdtDate_EdtTypeId_T
 ON [dbo].[JOBDL070ElectronicDataTransactions] ([JobId])
 INCLUDE ([EdtCode],[EdtTitle],[StatusId],[EdtData],[EdtTypeId],[TransactionDate])
 
+CREATE NONCLUSTERED INDEX IX_JOBDL061BillableSheet_JobId_StatusId
+ON [dbo].[JOBDL061BillableSheet] ([JobID],[StatusId])
+
 
