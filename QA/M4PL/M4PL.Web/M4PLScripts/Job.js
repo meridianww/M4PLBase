@@ -57,8 +57,9 @@ M4PLJob.FormView = function () {
                         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
                             if (!isFromConfirmSave) {
                                 window.setTimeout(function () {
-                                    if (response.tabRoute != null) {
-                                        ASPxClientControl.GetControlCollection().GetByName("pageControl").PerformCallback({ strRoute: response.tabRoute });
+                                    var pageControlCtrl = ASPxClientControl.GetControlCollection().GetByName("pageControl");
+                                    if (response.tabRoute != null && pageControlCtrl != undefined && pageControlCtrl != null) {
+                                        pageControlCtrl.PerformCallback({ strRoute: response.tabRoute });
                                     }
                                     if (response.refreshContent === true || response.route.Entity !== "Job") {
                                         ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route) });

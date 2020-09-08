@@ -334,24 +334,7 @@ else
        }).GetHtml()
         </div>
 
-        @Html.DevExpress().RoundPanel(settings =>
-   {
-       settings.Name = "pnlDestinationTabs";
-       settings.Width = Unit.Percentage(100);
-       settings.AllowCollapsingByHeaderClick = true;
-       settings.ShowCollapseButton = true;
-       settings.HeaderText = "Destination";
-       settings.Collapsed = true;
-       settings.ControlStyle.CssClass = "form-layout";
-       settings.SetContent(() =>
-       {
-           ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
-           Html.RenderAction("DeliveryTabView", Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) });
-
-           ViewContext.Writer.Write("</div>");
-
-       });
-   }).GetHtml()
+        @Html.Partial("Destination", tabRoute)
 
         @Html.DevExpress().RoundPanel(settings =>
     {

@@ -578,5 +578,6 @@ namespace M4PL.Entities.Job
 		public string StatusIdName { get; set; }
 
 		public IList<JobsSiteCode> JobsSiteCodeList { get; set; }
-	}
+        public bool JobIsDirtyDestination { get; set; }
+    }
 }

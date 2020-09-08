@@ -71,5 +71,6 @@ namespace M4PL.Entities.Job
 		public string JobPreferredMethodName { get; set; }
 
 		public bool IsJobVocSurvey { get; set; }
-	}
+        public bool JobIsDirtyDestination { get; set; }
+    }
 }
