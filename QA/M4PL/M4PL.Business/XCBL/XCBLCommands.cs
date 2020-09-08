@@ -879,8 +879,24 @@ namespace M4PL.Business.XCBL
                 _jobCommands.Put(ActiveUser, existingJobData, isLatLongUpdatedFromXCBL);
             }
 
+            InsertxCBLDetailsInTableForAWC(existingJobData.Id, request);
+            
             return request;
         }
+
+        private void InsertxCBLDetailsInTableForAWC(long jobId,XCBLToM4PLShippingScheduleRequest request)
+        {
+            _jobEDIxCBLCommand.Post(ActiveUser, new JobEDIXcbl()
+            {
+                JobId = jobId,
+                EdtCode = "ASN",
+                EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
+                EdtData = Newtonsoft.Json.JsonConvert.SerializeObject(request),
+                TransactionDate = Utilities.TimeUtility.GetPacificDateTime(),
+                EdtTitle = "ASN"
+            });
+        }
+
         private void InsertxCBLDetailsInTable(long jobId, ElectroluxOrderDetails orderDetails)
         {
             string orderXml = string.Empty;
