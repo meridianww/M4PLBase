@@ -1253,7 +1253,7 @@ M4PLWindow.FormView = function () {
                             RecordSubPopupControl.Hide();
                         else
                             RecordPopupControl.Hide();
-                        
+
                         DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                         if (ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel)) {
                             var grid = ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel);
@@ -1888,10 +1888,19 @@ M4PLWindow.ChooseColumns = function () {
                                 actionToAssign = "DocumentDataView";
                                 break;
                             case 1:
-                                actionToAssign = "DocDeliveryPodDataView";
+                                actionToAssign = "DocApprovalsDataView";
                                 break;
                             case 2:
                                 actionToAssign = "DocDamagedDataView";
+                                break;
+                            case 3:
+                                actionToAssign = "DocImageDataView";
+                                break;
+                            case 4:
+                                actionToAssign = "DocDeliveryPodDataView";
+                                break;
+                            case 5:
+                                actionToAssign = "DocSignatureDataView";
                                 break;
                         }
                     }
@@ -2004,7 +2013,7 @@ M4PLWindow.UploadFileDragDrop = function () {
             }
         }
     }
-    
+
 
     return {
         Init: _init,

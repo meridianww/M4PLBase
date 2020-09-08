@@ -50,6 +50,8 @@ namespace M4PL.Entities.Job
 		public string CargoTitle { get; set; }
 		public string CgoPartCode { get; set; }
 		public decimal JobTotalWeight { get; set; }
+		public int? JobPartsActual { get; set; }
+		public int? JobQtyActual { get; set; }
 		public string JobBOLMaster { get; set; }
 		public int? PackagingCode { get; set; }
 		public int? Labels { get; set; }
@@ -94,7 +96,7 @@ namespace M4PL.Entities.Job
 
 		public string OverallRating
 		{
-			get { return OverallScore.HasValue && OverallScore.Value > 0 ? GetPercentageString((double)OverallScore) : string.Empty; }
+			get { return OverallScore.HasValue && OverallScore.Value > 0 && JobCount.HasValue && JobCount.Value > 0 ? DisplayPercentage((int)OverallScore, (int)JobCount) : string.Empty; }
 		}
 		public int? Cabinets { get; set; }
 		public int? Parts { get; set; }

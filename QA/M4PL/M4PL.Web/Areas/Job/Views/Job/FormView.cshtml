@@ -17,7 +17,7 @@
     var IsJobDocReferenceTypeActive = false;
 
     ViewBag.Title = Model.PageName;
-    if (Model.SessionProvider.ActiveUser.IsSysAdmin)
+    if (Model.SessionProvider.ActiveUser.IsSysAdmin || Model.Permission == Permission.EditActuals)
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOrderedDate").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobShipmentDate").ColIsReadOnly = false;
@@ -44,7 +44,7 @@
     if (Session["tabName"] != null)
     {
         var jobDocReferenceType = (JobDocReferenceType)Enum.Parse(typeof(JobDocReferenceType), (string)Session["tabName"], true);
-        if (jobDocReferenceType == JobDocReferenceType.Document || jobDocReferenceType == JobDocReferenceType.POD || jobDocReferenceType == JobDocReferenceType.Damaged)
+        if (jobDocReferenceType == JobDocReferenceType.Document || jobDocReferenceType == JobDocReferenceType.POD || jobDocReferenceType == JobDocReferenceType.Damaged || jobDocReferenceType == JobDocReferenceType.Approval || jobDocReferenceType == JobDocReferenceType.Image || jobDocReferenceType == JobDocReferenceType.Signature)
         {
             IsJobDocReferenceTypeActive = true;
             tabRoute.TabIndex = 2;
@@ -78,8 +78,7 @@
 
 }
 
-@if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity)
-                                                                                                                && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
+@if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity) && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
 {
     <div class='col-lg-12 col-md-12 col-sm-12 form-group' style='padding-bottom: 0px;height:45px;background-color:#808080;color:#ffffff;line-height:45px;font-weight:bold;font-size:18px;'>
         <div class='col-lg-6 col-md-10 col-sm-6 form-group'>
@@ -336,23 +335,23 @@ else
         </div>
 
         @Html.DevExpress().RoundPanel(settings =>
-           {
-               settings.Name = "pnlDestinationTabs";
-               settings.Width = Unit.Percentage(100);
-               settings.AllowCollapsingByHeaderClick = true;
-               settings.ShowCollapseButton = true;
-               settings.HeaderText = "Destination";
-               settings.Collapsed = true;
-               settings.ControlStyle.CssClass = "form-layout";
-               settings.SetContent(() =>
-               {
-                   ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
-                   Html.RenderAction("DeliveryTabView", Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) });
+   {
+       settings.Name = "pnlDestinationTabs";
+       settings.Width = Unit.Percentage(100);
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.HeaderText = "Destination";
+       settings.Collapsed = true;
+       settings.ControlStyle.CssClass = "form-layout";
+       settings.SetContent(() =>
+       {
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
+           Html.RenderAction("DeliveryTabView", Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) });
 
-                   ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("</div>");
 
-               });
-           }).GetHtml()
+       });
+   }).GetHtml()
 
         @Html.DevExpress().RoundPanel(settings =>
     {
@@ -540,7 +539,8 @@ else
         });
     }).GetHtml()
 
-        @Html.Action(MvcConstants.ActionTabViewCallBack, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) })
+        @Html.Partial("Tracking", tabRoute)
+        @*@Html.Action(MvcConstants.ActionTabViewCallBack, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) })*@
 
         <div class="col-sm-12 col-md-12 col-lg-12  no-padding">
             @Html.DevExpress().RoundPanel(settings =>
@@ -579,7 +579,7 @@ else
                    settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
                    settings.AllowFocus = false;
                    settings.ControlStyle.CssClass = "form-btn pull-right";
-                   settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+                   settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditActuals) : !(Model.Permission < Permission.EditActuals);
                    settings.ClientSideEvents.Click = Model.SubmitClick;
                    settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
                }).GetHtml()

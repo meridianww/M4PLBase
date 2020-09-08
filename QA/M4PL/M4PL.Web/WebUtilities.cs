@@ -485,14 +485,20 @@ namespace M4PL.Web
                         gridName = string.Format("DocDeliveryPod_{0}", gridName);
                     else if (route.Action == MvcConstants.ActionDocDamagedDataView)
                         gridName = string.Format("DocDamagedDataView_{0}", gridName);
-                    return gridName;
+					else if (route.Action == MvcConstants.ActionDocApprovalsDataView)
+						gridName = string.Format("DocApprovalsDataView_{0}", gridName);
+					else if (route.Action == MvcConstants.ActionDocImageDataView)
+						gridName = string.Format("DocImageDataView_{0}", gridName);
+					else if (route.Action == MvcConstants.ActionDocSignatureDataView)
+						gridName = string.Format("DocSignatureDataView_{0}", gridName);
+					return gridName;
 
                 default:
                     return gridName;
             }
         }
 
-        public static void SetupOperationDisplayMessage(Operation operation, MvcRoute defaultRoute)
+		public static void SetupOperationDisplayMessage(Operation operation, MvcRoute defaultRoute)
         {
             var actionControllerData = new MvcRoute(defaultRoute);
             MessageOperationTypeEnum msgOpTypeEnum;

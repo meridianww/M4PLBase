@@ -28,9 +28,7 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobCardController : BaseController<JobCardView>
     {
         protected CardViewResult<JobCardViewView> _reportResult = new CardViewResult<JobCardViewView>();
-
         private readonly IJobCardCommands _jobCardCommands;
-
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
         /// Gets the page related information on the cache basis
@@ -42,7 +40,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             _jobCardCommands = JobCardCommands;
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
         }
-
         public ActionResult CardView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -82,7 +79,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["Destinations"] = null;
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
-
         public PartialViewResult JobCardTileByCustomer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -101,7 +97,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
         }
-
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -113,8 +108,18 @@ namespace M4PL.Web.Areas.Job.Controllers
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
 
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                if (filterId > 0)
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Empty;
+                    if (SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState != null &&
+                        ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState) != null)
+                        ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression = string.Empty;
+
+                }
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId =
-                    filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
+                        filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
+            }
             else
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -162,11 +167,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = false;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = 30;
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = destinationSiteWhereCondition;
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition += destinationSiteWhereCondition;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
-                if (SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState != null &&
-                    ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState) != null)
-                    ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression = string.Empty;
+                //if (SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState != null &&
+                //    ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState) != null)
+                //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition += 
+                //        ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression;
             }
             var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "CardView", "Job");
             cancelRoute.OwnerCbPanel = "AppCbPanel";
@@ -184,11 +190,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             base.DataView(JsonConvert.SerializeObject(route));
             //To Add Actions Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
-            _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             _gridResult.GridHeading = jobCardRequest != null ? jobCardRequest.CardType + " " + jobCardRequest.CardName : _gridResult.GridSetting.GridName;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-
         public PartialViewResult DestinationByProgramCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -227,7 +231,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
         #region Filtering & Sorting
-
         public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
         {
             long filterId = 0;
@@ -251,10 +254,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
 
             route.Filters = null;
-            _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             long filterId = 0;
@@ -276,14 +277,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Actions Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
 
-            _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-
         #endregion Filtering & Sorting
-
         #region Paging
-
         public override PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
         {
             _gridResult.Permission = Permission.EditAll;
@@ -302,12 +299,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Actions Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
 
-            _gridResult.GridSetting.CallBackRoute.IsPBSReport = false;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-
         #endregion Paging
-
         public override ActionResult RibbonMenu(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -379,5 +373,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
             }
         }
+        #region secret santa
+        public ActionResult JobCardGrid(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            ViewBag.FilterId = filterId;
+            return PartialView("JobCardGrid", route);
+        }
+        #endregion
     }
 }

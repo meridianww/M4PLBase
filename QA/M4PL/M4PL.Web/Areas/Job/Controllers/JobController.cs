@@ -130,22 +130,22 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             #region next/previous
 
-            CommonIds maxMinFormData = null;
-            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-            if (maxMinFormData != null)
-            {
-                _formResult.MaxID = maxMinFormData.MaxID;
-                _formResult.MinID = maxMinFormData.MinID;
-            }
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-            {
-                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-                if (maxMinFormData != null)
-                {
-                    SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
-                    SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
-                }
-            }
+            //CommonIds maxMinFormData = null;
+            //maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            //if (maxMinFormData != null)
+            //{
+            //    _formResult.MaxID = maxMinFormData.MaxID;
+            //    _formResult.MinID = maxMinFormData.MinID;
+            //}
+            //if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            //{
+            //    SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            //    if (maxMinFormData != null)
+            //    {
+            //        SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
+            //        SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
+            //    }
+            //}
 
             #endregion next/previous
 
@@ -185,12 +185,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (_formResult.Record?.ProgramID != null && route.ParentRecordId == 0)
                 route.ParentRecordId = route.ParentRecordId == 0 ? Convert.ToInt64(_formResult.Record.ProgramID) : route.ParentRecordId;
-            bool isNullFIlter = false;
-            if (route.Filters != null)
-                isNullFIlter = true;
-
             Session["ParentId"] = _formResult.Record?.ProgramID ?? 0;
-            ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, _formResult.Record?.ProgramID ?? route.ParentRecordId, isNullFIlter);
+            ViewData["jobSiteCode"] = _formResult.Record?.JobsSiteCodeList;
 
             if (Session["SpecialJobId"] != null)
             {
@@ -487,6 +483,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);
+        }
+
+        public PartialViewResult Tracking(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            return PartialView(route);
         }
 
         public ActionResult DeliveryTabView(string strRoute)

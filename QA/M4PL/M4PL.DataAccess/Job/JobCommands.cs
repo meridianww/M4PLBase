@@ -32,6 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -92,23 +93,41 @@ namespace M4PL.DataAccess.Job
             List<Task> tasks = new List<Task>();
             tasks.Add(Task.Factory.StartNew(() =>
             {
-                var permittedProgramEntity = GetCustomEntityIdByEntityName(activeUser, EntitiesAlias.Job, false);
-                jobIsHavingPermission = permittedProgramEntity != null && permittedProgramEntity.Any(t => t.EntityId == -1 || t.EntityId == id);
+				Stopwatch stopwatch = new Stopwatch();
+				stopwatch.Start();
+				var parameters = new List<Parameter>
+				{
+					   new Parameter("@userId", activeUser.UserId),
+					   new Parameter("@orgId", activeUser.OrganizationId),
+					   new Parameter("@jobId", id)
+				 };
+
+				jobIsHavingPermission = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.IsJobPermissionPresentForUser, parameters.ToArray(), false, true);
+				stopwatch.Stop();
+				Console.WriteLine(string.Format("Time taken by the permission call is: {0}", stopwatch.Elapsed));
             }));
 
             tasks.Add(Task.Factory.StartNew(() =>
             {
                 if (id > 0)
                 {
-                    jobAdditionalInfo = SqlSerializer.Default.DeserializeSingleRecord<JobAdditionalInfo>(StoredProceduresConstant.GetJobAdditionalInfo, new Parameter("@id", id), storedProcedure: true);
-                }
+					Stopwatch stopwatch = new Stopwatch();
+					stopwatch.Start();
+					jobAdditionalInfo = SqlSerializer.Default.DeserializeSingleRecord<JobAdditionalInfo>(StoredProceduresConstant.GetJobAdditionalInfo, new Parameter("@id", id), storedProcedure: true);
+					stopwatch.Stop();
+					Console.WriteLine(string.Format("Time taken by the GetJobAdditionalInfo call is: {0}", stopwatch.Elapsed));
+				}
             }));
 
             tasks.Add(Task.Factory.StartNew(() =>
             {
                 var parameters = activeUser.GetRecordDefaultParams(id, false);
-                result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
-            }));
+				Stopwatch stopwatch = new Stopwatch();
+				stopwatch.Start();
+				result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+				stopwatch.Stop();
+				Console.WriteLine(string.Format("Time taken by the GetJob call is: {0}", stopwatch.Elapsed));
+			}));
 
             if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
             if (jobAdditionalInfo != null && result != null)
@@ -137,32 +156,57 @@ namespace M4PL.DataAccess.Job
             bool jobIsHavingPermission = false;
             Entities.Job.Job result = null;
             Entities.Job.JobAdditionalInfo jobAdditionalInfo = null;
-            List<Task> tasks = new List<Task>();
+			IList<JobsSiteCode> jobsSiteCodeListResult = null;
+			List<Task> tasks = new List<Task>();
             tasks.Add(Task.Factory.StartNew(() =>
             {
-                var permittedProgramEntity = GetCustomEntityIdByEntityName(activeUser, EntitiesAlias.Job, false);
-                jobIsHavingPermission = permittedProgramEntity != null && permittedProgramEntity.Any(t => t.EntityId == -1 || t.EntityId == id);
-            }));
+				Stopwatch stopwatch = new Stopwatch();
+				stopwatch.Start();
+				var parameters = new List<Parameter>
+				{
+					   new Parameter("@userId", activeUser.UserId),
+					   new Parameter("@orgId", activeUser.OrganizationId),
+					   new Parameter("@jobId", id)
+				 };
+
+				jobIsHavingPermission = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.IsJobPermissionPresentForUser, parameters.ToArray(), false, true);
+				stopwatch.Stop();
+				Logger.ErrorLogger.Log(new Exception(), string.Format("Time taken by the permission call is: {0}", stopwatch.Elapsed.Milliseconds), "JobFormView", Utilities.Logger.LogType.Informational);
+			}));
 
             tasks.Add(Task.Factory.StartNew(() =>
             {
                 if (id > 0)
                 {
-                    jobAdditionalInfo = SqlSerializer.Default.DeserializeSingleRecord<JobAdditionalInfo>(StoredProceduresConstant.GetJobAdditionalInfo, new Parameter("@id", id), storedProcedure: true);
-                }
+					Stopwatch stopwatch = new Stopwatch();
+					stopwatch.Start();
+					jobAdditionalInfo = SqlSerializer.Default.DeserializeSingleRecord<JobAdditionalInfo>(StoredProceduresConstant.GetJobAdditionalInfo, new Parameter("@id", id), storedProcedure: true);
+					stopwatch.Stop();
+					Logger.ErrorLogger.Log(new Exception(), string.Format("Time taken by the GetJobAdditionalInfo is: {0}", stopwatch.Elapsed.Milliseconds), "JobFormView", Utilities.Logger.LogType.Informational);
+				}
             }));
 
             tasks.Add(Task.Factory.StartNew(() =>
             {
                 var parameters = activeUser.GetRecordDefaultParams(id);
                 parameters.Add(new Parameter("@parentId", parentId));
-                result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
-            }));
+				Stopwatch stopwatch = new Stopwatch();
+				stopwatch.Start();
+				result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+				stopwatch.Stop();
+				Logger.ErrorLogger.Log(new Exception(), string.Format("Time taken by the GetJob is: {0}", stopwatch.Elapsed.Milliseconds), "JobFormView", Utilities.Logger.LogType.Informational);
+			}));
+
+			tasks.Add(Task.Factory.StartNew(() => {
+
+				jobsSiteCodeListResult =  GetJobsSiteCodeByProgram(activeUser, id, parentId, true);
+			}));
 
             if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
             if (jobAdditionalInfo != null && result != null)
             {
-                result.CustomerERPId = jobAdditionalInfo.CustomerERPId;
+				result.JobsSiteCodeList = jobsSiteCodeListResult;
+				result.CustomerERPId = jobAdditionalInfo.CustomerERPId;
                 result.VendorERPId = jobAdditionalInfo.VendorERPId;
                 result.JobSONumber = jobAdditionalInfo.JobSONumber;
                 result.JobPONumber = jobAdditionalInfo.JobPONumber;
@@ -207,11 +251,11 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@firstName", driverContact.FirstName),
                 new Parameter("@lastName", driverContact.LastName),
                 new Parameter("@jobId", driverContact.JobId),
-				new Parameter("@routeId", driverContact.JobRouteId),
-				new Parameter("@JobStop", driverContact.JobStop),
-				new Parameter("@enteredBy", activeUser.UserName),
-				new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
-			};
+                new Parameter("@routeId", driverContact.JobRouteId),
+                new Parameter("@JobStop", driverContact.JobStop),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
+            };
 
             var result = SqlSerializer.Default.DeserializeSingleRecord<DriverContact>(StoredProceduresConstant.InsDriverContact, parameters.ToArray(), storedProcedure: true);
             return result ?? new DriverContact();
@@ -286,7 +330,7 @@ namespace M4PL.DataAccess.Job
 
         public static bool CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser activeUser, long jobId, long programId, string gatewayCode, long customerId, out bool isFarEyePushRequired)
         {
-			isFarEyePushRequired = false;
+            isFarEyePushRequired = false;
             try
             {
                 var parameters = new List<Parameter>
@@ -302,7 +346,7 @@ namespace M4PL.DataAccess.Job
                 var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBLForElectrolux, parameters.ToArray(), storedProcedure: true);
                 if (result && string.Equals(gatewayCode, "In Transit", StringComparison.InvariantCultureIgnoreCase))
                 {
-                  isFarEyePushRequired =  XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
+                    isFarEyePushRequired = XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
                 }
 
                 return result;
@@ -340,6 +384,37 @@ namespace M4PL.DataAccess.Job
             }
 
             return insertedGatewayId;
+        }
+
+        public static UnCancelJobResponse UnCancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string salesOrderNumber)
+        {
+            long insertedGatewayId = 0;
+            long jobId = 0;
+            string errorMessage = string.Empty;
+            bool isSuccess=false;
+            UnCancelJobResponse result = new UnCancelJobResponse();
+            try
+            {
+                var parameters = new List<Parameter>
+            {
+                new Parameter("@JobCustomerSalesOrder", salesOrderNumber),
+                new Parameter("@dateEntered", TimeUtility.GetPacificDateTime()),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@userId", activeUser.UserId)
+            };
+
+                result = SqlSerializer.Default.DeserializeSingleRecord<UnCancelJobResponse>(StoredProceduresConstant.UnCancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
+                insertedGatewayId = result.CurrentGatewayId;
+                jobId = result.JobId;
+                errorMessage = result.ErrorMessage;
+                isSuccess = result.IsSuccess;
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Exception is occuring while cancelling a job requested by customer.", "Job Cancellation", Utilities.Logger.LogType.Error);
+            }
+
+            return result;
         }
 
         public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
@@ -445,6 +520,13 @@ namespace M4PL.DataAccess.Job
                 parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
                 updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
+                if (existingJobDetail.StatusId != updatedJobDetails.StatusId && updatedJobDetails.StatusIdName == "Cancel")
+                {
+                    JobGateway jobGateway = JobGatewayCommands.GetGatewayWithParent(activeUser, 0, updatedJobDetails.Id);
+                    jobGateway.StatusId = updatedJobDetails.StatusId;
+                    JobGatewayCommands.PostWithSettings(activeUser, null, jobGateway,
+                    updatedJobDetails.CustomerId, updatedJobDetails.Id);
+                }
                 if (existingJobDetail != null && updatedJobDetails != null)
                 {
                     CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);

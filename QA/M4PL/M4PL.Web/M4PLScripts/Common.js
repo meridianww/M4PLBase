@@ -1194,21 +1194,17 @@ M4PLCommon.VocReport = (function () {
         var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
         if (destinationCtrl != null)
             if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
-                var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
+                var dest = destinationCtrl.GetValue().split(',').map(String);
                 route.Location = dest;
             }
-
         var dashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         route.CompanyId = customerCtrl.GetValue();
         M4PLCommon.IsIgnoreCardGridClick = true;
         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
-            route.IsPBSReport = true;
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId });
         }
 
-        //route.Action = "RibbonMenu";
-        //route.Entity = "Common";
         DevExCtrl.Ribbon.DoCallBack(route);
     }
     var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
@@ -1287,6 +1283,7 @@ M4PLCommon.AdvancedReport = (function () {
         $(".isAdditional").hide();
         $(".isDriverImport").hide();
         $(".isVisibleCapacityReport").hide();
+        $(".isManifestReport").hide();
     }
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
@@ -1570,6 +1567,11 @@ M4PLCommon.AdvancedReport = (function () {
             controlEnabledDisabled(true);
             startDateCtrl.SetEnabled(true);
             endDateCtrl.SetEnabled(true);
+            if (reportTypeCtrl.GetText() == "Manifest Report") {
+                $(".isManifestReport").show();
+            } else {
+                $(".isManifestReport").hide();
+            }
             $(".isVisibleCapacityReport").hide();
             $(".isDriverScrubreport").show();
             $(".isDriverbtnScrubreport").show();
@@ -1686,8 +1688,8 @@ M4PLCommon.AdvancedReport = (function () {
         var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
         var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
         var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
-        var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('PackagingTypeByJobCbPanelClosed');
-        var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
+        //var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('PackagingTypeByJobCbPanelClosed');
+        //var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
 
         prgmCtrl.SetEnabled(isEnabled);
         originCtrl.SetEnabled(isEnabled);
@@ -1698,16 +1700,16 @@ M4PLCommon.AdvancedReport = (function () {
         productTypeCtrl.SetEnabled(isEnabled);
         jobChannelCtrl.SetEnabled(isEnabled);
         searchCtrl.SetEnabled(isEnabled);
-        cargoTitleCtrl.SetEnabled(isEnabled);
+        //cargoTitleCtrl.SetEnabled(isEnabled);
 
         jobStatusCtrl.SetEnabled(isEnabled);
         dateTypeCtrl.SetEnabled(isEnabled);
-        packagingTypeCtrl.SetEnabled(isEnabled);
+        //packagingTypeCtrl.SetEnabled(isEnabled);
         scheduleTypeCtrl.SetEnabled(isEnabled);
         orderTypeCtrl.SetEnabled(isEnabled);
 
         var bgColor = !isEnabled ? "#9BEBF2" : '#fff';
-        packagingTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+        //packagingTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
         dateTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
         jobStatusCtrl.GetInputElement().style.backgroundColor = bgColor;
         orderTypeCtrl.GetInputElement().style.backgroundColor = bgColor;

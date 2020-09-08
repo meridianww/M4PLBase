@@ -259,7 +259,7 @@ namespace M4PL.Business.Job
         {
             List<int> completedTransitionStatus = PODTransitionStatusId.Split(',').Select(int.Parse).ToList();
 
-            if (jobId != null && gatewayStatus && (string.Equals(gatewayCode, "POD Upload", StringComparison.OrdinalIgnoreCase)
+            if (jobId != null && gatewayStatus && (string.Equals(gatewayCode, "POD Completion", StringComparison.OrdinalIgnoreCase)
                     || string.Equals(gatewayCode, "Will Call", StringComparison.OrdinalIgnoreCase) || (JobTransitionStatusId.HasValue && completedTransitionStatus.Contains((int)JobTransitionStatusId))))
             {
                 var jobResult = _jobCommands.Get(ActiveUser, Convert.ToInt64(jobId));

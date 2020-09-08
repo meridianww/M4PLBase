@@ -200,8 +200,14 @@ namespace M4PL.DataAccess.Job
             List<Task> tasks = new List<Task>();
             tasks.Add(Task.Factory.StartNew(() =>
             {
-                var permittedProgramEntity = JobCommands.GetCustomEntityIdByEntityName(activeUser, EntitiesAlias.Job, false);
-                jobIsHavingPermission = permittedProgramEntity != null && permittedProgramEntity.Any(t => t.EntityId == -1 || t.EntityId == id);
+				var parameters = new List<Parameter>
+				{
+					   new Parameter("@userId", activeUser.UserId),
+					   new Parameter("@orgId", activeUser.OrganizationId),
+					   new Parameter("@jobId", id)
+				 };
+
+				jobIsHavingPermission = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.IsJobPermissionPresentForUser, parameters.ToArray(), false, true);
             }));
 
             tasks.Add(Task.Factory.StartNew(() =>

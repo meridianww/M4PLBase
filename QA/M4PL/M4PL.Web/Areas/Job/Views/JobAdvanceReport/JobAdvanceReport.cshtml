@@ -114,12 +114,13 @@
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.Search));
         ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isManifestReport style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("PackagingTypeByJob", Model));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isManifestReport style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }));
         ViewContext.Writer.Write("</div>");
+
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isVisibleCapacityReport style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write((Html.EditorFor(t => t.Record.Year, new { Year = Model.Record.Year }).ToHtmlString()));
         ViewContext.Writer.Write("</div>");

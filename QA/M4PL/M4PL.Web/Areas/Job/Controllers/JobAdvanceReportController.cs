@@ -120,6 +120,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
         }
+        #region dropdown
         public PartialViewResult ProgramByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -339,6 +340,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "CargoTitle");
             return PartialView("CargoTitleByJob", _reportResult);
         }
+        #endregion
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
@@ -491,6 +493,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _ReportText = route.Location.FirstOrDefault();
             return PartialView(_formResult);
         }
+        #region upload
         [HttpPost]
         public ActionResult ImportScrubDriver([ModelBinder(typeof(DragAndDropSupportDemoBinder))] IEnumerable<UploadedFile> ucDragAndDropImportDriver, long ParentId = 0)
         {
@@ -512,7 +515,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 try
                 {
                     DateTime startDate, endDate; string filterDescription;
-                    if (_ReportText.Equals("Driver Scrub Report",StringComparison.OrdinalIgnoreCase))
+                    if (_ReportText.Equals("Driver Scrub Report", StringComparison.OrdinalIgnoreCase))
                     {
                         using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
                         {
@@ -556,5 +559,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             e.CallbackData = JsonConvert.SerializeObject(displayMessage);
         }
+        #endregion
     }
 }
