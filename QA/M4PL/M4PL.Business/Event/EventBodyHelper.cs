@@ -92,6 +92,7 @@ namespace M4PL.Business.Event
 				{ "JobURL", string.Format("{0}?jobId={1}", ConfigurationManager.AppSettings["M4PLApplicationURL"], jobId) },
 				{ "Comment", string.IsNullOrEmpty(comment) ? string.Empty : comment },
 				{ "IsCommentPresent", string.IsNullOrEmpty(comment) ? "0" : "1" },
+				{ "IsCargoDetailsPresent", string.IsNullOrEmpty(cgoPartNumCode) && string.IsNullOrEmpty(cgoitle) && string.IsNullOrEmpty(cgoSerialNumber) && string.IsNullOrEmpty(currentGateway)? "0" : "1" },
 				{ "CgoPartNumCode", cgoPartNumCode??" " },
 				{ "CgoTitle", cgoitle??" " },
 				{ "CgoSerialNumber", cgoSerialNumber??" " },
