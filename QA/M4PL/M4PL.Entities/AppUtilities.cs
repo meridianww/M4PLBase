@@ -170,5 +170,10 @@ namespace M4PL.Entities
 		{
 			dictionary.AddOrUpdate(langCode, sysSetting, (key, oldValue) => sysSetting);
 		}
+
+		public static void AddOrUpdate(this ConcurrentDictionary<string, BusinessConfiguration> dictionary, string langCode, BusinessConfiguration businessConfiguration)
+		{
+			dictionary.AddOrUpdate(langCode, businessConfiguration, (key, oldValue) => businessConfiguration);
+		}
 	}
 }

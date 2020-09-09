@@ -150,6 +150,15 @@ namespace M4PL.APIClient.Common
 			return CoreCache.RibbonMenus[ActiveUser.LangCode];
 		}
 
+		public BusinessConfiguration GetBusinessConfiguration(bool forceUpdate = false)
+		{
+			if (!CoreCache.BusinessConfiguration.ContainsKey(ActiveUser.LangCode))
+				CoreCache.BusinessConfiguration.GetOrAdd(ActiveUser.LangCode, new BusinessConfiguration());
+			if (CoreCache.BusinessConfiguration[ActiveUser.LangCode] == null || forceUpdate)
+				CoreCache.BusinessConfiguration.AddOrUpdate(ActiveUser.LangCode, GetBusinessConfigurationFromApi(forceUpdate));
+			return CoreCache.BusinessConfiguration[ActiveUser.LangCode];
+		}
+
 		public virtual IList<ViewModels.ColumnSetting> GetColumnSettings(EntitiesAlias entity, bool forceUpdate = false)
 		{
 			if (!CoreCache.ColumnSettings.ContainsKey(ActiveUser.LangCode))
@@ -386,6 +395,12 @@ namespace M4PL.APIClient.Common
 		{
 			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "RibbonMenus");
 			return JsonConvert.DeserializeObject<ApiResult<RibbonMenu>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("forceUpdate", forceUpdate)).Content).Results;
+		}
+
+		public BusinessConfiguration GetBusinessConfigurationFromApi(bool forceUpdate = false)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "BusinessConfiguration");
+			return JsonConvert.DeserializeObject<ApiResult<BusinessConfiguration>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("forceUpdate", forceUpdate)).Content).Results.FirstOrDefault();
 		}
 
 		public IList<TableReference> GetTablesFromApi(bool forceUpdate = false)

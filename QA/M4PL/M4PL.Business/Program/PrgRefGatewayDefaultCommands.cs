@@ -17,8 +17,10 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Program.PrgRefGatewayDefaultCommands
 //====================================================================================================================
 
+using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgRefGatewayDefaultCommands;
@@ -27,12 +29,17 @@ namespace M4PL.Business.Program
 {
     public class PrgRefGatewayDefaultCommands : BaseCommands<PrgRefGatewayDefault>, IPrgRefGatewayDefaultCommands
     {
-        /// <summary>
-        /// Gets list of prgrefgatewaydefault data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<PrgRefGatewayDefault> GetPagedData(PagedDataInfo pagedDataInfo)
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
+		/// <summary>
+		/// Gets list of prgrefgatewaydefault data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<PrgRefGatewayDefault> GetPagedData(PagedDataInfo pagedDataInfo)
         {
             return _commands.GetPagedData(ActiveUser, pagedDataInfo);
         }
@@ -46,7 +53,7 @@ namespace M4PL.Business.Program
         public PrgRefGatewayDefault Get(long id)
         {
             var result = _commands.Get(ActiveUser, id);
-            result.IsSpecificCustomer = result?.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
+            result.IsSpecificCustomer = result?.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? true : false;
             return result;
         }
 

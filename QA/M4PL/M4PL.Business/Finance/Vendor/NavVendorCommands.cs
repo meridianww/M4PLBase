@@ -16,6 +16,7 @@
 // Program Name:                                 NavVendorCommands
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavVendorCommands
 //==============================================================================================================
+using M4PL.Entities;
 using M4PL.Entities.Finance.Vendor;
 using M4PL.Entities.Support;
 using System;
@@ -32,7 +33,12 @@ namespace M4PL.Business.Finance.Vendor
 {
     public class NavVendorCommands : BaseCommands<NavVendor>, INavVendorCommands
     {
-        public int Delete(long id)
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
+		public int Delete(long id)
         {
             throw new NotImplementedException();
         }
@@ -52,9 +58,9 @@ namespace M4PL.Business.Finance.Vendor
             IList<NavVendor> navOneToManyVendorList = new List<NavVendor>();
             List<NavVendor> navOneToOneVendorList = new List<NavVendor>(); ;
             IList<NavVendorData> navVendorData = null;
-			string navVendorUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			string navVendorUrl = M4PLBusinessConfiguration.NavAPIUrl;
+			string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+			string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
 			IList<Entities.Vendor.Vendor> m4PLVendorData = null;
             Task[] tasks = new Task[2];
 

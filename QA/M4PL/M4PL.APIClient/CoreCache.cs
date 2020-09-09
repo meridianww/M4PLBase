@@ -105,6 +105,11 @@ namespace M4PL.APIClient
 		/// </summary>
 		public static ConcurrentDictionary<string, IList<ConditionalOperator>> ConditionalOperators { get; private set; }
 
+		/// <summary>
+		/// To hold language Key with BusinessConfiguration lookup data
+		/// </summary>
+		public static ConcurrentDictionary<string, BusinessConfiguration> BusinessConfiguration { get; private set; }
+
 		static CoreCache()
 		{
 			RibbonMenus = new ConcurrentDictionary<string, IList<RibbonMenu>>();
@@ -118,6 +123,7 @@ namespace M4PL.APIClient
 			MasterTables = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, object>>();
 			ConditionalOperators = new ConcurrentDictionary<string, IList<ConditionalOperator>>();
 			SysSettings = new ConcurrentDictionary<string, SysSetting>();
+			BusinessConfiguration = new ConcurrentDictionary<string, BusinessConfiguration>();
 		}
 
 		/// <summary>
@@ -138,6 +144,7 @@ namespace M4PL.APIClient
 			MasterTables.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, object>());
 			ConditionalOperators.GetOrAdd(langCode, new List<ConditionalOperator>());
 			SysSettings.GetOrAdd(langCode, new SysSetting());
+			BusinessConfiguration.GetOrAdd(langCode, new BusinessConfiguration());
 		}
 	}
 }

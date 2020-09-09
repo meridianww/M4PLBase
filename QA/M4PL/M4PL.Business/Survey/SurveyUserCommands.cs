@@ -7,6 +7,7 @@
 ******************************************************************************/
 #endregion Copyright
 
+using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Entities.Survey;
 using System;
@@ -20,7 +21,12 @@ namespace M4PL.Business.Survey
 {
     public class SurveyUserCommands : BaseCommands<SurveyUser>, ISurveyUserCommands
     {
-        public int Delete(long id)
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
+		public int Delete(long id)
         {
             throw new NotImplementedException();
         }
@@ -60,7 +66,7 @@ namespace M4PL.Business.Survey
 
         public SurveyUser GetVOCAdditionalInfo(SurveyUser entity)
         {
-            string serviceCall = string.Format("{0}?&JobNo={1}", M4PBusinessContext.ComponentSettings.GetVOCJobURL, entity.EntityTypeId);
+            string serviceCall = string.Format("{0}?&JobNo={1}", M4PLBusinessConfiguration.VOCJobWebServiceURL, entity.EntityTypeId);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
             request.KeepAlive = false;
             WebResponse response = request.GetResponse();

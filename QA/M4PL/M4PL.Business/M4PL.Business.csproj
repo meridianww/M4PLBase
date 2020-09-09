@@ -181,8 +181,6 @@
     <Compile Include="Job\JobCostSheetCommands.cs" />
     <Compile Include="Job\JobRefStatusCommands.cs" />
     <Compile Include="Job\JobRollupHelper.cs" />
-    <Compile Include="M4PBusinessConfiguration.cs" />
-    <Compile Include="M4PBusinessContext.cs" />
     <Compile Include="Organization\OrgReportCommands.cs" />
     <Compile Include="Organization\IOrgReportCommands.cs" />
     <Compile Include="Organization\IOrganizationCommands.cs" />
@@ -328,9 +326,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="M4PL.Business.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="M4PL.Business.licenseheader" />
     <None Include="packages.config" />
   </ItemGroup>

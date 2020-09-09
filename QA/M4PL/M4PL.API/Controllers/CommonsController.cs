@@ -60,7 +60,7 @@ namespace M4PL.API.Controllers
             return _command.GetTables(forceUpdate).AsQueryable();
         }
 
-        [HttpGet]
+		[HttpGet]
         [CustomQueryable]
         [Route("RibbonMenus")]
         public IQueryable<RibbonMenu> GetRibbonMenus(bool forceUpdate = false)
@@ -69,7 +69,15 @@ namespace M4PL.API.Controllers
             return _command.GetRibbonMenus(forceUpdate).AsQueryable();
         }
 
-        [HttpGet]
+		[HttpGet]
+		[Route("BusinessConfiguration")]
+		public BusinessConfiguration GetBusinessConfiguration(bool forceUpdate = false)
+		{
+			_command.ActiveUser = ActiveUser;
+			return _command.GetBusinessConfiguration(forceUpdate);
+		}
+
+		[HttpGet]
         [CustomQueryable]
         [Route("IdRefLangNames")]
         public IQueryable<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
