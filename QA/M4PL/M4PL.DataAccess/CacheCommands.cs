@@ -51,7 +51,7 @@ namespace M4PL.DataAccess
 
 		public static BusinessConfiguration GetBusinessConfiguration(string langCode)
 		{
-			BusinessConfiguration businessConfiguration = new BusinessConfiguration();
+			BusinessConfiguration businessConfiguration = null;
 			bool isProductionEnvironment = ConfigurationManager.AppSettings["IsProductionEnvironment"].ToBoolean();
 			var parameters = new[]
 			{
@@ -61,6 +61,7 @@ namespace M4PL.DataAccess
 			var configurationKeyValuePair = SqlSerializer.Default.DeserializeMultiRecords<ConfigurationKeyValuePair>(StoredProceduresConstant.GetBusinessConfiguration, parameters, false, true);
 			if (configurationKeyValuePair != null && configurationKeyValuePair.Count > 0)
 			{
+				businessConfiguration = new BusinessConfiguration();
 				businessConfiguration.ConfigurationKeyValuePair = configurationKeyValuePair;
 			}
 

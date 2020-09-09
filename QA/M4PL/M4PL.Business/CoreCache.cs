@@ -262,7 +262,7 @@ namespace M4PL.Business
 		{
 			if (!BusinessConfiguration.ContainsKey(langCode))
 				BusinessConfiguration.GetOrAdd(langCode, new BusinessConfiguration());
-			if (BusinessConfiguration[langCode] == null || forceUpdate)
+			if (BusinessConfiguration[langCode] == null || (BusinessConfiguration[langCode] != null && string.IsNullOrEmpty(BusinessConfiguration[langCode].AWCCustomerId)) || forceUpdate)
 				BusinessConfiguration.AddOrUpdate(langCode, _commands.GetBusinessConfiguration(langCode));
 			return BusinessConfiguration[langCode];
 		}
