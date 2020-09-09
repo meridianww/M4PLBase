@@ -679,7 +679,7 @@ namespace M4PL.Business.XCBL
 
 				#region Geo Cordinates Update
 
-				if (!existingJobData.JobLatitude.Equals(request.Latitude, StringComparison.OrdinalIgnoreCase) || !existingJobData.JobLongitude.Equals(request.Longitude))
+				if (string.Compare(existingJobData.JobLatitude, request.Latitude,true)!=0 || string.Compare(existingJobData.JobLongitude, request.Longitude,true)!=0)
 				{
 					isLatLongUpdatedFromXCBL = true;
 					var coordinateAction = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("Latitude", StringComparison.OrdinalIgnoreCase));
@@ -702,9 +702,9 @@ namespace M4PL.Business.XCBL
 
 				#region Delivery City and Postal Update
 
-				if (!existingJobData.JobDeliveryPostalCode.Equals(request.PostalCode, StringComparison.OrdinalIgnoreCase) ||
-					!existingJobData.JobDeliveryCity.Equals(request.City, StringComparison.OrdinalIgnoreCase))
-				{
+					if (string.Compare(existingJobData.JobDeliveryPostalCode, request.PostalCode,true)!=0 ||
+					string.Compare(existingJobData.JobDeliveryCity, request.City,true)!=0)
+					{
 					var deliveryLocationAction = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("City", StringComparison.OrdinalIgnoreCase));
 					actionCode = deliveryLocationAction != null ? deliveryLocationAction.ActionCode : string.Empty;
 					jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
@@ -725,10 +725,10 @@ namespace M4PL.Business.XCBL
 
 				#region Delivery Site name and Region Update
 
-				if (!existingJobData.JobDeliverySiteName.Equals(request.Name1, StringComparison.OrdinalIgnoreCase) ||
-					!existingJobData.JobDeliveryStreetAddress.Equals(request.Street, StringComparison.OrdinalIgnoreCase) ||
-					!existingJobData.JobDeliveryStreetAddress2.Equals(request.Streetsupplement1, StringComparison.OrdinalIgnoreCase))
-				{
+					if (string.Compare(existingJobData.JobDeliverySiteName, request.Name1,true)!=0 ||
+						string.Compare(existingJobData.JobDeliveryStreetAddress, request.Street,true)!=0 ||
+						string.Compare(existingJobData.JobDeliveryStreetAddress2, request.Streetsupplement1,true)!=0)
+					{
 					isChanged = true;
 					existingJobData.JobDeliverySiteName = !existingJobData.JobDeliverySiteName.Equals(request.Name1, StringComparison.OrdinalIgnoreCase) ? request.Name1 : existingJobData.JobDeliverySiteName;
 					existingJobData.JobDeliveryStreetAddress = !existingJobData.JobDeliveryStreetAddress.Equals(request.Street, StringComparison.OrdinalIgnoreCase) ? request.Street : existingJobData.JobDeliveryStreetAddress;

@@ -13,6 +13,7 @@
   <xsl:param name="CgoTitle"/>
   <xsl:param name="CgoSerialNumber"/>
   <xsl:param name="CurrentGateway"/>
+  <xsl:param name="IsCargoDetailsPresent"/>
   <xsl:template match="/">
     <html>
       <head>
@@ -54,6 +55,7 @@
             <b>Comment add by user: </b>
             <xsl:value-of select="$Comment" />
           </xsl:if>
+          <xsl:if test="($IsCargoDetailsPresent = 1)">
           <br></br>
           <b>Details-</b>
           <table>
@@ -82,6 +84,8 @@
               </td>
             </tr>
           </table>
+          </xsl:if>
+            
         </div>
       </body>
     </html>
