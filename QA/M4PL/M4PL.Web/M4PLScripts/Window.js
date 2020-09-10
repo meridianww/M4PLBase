@@ -1894,12 +1894,15 @@ M4PLWindow.ChooseColumns = function () {
                                 actionToAssign = "DocDamagedDataView";
                                 break;
                             case 3:
-                                actionToAssign = "DocImageDataView";
+                                actionToAssign = "DocDocumentDataView";
                                 break;
                             case 4:
-                                actionToAssign = "DocDeliveryPodDataView";
+                                actionToAssign = "DocImageDataView";
                                 break;
                             case 5:
+                                actionToAssign = "DocDeliveryPodDataView";
+                                break;
+                            case 6:
                                 actionToAssign = "DocSignatureDataView";
                                 break;
                         }

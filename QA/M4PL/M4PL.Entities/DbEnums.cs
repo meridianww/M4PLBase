@@ -696,7 +696,8 @@ namespace M4PL.Entities
 		Damaged = 207,
 		Approval = 3285,
 		Image = 3286,
-		Signature = 3307
+		Signature = 3307,
+		All = 9999
 	}
 
 	public enum ValidationEnum

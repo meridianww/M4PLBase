@@ -672,6 +672,7 @@ namespace M4PL.Web
 				case MvcConstants.ActionDocApprovalsDataView:
 				case MvcConstants.ActionDocImageDataView:
 				case MvcConstants.ActionDocSignatureDataView:
+				case MvcConstants.ActionDocDocumentDataView:
 					pageInfo.Route.RecordId = 0;
                     break;
             }
@@ -1512,19 +1513,24 @@ namespace M4PL.Web
 				allNavMenus[0].Text = "Damaged";
 			}
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocImageDataView4ImageCbPanel")
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocImageDataView5ImageCbPanel")
 			{
 				allNavMenus[0].Text = "Image";
 			}
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDeliveryPodDataView5PODCbPanel")
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDeliveryPodDataView6PODCbPanel")
 			{
 				allNavMenus[0].Text = "Proof Of Delivery";
 			}
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocSignatureDataView6SignatureCbPanel")
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocSignatureDataView7SignatureCbPanel")
 			{
 				allNavMenus[0].Text = "Signature";
+			}
+
+			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDocumentDataView4DocumentCbPanel")
+			{
+				allNavMenus[0].Text = "Document";
 			}
 
 			if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
