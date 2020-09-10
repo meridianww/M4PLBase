@@ -346,7 +346,7 @@ DevExCtrl.Ribbon = function () {
             RibbonCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
         }
         else {
-            if (route != unll && route != undefined) {
+            if (route != null && route != undefined) {
                 var ctrl = ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel);
                 if (ctrl != null && ctrl != undefined) {
                     ctrl.PerformCallback({ strRoute: JSON.stringify(route) });
