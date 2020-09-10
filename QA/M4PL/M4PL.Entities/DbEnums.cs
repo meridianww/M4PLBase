@@ -1073,8 +1073,8 @@ namespace M4PL.Entities
 
 	public enum EventNotification
 	{
-		CargoException = 1,
-		OrderUnCanceled = 2,
-		AwcXcblFailure = 3
+		AWCCargoException = 1,
+		ElectroluxCargoException = 2,
+		JobReActivated = 3
 	}
 }

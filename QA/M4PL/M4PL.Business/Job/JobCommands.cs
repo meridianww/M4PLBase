@@ -438,7 +438,7 @@ namespace M4PL.Business.Job
 
                     var DateEntered=TimeUtility.GetPacificDateTime();
                     string emailBody = EventBodyHelper.GetJobReactivationMailBody(jobId,DateEntered.ToString("MM/dd/yyyy"),DateEntered.ToString("hh:mm tt"), orderNumber,result.JobOriginDateTimePlanned==null?"NA": result.JobOriginDateTimePlanned.Value.ToString("MM/dd/yyyy hh:mm tt"), result.JobDeliveryDateTimePlanned == null ? "NA" : result.JobDeliveryDateTimePlanned.Value.ToString("MM/dd/yyyy hh:mm tt"));
-                    EventBodyHelper.CreateEventMailNotification(20200903, result.ProgramId, orderNumber, emailBody);
+                    EventBodyHelper.CreateEventMailNotification((int)EventNotification.JobReActivated, result.ProgramId, orderNumber, emailBody);
                     return new StatusModel()
                     {
                         Status = "Success",

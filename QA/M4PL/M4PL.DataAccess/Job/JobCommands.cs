@@ -1525,6 +1525,7 @@ namespace M4PL.DataAccess.Job
 			parameters.Add(new Parameter("@OldShipmentType", existingJob.ShipmentType));
 			if (updatedJob.IsCancelled.HasValue && !updatedJob.IsCancelled.Value && updatedJob.StatusId == (int)StatusType.Active && existingJob.IsCancelled.HasValue && existingJob.IsCancelled.Value)
 			{
+				updatedJob.JobGatewayStatus = isRelatedAttributeUpdate ? "In Transit" : "In Production";
 				parameters.Add(new Parameter("@IsJobReactivated", true));
 			}
 			else

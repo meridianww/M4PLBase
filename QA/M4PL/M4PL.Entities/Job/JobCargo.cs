@@ -143,5 +143,6 @@ namespace M4PL.Entities.Job
 
 		public DateTime? CgoDateLastScan { get; set; }
         public string JobGatewayStatus { get; set; }
-    }
+		public long CustomerId { get; set; }
+	}
 }
