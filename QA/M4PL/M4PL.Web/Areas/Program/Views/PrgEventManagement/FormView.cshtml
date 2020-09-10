@@ -53,8 +53,8 @@
         ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding prgEventManagement-grouping'>");
         //ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.Description, "MultilineText").ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code isToEmail'>" + Html.EditorFor(m => m.Record.ToEmail, "MultilineText").ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code isCcEMail'>" + Html.EditorFor(m => m.Record.CcEmail, "MultilineText").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code isToEmail width20p'>" + Html.EditorFor(m => m.Record.ToEmail, "MultilineText").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prgEventManagement-castrate-code isCcEMail width20p'>" + Html.EditorFor(m => m.Record.CcEmail, "MultilineText").ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
     });
 }).GetHtml()

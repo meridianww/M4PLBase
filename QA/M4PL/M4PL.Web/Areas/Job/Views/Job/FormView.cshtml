@@ -80,7 +80,8 @@
     {
         programDropdown.IsReadOnly = true;
     }
-
+    var uriQueryString = HttpContext.Current.Request.QueryString["jobId"];
+    var isReboonRequired = uriQueryString != null && !string.IsNullOrEmpty(uriQueryString) ? false : true;
 }
 
 @if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity) && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
@@ -573,7 +574,7 @@ else
                }).GetHtml()
                 </div>
                 <div class="col-md-2">
-                    @if (!Model.CallBackRoute.IsPBSReport)
+                    @if (!Model.CallBackRoute.IsPBSReport && isReboonRequired)
                     {
                         @Html.DevExpress().Button(settings =>
                               {

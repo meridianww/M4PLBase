@@ -164,25 +164,30 @@ namespace M4PL.DataAccess.Program
             var eventSubscriber = sets.GetSet<EventSubscriber>("EventSubscriber");
             var eventSubscriberType = sets.GetSet<EventSubscriberType>("EventSubscriberType");
 
-            var toEmailSubscribers = PrgEventManagement.ToEmailSubscribers.Split(',');
-            var ccEmailSubscribers = PrgEventManagement.CcEMailSubscribers.Split(',');
+            var toEmailSubscribers = !string.IsNullOrEmpty(PrgEventManagement.ToEmailSubscribers)
+                ? PrgEventManagement.ToEmailSubscribers.Split(',') : null;
+            var ccEmailSubscribers = !string.IsNullOrEmpty(PrgEventManagement.CcEMailSubscribers)
+                ? PrgEventManagement.CcEMailSubscribers.Split(',') : null;
 
             int toEmailSubscriberTypeId = eventSubscriberType.Find(obj => obj.EventSubscriberTypeName == "To").Id;
             int ccEmailSubscriberTypeId = eventSubscriberType.Find(obj => obj.EventSubscriberTypeName == "CC").Id;
 
-
-            foreach (var item in toEmailSubscribers)
+            if (toEmailSubscribers != null)
             {
-                var subscriberId = eventSubscriber.Find(obj => obj.SubscriberDescription == item).Id;
-                PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = subscriberId, SubscriberTypeId = toEmailSubscriberTypeId });
+                foreach (var item in toEmailSubscribers)
+                {
+                    var subscriberId = eventSubscriber.Find(obj => obj.SubscriberDescription == item).Id;
+                    PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = subscriberId, SubscriberTypeId = toEmailSubscriberTypeId });
+                }
             }
-
-            foreach (var item in ccEmailSubscribers)
+            if (ccEmailSubscribers != null)
             {
-                var subscriberId = eventSubscriber.Find(obj => obj.SubscriberDescription == item).Id;
-                PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = subscriberId, SubscriberTypeId = ccEmailSubscriberTypeId });
+                foreach (var item in ccEmailSubscribers)
+                {
+                    var subscriberId = eventSubscriber.Find(obj => obj.SubscriberDescription == item).Id;
+                    PrgEventManagement.SubscriberAndSubscriberTypeMappingList.Add(new Entities.Event.EventSubscriberAndSubscriberType() { SubscriberId = subscriberId, SubscriberTypeId = ccEmailSubscriberTypeId });
+                }
             }
-
 
 
             var subscriberAndSubscriberTypeMapping = PrgEventManagement.SubscriberAndSubscriberTypeMappingList.ToDataTable();
