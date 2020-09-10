@@ -346,7 +346,7 @@ namespace M4PL.Business.Job
                         AdditionalDetail = "Order number passed in the service is already completed in Meridian System, please contact to Meridian support team for any further action."
                     };
                 }
-                else if (jobDetail?.Id > 0 && jobDetail.IsCancelled)
+                else if (jobDetail?.Id > 0 && jobDetail.IsCancelled.HasValue && jobDetail.IsCancelled.Value)
                 {
                     return new StatusModel()
                     {
@@ -580,7 +580,7 @@ namespace M4PL.Business.Job
                         AdditionalDetail = "Order number passed in the service is already completed in Meridian System, please contact to Meridian support team for any further action."
                     };
                 }
-                else if (jobDetail?.Id > 0 && jobDetail.IsCancelled)
+                else if (jobDetail?.Id > 0 && jobDetail.IsCancelled.HasValue && jobDetail.IsCancelled.Value)
                 {
                     return new StatusModel()
                     {
