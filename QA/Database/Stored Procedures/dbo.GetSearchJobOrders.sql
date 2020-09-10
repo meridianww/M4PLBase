@@ -12,8 +12,8 @@ GO
 -- Description:               Get a Job Details by job id  
 -- Exec :					  Exec GetSearchJobOrders null,0,0,'july'   
 -- ============================================= 
-ALTER PROCEDURE GetSearchJobOrders @userId BIGINT
-	,@roleId BIGINT
+ALTER PROCEDURE GetSearchJobOrders @userId BIGINT=0
+	,@roleId BIGINT=0
 	,@orgId BIGINT = 1
 	,@search NVARCHAR(200)
 AS
@@ -21,7 +21,6 @@ BEGIN
 	IF (
 			@userId = 0
 			AND @roleId = 0
-			AND @orgId = 0
 			)
 	BEGIN
 		SELECT JOB.Id
