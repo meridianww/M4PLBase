@@ -97,7 +97,7 @@ namespace M4PL.Business.Job
         {
             var gateway = _commands.Post(ActiveUser, jobGateway, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
             PushDataToNav(gateway.JobID, jobGateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
-			int scenarioId = jobGateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : jobGateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
+			int scenarioId = gateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : gateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
 			if (scenarioId > 0)
 			{
 				if (jobGateway.GwyCargoId > 0)
@@ -152,7 +152,7 @@ namespace M4PL.Business.Job
                 PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
             }
 
-			int scenarioId = jobGateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : jobGateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
+			int scenarioId = gateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : gateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
 			if (scenarioId > 0)
 			{
 				if (jobGateway.GwyCargoId > 0)
