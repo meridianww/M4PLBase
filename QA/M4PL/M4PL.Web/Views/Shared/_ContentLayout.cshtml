@@ -10,6 +10,8 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var uriQueryString = HttpContext.Current.Request.QueryString["jobId"];
+    var isReboonRequired = uriQueryString != null && !string.IsNullOrEmpty(uriQueryString) ? false : true;
 }
 
 @Html.DevExpress().Splitter(settings =>
@@ -31,8 +33,11 @@
         {
             var headerRoute = new M4PL.Entities.Support.MvcRoute { Action = "UserHeaderPartial", Entity = M4PL.Entities.EntitiesAlias.Account, OwnerCbPanel = "UserHeaderCbPanel" };
             Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(headerRoute) });
-            var mvcRoute = new M4PL.Entities.Support.MvcRoute { OwnerCbPanel = WebApplicationConstants.RibbonCbPanel, Action = MvcConstants.ActionRibbonMenu };
-            Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(mvcRoute) });
+            if (isReboonRequired)
+            {
+                var mvcRoute = new M4PL.Entities.Support.MvcRoute { OwnerCbPanel = WebApplicationConstants.RibbonCbPanel, Action = MvcConstants.ActionRibbonMenu };
+                Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(mvcRoute) });
+            }
         });
     });
 
@@ -41,7 +46,14 @@
         pane.Name = "Content";
         pane.PaneStyle.CssClass = "mainContentPane";
         pane.MinSize = System.Web.UI.WebControls.Unit.Pixel(375);
-        pane.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+        if (isReboonRequired)
+        {
+            pane.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+        }
+        else
+        {
+            pane.ScrollBars = System.Web.UI.WebControls.ScrollBars.None;
+        }
         pane.Separator.Visible = DefaultBoolean.True;
         pane.PaneStyle.BackColor = System.Drawing.Color.White;
         pane.PaneStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
