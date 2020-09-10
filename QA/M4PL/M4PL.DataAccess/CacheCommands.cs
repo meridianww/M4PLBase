@@ -23,7 +23,9 @@ using M4PL.Entities.Administration;
 using M4PL.Entities.MasterTables;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 
@@ -45,6 +47,25 @@ namespace M4PL.DataAccess
 
 			return SqlSerializer.Default.DeserializeMultiRecords<RibbonMenu>(StoredProceduresConstant.GetRibbonMenus, parameters,
 				storedProcedure: true).BuildMenus();
+		}
+
+		public static BusinessConfiguration GetBusinessConfiguration(string langCode)
+		{
+			BusinessConfiguration businessConfiguration = null;
+			bool isProductionEnvironment = ConfigurationManager.AppSettings["IsProductionEnvironment"].ToBoolean();
+			var parameters = new[]
+			{
+				new Parameter("@environment", isProductionEnvironment ? 1 : 2),
+			};
+
+			var configurationKeyValuePair = SqlSerializer.Default.DeserializeMultiRecords<ConfigurationKeyValuePair>(StoredProceduresConstant.GetBusinessConfiguration, parameters, false, true);
+			if (configurationKeyValuePair != null && configurationKeyValuePair.Count > 0)
+			{
+				businessConfiguration = new BusinessConfiguration();
+				businessConfiguration.ConfigurationKeyValuePair = configurationKeyValuePair;
+			}
+
+			return businessConfiguration;
 		}
 
 		public static IList<IdRefLangName> GetIdRefLangNames(string langCode, int lookupId)

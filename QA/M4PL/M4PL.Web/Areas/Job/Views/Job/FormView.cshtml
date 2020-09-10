@@ -17,11 +17,10 @@
     var IsJobDocReferenceTypeActive = false;
 
     ViewBag.Title = Model.PageName;
-    if (Model.SessionProvider.ActiveUser.IsSysAdmin || Model.Permission == Permission.EditActuals)
+    if (Model.SessionProvider.ActiveUser.IsSysAdmin)
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOrderedDate").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobShipmentDate").ColIsReadOnly = false;
-        ////Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobInvoicedDate").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimeBaseline").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimePlanned").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimeActual").ColIsReadOnly = false;
@@ -32,6 +31,12 @@
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeActual").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "WindowDelStartTime").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "WindowDelEndTime").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "StatusId").ColIsReadOnly = false;
+    }
+    else if(Model.Permission == Permission.EditActuals)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimeActual").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeActual").ColIsReadOnly = false;
     }
 
     var responsibleContactDropDownModel = Model.Record.JobDeliveryResponsibleContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryResponsibleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);

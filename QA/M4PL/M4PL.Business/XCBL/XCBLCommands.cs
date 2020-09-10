@@ -38,7 +38,11 @@ namespace M4PL.Business.XCBL
 {
 	public class XCBLCommands : BaseCommands<XCBLToM4PLRequest>, IXCBLCommands
 	{
-		public int M4PLBusinessConfiguration { get; private set; }
+
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
 
 		#region Public Methods
 
@@ -95,7 +99,7 @@ namespace M4PL.Business.XCBL
 				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
 				Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
 				FirstOrDefault().Id;
-			Entities.Job.Job existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+			Entities.Job.Job existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 
 			// Populate the data in xCBL tables
 			tasks[0] = Task.Factory.StartNew(() =>
@@ -207,7 +211,7 @@ namespace M4PL.Business.XCBL
 							{
 								InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
 								bool isFarEyePushRequired = false;
-								_jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, out isFarEyePushRequired);
+								_jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
 								List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
 								if (jobCargos != null && jobCargos.Count > 0)
 								{
@@ -294,7 +298,7 @@ namespace M4PL.Business.XCBL
 
 		private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
 		{
-			_jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+			_jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 		}
 
 		private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails, List<SystemReference> systemOptionList)
@@ -304,7 +308,7 @@ namespace M4PL.Business.XCBL
 			JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
 			var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
 			var orderLineDetailList = electroluxOrderDetails.Body?.Order?.OrderLineDetailList;
-			long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+			long programId = M4PLBusinessConfiguration.ElectroluxProgramId.ToLong();
 			basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref jobCreationData, programId, orderLineDetailList, false, systemOptionList);
 			addressMapper.ToJobAddressModel(orderDetails, ref jobCreationData);
 
@@ -340,7 +344,7 @@ namespace M4PL.Business.XCBL
 				var xcBLToM4PLShippingScheduleRequest = Newtonsoft.Json.JsonConvert.DeserializeObject<XCBLToM4PLShippingScheduleRequest>(xCBLToM4PLRequest.Request.ToString());
 				if (xcBLToM4PLShippingScheduleRequest != null)
 				{
-					var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, xcBLToM4PLShippingScheduleRequest.OrderNumber, M4PBusinessContext.ComponentSettings.AWCCustomerId);
+					var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, xcBLToM4PLShippingScheduleRequest.OrderNumber, M4PLBusinessConfiguration.AWCCustomerId.ToLong());
 					if (existingJobData != null && existingJobData.Id > 0)
 					{
 						tasks.Add(Task.Factory.StartNew(() =>
@@ -679,7 +683,7 @@ namespace M4PL.Business.XCBL
 
 				#region Geo Cordinates Update
 
-				if (!existingJobData.JobLatitude.Equals(request.Latitude, StringComparison.OrdinalIgnoreCase) || !existingJobData.JobLongitude.Equals(request.Longitude))
+				if (string.Compare(existingJobData.JobLatitude, request.Latitude,true)!=0 || string.Compare(existingJobData.JobLongitude, request.Longitude,true)!=0)
 				{
 					isLatLongUpdatedFromXCBL = true;
 					var coordinateAction = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("Latitude", StringComparison.OrdinalIgnoreCase));
@@ -702,9 +706,9 @@ namespace M4PL.Business.XCBL
 
 				#region Delivery City and Postal Update
 
-				if (!existingJobData.JobDeliveryPostalCode.Equals(request.PostalCode, StringComparison.OrdinalIgnoreCase) ||
-					!existingJobData.JobDeliveryCity.Equals(request.City, StringComparison.OrdinalIgnoreCase))
-				{
+					if (string.Compare(existingJobData.JobDeliveryPostalCode, request.PostalCode,true)!=0 ||
+					string.Compare(existingJobData.JobDeliveryCity, request.City,true)!=0)
+					{
 					var deliveryLocationAction = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("City", StringComparison.OrdinalIgnoreCase));
 					actionCode = deliveryLocationAction != null ? deliveryLocationAction.ActionCode : string.Empty;
 					jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
@@ -725,10 +729,10 @@ namespace M4PL.Business.XCBL
 
 				#region Delivery Site name and Region Update
 
-				if (!existingJobData.JobDeliverySiteName.Equals(request.Name1, StringComparison.OrdinalIgnoreCase) ||
-					!existingJobData.JobDeliveryStreetAddress.Equals(request.Street, StringComparison.OrdinalIgnoreCase) ||
-					!existingJobData.JobDeliveryStreetAddress2.Equals(request.Streetsupplement1, StringComparison.OrdinalIgnoreCase))
-				{
+					if (string.Compare(existingJobData.JobDeliverySiteName, request.Name1,true)!=0 ||
+						string.Compare(existingJobData.JobDeliveryStreetAddress, request.Street,true)!=0 ||
+						string.Compare(existingJobData.JobDeliveryStreetAddress2, request.Streetsupplement1,true)!=0)
+					{
 					isChanged = true;
 					existingJobData.JobDeliverySiteName = !existingJobData.JobDeliverySiteName.Equals(request.Name1, StringComparison.OrdinalIgnoreCase) ? request.Name1 : existingJobData.JobDeliverySiteName;
 					existingJobData.JobDeliveryStreetAddress = !existingJobData.JobDeliveryStreetAddress.Equals(request.Street, StringComparison.OrdinalIgnoreCase) ? request.Street : existingJobData.JobDeliveryStreetAddress;
@@ -965,7 +969,7 @@ namespace M4PL.Business.XCBL
 			{
 				JobId = jobId,
 				EdtCode = title,
-				EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
+				EdtTypeId = M4PLBusinessConfiguration.XCBLEDTType.ToInt(),
 				EdtData = Newtonsoft.Json.JsonConvert.SerializeObject(xCBLToM4PLRequest),
 				TransactionDate = Utilities.TimeUtility.GetPacificDateTime(),
 				EdtTitle = title
@@ -990,7 +994,7 @@ namespace M4PL.Business.XCBL
 			{
 				JobId = jobId,
 				EdtCode = message,
-				EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
+				EdtTypeId = M4PLBusinessConfiguration.XCBLEDTType.ToInt(),
 				EdtData = orderXml,
 				TransactionDate = Utilities.TimeUtility.GetPacificDateTime(),
 				EdtTitle = string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase)

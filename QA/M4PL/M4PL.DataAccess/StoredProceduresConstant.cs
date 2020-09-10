@@ -44,6 +44,7 @@ namespace M4PL.DataAccess
 		public const string GetDisplayMessagesByCode = "dbo.GetDisplayMessagesByCode";
 		public const string GetDataForChangeHistory = "dbo.GetDataForChangeHistory";
 		public const string GetJobChangeHistory = "GetJobChangeHistory";
+		public const string GetBusinessConfiguration = "GetBusinessConfiguration";
 
 		public const string GetUserSecurities = "dbo.GetUserSecurities";
 		public const string GetComboBoxContacts = "dbo.GetComboBoxContacts";
