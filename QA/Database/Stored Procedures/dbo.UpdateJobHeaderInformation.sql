@@ -96,6 +96,7 @@ CREATE PROCEDURE [dbo].[UpdateJobHeaderInformation] (
 	,@jobDeliveryPostalCode NVARCHAR(50) = NULL
 	,@OldOrderType NVARCHAR(20)
 	,@OldShipmentType NVARCHAR(20)
+	,@IsJobReactivated BIT = 0
 	)
 AS
 BEGIN
@@ -745,6 +746,21 @@ END
 			,@enteredBy = @changedBy
 			,@userId = @userId
 			,@IsRelatedAttributeUpdate = @IsRelatedAttributeUpdate
+	END
+
+	IF(ISNULL(@IsJobReactivated, 0) = 1)
+	BEGIN
+
+	UPDATE dbo.JOBDL020Gateways 
+	SET StatusId = 196
+	Where JobId = @id AND GatewayTypeId = 85
+
+	EXEC [dbo].[CopyJobGatewayFromProgram] @id
+		,@programId
+		,@dateChanged
+		,@changedBy
+		,@userId
+		,@IsRelatedAttributeUpdate
 	END
 END 
 GO

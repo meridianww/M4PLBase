@@ -488,11 +488,6 @@ namespace M4PL.DataAccess.Job
 				isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
 			}
 
-			if (job.IsCancelled.HasValue && !job.IsCancelled.Value && job.StatusId == (int)StatusType.Active && existingJobDetail.IsCancelled.Value)
-			{
-
-			}
-
 			if (isExistsRecord)
 			{
 				jobUpdateTasks.Add(Task.Factory.StartNew(() =>
@@ -1528,6 +1523,15 @@ namespace M4PL.DataAccess.Job
 			parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
 			parameters.Add(new Parameter("@OldOrderType", existingJob.JobType));
 			parameters.Add(new Parameter("@OldShipmentType", existingJob.ShipmentType));
+			if (updatedJob.IsCancelled.HasValue && !updatedJob.IsCancelled.Value && updatedJob.StatusId == (int)StatusType.Active && existingJob.IsCancelled.HasValue && existingJob.IsCancelled.Value)
+			{
+				parameters.Add(new Parameter("@IsJobReactivated", true));
+			}
+			else
+			{
+				parameters.Add(new Parameter("@IsJobReactivated", false));
+			}
+
 			parameters.AddRange(activeUser.PutDefaultParams(updatedJob.Id, updatedJob));
 			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobHeaderInformation, parameters.ToArray(), true);
 		}
