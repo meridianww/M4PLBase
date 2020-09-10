@@ -1,0 +1,1 @@
+UPDATE SYSTM000ColumnsAlias SET ColIsReadOnly = 1 Where ColtableName='Job' AND COlColumnName = 'StatusId'

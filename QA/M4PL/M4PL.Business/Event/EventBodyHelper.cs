@@ -14,6 +14,7 @@ using M4PL.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -88,9 +89,10 @@ namespace M4PL.Business.Event
 				{ "ContractNo", contractNo },
 				{ "CreatedDate", createdDate.ToString() },
 				{ "Username", activeUser.UserName },
-				{ "JobURL", string.Format("{0}?jobId={1}", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, jobId) },
+				{ "JobURL", string.Format("{0}?jobId={1}", ConfigurationManager.AppSettings["M4PLApplicationURL"], jobId) },
 				{ "Comment", string.IsNullOrEmpty(comment) ? string.Empty : comment },
 				{ "IsCommentPresent", string.IsNullOrEmpty(comment) ? "0" : "1" },
+				{ "IsCargoDetailsPresent", string.IsNullOrEmpty(cgoPartNumCode) && string.IsNullOrEmpty(cgoitle) && string.IsNullOrEmpty(cgoSerialNumber) && string.IsNullOrEmpty(currentGateway)? "0" : "1" },
 				{ "CgoPartNumCode", cgoPartNumCode??" " },
 				{ "CgoTitle", cgoitle??" " },
 				{ "CgoSerialNumber", cgoSerialNumber??" " },
@@ -121,7 +123,7 @@ namespace M4PL.Business.Event
 				{ "Date", Date },
 				{ "Time", Time},
 				{ "ContactNumber", ContactNumber },
-				{ "JobURL", string.Format("{0}?jobId={1}", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, JobId) },
+				{ "JobURL", string.Format("{0}?jobId={1}", ConfigurationManager.AppSettings["M4PLApplicationURL"], JobId) },
 				{ "JobOriginDateTimePlanned", JobOriginDateTimePlanned },
 				{ "JobDeliveryDateTimePlanned", JobDeliveryDateTimePlanned },
 

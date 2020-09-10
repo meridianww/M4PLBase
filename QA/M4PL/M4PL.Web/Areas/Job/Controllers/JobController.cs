@@ -461,6 +461,11 @@ namespace M4PL.Web.Areas.Job.Controllers
         #endregion TreeList
 
         #region TabView
+        public PartialViewResult Tracking(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            return PartialView(route);
+        }
 
         public ActionResult TabViewCallBack(string strRoute)
         {
@@ -485,12 +490,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);
         }
 
-        public PartialViewResult Tracking(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            return PartialView(route);
-        }
-
         public ActionResult DeliveryTabView(string strRoute)
         {
             //var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -513,6 +512,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
         }
 
+        public PartialViewResult Destination(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            return PartialView(route);
+        }
+
         public ActionResult DestinationFormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -525,7 +530,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (long.TryParse(route.Url, out parentRecI))
                 route.ParentRecordId = parentRecI;
             formResult.Record = _jobCommands.GetJobDestination(route.RecordId, route.ParentRecordId) ?? new JobDestination();
-
+            formResult.Record.JobIsDirtyDestination = true;
             ////if (!formResult.Record.JobCompleted)
             ////{
             ////    formResult.Record.JobDeliveryDateTimeActual = null;

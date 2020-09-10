@@ -574,9 +574,10 @@ namespace M4PL.Entities.Job
 		public string JobPurchaseInvoiceNumber { get; set; }
 		public bool JobIsSchedule { get; set; }
 		public string InstallStatus { get; set; }
-		public bool IsCancelled { get; set; }
+		public bool? IsCancelled { get; set; }
 		public string StatusIdName { get; set; }
 
 		public IList<JobsSiteCode> JobsSiteCodeList { get; set; }
-	}
+        public bool JobIsDirtyDestination { get; set; }
+    }
 }

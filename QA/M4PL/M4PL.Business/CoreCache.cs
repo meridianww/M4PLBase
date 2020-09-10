@@ -146,6 +146,8 @@ namespace M4PL.Business
 			private set;
 		}
 
+		public static ConcurrentDictionary<string, BusinessConfiguration> BusinessConfiguration { get; private set; }
+
 		static CoreCache()
 		{
 			Tables = new List<TableReference>();
@@ -160,6 +162,7 @@ namespace M4PL.Business
 			MasterTables = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, object>>();
 			ConditionalOperators = new ConcurrentDictionary<string, IList<ConditionalOperator>>();
 			SysSettings = new ConcurrentDictionary<string, SysSetting>();
+			BusinessConfiguration = new ConcurrentDictionary<string, BusinessConfiguration>();
 			////DimensionValues = new ConcurrentDictionary<string, NavSalesOrderDimensionResponse>();
 			////NAVOrderItemResponse = new ConcurrentDictionary<string, NAVOrderItemResponse>();
 			////CachedNavSalesOrder = new ConcurrentDictionary<string, NavSalesOrderPostedInvoiceResponse>();
@@ -184,6 +187,7 @@ namespace M4PL.Business
 			ValidationRegExpressions.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>());
 			MasterTables.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, object>());
 			ConditionalOperators.GetOrAdd(langCode, new List<ConditionalOperator>());
+			BusinessConfiguration.GetOrAdd(langCode, new BusinessConfiguration());
 			List<Task> tasks = new List<Task>();
 			tasks.Add(Task.Factory.StartNew(() =>
 			{
@@ -252,6 +256,15 @@ namespace M4PL.Business
 			if (!RibbonMenus[langCode].Any() || forceUpdate)
 				RibbonMenus.AddOrUpdate(langCode, _commands.GetRibbonMenus(langCode));
 			return RibbonMenus[langCode];
+		}
+
+		public static BusinessConfiguration GetBusinessConfiguration(string langCode, bool forceUpdate = false)
+		{
+			if (!BusinessConfiguration.ContainsKey(langCode))
+				BusinessConfiguration.GetOrAdd(langCode, new BusinessConfiguration());
+			if (BusinessConfiguration[langCode] == null || (BusinessConfiguration[langCode] != null && string.IsNullOrEmpty(BusinessConfiguration[langCode].AWCCustomerId)) || forceUpdate)
+				BusinessConfiguration.AddOrUpdate(langCode, _commands.GetBusinessConfiguration(langCode));
+			return BusinessConfiguration[langCode];
 		}
 
 		#region Commented Code

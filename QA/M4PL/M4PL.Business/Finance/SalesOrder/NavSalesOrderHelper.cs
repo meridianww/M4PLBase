@@ -18,6 +18,7 @@
 //==============================================================================================================
 
 using M4PL.Business.Common;
+using M4PL.Entities;
 using M4PL.Entities.Finance.JobOrderMapping;
 using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.PurchaseOrder;
@@ -43,6 +44,11 @@ namespace M4PL.Business.Finance.SalesOrder
     /// </summary>
     public static class NavSalesOrderHelper
     {
+		public static BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
 		#region Sales Order
 
 		public static NavJobSalesOrder GetSalesOrderFromNavByJobId(string navAPIUrl, string navAPIUserName, string navAPIPassword, long jobId)
@@ -597,9 +603,9 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		public static NAVOrderItemResponse GetNavNAVOrderItemResponse()
         {
-            string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-            string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-            string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+            string navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+            string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+            string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
             NAVOrderItemResponse navOrderItemResponse = null;
             try
             {

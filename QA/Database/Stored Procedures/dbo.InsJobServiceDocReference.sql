@@ -12,7 +12,7 @@ GO
 -- Description:               Ins a Job Service Doc Reference   
 -- Execution:                 EXEC [dbo].[InsJobServiceDocReference]
 -- =============================================    
-CREATE PROCEDURE [dbo].[InsJobServiceDocReference] (
+ALTER PROCEDURE [dbo].[InsJobServiceDocReference] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@jobId BIGINT
@@ -70,6 +70,7 @@ BEGIN
 		,[StatusId]
 		,[EnteredBy]
 		,[DateEntered]
+		,[JdrAttachment]
 		)
 	VALUES (
 		@DocRefId
@@ -81,6 +82,7 @@ BEGIN
 		,@statusId
 		,@enteredBy
 		,@dateEntered
+		,@AttachmentCount
 		)
 
 	SELECT @DocRefId Id

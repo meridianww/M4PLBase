@@ -7,8 +7,10 @@
 ******************************************************************************/
 #endregion Copyright
 
+using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,16 +23,18 @@ namespace M4PL.Business.XCBL.HelperClasses
 {
 	public static class FarEyeHelper
 	{
+		public static BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
 		public static void PushStatusUpdateToFarEye(long jobId, ActiveUser activeUser)
 		{
-			bool isFarEyePushNeeded = M4PBusinessContext.ComponentSettings.IsFarEyePushRequired;
+			bool isFarEyePushNeeded = M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean();
 			if (isFarEyePushNeeded)
 			{
-				bool isUpdateRequiredToPushOnProduction = M4PBusinessContext.ComponentSettings.IsElectroluxDeliveryUpdateProduction;
-				string testAPIURL = M4PBusinessContext.ComponentSettings.FarEyeUpdateTestAPIURL;
-				string testAPIKey = M4PBusinessContext.ComponentSettings.FarEyeUpdateTestAPIKey;
-				string productionAPIURL = M4PBusinessContext.ComponentSettings.FarEyeUpdateProductionAPIURL;
-				string productionAPIKey = M4PBusinessContext.ComponentSettings.FarEyeUpdateProductionAPIKey;
+				string farEyeAPIUrl = M4PLBusinessConfiguration.FarEyeAPIUrl;
+				string farEyeAuthKey = M4PLBusinessConfiguration.FarEyeAuthKey;
 				Task.Factory.StartNew(() =>
 				{
 					try
@@ -39,7 +43,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 						if (deliveryUpdateModel != null)
 						{
 							string requestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
-							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, isUpdateRequiredToPushOnProduction, testAPIURL, testAPIKey, productionAPIURL, productionAPIKey);
+							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
 							DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(requestBody, response, jobId);
 						}
 					}
@@ -51,22 +55,14 @@ namespace M4PL.Business.XCBL.HelperClasses
 			}
 		}
 
-		private static string SentOrderStatusUpdateToFarEye(DeliveryUpdate deliveryUpdate, bool isUpdateRequiredToPushOnProduction, string testAPIURL, string testAPIKey, string productionAPIURL, string productionAPIKey)
+		private static string SentOrderStatusUpdateToFarEye(DeliveryUpdate deliveryUpdate, string farEyeAPIURL, string farEyeAPIKey)
 		{
 			string electroluxOrderStatusUpdateJson = string.Empty;
 			string farEyeUpdateURL = string.Empty;
 			string farEyeApiKey = string.Empty;
 			string responseData = string.Empty;
-			if (!isUpdateRequiredToPushOnProduction)
-			{
-				farEyeUpdateURL = string.Format("{0}/Connector/v1/meridian/trackingUpdates", testAPIURL);
-				farEyeApiKey = string.Format("bearer {0}", testAPIKey);
-			}
-			else
-			{
-				farEyeUpdateURL = string.Format("{0}/Connector/v1/meridian/trackingUpdates", productionAPIURL);
-				farEyeApiKey = string.Format("bearer {0}", productionAPIKey);
-			}
+			farEyeUpdateURL = string.Format("{0}/Connector/v1/meridian/trackingUpdates", farEyeAPIURL);
+			farEyeApiKey = string.Format("bearer {0}", farEyeAPIKey);
 
 			try
 			{

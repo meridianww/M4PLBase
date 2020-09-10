@@ -16,6 +16,7 @@
 // Program Name:                                 NavCustomerCommands
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Administration.NavCustomerCommands
 //==============================================================================================================
+using M4PL.Entities;
 using M4PL.Entities.Finance.Customer;
 using M4PL.Entities.Support;
 using System;
@@ -32,7 +33,12 @@ namespace M4PL.Business.Finance.Customer
 {
     public class NavCustomerCommands : BaseCommands<NavCustomer>, INavCustomerCommands
     {
-        public int Delete(long id)
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
+		public int Delete(long id)
         {
             throw new NotImplementedException();
         }
@@ -47,9 +53,9 @@ namespace M4PL.Business.Finance.Customer
             IList<NavCustomer> navOneToManyCustomerList = new List<NavCustomer>();
             List<NavCustomer> navOneToOneCustomerList = new List<NavCustomer>(); ;
             IList<NavCustomerData> navCustomerData = null;
-			string navCustomerUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			string navCustomerUrl = M4PLBusinessConfiguration.NavAPIUrl;
+			string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+			string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
 			IList<Entities.Customer.Customer> m4PLCustomerData = null;
             Task[] tasks = new Task[2];
 

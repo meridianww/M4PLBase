@@ -23,6 +23,7 @@
 
 <div class="col-sm-12 col-md-12 col-lg-12 overflow-visible no-padding">
     <div class="col-sm-8 col-md-6 col-lg-6 no-padding-left">
+        @Html.Hidden("JobIsDirtyDestination", true)
         @Html.DevExpress().RoundPanel(settings =>
    {
        settings.Name = "pnlJobSellerOriginDetail";
@@ -34,7 +35,6 @@
        settings.ControlStyle.CssClass = "form-layout";
        settings.SetContent(() =>
        {
-
            ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-10 job-origin-destination no-padding'>");
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginSiteName, new { onTextChange = changeEvent }).ToHtmlString());
@@ -156,19 +156,19 @@
            ViewContext.Writer.Write("</div>");
 
            ViewContext.Writer.Write("</div>");
-          //ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
-          //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
-          //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignText).ToHtmlString());
-          //ViewContext.Writer.Write("</div>");
+           //ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
+           //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+           //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignText).ToHtmlString());
+           //ViewContext.Writer.Write("</div>");
 
-          //ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right' >");
-          //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLatitude).ToHtmlString());
-          //ViewContext.Writer.Write("</div>");
+           //ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right' >");
+           //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLatitude).ToHtmlString());
+           //ViewContext.Writer.Write("</div>");
 
-          //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right' style='float: none !important'>");
-          //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLongitude).ToHtmlString());
-          //ViewContext.Writer.Write("</div>");
-          //ViewContext.Writer.Write("</div>");
+           //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right' style='float: none !important'>");
+           //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLongitude).ToHtmlString());
+           //ViewContext.Writer.Write("</div>");
+           //ViewContext.Writer.Write("</div>");
        });
    }).GetHtml()
         @Html.DevExpress().RoundPanel(settings =>

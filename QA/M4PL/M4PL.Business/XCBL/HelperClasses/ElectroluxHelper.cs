@@ -7,12 +7,15 @@
 ******************************************************************************/
 #endregion Copyright
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateResponse;
+using M4PL.Utilities;
 using M4PL.Utilities.Logger;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Xml;
@@ -25,31 +28,21 @@ namespace M4PL.Business.XCBL.HelperClasses
 {
     public static class ElectroluxHelper
     {
-        public static DeliveryUpdateResponse SendDeliveryUpdateRequestToElectrolux(ActiveUser activeUser, DeliveryUpdate deliveryUpdate, long jobId)
+		public static BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
+		public static DeliveryUpdateResponse SendDeliveryUpdateRequestToElectrolux(ActiveUser activeUser, DeliveryUpdate deliveryUpdate, long jobId)
         {
             DeliveryUpdateResponse deliveryUpdateResponse = null;
             string deliveryUpdateResponseString = string.Empty;
             string deliveryUpdateXml = string.Empty;
-            string deliveryUpdateURL = string.Empty;
-            string deliveryUpdateUserName = string.Empty;
-            string deliveryUpdatePassword = string.Empty;
-            if (!M4PBusinessContext.ComponentSettings.IsElectroluxDeliveryUpdateProduction)
-            {
-                deliveryUpdateURL = M4PBusinessContext.ComponentSettings.ElectroluxDeliveryUpdateTestAPIUrl;
-                deliveryUpdateUserName = M4PBusinessContext.ComponentSettings.ElectroluxDeliveryUpdateTestAPIUsername;
-                deliveryUpdatePassword = M4PBusinessContext.ComponentSettings.ElectroluxDeliveryUpdateTestAPIPassword;
-            }
-            else
-            {
-                deliveryUpdateURL = M4PBusinessContext.ComponentSettings.ElectroluxDeliveryUpdateProductionAPIUrl;
-                deliveryUpdateUserName = M4PBusinessContext.ComponentSettings.ElectroluxDeliveryUpdateProductionAPIUsername;
-                deliveryUpdatePassword = M4PBusinessContext.ComponentSettings.ElectroluxDeliveryUpdateProductionAPIPassword;
-            }
 
-            try
+			try
             {
-                NetworkCredential networkCredential = new NetworkCredential(deliveryUpdateUserName, deliveryUpdatePassword);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(deliveryUpdateURL);
+                NetworkCredential networkCredential = new NetworkCredential(M4PLBusinessConfiguration.ElectroluxDeliveryUpdateUserName, M4PLBusinessConfiguration.ElectroluxDeliveryUpdatePassword);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(M4PLBusinessConfiguration.ElectroluxDeliveryUpdateAPIUrl);
                 request.Credentials = networkCredential;
                 request.KeepAlive = false;
                 request.ContentType = "application/xml";
@@ -82,7 +75,7 @@ namespace M4PL.Business.XCBL.HelperClasses
                     {
                         JobId = jobId,
                         EdtCode = "Delivery Update",
-                        EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
+                        EdtTypeId = M4PLBusinessConfiguration.XCBLEDTType.ToInt(),
                         EdtData = deliveryUpdateXml,
                         TransactionDate = Utilities.TimeUtility.GetPacificDateTime(),
                         EdtTitle = "Delivery Update"
@@ -91,7 +84,7 @@ namespace M4PL.Business.XCBL.HelperClasses
             }
             catch (Exception exp)
             {
-                _logger.Log(exp, string.Format("Error is occuring while Sending the Delivery Update To Electrolux: Request Url is: {0}, Request body xml was {1}", deliveryUpdateURL, deliveryUpdateXml), string.Format("Electrolux delivery update for JobId: {0}", jobId), LogType.Error);
+                _logger.Log(exp, string.Format("Error is occuring while Sending the Delivery Update To Electrolux: Request Url is: {0}, Request body xml was {1}", M4PLBusinessConfiguration.ElectroluxDeliveryUpdateAPIUrl, deliveryUpdateXml), string.Format("Electrolux delivery update for JobId: {0}", jobId), LogType.Error);
             }
 
             InsertJobDeliveryUpdateLog(deliveryUpdateXml, deliveryUpdateResponseString, jobId);
@@ -120,15 +113,15 @@ namespace M4PL.Business.XCBL.HelperClasses
                 Exceptions = deliveryUpdateModel.Exceptions,
                 UserNotes = deliveryUpdateModel.UserNotes,
                 AdditionalComments = deliveryUpdateModel.AdditionalComments,
-                OrderURL = string.Format("<![CDATA[{0}?jobId={1}]]>", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID),
+                OrderURL = string.Format("<![CDATA[{0}?jobId={1}]]>", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdateModel.ServiceProviderID),
                 OrderLineDetail = deliveryUpdateModel.OrderLineDetail
             };
 
             deliveryUpdate.POD = deliveryUpdateModel.POD == null ? new POD() : deliveryUpdateModel.POD;
             deliveryUpdate.POD.DeliveryImages = deliveryUpdateModel.POD.DeliveryImages == null ? new DeliveryImages() : deliveryUpdateModel.POD.DeliveryImages;
-            deliveryUpdate.POD.DeliveryImages.ImageURL = string.Format("<![CDATA[{0}?jobId={1}&tabName=POD]]>", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
+            deliveryUpdate.POD.DeliveryImages.ImageURL = string.Format("<![CDATA[{0}?jobId={1}&tabName=POD]]>", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdateModel.ServiceProviderID);
             deliveryUpdate.POD.DeliverySignature = deliveryUpdateModel.POD.DeliverySignature == null ? new DeliverySignature() : deliveryUpdateModel.POD.DeliverySignature;
-            deliveryUpdate.POD.DeliverySignature.ImageURL = string.Format("<![CDATA[{0}?jobId={1}&tabName=POD]]>", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
+            deliveryUpdate.POD.DeliverySignature.ImageURL = string.Format("<![CDATA[{0}?jobId={1}&tabName=POD]]>", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdateModel.ServiceProviderID);
 
             return deliveryUpdate;
         }

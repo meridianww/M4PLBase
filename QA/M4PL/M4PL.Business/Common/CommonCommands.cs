@@ -31,12 +31,18 @@ using M4PL.Utilities.Logger;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
 using System;
+using System.Configuration;
 
 namespace M4PL.Business.Common
 {
     public class CommonCommands
     {
-        public static ActiveUser ActiveUser { get; set; }
+		public static BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
+		public static ActiveUser ActiveUser { get; set; }
 
         #region Cached Results
 
@@ -67,15 +73,20 @@ namespace M4PL.Business.Common
 			return Finance.SalesOrder.NavSalesOrderHelper.GetNavSalesOrderDimension(username, password, serviceURL);
         }
 
+		public static BusinessConfiguration GetBusinessConfiguration(bool forceUpdate)
+		{
+			return CoreCache.GetBusinessConfiguration(ActiveUser.LangCode, forceUpdate);
+		}
+
 		/// <summary>
 		/// Gets the list of app menu data
 		/// </summary>
 		/// <returns></returns>
 		public static NavSalesOrderPostedInvoiceResponse GetCachedNavSalesOrderValues(bool forceUpdate = false)
 		{
-			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string username = M4PLBusinessConfiguration.NavAPIUserName;
+			string password = M4PLBusinessConfiguration.NavAPIPassword;
+			string serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
 
 			return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderResponse(username, password, serviceURL);
 		}
@@ -86,9 +97,9 @@ namespace M4PL.Business.Common
 		/// <returns></returns>
 		public static NavPurchaseOrderPostedInvoiceResponse GetCachedNavPurchaseOrderValues(bool forceUpdate = false)
 		{
-			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string username = M4PLBusinessConfiguration.NavAPIUserName;
+			string password = M4PLBusinessConfiguration.NavAPIPassword;
+			string serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
 			return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderResponse(username, password, serviceURL);
 		}
 
@@ -98,9 +109,9 @@ namespace M4PL.Business.Common
 		/// <returns></returns>
 		public static NavSalesOrderItemResponse GetCachedNavSalesOrderItemValues(bool forceUpdate = false)
 		{
-			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string username = M4PLBusinessConfiguration.NavAPIUserName;
+			string password = M4PLBusinessConfiguration.NavAPIPassword;
+			string serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
 			return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderItemResponse(username, password, serviceURL);
 		}
 
@@ -110,9 +121,9 @@ namespace M4PL.Business.Common
 		/// <returns></returns>
 		public static NavPurchaseOrderItemResponse GetCachedNavPurchaseOrderItemValues(bool forceUpdate = false)
 		{
-			string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string password = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			string serviceURL = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string username = M4PLBusinessConfiguration.NavAPIUserName;
+			string password = M4PLBusinessConfiguration.NavAPIPassword;
+			string serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
 			return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderItemResponse(username, password, serviceURL);
 		}
 

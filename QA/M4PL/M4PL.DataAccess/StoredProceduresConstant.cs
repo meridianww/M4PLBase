@@ -44,6 +44,7 @@ namespace M4PL.DataAccess
 		public const string GetDisplayMessagesByCode = "dbo.GetDisplayMessagesByCode";
 		public const string GetDataForChangeHistory = "dbo.GetDataForChangeHistory";
 		public const string GetJobChangeHistory = "GetJobChangeHistory";
+		public const string GetBusinessConfiguration = "GetBusinessConfiguration";
 
 		public const string GetUserSecurities = "dbo.GetUserSecurities";
 		public const string GetComboBoxContacts = "dbo.GetComboBoxContacts";
@@ -450,6 +451,8 @@ namespace M4PL.DataAccess
 		public const string InsertJob = "dbo.InsJob";
 		public const string UpdateJob = "dbo.UpdJob";
 		public const string DeleteJob = "dbo.DeleteJob";
+		public const string UpdateJobHeaderInformation = "dbo.UpdateJobHeaderInformation";
+		public const string UpdateJobLocationInformation = "dbo.UpdateJobLocationInformation";
 
 		/* Job Destination */
 		public const string GetJobDestination = "dbo.GetJobDestination";

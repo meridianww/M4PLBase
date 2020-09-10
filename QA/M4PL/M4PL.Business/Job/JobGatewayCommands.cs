@@ -29,31 +29,34 @@ using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.Job.JobGatewayCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 using _jobCargoCommands = M4PL.DataAccess.Job.JobCargoCommands;
+using M4PL.Utilities;
 
 namespace M4PL.Business.Job
 {
     public class JobGatewayCommands : BaseCommands<JobGateway>, IJobGatewayCommands
     {
-
-
-        public string NavAPIUrl
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+		public string NavAPIUrl
         {
-            get { return M4PBusinessContext.ComponentSettings.NavAPIUrl; }
+            get { return M4PLBusinessConfiguration.NavAPIUrl; }
         }
 
         public string NavAPIUserName
         {
-            get { return M4PBusinessContext.ComponentSettings.NavAPIUserName; }
+            get { return M4PLBusinessConfiguration.NavAPIUserName; }
         }
 
         public string NavAPIPassword
         {
-            get { return M4PBusinessContext.ComponentSettings.NavAPIPassword; }
+            get { return M4PLBusinessConfiguration.NavAPIPassword; }
         }
 
         public string PODTransitionStatusId
         {
-            get { return M4PBusinessContext.ComponentSettings.CompletedTransitionStatusId; }
+            get { return M4PLBusinessConfiguration.CompletedTransitionStatusId; }
         }
 
         /// <summary>
@@ -80,7 +83,7 @@ namespace M4PL.Business.Job
         public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction, string gatewayCode = null)
         {
             var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor, is3PlAction, gatewayCode);
-            result.IsSpecificCustomer = result.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
+            result.IsSpecificCustomer = result.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? true : false;
             return result;
         }
 
@@ -92,7 +95,7 @@ namespace M4PL.Business.Job
 
         public JobGateway Post(JobGateway jobGateway)
         {
-            var gateway = _commands.Post(ActiveUser, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+            var gateway = _commands.Post(ActiveUser, jobGateway, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
             PushDataToNav(gateway.JobID, jobGateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
             if (jobGateway.GwyCargoId > 0)
             {
@@ -100,7 +103,11 @@ namespace M4PL.Business.Job
                 string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyExceptionStatusIdName, (long)jobGateway.JobID, jobGateway.ContractNumber, (DateTime)jobGateway.GwyGatewayACD, jobGateway.GwyAddtionalComment, jobCargo.CgoPartNumCode, jobCargo.CgoTitle, jobCargo.CgoSerialNumber, jobCargo.JobGatewayStatus);
                 EventBodyHelper.CreateEventMailNotificationForCargoException((int)EventNotification.CargoException, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
             }
-
+            else if (string.Compare(jobGateway.GwyGatewayCode, "Exception", true) == 0)
+            {
+                string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, gateway.GwyGatewayACD.HasValue ? (DateTime)gateway.GwyGatewayACD : Utilities.TimeUtility.GetPacificDateTime(), jobGateway.GwyAddtionalComment, string.Empty, string.Empty, string.Empty, string.Empty);
+                EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
+            }
             if (gateway.IsFarEyePushRequired)
             {
                 FarEyeHelper.PushStatusUpdateToFarEye((long)jobGateway.JobID, ActiveUser);
@@ -128,7 +135,7 @@ namespace M4PL.Business.Job
                 {
                     gateway = new JobGateway();
                     gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway,
-                        M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, Convert.ToInt64(item));
+						M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), Convert.ToInt64(item));
                     gatewaysIds += gateway.Id + ",";
                 }
                 gateway.GatewayIds = gatewaysIds.Remove(gatewaysIds.Length - 1);
@@ -136,7 +143,7 @@ namespace M4PL.Business.Job
             }
             else
             {
-                gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
                 PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
             }
 
@@ -144,6 +151,11 @@ namespace M4PL.Business.Job
             {
                 var jobCargo = _jobCargoCommands.Get(ActiveUser, jobGateway.GwyCargoId);
                 string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, gateway.GwyGatewayACD.HasValue ? (DateTime)gateway.GwyGatewayACD : Utilities.TimeUtility.GetPacificDateTime(), jobGateway.GwyAddtionalComment, jobCargo.CgoPartNumCode, jobCargo.CgoTitle, jobCargo.CgoSerialNumber, jobCargo.JobGatewayStatus);
+                EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
+            }
+            else if(string.Compare(jobGateway.GwyGatewayCode,"Exception",true)==0)
+            {
+                string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, gateway.GwyGatewayACD.HasValue ? (DateTime)gateway.GwyGatewayACD : Utilities.TimeUtility.GetPacificDateTime(), jobGateway.GwyAddtionalComment, string.Empty, string.Empty, string.Empty, string.Empty);
                 EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
             }
 
@@ -274,7 +286,7 @@ namespace M4PL.Business.Job
                         }
                         else
                         {
-                            isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                            isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
                         }
 
                         if (isDeliveryChargeRemovalRequired)

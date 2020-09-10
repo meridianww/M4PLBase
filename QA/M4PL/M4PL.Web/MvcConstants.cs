@@ -160,6 +160,7 @@ namespace M4PL.Web
 		public const string ActionDocApprovalsDataView = "DocApprovalsDataView";
 		public const string ActionDocImageDataView = "DocImageDataView";
 		public const string ActionDocSignatureDataView = "DocSignatureDataView";
+		public const string ActionDocDocumentDataView = "DocDocumentDataView";
 
 		public const string ActionCopyTo = "CopyTo";
 		public const string ActionCopyFrom = "CopyFrom";

@@ -26,6 +26,7 @@ namespace M4PL.Entities.JobService
         public string CustomerCode { get; set; }
         public string GwyOrderType { get; set; }
         public string GwyShipmentType { get; set; }
+        public bool IsJobPermission { get; set; }
         public List<OrderGatewayDetails> OrderGatewayDetails { get; set; }
         //public List<OrderDocumentDetails> OrderDocumentDetails { get; set; }
     }

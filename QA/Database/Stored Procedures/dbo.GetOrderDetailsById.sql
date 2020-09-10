@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -12,13 +11,31 @@ GO
 -- Description:               Get a Job Details by job id  
 -- Exec :					  Exec GetOrderDetailsById 170712   
 -- =============================================  
-ALTER PROCEDURE GetOrderDetailsById @userId BIGINT
-	,@roleId BIGINT
+ALTER PROCEDURE GetOrderDetailsById @userId BIGINT =0
+	,@roleId BIGINT = 0
 	,@orgId BIGINT = 1
 	,@id BIGINT
 AS
 BEGIN
-
+   IF OBJECT_ID('tempdb..#JobPermission') IS NOT NULL
+		BEGIN
+			DROP TABLE #JobPermission
+		END
+   CREATE TABLE #JobPermission
+   (IsJobPermission BIT )
+   IF (
+			@userId > 0
+			AND @orgId > 0
+			)
+	BEGIN
+	   	INSERT INTO #JobPermission (IsJobPermission)
+	    EXEC [dbo].[IsJobPermissionPresentForUser] @userId,@orgId,@id
+		--IF EXISTS(SELECT 1 from #JobPermission WHERE IsJobPermission = 1)
+		--BEGIN
+		  
+		--END
+	END
+	
 	SELECT JOB.Id
 		,JOB.JobCustomerSalesOrder AS CustomerSalesOrder
 		,JOB.JobGatewayStatus AS GatewayStatus
@@ -32,6 +49,7 @@ BEGIN
 		,CUSTOMER.CustCode AS CustomerCode
 		,JOB.ShipmentType AS GwyShipmentType
 		,JOB.JobType AS GwyOrderType
+		,CASE WHEN @userId = 0 AND @roleId = 0 THEN CAST(0 AS BIT) ELSE  CAST((SELECT IsJobPermission FROM #JobPermission) AS BIT) END IsJobPermission
 	FROM CUST000Master CUSTOMER
 	INNER JOIN PRGRM000Master PROGRAM ON PROGRAM.PrgCustID = CUSTOMER.ID
 	INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = PROGRAM.ID

@@ -233,12 +233,14 @@ BEGIN TRY
 	END
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(' + @entity + '.Id) ' + @TablesQuery
+	SET @TCountQuery += ' LEFT JOIN dbo.JobCargoAdvanceReportView Cargo ON Cargo.JobId =' + @entity + '.Id'
+	SET @TCountQuery += ' LEFT JOIN dbo.JOBDL020Gateways Gateway ON Gateway.JobId = ' + @entity + '.Id ' + 'AND Gateway.StatusId = 194 AND Gateway.GatewayTypeId = 85 AND GwyGatewayCode IN (''DS On Truck'', ''Loaded on Truck'', ''On Truck'')'
 
 	IF (ISNULL(@where, '') <> '')
 	BEGIN
 		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
 	END
-	
+
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -385,7 +387,7 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END
-
+	
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

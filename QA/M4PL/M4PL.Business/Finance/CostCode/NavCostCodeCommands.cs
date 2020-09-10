@@ -17,6 +17,7 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavCostCodeCommands
 //==============================================================================================================
 using M4PL.Business.Common;
+using M4PL.Entities;
 using M4PL.Entities.Document;
 using M4PL.Entities.Finance.CostCode;
 using M4PL.Entities.Finance.OrderItem;
@@ -42,6 +43,11 @@ namespace M4PL.Business.Finance.CostCode
 {
 	public class NavCostCodeCommands : BaseCommands<NavCostCode>, INavCostCodeCommands
 	{
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
 		public int Delete(long id)
 		{
 			throw new NotImplementedException();
@@ -55,7 +61,7 @@ namespace M4PL.Business.Finance.CostCode
 		public IList<NavCostCode> GetAllCostCode()
 		{
 			List<NavCostCode> navCostCodeList = null;
-			if (!M4PBusinessContext.ComponentSettings.NavRateReadFromItem)
+			if (!M4PLBusinessConfiguration.NavRateReadFromItem.ToBoolean())
 			{
 				navCostCodeList = GetNavCostCodeData();
 				if (navCostCodeList != null && navCostCodeList.Count > 0)
@@ -103,9 +109,9 @@ namespace M4PL.Business.Finance.CostCode
 
 		private List<NavCostCode> GetNavCostCodeData()
 		{
-			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			string navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+			string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+			string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
 			NavCostCodeResponse navCostCodeResponse = null;
 			try
 			{
