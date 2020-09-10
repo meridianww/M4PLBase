@@ -485,6 +485,8 @@ namespace M4PL.Web
                         gridName = string.Format("DocDeliveryPod_{0}", gridName);
                     else if (route.Action == MvcConstants.ActionDocDamagedDataView)
                         gridName = string.Format("DocDamagedDataView_{0}", gridName);
+					else if (route.Action == MvcConstants.ActionDocDocumentDataView)
+						gridName = string.Format("DocDocumentDataView_{0}", gridName);
 					else if (route.Action == MvcConstants.ActionDocApprovalsDataView)
 						gridName = string.Format("DocApprovalsDataView_{0}", gridName);
 					else if (route.Action == MvcConstants.ActionDocImageDataView)

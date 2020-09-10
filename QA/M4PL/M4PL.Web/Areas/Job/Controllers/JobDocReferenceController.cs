@@ -84,17 +84,21 @@ namespace M4PL.Web.Areas.Job.Controllers
 			{
 				return new JobDocReferenceView() { Id = Id, JdrTitle = "Damaged", DocTypeId = (int)JobDocReferenceType.Damaged, JdrCode = "Damaged", IsNew = true };
 			}
-			else if (ownerCbPanel == "JobDocReferenceJobDocReferenceDocImageDataView4ImageCbPanel")
+			else if (ownerCbPanel == "JobDocReferenceJobDocReferenceDocImageDataView5ImageCbPanel")
 			{
 				return new JobDocReferenceView() { Id = Id, JdrTitle = "Image", DocTypeId = (int)JobDocReferenceType.Image, JdrCode = "Image", IsNew = true };
 			}
-			else if (ownerCbPanel == "JobDocReferenceJobDocReferenceDocDeliveryPodDataView5PODCbPanel")
+			else if (ownerCbPanel == "JobDocReferenceJobDocReferenceDocDeliveryPodDataView6PODCbPanel")
 			{
 				return new JobDocReferenceView() { Id = Id, JdrTitle = "POD", DocTypeId = (int)JobDocReferenceType.POD, JdrCode = "POD", IsNew = true };
 			}
-			else if (ownerCbPanel == "JobDocReferenceJobDocReferenceDocSignatureDataView6SignatureCbPanel")
+			else if (ownerCbPanel == "JobDocReferenceJobDocReferenceDocSignatureDataView7SignatureCbPanel")
 			{
 				return new JobDocReferenceView() { Id = Id, JdrTitle = "Signature", DocTypeId = (int)JobDocReferenceType.Signature, JdrCode = "Signature", IsNew = true };
+			}
+			else if(ownerCbPanel == "JobDocReferenceJobDocReferenceDocDocumentDataView4DocumentCbPanel")
+			{
+				return new JobDocReferenceView() { Id = Id, JdrTitle = "Document", DocTypeId = (int)JobDocReferenceType.Document, JdrCode = "Document", IsNew = true };
 			}
 			else
 			{
@@ -187,7 +191,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 				var jobDocReferenceType = (JobDocReferenceType)Enum.Parse(typeof(JobDocReferenceType), (string)Session["tabName"], true);
 				switch (jobDocReferenceType)
 				{
-					case JobDocReferenceType.Document:
+					case JobDocReferenceType.All:
 					default:
 						pageControlResult.SelectedTabIndex = 0;
 						break;
@@ -200,16 +204,20 @@ namespace M4PL.Web.Areas.Job.Controllers
 						pageControlResult.SelectedTabIndex = 2;
 						break;
 
-					case JobDocReferenceType.Image:
+					case JobDocReferenceType.Document:
 						pageControlResult.SelectedTabIndex = 3;
 						break;
 
-					case JobDocReferenceType.POD:
+					case JobDocReferenceType.Image:
 						pageControlResult.SelectedTabIndex = 4;
 						break;
 
-					case JobDocReferenceType.Signature:
+					case JobDocReferenceType.POD:
 						pageControlResult.SelectedTabIndex = 5;
+						break;
+
+					case JobDocReferenceType.Signature:
+						pageControlResult.SelectedTabIndex = 6;
 						break;
 				}
 
@@ -433,6 +441,35 @@ namespace M4PL.Web.Areas.Job.Controllers
 			else
 				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 			SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.Signature);
+			var currentGridName = WebUtilities.GetGridName(route);
+			base.DataView(strRoute, currentGridName);
+			if (selectedId > 0)
+				_gridResult.FocusedRowId = selectedId;
+			if (_gridResult.Records.Any(c => c.JobCompleted) || (_gridResult.Records.Count == 0 && _commonCommands.GetIsJobCompleted(route.ParentRecordId)))
+			{
+				_gridResult.Operations.Remove(OperationTypeEnum.New);
+				_gridResult.GridSetting.ContextMenu.Remove(_commonCommands.GetOperation(OperationTypeEnum.New));
+			}
+			_gridResult.GridSetting.GridName = currentGridName;
+			return PartialView(MvcConstants.ActionDataView, _gridResult);
+		}
+
+		public PartialViewResult DocDocumentDataView(string strRoute, long selectedId = 0)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+			if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+			{
+				var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+				sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+				sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+				var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
+				viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
+				SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+			}
+			else
+				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
+			SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.Document);
 			var currentGridName = WebUtilities.GetGridName(route);
 			base.DataView(strRoute, currentGridName);
 			if (selectedId > 0)

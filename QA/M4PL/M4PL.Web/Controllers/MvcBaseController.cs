@@ -109,7 +109,7 @@ namespace M4PL.Web.Controllers
                 jobFormRoute.RecordId = jobId;
                 Session["SpecialJobId"] = true;
                 if (!string.IsNullOrEmpty(tabName))
-                    Session["tabName"] = tabName.ToLower() == "all" ? JobDocReferenceType.Document.ToString() : tabName;
+                    Session["tabName"] = tabName.ToLower() == "all" ? JobDocReferenceType.All.ToString() : tabName;
                 return jobFormRoute;
             }
 
