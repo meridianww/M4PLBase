@@ -18,6 +18,10 @@
 @{
     ViewBag.Title = Model.PageName;
     Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GatewayTypeId").ColIsReadOnly = true;
+    if (Model.Permission == Permission.EditActuals || Model.SessionProvider.ActiveUser.IsSysAdmin)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayACD").ColIsReadOnly = false;
+    }
 
     if (Model.Record.GwyCompleted)
     {
