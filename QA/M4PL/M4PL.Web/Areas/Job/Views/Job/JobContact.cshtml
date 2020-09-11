@@ -1,0 +1,16 @@
+﻿@model M4PL.Entities.Support.MvcRoute
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlContactStatusDetail";
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Analyst,Responsible and Driver Details";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.CallbackRouteValues = new { Controller = "Job", Action = "JobContact", Area = "Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
+    settings.SetContent(() =>
+    {
+        Html.RenderAction("JobContactFormView", "Job", new { Area = "Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) });
+    });
+}).GetHtml()

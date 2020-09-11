@@ -1,0 +1,105 @@
+﻿@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.Entities.Job.JobContact>
+@{
+    ViewBag.Title = Model.PageName;
+    var responsibleContactDropDownModel = Model.Record.JobDeliveryResponsibleContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryResponsibleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
+    responsibleContactDropDownModel.EntityFor = EntitiesAlias.PPPJobRespContact;
+    responsibleContactDropDownModel.ParentEntity = EntitiesAlias.Job;
+    var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model,
+(Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
+: (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId), Model.Record.CompanyId);
+    analystContactDropDownModel.EntityFor = EntitiesAlias.PPPJobAnalystContact;
+    analystContactDropDownModel.ParentEntity = EntitiesAlias.Job;
+
+    var driverContactDropDownModel = Model.Record.JobDriverId.GetValueOrDefault().GetContactDropDown("JobDriverId", Model,
+        (Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
+        : (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId)
+        , Model.Record.CompanyId);
+    driverContactDropDownModel.EntityFor = EntitiesAlias.JobDriverContactInfo;
+    driverContactDropDownModel.ParentEntity = EntitiesAlias.Job;
+};
+@if (Model != null)
+{
+    @Html.Hidden("JobIsDirtyContact", true)
+        <div class='col-md-4 col-lg-4 team-div no-padding'>
+        @Html.DevExpress().FormLayout(
+                        contactEmailsettings =>
+                        {
+                            contactEmailsettings.Name = "AnalystTeamMemberResponsible";
+                            contactEmailsettings.ControlStyle.CssClass = "team-analyst";
+
+                            contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                            {
+                                cEmailsettings.Caption = "Team Member Analyst";
+                                cEmailsettings.Items.Add(n =>
+                                {
+                                    n.Caption = "";
+                                    n.SetNestedContent(() =>
+                                    {
+                                        ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+                                        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(analystContactDropDownModel) }));
+                                        ViewContext.Writer.Write("</div>");
+
+                                    });
+                                });
+                            });
+                        }
+                    ).GetHtml()
+      </div>
+
+        <div class='col-md-4 col-lg-4 team-div no-padding'>
+        @Html.DevExpress().FormLayout(
+                        contactEmailsettings =>
+                        {
+                            contactEmailsettings.Name = "TeamMemberResponsible";
+                            contactEmailsettings.ControlStyle.CssClass = "team-member";
+
+                            contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                            {
+                                cEmailsettings.Caption = "Team Member Responsible";
+                                cEmailsettings.Items.Add(n =>
+                                {
+                                    n.Caption = "";
+                                    n.SetNestedContent(() =>
+                                    {
+                                        ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+                                        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(responsibleContactDropDownModel) }));
+                                        ViewContext.Writer.Write("</div>");
+
+                                    });
+                                });
+                            });
+                        }
+                    ).GetHtml()
+        </div>
+
+        <div class='col-md-12 col-lg-4 team-div no-padding'>
+        @Html.DevExpress().FormLayout(
+                contactEmailsettings =>
+                {
+                    contactEmailsettings.Name = "JobDriverPanel";
+                    contactEmailsettings.ControlStyle.CssClass = "team-driver";
+
+                    contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                    {
+                        cEmailsettings.Caption = "Job Driver";
+                        cEmailsettings.Items.Add(n =>
+                        {
+                            n.Caption = "";
+                            n.SetNestedContent(() =>
+                            {
+                                ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+                                ViewContext.Writer.Write(Html.Action("JobDriverPartial", M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(driverContactDropDownModel) }));
+                                ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member job-rout'>" + Html.EditorFor(m => m.Record.JobRouteId).ToHtmlString() + "</div>");
+                                ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member'>" + Html.EditorFor(m => m.Record.JobStop).ToHtmlString() + "</div>");
+                                ViewContext.Writer.Write("</div>");
+
+                            });
+                        });
+                    });
+                }
+            ).GetHtml()
+        </div>
+}

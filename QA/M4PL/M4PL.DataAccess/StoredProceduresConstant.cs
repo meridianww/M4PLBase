@@ -456,6 +456,7 @@ namespace M4PL.DataAccess
 
 		/* Job Destination */
 		public const string GetJobDestination = "dbo.GetJobDestination";
+		public const string GetJobContact = "dbo.GetJobContact";
 		public const string InsJobDestination = "dbo.InsJobDestination";
 		public const string UpdJobDestination = "dbo.UpdJobDestination";
 		public const string UpdateJobFomXCBL = "dbo.UpdateJobFromXCBL";

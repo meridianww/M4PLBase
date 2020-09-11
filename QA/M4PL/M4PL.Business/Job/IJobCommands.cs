@@ -70,5 +70,6 @@ namespace M4PL.Business.Job
 		StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting);
         StatusModel AddDriver(DriverContact driverContact);
         StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber);
+		JobContact GetJobContact(long id, long parentId);
 	}
 }

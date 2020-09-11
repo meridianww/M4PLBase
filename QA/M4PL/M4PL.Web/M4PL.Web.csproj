@@ -784,6 +784,8 @@
     <Content Include="Areas\Job\Views\JobCard\JobCardGrid.cshtml" />
     <Content Include="Areas\Job\Views\Job\Tracking.cshtml" />
     <Content Include="Areas\Job\Views\Job\Destination.cshtml" />
+    <Content Include="Areas\Job\Views\Job\JobContactFormView.cshtml" />
+    <Content Include="Areas\Job\Views\Job\JobContact.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

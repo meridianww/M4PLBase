@@ -140,7 +140,13 @@ namespace M4PL.Business.Job
         {
             return _commands.GetJobDestination(ActiveUser, id, parentId);
         }
-        public Job2ndPoc GetJob2ndPoc(long id, long parentId)
+
+		public JobContact GetJobContact(long id, long parentId)
+		{
+			return _commands.GetJobContact(ActiveUser, id, parentId);
+		}
+
+		public Job2ndPoc GetJob2ndPoc(long id, long parentId)
         {
             return _commands.GetJob2ndPoc(ActiveUser, id, parentId);
         }

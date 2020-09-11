@@ -209,6 +209,15 @@ namespace M4PL.DataAccess.Job
 			return result ?? new Entities.Job.Job();
 		}
 
+		public static JobContact GetJobContact(ActiveUser activeUser, long id, long parentId)
+		{
+			var parameters = activeUser.GetRecordDefaultParams(id);
+			parameters.Add(new Parameter("@parentId", parentId));
+			parameters.Add(new Parameter("@PacificTime", TimeUtility.GetPacificDateTime()));
+			var result = SqlSerializer.Default.DeserializeSingleRecord<JobContact>(StoredProceduresConstant.GetJobContact, parameters.ToArray(), storedProcedure: true);
+			return result ?? new JobContact();
+		}
+
 		public static Entities.Job.Job GetJobByCustomerSalesOrder(ActiveUser activeUser, string jobSalesOrderNumber, long customerId)
 		{
 			var parameters = new List<Parameter>
