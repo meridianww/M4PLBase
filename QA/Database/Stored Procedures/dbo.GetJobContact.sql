@@ -10,12 +10,8 @@ GO
 -- Description:               Get a GetJobContact  
 -- =============================================   
 CREATE PROCEDURE [dbo].[GetJobContact] 
-    @userId BIGINT,  
-    @roleId BIGINT,  
-    @orgId BIGINT,  
-    @id BIGINT,
-	@parentId BIGINT  ,
-	@PacificTime DATETIME2(7)
+@id BIGINT,
+@parentId BIGINT
 AS  
 BEGIN                  
  SET NOCOUNT ON; 

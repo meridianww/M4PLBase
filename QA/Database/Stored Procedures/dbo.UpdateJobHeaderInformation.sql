@@ -33,8 +33,6 @@ CREATE PROCEDURE [dbo].[UpdateJobHeaderInformation] (
 	,@jobCompleted BIT = NULL
 	,@jobType NVARCHAR(20) = NULL
 	,@shipmentType NVARCHAR(20) = NULL
-	,@jobDeliveryAnalystContactID BIGINT = NULL
-	,@jobDeliveryResponsibleContactId BIGINT = NULL
 	,@jobDeliveryDateTimePlanned DATETIME2(7) = NULL
 	,@jobDeliveryDateTimeActual DATETIME2(7) = NULL
 	,@jobDeliveryDateTimeBaseline DATETIME2(7) = NULL
@@ -54,13 +52,10 @@ CREATE PROCEDURE [dbo].[UpdateJobHeaderInformation] (
 	,@jobScannerFlags NVARCHAR(20) = NULL
 	,@plantIDCode NVARCHAR(30) = NULL
 	,@carrierID NVARCHAR(30) = NULL
-	,@jobDriverId BIGINT = NULL
 	,@windowDelStartTime DATETIME2(7) = NULL
 	,@windowDelEndTime DATETIME2(7) = NULL
 	,@windowPckStartTime DATETIME2(7) = NULL
 	,@windowPckEndTime DATETIME2(7) = NULL
-	,@jobRouteId NVARCHAR(20)
-	,@jobStop NVARCHAR(20) = NULL
 	,@jobSignText NVARCHAR(75) = NULL
 	,@changedBy NVARCHAR(50) = NULL
 	,@dateChanged DATETIME2(7) = NULL
@@ -397,16 +392,6 @@ END
 				THEN @shipmentType
 			ELSE ISNULL(@shipmentType, ShipmentType)
 			END
-		,[JobDeliveryAnalystContactID] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @jobDeliveryAnalystContactID
-			ELSE ISNULL(@jobDeliveryAnalystContactID, JobDeliveryAnalystContactID)
-			END
-		,[JobDeliveryResponsibleContactID] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @jobDeliveryResponsibleContactID
-			ELSE ISNULL(@jobDeliveryResponsibleContactID, JobDeliveryResponsibleContactID)
-			END
 		,[JobDeliveryTimeZone] = CASE 
 			WHEN (@isFormView = 1 AND ISNULL(@JobIsDirtyDestination, 0) = 1)
 				THEN CASE 
@@ -508,11 +493,6 @@ END
 				THEN @carrierID
 			ELSE ISNULL(@carrierID, CarrierID)
 			END
-		,[JobDriverId] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @jobDriverId
-			ELSE ISNULL(@jobDriverId, JobDriverId)
-			END
 		,[WindowDelStartTime] = CASE 
 			WHEN (@isFormView = 1)
 				THEN @windowDelStartTime
@@ -532,16 +512,6 @@ END
 			WHEN (@isFormView = 1)
 				THEN @windowPckEndTime
 			ELSE ISNULL(@windowPckEndTime, WindowPckEndTime)
-			END
-		,[JobRouteId] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @jobRouteId
-			ELSE ISNULL(@jobRouteId, JobRouteId)
-			END
-		,[JobStop] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @jobStop
-			ELSE ISNULL(@jobStop, JobStop)
 			END
 		,[JobQtyOrdered] = CASE 
 			WHEN (@isFormView = 1)

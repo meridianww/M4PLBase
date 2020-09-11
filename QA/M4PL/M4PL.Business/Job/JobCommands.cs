@@ -261,7 +261,8 @@ namespace M4PL.Business.Job
                 {
                     existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
 					existingJobDetails.JobIsDirtyDestination = false;
-                    var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails, false, true, true, isManualUpdate: true);
+					existingJobDetails.JobIsDirtyContact = false;
+					var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails, false, true, true, isManualUpdate: true);
                     result = updatedJobDetails?.Id > 0 ? true : false;
                 }
 

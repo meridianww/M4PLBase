@@ -32,7 +32,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -211,9 +210,12 @@ namespace M4PL.DataAccess.Job
 
 		public static JobContact GetJobContact(ActiveUser activeUser, long id, long parentId)
 		{
-			var parameters = activeUser.GetRecordDefaultParams(id);
-			parameters.Add(new Parameter("@parentId", parentId));
-			parameters.Add(new Parameter("@PacificTime", TimeUtility.GetPacificDateTime()));
+			var parameters = new List<Parameter>()
+			{
+			     new Parameter("@parentId", parentId),
+			     new Parameter("@id", id)
+			};
+
 			var result = SqlSerializer.Default.DeserializeSingleRecord<JobContact>(StoredProceduresConstant.GetJobContact, parameters.ToArray(), storedProcedure: true);
 			return result ?? new JobContact();
 		}
@@ -487,7 +489,6 @@ namespace M4PL.DataAccess.Job
 			int CancelId = SysOptionList.FirstOrDefault(x => x.SysRefName.Equals("Canceled", StringComparison.OrdinalIgnoreCase)).SysRefId;
 			job.IsCancelled = job.StatusId == CancelId ? true : false;
 			Entities.Job.Job updatedJobDetails = job;
-			List<Task> jobUpdateTasks = new List<Task>();
 			Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
 			bool isExistsRecord = true;
 
@@ -499,30 +500,26 @@ namespace M4PL.DataAccess.Job
 
 			if (isExistsRecord)
 			{
-				jobUpdateTasks.Add(Task.Factory.StartNew(() =>
-				{
-					UpdateJobHeaderInformation(job, existingJobDetail, activeUser, isRelatedAttributeUpdate, isManualUpdate);
-				}));
-
+				UpdateJobHeaderInformation(job, existingJobDetail, activeUser, isRelatedAttributeUpdate, isManualUpdate);
 				if (job.JobIsDirtyDestination)
 				{
-					jobUpdateTasks.Add(Task.Factory.StartNew(() =>
+					var mapRoute = GetJobMapRoute(activeUser, job.Id);
+					CalculateJobMileage(ref job, mapRoute);
+					if (!isLatLongUpdatedFromXCBL)
 					{
-						var mapRoute = GetJobMapRoute(activeUser, job.Id);
-						CalculateJobMileage(ref job, mapRoute);
-						if (!isLatLongUpdatedFromXCBL)
-						{
-							if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
-								&& (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
-									|| mapRoute.isAddressUpdated)
-								SetLatitudeAndLongitudeFromAddress(ref job);
-						}
+						if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
+							&& (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
+								|| mapRoute.isAddressUpdated)
+							SetLatitudeAndLongitudeFromAddress(ref job);
+					}
 
-						UpdateJobLocationInformation(job, activeUser, isRelatedAttributeUpdate, isManualUpdate);
-					}));
+					UpdateJobLocationInformation(job, activeUser, isRelatedAttributeUpdate, isManualUpdate);
 				}
 
-				if (jobUpdateTasks.Count > 0) { { Task.WaitAll(jobUpdateTasks.ToArray()); } }
+				if (job.JobIsDirtyContact)
+				{
+					UpdateJobContactInformation(job);
+				}
 
 				if (!isServiceCall && ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID)))
 				{
@@ -540,6 +537,22 @@ namespace M4PL.DataAccess.Job
 			}
 
 			return updatedJobDetails;
+		}
+
+		private static void UpdateJobContactInformation(Entities.Job.Job job)
+		{
+			var parameters = new List<Parameter>()
+			{
+				new Parameter("@jobDeliveryAnalystContactID", job.JobDeliveryAnalystContactID),
+				new Parameter("@jobDeliveryResponsibleContactId", job.JobDeliveryResponsibleContactID),
+				new Parameter("@jobRouteId", job.JobRouteId),
+				new Parameter("@jobStop", job.JobStop),
+				new Parameter("@jobDriverId", job.JobDriverId),
+				new Parameter("@id", job.Id),
+				new Parameter("@isFormView", job.IsFormView)
+			};
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobContactInformation, parameters.ToArray(), true);
 		}
 
 		/// <summary>
@@ -1385,8 +1398,6 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@jobCompleted", job.JobCompleted),
 			   new Parameter("@jobType", job.JobType),
 			   new Parameter("@shipmentType", job.ShipmentType),
-			   new Parameter("@jobDeliveryAnalystContactID", job.JobDeliveryAnalystContactID),
-			   new Parameter("@jobDeliveryResponsibleContactId", job.JobDeliveryResponsibleContactID),
 			   new Parameter("@jobDeliveryDateTimePlanned", job.JobDeliveryDateTimePlanned),
 			   new Parameter("@jobDeliveryDateTimeActual", job.JobDeliveryDateTimeActual),
 			   new Parameter("@jobDeliveryDateTimeBaseline", job.JobDeliveryDateTimeBaseline),
@@ -1406,13 +1417,10 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@jobScannerFlags", job.JobScannerFlags),
 			   new Parameter("@plantIDCode", job.PlantIDCode),
 			   new Parameter("@carrierID", job.CarrierID),
-			   new Parameter("@jobDriverId", job.JobDriverId),
 			   new Parameter("@windowDelStartTime", job.WindowDelStartTime.HasValue && (job.WindowDelStartTime.Value !=DateUtility.SystemEarliestDateTime)  ? job.WindowDelStartTime.Value.ToUniversalTime() :job.WindowDelStartTime ),
 			   new Parameter("@windowDelEndTime", job.WindowDelEndTime.HasValue  && (job.WindowDelEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowDelEndTime.Value.ToUniversalTime() :job.WindowDelEndTime),
 			   new Parameter("@windowPckStartTime", job.WindowPckStartTime.HasValue && (job.WindowPckStartTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckStartTime.Value.ToUniversalTime() :job.WindowPckStartTime),
 			   new Parameter("@windowPckEndTime", job.WindowPckEndTime.HasValue && (job.WindowPckEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckEndTime.Value.ToUniversalTime() :job.WindowPckEndTime),
-			   new Parameter("@jobRouteId", job.JobRouteId),
-			   new Parameter("@jobStop", job.JobStop),
 			   new Parameter("@jobSignText", job.JobSignText),
 			   new Parameter("@jobQtyOrdered", job.JobQtyOrdered),
 			   new Parameter("@jobQtyActual", job.JobQtyActual),
