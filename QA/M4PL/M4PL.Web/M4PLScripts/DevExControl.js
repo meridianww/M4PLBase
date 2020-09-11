@@ -2008,14 +2008,7 @@ DevExCtrl.TokenBox = function () {
             ctrlAnalystDriverResonsible.PerformCallback();
         }
     }
-
-    var _init = function (s, e, CallbackPanelAnalystResponsibleDriver) {
-        var tokenCollection = s.GetTokenCollection();
-        var ctrlAnalystDriverResonsible = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver")
-        if (tokenCollection.length > 0 && ctrlAnalystDriverResonsible != null && ctrlAnalystDriverResonsible !== "undefined") {
-            ctrlAnalystDriverResonsible.PerformCallback();
-        }
-    }
+    
     var _driverPanelInit = function () {
         var ctrlJobSiteCode = ASPxClientControl.GetControlCollection().GetByName("JobSiteCode");
         var tokenCollection = ctrlJobSiteCode.GetTokenCollection();
@@ -2025,7 +2018,6 @@ DevExCtrl.TokenBox = function () {
     }
     return {
         ValueChanged: _valueChanged,
-        Init: _init,
         DriverPanelInit: _driverPanelInit
     }
 }();
