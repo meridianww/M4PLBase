@@ -97,7 +97,7 @@ namespace M4PL.Business.Job
         {
             var gateway = _commands.Post(ActiveUser, jobGateway, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
             PushDataToNav(gateway.JobID, jobGateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
-			int scenarioId = jobGateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : jobGateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
+			int scenarioId = gateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : gateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
 			if (scenarioId > 0)
 			{
 				if (jobGateway.GwyCargoId > 0)
@@ -152,19 +152,19 @@ namespace M4PL.Business.Job
                 PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId);
             }
 
-			int scenarioId = jobGateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : jobGateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
+			int scenarioId = gateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : gateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
 			if (scenarioId > 0)
 			{
 				if (jobGateway.GwyCargoId > 0)
 				{
 					var jobCargo = _jobCargoCommands.Get(ActiveUser, jobGateway.GwyCargoId);
 					string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, gateway.GwyGatewayACD.HasValue ? (DateTime)gateway.GwyGatewayACD : Utilities.TimeUtility.GetPacificDateTime(), jobGateway.GwyAddtionalComment, jobCargo.CgoPartNumCode, jobCargo.CgoTitle, jobCargo.CgoSerialNumber, jobCargo.JobGatewayStatus);
-					EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
+					EventBodyHelper.CreateEventMailNotificationForCargoException(scenarioId, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
 				}
 				else if (string.Compare(jobGateway.GwyGatewayCode, "Exception", true) == 0)
 				{
 					string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobGateway.GwyTitle, (long)jobGateway.JobID, jobGateway.ContractNumber, gateway.GwyGatewayACD.HasValue ? (DateTime)gateway.GwyGatewayACD : Utilities.TimeUtility.GetPacificDateTime(), jobGateway.GwyAddtionalComment, string.Empty, string.Empty, string.Empty, string.Empty);
-					EventBodyHelper.CreateEventMailNotificationForCargoException(1, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
+					EventBodyHelper.CreateEventMailNotificationForCargoException(scenarioId, (long)jobGateway.ProgramID, jobGateway.ContractNumber, cargoExceptionBody);
 				}
 			}
 
