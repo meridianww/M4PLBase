@@ -341,7 +341,8 @@ DevExCtrl.Ribbon = function () {
 
     var _doCallBack = function (route) {
         // M4PLRibbon.SetVisible((route.Action != "Dashboard"));
-        if (typeof RibbonCbPanel !== 'undefined' && !RibbonCbPanel.InCallback()) {
+        var ctrlRibbonCbPanel = ASPxClientControl.GetControlCollection().GetByName("RibbonCbPanel");
+        if (ctrlRibbonCbPanel != undefined && ctrlRibbonCbPanel != null) {   // && !RibbonCbPanel.InCallback()) {
             route.OwnerCbPanel = "RibbonCbPanel";
             RibbonCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
         }
