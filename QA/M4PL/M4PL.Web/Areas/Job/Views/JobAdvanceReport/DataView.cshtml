@@ -32,11 +32,20 @@
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayACD").DataType = "datetime2";
     }
-    var filterSortingEnable = true;
-    if (Model.Records.FirstOrDefault() == null || (Model.Records.FirstOrDefault() != null && Model.Records.FirstOrDefault().IsFilterSortDisable))
+    var filterSortingEnable = false;
+    if (ViewData["ReportName"] == null ||
+    (ViewData["ReportName"] != null
+    && (ViewData["ReportName"].ToString() == "Job Advance Report"
+    || ViewData["ReportName"].ToString() == "Manifest Report")))
     {
-        filterSortingEnable = false;
-    }}
+        filterSortingEnable = true;
+    }
+    //var filterSortingEnable = true;
+    //if (Model.Records.FirstOrDefault() == null || (Model.Records.FirstOrDefault() != null && Model.Records.FirstOrDefault().IsFilterSortDisable))
+    //{
+    //    filterSortingEnable = false;
+    //}
+  }
     @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
