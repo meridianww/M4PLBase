@@ -142,8 +142,8 @@ else
                        }
 
                        tokensettings.Properties.Caption = columnSetting.ColAliasName;
-                       tokensettings.Properties.ClientSideEvents.ValueChanged = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.ValueChanged(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
-                       tokensettings.Properties.ClientSideEvents.Init = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.Init(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
+                       tokensettings.Properties.ClientSideEvents.ValueChanged = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.ValueChanged(s, e, '{0}')}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
+                       tokensettings.Properties.ClientSideEvents.Init = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.Init(s, e, '{0}')}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
                        tokensettings.Name = "JobSiteCode";
                    }).BindList(ViewData["jobSiteCode"]).GetHtml() + "</div>");
                    ViewContext.Writer.Write("</div>");

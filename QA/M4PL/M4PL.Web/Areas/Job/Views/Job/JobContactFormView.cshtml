@@ -81,6 +81,7 @@
                 {
                     contactEmailsettings.Name = "JobDriverPanel";
                     contactEmailsettings.ControlStyle.CssClass = "team-driver";
+                    contactEmailsettings.ClientSideEvents.Init = "DevExCtrl.TokenBox.DriverPanelInit";
 
                     contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
                     {
