@@ -150,7 +150,6 @@ namespace M4PL.Web.Tests.Organization
         public static void NavigateToProgramDVS(ChromeDriver driver)
         {
             driver.FindElementById(LeftPanelXPath.PrgDVS).Click();
-            Thread.Sleep(8000);
         }
 
         public static void SearchedProgram(ChromeDriver driver)
@@ -158,7 +157,6 @@ namespace M4PL.Web.Tests.Organization
             driver.FindElementByXPath(ProgramXPath.CusCodeArrow).Click();
             Thread.Sleep(4000);
             driver.FindElementByXPath(ProgramXPath.SearchedProgram).Click();
-            Thread.Sleep(5000);
         }
 
         public static void SearchedProject(ChromeDriver driver)
