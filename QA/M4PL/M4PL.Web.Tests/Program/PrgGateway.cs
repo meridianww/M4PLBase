@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
 using System;
 using System.Threading;
 
@@ -7,6 +8,23 @@ namespace M4PL.Web.Tests.Program
 {
     public class PrgGateway
     {
+        public static void AddGateway(string code , string title, ChromeDriver driver)
+        {
+            driver.FindElementById(ProgramXPath.PrgGateways).Click();
+            Actions action = new Actions(driver);
+            Thread.Sleep(8000);
+            IWebElement GtwGrid1 = driver.FindElement(By.Id(ProgramXPath.PrgGtwGrid_Record));
+            Thread.Sleep(4000);
+            action.ContextClick(GtwGrid1).Perform();           
+            driver.FindElementById(ProgramXPath.PrgGtwNew).Click();
+            Thread.Sleep(4000);
+            driver.FindElementById(ProgramXPath.PrgGtwCode).SendKeys(code);
+            driver.FindElementById(ProgramXPath.PrgGtwTitle).SendKeys(title);
+            driver.FindElementById(ProgramXPath.PrgGtwDefault).Click();
+            driver.FindElementById(ProgramXPath.PrgGtwSave).Click();
+            Thread.Sleep(8000);
+            driver.FindElementById(ProgramXPath.PrgGtwSaveOk).Click();
+        }
         public static void Add(string code, decimal? gatewayDuration, ChromeDriver driver)
         {
             driver.FindElementById(ProgramXPath.PrgGateways).Click();

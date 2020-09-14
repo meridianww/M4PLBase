@@ -152,8 +152,8 @@ namespace M4PL.API.Controllers
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.GetJobByProgram(id, parentId);
-        }
-
+		}
+		
         /// <summary>
         /// Get the Destination detials by Job Id, if Job id is zero Pickup and delivery information from program
         /// </summary>
@@ -169,13 +169,28 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJobDestination(id, parentId);
         }
 
-        /// <summary>
-        /// Get the Origin , Delivery Site POC2 details , Origin and Delivery Address by Job Id and if job id is zero Pickup and Delivery Time Information from Parent will be returned
-        /// </summary>
-        /// <param name="id">Job Id</param>
-        /// <param name="parentId">Program Id</param>
-        /// <returns>Site POC 2 and Origin and Delivery Address</returns>
-        [CustomAuthorize]
+		/// <summary>
+		/// Get the Destination detials by Job Id, if Job id is zero Pickup and delivery information from program
+		/// </summary>
+		/// <param name="id">Job Id</param>
+		/// <param name="parentId">Program Id</param>
+		/// <returns>Job Destination details</returns>
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("Contact"), ResponseType(typeof(JobDestination))]
+		public JobContact GetJobContact(long id, long parentId)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _jobCommands.GetJobContact(id, parentId);
+		}
+
+		/// <summary>
+		/// Get the Origin , Delivery Site POC2 details , Origin and Delivery Address by Job Id and if job id is zero Pickup and Delivery Time Information from Parent will be returned
+		/// </summary>
+		/// <param name="id">Job Id</param>
+		/// <param name="parentId">Program Id</param>
+		/// <returns>Site POC 2 and Origin and Delivery Address</returns>
+		[CustomAuthorize]
         [HttpGet]
         [Route("Poc")]
         public Job2ndPoc GetJob2ndPoc(long id, long parentId)

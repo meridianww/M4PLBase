@@ -238,6 +238,7 @@ namespace M4PL.Web
 		public const string ViewTreeListCallBack = "_TreeListPartial";
 
 		public const string ViewJobDestination = "DestinationFormView";
+		public const string ViewJobContact = "JobContactFormView";
 		public const string ViewJobMapRoute = "MapRouteFormView";
 		public const string ViewJobPoc = "PocFormView";
 		public const string ViewJobPod = "PodFormView";

@@ -453,9 +453,11 @@ namespace M4PL.DataAccess
 		public const string DeleteJob = "dbo.DeleteJob";
 		public const string UpdateJobHeaderInformation = "dbo.UpdateJobHeaderInformation";
 		public const string UpdateJobLocationInformation = "dbo.UpdateJobLocationInformation";
+		public const string UpdateJobContactInformation = "dbo.UpdateJobContactInformation";
 
 		/* Job Destination */
 		public const string GetJobDestination = "dbo.GetJobDestination";
+		public const string GetJobContact = "dbo.GetJobContact";
 		public const string InsJobDestination = "dbo.InsJobDestination";
 		public const string UpdJobDestination = "dbo.UpdJobDestination";
 		public const string UpdateJobFomXCBL = "dbo.UpdateJobFromXCBL";
