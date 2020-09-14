@@ -8,8 +8,8 @@ namespace M4PL.Web.Tests.Program
     {
         #region Program 
 
-        public const string CusCodeArrow = "//span[contains(text(),'CC_01_PP')]/preceding::img[@alt='Expand'][1]";
-        public const string SearchedProgram = "//span[contains(text(),'PORG_02')]";
+        public const string CusCodeArrow = "//*[@id='ProgramTree_CD']/ul/li[7]/span";
+        public const string SearchedProgram = "//*[@id='ProgramTree_N6_0']";
         public const string ProgramCodeArrow = "";
         public const string SearchedProject = "";
         public const string ProjectCodeArrow = "";
@@ -66,7 +66,7 @@ namespace M4PL.Web.Tests.Program
         #region Program Gateways - Gateways
 
         public const string PrgGtwGrid_Record = "PrgRefGatewayDefaultGridView_DXDataRow0";
-        public const string PrgGtwGrid = "PrgRefGatewayDefaultGridView_DXEmptyRow";
+        public const string PrgGtwGrid = "PrgRefGatewayDefaultGridView_DXBEC3";
         public const string PrgGtwNew = "PrgRefGatewayDefaultGridView_DXContextMenu_Rows_DXI0_T";
         public const string PrgGtwEdit = "PrgRefGatewayDefaultGridView_DXContextMenu_Rows_DXI1_T";
         public const string PrgGtwChooseColumn = "PrgRefGatewayDefaultGridView_DXContextMenu_Rows_DXI2_T";
