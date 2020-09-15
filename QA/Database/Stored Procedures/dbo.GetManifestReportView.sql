@@ -53,10 +53,7 @@ BEGIN TRY
 	DECLARE @AdvanceFilter NVARCHAR(MAX) = ''
 		,@JobStatusId INT = 0;
 
-	IF (
-			ISNULL(@JobStatus, '') = ''
-			OR @JobStatus = 'Active'
-			)
+	IF (@JobStatus = 'Active')
 	BEGIN
 		SET @JobStatusId = (
 				SELECT Id
@@ -94,8 +91,12 @@ BEGIN TRY
 	WHERE SysLookupCode = 'GatewayType'
 		AND SysOptionName = 'Action'
 
-	SET @TablesQuery = ' FROM CUST000Master CUST ' + ' INNER JOIN PRGRM000Master PRG ON PRG.PrgCustID = CUST.Id AND CUST.StatusId = 1 AND PRG.StatusId = 1 ' + ' INNER JOIN JOBDL000Master ' + @entity + ' ON ' + @entity + '.ProgramID = PRG.Id  AND JobAdvanceReport.StatusId = ' + CONVERT(NVARCHAR(10), @JobStatusId)
-
+	SET @TablesQuery = ' FROM CUST000Master CUST ' + ' INNER JOIN PRGRM000Master PRG ON PRG.PrgCustID = CUST.Id AND CUST.StatusId = 1 AND PRG.StatusId = 1 ' 
+	+ ' INNER JOIN JOBDL000Master ' + @entity + ' ON ' + @entity + '.ProgramID = PRG.Id '
+	IF(@JobStatusId >0 )
+	BEGIN
+		SET @TablesQuery += 'AND JobAdvanceReport.StatusId = ' + CONVERT(NVARCHAR(10), @JobStatusId)
+	END
 	--------------------- Security Start----------------------------------------------------------
 	DECLARE @JobCount BIGINT
 		,@IsJobAdmin BIT = 0
