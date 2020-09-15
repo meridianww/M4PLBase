@@ -1002,12 +1002,17 @@ namespace M4PL.Web.Areas
             //    : WebApplicationConstants.AppCbPanel;
             var routeResult =
                   (SessionProvider.ActiveUser.CurrentRoute != null
-                   && SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm
+                   //&& SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm
                    && SessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job
                    && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView)
                    //&& SessionProvider.ActiveUser.LastRoute.Action != "DataView")
                    ? SessionProvider.ActiveUser.CurrentRoute
                    : SessionProvider.ActiveUser.LastRoute;
+            if (route.Entity == EntitiesAlias.Job && SessionProvider.ActiveUser.CurrentRoute != null)
+            {
+                routeResult.ParentRecordId = route.ParentRecordId > 0 ? route.ParentRecordId : SessionProvider.ActiveUser.CurrentRoute.ParentRecordId;
+            }
+
             var ownerCbPanel = (route.Entity == EntitiesAlias.JobAdvanceReport
                 || route.Entity == EntitiesAlias.JobCard
                 || (route.Entity == EntitiesAlias.Job
