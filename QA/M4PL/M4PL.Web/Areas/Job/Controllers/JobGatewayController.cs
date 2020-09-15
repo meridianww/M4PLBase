@@ -120,8 +120,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                         resultRoute.ParentRecordId = result.ProgramID ?? 0; ;
                         resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
-                                                   ? WebApplicationConstants.AppCbPanel
-                                                   : "JobDataViewCbPanel";
+                                                     ? "pnlJobDetail"
+                                                     : "JobDataViewCbPanel";
 
                         resRoute = new MvcRoute(resultRoute, MvcConstants.ActionForm);
                         resRoute.Url = resRoute.ParentRecordId.ToString();
@@ -312,7 +312,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                         resultRoute.ParentRecordId = result.ProgramID ?? 0;
                         resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
-                                                   ? WebApplicationConstants.AppCbPanel
+                                                   ? "pnlJobDetail"
                                                    : "JobDataViewCbPanel";
 
                         resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
@@ -811,7 +811,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     route.ParentRecordId = route.RecordId;
                 route.RecordId = 0;
                 if (route.Action == "GatewayActionFormView" ||
-                    (route.Action == "FormView" && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
+                    (route.Action == "FormView" && route.Filters == null && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
                     entityFor = JobGatewayType.Action.ToString();
                 else
                 {
@@ -914,7 +914,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Permission = Permission.ReadOnly;
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
             }
-            if (((bool)Session["isEdit"] == false && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
+            if (((bool)Session["isEdit"] == false && route.Filters == null && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
                 || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment && (bool)Session["isEdit"]))
             {
                 _formResult.Record.IsAction = false;
