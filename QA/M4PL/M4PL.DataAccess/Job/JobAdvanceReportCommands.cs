@@ -338,7 +338,7 @@ namespace M4PL.DataAccess.Job
                 if (!string.IsNullOrEmpty(jobAdvanceReportRequest.JobStatus) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.JobStatus) && Convert.ToString(jobAdvanceReportRequest.JobStatus).ToLower() != "all")
                     parameters.Add(new Parameter("@JobStatus", jobAdvanceReportRequest.JobStatus));
                 else
-                    parameters.Add(new Parameter("@JobStatus", "Active"));
+                    parameters.Add(new Parameter("@JobStatus", "ALL"));
                 if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Search) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.Search))
                     parameters.Add(new Parameter("@SearchText", jobAdvanceReportRequest.Search));
                 if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
