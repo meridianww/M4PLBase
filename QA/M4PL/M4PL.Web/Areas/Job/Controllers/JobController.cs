@@ -82,7 +82,14 @@ namespace M4PL.Web.Areas.Job.Controllers
                 Session["JobNode"] = route.ParentRecordId.ToString();
             }
             _gridResult.FocusedRowId = route.RecordId;
-            if (route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
+            if (route.Action == "DataView")
+            {
+                if (SessionProvider.ActiveUser.CurrentRoute != null)
+                    SessionProvider.ActiveUser.CurrentRoute.ParentRecordId = route.ParentRecordId > 0 ? route.ParentRecordId : SessionProvider.ActiveUser.CurrentRoute.ParentRecordId;
+                else
+                    SessionProvider.ActiveUser.CurrentRoute = route;
+                SessionProvider.ActiveUser.LastRoute.RecordId = 0;
+            }
             route.RecordId = 0;
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common
                 && string.IsNullOrEmpty(route.OwnerCbPanel))
@@ -450,7 +457,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             //SessionProvider.ActiveUser.LastRoute = route;
-            SessionProvider.ActiveUser.CurrentRoute = null;
+            //SessionProvider.ActiveUser.CurrentRoute = null;
 
             var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
             if (Session["JobNode"] != null)
@@ -518,33 +525,33 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(route);
         }
 
-		public PartialViewResult JobContact(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			return PartialView(route);
-		}
+        public PartialViewResult JobContact(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            return PartialView(route);
+        }
 
-		public ActionResult JobContactFormView(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var formResult = new FormResult<JobContact>();
+        public ActionResult JobContactFormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var formResult = new FormResult<JobContact>();
 
-			formResult.Permission = _formResult.Permission;
-			formResult.SessionProvider = SessionProvider;
+            formResult.Permission = _formResult.Permission;
+            formResult.SessionProvider = SessionProvider;
 
-			long parentRecI;
-			if (long.TryParse(route.Url, out parentRecI))
-				route.ParentRecordId = parentRecI;
-			formResult.Record = _jobCommands.GetJobContact(route.RecordId, route.ParentRecordId) ?? new JobContact();
-			formResult.Record.JobIsDirtyContact = true;
-			formResult.SetupFormResult(_commonCommands, route);
-			formResult.ControlNameSuffix = "_JobContact_";
-			if (route.IsPopup)
-				return View(MvcConstants.ViewJobContact, formResult);
-			return PartialView(MvcConstants.ViewJobContact, formResult);
-		}
+            long parentRecI;
+            if (long.TryParse(route.Url, out parentRecI))
+                route.ParentRecordId = parentRecI;
+            formResult.Record = _jobCommands.GetJobContact(route.RecordId, route.ParentRecordId) ?? new JobContact();
+            formResult.Record.JobIsDirtyContact = true;
+            formResult.SetupFormResult(_commonCommands, route);
+            formResult.ControlNameSuffix = "_JobContact_";
+            if (route.IsPopup)
+                return View(MvcConstants.ViewJobContact, formResult);
+            return PartialView(MvcConstants.ViewJobContact, formResult);
+        }
 
-		public ActionResult DestinationFormView(string strRoute)
+        public ActionResult DestinationFormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var formResult = new FormResult<JobDestination>();
