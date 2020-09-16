@@ -1883,6 +1883,7 @@ namespace M4PL.Web
                              currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
                              currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
                              ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                             (currentSecurity.UserSubSecurities != null && currentSecurity.UserSubSecurities.Count() == 0 && childSecurity == null) ||
                              (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                              childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                              childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
@@ -1911,6 +1912,7 @@ namespace M4PL.Web
                              currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
                              currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
                              ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                             (currentSecurity.UserSubSecurities != null && currentSecurity.UserSubSecurities.Count() == 0 && childSecurity == null) ||
                              (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                              childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                              childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
@@ -1944,6 +1946,7 @@ namespace M4PL.Web
                              currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
                              currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
                              ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                             (currentSecurity.UserSubSecurities != null && currentSecurity.UserSubSecurities.Count() == 0 && childSecurity == null) ||
                              (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                              childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                              childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
@@ -1976,6 +1979,7 @@ namespace M4PL.Web
                                currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
                                currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
                                ((currentSecurity.UserSubSecurities == null && childSecurity == null) ||
+                               (currentSecurity.UserSubSecurities != null && currentSecurity.UserSubSecurities.Count() == 0 && childSecurity == null) ||
                                (childSecurity != null && (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                                childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                                childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
