@@ -679,6 +679,11 @@ namespace M4PL.Business.XCBL
 
 			JobGateway jobGateway;
 			List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList = _jobCommands.GetJobUpdateDecisionMaker();
+			if (existingJobData.JobIsSchedule && jobUpdateDecisionMakerList != null && jobUpdateDecisionMakerList.Count > 0 && jobUpdateDecisionMakerList.Where(x => x.xCBLColumnName == "ScheduledDeliveryDate").Any())
+			{
+				jobUpdateDecisionMakerList.Where(x => x.xCBLColumnName == "ScheduledDeliveryDate").FirstOrDefault().ActionCode = "XCBL-Reschedule";
+			}
+
 			if (jobUpdateDecisionMakerList != null && jobUpdateDecisionMakerList.Count > 0)
 			{
 
@@ -784,6 +789,27 @@ namespace M4PL.Business.XCBL
 							{
 								isChanged = true;
 								existingJobData.JobDeliveryDateTimePlanned = request.EstimatedArrivalDate;
+							}
+						}
+					}
+				}
+				else
+				{
+					if (!existingJobData.JobIsSchedule)
+					{
+						var deliveryDateTimePlannedActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("ScheduledDeliveryDate", StringComparison.OrdinalIgnoreCase));
+						actionCode = deliveryDateTimePlannedActionCode == null ? string.Empty : deliveryDateTimePlannedActionCode.ActionCode;
+						if (!string.IsNullOrEmpty(actionCode))
+						{
+							jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+							if (jobGateway != null)
+							{
+								copiedGatewayIds.Add(jobGateway.Id);
+								if (jobGateway.GwyCompleted)
+								{
+									isChanged = true;
+									existingJobData.JobDeliveryDateTimePlanned = request.EstimatedArrivalDate;
+								}
 							}
 						}
 					}
