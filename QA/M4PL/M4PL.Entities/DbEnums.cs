@@ -1075,6 +1075,7 @@ namespace M4PL.Entities
 	{
 		AWCCargoException = 1,
 		ElectroluxCargoException = 2,
-		JobReActivated = 3
+		JobReActivated = 3,
+		JobCancellation = 4
 	}
 }

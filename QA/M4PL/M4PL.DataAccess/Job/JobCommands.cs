@@ -353,7 +353,7 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job, long customerId)
+		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job, long customerId, string cancelComment, string cancelReason)
 		{
 			long insertedGatewayId = 0;
 			try
@@ -371,7 +371,42 @@ namespace M4PL.DataAccess.Job
 				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
 				if (insertedGatewayId > 0)
 				{
-					InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
+					if (!string.IsNullOrEmpty(cancelReason))
+					{
+						var result = JobGatewayCommands.GetGatewayWithParent(activeUser, 0, job.Id, "Action", false, "Comment");
+						if (result != null && result.JobID > 0)
+						{
+							result.GatewayTypeId = 86;
+							result.GwyGatewayCode = "Comment";
+							result.GwyGatewayACD = DateTime.UtcNow.AddHours(result.DeliveryUTCValue);
+							result.GwyGatewayTitle = cancelReason;
+							result.GwyTitle = cancelReason;
+							result.GwyCompleted = true;
+							var gatewayResult = JobGatewayCommands.PostWithSettings(activeUser, null, result, customerId, result.JobID);
+							if (gatewayResult != null && gatewayResult.Id > 0 && !string.IsNullOrEmpty(cancelComment))
+							{
+								RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+								richEditDocumentServer.Document.AppendHtmlText(cancelComment);
+								ByteArray byteArray = new ByteArray()
+								{
+									Id = gatewayResult.Id,
+									Entity = EntitiesAlias.JobGateway,
+									FieldName = "GwyGatewayDescription",
+									IsPopup = false,
+									FileName = null,
+									Type = SQLDataTypes.varbinary,
+									DocumentText = cancelComment,
+									Bytes = richEditDocumentServer.OpenXmlBytes
+								};
+
+								CommonCommands.SaveBytes(byteArray, activeUser);
+							}
+						}
+					}
+					else
+					{
+						InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
+					}
 				}
 			}
 			catch (Exception exp)
@@ -382,7 +417,7 @@ namespace M4PL.DataAccess.Job
 			return insertedGatewayId;
 		}
 
-		public static UnCancelJobResponse UnCancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string salesOrderNumber)
+		public static UnCancelJobResponse UnCancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string salesOrderNumber, string unCancelReason, string unCancelComment, long customerId)
 		{
 			long insertedGatewayId = 0;
 			long jobId = 0;
@@ -404,6 +439,38 @@ namespace M4PL.DataAccess.Job
 				jobId = result.JobId;
 				errorMessage = result.ErrorMessage;
 				isSuccess = result.IsSuccess;
+				if (insertedGatewayId > 0 && jobId > 0 && !string.IsNullOrEmpty(unCancelReason))
+				{
+					var gatewayResult = JobGatewayCommands.GetGatewayWithParent(activeUser, 0, jobId, "Action", false, "Comment");
+					if (gatewayResult != null && gatewayResult.JobID > 0)
+					{
+						gatewayResult.GatewayTypeId = 86;
+						gatewayResult.GwyGatewayCode = "Comment";
+						gatewayResult.GwyGatewayACD = DateTime.UtcNow.AddHours(gatewayResult.DeliveryUTCValue);
+						gatewayResult.GwyGatewayTitle = unCancelReason;
+						gatewayResult.GwyTitle = unCancelReason;
+						gatewayResult.GwyCompleted = true;
+						var gatewayInsertResult = JobGatewayCommands.PostWithSettings(activeUser, null, gatewayResult, customerId, gatewayResult.JobID);
+						if (gatewayInsertResult != null && gatewayInsertResult.Id > 0 && !string.IsNullOrEmpty(unCancelComment))
+						{
+							RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+							richEditDocumentServer.Document.AppendHtmlText(unCancelComment);
+							ByteArray byteArray = new ByteArray()
+							{
+								Id = gatewayInsertResult.Id,
+								Entity = EntitiesAlias.JobGateway,
+								FieldName = "GwyGatewayDescription",
+								IsPopup = false,
+								FileName = null,
+								Type = SQLDataTypes.varbinary,
+								DocumentText = unCancelComment,
+								Bytes = richEditDocumentServer.OpenXmlBytes
+							};
+
+							CommonCommands.SaveBytes(byteArray, activeUser);
+						}
+					}
+				}
 			}
 			catch (Exception exp)
 			{

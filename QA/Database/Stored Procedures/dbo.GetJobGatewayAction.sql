@@ -12,7 +12,7 @@ GO
 -- Description:               Get a Job Gateway Action 
 -- Execution:                 EXEC [dbo].[GetJobGateway] 2,14,1,0,186915,'Gateway',0,0,'Will Call'  
 -- =============================================  
-CREATE PROCEDURE [dbo].[GetJobGatewayAction] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetJobGatewayAction] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@id BIGINT
@@ -130,6 +130,32 @@ BEGIN TRY
 	FROM [dbo].[SYSTM000Ref_Options]
 	WHERE SysLookupCode = 'JobPreferredMethod'
 		AND SysDefault = 1
+
+		SELECT TOP 1 @DeliveryUTCValue = CASE 
+		WHEN IsDayLightSaving = 1
+			AND @isDayLightSavingEnable = 1
+			THEN UTC + 1
+		ELSE UTC
+		END
+FROM Location000Master
+WHERE TimeZoneShortName = CASE 
+		WHEN ISNULL(@JobDeliveryTimeZone, 'Unknown') = 'Unknown'
+			THEN 'Pacific'
+		ELSE @JobDeliveryTimeZone
+		END
+
+SELECT TOP 1 @OriginUTCValue = CASE 
+		WHEN IsDayLightSaving = 1
+			AND @isDayLightSavingEnable = 1
+			THEN UTC + 1
+		ELSE UTC
+		END
+FROM Location000Master
+WHERE TimeZoneShortName = CASE 
+		WHEN ISNULL(@jobOriginTimeZone, 'Unknown') = 'Unknown'
+			THEN 'Pacific'
+		ELSE @jobOriginTimeZone
+		END	
 
 	SELECT @parentId AS JobID
 		,@JobOriginDateTimeBaseline AS [JobOriginDateTimeBaseline]
