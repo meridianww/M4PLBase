@@ -62,9 +62,8 @@ namespace M4PL.Business.Job
         int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser);
         List<Entities.Job.Job> GetActiveJobByProgramId(long programId);
 		bool UpdateJobInvoiceDetail(long jobId, JobInvoiceDetail jobInvoiceDetail);
-		StatusModel CancelJobByOrderNumber(string orderNumber);
+		StatusModel CancelJobByOrderNumber(string orderNumber, string cancelComment, string cancelReason);
         StatusModel UnCancelJobByOrderNumber(string orderNumber);
-
         OrderLocationCoordinate GetOrderLocationCoordinate(string orderNumber);
 		OrderStatusModel GetOrderStatus(string orderNumber);
 		StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting);

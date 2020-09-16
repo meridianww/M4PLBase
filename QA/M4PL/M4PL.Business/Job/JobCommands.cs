@@ -319,7 +319,7 @@ namespace M4PL.Business.Job
         {
             return _commands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail, ActiveUser);
         }
-        public StatusModel CancelJobByOrderNumber(string orderNumber)
+        public StatusModel CancelJobByOrderNumber(string orderNumber, string cancelComment, string cancelReason)
         {
             if (string.IsNullOrEmpty(orderNumber))
             {
@@ -362,29 +362,27 @@ namespace M4PL.Business.Job
                         AdditionalDetail = "Order number passed in the service is already cancelled in Meridian System, please contact to Meridian support team for any further action."
                     };
                 }
-                else if (jobDetail?.Id > 0 && jobDetail.JobDeliveryDateTimePlanned.HasValue)
-                {
-                    string timeZone = string.IsNullOrEmpty(jobDetail.JobDeliveryTimeZone) ? "Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Equals("Unknown", StringComparison.OrdinalIgnoreCase) ?
-                        "Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Any(char.IsDigit) ?
-                        jobDetail.JobDeliveryTimeZone : string.Format("{0} Standard Time", jobDetail.JobDeliveryTimeZone);
-                    TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-                    DateTime destinationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo);
-                    int jobStatusUpdateValidationHours = M4PLBusinessConfiguration.JobStatusUpdateValidationHours.ToInt();
-                    if (((DateTime)jobDetail.JobDeliveryDateTimePlanned - destinationTime).TotalHours < jobStatusUpdateValidationHours)
-                    {
-                        return new StatusModel()
-                        {
-                            Status = "Failure",
-                            StatusCode = (int)HttpStatusCode.PreconditionFailed,
-                            AdditionalDetail = string.Format("Order number passed in the service can not be cancelled before {0} hours of delivery, please contact to Meridian support team for any further action.", jobStatusUpdateValidationHours)
-                        };
-                    }
-                }
 
-                long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+                long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), cancelComment, cancelReason);
                 if (gatewayId > 0)
                 {
-                    bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobDetail.Id, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					if (jobDetail.JobDeliveryDateTimePlanned.HasValue)
+					{
+						string timeZone = string.IsNullOrEmpty(jobDetail.JobDeliveryTimeZone) ? "Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Equals("Unknown", StringComparison.OrdinalIgnoreCase) ?
+							"Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Any(char.IsDigit) ?
+							jobDetail.JobDeliveryTimeZone : string.Format("{0} Standard Time", jobDetail.JobDeliveryTimeZone);
+						TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+						DateTime destinationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo);
+						int jobStatusUpdateValidationHours = M4PLBusinessConfiguration.JobStatusUpdateValidationHours.ToInt();
+						double timeDiffrence = ((DateTime)jobDetail.JobDeliveryDateTimePlanned - destinationTime).TotalHours;
+						if (timeDiffrence < jobStatusUpdateValidationHours)
+						{
+							string emailBody = EventBodyHelper.GetJobCancellationMailBody(jobDetail.Id, timeDiffrence.ToInt().ToString(), jobDetail.JobCustomerSalesOrder, ActiveUser.UserName);
+							EventBodyHelper.CreateEventMailNotification((int)EventNotification.JobCancellation, (long)jobDetail.ProgramID, orderNumber, emailBody);
+						}
+					}
+
+					bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobDetail.Id, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
                     if (isFarEyePushRequired)
                     {
                         FarEyeHelper.PushStatusUpdateToFarEye(jobDetail.Id, ActiveUser);
