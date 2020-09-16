@@ -2576,6 +2576,7 @@ namespace M4PL.Web
                     break;
 
                 case WebUtilities.JobGatewayActions.ThreePL:
+                case WebUtilities.JobGatewayActions.SchedulePickUp:
                     escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateCancelled.ToString(),
                                             JobGatewayColumns.DateComment.ToString(),
