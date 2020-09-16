@@ -128,6 +128,7 @@
     <Compile Include="JobService\SearchOrder.cs" />
     <Compile Include="Job\AWCDriverScrubReportRawData.cs" />
     <Compile Include="Job\BatchJobDetail.cs" />
+    <Compile Include="Job\CancelOrder.cs" />
     <Compile Include="Job\CommonDriverScrubReportRawData.cs" />
     <Compile Include="Job\DriverContact.cs" />
     <Compile Include="Job\JobAdditionalInfo.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Job\ProjectedCapacityRawData.cs" />
     <Compile Include="Job\SelectedJobList.cs" />
     <Compile Include="Job\UnCancelJobResponse.cs" />
+    <Compile Include="Job\UnCancelOrder.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
     <Compile Include="Program\EventType.cs" />

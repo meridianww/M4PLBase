@@ -153,7 +153,7 @@ namespace M4PL.API.Controllers
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.GetJobByProgram(id, parentId);
 		}
-		
+
         /// <summary>
         /// Get the Destination detials by Job Id, if Job id is zero Pickup and delivery information from program
         /// </summary>
@@ -505,10 +505,10 @@ namespace M4PL.API.Controllers
 		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
 		[HttpPost]
 		[Route("CancelOrder"), ResponseType(typeof(StatusModel))]
-		public StatusModel CancelOrder(string orderNumber)
+		public StatusModel CancelOrder(CancelOrder cancelJob)
 		{
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.CancelJobByOrderNumber(orderNumber);
+            return _jobCommands.CancelJobByOrderNumber(cancelJob.OrderNumber, cancelJob.CancelComment, cancelJob.CancelReason);
 		}
 
         /// <summary>
@@ -518,10 +518,10 @@ namespace M4PL.API.Controllers
         /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
         [HttpPost]
         [Route("UnCancelOrder"), ResponseType(typeof(StatusModel))]
-        public StatusModel UnCancelOrder(string orderNumber)
+        public StatusModel UnCancelOrder(UnCancelOrder unCancelOrder)
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.UnCancelJobByOrderNumber(orderNumber);
+            return _jobCommands.UnCancelJobByOrderNumber(unCancelOrder.OrderNumber, unCancelOrder.UnCancelReason, unCancelOrder.UnCancelComment);
         }
 
         /// <summary>

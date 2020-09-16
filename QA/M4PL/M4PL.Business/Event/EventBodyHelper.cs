@@ -143,6 +143,33 @@ namespace M4PL.Business.Event
 			return stringBuilder.ToString();
 		}
 
+		public static string GetJobCancellationMailBody(long JobId, string timeDifference, string ContactNumber, string userName)
+		{
+			SetCollection setcollection = new SetCollection();
+			Dictionary<string, string> args = new Dictionary<string, string>
+			{
+				{ "JobId", JobId.ToString() },
+				{ "Username", userName },
+				{ "TimeDifference", timeDifference},
+				{ "ContactNumber", ContactNumber },
+				{ "JobURL", string.Format("{0}?jobId={1}", ConfigurationManager.AppSettings["M4PLApplicationURL"], JobId) },
+			};
+
+			Stream stream = GenerateHtmlFile(setcollection, "JobDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobCancel.xslt", args);
+			StringBuilder stringBuilder = new StringBuilder();
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				string line = string.Empty;
+				while ((line = reader.ReadLine()) != null)
+				{
+					stringBuilder.Append(line);
+				}
+			}
+
+			return stringBuilder.ToString();
+		}
+
+
 		private static Stream GenerateHtmlFile(SetCollection data, string rootName, string xsltFilePath, Dictionary<string, string> xsltArgumentsDictionary)
 		{
 			if (data == null)
