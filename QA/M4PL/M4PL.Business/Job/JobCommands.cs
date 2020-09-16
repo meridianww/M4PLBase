@@ -416,7 +416,7 @@ namespace M4PL.Business.Job
                 };
             }
         }
-        public StatusModel UnCancelJobByOrderNumber(string orderNumber)
+        public StatusModel UnCancelJobByOrderNumber(string orderNumber, string unCancelReason, string unCancelComment)
         {
             if (string.IsNullOrEmpty(orderNumber))
             {
@@ -429,7 +429,7 @@ namespace M4PL.Business.Job
             }
             try
             {
-                var result = _commands.UnCancelJobByCustomerSalesOrderNumber(ActiveUser,orderNumber);
+                var result = _commands.UnCancelJobByCustomerSalesOrderNumber(ActiveUser,orderNumber, unCancelReason, unCancelComment, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
                 long jobId = result.JobId;
                 long gatewayId = result.CurrentGatewayId;
                 string errorMessage = result.ErrorMessage;

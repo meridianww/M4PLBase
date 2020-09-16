@@ -505,7 +505,7 @@ namespace M4PL.API.Controllers
 		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
 		[HttpPost]
 		[Route("CancelOrder"), ResponseType(typeof(StatusModel))]
-		public StatusModel CancelOrder(CancelJob cancelJob)
+		public StatusModel CancelOrder(CancelOrder cancelJob)
 		{
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.CancelJobByOrderNumber(cancelJob.OrderNumber, cancelJob.CancelComment, cancelJob.CancelReason);
@@ -518,10 +518,10 @@ namespace M4PL.API.Controllers
         /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
         [HttpPost]
         [Route("UnCancelOrder"), ResponseType(typeof(StatusModel))]
-        public StatusModel UnCancelOrder(string orderNumber)
+        public StatusModel UnCancelOrder(UnCancelOrder unCancelOrder)
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.UnCancelJobByOrderNumber(orderNumber);
+            return _jobCommands.UnCancelJobByOrderNumber(unCancelOrder.OrderNumber, unCancelOrder.UnCancelReason, unCancelOrder.UnCancelComment);
         }
 
         /// <summary>

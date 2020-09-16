@@ -417,7 +417,7 @@ namespace M4PL.DataAccess.Job
 			return insertedGatewayId;
 		}
 
-		public static UnCancelJobResponse UnCancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string salesOrderNumber)
+		public static UnCancelJobResponse UnCancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string salesOrderNumber, string unCancelReason, string unCancelComment, long customerId)
 		{
 			long insertedGatewayId = 0;
 			long jobId = 0;
@@ -439,6 +439,38 @@ namespace M4PL.DataAccess.Job
 				jobId = result.JobId;
 				errorMessage = result.ErrorMessage;
 				isSuccess = result.IsSuccess;
+				if (insertedGatewayId > 0 && jobId > 0 && !string.IsNullOrEmpty(unCancelReason))
+				{
+					var gatewayResult = JobGatewayCommands.GetGatewayWithParent(activeUser, 0, jobId, "Action", false, "Comment");
+					if (gatewayResult != null && gatewayResult.JobID > 0)
+					{
+						gatewayResult.GatewayTypeId = 86;
+						gatewayResult.GwyGatewayCode = "Comment";
+						gatewayResult.GwyGatewayACD = DateTime.UtcNow.AddHours(gatewayResult.DeliveryUTCValue);
+						gatewayResult.GwyGatewayTitle = unCancelReason;
+						gatewayResult.GwyTitle = unCancelReason;
+						gatewayResult.GwyCompleted = true;
+						var gatewayInsertResult = JobGatewayCommands.PostWithSettings(activeUser, null, gatewayResult, customerId, gatewayResult.JobID);
+						if (gatewayInsertResult != null && gatewayInsertResult.Id > 0 && !string.IsNullOrEmpty(unCancelComment))
+						{
+							RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+							richEditDocumentServer.Document.AppendHtmlText(unCancelComment);
+							ByteArray byteArray = new ByteArray()
+							{
+								Id = gatewayInsertResult.Id,
+								Entity = EntitiesAlias.JobGateway,
+								FieldName = "GwyGatewayDescription",
+								IsPopup = false,
+								FileName = null,
+								Type = SQLDataTypes.varbinary,
+								DocumentText = unCancelComment,
+								Bytes = richEditDocumentServer.OpenXmlBytes
+							};
+
+							CommonCommands.SaveBytes(byteArray, activeUser);
+						}
+					}
+				}
 			}
 			catch (Exception exp)
 			{

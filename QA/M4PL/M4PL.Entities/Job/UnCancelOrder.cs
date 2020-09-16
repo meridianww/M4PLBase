@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Job
 {
-	public class CancelJob
+	public class UnCancelOrder
 	{
 		public string OrderNumber { get; set; }
 
-		public string CancelReason { get; set; }
+		public string UnCancelReason { get; set; }
 
-		public string CancelComment { get; set; }
+		public string UnCancelComment { get; set; }
 	}
 }
