@@ -421,12 +421,7 @@ namespace M4PL.Business.XCBL
 							summaryHeader.LineDetail = new List<LineDetail>()
 							{
 							};
-							List<CopiedGateway> gatewayIds = new List<CopiedGateway>();
-							copiedGatewayIds.ForEach(d =>
-							{
-								gatewayIds.Add(new CopiedGateway() { Id = d });
-							});
-							summaryHeader.CopiedGatewayIds = gatewayIds;
+							
 						}
 						catch (Exception exp)
 						{
@@ -435,6 +430,12 @@ namespace M4PL.Business.XCBL
 					}));
 
 					if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+					List<CopiedGateway> gatewayIds = new List<CopiedGateway>();
+					copiedGatewayIds.ForEach(d =>
+					{
+						gatewayIds.Add(new CopiedGateway() { Id = d });
+					});
+					summaryHeader.CopiedGatewayIds = gatewayIds;
 				}
 			}
 			else
