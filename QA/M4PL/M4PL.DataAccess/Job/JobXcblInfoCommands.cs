@@ -28,6 +28,8 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
+using _jobCommands = M4PL.DataAccess.Job.JobCommands;
+
 
 namespace M4PL.DataAccess.Job
 {
@@ -83,10 +85,16 @@ namespace M4PL.DataAccess.Job
                 string columnsAndValuesToUpdate = string.Empty;
                 if (jobXcblInfoView.ColumnMappingData != null && jobXcblInfoView.ColumnMappingData.Any())
                 {
+                    Entities.Job.Job job = _jobCommands.Get(activeUser, jobXcblInfoView.JobId);
+
                     foreach (var item in jobXcblInfoView.ColumnMappingData)
                     {
                         columnsAndValuesToUpdate += item.ColumnName + "=" + "'" + item.UpdatedValue + "', ";
+                        job.GetType().GetProperty(item.ColumnName).SetValue(job, item.UpdatedValue);
                     }
+                    job.JobIsDirtyDestination = true;
+                    _jobCommands.Put(activeUser, job, isLatLongUpdatedFromXCBL: true);
+
                 }
 
                 columnsAndValuesToUpdate += "ChangedBy = " + "'" + activeUser.UserName + "'";

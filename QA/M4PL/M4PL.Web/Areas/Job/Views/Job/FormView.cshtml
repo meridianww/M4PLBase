@@ -67,6 +67,15 @@
     }
     var uriQueryString = HttpContext.Current.Request.QueryString["jobId"];
     var isReboonRequired = uriQueryString != null && !string.IsNullOrEmpty(uriQueryString) ? false : true;
+    if (Model.Record.JobIsSchedule)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimePlanned").ColAliasName = "Scheduled Delivery Date";
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimePlanned").ColCaption = "Scheduled Delivery Date";
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimePlanned").ColGridAliasName = "Scheduled Delivery Date";
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeBaseline").ColAliasName = "Estimated Delivery Date";
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeBaseline").ColCaption = "Estimated Delivery Date";
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeBaseline").ColGridAliasName = "Estimated Delivery Date";
+    }
 }
 
 @if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity) && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)

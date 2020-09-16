@@ -467,6 +467,40 @@
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write("</div>");
         }
+        else if (actionEnumToCompare == WebUtilities.JobGatewayActions.SchedulePickUp)
+        {
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+            @Html.DevExpress().FormLayout(
+                              contactEmailsettings =>
+                              {
+                                  contactEmailsettings.Name = "SchedulePickUpDate";
+                                  contactEmailsettings.ControlStyle.CssClass = "emaildate";
+
+                                  contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                                  {
+                                      cEmailsettings.Caption = "Schedule Pick Up";
+                                      cEmailsettings.Items.Add(n =>
+                                      {
+                                          n.Caption = "";
+                                          n.SetNestedContent(() =>
+                                          {
+                                              Model.Record.StatusCode = string.Empty;
+                                              Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColAliasName = "Schedule Pick Date";
+                                              Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColIsReadOnly = false;
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              if (!Model.Record.IsGatewayCalled)
+                                              {
+                                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              }
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                          });
+                                      });
+                                  });
+                              }
+                          ).GetHtml();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
+        }
         else
         {
             /*By Default will consider as comment entry*/
