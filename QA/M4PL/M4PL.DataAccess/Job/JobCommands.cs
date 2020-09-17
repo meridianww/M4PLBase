@@ -829,7 +829,7 @@ namespace M4PL.DataAccess.Job
 			}
 			catch (Exception exp)
 			{
-				_logger.Log(exp, "UpdateJobPartialDataByShippingSchedule", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+				_logger.Log(exp, "UpdateJobPartialDataByShippingSchedule", string.Format("Error occuring while processing shipping schedule. Query was: {0}", finalSQLUpdateQuery), Utilities.Logger.LogType.Error);
 			}
 		}
 
