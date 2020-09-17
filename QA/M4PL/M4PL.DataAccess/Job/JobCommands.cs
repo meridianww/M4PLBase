@@ -863,13 +863,14 @@ namespace M4PL.DataAccess.Job
 			return isDeliveryChargeRemovalRequired;
 		}
 
-		public static bool UpdateJobPriceOrCostCodeStatus(long jobId, int statusId)
+		public static bool UpdateJobPriceOrCostCodeStatus(long jobId, int statusId, long customerId)
 		{
 			bool isDefaultChargeUpdate = false;
 			var parameters = new List<Parameter>
 			{
 			   new Parameter("@JobId", jobId),
-			   new Parameter("@StatusId", statusId)
+			   new Parameter("@StatusId", statusId),
+			   new Parameter("@CustomerId", customerId)
 			};
 
 			try

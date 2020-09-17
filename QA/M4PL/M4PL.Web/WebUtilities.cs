@@ -1365,6 +1365,7 @@ namespace M4PL.Web
             Exception,
             NotAction,
             ThreePL,
+            SchedulePickUp
         }
 
         public static List<string> ContactColumnsUsedAsVirtualInOtherEntities()

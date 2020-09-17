@@ -32,7 +32,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 Where(y => y.SysOptionName.Equals("Each", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
             jobDatatoUpdate.JobPONumber = orderHeader.CustomerPO;
-			jobDatatoUpdate.JobBOLMaster = orderHeader.OriginalOrderNumber;
+			jobDatatoUpdate.JobServiceMode = orderHeader.OriginalOrderNumber;
 			jobDatatoUpdate.JobCustomerPurchaseOrder = orderHeader.CustomerPO;
             jobDatatoUpdate.JobCustomerSalesOrder = orderHeader.OrderNumber;
             jobDatatoUpdate.PlantIDCode = (orderHeader.ShipFrom != null && !string.IsNullOrEmpty(orderHeader.ShipFrom.LocationID)) ? orderHeader.ShipFrom.LocationID : jobDatatoUpdate.PlantIDCode;

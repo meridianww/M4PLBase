@@ -80,7 +80,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 			if (isDeliveryChargeRemovalRequired)
 			{
-				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Delete);
+				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Delete, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 			}
 
 			try
@@ -94,7 +94,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 			if (isDeliveryChargeRemovalRequired)
 			{
-				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Active);
+				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Active, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 			}
 
 			return result;
@@ -174,7 +174,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 				if (isDeliveryChargeRemovalRequired)
 				{
-					_jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Delete);
+					_jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Delete, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 				}
 
 				try
@@ -188,7 +188,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 				if (isDeliveryChargeRemovalRequired)
 				{
-					_jobCommands.UpdateJobPriceOrCostCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Active);
+					_jobCommands.UpdateJobPriceOrCostCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Active, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 				}
 			}
 

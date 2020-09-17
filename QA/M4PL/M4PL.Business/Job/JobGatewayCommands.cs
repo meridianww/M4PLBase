@@ -300,7 +300,7 @@ namespace M4PL.Business.Job
 
                         if (isDeliveryChargeRemovalRequired)
                         {
-                            _jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Delete);
+                            _jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Delete, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
                         }
 
                         try
@@ -314,7 +314,7 @@ namespace M4PL.Business.Job
 
                         if (isDeliveryChargeRemovalRequired)
                         {
-                            _jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Active);
+                            _jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Active, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
                         }
                     });
                 }
