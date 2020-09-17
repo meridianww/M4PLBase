@@ -12,7 +12,7 @@ CREATE PROCEDURE [dbo].[GetJobParentIdAfterNavOrderCreation]
 (
 @JobId BIGINT,
 @customerId BIGINT,
-@ParentJobId BIGINT OUTPUT
+@ParentOrder NVARCHAR(50) OUTPUT
 )
 AS
 BEGIN
@@ -40,7 +40,7 @@ BEGIN
 			AND @customerId = @JobCustomerId
 			)
 	BEGIN
-	SELECT TOP 1 @ParentJobId = JobId
+	SELECT TOP 1 @ParentOrder = JobCustomerSalesOrder
 				FROM dbo.JOBDL000Master Job WITH (NOLOCK)
 				INNER JOIN dbo.NAV000JobSalesOrderMapping JSO WITH (NOLOCK) ON JSO.JobId = Job.Id
 				WHERE Job.Id <> @JobId
