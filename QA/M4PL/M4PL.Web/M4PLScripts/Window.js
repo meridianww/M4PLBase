@@ -28,6 +28,7 @@ M4PLWindow.OrderId = 0;
 M4PLWindow.JobIsScheduled = false;
 M4PLWindow.JobGatewayStatus = '';
 M4PLWindow.MultiSelectedJobIds = [];
+M4PLWindow.Count = 0;
 
 M4PLWindow.CallBackPanel = function () {
     var params;
@@ -50,9 +51,13 @@ M4PLWindow.CallBackPanel = function () {
     var _onEndCallBack = function (s, e) {
         if (ASPxClientControl.GetControlCollection().GetByName("MainSplitter"))
             ASPxClientControl.GetControlCollection().GetByName("MainSplitter").GetPaneByName("Content").SetScrollTop(0);
-        if (s.cpRibbonRoute) {
+
+        if (s.cpRibbonRoute && M4PLWindow.Count == 0) {
+            M4PLWindow.Count = M4PLWindow.Count + 1;
             DevExCtrl.Ribbon.DoCallBack(s.cpRibbonRoute);
             delete s.cpRibbonRoute;
+        } else {
+            M4PLWindow.Count = 0;
         }
         M4PLCommon.Error.CheckServerError();
     }

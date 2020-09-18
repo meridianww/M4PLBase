@@ -821,6 +821,18 @@ namespace M4PL.DataAccess.Job
 			return insertedGatewayId > 0 ? true : false;
 		}
 
+		public static void UpdateJobPartialDataByShippingSchedule(string finalSQLUpdateQuery)
+		{
+			try
+			{
+				SqlSerializer.Default.Execute(finalSQLUpdateQuery, null);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "UpdateJobPartialDataByShippingSchedule", string.Format("Error occuring while processing shipping schedule. Query was: {0}", finalSQLUpdateQuery), Utilities.Logger.LogType.Error);
+			}
+		}
+
 		public static bool IsJobNotDuplicate(string customerSalesOrderNo, long programId)
 		{
 			bool isJobDuplicate = false;

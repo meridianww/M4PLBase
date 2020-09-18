@@ -43,7 +43,7 @@
             settings.Properties.AllowUserInput = false;
             settings.DataBound = (sender, e) =>
             {
-                Model.Record.JobStatusIdName = "Active";
+                Model.Record.JobStatusIdName = "ALL";
                 var gridLookup = (MVCxGridLookup)sender;
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.JobStatusIdName);
             };

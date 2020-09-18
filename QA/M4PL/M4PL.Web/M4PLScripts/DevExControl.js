@@ -1873,7 +1873,10 @@ DevExCtrl.PageControl = function () {
                     e.reloadContentOnCallback = true;
                 }
             }
-            else if (callbackRoute != null && callbackRoute.Action === "TabView" && (callbackRoute.Controller === "JobDocReference" || callbackRoute.Controller === "JobGateway")) {
+            else if (callbackRoute != null && callbackRoute.Action === "TabView" && callbackRoute.Controller === "JobGateway") {          
+                //e.reloadContentOnCallback = true;
+            }
+            else if (callbackRoute != null && callbackRoute.Action === "TabView" && callbackRoute.Controller === "JobDocReference") {
                 e.reloadContentOnCallback = true;
             }
             else if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Program") {
@@ -2008,7 +2011,7 @@ DevExCtrl.TokenBox = function () {
             ctrlAnalystDriverResonsible.PerformCallback();
         }
     }
-    
+
     var _driverPanelInit = function () {
         var ctrlJobSiteCode = ASPxClientControl.GetControlCollection().GetByName("JobSiteCode");
         var tokenCollection = ctrlJobSiteCode.GetTokenCollection();

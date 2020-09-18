@@ -97,6 +97,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (result is SysRefModel)
             {
                 MvcRoute resRoute = null;
+                var uriQueryString = Request.UrlReferrer.PathAndQuery;
                 if (jobGatewayView.IsGatewayCalled)
                 {
                     var resultRoute = SessionProvider.ActiveUser.LastRoute;
@@ -119,8 +120,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.Action = "FormView";
                         resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                         resultRoute.ParentRecordId = result.ProgramID ?? 0; ;
-                        resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
-                                                     ? "pnlJobDetail"
+                        resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId")
+                                                     ? "AppCbPanel"
                                                      : "JobDataViewCbPanel";
 
                         resRoute = new MvcRoute(resultRoute, MvcConstants.ActionForm);
@@ -288,7 +289,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (result is SysRefModel)
             {
                 MvcRoute resRoute = null;
-
+                var uriQueryString =Request.UrlReferrer.PathAndQuery;
                 if (jobGatewayView.IsGatewayCalled)
                 {
                     var resultRoute = SessionProvider.ActiveUser.LastRoute;
@@ -311,8 +312,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.Action = "FormView";
                         resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                         resultRoute.ParentRecordId = result.ProgramID ?? 0;
-                        resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
-                                                   ? "pnlJobDetail"
+                        resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId") 
+                                                   ? "AppCbPanel"
                                                    : "JobDataViewCbPanel";
 
                         resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);

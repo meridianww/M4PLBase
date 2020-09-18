@@ -80,6 +80,15 @@ BEGIN TRY
 					AND SysOptionName = 'Archive'
 				);
 	END
+	ELSE IF (@JobStatus = 'Canceled')
+	BEGIN
+		SET @JobStatusId = (
+				SELECT Id
+				FROM SYSTM000Ref_Options
+				WHERE SysLookupCode = 'Status'
+					AND SysOptionName = 'Canceled'
+				);
+	END
 
 	SELECT @GatewayTypeId = Id
 	FROM SYSTM000Ref_Options
