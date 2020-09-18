@@ -115,6 +115,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _reportResult.Record.ServiceMode = "ALL";
                 _reportResult.Record.ProductType = "ALL";
                 _reportResult.Record.PackagingCode = "ALL";
+                _reportResult.Record.JobStatusIdName = "ALL";
                 ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
                 return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
             }
