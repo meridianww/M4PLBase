@@ -23,7 +23,7 @@ IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName = 'EDISummar
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName = 'EDISummaryHeader' AND ColColumnName = 'eshInterConsigneeAltContEmail')
  BEGIN
 	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
-	 VALUES ('EN', 'EDISummaryHeader', NULL, 'eshInterConsigneeContactEmail', 'Internal Consignee Alternative Email', 'Internal Consignee Alternative Email', NULL, NULL, 'Internal Consignee Alternative Email', @sortOrder, 0, 1, 1, NULL, NULL, 0, 0, NULL, 0, 'Internal Consignee Alternative Email')
+	 VALUES ('EN', 'EDISummaryHeader', NULL, 'eshInterConsigneeAltContEmail', 'Internal Consignee Alternative Email', 'Internal Consignee Alternative Email', NULL, NULL, 'Internal Consignee Alternative Email', @sortOrder, 0, 1, 1, NULL, NULL, 0, 0, NULL, 0, 'Internal Consignee Alternative Email')
 	 SET @sortOrder = @sortOrder +1
  END
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName = 'EDISummaryHeader' AND ColColumnName = 'eshShipFromContactEmail')
