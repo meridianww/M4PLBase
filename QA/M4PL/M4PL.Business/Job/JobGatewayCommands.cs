@@ -133,7 +133,6 @@ namespace M4PL.Business.Job
             JobGateway gateway = null;
             if (jobGateway.JobIds != null && jobGateway.JobIds.Length > 0)
             {
-                List<Task> tasks = new List<Task>();
                 jobGateway.IsMultiOperation = true;
                 gateway = new JobGateway();
                 foreach (var item in jobGateway.JobIds[0].Split(','))

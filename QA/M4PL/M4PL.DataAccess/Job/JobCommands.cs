@@ -555,7 +555,7 @@ namespace M4PL.DataAccess.Job
 		{
 			int CancelId = SysOptionList.FirstOrDefault(x => x.SysRefName.Equals("Canceled", StringComparison.OrdinalIgnoreCase)).SysRefId;
 			job.IsCancelled = job.StatusId == CancelId ? true : false;
-			Entities.Job.Job updatedJobDetails = job;
+			Entities.Job.Job updatedJobDetails = null;
 			Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
 			bool isExistsRecord = true;
 
@@ -588,7 +588,8 @@ namespace M4PL.DataAccess.Job
 					UpdateJobContactInformation(job);
 				}
 
-				if (!isServiceCall && ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID)))
+				updatedJobDetails = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
+				if (!isServiceCall && updatedJobDetails != null && ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID)))
 				{
 					Task.Run(() =>
 					{
