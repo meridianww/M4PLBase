@@ -32,9 +32,9 @@ body {
     padding-left: 0px;
 }
 
-div#JobSiteCode_DDD_PW-1[style] {
+/*div#JobSiteCode_DDD_PW-1[style] {
     padding: 0 !important;
-}
+}*/
 
 .headerPane {
     background-color: #EDEDED;
@@ -50,7 +50,7 @@ div#JobSiteCode_DDD_PW-1[style] {
 #ReportDesigner .dx-popup-wrapper {
     position: fixed !important;
 }
-
+/*
 #JobSiteCode_ET.dxeRoot_Office2010Black > table {
     border-collapse: collapse;
     overflow: auto;
@@ -68,7 +68,7 @@ div#JobSiteCode_DDD_PW-1 > div > div.dxpc-contentWrapper {
 
 div#JobSiteCode_DDD_L_D {
     height: auto !important;
-}
+}*/
 
 .dxrd-wizard .dxrd-wizard-content .dxrd-report-type-page {
     margin-top: 2% !important;
