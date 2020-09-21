@@ -710,7 +710,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
-
+            sessionInfo.PagedDataInfo.IsJobParentEntity = route.IsJobParentEntityUpdated;
             if (sessionInfo.Filters == null)
                 sessionInfo.Filters = new Dictionary<string, string>();
             if (string.IsNullOrEmpty(filteringState.FilterExpression) && (filteringState.ModifiedColumns.Count > 0))
@@ -769,6 +769,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+            sessionInfo.PagedDataInfo.IsJobParentEntity = route.IsJobParentEntityUpdated;
             sessionInfo.PagedDataInfo.PageNumber = pager.PageIndex + 1;
             sessionInfo.PagedDataInfo.PageSize = pager.PageSize;
             var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
