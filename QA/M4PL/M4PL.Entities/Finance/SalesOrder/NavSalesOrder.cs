@@ -162,5 +162,6 @@ namespace M4PL.Entities.Finance.SalesOrder
 
 		public string ManualPurchaseOrderNo { get; set; }
 		public string ElectronicPurchaseOrderNo { get; set; }
+		public string Parent_ID { get; set; }
 	}
 }
