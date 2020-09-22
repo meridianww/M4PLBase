@@ -106,6 +106,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             var jobCardRequest = new JobCardRequest();
             TempData["CardTtile"] = null;
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
+            bool isExport = false;
+            if (Request.ContentType == "application/x-www-form-urlencoded")
+                isExport = true;
 
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
@@ -119,6 +122,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId =
                         filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
+                
             }
             else
             {
@@ -174,6 +178,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition += 
                 //        ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression;
             }
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsExport = isExport;
             var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "CardView", "Job");
             cancelRoute.OwnerCbPanel = "AppCbPanel";
             cancelRoute.EntityName = "JobCard";
@@ -186,7 +191,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             SessionProvider.IsCardEditMode = false;
             if (_gridResult.SessionProvider == null)
                 _gridResult.SessionProvider = SessionProvider;
-
+            
             base.DataView(JsonConvert.SerializeObject(route));
             //To Add Actions Operation in ContextMenu
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
