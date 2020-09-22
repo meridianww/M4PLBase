@@ -386,6 +386,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\Common.cs" />
     <Compile Include="Handlers\MetadataHandler.cs" />
     <Compile Include="IoC\BizMoblModule.cs" />
     <Compile Include="IoC\EmailModule.cs" />

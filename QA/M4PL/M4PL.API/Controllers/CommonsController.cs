@@ -18,6 +18,7 @@
 //====================================================================================================================================================*/
 
 using M4PL.API.Filters;
+using M4PL.API.Handlers;
 using M4PL.API.Models;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
@@ -60,7 +61,7 @@ namespace M4PL.API.Controllers
             return _command.GetTables(forceUpdate).AsQueryable();
         }
 
-		[HttpGet]
+        [HttpGet]
         [CustomQueryable]
         [Route("RibbonMenus")]
         public IQueryable<RibbonMenu> GetRibbonMenus(bool forceUpdate = false)
@@ -69,15 +70,15 @@ namespace M4PL.API.Controllers
             return _command.GetRibbonMenus(forceUpdate).AsQueryable();
         }
 
-		[HttpGet]
-		[Route("BusinessConfiguration")]
-		public BusinessConfiguration GetBusinessConfiguration(bool forceUpdate = false)
-		{
-			_command.ActiveUser = ActiveUser;
-			return _command.GetBusinessConfiguration(forceUpdate);
-		}
+        [HttpGet]
+        [Route("BusinessConfiguration")]
+        public BusinessConfiguration GetBusinessConfiguration(bool forceUpdate = false)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetBusinessConfiguration(forceUpdate);
+        }
 
-		[HttpGet]
+        [HttpGet]
         [CustomQueryable]
         [Route("IdRefLangNames")]
         public IQueryable<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
@@ -124,7 +125,7 @@ namespace M4PL.API.Controllers
             return _command.GetColumnSettingsByEntityAlias(entity, forceUpdate).AsQueryable();
         }
 
-		[HttpGet]
+        [HttpGet]
         [CustomQueryable]
         [Route("GridColumnSettings")]
         public IQueryable<ColumnSetting> GridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false)
@@ -133,16 +134,16 @@ namespace M4PL.API.Controllers
             return _command.GetGridColumnSettingsByEntityAlias(entity, forceUpdate, isGridSetting).AsQueryable();
         }
 
-		[HttpGet]
-		[CustomQueryable]
-		[Route("GetJobReportColumnRelation")]
-		public IQueryable<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)
-		{
-			_command.ActiveUser = ActiveUser;
-			return _command.GetJobReportColumnRelation(reportTypeId).AsQueryable();
-		}
+        [HttpGet]
+        [CustomQueryable]
+        [Route("GetJobReportColumnRelation")]
+        public IQueryable<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetJobReportColumnRelation(reportTypeId).AsQueryable();
+        }
 
-		[HttpGet]
+        [HttpGet]
         [CustomQueryable]
         [Route("ValidationRegExps")]
         public IQueryable<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false)
@@ -257,12 +258,24 @@ namespace M4PL.API.Controllers
         [HttpPost]
         [CustomQueryable]
         [Route("UserSecurities")]
-        public IQueryable<UserSecurity> GetUserSecurities(ActiveUser activeUser)
+        public IQueryable<UserSecurity> GetUserSecurities(ActiveUser activeUser )
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetUserSecurities(activeUser).AsQueryable();
         }
 
+        /// <summary>
+        /// GetUserSecurities
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [CustomQueryable]
+        [Route("UserSecurity")]
+        public IQueryable<UserSecurity> GetUserSecurities()
+        {
+            _command.ActiveUser = Common.GetActiveUser();
+            return _command.GetUserSecurities(_command.ActiveUser).AsQueryable();
+        }
         [HttpPost]
         [CustomQueryable]
         [Route("RefRoleSecurities")]
@@ -570,13 +583,13 @@ namespace M4PL.API.Controllers
             return _command.GetJobGateway(jobId).AsQueryable();
         }
 
-		[CustomAuthorize]
-		[HttpPost]
-		[Route("InsertErrorLog")]
-		public bool InsertErrorLog(M4PLException m4plException)
-		{
-			_command.ActiveUser = Models.ApiContext.ActiveUser;
-			return _command.InsertErrorLog(m4plException);
-		}
-	}
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("InsertErrorLog")]
+        public bool InsertErrorLog(M4PLException m4plException)
+        {
+            _command.ActiveUser = Models.ApiContext.ActiveUser;
+            return _command.InsertErrorLog(m4plException);
+        }
+    }
 }
