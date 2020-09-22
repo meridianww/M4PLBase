@@ -323,6 +323,10 @@ BEGIN
 			,@ProjectedYear
 			,@TotalCount OUTPUT
 	END
+	ELSE IF(ISNULL(@ReportName, '') = 'Cost Charge' OR ISNULL(@ReportName, '') = 'Price Charge')
+	BEGIN
+	EXEC [dbo].[GetCompletedJobRecordsForPostedCharges]  @userId, @roleId, @orgId, @where, @TotalCount OUTPUT
+	END
 END
 GO
 

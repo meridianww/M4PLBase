@@ -346,6 +346,9 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
+            bool isExport = false;
+            if (Request.ContentType == "application/x-www-form-urlencoded")
+                isExport = true;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             if (!strJobAdvanceReportRequestRoute.StartDate.HasValue)
                 strJobAdvanceReportRequestRoute.StartDate = DateTime.Now.AddDays(-1);
@@ -383,6 +386,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params);
                 }
             }
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsExport = isExport;
             if (!string.IsNullOrEmpty(strJobAdvanceReportRequestRoute.FileName))
                 ViewData["ReportName"] = strJobAdvanceReportRequestRoute.FileName;
             SetGridResult(requestRout, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
