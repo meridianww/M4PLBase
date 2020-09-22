@@ -292,7 +292,7 @@ namespace M4PL.Web
                     gridViewSetting.ContextMenu.Add(editOperation);
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
                         gridViewSetting.ContextMenu.Add(copyOperation);
-                    if (route.Entity == EntitiesAlias.Job)
+                    if (route.Entity == EntitiesAlias.Job && sessionProvider != null)
                     {
                         var moduleIdToCompare = MainModule.Job.ToInt();
                         var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
