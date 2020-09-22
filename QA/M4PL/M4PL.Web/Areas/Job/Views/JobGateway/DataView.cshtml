@@ -509,6 +509,7 @@
                                 subChildCommand.Enabled = false;
                             else
                                 subChildCommand.Enabled = true;
+                            subChildCommand.Items.Clear();
                             childCommand.Items.Add(subChildCommand);
                         }
                         command.Items.Add(childCommand);
