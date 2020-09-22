@@ -52,7 +52,7 @@
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
 
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
-    settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
+    //settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
     settings.SettingsResizing.Visualization = ResizingMode.Live;
     settings.ControlStyle.CssClass = "gridfields-text-visible";
 
@@ -92,25 +92,23 @@
     //}
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = WebApplicationConstants.ColPreviousStatusId;
+    //    column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
+    //    column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
+    //    column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
+    //    column.CellStyle.CssClass = CssConstants.HiddenColumn;
+    //});
 
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = WebApplicationConstants.ColPreviousStatusId;
-        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
-        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.CellStyle.CssClass = CssConstants.HiddenColumn;
-    });
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = OrgRefRoleColumns.OrgRoleContactID.ToString();
-        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
-        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.CellStyle.CssClass = CssConstants.HiddenColumn;
-    });
-
+    //settings.Columns.Add(column =>
+    //{
+    //    column.FieldName = OrgRefRoleColumns.OrgRoleContactID.ToString();
+    //    column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
+    //    column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
+    //    column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
+    //    column.CellStyle.CssClass = CssConstants.HiddenColumn;
+    //});
     foreach (var col in Model.ColumnSettings)
     {
         if (col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
