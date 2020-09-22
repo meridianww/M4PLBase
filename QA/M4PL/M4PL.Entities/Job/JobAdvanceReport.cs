@@ -153,5 +153,19 @@ namespace M4PL.Entities.Job
 		{
 			return string.Format("{0:0.0%}", ratio);
 		}
+
+		public bool IsCostChargeReport { get; set; }
+		public bool IsPriceChargeReport { get; set; }
+		public string JobOriginSiteName { get; set; }
+		public string RateChargeCode { get; set; }
+		public string RateTitle { get; set; }
+		public decimal RateAmount { get; set; }
+		public long JobId { get; set; }
+		public bool IsPaginationDisable { get; set; }
+
+		public JobAdvanceReport DeepCopy()
+		{
+			return (JobAdvanceReport)this.MemberwiseClone();
+		}
 	}
 }
