@@ -61,7 +61,7 @@
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
 
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
-    settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnChanged";
+    //settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnChanged";
     settings.SettingsResizing.Visualization = ResizingMode.Live;
 
     settings.SettingsPager.EnableAdaptivity = true;
