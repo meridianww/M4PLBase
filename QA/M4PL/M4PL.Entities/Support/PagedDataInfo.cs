@@ -83,6 +83,7 @@ namespace M4PL.Entities.Support
         public string EntityFor { get; set; }
         public bool IsDataView { get; set; }
         public long JobCardFilterId { get; set; }
+        public bool IsExport { get; set; }
         public PagedDataInfo Clone()
         {
             return this.MemberwiseClone() as PagedDataInfo;
