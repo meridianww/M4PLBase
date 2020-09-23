@@ -210,8 +210,16 @@ namespace M4PL.Business.XCBL
 							if (processingJobDetail?.Id > 0)
 							{
 								InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-								bool isFarEyePushRequired = false;
-								_jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+								if (!M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean())
+								{
+									bool isFarEyePushRequired = false;
+									_jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+									if (isFarEyePushRequired)
+									{
+										FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
+									}
+								}
+
 								List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
 								if (jobCargos != null && jobCargos.Count > 0)
 								{
@@ -221,11 +229,6 @@ namespace M4PL.Business.XCBL
 								if (processingJobDetail.ProgramID.HasValue)
 								{
 									_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
-								}
-
-								if (isFarEyePushRequired)
-								{
-									FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
 								}
 							}
 						}
