@@ -44,7 +44,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @ReportName VARCHAR(150)
+	DECLARE @ReportName VARCHAR(150), @IsCostCharge BIT
 
 	IF(ISNULL(@reportTypeId,0) = 0)
 	BEGIN
@@ -325,7 +325,8 @@ BEGIN
 	END
 	ELSE IF(ISNULL(@ReportName, '') = 'Cost Charge' OR ISNULL(@ReportName, '') = 'Price Charge')
 	BEGIN
-	EXEC [dbo].[GetCompletedJobRecordsForPostedCharges]  @userId, @roleId, @orgId, @where, @TotalCount OUTPUT
+	SET @IsCostCharge = CASE WHEN ISNULL(@ReportName, '') = 'Cost Charge' THEN 1 ELSE 0 END
+	EXEC [dbo].[GetCompletedJobRecordsForPostedCharges]  @userId, @roleId, @orgId, @where,@IsCostCharge,@IsExport, @TotalCount OUTPUT
 	END
 END
 GO
