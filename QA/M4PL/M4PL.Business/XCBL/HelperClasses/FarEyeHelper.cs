@@ -45,6 +45,25 @@ namespace M4PL.Business.XCBL.HelperClasses
 							string requestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
 							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
 							DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(requestBody, response, jobId);
+
+							Task.Factory.StartNew(() =>
+							{
+								if (!string.IsNullOrEmpty(deliveryUpdateModel.RescheduledInstallDate))
+								{
+									deliveryUpdateModel.InstallStatus = "Reschedule";
+									string rescheduleRequestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
+									string rescheduleResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
+									DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(rescheduleRequestBody, rescheduleResponse, jobId);
+								}
+
+								if (!string.IsNullOrEmpty(deliveryUpdateModel.CancelDate))
+								{
+									deliveryUpdateModel.InstallStatus = "Cancelled";
+									string cancelledRequestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
+									string cancelledResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
+									DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(cancelledRequestBody, cancelledResponse, jobId);
+								}
+							});
 						}
 					}
 					catch (Exception exp)
