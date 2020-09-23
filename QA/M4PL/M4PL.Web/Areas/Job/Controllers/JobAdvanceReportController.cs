@@ -72,7 +72,33 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
-
+            if (!SessionProvider.ActiveUser.IsSysAdmin)
+            {
+                var currentSecurity = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
+                if (currentSecurity != null)
+                {
+                    var subSecurityCostCharge = currentSecurity.UserSubSecurities.FirstOrDefault(t => t.RefTableName == EntitiesAlias.JobCostSheet.ToString());
+                    if (currentSecurity.UserSubSecurities != null && subSecurityCostCharge != null)
+                    {
+                        foreach (var res in _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Cost Charge")).FirstOrDefault().Value)
+                        {
+                            if (res.SysRefName.ToLower() == "cost charge" && subSecurityCostCharge.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess)
+                            {
+                                _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Cost Charge")).FirstOrDefault().Value.Remove(res);
+                                break;
+                            }
+                        }
+                        foreach (var res in _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Price Charge")).FirstOrDefault().Value)
+                        {
+                            if (res.SysRefName.ToLower() == "price charge" && subSecurityCostCharge.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess)
+                            {
+                                _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Price Charge")).FirstOrDefault().Value.Remove(res);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
             if (reportView != null && reportView.Id > 0)
             {
                 ViewData["isFirstLoadProductType"] = true;
