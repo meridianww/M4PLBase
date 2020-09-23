@@ -736,15 +736,17 @@ DevExCtrl.ComboBox = function () {
             }
             if (BrandByCustomerProgramCbPanel && !BrandByCustomerProgramCbPanel.InCallback()) {
                 BrandByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-            }
-            if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
-                GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-            }
+            }            
             if (ServiceModeByCustomerCbPanel && !ServiceModeByCustomerCbPanel.InCallback()) {
                 ServiceModeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
             }
             if (ProductTypeByCustomerCbPanel && !ProductTypeByCustomerCbPanel.InCallback()) {
                 ProductTypeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (reportTypeCtrl == null || (reportTypeCtrl != null && !(reportTypeCtrl.GetText() == "Price Charge" || reportTypeCtrl.GetText() == "Cost Charge"))) {
+                if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
+                    GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+                }
             }
             if (JobChannelByProgramCustomerCbPanel && !JobChannelByProgramCustomerCbPanel.InCallback()) {
                 JobChannelByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
