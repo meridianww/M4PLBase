@@ -798,7 +798,7 @@ namespace M4PL.Business.Job
                     jobGateway.GwyGatewayTitle = jobExceptionInfo.ExceptionTitle;
                 }
 
-                result = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, sysSetting, jobGateway, jobDetail.CustomerId, jobDetail.Id);
+                result = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, sysSetting, jobGateway, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), jobDetail.Id);
             }
             catch (Exception exp)
             {
