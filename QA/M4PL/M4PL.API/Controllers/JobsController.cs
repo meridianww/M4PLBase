@@ -22,6 +22,7 @@ using M4PL.Business.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Entities.XCBL.FarEye;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -576,6 +577,19 @@ namespace M4PL.API.Controllers
 		{
 			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _jobCommands.GetOrderStatus(orderNumber);
+		}
+
+		/// <summary>
+		/// This API use to push the data for Order Tracking From Far Eye System
+		/// </summary>
+		/// <param name="orderEvent">orderEvent</param>
+		/// <returns>response with the </returns>
+		[HttpPost]
+		[Route("OrderEvent"), ResponseType(typeof(OrderEventResponse))]
+		public OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _jobCommands.UpdateOrderEvent(orderEvent);
 		}
 
 		/// <summary>

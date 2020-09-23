@@ -1939,7 +1939,7 @@ namespace M4PL.Web
                             var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                             UserSubSecurity childSecurity = null;
                             if (currentSecurity.UserSubSecurities != null)
-                                childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                                childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;
                             if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
                           || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                              currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||

@@ -22,6 +22,7 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
+using M4PL.Entities.XCBL.FarEye;
 
 namespace M4PL.Business.Job
 {
@@ -70,5 +71,6 @@ namespace M4PL.Business.Job
         StatusModel AddDriver(DriverContact driverContact);
         StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber);
 		JobContact GetJobContact(long id, long parentId);
+		OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent);
 	}
 }
