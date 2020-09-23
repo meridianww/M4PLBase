@@ -541,15 +541,35 @@ namespace M4PL.Business.Job
                     AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
                 };
             }
+			else if(jobDetail.CustomerId != M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong())
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Status API only avaliable for Electrolux Customer."
+				};
+			}
             else
             {
-                return new OrderStatusModel()
+				var deliveryUpdate = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobDetail.Id, ActiveUser);
+				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
+				{
+					deliveryUpdate.InstallStatus = "Reschedule";
+				}
+
+				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) && !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+				{
+					deliveryUpdate.InstallStatus = "Canceled";
+				}
+
+				return new OrderStatusModel()
                 {
                     Status = "Success",
                     StatusCode = (int)HttpStatusCode.OK,
                     AdditionalDetail = string.Empty,
-                    DeliveryUpdate = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobDetail.Id, ActiveUser)
-                };
+                    DeliveryUpdate = deliveryUpdate
+				};
             }
         }
         public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting)
