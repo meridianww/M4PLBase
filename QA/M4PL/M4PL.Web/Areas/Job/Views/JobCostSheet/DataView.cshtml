@@ -443,6 +443,7 @@
                             var subChildCommand = e.CreateItem(subChildContextMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(subChildContextMenu.Route));
                             subChildCommand.Image.Url = WebExtension.ConvertByteToString(subChildContextMenu.Icon);
                             subChildCommand.Enabled = true;
+                            subChildCommand.Items.Clear();
                             childCommand.Items.Add(subChildCommand);
                         }
                         command.Items.Add(childCommand);
