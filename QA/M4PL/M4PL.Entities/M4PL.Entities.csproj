@@ -100,6 +100,7 @@
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderRequest.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderResponse.cs" />
     <Compile Include="Finance\CostCode\SalesLineCostCode.cs" />
+    <Compile Include="Finance\Remittance\NavRemittance.cs" />
     <Compile Include="Finance\SalesOrder\NavJobSalesOrder.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrder.cs" />
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionResponse.cs" />

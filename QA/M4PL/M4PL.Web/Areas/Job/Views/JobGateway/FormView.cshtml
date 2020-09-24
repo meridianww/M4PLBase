@@ -32,6 +32,7 @@
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyCompleted").ColIsReadOnly = false;
     }
 
+
     Model.Record.JobID = Model.Record.ParentId;
     var popup = Model.IsPopUp ? "_popup" : "";
     var gwyAnalystContactDropDownViewModel = Model.Record.GwyGatewayAnalyst.GetValueOrDefault().GetContactDropDown("GwyGatewayAnalyst", Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());

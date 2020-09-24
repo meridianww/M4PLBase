@@ -81,7 +81,7 @@ namespace M4PL.Business.Job
 									currentJobAdvanceReport.RateChargeCode = string.IsNullOrEmpty(salesLineItem.Cross_Reference_No) ? salesLineItem.No : salesLineItem.Cross_Reference_No;
 									currentJobAdvanceReport.RateTitle = salesLineItem.Description;
 									currentJobAdvanceReport.RateAmount = salesLineItem.Unit_Price;
-									currentJobAdvanceReport.Id = jobItemCount;
+									currentJobAdvanceReport.Id = currentJob.Id;
 									updatedResult.Add(currentJobAdvanceReport);
 									jobItemCount = jobItemCount + 1;
 								}
@@ -107,7 +107,7 @@ namespace M4PL.Business.Job
 									currentJobAdvanceReport.RateChargeCode = string.IsNullOrEmpty(purchaseLineItem.Cross_Reference_No) ? purchaseLineItem.No : purchaseLineItem.Cross_Reference_No;
 									currentJobAdvanceReport.RateTitle = purchaseLineItem.Description;
 									currentJobAdvanceReport.RateAmount = purchaseLineItem.Unit_Cost_LCY;
-									currentJobAdvanceReport.Id = jobItemCount;
+									currentJobAdvanceReport.Id = currentJob.Id;
 									updatedResult.Add(currentJobAdvanceReport);
 									jobItemCount = jobItemCount + 1;
 								}

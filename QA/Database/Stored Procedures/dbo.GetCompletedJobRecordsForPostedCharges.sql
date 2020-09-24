@@ -48,7 +48,8 @@ BEGIN
 		,@orgId
 		,'Job'
 
-	SET @TablesQuery = 'Select JobAdvanceReport.Id JobId,
+	SET @TablesQuery = 'Select JobAdvanceReport.Id Id,
+JobAdvanceReport.Id JobId,
 JobAdvanceReport.JobDeliveryDateTimePlanned,
 JobAdvanceReport.JobOriginDateTimePlanned,
 JobAdvanceReport.JobGatewayStatus,

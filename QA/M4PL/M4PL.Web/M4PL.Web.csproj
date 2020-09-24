@@ -260,6 +260,7 @@
     <Compile Include="Areas\Finance\Controllers\NavCustomerController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavPriceCodeController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavPurchaseOrderController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavRemittanceController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavSalesOrderController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavVendorController.cs" />
     <Compile Include="Areas\Finance\FinanceAreaRegistration.cs" />
@@ -786,6 +787,7 @@
     <Content Include="Areas\Job\Views\Job\Destination.cshtml" />
     <Content Include="Areas\Job\Views\Job\JobContactFormView.cshtml" />
     <Content Include="Areas\Job\Views\Job\JobContact.cshtml" />
+    <Content Include="Areas\Finance\Views\NavRemittance\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

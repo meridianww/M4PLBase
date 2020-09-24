@@ -1309,32 +1309,33 @@ namespace M4PL.Web
                 && (route.Entity != EntitiesAlias.PrgRefGatewayDefault)
                 && (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
                 && (route.Entity != EntitiesAlias.Gateway && route.Action != MvcConstants.ActionForm)
-                && (route.Entity != EntitiesAlias.JobAdvanceReport && route.Action != MvcConstants.ActionForm))
-            {
-                var navMenuEnabled = true;
-                if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
-                {
-                    if (!route.IsPopup)
-                        navMenuEnabled = ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1) || ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount == 1) && ((route.PreviousRecordId != null) && (route.PreviousRecordId == 0))));
-                    else
-                        navMenuEnabled = (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1);
-                }
+                && (route.Entity != EntitiesAlias.JobAdvanceReport && route.Action != MvcConstants.ActionForm)
+                && (route.Entity != EntitiesAlias.NavRemittance && route.Action != MvcConstants.ActionForm))
+                 {
+                    var navMenuEnabled = true;
+                    if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
+                    {
+                        if (!route.IsPopup)
+                            navMenuEnabled = ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1) || ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount == 1) && ((route.PreviousRecordId != null) && (route.PreviousRecordId == 0))));
+                        else
+                            navMenuEnabled = (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1);
+                    }
 
-                defaultFormNavMenu.Enabled = navMenuEnabled;
-                allNavMenus = new List<FormNavMenu> {
-                       defaultFormNavMenu,
-                       new FormNavMenu ( defaultFormNavMenu, false, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray, 1, enabled:navMenuEnabled),
-                       new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
-                       new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
-                       new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
-                        };
-            }
-            else
-            {
-                allNavMenus = new List<FormNavMenu> {
-                      new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
-                       };
-            }
+                    defaultFormNavMenu.Enabled = navMenuEnabled;
+                    allNavMenus = new List<FormNavMenu> {
+                           defaultFormNavMenu,
+                           new FormNavMenu ( defaultFormNavMenu, false, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray, 1, enabled:navMenuEnabled),
+                           new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
+                           new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
+                           new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
+                            };
+                }
+                else
+                {
+                    allNavMenus = new List<FormNavMenu> {
+                          new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
+                           };
+                }
 
             if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
             {
@@ -1423,7 +1424,8 @@ namespace M4PL.Web
                     || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView)
                     || (route.Entity == EntitiesAlias.NavRate && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.Gateway && route.Action == MvcConstants.ActionForm)
-                    || (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == MvcConstants.ActionForm))
+                    || (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == MvcConstants.ActionForm)
+                    || (route.Entity == EntitiesAlias.NavRemittance && route.Action == MvcConstants.ActionForm))
                     allNavMenus.Remove(saveMenu);
             }
 

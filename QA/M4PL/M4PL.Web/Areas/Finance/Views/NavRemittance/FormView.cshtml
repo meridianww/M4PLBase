@@ -1,0 +1,64 @@
+﻿@using System.Web.UI.WebControls;
+@using M4PL.Entities;
+
+@model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.NavRemittance.NavRemittanceView>
+@{
+    ViewBag.Title = "Download Invoice";
+}
+
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlDownloadInvoice";
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.Enabled = false;
+    settings.HeaderText = "Download Invoice";
+    settings.Collapsed = false;
+    settings.SetContent(() =>
+    {
+        settings.Name = "pnlDownloadInvoice";
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.Enabled = false;
+        settings.HeaderText = "Download Invoice";
+        settings.Collapsed = false;
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.ChequeNo));
+        });
+    });
+
+}).GetHtml()
+
+<div class="form-btns-block">
+    <div class="col-md-5">
+        @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btnNavRemittanceSave";//"btn" + Model.CallBackRoute.Controller + "Save";
+               settings.EnableTheming = true;
+               settings.Text = "Submit";//(Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = true;// (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditActuals) : !(Model.Permission < Permission.EditActuals);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+    </div>
+    <div class="col-md-2">
+        @Html.DevExpress().Button(settings =>
+              {
+                  settings.Name = "btnNavRemittanceCancel";//"btn" + Model.CallBackRoute.Controller + "Cancel";
+                  settings.EnableTheming = true;
+                  settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+                  settings.AllowFocus = false;
+                  settings.ControlStyle.CssClass = "form-btn";
+                  settings.ClientSideEvents.Click = Model.CancelClick;
+                  settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+              }).GetHtml()
+    </div>
+</div>
+
+
+
+
+

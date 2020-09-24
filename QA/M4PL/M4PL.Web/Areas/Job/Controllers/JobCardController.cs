@@ -122,7 +122,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId =
                         filterId == 0 ? SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobCardFilterId : filterId;
-                
+
             }
             else
             {
@@ -191,10 +191,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             SessionProvider.IsCardEditMode = false;
             if (_gridResult.SessionProvider == null)
                 _gridResult.SessionProvider = SessionProvider;
-            
+
             base.DataView(JsonConvert.SerializeObject(route));
             //To Add Actions Operation in ContextMenu
-            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
+            if (!isExport)
+                _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
             _gridResult.GridHeading = jobCardRequest != null ? jobCardRequest.CardType + " " + jobCardRequest.CardName : _gridResult.GridSetting.GridName;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }

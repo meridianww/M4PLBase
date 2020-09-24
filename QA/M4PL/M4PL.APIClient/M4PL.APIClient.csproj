@@ -117,6 +117,7 @@
     <Compile Include="Finance\INavPurchaseOrderCommands.cs" />
     <Compile Include="Finance\IGatewayCommands.cs" />
     <Compile Include="Finance\INavRateCommands.cs" />
+    <Compile Include="Finance\INavRemittanceCommands.cs" />
     <Compile Include="Finance\INavSalesOrderCommands.cs" />
     <Compile Include="Finance\INavVendorCommands.cs" />
     <Compile Include="Finance\NavCostCodeCommands.cs" />
@@ -125,6 +126,8 @@
     <Compile Include="Finance\NavPurchaseOrderCommands.cs" />
     <Compile Include="Finance\GatewayCommands.cs" />
     <Compile Include="Finance\NavRateCommands.cs" />
+    <Compile Include="Finance\NavRemittanceCommands.cs" />
+    <Compile Include="ViewModels\NavRemittance\NavRemittanceView.cs" />
     <Compile Include="Finance\NavSalesOrderCommands.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="HttpRestClient.cs" />
