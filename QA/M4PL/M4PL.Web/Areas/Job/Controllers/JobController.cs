@@ -274,6 +274,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     resultRoute.ParentRecordId = result.ProgramID == 0 ? preProgramId : Convert.ToInt64(result.ProgramID);
 
                     tabRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionTabViewCallBack);
+                    tabRoute.ParentRecordId= jobView.Id;
                     tabRoute.Url = tabRoute.ParentRecordId.ToString();
                     Session["SpecialJobId"] = null;
                 }
