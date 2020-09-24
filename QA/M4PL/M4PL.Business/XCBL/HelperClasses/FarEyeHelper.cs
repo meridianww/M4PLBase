@@ -42,23 +42,50 @@ namespace M4PL.Business.XCBL.HelperClasses
 						var deliveryUpdateModel = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobId, activeUser);
 						if (deliveryUpdateModel != null)
 						{
-							string requestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
+							string rescheduleReason = string.Empty;
+							string rescheduleDate = string.Empty;
+							string canceledDate = string.Empty;
+							string cancelReason = string.Empty;
+							bool isCanceled = false;
+							bool isRescheduled = false;
+							if (!string.IsNullOrEmpty(deliveryUpdateModel.RescheduledInstallDate))
+							{
+								rescheduleDate = deliveryUpdateModel.RescheduledInstallDate;
+								rescheduleReason = deliveryUpdateModel.RescheduleReason;
+								deliveryUpdateModel.RescheduledInstallDate = string.Empty;
+								deliveryUpdateModel.RescheduleReason = string.Empty;
+								isRescheduled = true;
+							}
+
+							if (!string.IsNullOrEmpty(deliveryUpdateModel.CancelDate) && !string.IsNullOrEmpty(deliveryUpdateModel.InstallStatus) && !deliveryUpdateModel.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+							{
+								canceledDate = deliveryUpdateModel.CancelDate;
+								cancelReason = deliveryUpdateModel.CancelReason;
+								deliveryUpdateModel.CancelDate = string.Empty;
+								deliveryUpdateModel.CancelReason = string.Empty;
+								isCanceled = true;
+							}
+
+								string requestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
 							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
 							DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(requestBody, response, jobId);
 
 							Task.Factory.StartNew(() =>
 							{
-								if (!string.IsNullOrEmpty(deliveryUpdateModel.RescheduledInstallDate))
+								if (isRescheduled)
 								{
+									deliveryUpdateModel.RescheduledInstallDate = rescheduleDate;
+									deliveryUpdateModel.RescheduleReason = rescheduleReason;
 									deliveryUpdateModel.InstallStatus = "Reschedule";
 									string rescheduleRequestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
 									string rescheduleResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
 									DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(rescheduleRequestBody, rescheduleResponse, jobId);
 								}
-
-								if (!string.IsNullOrEmpty(deliveryUpdateModel.CancelDate) && !string.IsNullOrEmpty(deliveryUpdateModel.InstallStatus) && !deliveryUpdateModel.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+								else if (isCanceled)
 								{
 									deliveryUpdateModel.InstallStatus = "Canceled";
+									deliveryUpdateModel.CancelDate = canceledDate;
+									deliveryUpdateModel.CancelReason = cancelReason;
 									string cancelledRequestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
 									string cancelledResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
 									DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(cancelledRequestBody, cancelledResponse, jobId);
