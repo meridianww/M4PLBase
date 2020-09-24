@@ -43,7 +43,7 @@
             settings.Properties.AllowUserInput = false;
             settings.DataBound = (sender, e) =>
             {
-                Model.Record.DateTypeName = "Delivery Date";
+                Model.Record.DateTypeName = "Delivered Date";
                 var gridLookup = (MVCxGridLookup)sender;
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.DateTypeName);
             };

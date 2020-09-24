@@ -3060,7 +3060,7 @@ namespace M4PL.Web
                ? string.Format(" AND JobAdvanceReport.JobOrderedDate  IS NOT NULL  AND CAST(JobAdvanceReport.JobOrderedDate AS DATE) = '{0}' ", DateTime.Now.Date.ToShortDateString())
                : string.Format(" AND JobAdvanceReport.JobOrderedDate IS NOT NULL  AND CAST(JobAdvanceReport.JobOrderedDate AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobOrderedDate AS DATE) <= '{1}' ",
                Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
-                else if (jobAdvanceReportRequest.DateTypeName == "Delivery Date")
+                else if (jobAdvanceReportRequest.DateTypeName == "Delivered Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
                ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)= '{0}'", DateTime.Now.Date.ToShortDateString())
                : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)>= '{0}' AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) <= '{1}' ",
