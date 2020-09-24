@@ -367,6 +367,10 @@
     <Compile Include="XCBL\Electrolux\OrderRequest\ShipTo.cs" />
     <Compile Include="XCBL\Electrolux\OrderRequest\To.cs" />
     <Compile Include="XCBL\Electrolux\OrderResponse\OrderResponse.cs" />
+    <Compile Include="XCBL\FarEye\ExtraInfo.cs" />
+    <Compile Include="XCBL\FarEye\Info.cs" />
+    <Compile Include="XCBL\FarEye\OrderEvent.cs" />
+    <Compile Include="XCBL\FarEye\OrderEventResponse.cs" />
     <Compile Include="XCBL\LineDetail.cs" />
     <Compile Include="XCBL\SummaryHeader.cs" />
     <Compile Include="XCBL\UserDefinedField.cs" />

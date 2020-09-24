@@ -22,7 +22,9 @@ using M4PL.Business.XCBL.HelperClasses;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Entities.XCBL.FarEye;
 using M4PL.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -473,7 +475,6 @@ namespace M4PL.Business.Job
             }
         }
 
-
         public OrderLocationCoordinate GetOrderLocationCoordinate(string orderNumber)
         {
             if (string.IsNullOrEmpty(orderNumber))
@@ -540,15 +541,35 @@ namespace M4PL.Business.Job
                     AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
                 };
             }
+			else if(jobDetail.CustomerId != M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong())
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Status API only avaliable for Electrolux Customer."
+				};
+			}
             else
             {
-                return new OrderStatusModel()
+				var deliveryUpdate = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobDetail.Id, ActiveUser);
+				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
+				{
+					deliveryUpdate.InstallStatus = "Reschedule";
+				}
+
+				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) && !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+				{
+					deliveryUpdate.InstallStatus = "Canceled";
+				}
+
+				return new OrderStatusModel()
                 {
                     Status = "Success",
                     StatusCode = (int)HttpStatusCode.OK,
                     AdditionalDetail = string.Empty,
-                    DeliveryUpdate = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobDetail.Id, ActiveUser)
-                };
+                    DeliveryUpdate = deliveryUpdate
+				};
             }
         }
         public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting)
@@ -726,7 +747,50 @@ namespace M4PL.Business.Job
             if (result) { return new StatusModel() { AdditionalDetail = "", Status = "Success", StatusCode = 200 }; }
             else { return new StatusModel() { AdditionalDetail = "There is some issue while updating special instructions, please try after sometime.", Status = "Failure", StatusCode = 500 }; }
         }
-        private JobGateway RescheduleOrderGateway(Entities.Job.Job jobDetail, JobExceptionInfo jobExceptionInfo, DateTime rescheduleData, JobInstallStatus installStatus, SysSetting sysSetting)
+		public OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent)
+		{
+			if (orderEvent == null)
+			{
+				return new OrderEventResponse() { Status = (int)HttpStatusCode.ExpectationFailed, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { "OrderEvent Object can not be null." } };
+			}
+			else if (string.IsNullOrEmpty(orderEvent.OrderNumber))
+			{
+				return new OrderEventResponse() { Status = (int)HttpStatusCode.ExpectationFailed, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { "OrderNumber can not be null or empty." } };
+			}
+
+			var orderData = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderEvent.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			if (orderData != null && orderData.Id > 0)
+			{
+				DataAccess.Job.JobEDIXcblCommands.Post(ActiveUser, new JobEDIXcbl()
+				{
+					JobId = orderData.Id,
+					EdtCode = "Order Tracking",
+					EdtTypeId = M4PLBusinessConfiguration.XCBLEDTType.ToInt(),
+					EdtData = JsonConvert.SerializeObject(orderEvent),
+					TransactionDate = TimeUtility.GetPacificDateTime(),
+					EdtTitle = "Order Tracking"
+				});
+
+				if (!string.IsNullOrEmpty(orderEvent.StatusCode) && orderEvent.StatusCode.Equals("shipment_in_transit", StringComparison.OrdinalIgnoreCase))
+				{
+					bool isFarEyePushRequired = false;
+					_commands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, orderData.Id, (long)orderData.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+
+					if (isFarEyePushRequired)
+					{
+						FarEyeHelper.PushStatusUpdateToFarEye((long)orderData.Id, ActiveUser);
+					}
+				}
+
+				return new OrderEventResponse() { Status = (int)HttpStatusCode.OK, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { string.Format("Order {0} is successfully updated.", orderData.JobCustomerSalesOrder) } };
+			}
+			else
+			{
+				return new OrderEventResponse() { Status = (int)HttpStatusCode.ExpectationFailed, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { "OrderNumber is not present in the Meridian system." } };
+			}
+		}
+
+		private JobGateway RescheduleOrderGateway(Entities.Job.Job jobDetail, JobExceptionInfo jobExceptionInfo, DateTime rescheduleData, JobInstallStatus installStatus, SysSetting sysSetting)
         {
             JobGateway result = null;
             try
@@ -754,7 +818,7 @@ namespace M4PL.Business.Job
                     jobGateway.GwyGatewayTitle = jobExceptionInfo.ExceptionTitle;
                 }
 
-                result = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, sysSetting, jobGateway, jobDetail.CustomerId, jobDetail.Id);
+                result = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, sysSetting, jobGateway, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), jobDetail.Id);
             }
             catch (Exception exp)
             {
