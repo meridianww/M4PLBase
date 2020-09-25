@@ -787,7 +787,6 @@
     <Content Include="Areas\Job\Views\Job\Destination.cshtml" />
     <Content Include="Areas\Job\Views\Job\JobContactFormView.cshtml" />
     <Content Include="Areas\Job\Views\Job\JobContact.cshtml" />
-    <Content Include="Areas\Finance\Views\NavRemittance\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

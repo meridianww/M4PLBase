@@ -127,7 +127,6 @@
     <Compile Include="Finance\GatewayCommands.cs" />
     <Compile Include="Finance\NavRateCommands.cs" />
     <Compile Include="Finance\NavRemittanceCommands.cs" />
-    <Compile Include="ViewModels\NavRemittance\NavRemittanceView.cs" />
     <Compile Include="Finance\NavSalesOrderCommands.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="HttpRestClient.cs" />
@@ -305,6 +304,7 @@
     <Compile Include="ViewModels\Job\JobCardViewView.cs" />
     <Compile Include="ViewModels\Job\VocReportView.cs" />
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />
+    <Compile Include="ViewModels\NavRemittance\NavRemittanceView.cs" />
     <Compile Include="ViewModels\Program\PrgBillableLocationView.cs" />
     <Compile Include="ViewModels\Program\PrgCostLocationView.cs" />
     <Compile Include="ViewModels\Program\PrgEdiConditionView.cs" />

@@ -1609,20 +1609,22 @@ DevExCtrl.PopupControl = function () {
             var currentGrid = ASPxClientControl.GetControlCollection().GetByName("JobGatewayGridView");
             if (currentGrid) {
                 var listOfElements = document.getElementsByClassName("dxgvBatchEditModifiedCell_Office2010Black");
-                var nextElement = $('#' + listOfElements[listOfElements.length - 1].closest('tr').id).next('tr').attr('id').match(/\d+$/);
-                if (nextElement == null) {
-                    var currentElementIndex = listOfElements[listOfElements.length - 1].closest('tr').id.match(/\d+$/)[0];
+                if (listOfElements.length != 0) {
+                    var nextElement = $('#' + listOfElements[listOfElements.length - 1].closest('tr').id).next('tr').attr('id').match(/\d+$/);
+                    if (nextElement == null) {
+                        var currentElementIndex = listOfElements[listOfElements.length - 1].closest('tr').id.match(/\d+$/)[0];
+                    }
+                    else {
+                        var currentElementIndex = nextElement[0] - 1;
+                    }
+                    currentGrid.CancelEdit(currentElementIndex);
+                    ASPxClientControl.GetControlCollection().GetByName("btnSaveJobGatewayGridView").SetEnabled(false);
+                    ASPxClientControl.GetControlCollection().GetByName("btnCancelJobGatewayGridView").SetEnabled(false);
+                    $("#btnSaveJobGatewayGridView").addClass("noHover");
+                    $("#btnCancelJobGatewayGridView").addClass("noHover");
+                    M4PLWindow.PopupDataViewHasChanges[currentGrid] = false;
+                    M4PLWindow.DataViewsHaveChanges[currentGrid] = false;
                 }
-                else {
-                    var currentElementIndex = nextElement[0] - 1;
-                }
-                currentGrid.CancelEdit(currentElementIndex);
-                ASPxClientControl.GetControlCollection().GetByName("btnSaveJobGatewayGridView").SetEnabled(false);
-                ASPxClientControl.GetControlCollection().GetByName("btnCancelJobGatewayGridView").SetEnabled(false);
-                $("#btnSaveJobGatewayGridView").addClass("noHover");
-                $("#btnCancelJobGatewayGridView").addClass("noHover");
-                M4PLWindow.PopupDataViewHasChanges[currentGrid] = false;
-                M4PLWindow.DataViewsHaveChanges[currentGrid] = false;
             }
 
             RecordPopupControl.Hide();
