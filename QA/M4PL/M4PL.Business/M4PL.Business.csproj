@@ -136,6 +136,8 @@
     <Compile Include="Finance\PriceCode\INavPriceCodeCommands.cs" />
     <Compile Include="Finance\PurchaseOrder\INavPurchaseOrderCommands.cs" />
     <Compile Include="Finance\SalesOrder\INavSalesOrderCommands.cs" />
+    <Compile Include="Finance\VendorLedger\INavVendorLedgerCommands.cs" />
+    <Compile Include="Finance\VendorLedger\NavVendorLedgerCommands.cs" />
     <Compile Include="Finance\Vendor\INavVendorCommands.cs" />
     <Compile Include="Finance\CostCode\NavCostCodeCommands.cs" />
     <Compile Include="Finance\Customer\NavCustomerCommands.cs" />

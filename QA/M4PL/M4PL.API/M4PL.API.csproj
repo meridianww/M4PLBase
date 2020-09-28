@@ -229,6 +229,7 @@
     <Folder Include="Views\JobRollup\" />
     <Folder Include="Views\NavRate\" />
     <Folder Include="Views\NavSalesOrder\" />
+    <Folder Include="Views\NavVendorLedger\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="Controllers\GatewayImportController.cs" />
     <Compile Include="Controllers\NavRateController.cs" />
     <Compile Include="Controllers\JobServicesController.cs" />
+    <Compile Include="Controllers\NavVendorLedgerController.cs" />
     <Compile Include="Controllers\PrgEventManagementController.cs" />
     <Compile Include="Controllers\TrainingController.cs" />
     <Compile Include="Controllers\JobAdvanceReportController.cs" />
