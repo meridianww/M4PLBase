@@ -100,57 +100,6 @@ namespace M4PL.Business.Finance.SalesOrder
 			return result;
 		}
 
-		private void SyncSalesOrderDetailsFromNav(NavSalesOrder entity, NavJobSalesOrder navJobSalesOrder)
-		{
-			if (navJobSalesOrder != null && navJobSalesOrder?.NavSalesOrder?.Count > 0)
-			{
-				bool isManualDelete = false;
-				bool isElectronicDelete = false;
-				bool isManualUpdate = false;
-				bool isElectronicUpdate = false;
-				string manualSalesOrderId = navJobSalesOrder.NavSalesOrder.Where(x => !x.Electronic_Invoice).Any() ? navJobSalesOrder.NavSalesOrder.Where(x => !x.Electronic_Invoice).FirstOrDefault().No : null;
-				string electronicSalesOrderId = navJobSalesOrder.NavSalesOrder.Where(x => x.Electronic_Invoice).Any() ? navJobSalesOrder.NavSalesOrder.Where(x => x.Electronic_Invoice).FirstOrDefault().No : null;
-				if (string.IsNullOrEmpty(entity.ManualSalesOrderNo) && !string.IsNullOrEmpty(manualSalesOrderId))
-				{
-					entity.ManualSalesOrderNo = manualSalesOrderId;
-					isManualUpdate = true;
-				}
-				else if (!string.IsNullOrEmpty(entity.ManualSalesOrderNo) && string.IsNullOrEmpty(manualSalesOrderId))
-				{
-					isManualUpdate = true;
-					isManualDelete = true;
-					entity.ManualSalesOrderNo = null;
-				}
-				else if (!string.IsNullOrEmpty(entity.ManualSalesOrderNo) && !string.IsNullOrEmpty(manualSalesOrderId) && !entity.ManualSalesOrderNo.Equals(manualSalesOrderId))
-				{
-					isManualUpdate = true;
-					entity.ManualSalesOrderNo = manualSalesOrderId;
-				}
-
-				if (string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) && !string.IsNullOrEmpty(electronicSalesOrderId))
-				{
-					isElectronicUpdate = true;
-					entity.ElectronicSalesOrderNo = electronicSalesOrderId;
-				}
-				else if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) && string.IsNullOrEmpty(electronicSalesOrderId))
-				{
-					isElectronicUpdate = true;
-					isElectronicDelete = true;
-					entity.ElectronicSalesOrderNo = null;
-				}
-				else if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) && !string.IsNullOrEmpty(electronicSalesOrderId) && !entity.ElectronicSalesOrderNo.Equals(electronicSalesOrderId))
-				{
-					isElectronicUpdate = true;
-					entity.ElectronicSalesOrderNo = electronicSalesOrderId;
-				}
-
-				if (isElectronicUpdate || isManualUpdate)
-				{
-					NavSalesOrderHelper.UpdateSalesOrderInformationInDB(entity.ManualSalesOrderNo, entity.ElectronicSalesOrderNo, Convert.ToInt64(entity.M4PL_Job_ID), isManualDelete ? false : true, isElectronicDelete ? false : true, ActiveUser);
-				}
-			}
-		}
-
 		public NavSalesOrder Put(NavSalesOrder entity)
         {
             throw new NotImplementedException();
