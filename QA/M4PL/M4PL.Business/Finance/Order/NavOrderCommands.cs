@@ -36,7 +36,7 @@ namespace M4PL.Business.Finance.Order
 
 		public void GenerateSalesOrderInNav(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, long customerId, ActiveUser activeUser)
 		{
-			var jobResult = DataAccess.Job.JobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
+			var jobResult = DataAccess.Job.JobCommands.Get(activeUser, Convert.ToInt64(jobId));
 			// Start Sales Order Creation Process Only When JobOriginDateTimeActual and JobDeliveryDateTimeActual are not null.
 			if (jobResult != null && jobResult.JobCompleted && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
 			{
@@ -142,7 +142,7 @@ namespace M4PL.Business.Finance.Order
 
 		public void GeneratePurchaseOrderInNav(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, long customerId, ActiveUser activeUser)
 		{
-			var jobResult = DataAccess.Job.JobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
+			var jobResult = DataAccess.Job.JobCommands.Get(activeUser, Convert.ToInt64(jobId));
 			if (jobResult != null && jobResult.JobCompleted && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
 			{
 				List<long> jobIdList = new List<long>();
