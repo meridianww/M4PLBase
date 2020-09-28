@@ -17,7 +17,10 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavPriceCodeCommands
 //==============================================================================================================
 
+using M4PL.Business.Finance.PurchaseOrder;
 using M4PL.Entities;
+using M4PL.Entities.Finance.PurchaseOrder;
+using M4PL.Entities.Finance.PurchaseOrderItem;
 using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;
@@ -29,6 +32,8 @@ namespace M4PL.Business.Finance.Order
 {
 	public class NavOrderCommands : BaseCommands<NavSalesOrderResponse>, INavOrderCommands
 	{
+		public object jobData { get; private set; }
+
 		public void GenerateSalesOrderInNav(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, long customerId, ActiveUser activeUser)
 		{
 			var jobResult = DataAccess.Job.JobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
@@ -131,6 +136,117 @@ namespace M4PL.Business.Finance.Order
 				if (isDeliveryChargeRemovalRequired)
 				{
 					DataAccess.Job.JobCommands.UpdateJobPriceCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Active, customerId);
+				}
+			}
+		}
+
+		public void GeneratePurchaseOrderInNav(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, long customerId, ActiveUser activeUser)
+		{
+			var jobResult = DataAccess.Job.JobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
+			if (jobResult != null && jobResult.JobCompleted && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
+			{
+				List<long> jobIdList = new List<long>();
+				bool isElectronicInvoice = false;
+				bool isManualInvoice = false;
+				bool isDeliveryChargeRemovalRequired = false;
+				bool isPurchaseItemPresent = false;
+				NavPurchaseOrder manualPurchaseOrder = null;
+				NavPurchaseOrder electronicPurchaseOrder = null;
+				List<PurchaseOrderItem> manualPurchaseOrderItemRequest = null;
+				List<PurchaseOrderItem> electronicPurchaseOrderItemRequest = null;
+				jobIdList.Add(jobResult.Id);
+				if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
+				{
+					isDeliveryChargeRemovalRequired = false;
+				}
+				else
+				{
+					isDeliveryChargeRemovalRequired = DataAccess.Job.JobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), customerId);
+				}
+
+				if (isDeliveryChargeRemovalRequired)
+				{
+					DataAccess.Job.JobCommands.UpdateJobCostCodeStatus(jobResult.Id, (int)StatusType.Delete, customerId);
+				}
+
+				List<PurchaseOrderItem> purchaseOrderItemRequest = DataAccess.Finance.NavSalesOrderCommand.GetPurchaseOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrderItem);
+				isPurchaseItemPresent = purchaseOrderItemRequest?.Any() ?? false;
+
+				isManualInvoice = !isPurchaseItemPresent || (isPurchaseItemPresent && purchaseOrderItemRequest.Any(x => !x.Electronic_Invoice)) ? true : false;
+				manualPurchaseOrderItemRequest = isPurchaseItemPresent && isManualInvoice ? purchaseOrderItemRequest.Where(x => !x.Electronic_Invoice).ToList() : null;
+
+				isElectronicInvoice = isPurchaseItemPresent && purchaseOrderItemRequest.Any(x => x.Electronic_Invoice) ? true : false;
+				electronicPurchaseOrderItemRequest = isElectronicInvoice ? purchaseOrderItemRequest.Where(x => x.Electronic_Invoice).ToList() : null;
+
+				if (!string.IsNullOrEmpty(jobResult.JobElectronicInvoicePONumber) && (!jobResult.JobElectronicInvoice || !isElectronicInvoice))
+				{
+					bool isDeleted = false;
+					NavPurchaseOrderHelper.DeletePurchaseOrderForNAV(jobResult.JobElectronicInvoicePONumber, navAPIUrl, navAPIUserName, navAPIPassword, out isDeleted);
+					jobResult.JobElectronicInvoicePONumber = isDeleted ? string.Empty : jobResult.JobElectronicInvoicePONumber;
+				}
+
+				if (!string.IsNullOrEmpty(jobResult.JobPONumber) && (!isManualInvoice || !isPurchaseItemPresent))
+				{
+					bool isDeleted = false;
+					NavPurchaseOrderHelper.DeletePurchaseOrderForNAV(jobResult.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, out isDeleted);
+					jobResult.JobPONumber = isDeleted ? string.Empty : jobResult.JobPONumber;
+				}
+
+				if (!jobResult.JobElectronicInvoice)
+				{
+					if (string.IsNullOrEmpty(jobResult.JobPONumber))
+					{
+						manualPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice, purchaseOrderItemRequest);
+					}
+					else
+					{
+						manualPurchaseOrder = NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(activeUser, jobIdList,
+							string.IsNullOrEmpty(jobResult.JobPONumber) ? jobResult.JobElectronicInvoicePONumber : jobResult.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice, purchaseOrderItemRequest);
+					}
+				}
+				else if (jobResult.JobElectronicInvoice && (!isPurchaseItemPresent || !isElectronicInvoice))
+				{
+					if (string.IsNullOrEmpty(jobResult.JobElectronicInvoicePONumber))
+					{
+						manualPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice, purchaseOrderItemRequest);
+					}
+					else
+					{
+						manualPurchaseOrder = NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(activeUser, jobIdList,
+							string.IsNullOrEmpty(jobResult.JobElectronicInvoicePONumber) ? jobResult.JobPONumber : jobResult.JobElectronicInvoicePONumber,
+							navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice, purchaseOrderItemRequest);
+					}
+				}
+				else
+				{
+					if (isManualInvoice)
+					{
+						if (string.IsNullOrEmpty(jobResult.JobPONumber))
+						{
+							manualPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, false, manualPurchaseOrderItemRequest);
+						}
+						else
+						{
+							manualPurchaseOrder = NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(activeUser, jobIdList, string.IsNullOrEmpty(jobResult.JobPONumber) ? jobResult.JobElectronicInvoicePONumber : jobResult.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, false, manualPurchaseOrderItemRequest);
+						}
+					}
+
+					if (isElectronicInvoice)
+					{
+						if (string.IsNullOrEmpty(jobResult.JobElectronicInvoicePONumber))
+						{
+							electronicPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, true, electronicPurchaseOrderItemRequest);
+						}
+						else
+						{
+							electronicPurchaseOrder = NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(activeUser, jobIdList, !string.IsNullOrEmpty(jobResult.JobElectronicInvoicePONumber) ? jobResult.JobElectronicInvoicePONumber : jobResult.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, true, electronicPurchaseOrderItemRequest);
+						}
+					}
+				}
+
+				if (isDeliveryChargeRemovalRequired)
+				{
+					DataAccess.Job.JobCommands.UpdateJobCostCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Active, customerId);
 				}
 			}
 		}
