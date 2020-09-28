@@ -328,13 +328,13 @@ namespace M4PL.DataAccess.Job
                 if (jobAdvanceReportRequest.CargoId.HasValue)
                     parameters.Add(new Parameter("@CargoId", jobAdvanceReportRequest.CargoId));
 
-                if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName) && jobAdvanceReportRequest.DateTypeName == "Schedule Date")
-                {
-                    parameters.Add(new Parameter("@DateType", jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
-               ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}'", DateTime.Now.Date.ToShortDateString())
-               : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ",
-               Convert.ToDateTime(jobAdvanceReportRequest.StartDate).Date.ToShortDateString(), Convert.ToDateTime(jobAdvanceReportRequest.EndDate).Date.ToShortDateString())));
-                }
+               // if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName) && jobAdvanceReportRequest.DateTypeName == "Schedule Date")
+               // {
+               //     parameters.Add(new Parameter("@DateType", jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
+               //? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}'", DateTime.Now.Date.ToShortDateString())
+               //: string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ",
+               //Convert.ToDateTime(jobAdvanceReportRequest.StartDate).Date.ToShortDateString(), Convert.ToDateTime(jobAdvanceReportRequest.EndDate).Date.ToShortDateString())));
+               // }
                 if (!string.IsNullOrEmpty(jobAdvanceReportRequest.JobStatus) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.JobStatus) && Convert.ToString(jobAdvanceReportRequest.JobStatus).ToLower() != "all")
                     parameters.Add(new Parameter("@JobStatus", jobAdvanceReportRequest.JobStatus));
                 else

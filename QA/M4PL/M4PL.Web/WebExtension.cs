@@ -3062,8 +3062,8 @@ namespace M4PL.Web
                Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
                 else if (jobAdvanceReportRequest.DateTypeName == "Delivered Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)= '{0}'", DateTime.Now.Date.ToShortDateString())
-               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)>= '{0}' AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) <= '{1}' ",
+               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimeActual IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimeActual AS DATE)= '{0}'", DateTime.Now.Date.ToShortDateString())
+               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimeActual IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimeActual AS DATE)>= '{0}' AND CAST (JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) <= '{1}' ",
                Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
                 else if (jobAdvanceReportRequest.DateTypeName == "Shipment Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
@@ -3074,6 +3074,11 @@ namespace M4PL.Web
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
                ? string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND CAST(JobAdvanceReport.JobOriginDateTimePlanned AS DATE) = '{0}'", DateTime.Now.Date.ToShortDateString())
                : string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND CAST(JobAdvanceReport.JobOriginDateTimePlanned AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobOriginDateTimePlanned AS DATE) <= '{1}'",
+               Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
+                else if (jobAdvanceReportRequest.DateTypeName == "Schedule Date")
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
+               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND CAST(JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) = '{0}'", DateTime.Now.Date.ToShortDateString())
+               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND CAST(JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE) <= '{1}'",
                Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
             }
             else
