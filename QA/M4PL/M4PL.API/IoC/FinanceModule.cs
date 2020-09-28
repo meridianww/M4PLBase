@@ -27,6 +27,7 @@ using M4PL.Business.Finance.PriceCode;
 using M4PL.Business.Finance.PurchaseOrder;
 using M4PL.Business.Finance.SalesOrder;
 using M4PL.Business.Finance.Vendor;
+using M4PL.Business.Finance.VendorLedger;
 
 namespace M4PL.API.IoC
 {
@@ -50,6 +51,7 @@ namespace M4PL.API.IoC
 			builder.RegisterType<NavPurchaseOrderCommands>().As<INavPurchaseOrderCommands>().InstancePerRequest();
 			builder.RegisterType<NavRateCommands>().As<INavRateCommands>().InstancePerRequest();
 			builder.RegisterType<GatewayCommands>().As<IGatewayCommands>().InstancePerRequest();
+			builder.RegisterType<NavVendorLedgerCommands>().As<INavVendorLedgerCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}

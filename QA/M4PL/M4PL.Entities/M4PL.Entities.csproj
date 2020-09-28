@@ -113,6 +113,8 @@
     <Compile Include="Finance\SalesOrder\NavSalesOrderResponse.cs" />
     <Compile Include="Finance\ShippingItem\NavSalesOrderItemResponse.cs" />
     <Compile Include="Finance\ShippingItem\SalesOrderItem.cs" />
+    <Compile Include="Finance\VendorLedger\NavVendorCheckedInvoice.cs" />
+    <Compile Include="Finance\VendorLedger\NavVendorLedger.cs" />
     <Compile Include="Finance\Vendor\NavVendor.cs" />
     <Compile Include="Finance\Vendor\NavVendorData.cs" />
     <Compile Include="Finance\Vendor\NavVendorResponse.cs" />
