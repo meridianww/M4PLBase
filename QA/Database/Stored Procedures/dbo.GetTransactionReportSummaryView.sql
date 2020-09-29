@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -89,8 +88,14 @@ BEGIN TRY
 	WHERE SysLookupCode = 'GatewayType'
 		AND SysOptionName = 'Action'
 
-	SET @TablesQuery = ' FROM CUST000Master CUST ' + ' INNER JOIN PRGRM000Master PRG ON PRG.PrgCustID = CUST.Id AND CUST.StatusId = 1 AND PRG.StatusId = 1 ' + ' INNER JOIN JOBDL000Master ' + @entity + ' ON ' + @entity + '.ProgramID = PRG.Id  AND JobAdvanceReport.StatusId = ' + CONVERT(NVARCHAR(10), @JobStatusId)
-
+	SET @TablesQuery = ' FROM CUST000Master CUST ' + ' INNER JOIN PRGRM000Master PRG ON PRG.PrgCustID = CUST.Id AND CUST.StatusId = 1 AND PRG.StatusId = 1 ' + ' INNER JOIN JOBDL000Master ' + @entity + ' ON ' + @entity + '.ProgramID = PRG.Id'
+	IF (
+			ISNULL(@JobStatus, '') <> ''
+			AND @JobStatus <> 'ALL'
+			)
+	BEGIN
+		SET @TablesQuery += ' AND JobAdvanceReport.StatusId = ' + CONVERT(NVARCHAR(10), @JobStatusId)
+    END
 	--------------------- Security Start----------------------------------------------------------
 	DECLARE @JobCount BIGINT
 		,@IsJobAdmin BIT = 0
@@ -238,9 +243,7 @@ BEGIN TRY
 	BEGIN
 		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
 	END
-
-	PRINT @TCountQuery
-
+	
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -282,7 +285,6 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
 		END
 	END
-	
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
@@ -335,5 +337,3 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
-GO
-

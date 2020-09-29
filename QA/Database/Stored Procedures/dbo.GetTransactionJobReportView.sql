@@ -1,5 +1,4 @@
 
-/****** Object:  StoredProcedure [dbo].[GetTransactionJobReportView]    Script Date: 8/24/2020 3:06:08 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -12,7 +11,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetTransactionJobReportView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetTransactionJobReportView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -90,8 +89,15 @@ BEGIN TRY
 	WHERE SysLookupCode = 'GatewayType'
 		AND SysOptionName = 'Action'
 
-	SET @TablesQuery = ' FROM CUST000Master CUST ' + ' INNER JOIN PRGRM000Master PRG ON PRG.PrgCustID = CUST.Id AND CUST.StatusId = 1 AND PRG.StatusId = 1 ' + ' INNER JOIN JOBDL000Master ' + @entity + ' ON ' + @entity + '.ProgramID = PRG.Id  AND JobAdvanceReport.StatusId = ' + CONVERT(NVARCHAR(10), @JobStatusId)
-
+	SET @TablesQuery = ' FROM CUST000Master CUST ' + ' INNER JOIN PRGRM000Master PRG ON PRG.PrgCustID = CUST.Id AND CUST.StatusId = 1 AND PRG.StatusId = 1 ' + ' INNER JOIN JOBDL000Master ' + @entity + ' ON ' + @entity + '.ProgramID = PRG.Id '
+	
+	IF (
+			ISNULL(@JobStatus, '') <> ''
+			AND @JobStatus <> 'ALL'
+			)
+	BEGIN
+		SET @TablesQuery += ' AND JobAdvanceReport.StatusId = ' + CONVERT(NVARCHAR(10), @JobStatusId)
+    END
 	--------------------- Security Start----------------------------------------------------------
 	DECLARE @JobCount BIGINT
 		,@IsJobAdmin BIT = 0
