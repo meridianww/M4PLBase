@@ -626,7 +626,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 						using (var stringReader = new StringReader(responceString))
 						{
-							navOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NAVOrderItemResponse>(responceString);
+							navOrderItemResponse = JsonConvert.DeserializeObject<NAVOrderItemResponse>(responceString);
 						}
 					}
 				}
@@ -643,7 +643,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		#region Helper Method
 
-		public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
+		public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest, bool isParentOrder = true)
 		{
 			string dimensionCode = string.Empty;
 			string divisionCode = string.Empty;
@@ -675,12 +675,9 @@ namespace M4PL.Business.Finance.SalesOrder
 			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
-				long JobSalesOrderMappingId = _commands.UpdateJobOrderMapping(activeUser, jobIdList, navSalesOrderResponse.No, null, electronicInvoice);
+				_commands.UpdateJobOrderMapping(activeUser, jobIdList, navSalesOrderResponse.No, electronicInvoice, isParentOrder);
 				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
-				//Task.Run(() =>
-				//{
 				UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
-				//});
 			}
 
 			return navSalesOrderResponse;

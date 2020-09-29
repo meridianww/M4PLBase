@@ -51,10 +51,18 @@ namespace M4PL.Business.Finance.Order
 				List<long> jobIdList = new List<long>();
 				m4PLSalesOrderCreationResponse = new M4PLSalesOrderCreationResponse();
 				jobIdList.Add(jobResult.Id);
-				isDeliveryChargeRemovalRequired = DataAccess.Job.JobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), customerId);
-				if (isDeliveryChargeRemovalRequired)
+
+				if (!jobResult.IsParentOrder)
 				{
-					DataAccess.Job.JobCommands.UpdateJobPriceCodeStatus(jobResult.Id, (int)StatusType.Delete, customerId);
+					isDeliveryChargeRemovalRequired = DataAccess.Job.JobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), customerId);
+					if (isDeliveryChargeRemovalRequired)
+					{
+						DataAccess.Job.JobCommands.UpdateJobPriceCodeStatus(jobResult.Id, (int)StatusType.Delete, customerId);
+					}
+					else
+					{
+						jobResult.IsParentOrder = true;
+					}
 				}
 
 				List<SalesOrderItem> salesOrderItemRequest = DataAccess.Finance.NavSalesOrderCommand.GetSalesOrderItemCreationData(activeUser, jobIdList, EntitiesAlias.ShippingItem);
@@ -67,14 +75,14 @@ namespace M4PL.Business.Finance.Order
 				if (!string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber) && (!jobResult.JobElectronicInvoice || !isElectronicInvoice))
 				{
 					bool isDeleted = false;
-					SalesOrder.NavSalesOrderHelper.DeleteSalesOrderForNAV(activeUser, jobResult.Id, true, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoiceSONumber, out isDeleted);
+					NavSalesOrderHelper.DeleteSalesOrderForNAV(activeUser, jobResult.Id, true, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoiceSONumber, out isDeleted);
 					jobResult.JobElectronicInvoiceSONumber = isDeleted ? string.Empty : jobResult.JobElectronicInvoiceSONumber;
 				}
 
 				if (!string.IsNullOrEmpty(jobResult.JobSONumber) && (!isSalesOrderItemPresent || !isManualInvoice))
 				{
 					bool isDeleted = false;
-					SalesOrder.NavSalesOrderHelper.DeleteSalesOrderForNAV(activeUser, jobResult.Id, false, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobSONumber, out isDeleted);
+					NavSalesOrderHelper.DeleteSalesOrderForNAV(activeUser, jobResult.Id, false, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobSONumber, out isDeleted);
 					jobResult.JobSONumber = isDeleted ? string.Empty : jobResult.JobSONumber;
 				}
 
@@ -113,7 +121,7 @@ namespace M4PL.Business.Finance.Order
 				{
 					if (string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 					{
-						m4PLSalesOrderCreationResponse.ManualSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						m4PLSalesOrderCreationResponse.ManualSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest, jobResult.IsParentOrder);
 					}
 					else
 					{
@@ -126,11 +134,11 @@ namespace M4PL.Business.Finance.Order
 					{
 						if (string.IsNullOrEmpty(jobResult.JobSONumber))
 						{
-							m4PLSalesOrderCreationResponse.ManualSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest);
+							m4PLSalesOrderCreationResponse.ManualSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest, jobResult.IsParentOrder);
 						}
 						else
 						{
-							m4PLSalesOrderCreationResponse.ManualSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderUpdationProcessForNAV(activeUser, jobIdList, jobResult.JobSONumber, jobResult.JobCustomerPurchaseOrder, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest);
+							m4PLSalesOrderCreationResponse.ManualSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(activeUser, jobIdList, jobResult.JobSONumber, jobResult.JobCustomerPurchaseOrder, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest);
 						}
 					}
 
@@ -138,7 +146,7 @@ namespace M4PL.Business.Finance.Order
 					{
 						if (string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 						{
-							m4PLSalesOrderCreationResponse.ElectronicSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest);
+							m4PLSalesOrderCreationResponse.ElectronicSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest, jobResult.IsParentOrder);
 						}
 						else
 						{
@@ -171,7 +179,11 @@ namespace M4PL.Business.Finance.Order
 				List<PurchaseOrderItem> electronicPurchaseOrderItemRequest = null;
 				jobIdList.Add(jobResult.Id);
 				m4PLPurchaseOrderCreationResponse = new M4PLPurchaseOrderCreationResponse();
-				isDeliveryChargeRemovalRequired = DataAccess.Job.JobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), customerId);
+				if(!jobResult.IsParentOrder)
+				{
+					isDeliveryChargeRemovalRequired = DataAccess.Job.JobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), customerId);
+				}
+
 				if (isDeliveryChargeRemovalRequired)
 				{
 					DataAccess.Job.JobCommands.UpdateJobCostCodeStatus(jobResult.Id, (int)StatusType.Delete, customerId);
