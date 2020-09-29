@@ -54,14 +54,14 @@ namespace M4PL.Business.Job
 			if ((!jobResult.JobElectronicInvoice || (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0 && !salesOrderItemRequest.Where(x => x.Electronic_Invoice).Any())) && !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 			{
 				bool isDeleted = false;
-				_salesOrderHelper.DeleteSalesOrderForNAV(activeUser, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoiceSONumber, out isDeleted);
+				_salesOrderHelper.DeleteSalesOrderForNAV(activeUser, jobResult.Id, true, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoiceSONumber, out isDeleted);
 				jobResult.JobElectronicInvoiceSONumber = isDeleted ? string.Empty : jobResult.JobElectronicInvoiceSONumber;
 			}
 
 			if (!string.IsNullOrEmpty(jobResult.JobSONumber) && ((salesOrderItemRequest == null || (salesOrderItemRequest != null && salesOrderItemRequest.Count == 0)) || (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0 && !salesOrderItemRequest.Where(x => !x.Electronic_Invoice).Any())))
 			{
 				bool isDeleted = false;
-				_salesOrderHelper.DeleteSalesOrderForNAV(activeUser, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobSONumber, out isDeleted);
+				_salesOrderHelper.DeleteSalesOrderForNAV(activeUser, jobResult.Id, false, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobSONumber, out isDeleted);
 				jobResult.JobSONumber = isDeleted ? string.Empty : jobResult.JobSONumber;
 			}
 

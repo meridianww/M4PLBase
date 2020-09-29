@@ -228,7 +228,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderResponse;
 		}
 
-		public static bool DeleteSalesOrderForNAV(ActiveUser activeUser, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, out bool isRecordDeleted)
+		public static bool DeleteSalesOrderForNAV(ActiveUser activeUser, long jobId, bool isElectronicInvoice, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, out bool isRecordDeleted)
 		{
 			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
 			try
@@ -243,7 +243,7 @@ namespace M4PL.Business.Finance.SalesOrder
 				isRecordDeleted = response != null && (response as HttpWebResponse).StatusCode == HttpStatusCode.NoContent ? true : false;
 				if (isRecordDeleted)
 				{
-					_commands.DeleteJobOrderMapping(soNumber, Entities.EntitiesAlias.SalesOrder.ToString());
+					_commands.DeleteJobOrderMapping(jobId, isElectronicInvoice, Entities.EntitiesAlias.SalesOrder.ToString());
 				}
 			}
 			catch (Exception exp)

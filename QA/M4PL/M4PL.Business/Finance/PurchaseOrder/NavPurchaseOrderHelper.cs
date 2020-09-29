@@ -284,7 +284,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			return navPurchaseOrderResponse;
 		}
 
-		public static bool DeletePurchaseOrderForNAV(string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordDeleted)
+		public static bool DeletePurchaseOrderForNAV(string poNumer, long jobId, bool isElectronicInvoice, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordDeleted)
 		{
 			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumer);
 			try
@@ -299,7 +299,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				isRecordDeleted = response != null && (response as HttpWebResponse).StatusCode == HttpStatusCode.NoContent ? true : false;
 				if (isRecordDeleted)
 				{
-					_commands.DeleteJobOrderMapping(poNumer, Entities.EntitiesAlias.PurchaseOrder.ToString());
+					_commands.DeleteJobOrderMapping(jobId, isElectronicInvoice, Entities.EntitiesAlias.PurchaseOrder.ToString());
 				}
 			}
 			catch (Exception exp)
@@ -595,14 +595,14 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						&& !string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber))
 					{
 						bool isDeleted = false;
-						DeletePurchaseOrderForNAV(jobData.JobElectronicInvoicePONumber, navAPIUrl, navAPIUserName, navAPIPassword, out isDeleted);
+						DeletePurchaseOrderForNAV(jobData.JobElectronicInvoicePONumber, jobData.Id, true, navAPIUrl, navAPIUserName, navAPIPassword, out isDeleted);
 						jobData.JobElectronicInvoicePONumber = isDeleted ? string.Empty : jobData.JobElectronicInvoicePONumber;
 					}
 
 					if (!string.IsNullOrEmpty(jobData.JobPONumber) && ((purchaseOrderItemRequest == null || (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count == 0)) || (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0 && !purchaseOrderItemRequest.Where(x => !x.Electronic_Invoice).Any())))
 					{
 						bool isDeleted = false;
-						DeletePurchaseOrderForNAV(jobData.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, out isDeleted);
+						DeletePurchaseOrderForNAV(jobData.JobPONumber, jobData.Id, false, navAPIUrl, navAPIUserName, navAPIPassword, out isDeleted);
 						jobData.JobPONumber = isDeleted ? string.Empty : jobData.JobPONumber;
 					}
 
