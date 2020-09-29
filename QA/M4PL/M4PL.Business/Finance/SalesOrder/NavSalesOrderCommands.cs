@@ -18,6 +18,8 @@
 //==============================================================================================================
 using M4PL.Business.Finance.PurchaseOrder;
 using M4PL.Entities;
+using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.PurchaseOrder;
 using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;
@@ -25,6 +27,7 @@ using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 
@@ -64,97 +67,52 @@ namespace M4PL.Business.Finance.SalesOrder
 
         public NavSalesOrder Post(NavSalesOrder entity)
 		{
-			NavSalesOrder result = null;
-			bool isDeliveryChargeRemovalRequired = false;
-			//NavJobSalesOrder navJobSalesOrder = NavSalesOrderHelper.GetSalesOrderFromNavByJobId(NavAPIUrl, NavAPIUserName, NavAPIPassword, Convert.ToInt64(entity.M4PL_Job_ID));
-			//SyncSalesOrderDetailsFromNav(entity, navJobSalesOrder);
-
-			if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) || !string.IsNullOrEmpty(entity.ManualSalesOrderNo))
-			{
-				isDeliveryChargeRemovalRequired = false;
-			}
-			else
-			{
-				isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(entity.M4PL_Job_ID), M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-			}
-
-			if (isDeliveryChargeRemovalRequired)
-			{
-				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Delete, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-			}
-
-			try
-			{
-				result = GenerateNAVOrderFromM4PLUI(entity);
-			}
-			catch (Exception exp)
-			{
-				M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "Error is occuring while create/update the order in NAV from M4PL UI.", "Post", Utilities.Logger.LogType.Error);
-			}
-
-			if (isDeliveryChargeRemovalRequired)
-			{
-				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Active, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-			}
-
-			return result;
-		}
-
-		private void SyncSalesOrderDetailsFromNav(NavSalesOrder entity, NavJobSalesOrder navJobSalesOrder)
-		{
-			if (navJobSalesOrder != null && navJobSalesOrder?.NavSalesOrder?.Count > 0)
-			{
-				bool isManualDelete = false;
-				bool isElectronicDelete = false;
-				bool isManualUpdate = false;
-				bool isElectronicUpdate = false;
-				string manualSalesOrderId = navJobSalesOrder.NavSalesOrder.Where(x => !x.Electronic_Invoice).Any() ? navJobSalesOrder.NavSalesOrder.Where(x => !x.Electronic_Invoice).FirstOrDefault().No : null;
-				string electronicSalesOrderId = navJobSalesOrder.NavSalesOrder.Where(x => x.Electronic_Invoice).Any() ? navJobSalesOrder.NavSalesOrder.Where(x => x.Electronic_Invoice).FirstOrDefault().No : null;
-				if (string.IsNullOrEmpty(entity.ManualSalesOrderNo) && !string.IsNullOrEmpty(manualSalesOrderId))
-				{
-					entity.ManualSalesOrderNo = manualSalesOrderId;
-					isManualUpdate = true;
-				}
-				else if (!string.IsNullOrEmpty(entity.ManualSalesOrderNo) && string.IsNullOrEmpty(manualSalesOrderId))
-				{
-					isManualUpdate = true;
-					isManualDelete = true;
-					entity.ManualSalesOrderNo = null;
-				}
-				else if (!string.IsNullOrEmpty(entity.ManualSalesOrderNo) && !string.IsNullOrEmpty(manualSalesOrderId) && !entity.ManualSalesOrderNo.Equals(manualSalesOrderId))
-				{
-					isManualUpdate = true;
-					entity.ManualSalesOrderNo = manualSalesOrderId;
-				}
-
-				if (string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) && !string.IsNullOrEmpty(electronicSalesOrderId))
-				{
-					isElectronicUpdate = true;
-					entity.ElectronicSalesOrderNo = electronicSalesOrderId;
-				}
-				else if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) && string.IsNullOrEmpty(electronicSalesOrderId))
-				{
-					isElectronicUpdate = true;
-					isElectronicDelete = true;
-					entity.ElectronicSalesOrderNo = null;
-				}
-				else if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) && !string.IsNullOrEmpty(electronicSalesOrderId) && !entity.ElectronicSalesOrderNo.Equals(electronicSalesOrderId))
-				{
-					isElectronicUpdate = true;
-					entity.ElectronicSalesOrderNo = electronicSalesOrderId;
-				}
-
-				if (isElectronicUpdate || isManualUpdate)
-				{
-					NavSalesOrderHelper.UpdateSalesOrderInformationInDB(entity.ManualSalesOrderNo, entity.ElectronicSalesOrderNo, Convert.ToInt64(entity.M4PL_Job_ID), isManualDelete ? false : true, isElectronicDelete ? false : true, ActiveUser);
-				}
-			}
+			throw new NotImplementedException();
 		}
 
 		public NavSalesOrder Put(NavSalesOrder entity)
         {
             throw new NotImplementedException();
         }
+
+		public M4PLOrderCreationResponse GenerateOrderInNav(long jobId)
+		{
+			Order.NavOrderCommands navOrderRepo = new Order.NavOrderCommands();
+			string navAPIURL = M4PLBusinessConfiguration.NavAPIUrl;
+			string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+			string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+			long customerId = M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong();
+			ActiveUser activeUser = ActiveUser;
+			M4PLOrderCreationResponse m4PLOrderCreationResponse = new M4PLOrderCreationResponse();
+			List<Task> tasks = new List<Task>();
+			tasks.Add(Task.Factory.StartNew(() =>
+			{
+				try
+				{
+					m4PLOrderCreationResponse.M4PLSalesOrderCreationResponse = navOrderRepo.GenerateSalesOrderInNav(jobId, navAPIURL, navAPIUserName, navAPIPassword, customerId, activeUser);
+				}
+				catch(Exception exp)
+				{
+					DataAccess.Logger.ErrorLogger.Log(exp, "Error occured while creating the Sales Order for the job", "GenerateOrderInNav", Utilities.Logger.LogType.Error);
+				}
+			}));
+
+			tasks.Add(Task.Factory.StartNew(() =>
+			{
+				try
+				{
+					m4PLOrderCreationResponse.M4PLPurchaseOrderCreationResponse = navOrderRepo.GeneratePurchaseOrderInNav(jobId, navAPIURL, navAPIUserName, navAPIPassword, customerId, activeUser);
+				}
+				catch (Exception exp)
+				{
+					DataAccess.Logger.ErrorLogger.Log(exp, "Error occured while creating the Purchase Order for the job", "GenerateOrderInNav", Utilities.Logger.LogType.Error);
+				}
+			}));
+
+			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+
+			return m4PLOrderCreationResponse;
+		}
 
         public NavSalesOrderCreationResponse CreateOrderInNAVFromM4PLJob(List<long> jobIdList)
         {
@@ -291,104 +249,6 @@ namespace M4PL.Business.Finance.SalesOrder
             }
 
             return navSalesOrderCreationResponse;
-        }
-
-        private NavSalesOrder GenerateNAVOrderFromM4PLUI(NavSalesOrder entity)
-        {
-            bool isElectronicInvoice = false;
-            bool isManualInvoice = false;
-            NavSalesOrder manualSalesOrder = null;
-            NavSalesOrder electronicSalesOrder = null;
-            List<SalesOrderItem> manualSalesOrderItemRequest = null;
-            List<SalesOrderItem> electronicSalesOrderItemRequest = null;
-            List<long> jobIdList = new List<long>();
-            jobIdList.Add(Convert.ToInt64(entity.M4PL_Job_ID));
-            List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(ActiveUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
-            if (salesOrderItemRequest == null || (salesOrderItemRequest != null && salesOrderItemRequest.Count == 0))
-            {
-                isManualInvoice = true;
-                isElectronicInvoice = false;
-            }
-            else if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
-            {
-                isElectronicInvoice = salesOrderItemRequest.Where(x => x.Electronic_Invoice).Any() ? true : false;
-                isManualInvoice = salesOrderItemRequest.Where(x => !x.Electronic_Invoice).Any() ? true : false;
-                manualSalesOrderItemRequest = isManualInvoice ? salesOrderItemRequest.Where(x => !x.Electronic_Invoice).ToList() : null;
-                electronicSalesOrderItemRequest = isElectronicInvoice ? salesOrderItemRequest.Where(x => x.Electronic_Invoice).ToList() : null;
-            }
-
-            if ((!entity.Electronic_Invoice || (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0 && !salesOrderItemRequest.Where(x => x.Electronic_Invoice).Any())) && !string.IsNullOrEmpty(entity.ElectronicSalesOrderNo))
-            {
-                bool isDeleted = false;
-                NavSalesOrderHelper.DeleteSalesOrderForNAV(ActiveUser, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.ElectronicSalesOrderNo, out isDeleted);
-                entity.ElectronicSalesOrderNo = isDeleted ? string.Empty : entity.ElectronicSalesOrderNo;
-            }
-
-            if (!string.IsNullOrEmpty(entity.ManualSalesOrderNo) && ((salesOrderItemRequest == null || (salesOrderItemRequest != null && salesOrderItemRequest.Count == 0)) || (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0 && !salesOrderItemRequest.Where(x => !x.Electronic_Invoice).Any())))
-            {
-                bool isDeleted = false;
-                NavSalesOrderHelper.DeleteSalesOrderForNAV(ActiveUser, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.ManualSalesOrderNo, out isDeleted);
-                entity.ManualSalesOrderNo = isDeleted ? string.Empty : entity.ManualSalesOrderNo;
-            }
-
-            if (!entity.Electronic_Invoice || (entity.Electronic_Invoice && (salesOrderItemRequest == null || (salesOrderItemRequest != null && salesOrderItemRequest.Count == 0))) || (entity.Electronic_Invoice && salesOrderItemRequest != null && salesOrderItemRequest.Count > 0 && !salesOrderItemRequest.Where(x => x.Electronic_Invoice).Any()))
-            {
-                if (!entity.Electronic_Invoice)
-                {
-                    if (string.IsNullOrEmpty(entity.ManualSalesOrderNo))
-                    {
-                        manualSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.VendorNo, entity.Electronic_Invoice, salesOrderItemRequest);
-                    }
-                    else
-                    {
-                        manualSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, entity.ManualSalesOrderNo, string.IsNullOrEmpty(entity.ManualPurchaseOrderNo) ? entity.ElectronicPurchaseOrderNo : entity.ManualPurchaseOrderNo, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.VendorNo, entity.Electronic_Invoice, salesOrderItemRequest);
-                    }
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(entity.ElectronicSalesOrderNo))
-                    {
-                        manualSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.VendorNo, entity.Electronic_Invoice, salesOrderItemRequest);
-                    }
-                    else
-                    {
-                        manualSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, entity.ElectronicSalesOrderNo, string.IsNullOrEmpty(entity.ElectronicPurchaseOrderNo) ? entity.ManualPurchaseOrderNo : entity.ElectronicPurchaseOrderNo, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.VendorNo, entity.Electronic_Invoice, salesOrderItemRequest);
-                    }
-                }
-            }
-            else
-            {
-                if (isManualInvoice)
-                {
-                    if (string.IsNullOrEmpty(entity.ManualSalesOrderNo))
-                    {
-                        manualSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.VendorNo, false, manualSalesOrderItemRequest);
-                    }
-                    else
-                    {
-                        manualSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, entity.ManualSalesOrderNo, entity.ManualPurchaseOrderNo, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.VendorNo, false, manualSalesOrderItemRequest);
-                    }
-                }
-
-                if (isElectronicInvoice)
-                {
-                    if (string.IsNullOrEmpty(entity.ElectronicSalesOrderNo))
-                    {
-                        electronicSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.VendorNo, true, electronicSalesOrderItemRequest);
-                    }
-                    else
-                    {
-                        electronicSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, entity.ElectronicSalesOrderNo, entity.ElectronicPurchaseOrderNo, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.VendorNo, true, electronicSalesOrderItemRequest);
-                    }
-                }
-            }
-
-            if (!string.IsNullOrEmpty(entity.VendorNo))
-            {
-                NavPurchaseOrderHelper.PurchaseOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entity.Electronic_Invoice);
-            }
-
-            return manualSalesOrder != null ? manualSalesOrder : electronicSalesOrder;
         }
     }
 }

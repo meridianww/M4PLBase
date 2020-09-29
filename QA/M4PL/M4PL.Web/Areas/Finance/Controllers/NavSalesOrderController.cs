@@ -22,6 +22,8 @@ using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Finance;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
+using M4PL.Entities.Finance;
+using System.Text;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Finance.Controllers
@@ -48,7 +50,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 		public ActionResult SyncOrderDetailsInNAV()
 		{
 			var route = SessionProvider.ActiveUser.CurrentRoute;
-			NavSalesOrderView navSalesOrder;
+			StringBuilder successMessage = new StringBuilder();
 			_jobCommands.ActiveUser = SessionProvider.ActiveUser;
 			JobView jobData = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
 			var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.CreateSalesOrder);
@@ -78,23 +80,47 @@ namespace M4PL.Web.Areas.Finance.Controllers
 				return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 			}
 
-			navSalesOrder = new NavSalesOrderView()
+			M4PLOrderCreationResponse m4PLOrderCreationResponse = _navSalesOrderCommands.GenerateOrdersInNav(jobData.Id);
+			if (m4PLOrderCreationResponse != null)
 			{
-				M4PL_Job_ID = jobData.Id.ToString(),
-				VendorNo = jobData.VendorERPId,
-				Electronic_Invoice = jobData.JobElectronicInvoice,
-				ManualSalesOrderNo = jobData.JobSONumber,
-				ElectronicSalesOrderNo = jobData.JobElectronicInvoiceSONumber
-			};
+				if (m4PLOrderCreationResponse.M4PLSalesOrderCreationResponse != null)
+				{
+					if (m4PLOrderCreationResponse.M4PLSalesOrderCreationResponse.ManualSalesOrder != null && !string.IsNullOrEmpty(m4PLOrderCreationResponse.M4PLSalesOrderCreationResponse.ManualSalesOrder.No))
+					{
+						successMessage.AppendLine(string.Format("Manual Sales Order: {0}", m4PLOrderCreationResponse.M4PLSalesOrderCreationResponse.ManualSalesOrder.No));
+					}
 
-			NavSalesOrderView navSalesOrderView = _currentEntityCommands.Post(navSalesOrder);
-			if (navSalesOrderView != null && !string.IsNullOrEmpty(navSalesOrderView.No))
-			{
-				displayMessage.Description = string.Format("Sales order updated sucessfully, sales order number is: {0}", navSalesOrderView.No);
+					if (m4PLOrderCreationResponse.M4PLSalesOrderCreationResponse.ElectronicSalesOrder != null && !string.IsNullOrEmpty(m4PLOrderCreationResponse.M4PLSalesOrderCreationResponse.ElectronicSalesOrder.No))
+					{
+						successMessage.AppendLine(string.Format("Electronic Sales Order: {0}", m4PLOrderCreationResponse.M4PLSalesOrderCreationResponse.ElectronicSalesOrder.No));
+					}
+				}
+
+				if (m4PLOrderCreationResponse.M4PLPurchaseOrderCreationResponse != null)
+				{
+					if (m4PLOrderCreationResponse.M4PLPurchaseOrderCreationResponse.ManualPurchaseOrder != null && !string.IsNullOrEmpty(m4PLOrderCreationResponse.M4PLPurchaseOrderCreationResponse.ManualPurchaseOrder.No))
+					{
+						successMessage.AppendLine(string.Format("Manual Purchase Order: {0}", m4PLOrderCreationResponse.M4PLPurchaseOrderCreationResponse.ManualPurchaseOrder.No));
+					}
+
+					if (m4PLOrderCreationResponse.M4PLPurchaseOrderCreationResponse.ElectronicPurchaseOrder != null && !string.IsNullOrEmpty(m4PLOrderCreationResponse.M4PLPurchaseOrderCreationResponse.ElectronicPurchaseOrder.No))
+					{
+						successMessage.AppendLine(string.Format("Electronic Purchase Order: {0}", m4PLOrderCreationResponse.M4PLPurchaseOrderCreationResponse.ElectronicPurchaseOrder.No));
+					}
+				}
+
+				if (!string.IsNullOrEmpty(successMessage.ToString()))
+				{
+					displayMessage.Description = string.Format("Order creation process successfully completed, details are as follows: {0}", successMessage.ToString());
+				}
+				else
+				{
+					displayMessage.Description = "Order is not Created In Nav.";
+				}
 			}
 			else
 			{
-				displayMessage.Description = "Sales Order is not Created In Nav.";
+				displayMessage.Description = "Order is not Created In Nav.";
 			}
 
 			return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);

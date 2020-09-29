@@ -136,11 +136,11 @@ BEGIN
 	LEFT JOIN dbo.Vend000Master Vendor ON Vendor.Id = PVC.PvlVendorId
 	LEFT JOIN dbo.NAV000JobSalesOrderMapping JOM ON JOM.JobId = Job.Id
 		AND ISNULL(JOM.IsElectronicInvoiced, 0) = 0
-	LEFT JOIN dbo.NAV000JobPurchaseOrderMapping JPM ON JPM.JobSalesOrderMappingId = JOM.JobSalesOrderMappingId
+	LEFT JOIN dbo.NAV000JobPurchaseOrderMapping JPM ON JPM.JobId = Job.Id
 		AND ISNULL(JPM.IsElectronicInvoiced, 0) = 0
 	LEFT JOIN dbo.NAV000JobSalesOrderMapping EJOM ON EJOM.JobId = Job.Id
 		AND ISNULL(EJOM.IsElectronicInvoiced, 0) = 1
-	LEFT JOIN dbo.NAV000JobPurchaseOrderMapping EJPM ON EJPM.JobSalesOrderMappingId = EJOM.JobSalesOrderMappingId
+	LEFT JOIN dbo.NAV000JobPurchaseOrderMapping EJPM ON EJPM.JobId = Job.Id
 		AND ISNULL(EJPM.IsElectronicInvoiced, 0) = 1
 	WHERE job.[Id] = @id
 END

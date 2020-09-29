@@ -899,6 +899,54 @@ namespace M4PL.DataAccess.Job
 			return isDefaultChargeUpdate;
 		}
 
+		public static bool UpdateJobPriceCodeStatus(long jobId, int statusId, long customerId)
+		{
+			bool isDefaultChargeUpdate = false;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@StatusId", statusId),
+			   new Parameter("@CustomerId", customerId)
+			};
+
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobPriceCodeStatus, parameters.ToArray(), true);
+				isDefaultChargeUpdate = true;
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error occuring in method UpdateJobPriceCodeStatus", "UpdateJobPriceCodeStatus", Utilities.Logger.LogType.Error);
+			}
+
+			return isDefaultChargeUpdate;
+		}
+
+		public static bool UpdateJobCostCodeStatus(long jobId, int statusId, long customerId)
+		{
+			bool isDefaultChargeUpdate = false;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@StatusId", statusId),
+			   new Parameter("@CustomerId", customerId)
+			};
+
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobCostCodeStatus, parameters.ToArray(), true);
+				isDefaultChargeUpdate = true;
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error occuring in method UpdateJobCostCodeStatus", "UpdateJobCostCodeStatus", Utilities.Logger.LogType.Error);
+			}
+
+			return isDefaultChargeUpdate;
+		}
+
+
+
 		public static bool IsJobCancelled(long jobId)
 		{
 			bool isJobCanceled = false;

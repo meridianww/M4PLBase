@@ -22,6 +22,7 @@ using M4PL.Entities.Finance.PurchaseOrder;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace M4PL.DataAccess.Finance
 {
@@ -38,11 +39,11 @@ namespace M4PL.DataAccess.Finance
 			return SqlSerializer.Default.DeserializeSingleRecord<NavPurchaseOrderRequest>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
 		}
 
-		public static long UpdateJobPurchaseOrderMapping(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, bool isElectronicInvoiced)
+		public static long UpdateJobPurchaseOrderMapping(ActiveUser activeUser, List<long> jobIdList, string poNumber, bool isElectronicInvoiced)
 		{
 			var parameters = new List<Parameter>
 		   {
-			   new Parameter("@SONumber", soNumber),
+			   new Parameter("@JobId", jobIdList.First()),
 			   new Parameter("@PONumber", poNumber),
 			   new Parameter("@IsElectronicInvoiced", isElectronicInvoiced),
 			   new Parameter("@EnteredBy", activeUser.UserName)

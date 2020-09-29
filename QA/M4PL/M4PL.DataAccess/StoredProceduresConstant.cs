@@ -586,6 +586,8 @@ namespace M4PL.DataAccess
 		public const string CheckJobCancellation = "dbo.CheckJobCancellation";
 		public const string GetJobDeliveryChargeRemovalRequired = "GetJobDeliveryChargeRemovalRequired";
 		public const string UpdateJobPriceOrCostCodeStatus = "dbo.UpdateJobPriceOrCostCodeStatus";
+		public const string UpdateJobPriceCodeStatus = "dbo.UpdateJobPriceCodeStatus";
+		public const string UpdateJobCostCodeStatus = "dbo.UpdateJobCostCodeStatus";
 
 		/* Job Roll up */
 		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";

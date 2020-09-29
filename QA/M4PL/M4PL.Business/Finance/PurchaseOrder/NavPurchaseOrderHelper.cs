@@ -111,7 +111,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
             return navPurchaseOrderResponse;
         }
 
-        public static NavPurchaseOrder GeneratePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
+        public static NavPurchaseOrder GeneratePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
         {
             NavPurchaseOrder navPurchaseOrderResponse = null;
             string navPurchaseOrderJson = string.Empty;
@@ -178,7 +178,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 
                 if (navPurchaseOrderResponse != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.No))
                 {
-                    _purchaseCommands.UpdateJobPurchaseOrderMapping(activeUser, jobIdList, soNumber, navPurchaseOrderResponse.No, electronicInvoice);
+                    _purchaseCommands.UpdateJobPurchaseOrderMapping(activeUser, jobIdList, navPurchaseOrderResponse.No, electronicInvoice);
                     if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
                     {
                         purchaseOrderItemRequest.ForEach(x => x.Document_No = navPurchaseOrderResponse.No);
@@ -197,7 +197,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
             return navPurchaseOrderResponse;
         }
 
-        public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
+        public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
         {
             string navPurchaseOrderJson = string.Empty;
             string dimensionCode = string.Empty;
@@ -614,29 +614,25 @@ namespace M4PL.Business.Finance.PurchaseOrder
                             if (string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber))
                             {
                                 manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
-                                    string.IsNullOrEmpty(jobData.JobElectronicInvoiceSONumber) ? jobData.JobSONumber : jobData.JobElectronicInvoiceSONumber,
                                     jobData.JobElectronicInvoice, purchaseOrderItemRequest);
                             }
                             else
                             {
                                 manualPurchaseOrder = UpdatePurchaseOrderForNAV(activeUser, jobIdList,
                                     string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber) ? jobData.JobPONumber : jobData.JobElectronicInvoicePONumber,
-                                    navAPIUrl, navAPIUserName, navAPIPassword, string.IsNullOrEmpty(jobData.JobElectronicInvoiceSONumber) ? jobData.JobSONumber :
-                                    jobData.JobElectronicInvoiceSONumber, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+                                    navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
                             }
                         }
                         else
                         {
                             if (string.IsNullOrEmpty(jobData.JobPONumber))
                             {
-                                manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
-                                    string.IsNullOrEmpty(jobData.JobSONumber) ? jobData.JobElectronicInvoiceSONumber : jobData.JobSONumber, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+                                manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
                             }
                             else
                             {
                                 manualPurchaseOrder = UpdatePurchaseOrderForNAV(activeUser, jobIdList,
                                     string.IsNullOrEmpty(jobData.JobPONumber) ? jobData.JobElectronicInvoicePONumber : jobData.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword,
-                                    string.IsNullOrEmpty(jobData.JobSONumber) ? jobData.JobElectronicInvoiceSONumber : string.IsNullOrEmpty(jobData.JobSONumber) ? jobData.JobElectronicInvoiceSONumber : jobData.JobSONumber,
                                     jobData.JobElectronicInvoice, purchaseOrderItemRequest);
                             }
                         }
@@ -648,12 +644,12 @@ namespace M4PL.Business.Finance.PurchaseOrder
                             if (string.IsNullOrEmpty(jobData.JobPONumber))
                             {
                                 manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
-                                    string.IsNullOrEmpty(jobData.JobSONumber) ? jobData.JobElectronicInvoiceSONumber : jobData.JobSONumber, false, manualPurchaseOrderItemRequest);
+                                    false, manualPurchaseOrderItemRequest);
                             }
                             else
                             {
                                 manualPurchaseOrder = UpdatePurchaseOrderForNAV(activeUser, jobIdList, string.IsNullOrEmpty(jobData.JobPONumber) ? jobData.JobElectronicInvoicePONumber : jobData.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword,
-                                string.IsNullOrEmpty(jobData.JobSONumber) ? jobData.JobElectronicInvoiceSONumber : jobData.JobSONumber, false, manualPurchaseOrderItemRequest);
+                                false, manualPurchaseOrderItemRequest);
                             }
                         }
 
@@ -662,12 +658,12 @@ namespace M4PL.Business.Finance.PurchaseOrder
                             if (string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber))
                             {
                                 electronicPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
-                                string.IsNullOrEmpty(jobData.JobElectronicInvoiceSONumber) ? jobData.JobSONumber : jobData.JobElectronicInvoiceSONumber, true, electronicPurchaseOrderItemRequest);
+                                true, electronicPurchaseOrderItemRequest);
                             }
                             else
                             {
                                 electronicPurchaseOrder = UpdatePurchaseOrderForNAV(activeUser, jobIdList, !string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber) ? jobData.JobElectronicInvoicePONumber : jobData.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword,
-                                string.IsNullOrEmpty(jobData.JobElectronicInvoiceSONumber) ? jobData.JobSONumber : jobData.JobElectronicInvoiceSONumber, true, electronicPurchaseOrderItemRequest);
+                                true, electronicPurchaseOrderItemRequest);
                             }
                         }
                     }
