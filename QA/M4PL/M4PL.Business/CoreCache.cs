@@ -17,12 +17,6 @@
 //====================================================================================================================
 
 using M4PL.Entities;
-using M4PL.Entities.Finance.OrderItem;
-using M4PL.Entities.Finance.PurchaseOrder;
-using M4PL.Entities.Finance.PurchaseOrderItem;
-using M4PL.Entities.Finance.SalesOrder;
-using M4PL.Entities.Finance.SalesOrderDimension;
-using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Concurrent;
@@ -30,7 +24,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.CacheCommands;
-using _salesOrderCommands = M4PL.Business.Finance.SalesOrder.NavSalesOrderHelper;
 
 namespace M4PL.Business
 {
@@ -75,7 +68,7 @@ namespace M4PL.Business
 		/////// </summary>
 		////public static ConcurrentDictionary<string, NAVOrderItemResponse> NAVOrderItemResponse { get; private set; }
 
-		#endregion
+		#endregion Commented Properties
 
 		/// <summary>
 		/// To hold language Key with lookups list data
@@ -199,7 +192,6 @@ namespace M4PL.Business
 
 			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
 
-
 			#region Nav Cache Commented Code
 
 			////string username = M4PBusinessContext.ComponentSettings.NavAPIUserName;
@@ -217,7 +209,7 @@ namespace M4PL.Business
 			////CachedNavPurchaseLine.GetOrAdd(langCode, new NavPurchaseOrderItemResponse());
 			////GetCachedNavPurchaseOrderItemValues(langCode, username, password, serviceURL);
 
-			#endregion
+			#endregion Nav Cache Commented Code
 		}
 
 		private static void InitializerOperations(string langCode)
@@ -323,7 +315,7 @@ namespace M4PL.Business
 		//	return NAVOrderItemResponse[langCode];
 		//}
 
-		#endregion
+		#endregion Commented Code
 
 		public static IList<IdRefLangName> GetIdRefLangNames(string langCode, int lookupId, bool forceUpdate = false)
 		{

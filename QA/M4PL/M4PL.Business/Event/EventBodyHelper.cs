@@ -1,10 +1,12 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
@@ -17,9 +19,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.Business.Event
 {
@@ -97,7 +97,6 @@ namespace M4PL.Business.Event
 				{ "CgoTitle", cgoitle??" " },
 				{ "CgoSerialNumber", cgoSerialNumber??" " },
 				{ "CurrentGateway", currentGateway??" " },
-
 			};
 
 			Stream stream = GenerateHtmlFile(setcollection, "JobDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\CargoException.xslt", args);
@@ -114,7 +113,7 @@ namespace M4PL.Business.Event
 			return stringBuilder.ToString();
 		}
 
-		public static string GetJobReactivationMailBody(long JobId,string Date, string Time, string ContactNumber,string JobOriginDateTimePlanned, string JobDeliveryDateTimePlanned)
+		public static string GetJobReactivationMailBody(long JobId, string Date, string Time, string ContactNumber, string JobOriginDateTimePlanned, string JobDeliveryDateTimePlanned)
 		{
 			SetCollection setcollection = new SetCollection();
 			Dictionary<string, string> args = new Dictionary<string, string>
@@ -126,7 +125,6 @@ namespace M4PL.Business.Event
 				{ "JobURL", string.Format("{0}?jobId={1}", ConfigurationManager.AppSettings["M4PLApplicationURL"], JobId) },
 				{ "JobOriginDateTimePlanned", JobOriginDateTimePlanned },
 				{ "JobDeliveryDateTimePlanned", JobDeliveryDateTimePlanned },
-
 			};
 
 			Stream stream = GenerateHtmlFile(setcollection, "JobDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobReactivation.xslt", args);
@@ -169,7 +167,6 @@ namespace M4PL.Business.Event
 			return stringBuilder.ToString();
 		}
 
-
 		private static Stream GenerateHtmlFile(SetCollection data, string rootName, string xsltFilePath, Dictionary<string, string> xsltArgumentsDictionary)
 		{
 			if (data == null)
@@ -209,6 +206,5 @@ namespace M4PL.Business.Event
 				return HtmlGenerator.GenerateHtmlFile(ds, xsltFilePath, xsltArgumentsDictionary);
 			}
 		}
-
 	}
 }

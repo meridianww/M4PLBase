@@ -1,10 +1,12 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 using M4PL.Entities;
@@ -12,11 +14,8 @@ using M4PL.Entities.Support;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
 using M4PL.Utilities;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace M4PL.Business.XCBL.HelperClasses
@@ -66,7 +65,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 								isCanceled = true;
 							}
 
-								string requestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
+							string requestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
 							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
 							DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(requestBody, response, jobId);
 
@@ -132,7 +131,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 					}
 				}
 			}
-			catch(Exception exp)
+			catch (Exception exp)
 			{
 				responseData = exp.Message;
 				DataAccess.Logger.ErrorLogger.Log(exp, "Exception occured while pushing data to Far Eye.", "SentOrderStatusUpdateToFarEye", Utilities.Logger.LogType.Error);

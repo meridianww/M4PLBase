@@ -21,8 +21,6 @@ using M4PL.Entities;
 using M4PL.Entities.Document;
 using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.PriceCode;
-using M4PL.Entities.Finance.PurchaseOrder;
-using M4PL.Entities.Finance.PurchaseOrderItem;
 using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;

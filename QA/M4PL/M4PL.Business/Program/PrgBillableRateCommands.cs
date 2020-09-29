@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -24,76 +24,76 @@ using _commands = M4PL.DataAccess.Program.PrgBillableRateCommands;
 
 namespace M4PL.Business.Program
 {
-    public class PrgBillableRateCommands : BaseCommands<PrgBillableRate>, IPrgBillableRateCommands
-    {
-        /// <summary>
-        /// Gets list of prgbillablerate data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<PrgBillableRate> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class PrgBillableRateCommands : BaseCommands<PrgBillableRate>, IPrgBillableRateCommands
+	{
+		/// <summary>
+		/// Gets list of prgbillablerate data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<PrgBillableRate> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific prgbillablerate record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific prgbillablerate record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public PrgBillableRate Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public PrgBillableRate Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Creates a new prgbillablerate record
-        /// </summary>
-        /// <param name="programBillableRate"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new prgbillablerate record
+		/// </summary>
+		/// <param name="programBillableRate"></param>
+		/// <returns></returns>
 
-        public PrgBillableRate Post(PrgBillableRate programBillableRate)
-        {
-            return _commands.Post(ActiveUser, programBillableRate);
-        }
+		public PrgBillableRate Post(PrgBillableRate programBillableRate)
+		{
+			return _commands.Post(ActiveUser, programBillableRate);
+		}
 
-        /// <summary>
-        /// Updates an existing prgbillablerate record
-        /// </summary>
-        /// <param name="programBillableRate"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing prgbillablerate record
+		/// </summary>
+		/// <param name="programBillableRate"></param>
+		/// <returns></returns>
 
-        public PrgBillableRate Put(PrgBillableRate programBillableRate)
-        {
-            return _commands.Put(ActiveUser, programBillableRate);
-        }
+		public PrgBillableRate Put(PrgBillableRate programBillableRate)
+		{
+			return _commands.Put(ActiveUser, programBillableRate);
+		}
 
-        /// <summary>
-        /// Deletes a specific prgbillablerate record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific prgbillablerate record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of prgbillablerate record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of prgbillablerate record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
-        public PrgBillableRate Patch(PrgBillableRate entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public PrgBillableRate Patch(PrgBillableRate entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

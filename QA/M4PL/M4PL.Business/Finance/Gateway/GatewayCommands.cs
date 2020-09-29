@@ -1,10 +1,12 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 //=============================================================================================================
@@ -15,13 +17,12 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Administration.NavRateCommands
 //==============================================================================================================
 
+using M4PL.Entities;
+using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
-using M4PL.Entities;
-using M4PL.Entities.Finance.Customer;
-using M4PL.Entities.Support;
-using System.Net;
 using System.Linq;
+using System.Net;
 
 namespace M4PL.Business.Finance.Gateway
 {
@@ -81,9 +82,9 @@ namespace M4PL.Business.Finance.Gateway
 
 			if (gatewayList == null || (gatewayList != null && gatewayList.Count == 0))
 			{
-				return new StatusModel() { AdditionalDetail ="Gateway details can not be empty.", Status ="Failue", StatusCode = (int)HttpStatusCode.PreconditionFailed };
+				return new StatusModel() { AdditionalDetail = "Gateway details can not be empty.", Status = "Failue", StatusCode = (int)HttpStatusCode.PreconditionFailed };
 			}
-			else if(!gatewayList.Where(p => (String.Equals(p.OrderType, "Original", StringComparison.CurrentCulture) || String.Equals(p.OrderType, "Return", StringComparison.CurrentCulture))).Any())
+			else if (!gatewayList.Where(p => (String.Equals(p.OrderType, "Original", StringComparison.CurrentCulture) || String.Equals(p.OrderType, "Return", StringComparison.CurrentCulture))).Any())
 			{
 				return new StatusModel() { AdditionalDetail = "Your uploaded file data is having some unwanted OrderType, valid order types accepting by the system are: Original and Return.", Status = "Failue", StatusCode = (int)HttpStatusCode.PreconditionFailed };
 			}
@@ -95,7 +96,7 @@ namespace M4PL.Business.Finance.Gateway
 			{
 				return new StatusModel() { AdditionalDetail = "Your uploaded file data is having some unwanted Gateway Types, valid gateway types accepting by the system are: Gateway and Action.", Status = "Failue", StatusCode = (int)HttpStatusCode.PreconditionFailed };
 			}
-			else if(duplicateRecords != null && duplicateRecords.Count() > 1 && duplicateRecords.Where(x => x.RecordCount > 1).Any())
+			else if (duplicateRecords != null && duplicateRecords.Count() > 1 && duplicateRecords.Where(x => x.RecordCount > 1).Any())
 			{
 				var currentDuplicateRecord = duplicateRecords.Where(x => x.RecordCount > 1).FirstOrDefault();
 				string.Format("Combination of Code, Type, Shipment Type and Order Type should be unique, in the sheet there is a duplicate combination found for Code: {0}, OrderType: {1}, ShipmentType: {2}, Type: {3}. Please correct the data and upload again.", currentDuplicateRecord.Code, currentDuplicateRecord.OrderType, currentDuplicateRecord.ShipmentType, currentDuplicateRecord.Type);

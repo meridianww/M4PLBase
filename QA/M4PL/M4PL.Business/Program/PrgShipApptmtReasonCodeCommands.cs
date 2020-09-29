@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,78 +25,78 @@ using _commands = M4PL.DataAccess.Program.PrgShipApptmtReasonCodeCommands;
 
 namespace M4PL.Business.Program
 {
-    public class PrgShipApptmtReasonCodeCommands : BaseCommands<PrgShipApptmtReasonCode>, IPrgShipApptmtReasonCodeCommands
-    {
-        /// <summary>
-        /// Gets list of PrgShipApptmtReasonCode data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<PrgShipApptmtReasonCode> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class PrgShipApptmtReasonCodeCommands : BaseCommands<PrgShipApptmtReasonCode>, IPrgShipApptmtReasonCodeCommands
+	{
+		/// <summary>
+		/// Gets list of PrgShipApptmtReasonCode data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<PrgShipApptmtReasonCode> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific PrgShipApptmtReasonCode record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific PrgShipApptmtReasonCode record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public PrgShipApptmtReasonCode Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public PrgShipApptmtReasonCode Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Creates a new PrgShipApptmtReasonCode record
-        /// </summary>
-        /// <param name="prgShipApptmtReasonCode"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new PrgShipApptmtReasonCode record
+		/// </summary>
+		/// <param name="prgShipApptmtReasonCode"></param>
+		/// <returns></returns>
 
-        public PrgShipApptmtReasonCode Post(PrgShipApptmtReasonCode prgShipApptmtReasonCode)
-        {
-            prgShipApptmtReasonCode.PacOrgID = ActiveUser.OrganizationId;
-            return _commands.Post(ActiveUser, prgShipApptmtReasonCode);
-        }
+		public PrgShipApptmtReasonCode Post(PrgShipApptmtReasonCode prgShipApptmtReasonCode)
+		{
+			prgShipApptmtReasonCode.PacOrgID = ActiveUser.OrganizationId;
+			return _commands.Post(ActiveUser, prgShipApptmtReasonCode);
+		}
 
-        /// <summary>
-        /// Updates an existing PrgShipApptmtReasonCode record
-        /// </summary>
-        /// <param name="prgShipApptmtReasonCode"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing PrgShipApptmtReasonCode record
+		/// </summary>
+		/// <param name="prgShipApptmtReasonCode"></param>
+		/// <returns></returns>
 
-        public PrgShipApptmtReasonCode Put(PrgShipApptmtReasonCode prgShipApptmtReasonCode)
-        {
-            prgShipApptmtReasonCode.PacOrgID = ActiveUser.OrganizationId;
-            return _commands.Put(ActiveUser, prgShipApptmtReasonCode);
-        }
+		public PrgShipApptmtReasonCode Put(PrgShipApptmtReasonCode prgShipApptmtReasonCode)
+		{
+			prgShipApptmtReasonCode.PacOrgID = ActiveUser.OrganizationId;
+			return _commands.Put(ActiveUser, prgShipApptmtReasonCode);
+		}
 
-        /// <summary>
-        /// Deletes a specific PrgShipApptmtReasonCode record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific PrgShipApptmtReasonCode record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of PrgShipApptmtReasonCode record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of PrgShipApptmtReasonCode record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
-        public PrgShipApptmtReasonCode Patch(PrgShipApptmtReasonCode entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public PrgShipApptmtReasonCode Patch(PrgShipApptmtReasonCode entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

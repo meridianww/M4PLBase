@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,76 +25,76 @@ using _commands = M4PL.DataAccess.Job.JobRefStatusCommands;
 
 namespace M4PL.Business.Job
 {
-    public class JobRefStatusCommands : BaseCommands<JobRefStatus>, IJobRefStatusCommands
-    {
-        /// <summary>
-        /// Get list of job ref status data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<JobRefStatus> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class JobRefStatusCommands : BaseCommands<JobRefStatus>, IJobRefStatusCommands
+	{
+		/// <summary>
+		/// Get list of job ref status data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<JobRefStatus> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific ob ref status record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific ob ref status record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public JobRefStatus Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public JobRefStatus Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Creates a new job ref status  record
-        /// </summary>
-        /// <param name="jobRefStatus"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new job ref status  record
+		/// </summary>
+		/// <param name="jobRefStatus"></param>
+		/// <returns></returns>
 
-        public JobRefStatus Post(JobRefStatus jobRefStatus)
-        {
-            return _commands.Post(ActiveUser, jobRefStatus);
-        }
+		public JobRefStatus Post(JobRefStatus jobRefStatus)
+		{
+			return _commands.Post(ActiveUser, jobRefStatus);
+		}
 
-        /// <summary>
-        /// Updates an existing job ref status record
-        /// </summary>
-        /// <param name="jobRefStatus"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing job ref status record
+		/// </summary>
+		/// <param name="jobRefStatus"></param>
+		/// <returns></returns>
 
-        public JobRefStatus Put(JobRefStatus jobRefStatus)
-        {
-            return _commands.Put(ActiveUser, jobRefStatus);
-        }
+		public JobRefStatus Put(JobRefStatus jobRefStatus)
+		{
+			return _commands.Put(ActiveUser, jobRefStatus);
+		}
 
-        /// <summary>
-        /// Deletes a specific job ref status record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific job ref status record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of job ref status record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of job ref status record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
-        public JobRefStatus Patch(JobRefStatus entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public JobRefStatus Patch(JobRefStatus entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

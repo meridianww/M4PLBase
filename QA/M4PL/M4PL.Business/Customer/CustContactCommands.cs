@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,76 +25,76 @@ using _commands = M4PL.DataAccess.Customer.CustContactCommands;
 
 namespace M4PL.Business.Customer
 {
-    public class CustContactCommands : BaseCommands<CustContact>, ICustContactCommands
-    {
-        /// <summary>
-        /// Get list of customer contacts data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<CustContact> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class CustContactCommands : BaseCommands<CustContact>, ICustContactCommands
+	{
+		/// <summary>
+		/// Get list of customer contacts data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<CustContact> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific customer contacts record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific customer contacts record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public CustContact Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public CustContact Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Creates a new customer contacts record
-        /// </summary>
-        /// <param name="custContact"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new customer contacts record
+		/// </summary>
+		/// <param name="custContact"></param>
+		/// <returns></returns>
 
-        public CustContact Post(CustContact custContact)
-        {
-            return _commands.Post(ActiveUser, custContact);
-        }
+		public CustContact Post(CustContact custContact)
+		{
+			return _commands.Post(ActiveUser, custContact);
+		}
 
-        /// <summary>
-        /// Updates an existing customer contacts record
-        /// </summary>
-        /// <param name="custContact"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing customer contacts record
+		/// </summary>
+		/// <param name="custContact"></param>
+		/// <returns></returns>
 
-        public CustContact Put(CustContact custContact)
-        {
-            return _commands.Put(ActiveUser, custContact);
-        }
+		public CustContact Put(CustContact custContact)
+		{
+			return _commands.Put(ActiveUser, custContact);
+		}
 
-        /// <summary>
-        /// Deletes a specific customer contacts record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific customer contacts record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of customer contacts record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of customer contacts record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
-        public CustContact Patch(CustContact entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public CustContact Patch(CustContact entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

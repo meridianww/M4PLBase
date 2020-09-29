@@ -23,8 +23,6 @@ using M4PL.Entities.Finance.CostCode;
 using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.PurchaseOrder;
 using M4PL.Entities.Finance.PurchaseOrderItem;
-using M4PL.Entities.Finance.SalesOrder;
-using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System;

@@ -1,13 +1,13 @@
 ﻿<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl">
-  <xsl:output method="xml" indent="yes"/>
-  <xsl:param name="JobId"/>
-  <xsl:param name="Date"/>
-  <xsl:param name="Time"/>
-  <xsl:param name="ContactNumber"/>
-  <xsl:param name="JobURL"/>
-  <xsl:param name="JobOriginDateTimePlanned"/>
-  <xsl:param name="JobDeliveryDateTimePlanned"/>
+  <xsl:output method="xml" indent="yes" />
+  <xsl:param name="JobId" />
+  <xsl:param name="Date" />
+  <xsl:param name="Time" />
+  <xsl:param name="ContactNumber" />
+  <xsl:param name="JobURL" />
+  <xsl:param name="JobOriginDateTimePlanned" />
+  <xsl:param name="JobDeliveryDateTimePlanned" />
   <xsl:template match="/">
     <html>
       <head>

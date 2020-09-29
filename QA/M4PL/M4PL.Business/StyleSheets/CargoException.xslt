@@ -1,19 +1,19 @@
 ﻿<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl">
-  <xsl:output method="xml" indent="yes"/>
-  <xsl:param name="ExceptionCode"/>
-  <xsl:param name="JobId"/>
-  <xsl:param name="ContractNo"/>
-  <xsl:param name="CreatedDate"/>
-  <xsl:param name="Username"/>
-  <xsl:param name="JobURL"/>
-  <xsl:param name="Comment"/>
-  <xsl:param name="IsCommentPresent"/>
-  <xsl:param name="CgoPartNumCode"/>
-  <xsl:param name="CgoTitle"/>
-  <xsl:param name="CgoSerialNumber"/>
-  <xsl:param name="CurrentGateway"/>
-  <xsl:param name="IsCargoDetailsPresent"/>
+  <xsl:output method="xml" indent="yes" />
+  <xsl:param name="ExceptionCode" />
+  <xsl:param name="JobId" />
+  <xsl:param name="ContractNo" />
+  <xsl:param name="CreatedDate" />
+  <xsl:param name="Username" />
+  <xsl:param name="JobURL" />
+  <xsl:param name="Comment" />
+  <xsl:param name="IsCommentPresent" />
+  <xsl:param name="CgoPartNumCode" />
+  <xsl:param name="CgoTitle" />
+  <xsl:param name="CgoSerialNumber" />
+  <xsl:param name="CurrentGateway" />
+  <xsl:param name="IsCargoDetailsPresent" />
   <xsl:template match="/">
     <html>
       <head>
@@ -85,7 +85,6 @@
             </tr>
           </table>
           </xsl:if>
-            
         </div>
       </body>
     </html>
