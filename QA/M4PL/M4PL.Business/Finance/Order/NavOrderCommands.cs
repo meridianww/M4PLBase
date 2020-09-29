@@ -80,8 +80,8 @@ namespace M4PL.Business.Finance.Order
 
 				if (!string.IsNullOrEmpty(jobResult.JobSONumber))
 				{
-					var existingPurchaseOrder = NavSalesOrderHelper.GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobSONumber);
-					if (existingPurchaseOrder == null)
+					var existingSalesOrder = NavSalesOrderHelper.GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobSONumber);
+					if (existingSalesOrder == null)
 					{
 						DataAccess.Finance.NavSalesOrderCommand.DeleteJobOrderMapping(jobResult.Id, false, EntitiesAlias.SalesOrder.ToString());
 						jobResult.JobSONumber = string.Empty;
@@ -90,8 +90,8 @@ namespace M4PL.Business.Finance.Order
 
 				if (!string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 				{
-					var existingElectronicPurchaseOrder = NavSalesOrderHelper.GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoiceSONumber);
-					if (existingElectronicPurchaseOrder == null)
+					var existingElectronicSalesOrder = NavSalesOrderHelper.GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoiceSONumber);
+					if (existingElectronicSalesOrder == null)
 					{
 						DataAccess.Finance.NavSalesOrderCommand.DeleteJobOrderMapping(jobResult.Id, true, Entities.EntitiesAlias.SalesOrder.ToString());
 						jobResult.JobElectronicInvoiceSONumber = string.Empty;
