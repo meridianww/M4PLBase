@@ -635,7 +635,7 @@ namespace M4PL.Web
                         case SQLDataTypes.varchar:
                             if (columnSetting.ColColumnName == "JobDeliveryState")
                                 return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 270;
-                            if (columnSetting.ColColumnName == "PecJobField")
+                            if (columnSetting.ColColumnName == "PecJobField" || columnSetting.ColColumnName == "PecJobField2")
                                 return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 350;
                             return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : 270;
 
