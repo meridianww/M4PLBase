@@ -11,6 +11,7 @@
 
 using M4PL.API.Filters;
 using M4PL.Business.Finance.SalesOrder;
+using M4PL.Entities.Finance;
 using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace M4PL.API.Controllers
 		/// Initializes a new instance of the <see cref="NavSalesOrderController"/> class.
 		/// </summary>
 		public NavSalesOrderController(INavSalesOrderCommands navSalesOrderCommands)
-			
+
 		{
 			_navSalesOrderCommands = navSalesOrderCommands;
 		}
@@ -146,6 +147,15 @@ namespace M4PL.API.Controllers
 		{
             _navSalesOrderCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navSalesOrderCommands.CreateOrderInNAVFromM4PLJob(jobIdList);
+		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("GenerateOrdersInNav")]
+		public M4PLOrderCreationResponse GenerateOrdersInNav(long jobId)
+		{
+			_navSalesOrderCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _navSalesOrderCommands.GenerateOrderInNav(jobId);
 		}
 	}
 }

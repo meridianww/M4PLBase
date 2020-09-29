@@ -17,6 +17,7 @@
 // Purpose:                                      Set of rules for NavCostCodeCommands
 //================================================================================================================
 
+using M4PL.Entities.Finance;
 using M4PL.Entities.Finance.SalesOrder;
 using System.Collections.Generic;
 
@@ -25,5 +26,8 @@ namespace M4PL.Business.Finance.SalesOrder
     public interface INavSalesOrderCommands : IBaseCommands<NavSalesOrder>
     {
         NavSalesOrderCreationResponse CreateOrderInNAVFromM4PLJob(List<long> jobIdList);
-    }
+
+		M4PLOrderCreationResponse GenerateOrderInNav(long jobId);
+
+	}
 }

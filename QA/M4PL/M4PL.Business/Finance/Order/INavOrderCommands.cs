@@ -15,6 +15,7 @@
 // Purpose:                                      Set of rules for INavOrderItemCommands
 //================================================================================================================
 using M4PL.Entities.Finance.OrderItem;
+using M4PL.Entities.Finance.PurchaseOrder;
 using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Support;
 
@@ -22,6 +23,7 @@ namespace M4PL.Business.Finance.Order
 {
     public interface INavOrderCommands : IBaseCommands<NavSalesOrderResponse>
     {
-		void GenerateSalesOrderInNav(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, long customerId, ActiveUser activeUser);
+		M4PLSalesOrderCreationResponse GenerateSalesOrderInNav(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, long customerId, ActiveUser activeUser);
+		M4PLPurchaseOrderCreationResponse GeneratePurchaseOrderInNav(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, long customerId, ActiveUser activeUser);
 	}
 }
