@@ -9,7 +9,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobAdditionalInfo] (@id BIGINT)
+CREATE PROCEDURE [dbo].[GetJobAdditionalInfo]  (@id BIGINT)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -127,6 +127,7 @@ BEGIN
 		,@JobWeightUnitTypeIdName AS JobWeightUnitTypeIdName
 		,@JobOriginResponsibleContactIDName AS JobOriginResponsibleContactIDName
 		,@JobDriverIdName AS JobDriverIdName
+		,CASE WHEN ISNULL(JOM.IsParentOrder, 0) = 0 THEN EJOM.IsParentOrder ELSE JOM.IsParentOrder END IsParentOrder
 	FROM [dbo].[JOBDL000Master] job
 	INNER JOIN PRGRM000MASTER prg ON job.ProgramID = prg.Id
 	INNER JOIN dbo.CUST000Master Customer ON Customer.Id = prg.PrgCustID

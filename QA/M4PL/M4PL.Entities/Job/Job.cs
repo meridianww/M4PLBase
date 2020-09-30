@@ -580,5 +580,6 @@ namespace M4PL.Entities.Job
 		public IList<JobsSiteCode> JobsSiteCodeList { get; set; }
         public bool JobIsDirtyDestination { get; set; }
 		public bool JobIsDirtyContact { get; set; }
+		public bool IsParentOrder { get; set; }
 	}
 }

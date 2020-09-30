@@ -30,5 +30,6 @@ namespace M4PL.Entities.Job
 		public string JobWeightUnitTypeIdName { get; set; }
 		public string JobOriginResponsibleContactIDName { get; set; }
 		public string JobDriverIdName { get; set; }
+		public bool IsParentOrder { get; set; }
 	}
 }
