@@ -140,6 +140,7 @@ namespace M4PL.DataAccess.Job
 				result.JobWeightUnitTypeIdName = jobAdditionalInfo.JobWeightUnitTypeIdName;
 				result.JobOriginResponsibleContactIDName = jobAdditionalInfo.JobOriginResponsibleContactIDName;
 				result.JobDriverIdName = jobAdditionalInfo.JobDriverIdName;
+				result.IsParentOrder = jobAdditionalInfo.IsParentOrder;
 			}
 			if (result != null) { result.JobIsHavingPermission = jobIsHavingPermission; }
 
@@ -202,6 +203,7 @@ namespace M4PL.DataAccess.Job
 				result.JobWeightUnitTypeIdName = jobAdditionalInfo.JobWeightUnitTypeIdName;
 				result.JobOriginResponsibleContactIDName = jobAdditionalInfo.JobOriginResponsibleContactIDName;
 				result.JobDriverIdName = jobAdditionalInfo.JobDriverIdName;
+				result.IsParentOrder = jobAdditionalInfo.IsParentOrder;
 			}
 			if (result != null) { result.JobIsHavingPermission = jobIsHavingPermission; }
 

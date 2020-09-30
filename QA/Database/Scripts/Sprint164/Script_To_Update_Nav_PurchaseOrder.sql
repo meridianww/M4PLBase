@@ -18,3 +18,5 @@ INNER JOIN dbo.NAV000JobSalesOrderMapping SO ON SO.JobSalesOrderMappingId = PO.J
 
 ALTER TABLE [dbo].[NAV000JobPurchaseOrderMapping] DROP CONSTRAINT [FK_NAV000JobPurchaseOrderMapping_NAV000JobSalesOrderMapping]
 GO
+
+ALTER TABLE NAV000JobSalesOrderMapping ADD IsParentOrder BIT
