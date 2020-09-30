@@ -145,6 +145,8 @@ BEGIN TRY
 						,[ConBusinessStateId]
 						,[ConBusinessZipPostal]
 						,[ConBusinessCountryId]
+						,[EnteredBy]
+						,[DateEntered]
 						)
 					VALUES (
 						@orgId
@@ -170,6 +172,8 @@ BEGIN TRY
 						,@conBusinessStateId
 						,@conBusinessZipPostal
 						,@conBusinessCountryId
+						,@enteredBy
+						,@dateEntered
 						)
 
 					SET @masterContactId = SCOPE_IDENTITY();
