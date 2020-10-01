@@ -1617,6 +1617,18 @@ M4PLCommon.AdvancedReport = (function () {
         var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         if (reportTypeCtrl != null &&
+            reportTypeCtrl.GetText() != "Job Advance Report" && reportTypeCtrl.GetText() != "Manifest Report") {
+            var today = new Date();
+            var yeasterday = new Date();
+            yeasterday.setDate(yeasterday.getDate() - 1);
+            startDateCtrl.SetValue(yeasterday);
+            endDateCtrl.SetValue(today);
+        } else {
+            startDateCtrl.SetValue(null);
+            endDateCtrl.SetValue(null);
+        }
+
+        if (reportTypeCtrl != null &&
             ((reportTypeCtrl.GetText() == "Driver Scrub Report"))
             || (reportTypeCtrl.GetText() == "Capacity Report")
             || (reportTypeCtrl.GetText() == "Pride Metric Report")) {
@@ -1764,9 +1776,11 @@ M4PLCommon.AdvancedReport = (function () {
         if (searchCtrl != null)
             rprtVwrRoute.Search = searchCtrl.GetValue();
         var startDate = startDateCtrl.GetValue();
-        rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+        if (startDate != null)
+            rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
         var endDate = endDateCtrl.GetValue();
-        rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+        if (endDate != null)
+            rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
         rprtVwrRoute.IsFormRequest = true;
         if (packagingTypeCtrl != null)
             rprtVwrRoute.PackagingCode = packagingTypeCtrl.GetText();

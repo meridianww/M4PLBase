@@ -669,11 +669,11 @@ namespace M4PL.Web
                 case MvcConstants.ActionDeliveryPodDataView:
                 case MvcConstants.ActionDocDamagedDataView:
                 case MvcConstants.ActionDocDeliveryPodDataView:
-				case MvcConstants.ActionDocApprovalsDataView:
-				case MvcConstants.ActionDocImageDataView:
-				case MvcConstants.ActionDocSignatureDataView:
-				case MvcConstants.ActionDocDocumentDataView:
-					pageInfo.Route.RecordId = 0;
+                case MvcConstants.ActionDocApprovalsDataView:
+                case MvcConstants.ActionDocImageDataView:
+                case MvcConstants.ActionDocSignatureDataView:
+                case MvcConstants.ActionDocDocumentDataView:
+                    pageInfo.Route.RecordId = 0;
                     break;
             }
 
@@ -1311,31 +1311,31 @@ namespace M4PL.Web
                 && (route.Entity != EntitiesAlias.Gateway && route.Action != MvcConstants.ActionForm)
                 && (route.Entity != EntitiesAlias.JobAdvanceReport && route.Action != MvcConstants.ActionForm)
                 && (route.Entity != EntitiesAlias.NavRemittance && route.Action != MvcConstants.ActionForm))
-                 {
-                    var navMenuEnabled = true;
-                    if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
-                    {
-                        if (!route.IsPopup)
-                            navMenuEnabled = ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1) || ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount == 1) && ((route.PreviousRecordId != null) && (route.PreviousRecordId == 0))));
-                        else
-                            navMenuEnabled = (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1);
-                    }
+            {
+                var navMenuEnabled = true;
+                if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
+                {
+                    if (!route.IsPopup)
+                        navMenuEnabled = ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1) || ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount == 1) && ((route.PreviousRecordId != null) && (route.PreviousRecordId == 0))));
+                    else
+                        navMenuEnabled = (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1);
+                }
 
-                    defaultFormNavMenu.Enabled = navMenuEnabled;
-                    allNavMenus = new List<FormNavMenu> {
+                defaultFormNavMenu.Enabled = navMenuEnabled;
+                allNavMenus = new List<FormNavMenu> {
                            defaultFormNavMenu,
                            new FormNavMenu ( defaultFormNavMenu, false, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray, 1, enabled:navMenuEnabled),
                            new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
                            new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
                            new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
                             };
-                }
-                else
-                {
-                    allNavMenus = new List<FormNavMenu> {
+            }
+            else
+            {
+                allNavMenus = new List<FormNavMenu> {
                           new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
                            };
-                }
+            }
 
             if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
             {
@@ -1500,42 +1500,42 @@ namespace M4PL.Web
                 allNavMenus[0].Text = "Import Gateway/Action";
             }
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocumentDataView1AllCbPanel")
-			{
-				allNavMenus[0].Text = "All Job Document";
-			}
+            if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocumentDataView1AllCbPanel")
+            {
+                allNavMenus[0].Text = "All Job Document";
+            }
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocApprovalsDataView2ApprovalsCbPanel")
-			{
-				allNavMenus[0].Text = "Approvals";
-			}
+            if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocApprovalsDataView2ApprovalsCbPanel")
+            {
+                allNavMenus[0].Text = "Approvals";
+            }
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDamagedDataView3DamagedCbPanel")
-			{
-				allNavMenus[0].Text = "Damaged";
-			}
+            if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDamagedDataView3DamagedCbPanel")
+            {
+                allNavMenus[0].Text = "Damaged";
+            }
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocImageDataView5ImageCbPanel")
-			{
-				allNavMenus[0].Text = "Image";
-			}
+            if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocImageDataView5ImageCbPanel")
+            {
+                allNavMenus[0].Text = "Image";
+            }
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDeliveryPodDataView6PODCbPanel")
-			{
-				allNavMenus[0].Text = "Proof Of Delivery";
-			}
+            if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDeliveryPodDataView6PODCbPanel")
+            {
+                allNavMenus[0].Text = "Proof Of Delivery";
+            }
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocSignatureDataView7SignatureCbPanel")
-			{
-				allNavMenus[0].Text = "Signature";
-			}
+            if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocSignatureDataView7SignatureCbPanel")
+            {
+                allNavMenus[0].Text = "Signature";
+            }
 
-			if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDocumentDataView4DocumentCbPanel")
-			{
-				allNavMenus[0].Text = "Document";
-			}
+            if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDocumentDataView4DocumentCbPanel")
+            {
+                allNavMenus[0].Text = "Document";
+            }
 
-			if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
+            if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
             {
                 allNavMenus[0].Text = (route.ParentRecordId == 3316 || route.Location.FirstOrDefault() == "Driver Scrub Report") ? "Import Scrub Driver Details"
                      : ((route.ParentRecordId == 3318 || route.Location.FirstOrDefault() == "Capacity Report") ? "Import Projected Capacity" : "Import report");
@@ -3019,11 +3019,11 @@ namespace M4PL.Web
         public static string GetAdvanceWhereCondition(M4PL.Entities.Job.JobAdvanceReportRequest jobAdvanceReportRequest, PagedDataInfo pageDataInfo)
         {
             string where = string.Empty;
-            if (jobAdvanceReportRequest == null)
-            {
-                where = string.Format(" AND CAST(JobAdvanceReport.DateEntered AS DATE) = '{0}' ", DateTime.Now.Date);
-                return where;
-            }
+            //if (jobAdvanceReportRequest == null)
+            //{
+            //    where = string.Format(" AND CAST(JobAdvanceReport.DateEntered AS DATE) = '{0}' ", DateTime.Now.Date);
+            //    return where;
+            //}
             if (jobAdvanceReportRequest.CustomerId > 0)
                 where = string.Format("AND prg.PrgCustID = {0}", jobAdvanceReportRequest.CustomerId);
             if (jobAdvanceReportRequest.ProgramId != null && jobAdvanceReportRequest.ProgramId.Count > 0 && !jobAdvanceReportRequest.ProgramId.Contains(0))
@@ -3053,7 +3053,7 @@ namespace M4PL.Web
             endDate = jobAdvanceReportRequest.EndDate.HasValue
                 ? jobAdvanceReportRequest.EndDate.Value.Date.ToShortDateString() : string.Empty;
 
-            if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName))
+            if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrEmpty(starteDate) && !string.IsNullOrEmpty(endDate))
             {
                 if (jobAdvanceReportRequest.DateTypeName == "Order Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
@@ -3090,7 +3090,8 @@ namespace M4PL.Web
                   : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimeActual  IS NOT NULL  AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) <= '{1}' ",
                   Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
                 }
-                else
+                else if ((jobAdvanceReportRequest.FileName != "Job Advance Report" && jobAdvanceReportRequest.FileName != "Manifest Report")
+                || (jobAdvanceReportRequest.FileName == null))
                 {
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
                    ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND CAST (JobAdvanceReport.JobDeliveryDateTimePlanned AS DATE)= '{0}'", DateTime.Now.Date.ToShortDateString())

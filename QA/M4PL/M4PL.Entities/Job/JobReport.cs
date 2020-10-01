@@ -32,10 +32,10 @@ namespace M4PL.Entities.Job
         }
 
         [DisplayName("Start Date")]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [DisplayName("End Date")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         #region VOC
 

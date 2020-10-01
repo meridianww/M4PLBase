@@ -131,8 +131,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
-                _reportResult.Record.StartDate = DateTime.Now.AddDays(-1);
-                _reportResult.Record.EndDate = DateTime.Now;
+                //_reportResult.Record.StartDate = DateTime.Now.AddDays(-1);
+                //_reportResult.Record.EndDate = DateTime.Now;
                 _reportResult.Record.ProgramCode = "ALL";
                 _reportResult.Record.Origin = "ALL";
                 _reportResult.Record.Destination = "ALL";
@@ -376,10 +376,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (Request.ContentType == "application/x-www-form-urlencoded")
                 isExport = true;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
-            if (!strJobAdvanceReportRequestRoute.StartDate.HasValue)
-                strJobAdvanceReportRequestRoute.StartDate = DateTime.Now.AddDays(-1);
-            if (!strJobAdvanceReportRequestRoute.EndDate.HasValue)
-                strJobAdvanceReportRequestRoute.EndDate = DateTime.Now;
+            if ((strJobAdvanceReportRequestRoute.FileName != "Job Advance Report" && strJobAdvanceReportRequestRoute.FileName != "Manifest Report")
+           || (strJobAdvanceReportRequestRoute.FileName == null))
+            {
+                if (!strJobAdvanceReportRequestRoute.StartDate.HasValue)
+                    strJobAdvanceReportRequestRoute.StartDate = DateTime.Now.AddDays(-1);
+                if (!strJobAdvanceReportRequestRoute.EndDate.HasValue)
+                    strJobAdvanceReportRequestRoute.EndDate = DateTime.Now;
+            }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentRecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
