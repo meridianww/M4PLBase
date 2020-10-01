@@ -114,6 +114,7 @@ namespace M4PL.Web.Areas
             if (route.Entity == EntitiesAlias.JobAdvanceReport && reportTypeId == 0)
             {
                 _gridResult.Records = new List<TView>();
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount = 0;
             }
             else if (route.Entity == EntitiesAlias.JobHistory)
             {
