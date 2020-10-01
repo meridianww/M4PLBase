@@ -5103,3 +5103,8 @@ div#btnCardRefresh {
 .marRight25 {
     margin-right: 25px !important;
 }
+
+#pageControl_LPV{
+    width:7% !important;
+    border:none;
+}
