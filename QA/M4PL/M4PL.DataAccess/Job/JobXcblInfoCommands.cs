@@ -90,7 +90,16 @@ namespace M4PL.DataAccess.Job
                     foreach (var item in jobXcblInfoView.ColumnMappingData)
                     {
                         columnsAndValuesToUpdate += item.ColumnName + "=" + "'" + item.UpdatedValue + "', ";
-                        job.GetType().GetProperty(item.ColumnName).SetValue(job, item.UpdatedValue);
+                        if (job.GetType().GetProperty(item.ColumnName).PropertyType.Equals(typeof(DateTime?)))
+                        {
+                            DateTime updatedVal = new DateTime();
+                            if(DateTime.TryParse(item.UpdatedValue, out updatedVal))
+                                job.GetType().GetProperty(item.ColumnName).SetValue(job, updatedVal);
+                        }
+                        else
+                        {
+                            job.GetType().GetProperty(item.ColumnName).SetValue(job, item.UpdatedValue);
+                        }
                     }
                     job.JobIsDirtyDestination = true;
                     _jobCommands.Put(activeUser, job, isLatLongUpdatedFromXCBL: true);
