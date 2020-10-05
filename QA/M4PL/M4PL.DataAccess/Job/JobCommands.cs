@@ -1142,8 +1142,8 @@ namespace M4PL.DataAccess.Job
 			}
 			else
 			{
-				jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForOrder(jobId, activeUser, programBillableRate, quantity);
-				jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForOrder(jobId, activeUser, programCostRate, quantity);
+				jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForOrder(jobId, activeUser, programBillableRate, quantity, locationCode);
+				jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForOrder(jobId, activeUser, programCostRate, quantity, locationCode);
 			}
 
 			jobBillableSheetList = jobBillableSheetList == null ? new List<JobBillableSheet>() : jobBillableSheetList;

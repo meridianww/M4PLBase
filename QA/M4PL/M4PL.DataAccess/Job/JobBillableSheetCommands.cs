@@ -235,29 +235,56 @@ namespace M4PL.DataAccess.Job
 			return jobBillableSheetList;
 		}
 
-		public static List<JobBillableSheet> GetPriceCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgBillableRate> programBillableRate, int? quantity)
+		public static List<JobBillableSheet> GetPriceCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgBillableRate> programBillableRate, int? quantity, string locationCode)
 		{
 			List<JobBillableSheet> jobBillableSheetList = null;
 			if (programBillableRate?.Count > 0)
 			{
 				jobBillableSheetList = new List<JobBillableSheet>();
-				jobBillableSheetList.AddRange(programBillableRate.Select(billableCharge => new JobBillableSheet()
+				if (!string.IsNullOrEmpty(locationCode))
 				{
-					ItemNumber = billableCharge.ItemNumber,
-					JobID = jobId,
-					PrcLineItem = billableCharge.ItemNumber.ToString(),
-					PrcChargeID = billableCharge.Id,
-					PrcChargeCode = billableCharge.PbrCode,
-					PrcTitle = billableCharge.PbrTitle,
-					PrcUnitId = billableCharge.RateUnitTypeId,
-					PrcRate = billableCharge.PbrBillablePrice,
-					ChargeTypeId = billableCharge.RateTypeId,
-					StatusId = billableCharge.StatusId,
-					PrcElectronicBilling = billableCharge.PbrElectronicBilling,
-					PrcQuantity = quantity.HasValue ? (decimal)quantity : 0,
-					DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
-					EnteredBy = activeUser.UserName
-				}));
+					jobBillableSheetList.AddRange(programBillableRate.Select(billableCharge => new JobBillableSheet()
+					{
+						ItemNumber = billableCharge.ItemNumber,
+						JobID = jobId,
+						PrcLineItem = billableCharge.ItemNumber.ToString(),
+						PrcChargeID = billableCharge.Id,
+						PrcChargeCode = billableCharge.PbrCode,
+						PrcTitle = billableCharge.PbrTitle,
+						PrcUnitId = billableCharge.RateUnitTypeId,
+						PrcRate = billableCharge.PbrBillablePrice,
+						ChargeTypeId = billableCharge.RateTypeId,
+						StatusId = billableCharge.StatusId,
+						PrcElectronicBilling = billableCharge.PbrElectronicBilling,
+						PrcQuantity = quantity.HasValue ? (decimal)quantity : 0,
+						DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+						EnteredBy = activeUser.UserName
+					}));
+				}
+				else
+				{
+					var prgDefaultBillableRate = programBillableRate.Where(x => x.IsDefault).Any() ? programBillableRate.Where(x => x.IsDefault).FirstOrDefault() : null;
+					if (prgDefaultBillableRate != null )
+					{
+						jobBillableSheetList.Add(new JobBillableSheet()
+						{
+							ItemNumber = prgDefaultBillableRate.ItemNumber,
+							JobID = jobId,
+							PrcLineItem = prgDefaultBillableRate.ItemNumber.ToString(),
+							PrcChargeID = prgDefaultBillableRate.Id,
+							PrcChargeCode = prgDefaultBillableRate.PbrCode,
+							PrcTitle = prgDefaultBillableRate.PbrTitle,
+							PrcUnitId = prgDefaultBillableRate.RateUnitTypeId,
+							PrcRate = prgDefaultBillableRate.PbrBillablePrice,
+							ChargeTypeId = prgDefaultBillableRate.RateTypeId,
+							StatusId = prgDefaultBillableRate.StatusId,
+							PrcElectronicBilling = prgDefaultBillableRate.PbrElectronicBilling,
+							PrcQuantity = quantity.HasValue ? (decimal)quantity : 0,
+							DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
+							EnteredBy = activeUser.UserName
+						});
+					}
+				}
 			}
 
 			return jobBillableSheetList;
