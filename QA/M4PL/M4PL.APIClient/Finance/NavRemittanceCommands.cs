@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using M4PL.Entities;
+using M4PL.Entities.Document;
 
 namespace M4PL.APIClient.Finance
 {
@@ -23,5 +24,13 @@ namespace M4PL.APIClient.Finance
             var result = RestClient.Execute(request);
             return JsonConvert.DeserializeObject<ApiResult<List<NavRemittanceView>>>(result.Content).Results?.FirstOrDefault();
         }
-    }
+
+		public DocumentData GetPostedInvoicesByCheckNumber(string checkNumber)
+		{
+			var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetPostedInvoicesByCheckNumber"), ActiveUser).AddParameter("checkNumber", checkNumber);
+			var result = RestClient.Execute(request);
+			return JsonConvert.DeserializeObject<ApiResult<DocumentData>>(result.Content).Results?.FirstOrDefault();
+		}
+
+	}
 }

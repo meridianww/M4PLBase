@@ -27,7 +27,13 @@ namespace M4PL.Entities.Finance.VendorLedger
 
 	public class VendorLedger
 	{
+		public string Entry_No { get; set; }
+		public string Posting_Date { get; set; }
+		public string Document_Type { get; set; }
 		public string Document_No { get; set; }
+		public string External_Document_No { get; set; }
+		public string Vendor_No { get; set; }
+		public string Amount { get; set; }
 		public string Closed_by_Entry_No { get; set; }
 	}
 }

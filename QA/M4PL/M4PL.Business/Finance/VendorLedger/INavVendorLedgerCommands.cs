@@ -16,6 +16,7 @@
 // Program Name:                                 INavVendorCommands
 // Purpose:                                      Set of rules for NavVendorCommands
 //================================================================================================================
+using M4PL.Entities.Finance.PurchaseOrder;
 using M4PL.Entities.Finance.VendorLedger;
 using System.Collections.Generic;
 
@@ -26,6 +27,6 @@ namespace M4PL.Business.Finance.VendorLedger
 	/// </summary>
 	public interface INavVendorLedgerCommands : IBaseCommands<NavVendorLedger>
 	{
-		List<VendorCheckedInvoice> GetVendorCheckedInvoice(string postedInvoiceNumber);
+		List<CheckPostedInvoice> GetVendorCheckedInvoice(string checkNumber);
 	}
 }

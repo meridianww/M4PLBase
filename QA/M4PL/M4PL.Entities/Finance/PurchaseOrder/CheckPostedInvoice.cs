@@ -7,7 +7,6 @@
 ******************************************************************************/
 #endregion Copyright
 
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,21 +15,12 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Finance.PurchaseOrder
 {
-	public class NavPurchaseOrderPostedInvoiceResponse
-	{
-		[JsonProperty("@odata.context")]
-		public string ContextData { get; set; }
-
-		[JsonProperty("value")]
-		public List<PostedPurchaseOrder> NavPurchaseOrder { get; set; }
-	}
-
-	public class PostedPurchaseOrder
+	public class CheckPostedInvoice
 	{
 		public string No { get; set; }
-		public string M4PL_Job_ID { get; set; }
-		public string Vendor_Invoice_No { get; set; }
-		public string Document_Date { get; set; }
+		public string M4PL_JobId { get; set; }
 		public string Vendor_Order_No { get; set; }
+		public string Document_Date { get; set; }
+		public decimal Amount { get; set; }
 	}
 }

@@ -95,6 +95,7 @@
     <Compile Include="Finance\PriceCode\PurchaseLinePriceCodeResponse.cs" />
     <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItemResponse.cs" />
     <Compile Include="Finance\PurchaseOrderItem\PurchaseOrderItem.cs" />
+    <Compile Include="Finance\PurchaseOrder\CheckPostedInvoice.cs" />
     <Compile Include="Finance\PurchaseOrder\M4PLPurchaseOrderCreationResponse.cs" />
     <Compile Include="Finance\PurchaseOrder\NavJobPurchaseOrder.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrder.cs" />

@@ -16,15 +16,19 @@
 // Program Name:                                 NavVendorCommands
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavVendorCommands
 //==============================================================================================================
+using M4PL.Business.Finance.SalesOrder;
 using M4PL.Entities;
+using M4PL.Entities.Finance.PurchaseOrder;
 using M4PL.Entities.Finance.Vendor;
 using M4PL.Entities.Finance.VendorLedger;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace M4PL.Business.Finance.VendorLedger
 {
@@ -35,14 +39,38 @@ namespace M4PL.Business.Finance.VendorLedger
 			get { return CoreCache.GetBusinessConfiguration("EN"); }
 		}
 
-		public List<VendorCheckedInvoice> GetVendorCheckedInvoice(string postedInvoiceNumber)
+		public List<CheckPostedInvoice> GetVendorCheckedInvoice(string checkNumber)
 		{
-			List<VendorCheckedInvoice> resultPostedInvoices = null;
-			var vendorLedgerData = GetNavVendorLedgerData(M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, postedInvoiceNumber);
-			if (vendorLedgerData?.VendorLedger != null && !string.IsNullOrEmpty(vendorLedgerData.VendorLedger?.FirstOrDefault().Closed_by_Entry_No))
+			List<CheckPostedInvoice> resultPostedInvoices = null;
+			var vendorLedgerData = GetNavVendorLedgerDataByCheckNumber(M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, checkNumber);
+			if (vendorLedgerData?.VendorLedger != null && vendorLedgerData.VendorLedger.Where(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Payment", StringComparison.OrdinalIgnoreCase)).Any())
 			{
-				var result = GetNavVendorCheckedInvoice(M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, vendorLedgerData.VendorLedger.FirstOrDefault().Closed_by_Entry_No);
-				resultPostedInvoices = result?.VendorCheckedInvoice;
+				string entryNumber = vendorLedgerData.VendorLedger.Where(x => x.Document_Type.Equals("Payment", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Entry_No;
+				var result = GetNavVendorLedgerDataByClosedByEntryNumber(M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entryNumber);
+				if (result?.VendorLedger?.Count > 0 && result.VendorLedger.Where(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Invoice", StringComparison.OrdinalIgnoreCase)).Any())
+				{
+					List<Task> tasks = new List<Task>();
+					resultPostedInvoices = new List<CheckPostedInvoice>();
+					var processingData = result.VendorLedger.Where(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Invoice", StringComparison.OrdinalIgnoreCase));
+					foreach (var currentVendorLedger in processingData)
+					{
+						tasks.Add(Task.Factory.StartNew(() =>
+						{
+							var postedInvoice = NavSalesOrderHelper.GetNavPostedPurchaseInvoiceResponse(M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, M4PLBusinessConfiguration.NavAPIUrl, currentVendorLedger.Document_No);
+							if (postedInvoice != null && postedInvoice.NavPurchaseOrder != null && postedInvoice.NavPurchaseOrder.Count > 0)
+							{
+								postedInvoice.NavPurchaseOrder.ForEach(x => resultPostedInvoices.Add(new CheckPostedInvoice() { No = x.No,
+									M4PL_JobId = x.Vendor_Invoice_No,
+									Document_Date = x.Document_Date,
+									Vendor_Order_No = x.Vendor_Order_No,
+									Amount = processingData.Where(z => z.Document_No == x.No).FirstOrDefault().Amount.ToDecimal()
+								}));
+							}
+						}));
+					}
+
+					if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+				}
 			}
 
 			return resultPostedInvoices;
@@ -88,7 +116,7 @@ namespace M4PL.Business.Finance.VendorLedger
 			throw new NotImplementedException();
 		}
 
-		private NavVendorLedger GetNavVendorLedgerData(string navVendorUrl, string navAPIUserName, string navAPIPassword, string documentNumer)
+		private NavVendorLedger GetNavVendorLedgerDataByCheckNumber(string navVendorUrl, string navAPIUserName, string navAPIPassword, string documentNumer)
 		{
 			NavVendorLedger navVendorLedgerResponse = null;
 			string serviceCall = string.Format("{0}('{1}')/Vendor_ledger_Entries?$filter=Document_No eq '{2}'", navVendorUrl, "Meridian", documentNumer);
@@ -114,10 +142,10 @@ namespace M4PL.Business.Finance.VendorLedger
 			return navVendorLedgerResponse;
 		}
 
-		private NavVendorCheckedInvoice GetNavVendorCheckedInvoice(string navVendorUrl, string navAPIUserName, string navAPIPassword, string documentNumer)
+		private NavVendorLedger GetNavVendorLedgerDataByClosedByEntryNumber(string navVendorUrl, string navAPIUserName, string navAPIPassword, string documentNumer)
 		{
-			NavVendorCheckedInvoice navVendorCheckedInvoiceResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/Vendor_ledger_Entries?$filter=Entry_No eq {2}", navVendorUrl, "Meridian", documentNumer);
+			NavVendorLedger navVendorLedgerResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/Vendor_ledger_Entries?$filter=Closed_by_Entry_No eq {2}", navVendorUrl, "Meridian", documentNumer);
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 			request.Credentials = myCredentials;
@@ -132,12 +160,12 @@ namespace M4PL.Business.Finance.VendorLedger
 
 					using (var stringReader = new StringReader(responceString))
 					{
-						navVendorCheckedInvoiceResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavVendorCheckedInvoice>(responceString);
+						navVendorLedgerResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavVendorLedger>(responceString);
 					}
 				}
 			}
 
-			return navVendorCheckedInvoiceResponse;
+			return navVendorLedgerResponse;
 		}
 	}
 }

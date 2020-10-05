@@ -228,6 +228,7 @@
     <Folder Include="Views\JobAttachment\" />
     <Folder Include="Views\JobRollup\" />
     <Folder Include="Views\NavRate\" />
+    <Folder Include="Views\NavRemittance\" />
     <Folder Include="Views\NavSalesOrder\" />
     <Folder Include="Views\NavVendorLedger\" />
   </ItemGroup>
@@ -277,6 +278,7 @@
     <Compile Include="Controllers\GatewayImportController.cs" />
     <Compile Include="Controllers\NavRateController.cs" />
     <Compile Include="Controllers\JobServicesController.cs" />
+    <Compile Include="Controllers\NavRemittanceController.cs" />
     <Compile Include="Controllers\NavVendorLedgerController.cs" />
     <Compile Include="Controllers\PrgEventManagementController.cs" />
     <Compile Include="Controllers\TrainingController.cs" />

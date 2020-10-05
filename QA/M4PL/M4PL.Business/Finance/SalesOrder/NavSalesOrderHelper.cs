@@ -529,6 +529,41 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navPurchaseOrderResponse;
 		}
 
+		public static NavPurchaseOrderPostedInvoiceResponse GetNavPostedPurchaseInvoiceResponse(string username, string password, string serviceUrl, string documentNumber)
+		{
+			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoice?$filter=No eq '{2}'", serviceUrl, "Meridian", documentNumber);
+			try
+			{
+				navPurchaseOrderResponse = new NavPurchaseOrderPostedInvoiceResponse();
+				NetworkCredential myCredentials = new NetworkCredential(username, password);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
+
+				using (Stream navPurchaseOrderStream = response.GetResponseStream())
+				{
+					using (TextReader navPurchaseOrderReader = new StreamReader(navPurchaseOrderStream))
+					{
+						string responceString = navPurchaseOrderReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(responceString))
+						{
+							navPurchaseOrderResponse = JsonConvert.DeserializeObject<NavPurchaseOrderPostedInvoiceResponse>(responceString);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the PostedPurchaseInvoice: Request Url is: {0}", serviceCall), "Get the PostedPurchaseInvoice List From NAV.", LogType.Error);
+			}
+
+			return navPurchaseOrderResponse;
+		}
+
 		public static NavSalesOrderItemResponse GetNavPostedSalesOrderItemResponse(string username, string password, string serviceUrl)
 		{
 			NavSalesOrderItemResponse navSalesOrderItemResponse = null;

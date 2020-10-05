@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using M4PL.Business.Finance.VendorLedger;
 using M4PL.Entities.Finance.VendorLedger;
+using M4PL.Entities.Finance.PurchaseOrder;
 
 namespace M4PL.API.Controllers
 {
@@ -30,10 +31,11 @@ namespace M4PL.API.Controllers
 		}
 
 		[HttpGet]
-		public virtual List<VendorCheckedInvoice> GetVendorCheckedInvoice(string postedInvoiceNumber)
+		[Route("GetPostedInvoicesByCheckNumber")]
+		public virtual List<CheckPostedInvoice> GetPostedInvoicesByCheckNumber(string checkNumber)
 		{
 			_navVendorLedgerCommands.ActiveUser = Models.ApiContext.ActiveUser;
-			return _navVendorLedgerCommands.GetVendorCheckedInvoice(postedInvoiceNumber);
+			return _navVendorLedgerCommands.GetVendorCheckedInvoice(checkNumber);
 		}
 	}
 }

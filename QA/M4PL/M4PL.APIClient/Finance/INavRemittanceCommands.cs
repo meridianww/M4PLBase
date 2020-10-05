@@ -1,4 +1,5 @@
 ﻿using M4PL.APIClient.ViewModels.NavRemittance;
+using M4PL.Entities.Document;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace M4PL.APIClient.Finance
     public interface INavRemittanceCommands : IBaseCommands<NavRemittanceView>
     {
         IList<NavRemittanceView> GetAllNavRemittance();
-    }
+		DocumentData GetPostedInvoicesByCheckNumber(string checkNumber);
+
+	}
 }
