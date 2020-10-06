@@ -807,14 +807,45 @@ namespace M4PL.Business.Job
 					EdtTitle = "Order Tracking"
 				});
 
-				if (!string.IsNullOrEmpty(orderEvent.StatusCode) && orderEvent.StatusCode.Equals("shipment_in_transit", StringComparison.OrdinalIgnoreCase))
+				if (!string.IsNullOrEmpty(orderEvent.StatusCode))
 				{
 					bool isFarEyePushRequired = false;
-					_commands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, orderData.Id, (long)orderData.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
-
-					if (isFarEyePushRequired)
+					if (orderEvent.StatusCode.Equals("shipment_in_transit", StringComparison.OrdinalIgnoreCase))
 					{
-						FarEyeHelper.PushStatusUpdateToFarEye((long)orderData.Id, ActiveUser);
+						_commands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, orderData.Id, (long)orderData.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+
+						if (isFarEyePushRequired)
+						{
+							FarEyeHelper.PushStatusUpdateToFarEye((long)orderData.Id, ActiveUser);
+						}
+					}
+					else if (orderEvent.StatusCode.Equals("call_to_customer", StringComparison.OrdinalIgnoreCase))
+					{
+						var customerCallActionData = DataAccess.Job.JobGatewayCommands.GetGatewayWithParent(ActiveUser, 0, (long)orderData.Id, "Action", false, "Call Customer");
+						if (customerCallActionData != null)
+						{
+							customerCallActionData.GatewayTypeId = 86;
+							customerCallActionData.GwyGatewayCode = "Call Customer";
+							customerCallActionData.GwyGatewayACD = DateTime.UtcNow.AddHours(customerCallActionData.DeliveryUTCValue);
+							customerCallActionData.GwyGatewayTitle = "Call Customer";
+							customerCallActionData.GwyTitle = "Call Customer";
+							customerCallActionData.GwyCompleted = false;
+							DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, null, customerCallActionData, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), orderData.Id);
+						}
+					}
+					else if (orderEvent.StatusCode.Equals("reschedule", StringComparison.OrdinalIgnoreCase))
+					{
+						var rescheduleActionData = DataAccess.Job.JobGatewayCommands.GetGatewayWithParent(ActiveUser, 0, (long)orderData.Id, "Action", false, "Reschedule-49");
+						if (rescheduleActionData != null)
+						{
+							rescheduleActionData.GatewayTypeId = 86;
+							rescheduleActionData.GwyGatewayCode = "Reschedule-49";
+							rescheduleActionData.GwyGatewayACD = DateTime.UtcNow.AddHours(rescheduleActionData.DeliveryUTCValue);
+							rescheduleActionData.GwyGatewayTitle = "Electrolux Request";
+							rescheduleActionData.GwyTitle = "Electrolux Request";
+							rescheduleActionData.GwyCompleted = true;
+							DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, null, rescheduleActionData, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), orderData.Id);
+						}
 					}
 				}
 
