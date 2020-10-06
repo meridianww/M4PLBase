@@ -839,12 +839,18 @@ namespace M4PL.Business.Job
 						if (rescheduleActionData != null)
 						{
 							rescheduleActionData.GatewayTypeId = 86;
+							rescheduleActionData.isScheduleReschedule = true;
+							rescheduleActionData.GwyDDPNew = orderEvent?.Information?.RescheduleDate?.ToDateTime();
 							rescheduleActionData.GwyGatewayCode = "Reschedule-49";
 							rescheduleActionData.GwyGatewayACD = DateTime.UtcNow.AddHours(rescheduleActionData.DeliveryUTCValue);
 							rescheduleActionData.GwyGatewayTitle = "Electrolux Request";
 							rescheduleActionData.GwyTitle = "Electrolux Request";
 							rescheduleActionData.GwyCompleted = true;
-							DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, null, rescheduleActionData, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), orderData.Id);
+							var gatewayInsertResult = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, null, rescheduleActionData, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), orderData.Id);
+							if (gatewayInsertResult != null && gatewayInsertResult.IsFarEyePushRequired)
+							{
+								FarEyeHelper.PushStatusUpdateToFarEye((long)orderData.Id, ActiveUser);
+							}
 						}
 					}
 				}
