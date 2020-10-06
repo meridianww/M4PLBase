@@ -34,6 +34,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
@@ -60,93 +61,146 @@ namespace M4PL.Web.Areas.Job.Controllers
             _commonCommands = commonCommands;
             _jobAdvanceReportCommands = JobAdvanceReportCommands;
         }
-        public ActionResult Report(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-            {
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition = null;
-            }
+		public ActionResult Report(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+			{
+				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
+				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition = null;
+			}
 
-            route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
-            route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
-            if (!SessionProvider.ActiveUser.IsSysAdmin)
-            {
-                var currentSecurity = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
-                if (currentSecurity != null)
-                {
-                    var subSecurityCostCharge = currentSecurity.UserSubSecurities.FirstOrDefault(t => t.RefTableName == EntitiesAlias.JobCostSheet.ToString());
-                    if (currentSecurity.UserSubSecurities != null && subSecurityCostCharge != null)
-                    {
-                        foreach (var res in _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Cost Charge")).FirstOrDefault().Value)
-                        {
-                            if (res.SysRefName.ToLower() == "cost charge" && subSecurityCostCharge.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess)
-                            {
-                                _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Cost Charge")).FirstOrDefault().Value.Remove(res);
-                                break;
-                            }
-                        }
-                        foreach (var res in _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Price Charge")).FirstOrDefault().Value)
-                        {
-                            if (res.SysRefName.ToLower() == "price charge" && subSecurityCostCharge.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess)
-                            {
-                                _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Price Charge")).FirstOrDefault().Value.Remove(res);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            if (reportView != null && reportView.Id > 0)
-            {
-                ViewData["isFirstLoadProductType"] = true;
-                ViewData["isFirstLoadServiceType"] = true;
-                ViewData["isFirstLoadOrderType"] = true;
-                ViewData["isFirstDestination"] = true;
-                ViewData["isFirstProgram"] = true;
-                ViewData["isFirstLoadOrgin"] = true;
-                ViewData["isFirstBrand"] = true;
-                ViewData["isFirstLoadGatewayStatus"] = true;
-                ViewData["isFirstLoadChannel"] = true;
-                ViewData["isFirstLoadWeightUnitType"] = true;
-                ViewData["isFirstLoadPackagingCode"] = true;
-                ViewData["isFirstLoadCargoTitle"] = true;
-                ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Program");
-                ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Origin");
-                ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Destination");
-                ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Brand");
-                ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "GatewayStatus");
-                ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ServiceMode");
-                ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ProductType");
-                ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "OrderType");
-                ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobStatus");
-                ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobChannel");
-                ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
-                ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
-                ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "PackagingCode");
-                //ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "WeightUnit");
-                //ViewData["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "CargoTitle");
+			route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
+			route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+			var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
+			if (!SessionProvider.ActiveUser.IsSysAdmin)
+			{
+				var currentSecurity = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
+				if (currentSecurity != null)
+				{
+					var subSecurityCostCharge = currentSecurity.UserSubSecurities.FirstOrDefault(t => t.RefTableName == EntitiesAlias.JobCostSheet.ToString());
+					if (currentSecurity.UserSubSecurities != null && subSecurityCostCharge != null)
+					{
+						foreach (var res in _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Cost Charge")).FirstOrDefault().Value)
+						{
+							if (res.SysRefName.ToLower() == "cost charge" && subSecurityCostCharge.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess)
+							{
+								_reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Cost Charge")).FirstOrDefault().Value.Remove(res);
+								break;
+							}
+						}
+						foreach (var res in _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Price Charge")).FirstOrDefault().Value)
+						{
+							if (res.SysRefName.ToLower() == "price charge" && subSecurityCostCharge.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess)
+							{
+								_reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Price Charge")).FirstOrDefault().Value.Remove(res);
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (reportView != null && reportView.Id > 0)
+			{
+				List<Task> tasks = new List<Task>();
+				ViewData["isFirstLoadProductType"] = true;
+				ViewData["isFirstLoadServiceType"] = true;
+				ViewData["isFirstLoadOrderType"] = true;
+				ViewData["isFirstDestination"] = true;
+				ViewData["isFirstProgram"] = true;
+				ViewData["isFirstLoadOrgin"] = true;
+				ViewData["isFirstBrand"] = true;
+				ViewData["isFirstLoadGatewayStatus"] = true;
+				ViewData["isFirstLoadChannel"] = true;
+				ViewData["isFirstLoadWeightUnitType"] = true;
+				ViewData["isFirstLoadPackagingCode"] = true;
+				ViewData["isFirstLoadCargoTitle"] = true;
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Program");
+				}));
 
-                _reportResult.ReportRoute.Action = "AdvanceReportViewer";
-                _reportResult.Record = new JobReportView(reportView);
-                //_reportResult.Record.StartDate = DateTime.Now.AddDays(-1);
-                //_reportResult.Record.EndDate = DateTime.Now;
-                _reportResult.Record.ProgramCode = "ALL";
-                _reportResult.Record.Origin = "ALL";
-                _reportResult.Record.Destination = "ALL";
-                _reportResult.Record.Brand = "ALL";
-                _reportResult.Record.GatewayStatus = "ALL";
-                _reportResult.Record.ServiceMode = "ALL";
-                _reportResult.Record.ProductType = "ALL";
-                _reportResult.Record.PackagingCode = "ALL";
-                _reportResult.Record.JobStatusIdName = "ALL";
-                ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-                return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
-            }
-            return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
-        }
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Origin");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Destination");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Brand");
+					}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ServiceMode");
+					}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "GatewayStatus");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ProductType");
+					}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "OrderType");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobChannel");
+					}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobStatus");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
+					}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "PackagingCode");
+					}));
+
+				if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+				_reportResult.ReportRoute.Action = "AdvanceReportViewer";
+				_reportResult.Record = new JobReportView(reportView);
+				//_reportResult.Record.StartDate = DateTime.Now.AddDays(-1);
+				//_reportResult.Record.EndDate = DateTime.Now;
+				_reportResult.Record.ProgramCode = "ALL";
+				_reportResult.Record.Origin = "ALL";
+				_reportResult.Record.Destination = "ALL";
+				_reportResult.Record.Brand = "ALL";
+				_reportResult.Record.GatewayStatus = "ALL";
+				_reportResult.Record.ServiceMode = "ALL";
+				_reportResult.Record.ProductType = "ALL";
+				_reportResult.Record.PackagingCode = "ALL";
+				_reportResult.Record.JobStatusIdName = "ALL";
+				ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+				return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
+			}
+
+			return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
+		}
+
         #region dropdown
         public PartialViewResult ProgramByCustomer(string model, long id = 0)
         {
