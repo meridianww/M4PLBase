@@ -718,7 +718,7 @@ namespace M4PL.Business.XCBL
 				tasks.Add(Task.Factory.StartNew(() =>
 						{
 							// Update Delivery Date Time Actual
-							UpdateDeliveryDateTimeActual(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList, ref deliveryDateTimeActualQuery);
+							UpdateDeliveryDateTimePlanned(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList, ref deliveryDateTimeActualQuery);
 						}));
 
 				tasks.Add(Task.Factory.StartNew(() =>
@@ -1008,7 +1008,7 @@ namespace M4PL.Business.XCBL
 			}
 		}
 
-		private void UpdateDeliveryDateTimeActual(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList, ref string deliveryDateTimeActualQuery)
+		private void UpdateDeliveryDateTimePlanned(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList, ref string deliveryDateTimeActualQuery)
 		{
 			try
 			{
@@ -1027,7 +1027,7 @@ namespace M4PL.Business.XCBL
 
 							if (jobGateway.GwyCompleted)
 							{
-								if (!existingJobData.JobDeliveryDateTimeActual.Equals(request.EstimatedArrivalDate))
+								if (!existingJobData.JobDeliveryDateTimePlanned.Equals(request.EstimatedArrivalDate))
 								{
 									deliveryDateTimeActualQuery = string.Format("JobDeliveryDateTimePlanned = '{0}'", request.EstimatedArrivalDate);
 								}
@@ -1048,8 +1048,11 @@ namespace M4PL.Business.XCBL
 			{
 				var deliveryDateTimePlannedActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("ScheduledDeliveryDate", StringComparison.OrdinalIgnoreCase));
 				string actionCode = deliveryDateTimePlannedActionCode == null ? string.Empty : deliveryDateTimePlannedActionCode.ActionCode;
-				if ((existingJobData.JobDeliveryDateTimePlanned.HasValue && request.EstimatedArrivalDate.CompareTo(existingJobData.JobDeliveryDateTimePlanned) != 0)
-					|| (!existingJobData.JobDeliveryDateTimePlanned.HasValue && existingJobData.JobDeliveryDateTimeBaseline.HasValue && request.EstimatedArrivalDate.CompareTo(existingJobData.JobDeliveryDateTimeBaseline) != 0))
+				if ((existingJobData.JobDeliveryDateTimePlanned.HasValue && 
+					request.EstimatedArrivalDate.CompareTo(existingJobData.JobDeliveryDateTimePlanned) != 0)
+					|| (!existingJobData.JobDeliveryDateTimePlanned.HasValue && 
+					existingJobData.JobDeliveryDateTimeBaseline.HasValue && 
+					request.EstimatedArrivalDate.CompareTo(existingJobData.JobDeliveryDateTimeBaseline) != 0))
 				{
 					if (!string.IsNullOrEmpty(actionCode))
 					{

@@ -37,7 +37,7 @@ BEGIN
 		EXEC [dbo].[UpdateLineNumberForJobBillableSheet] @JobID
 	END
 
-	IF (ISNULL(@StatusId, 0) = 1)
+	IF (ISNULL(@StatusId, 0) = 3)
 	BEGIN
 		EXEC [dbo].[GetJobParentIdAfterNavOrderCreation] @JobId
 			,@customerId
@@ -46,7 +46,9 @@ BEGIN
 		IF (ISNULL(@ParentOrder, '') <>'')
 		BEGIN
 			UPDATE dbo.JobDL000Master
-			SET JobBOLMaster = @ParentOrder
+			SET JobBOLMaster = CASE WHEN ISNULL(@ParentOrder,'') <> '' 
+			                   THEN @ParentOrder ELSE JobBOLMaster 
+							   END
 			WHERE Id = @JobId
 		END
 	END
