@@ -1351,7 +1351,7 @@ namespace M4PL.Web
                     closeClickEvent = string.Format(JsConstants.MapVendorCloseEvent, route.OwnerCbPanel);
                 if ((route.Entity == EntitiesAlias.Program) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
                     closeClickEvent = string.Format(JsConstants.ProgramCopyCloseEvent, route.OwnerCbPanel);
-                if (route.Entity == EntitiesAlias.Job && route.Action == "ImportOrder")
+                if ((route.Entity == EntitiesAlias.Job && route.Action == "ImportOrder") || route.Entity == EntitiesAlias.NavRemittance)
                     closeClickEvent = string.Format(JsConstants.RecordPopupCancelClick);
 
                 allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16, 2, secondNav: true, itemClick: (!string.IsNullOrWhiteSpace(closeClickEvent)) ? closeClickEvent : JsConstants.RecordPopupCancelClick));
@@ -1533,6 +1533,10 @@ namespace M4PL.Web
             if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocDocumentDataView4DocumentCbPanel")
             {
                 allNavMenus[0].Text = "Document";
+            }
+            if (route.Entity == EntitiesAlias.NavRemittance)
+            {
+                allNavMenus[0].Text = "Download Invoice";
             }
 
             if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")
@@ -2022,6 +2026,8 @@ namespace M4PL.Web
                     || route.Entity == EntitiesAlias.JobAdvanceReport
                     || route.Entity == EntitiesAlias.Job) && route.Action == MvcConstants.ActionForm && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
+                if (mnu.MnuTitle == "Retrieve Invoices")
+                    mnu.StatusId = 1;
             });
         }
 
