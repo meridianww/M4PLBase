@@ -63,7 +63,7 @@ namespace M4PL.Business.Finance.VendorLedger
 									M4PL_JobId = x.Vendor_Invoice_No,
 									Document_Date = x.Document_Date,
 									Vendor_Order_No = x.Vendor_Order_No,
-									Amount = processingData.Where(z => z.Document_No == x.No).FirstOrDefault().Amount.ToDecimal()
+									Amount = processingData.Where(z => z.Document_No == x.No).FirstOrDefault().Credit_Amount.ToDecimal()
 								}));
 							}
 						}));
