@@ -301,14 +301,14 @@
                                                if (Model.Record.CurrentAction == "Schedule")
                                                {
                                                    Model.Record.GwyDDPNew = !(bool)Session["isEdit"] ? Model.Record.GwyDDPCurrent : Model.Record.GwyDDPNew;
-                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Schedule Date";
-                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Schedule Date";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Schedule Delivery Date";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Schedule Delivery Date";
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                                }
                                                else
                                                {
-                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Reschedule Date";
-                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Reschedule Date";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Reschedule Delivery Date";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Reschedule Delivery Date";
                                                    if (!Model.Record.IsGatewayCalled)
                                                    {
                                                        ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
