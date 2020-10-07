@@ -363,10 +363,22 @@ namespace M4PL.Web.Areas.Job.Controllers
                                     ch.Children.Where(obj => obj.MnuTitle == "Save").FirstOrDefault().StatusId = 1;
                                 }
                                 else
+                                {
                                     ch.StatusId = 3;
+                                }
                             }
                             else
-                                ch.StatusId = 3;
+                            {
+                                ch.StatusId = 3;                                
+                                if (ch.MnuTitle == "Remittance")
+                                {
+                                    ch.StatusId = 1;
+                                }
+                                //if (ch.Children.Any(obj => obj.MnuTitle == "Retrieve Invoices"))
+                                //{
+                                //    ch.Children.FirstOrDefault(obj => obj.MnuTitle == "Retrieve Invoices").StatusId = 1;
+                                //}
+                            }
                         }
                     }
                 });

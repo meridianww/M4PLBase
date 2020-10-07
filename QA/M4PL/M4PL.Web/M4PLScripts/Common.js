@@ -1026,7 +1026,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1319,7 +1319,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -3063,5 +3063,19 @@ M4PLCommon.EmailCCAddressSubscriber = (function () {
         OnListBoxSelectionChanged: _onListBoxSelectionChanged,
         SynchronizeListBoxValues: _synchronizeListBoxValues,
         CloseUp: _closeUp
+    }
+})();
+
+M4PLCommon.NavRemittance = (function () {
+
+    var _downloadInvoice = function () {
+        var checkNo = ASPxClientControl.GetControlCollection().GetByName("ChequeNo");
+        if (checkNo != null && ChequeNo != "" && ChequeNo != undefined) {
+            window.open(window.location.origin + "/Finance/NavRemittance/DownloadInvoice" + "?checkNo=" + checkNo.GetValue());
+        }
+    }
+
+    return {
+        DownloadInvoice: _downloadInvoice
     }
 })();
