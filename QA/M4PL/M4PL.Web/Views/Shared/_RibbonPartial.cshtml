@@ -39,6 +39,12 @@
 
                     foreach (var subChild in child.Children)
                     {
+                        if (subChild != null && subChild.MnuTitle == "Retrieve Invoices" && subChild.Route != null)
+                        {
+                            subChild.Route.Entity = M4PL.Entities.EntitiesAlias.NavRemittance;
+                            subChild.Route.Area = "Finance";
+                            subChild.Route.IsPopup = true;
+                        }
                         if (subChild.MnuTitle == WebApplicationConstants.Themes)
                         {
 

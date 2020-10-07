@@ -42,30 +42,30 @@ namespace M4PL.Web.Areas.Finance.Controllers
         }
         public override ActionResult FormView(string strRoute)
         {
-            //strRoute = string.IsNullOrEmpty(strRoute) && SessionProvider.NavRemittanceData != null ?
-            //    ((IList<NavRemittanceView>)SessionProvider.NavRemittanceData).FirstOrDefault().StrRoute : strRoute;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.Action = MvcConstants.ActionForm;
             route.IsPopup = true;
-            //if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-            //    SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-            //_formResult.SessionProvider = SessionProvider;
-            //var recordData = (IList<NavRemittanceView>)SessionProvider.NavRemittanceData;
-            //if (recordData == null || (recordData != null && recordData.Count == 0))
-            //{
-            //    IList<NavRemittanceView> NavRemittanceList = _navRemittanceCommands.GetAllNavRemittance();
-            //    if (NavRemittanceList != null && NavRemittanceList.Count > 0)
-            //    {
-            //        foreach (var navRemittanceView in NavRemittanceList)
-            //        {
-            //            navRemittanceView.StrRoute = strRoute;
-            //        }
-            //    }
-            //    SessionProvider.NavRemittanceData = NavRemittanceList;
-            //    recordData = (IList<NavRemittanceView>)SessionProvider.NavRemittanceData;
-            //}
-
+            _formResult.CallBackRoute = route;
+            _formResult.SessionProvider = SessionProvider;
+            _formResult.ColumnSettings = _commonCommands.GetColumnSettings(Entities.EntitiesAlias.NavRemittance, false);
+            _formResult.Permission = Entities.Permission.All;
             return PartialView(_formResult);
+        }
+
+        public ActionResult DownloadInvoice(string checkNo)
+        {
+            if (string.IsNullOrEmpty(checkNo)) return null;
+            try
+            {
+                var result = _navRemittanceCommands.GetPostedInvoicesByCheckNumber(checkNo);
+                if (result != null && !string.IsNullOrEmpty(result.DocumentName) && result.DocumentContent != null)
+                    return File(result.DocumentContent, result.ContentType, result.DocumentName);
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
         }
     }
 }
