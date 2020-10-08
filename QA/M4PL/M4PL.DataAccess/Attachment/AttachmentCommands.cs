@@ -229,7 +229,7 @@ namespace M4PL.DataAccess.Attachment
 			List<JobPriceReport> jobPriceReportList = GetJobPriceReportData(activeUser, customerId, jobId);
 			DataTable tblJobPriceReport = new DataTable();
 			tblJobPriceReport.Columns.Add("Job ID");
-			tblJobPriceReport.Columns.Add("Delivery Date Planned");
+			tblJobPriceReport.Columns.Add("Scheduled Delivery Date");
 			tblJobPriceReport.Columns.Add("Arrival Date Planned");
 			tblJobPriceReport.Columns.Add("Job Gateway Scheduled");
 			tblJobPriceReport.Columns.Add("Site Code");
@@ -266,7 +266,7 @@ namespace M4PL.DataAccess.Attachment
 				{
 					var row = tblJobPriceReport.NewRow();
 					row["Job ID"] = jobPriceReport.JobId;
-					row["Delivery Date Planned"] = jobPriceReport.DeliveryDateTimePlanned;
+					row["Scheduled Delivery Date"] = jobPriceReport.DeliveryDateTimePlanned;
 					row["Arrival Date Planned"] = jobPriceReport.OriginDateTimePlanned;
 					row["Job Gateway Scheduled"] = jobPriceReport.GatewayStatus;
 					row["Site Code"] = jobPriceReport.VendorLocation;
@@ -309,7 +309,7 @@ namespace M4PL.DataAccess.Attachment
 			List<JobCostReport> jobCostReportList = GetJobCostReportData(activeUser, customerId, jobId);
 			DataTable tblJobCostReport = new DataTable();
 			tblJobCostReport.Columns.Add("Job ID");
-			tblJobCostReport.Columns.Add("Delivery Date Planned");
+			tblJobCostReport.Columns.Add("Scheduled Delivery Date");
 			tblJobCostReport.Columns.Add("Arrival Date Planned");
 			tblJobCostReport.Columns.Add("Job Gateway Scheduled");
 			tblJobCostReport.Columns.Add("Site Code");
@@ -346,7 +346,7 @@ namespace M4PL.DataAccess.Attachment
 				{
 					var row = tblJobCostReport.NewRow();
 					row["Job ID"] = jobCostReport.JobId;
-					row["Delivery Date Planned"] = jobCostReport.DeliveryDateTimePlanned;
+					row["Scheduled Delivery Date"] = jobCostReport.DeliveryDateTimePlanned;
 					row["Arrival Date Planned"] = jobCostReport.OriginDateTimePlanned;
 					row["Job Gateway Scheduled"] = jobCostReport.GatewayStatus;
 					row["Site Code"] = jobCostReport.VendorLocation;

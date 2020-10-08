@@ -297,7 +297,7 @@ namespace M4PL.Business.Finance.CostCode
 			Entities.Job.Job jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(activeUser, jobId, 0);
 			DataTable tblJobCostCodeReport = new DataTable();
 			tblJobCostCodeReport.Columns.Add("Job ID");
-			tblJobCostCodeReport.Columns.Add("Delivery Date Planned");
+			tblJobCostCodeReport.Columns.Add("Scheduled Delivery Date");
 			tblJobCostCodeReport.Columns.Add("Arrival Date Planned");
 			tblJobCostCodeReport.Columns.Add("Job Gateway Scheduled");
 			tblJobCostCodeReport.Columns.Add("Site Code");
@@ -334,7 +334,7 @@ namespace M4PL.Business.Finance.CostCode
 				{
 					var row = tblJobCostCodeReport.NewRow();
 					row["Job ID"] = jobDetails.Id;
-					row["Delivery Date Planned"] = jobDetails.JobDeliveryDateTimePlanned;
+					row["Scheduled Delivery Date"] = jobDetails.JobDeliveryDateTimePlanned;
 					row["Arrival Date Planned"] = jobDetails.JobOriginDateTimePlanned;
 					row["Job Gateway Scheduled"] = jobDetails.JobGatewayStatus;
 					row["Site Code"] = jobDetails.JobSiteCode;
