@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace M4PL.DataAccess.Job
 {
@@ -243,8 +244,20 @@ namespace M4PL.DataAccess.Job
         public static bool InsertDriverScrubReportRawData(JobDriverScrubReportData jobDriverScrubReportData, ActiveUser activeUser)
         {
             bool result = true;
+
             try
             {
+				List<string> controlIdList = new List<string>();
+				if (jobDriverScrubReportData.AWCDriverScrubReportRawData?.Count > 0)
+				{
+					jobDriverScrubReportData.AWCDriverScrubReportRawData.ForEach(x => controlIdList.Add(x.ActualControlId));
+				}
+				else if(jobDriverScrubReportData.CommonDriverScrubReportRawData?.Count > 0)
+				{
+					jobDriverScrubReportData.CommonDriverScrubReportRawData.ForEach(x => controlIdList.Add(x.ActualControlId));
+				}
+
+				var jobData = GetJobIdListByControlId(controlIdList);
                 var parameters = new List<Parameter>
                {
                     new Parameter("@CustomerId", jobDriverScrubReportData.CustomerId),
@@ -253,8 +266,8 @@ namespace M4PL.DataAccess.Job
                     new Parameter("@EndDate", jobDriverScrubReportData.EndDate),
                     new Parameter("@EnteredBy", activeUser.UserName),
                     new Parameter("@EnteredDate", TimeUtility.GetPacificDateTime()),
-                    new Parameter("@uttAWCDriverScrubReport", GetAWCDriverScrubReportTable(jobDriverScrubReportData.AWCDriverScrubReportRawData)),
-                    new Parameter("@uttCommonDriverScrubReport", GetCommonDriverScrubReportTable(jobDriverScrubReportData.CommonDriverScrubReportRawData))
+                    new Parameter("@uttAWCDriverScrubReport", GetAWCDriverScrubReportTable(jobDriverScrubReportData.AWCDriverScrubReportRawData, jobData)),
+                    new Parameter("@uttCommonDriverScrubReport", GetCommonDriverScrubReportTable(jobDriverScrubReportData.CommonDriverScrubReportRawData, jobData))
                };
 
                 SqlSerializer.Default.Execute(StoredProceduresConstant.InsertDriverScrubReportRawData, parameters.ToArray(), true);
@@ -268,7 +281,42 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
-        public static bool InsertProjectedCapacityRawData(ProjectedCapacityData projectedCapacityView, ActiveUser activeUser)
+		public static List<JobControlRelation> GetJobIdListByControlId(List<string> controlId)
+		{
+			List<JobControlRelation> result = null;
+			try
+			{
+				result = SqlSerializer.Default.DeserializeMultiRecords<JobControlRelation>(StoredProceduresConstant.GetJobIdByActualControlId, new Parameter("@UttStringIdList", GetDataTableForControlId(controlId)), false, true);
+			}
+			catch(Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error occured while inserting the Raw data for Driver Scrub Report", "GetJobIdListByControlId", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
+
+		private static DataTable GetDataTableForControlId(List<string> controlId)
+		{
+			using (DataTable tblControlId = new DataTable("UttStringIdList"))
+			{
+				tblControlId.Columns.Add("Id", typeof(string));
+				if(controlId?.Count > 0)
+				{
+					foreach (var item in controlId)
+					{
+						var row = tblControlId.NewRow();
+						row["Id"] = item;
+						tblControlId.Rows.Add(row);
+						tblControlId.AcceptChanges();
+					}
+				}
+
+				return tblControlId;
+			}
+		}
+
+		public static bool InsertProjectedCapacityRawData(ProjectedCapacityData projectedCapacityView, ActiveUser activeUser)
         {
             bool result = true;
             try
@@ -292,7 +340,6 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
-
         private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport, JobAdvanceReportRequest jobAdvanceReportRequest)
         {
             var parameters = new List<Parameter>
@@ -353,7 +400,7 @@ namespace M4PL.DataAccess.Job
             return parameters;
         }
 
-        public static DataTable GetAWCDriverScrubReportTable(List<AWCDriverScrubReportRawData> driverScrubReportRawDataList)
+        public static DataTable GetAWCDriverScrubReportTable(List<AWCDriverScrubReportRawData> driverScrubReportRawDataList, List<JobControlRelation> jobResult)
         {
             using (var uttAWCDriverScrubReport = new DataTable("uttAWCDriverScrubReport"))
             {
@@ -380,43 +427,48 @@ namespace M4PL.DataAccess.Job
                 uttAWCDriverScrubReport.Columns.Add("DaysToAccept");
                 uttAWCDriverScrubReport.Columns.Add("QMSTotalUnit");
                 uttAWCDriverScrubReport.Columns.Add("QMSTotalPrice");
-                if (driverScrubReportRawDataList != null && driverScrubReportRawDataList.Count > 0)
+				uttAWCDriverScrubReport.Columns.Add("ShipDate");
+				uttAWCDriverScrubReport.Columns.Add("JobId");
+				if (driverScrubReportRawDataList != null && driverScrubReportRawDataList.Count > 0)
                 {
-                    foreach (var currentReportData in driverScrubReportRawDataList)
-                    {
-                        var row = uttAWCDriverScrubReport.NewRow();
-                        row["QMSShippedOn"] = currentReportData.QMSShippedOn;
-                        row["QMSPSDisposition"] = currentReportData.QMSPSDisposition;
-                        row["QMSStatusDescription"] = currentReportData.QMSStatusDescription;
-                        row["FouthParty"] = currentReportData.FouthParty;
-                        row["ThirdParty"] = currentReportData.ThirdParty;
-                        row["ActualControlId"] = currentReportData.ActualControlId;
-                        row["QMSControlId"] = currentReportData.QMSControlId;
-                        row["QRCGrouping"] = currentReportData.QRCGrouping;
-                        row["QRCDescription"] = currentReportData.QRCDescription;
-                        row["ProductCategory"] = currentReportData.ProductCategory;
-                        row["ProductSubCategory"] = currentReportData.ProductSubCategory;
-                        row["ProductSubCategory2"] = currentReportData.ProductSubCategory2;
-                        row["ModelName"] = currentReportData.ModelName;
-                        row["CustomerBusinessType"] = currentReportData.CustomerBusinessType;
-                        row["ChannelCD"] = currentReportData.ChannelCD;
-                        row["NationalAccountName"] = currentReportData.NationalAccountName;
-                        row["CustomerName"] = currentReportData.CustomerName;
-                        row["ShipFromLocation"] = currentReportData.ShipFromLocation;
-                        row["QMSRemark"] = currentReportData.QMSRemark;
-                        row["DaysToAccept"] = string.IsNullOrEmpty(currentReportData.DaysToAccept) ? 0 : currentReportData.DaysToAccept.ToInt();
-                        row["QMSTotalUnit"] = string.IsNullOrEmpty(currentReportData.QMSTotalUnit) ? 0 : currentReportData.QMSTotalUnit.ToInt();
-                        row["QMSTotalPrice"] = string.IsNullOrEmpty(currentReportData.QMSTotalPrice) ? decimal.Zero : currentReportData.QMSTotalPrice.Replace("$", string.Empty).ToDecimal();
-                        uttAWCDriverScrubReport.Rows.Add(row);
-                        uttAWCDriverScrubReport.AcceptChanges();
-                    }
+					foreach (var currentReportData in driverScrubReportRawDataList)
+					{
+						var row = uttAWCDriverScrubReport.NewRow();
+						row["QMSShippedOn"] = currentReportData.QMSShippedOn;
+						row["QMSPSDisposition"] = currentReportData.QMSPSDisposition;
+						row["QMSStatusDescription"] = currentReportData.QMSStatusDescription;
+						row["FouthParty"] = currentReportData.FouthParty;
+						row["ThirdParty"] = currentReportData.ThirdParty;
+						row["ActualControlId"] = currentReportData.ActualControlId;
+						row["QMSControlId"] = currentReportData.QMSControlId;
+						row["QRCGrouping"] = currentReportData.QRCGrouping;
+						row["QRCDescription"] = currentReportData.QRCDescription;
+						row["ProductCategory"] = currentReportData.ProductCategory;
+						row["ProductSubCategory"] = currentReportData.ProductSubCategory;
+						row["ProductSubCategory2"] = currentReportData.ProductSubCategory2;
+						row["ModelName"] = currentReportData.ModelName;
+						row["CustomerBusinessType"] = currentReportData.CustomerBusinessType;
+						row["ChannelCD"] = currentReportData.ChannelCD;
+						row["NationalAccountName"] = currentReportData.NationalAccountName;
+						row["CustomerName"] = currentReportData.CustomerName;
+						row["ShipFromLocation"] = currentReportData.ShipFromLocation;
+						row["QMSRemark"] = currentReportData.QMSRemark;
+						row["DaysToAccept"] = string.IsNullOrEmpty(currentReportData.DaysToAccept) ? 0 : currentReportData.DaysToAccept.ToInt();
+						row["QMSTotalUnit"] = string.IsNullOrEmpty(currentReportData.QMSTotalUnit) ? 0 : currentReportData.QMSTotalUnit.ToInt();
+						row["QMSTotalPrice"] = string.IsNullOrEmpty(currentReportData.QMSTotalPrice) ? decimal.Zero : currentReportData.QMSTotalPrice.Replace("$", string.Empty).ToDecimal();
+						row["ShipDate"] = currentReportData.QMSShippedOn.ToDate();
+						row["JobId"] = jobResult != null && jobResult.Where(x => x.ActualControlId == currentReportData.ActualControlId).Any() ? jobResult.Where(x => x.ActualControlId == currentReportData.ActualControlId).First().JobId : 0;
+
+						uttAWCDriverScrubReport.Rows.Add(row);
+						uttAWCDriverScrubReport.AcceptChanges();
+					}
                 }
 
                 return uttAWCDriverScrubReport;
             }
         }
 
-        public static DataTable GetCommonDriverScrubReportTable(List<CommonDriverScrubReportRawData> driverScrubReportRawDataList)
+        public static DataTable GetCommonDriverScrubReportTable(List<CommonDriverScrubReportRawData> driverScrubReportRawDataList, List<JobControlRelation> jobResult)
         {
             using (var uttCommonDriverScrubReport = new DataTable("uttCommonDriverScrubReport"))
             {
@@ -443,7 +495,9 @@ namespace M4PL.DataAccess.Job
                 uttCommonDriverScrubReport.Columns.Add("DaysToAccept");
                 uttCommonDriverScrubReport.Columns.Add("QMSTotalUnit");
                 uttCommonDriverScrubReport.Columns.Add("QMSTotalPrice");
-                if (driverScrubReportRawDataList != null && driverScrubReportRawDataList.Count > 0)
+				uttCommonDriverScrubReport.Columns.Add("ShipDate");
+				uttCommonDriverScrubReport.Columns.Add("JobId");
+				if (driverScrubReportRawDataList != null && driverScrubReportRawDataList.Count > 0)
                 {
                     foreach (var currentReportData in driverScrubReportRawDataList)
                     {
@@ -470,7 +524,9 @@ namespace M4PL.DataAccess.Job
                         row["DaysToAccept"] = string.IsNullOrEmpty(currentReportData.DaysToAccept) ? 0 : currentReportData.DaysToAccept.ToInt();
                         row["QMSTotalUnit"] = string.IsNullOrEmpty(currentReportData.QMSTotalUnit) ? 0 : currentReportData.QMSTotalUnit.ToInt();
                         row["QMSTotalPrice"] = string.IsNullOrEmpty(currentReportData.QMSTotalPrice) ? decimal.Zero : currentReportData.QMSTotalPrice.Replace("$", string.Empty).ToDecimal();
-                        uttCommonDriverScrubReport.Rows.Add(row);
+						row["ShipDate"] = currentReportData.QMSShippedOn.ToDate();
+						row["JobId"] = jobResult != null && jobResult.Where(x => x.ActualControlId == currentReportData.ActualControlId).Any() ? jobResult.Where(x => x.ActualControlId == currentReportData.ActualControlId).First().JobId : 0;
+						uttCommonDriverScrubReport.Rows.Add(row);
                         uttCommonDriverScrubReport.AcceptChanges();
                     }
                 }

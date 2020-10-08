@@ -491,6 +491,7 @@ namespace M4PL.DataAccess
 		public const string GetJobAdvanceReport = "dbo.GetJobAdvanceReport";
 		public const string InsertDriverScrubReportRawData = "dbo.InsertDriverScrubReportRawData";
 		public const string InsertProjectedCapacityRawData = "dbo.InsertProjectedCapacityRawData";
+		public const string GetJobIdByActualControlId = "dbo.GetJobIdByActualControlId";
 
 		/* Job Card */
 		public const string GetJobCardView = "dbo.GetJobCardView";
