@@ -46,7 +46,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 		public static NavJobPurchaseOrder GetPurchaseOrderFromNavByJobId(string navAPIUrl, string navAPIUserName, string navAPIPassword, long jobId)
 		{
 			NavJobPurchaseOrder navJobPurchaseOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder?$filter=M4PL_Job_ID eq '{2}'", navAPIUrl, "Meridian", jobId);
+			string serviceCall = string.Format("{0}/PurchaseOrder?$filter=M4PL_Job_ID eq '{1}'", navAPIUrl, jobId);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -80,7 +80,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 		public static NavPurchaseOrder GetPurchaseOrderForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string poNumber)
 		{
 			NavPurchaseOrder navPurchaseOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumber);
+			string serviceCall = string.Format("{0}/PurchaseOrder('Order', '{1}')", navAPIUrl, poNumber);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -119,7 +119,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			string dimensionCode = string.Empty;
 			string divisionCode = string.Empty;
 			Newtonsoft.Json.Linq.JObject jsonObject = null;
-			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
+			string serviceCall = string.Format("{0}/PurchaseOrder", navAPIUrl);
 			try
 			{
 				NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
@@ -205,7 +205,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			NavPurchaseOrder navPurchaseOrderResponse = null;
 			string proFlag = null;
 			Newtonsoft.Json.Linq.JObject jsonObject = null;
-			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumer);
+			string serviceCall = string.Format("{0}/PurchaseOrder('Order', '{1}')", navAPIUrl, poNumer);
 			try
 			{
 				NavPurchaseOrder existingSalesOrderData = GetPurchaseOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, poNumer);
@@ -286,7 +286,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 
 		public static bool DeletePurchaseOrderForNAV(string poNumer, long jobId, bool isElectronicInvoice, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordDeleted)
 		{
-			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumer);
+			string serviceCall = string.Format("{0}/PurchaseOrder('Order', '{1}')", navAPIUrl, poNumer);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -318,7 +318,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 		public static NavPurchaseOrderItem GetPurchaseOrderItemForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string poNumber, int lineNo)
 		{
 			NavPurchaseOrderItem navPurchaseOrderItemResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PurchaseLine('Order', '{2}', {3})", navAPIUrl, "Meridian", poNumber, lineNo);
+			string serviceCall = string.Format("{0}/PurchaseLine('Order', '{1}', {2})", navAPIUrl, poNumber, lineNo);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -352,7 +352,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 		private static NavPurchaseOrderItem GeneratePurchaseOrderItemForNAV(NavPurchaseOrderItemRequest navPurchaseOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, ActiveUser activeUser, List<long> jobIdList, out bool isRecordUpdated)
 		{
 			NavPurchaseOrderItem navPurchaseOrderItemResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PurchaseLine", navAPIUrl, "Meridian");
+			string serviceCall = string.Format("{0}/PurchaseLine", navAPIUrl);
 			string dataToRemove = string.Format("{0}:{1},", "\"M4PLItemId\"", navPurchaseOrderItemRequest.M4PLItemId);
 			string navPurchaseOrderItemJson = string.Empty;
 			try
@@ -404,7 +404,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			NavPurchaseOrderItem navPurchaseOrderItemResponse = null;
 			string navPurchaseOrderItemJson = string.Empty;
 			string dataToRemove = string.Format("{0}:{1},", "\"M4PLItemId\"", navPurchaseOrderItemRequest.M4PLItemId);
-			string serviceCall = string.Format("{0}('{1}')/PurchaseLine('Order', '{2}', {3})", navAPIUrl, "Meridian", navPurchaseOrderItemRequest.Document_No, navPurchaseOrderItemRequest.Line_No);
+			string serviceCall = string.Format("{0}/PurchaseLine('Order', '{1}', {2})", navAPIUrl, navPurchaseOrderItemRequest.Document_No, navPurchaseOrderItemRequest.Line_No);
 			try
 			{
 				NavPurchaseOrderItem existingNavPurchaseOrderItem = GetPurchaseOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, navPurchaseOrderItemRequest.Document_No, navPurchaseOrderItemRequest.Line_No);
@@ -453,7 +453,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 
 		public static bool DeletePurchaseOrderItemForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string poNumber, int lineNo, out bool isRecordDeleted)
 		{
-			string serviceCall = string.Format("{0}('{1}')/PurchaseLine('Order', '{2}', {3})", navAPIUrl, "Meridian", poNumber, lineNo);
+			string serviceCall = string.Format("{0}/PurchaseLine('Order', '{1}', {2})", navAPIUrl, poNumber, lineNo);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);

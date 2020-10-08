@@ -156,7 +156,7 @@ namespace M4PL.Business.Finance.Vendor
 		private IList<NavVendorData> GetNavVendorData(string navVendorUrl, string navAPIUserName, string navAPIPassword)
 		{
 			NavVendorResponse naveVendorResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/VendorList", navVendorUrl, "Meridian");
+			string serviceCall = string.Format("{0}/VendorList", navVendorUrl);
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 			request.Credentials = myCredentials;

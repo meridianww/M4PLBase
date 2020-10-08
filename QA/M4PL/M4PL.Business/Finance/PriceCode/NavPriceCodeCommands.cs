@@ -168,7 +168,7 @@ namespace M4PL.Business.Finance.PriceCode
 			NavPriceCodeResponse navPriceCodeResponse = null;
 			try
 			{
-				string serviceCall = string.Format("{0}('{1}')/SalesPrices", navAPIUrl, "Meridian");
+				string serviceCall = string.Format("{0}/SalesPrices", navAPIUrl);
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
@@ -293,7 +293,7 @@ namespace M4PL.Business.Finance.PriceCode
 			Entities.Job.Job jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(activeUser, jobId, 0);
 			DataTable tblJobPriceCodeReport = new DataTable();
 			tblJobPriceCodeReport.Columns.Add("Job ID");
-			tblJobPriceCodeReport.Columns.Add("Delivery Date Planned");
+			tblJobPriceCodeReport.Columns.Add("Scheduled Delivery Date");
 			tblJobPriceCodeReport.Columns.Add("Arrival Date Planned");
 			tblJobPriceCodeReport.Columns.Add("Job Gateway Scheduled");
 			tblJobPriceCodeReport.Columns.Add("Site Code");
@@ -330,7 +330,7 @@ namespace M4PL.Business.Finance.PriceCode
 				{
 					var row = tblJobPriceCodeReport.NewRow();
 					row["Job ID"] = jobDetails.Id;
-					row["Delivery Date Planned"] = jobDetails.JobDeliveryDateTimePlanned;
+					row["Scheduled Delivery Date"] = jobDetails.JobDeliveryDateTimePlanned;
 					row["Arrival Date Planned"] = jobDetails.JobOriginDateTimePlanned;
 					row["Job Gateway Scheduled"] = jobDetails.JobGatewayStatus;
 					row["Site Code"] = jobDetails.JobSiteCode;

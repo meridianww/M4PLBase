@@ -65,6 +65,8 @@ BEGIN
 			,[DaysToAccept]
 			,[QMSTotalUnit]
 			,[QMSTotalPrice]
+			,[ShipDate]
+			,[JobId]
 			,[EnteredBy]
 			,[EnteredDate]
 			)
@@ -91,6 +93,8 @@ BEGIN
 			,[DaysToAccept]
 			,[QMSTotalUnit]
 			,[QMSTotalPrice]
+			,[ShipDate]
+			,[JobId]
 			,@EnteredBy
 			,@EnteredDate
 		FROM @uttCommonDriverScrubReport

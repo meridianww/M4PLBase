@@ -48,7 +48,33 @@ DECLARE @sqlCommand NVARCHAR(MAX)
 		,@JobStatusId INT = 0;
 
 IF OBJECT_ID('tempdb..#TempDriverScrub') IS NOT NULL DROP TABLE #TempDriverScrub
-Select AD.Id,CASE 
+Select AD.Id 
+		,AD.JobId
+		,'N' Scanned
+		,AD.ModelName
+		,AD.QRCDescription
+		,AD.QMSRemark
+		,AD.ThirdParty
+		,AD.ActualControlId
+		,AD.QMSTotalUnit
+		,AD.QMSTotalPrice
+		,AD.QMSShippedOn
+		,AD.ProductCategory
+		,AD.ProductSubCategory
+		,AD.CustomerName
+		,AD.QRCGrouping INTO #TempDriverScrub
+FROM dbo.AWCDriverScrubReport AD
+INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
+Where DM.CustomerId = @CustomerId AND CAST(AD.ShipDate AS DATE) >= CAST(@StartDate AS DATE) AND CAST(AD.ShipDate AS DATE) <= CAST(@EndDate AS DATE)
+
+ALTER TABLE #TempDriverScrub ADD DriverName Varchar(500)
+UPDATE tmp
+SET Scanned = CASE WHEN ISNULL(Cargo.CgoDateLastScan, '') = '' THEN Scanned ELSE 'Y' END
+From #TempDriverScrub tmp
+INNER JOIN dbo.JOBDL010Cargo Cargo ON Cargo.JobId = tmp.JobId AND tmp.ModelName like '%' + Cargo.CgoPartNumCode + '%' AND Cargo.StatusId=1
+
+UPDATE tmp
+SET DriverName = CASE 
 		WHEN ISNULL(DriverContact.ConFirstName, '') <> ''
 			AND ISNULL(DriverContact.ConLastName, '') <> ''
 			THEN CONCAT (
@@ -60,45 +86,29 @@ Select AD.Id,CASE
 			AND ISNULL(DriverContact.ConLastName, '') = ''
 			THEN DriverContact.ConFirstName
 		ELSE ''
-		END DriverName
-		,Job.Id JobId
-		,'N' Scanned
-		,AD.ModelName INTO #TempDriverScrub
-FROM dbo.AWCDriverScrubReport AD
-INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
-INNER JOIN dbo.JobDL000Master Job ON dbo.udf_GetNumeric(Job.JobCustomerSalesOrder) = AD.ActualControlId
-LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
-LEFT JOIN dbo.JOBDL010Cargo Cargo ON Cargo.JobId = Job.Id AND Cargo.CgoPartNumCode = AD.ModelName AND Cargo.StatusId=1
-Where DM.CustomerId = @CustomerId AND CAST(DM.StartDate AS DATE) >= CAST(@StartDate AS DATE) AND CAST(DM.EndDate AS DATE) <= CAST(@EndDate AS DATE)
-
-UPDATE tmp
-SET Scanned = CASE WHEN ISNULL(Cargo.CgoDateLastScan, '') = '' THEN Scanned ELSE 'Y' END
+		END 
 From #TempDriverScrub tmp
-INNER JOIN dbo.JOBDL010Cargo Cargo ON Cargo.JobId = tmp.JobId AND tmp.ModelName like '%' + Cargo.CgoPartNumCode + '%' AND Cargo.StatusId=1
+INNER JOIN dbo.JobDL000Master Job ON Job.Id = tmp.JobId
+INNER JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
 
-SET @TCountQuery = 'SELECT @TotalCount = COUNT(AD.Id) FROM dbo.AWCDriverScrubReport AD
-INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
-LEFT JOIN #TempDriverScrub Tmp  ON Tmp.Id = AD.Id
-Where DM.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND CAST(DM.StartDate AS DATE) >= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) <= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE)'
+SET @TCountQuery = 'SELECT @TotalCount = COUNT(Id) FROM #TempDriverScrub'
 
 EXEC sp_executesql @TCountQuery
-		,N'@StartDate DateTime2(7),@EndDate DateTime2(7),@TotalCount INT OUTPUT'
-		,@StartDate
-		,@EndDate
+		,N'@TotalCount INT OUTPUT'
 		,@TotalCount OUTPUT;
 
 
-			SET @sqlCommand = 'SELECT AD.QRCDescription LevelGrouped
-	,AD.QMSRemark Remarks
-	,AD.ThirdParty OriginalThirdPartyCarrier
-	,AD.ActualControlId OriginalOrderNumber
-	,AD.ModelName Description
-	,AD.QMSTotalUnit QtyShipped
-	,AD.QMSTotalPrice
-	,CASE WHEN AD.ProductCategory IN (''Cabinet'',''Door'',''Drawer Front'')  THEN ''Cab'' ELSE ''Part'' END CabOrPart
-	,Tmp.DriverName
+			SET @sqlCommand = 'SELECT QRCDescription LevelGrouped
+	,QMSRemark Remarks
+	,ThirdParty OriginalThirdPartyCarrier
+	,ActualControlId OriginalOrderNumber
+	,ModelName Description
+	,QMSTotalUnit QtyShipped
+	,QMSTotalPrice
+	,CASE WHEN ProductCategory IN (''Cabinet'',''Door'',''Drawer Front'')  THEN ''Cab'' ELSE ''Part'' END CabOrPart
+	,DriverName
 	,'''' InitialedPackingSlip
-	,Tmp.Scanned
+	,Scanned
 	,(
 		SELECT dbo.GetOnlyAlpabets(Item)
 		FROM (
@@ -122,15 +132,13 @@ EXEC sp_executesql @TCountQuery
 			) AS YearTable
 		WHERE rownumber = 1
 		) [Year]
-	,AD.ProductSubCategory
-	,AD.CustomerName Customer
+	,ProductSubCategory
+	,CustomerName Customer
 	,CAST(0 AS BIT) IsIdentityVisible
-	,AD.Id
+	,Id
 	,CAST(1 AS BIT) IsFilterSortDisable
-FROM dbo.AWCDriverScrubReport AD
-INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
-LEFT JOIN #TempDriverScrub Tmp  ON Tmp.Id = AD.Id '
-SET @sqlCommand = @sqlCommand + ' Where DM.CustomerId = '+ CAST(@CustomerId AS Varchar(50)) +' AND CAST(DM.StartDate AS DATE) >= CAST('''+CAST(@StartDate AS Varchar)+''' AS DATE) AND CAST(DM.EndDate AS DATE) <= CAST('''+CAST(@EndDate AS Varchar)+''' AS DATE) ORDER BY AD.Id'
+FROM #TempDriverScrub '
+SET @sqlCommand = @sqlCommand + ' ORDER BY Id'
 		IF (
 				@recordId = 0
 				AND @IsExport = 0
@@ -148,12 +156,9 @@ SET @sqlCommand = @sqlCommand + ' Where DM.CustomerId = '+ CAST(@CustomerId AS V
 	
 	
 	EXEC sp_executesql @sqlCommand
-		,N'@pageNo INT, @pageSize INT,@StartDate DateTime2(7),@EndDate DateTime2(7)'
+		,N'@pageNo INT, @pageSize INT'
 		,@pageNo = @pageNo
 		,@pageSize = @pageSize
-		,@StartDate = @StartDate
-		,@EndDate = @EndDate
 
 DROP TABLE #TempDriverScrub
 END
-GO
