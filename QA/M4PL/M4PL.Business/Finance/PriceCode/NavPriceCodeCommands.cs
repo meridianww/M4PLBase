@@ -168,7 +168,7 @@ namespace M4PL.Business.Finance.PriceCode
 			NavPriceCodeResponse navPriceCodeResponse = null;
 			try
 			{
-				string serviceCall = string.Format("{0}('{1}')/SalesPrices", navAPIUrl, "Meridian");
+				string serviceCall = string.Format("{0}/SalesPrices", navAPIUrl);
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;

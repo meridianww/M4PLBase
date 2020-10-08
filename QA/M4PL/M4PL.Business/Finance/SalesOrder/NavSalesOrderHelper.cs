@@ -54,7 +54,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavJobSalesOrder GetSalesOrderFromNavByJobId(string navAPIUrl, string navAPIUserName, string navAPIPassword, long jobId)
 		{
 			NavJobSalesOrder navJobSalesOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/SalesOrder?$filter=M4PL_Job_ID eq '{2}'", navAPIUrl, "Meridian", jobId);
+			string serviceCall = string.Format("{0}/SalesOrder?$filter=M4PL_Job_ID eq '{1}'", navAPIUrl, jobId);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -88,7 +88,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavSalesOrder GetSalesOrderForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
 		{
 			NavSalesOrder navSalesOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
+			string serviceCall = string.Format("{0}/SalesOrder('Order', '{1}')", navAPIUrl, soNumber);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -125,7 +125,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			string navSalesOrderJson = string.Empty;
 			string proFlag = null;
 			Newtonsoft.Json.Linq.JObject jsonObject = null;
-			string serviceCall = string.Format("{0}('{1}')/SalesOrder", navAPIUrl, "Meridian");
+			string serviceCall = string.Format("{0}/SalesOrder", navAPIUrl);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -178,7 +178,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			string navSalesOrderJson = string.Empty;
 			string proFlag = null;
 			Newtonsoft.Json.Linq.JObject jsonObject = null;
-			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
+			string serviceCall = string.Format("{0}/SalesOrder('Order', '{1}')", navAPIUrl, soNumber);
 			try
 			{
 				NavSalesOrder existingSalesOrderData = GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
@@ -230,7 +230,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		public static bool DeleteSalesOrderForNAV(ActiveUser activeUser, long jobId, bool isElectronicInvoice, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, out bool isRecordDeleted)
 		{
-			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
+			string serviceCall = string.Format("{0}/SalesOrder('Order', '{1}')", navAPIUrl, soNumber);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -262,7 +262,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavSalesOrderItem GetSalesOrderItemForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, int lineNo)
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/SalesLine('Order', '{2}', {3})", navAPIUrl, "Meridian", soNumber, lineNo);
+			string serviceCall = string.Format("{0}/SalesLine('Order', '{1}', {2})", navAPIUrl, soNumber, lineNo);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -298,7 +298,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
 			string dataToRemove = string.Format("{0}:{1},", "\"M4PLItemId\"", navSalesOrderItemRequest.M4PLItemId);
-			string serviceCall = string.Format("{0}('{1}')/SalesLine", navAPIUrl, "Meridian");
+			string serviceCall = string.Format("{0}/SalesLine", navAPIUrl);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -349,7 +349,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
 			string dataToRemove = string.Format("{0}:{1},", "\"M4PLItemId\"", navSalesOrderItemRequest.M4PLItemId);
-			string serviceCall = string.Format("{0}('{1}')/SalesLine('Order', '{2}', {3})", navAPIUrl, "Meridian", navSalesOrderItemRequest.Document_No, navSalesOrderItemRequest.Line_No);
+			string serviceCall = string.Format("{0}/SalesLine('Order', '{1}', {2})", navAPIUrl, navSalesOrderItemRequest.Document_No, navSalesOrderItemRequest.Line_No);
 			try
 			{
 				NavSalesOrderItem existingNavSalesOrderItem = GetSalesOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderItemRequest.Document_No, navSalesOrderItemRequest.Line_No);
@@ -399,7 +399,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		public static bool DeleteSalesOrderItemForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, int lineNo, out bool isRecordDeleted)
 		{
-			string serviceCall = string.Format("{0}('{1}')/SalesLine('Order', '{2}', {3})", navAPIUrl, "Meridian", soNumber, lineNo);
+			string serviceCall = string.Format("{0}/SalesLine('Order', '{1}', {2})", navAPIUrl, soNumber, lineNo);
 			try
 			{
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -427,7 +427,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavSalesOrderDimensionResponse GetNavSalesOrderDimension(string userName, string password, string serviceUrl)
 		{
 			NavSalesOrderDimensionResponse navSalesOrderDimensionValueList = null;
-			string serviceCall = string.Format("{0}('{1}')/DimensionValues", serviceUrl, "Meridian");
+			string serviceCall = string.Format("{0}/DimensionValues", serviceUrl);
 			try
 			{
 				navSalesOrderDimensionValueList = new NavSalesOrderDimensionResponse();
@@ -462,7 +462,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavSalesOrderPostedInvoiceResponse GetNavPostedSalesOrderResponse(string username, string password, string serviceUrl)
 		{
 			NavSalesOrderPostedInvoiceResponse navSalesOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PostedSalesInvoice", serviceUrl, "Meridian");
+			string serviceCall = string.Format("{0}/PostedSalesInvoice", serviceUrl);
 			try
 			{
 				navSalesOrderResponse = new NavSalesOrderPostedInvoiceResponse();
@@ -497,7 +497,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavPurchaseOrderPostedInvoiceResponse GetNavPostedPurchaseOrderResponse(string username, string password, string serviceUrl)
 		{
 			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoice", serviceUrl, "Meridian");
+			string serviceCall = string.Format("{0}/PostedPurchaseInvoice", serviceUrl);
 			try
 			{
 				navPurchaseOrderResponse = new NavPurchaseOrderPostedInvoiceResponse();
@@ -532,7 +532,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavPurchaseOrderPostedInvoiceResponse GetNavPostedPurchaseInvoiceResponse(string username, string password, string serviceUrl, string documentNumber)
 		{
 			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoice?$filter=No eq '{2}'", serviceUrl, "Meridian", documentNumber);
+			string serviceCall = string.Format("{0}/PostedPurchaseInvoice?$filter=No eq '{1}'", serviceUrl, documentNumber);
 			try
 			{
 				navPurchaseOrderResponse = new NavPurchaseOrderPostedInvoiceResponse();
@@ -567,7 +567,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavSalesOrderItemResponse GetNavPostedSalesOrderItemResponse(string username, string password, string serviceUrl)
 		{
 			NavSalesOrderItemResponse navSalesOrderItemResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PostedSalesInvoiceLines", serviceUrl, "Meridian");
+			string serviceCall = string.Format("{0}/PostedSalesInvoiceLines", serviceUrl);
 			try
 			{
 				navSalesOrderItemResponse = new NavSalesOrderItemResponse();
@@ -602,7 +602,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavPurchaseOrderItemResponse GetNavPostedPurchaseOrderItemResponse(string username, string password, string serviceUrl)
 		{
 			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PostedPurchaseInvoiceLines", serviceUrl, "Meridian");
+			string serviceCall = string.Format("{0}/PostedPurchaseInvoiceLines", serviceUrl);
 			try
 			{
 				navPurchaseOrderItemResponse = new NavPurchaseOrderItemResponse();
@@ -646,7 +646,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			NAVOrderItemResponse navOrderItemResponse = null;
 			try
 			{
-				string serviceCall = string.Format("{0}('{1}')/Items", navAPIUrl, "Meridian");
+				string serviceCall = string.Format("{0}/Items", navAPIUrl);
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
