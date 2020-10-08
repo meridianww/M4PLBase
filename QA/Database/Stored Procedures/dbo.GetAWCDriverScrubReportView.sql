@@ -48,20 +48,8 @@ DECLARE @sqlCommand NVARCHAR(MAX)
 		,@JobStatusId INT = 0;
 
 IF OBJECT_ID('tempdb..#TempDriverScrub') IS NOT NULL DROP TABLE #TempDriverScrub
-Select AD.Id,CASE 
-		WHEN ISNULL(DriverContact.ConFirstName, '') <> ''
-			AND ISNULL(DriverContact.ConLastName, '') <> ''
-			THEN CONCAT (
-					DriverContact.ConFirstName
-					,' '
-					,DriverContact.ConLastName
-					)
-		WHEN ISNULL(DriverContact.ConFirstName, '') <> ''
-			AND ISNULL(DriverContact.ConLastName, '') = ''
-			THEN DriverContact.ConFirstName
-		ELSE ''
-		END DriverName
-		,Job.Id JobId
+Select AD.Id 
+		,AD.JobId
 		,'N' Scanned
 		,AD.ModelName
 		,AD.QRCDescription
@@ -77,15 +65,31 @@ Select AD.Id,CASE
 		,AD.QRCGrouping INTO #TempDriverScrub
 FROM dbo.AWCDriverScrubReport AD
 INNER JOIN dbo.DriverScrubReportMaster DM ON DM.Id = AD.DriverScrubReportMasterId
-INNER JOIN dbo.JobDL000Master Job ON dbo.udf_GetNumeric(Job.JobCustomerSalesOrder) = AD.ActualControlId
-LEFT JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
-LEFT JOIN dbo.JOBDL010Cargo Cargo ON Cargo.JobId = Job.Id AND Cargo.CgoPartNumCode = AD.ModelName AND Cargo.StatusId=1
 Where DM.CustomerId = @CustomerId AND CAST(AD.ShipDate AS DATE) >= CAST(@StartDate AS DATE) AND CAST(AD.ShipDate AS DATE) <= CAST(@EndDate AS DATE)
 
+ALTER TABLE #TempDriverScrub ADD DriverName Varchar(500)
 UPDATE tmp
 SET Scanned = CASE WHEN ISNULL(Cargo.CgoDateLastScan, '') = '' THEN Scanned ELSE 'Y' END
 From #TempDriverScrub tmp
 INNER JOIN dbo.JOBDL010Cargo Cargo ON Cargo.JobId = tmp.JobId AND tmp.ModelName like '%' + Cargo.CgoPartNumCode + '%' AND Cargo.StatusId=1
+
+UPDATE tmp
+SET DriverName = CASE 
+		WHEN ISNULL(DriverContact.ConFirstName, '') <> ''
+			AND ISNULL(DriverContact.ConLastName, '') <> ''
+			THEN CONCAT (
+					DriverContact.ConFirstName
+					,' '
+					,DriverContact.ConLastName
+					)
+		WHEN ISNULL(DriverContact.ConFirstName, '') <> ''
+			AND ISNULL(DriverContact.ConLastName, '') = ''
+			THEN DriverContact.ConFirstName
+		ELSE ''
+		END 
+From #TempDriverScrub tmp
+INNER JOIN dbo.JobDL000Master Job ON Job.Id = tmp.JobId
+INNER JOIN dbo.CONTC000Master DriverContact ON DriverContact.Id = Job.JobDriverId
 
 SET @TCountQuery = 'SELECT @TotalCount = COUNT(Id) FROM #TempDriverScrub'
 
