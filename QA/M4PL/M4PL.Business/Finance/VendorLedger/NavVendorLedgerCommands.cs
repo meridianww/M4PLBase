@@ -119,7 +119,7 @@ namespace M4PL.Business.Finance.VendorLedger
 		private NavVendorLedger GetNavVendorLedgerDataByCheckNumber(string navVendorUrl, string navAPIUserName, string navAPIPassword, string documentNumer)
 		{
 			NavVendorLedger navVendorLedgerResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/Vendor_ledger_Entries?$filter=Document_No eq '{2}'", navVendorUrl, "Meridian", documentNumer);
+			string serviceCall = string.Format("{0}/Vendor_ledger_Entries?$filter=Document_No eq '{1}'", navVendorUrl, documentNumer);
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 			request.Credentials = myCredentials;
@@ -145,7 +145,7 @@ namespace M4PL.Business.Finance.VendorLedger
 		private NavVendorLedger GetNavVendorLedgerDataByClosedByEntryNumber(string navVendorUrl, string navAPIUserName, string navAPIPassword, string documentNumer)
 		{
 			NavVendorLedger navVendorLedgerResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/Vendor_ledger_Entries?$filter=Closed_by_Entry_No eq {2}", navVendorUrl, "Meridian", documentNumer);
+			string serviceCall = string.Format("{0}/Vendor_ledger_Entries?$filter=Closed_by_Entry_No eq {1}", navVendorUrl, documentNumer);
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 			request.Credentials = myCredentials;

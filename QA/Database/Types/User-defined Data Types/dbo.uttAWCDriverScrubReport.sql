@@ -20,5 +20,7 @@ CREATE TYPE [dbo].[uttAWCDriverScrubReport] AS TABLE(
 ,QMSRemark Varchar(Max)
 ,DaysToAccept INT
 ,QMSTotalUnit INT
-,QMSTotalPrice Money)
+,QMSTotalPrice Money
+,ShipDate DateTime2(7)
+,JobId BIGINT)
 

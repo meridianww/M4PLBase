@@ -153,7 +153,7 @@ namespace M4PL.Business.Finance.Customer
 		private IList<NavCustomerData> GetNavCustomerData(string navCustomerUrl, string navAPIUserName, string navAPIPassword)
 		{
 			NavCustomerResponse naveCustomerResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/CustomerList", navCustomerUrl, "Meridian");
+			string serviceCall = string.Format("{0}/CustomerList", navCustomerUrl);
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 			request.Credentials = myCredentials;

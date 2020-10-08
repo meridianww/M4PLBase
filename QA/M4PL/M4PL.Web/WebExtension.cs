@@ -1536,7 +1536,7 @@ namespace M4PL.Web
             }
             if (route.Entity == EntitiesAlias.NavRemittance)
             {
-                allNavMenus[0].Text = "Download Invoice";
+                allNavMenus[0].Text = "Retrieve Posted Invoice";
             }
 
             if (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == "FormView")

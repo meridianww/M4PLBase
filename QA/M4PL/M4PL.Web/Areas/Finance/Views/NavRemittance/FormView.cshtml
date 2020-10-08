@@ -2,7 +2,7 @@
 @using M4PL.Entities;
 @model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.NavRemittance.NavRemittanceView>
 @{
-    ViewBag.Title = "Download Invoice";
+    ViewBag.Title = "Retrieve Posted Invoice";
     Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "ChequeNo").ColIsReadOnly = false;
 }
 @Html.DevExpress().RoundPanel(settings =>
