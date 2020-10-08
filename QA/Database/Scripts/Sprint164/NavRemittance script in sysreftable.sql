@@ -17,6 +17,6 @@ INSERT INTO [dbo].[SYSTM000Ref_Table]
            ,'NFUJIMOTO')
 END
 
-UPDATE SYSTM000ColumnsAlias SET ColIsReadOnly=0 WHERE ColTableName='NavRemittance' AND ColColumnName='ChequeNo'
+UPDATE SYSTM000ColumnsAlias SET ColIsReadOnly=0,ColAliasName = 'Check Number', ColCaption = 'Check Number', ColGridAliasName = 'Check Number' WHERE ColTableName='NavRemittance' AND ColColumnName='ChequeNo'
 
 
