@@ -25,11 +25,11 @@ namespace M4PL.APIClient.Finance
             return JsonConvert.DeserializeObject<ApiResult<List<NavRemittanceView>>>(result.Content).Results?.FirstOrDefault();
         }
 
-		public DocumentData GetPostedInvoicesByCheckNumber(string checkNumber)
+		public DocumentStatusModel GetPostedInvoicesByCheckNumber(string checkNumber)
 		{
 			var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetPostedInvoicesByCheckNumber"), ActiveUser).AddParameter("checkNumber", checkNumber);
 			var result = RestClient.Execute(request);
-			return JsonConvert.DeserializeObject<ApiResult<DocumentData>>(result.Content).Results?.FirstOrDefault();
+			return JsonConvert.DeserializeObject<ApiResult<DocumentStatusModel>>(result.Content).Results?.FirstOrDefault();
 		}
 
 	}

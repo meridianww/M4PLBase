@@ -37,7 +37,7 @@ namespace M4PL.API.Controllers
 
 		[HttpGet]
 		[Route("GetPostedInvoicesByCheckNumber")]
-		public DocumentData GetPostedInvoiceByCheckNumber(string checkNumber)
+		public DocumentStatusModel GetPostedInvoiceByCheckNumber(string checkNumber)
 		{
 			_navRemittanceCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _navRemittanceCommands.GetPostedInvoiceByCheckNumber(checkNumber);

@@ -7,18 +7,18 @@
 ******************************************************************************/
 #endregion Copyright
 
-using M4PL.Entities.Document;
-using M4PL.Entities.Finance.Remittance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace M4PL.Business.Finance.Remittance
+namespace M4PL.Entities.Document
 {
-	public interface INavRemittanceCommands : IBaseCommands<NavRemittance>
+	public class DocumentStatusModel
 	{
-		DocumentStatusModel GetPostedInvoiceByCheckNumber(string checkNumber);
+		public bool IsSuccess { get; set; }
+		public string AdditionalMessage { get; set; }
+		public DocumentData DocumentData { get; set; }
 	}
 }

@@ -39,37 +39,45 @@ namespace M4PL.Business.Finance.VendorLedger
 			get { return CoreCache.GetBusinessConfiguration("EN"); }
 		}
 
-		public List<CheckPostedInvoice> GetVendorCheckedInvoice(string checkNumber)
+		public List<CheckPostedInvoice> GetVendorCheckedInvoice(string checkNumber, ActiveUser activeUser = null)
 		{
 			List<CheckPostedInvoice> resultPostedInvoices = null;
+			activeUser = activeUser == null ? ActiveUser : activeUser;
 			var vendorLedgerData = GetNavVendorLedgerDataByCheckNumber(M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, checkNumber);
-			if (vendorLedgerData?.VendorLedger != null && vendorLedgerData.VendorLedger.Where(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Payment", StringComparison.OrdinalIgnoreCase)).Any())
+			if (vendorLedgerData?.VendorLedger != null)
 			{
-				string entryNumber = vendorLedgerData.VendorLedger.Where(x => x.Document_Type.Equals("Payment", StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Entry_No;
-				var result = GetNavVendorLedgerDataByClosedByEntryNumber(M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entryNumber);
-				if (result?.VendorLedger?.Count > 0 && result.VendorLedger.Where(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Invoice", StringComparison.OrdinalIgnoreCase)).Any())
+				var vendorPaymentRecord = vendorLedgerData.VendorLedger.FirstOrDefault(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Payment", StringComparison.OrdinalIgnoreCase));
+				bool isPermissionPresent = DataAccess.Vendor.VendorCommands.IsUserHasVendorPermission(vendorPaymentRecord?.Vendor_No, activeUser.UserId);
+				string entryNumber = vendorPaymentRecord?.Entry_No;
+				if (isPermissionPresent && !string.IsNullOrEmpty(entryNumber))
 				{
-					List<Task> tasks = new List<Task>();
-					resultPostedInvoices = new List<CheckPostedInvoice>();
-					var processingData = result.VendorLedger.Where(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Invoice", StringComparison.OrdinalIgnoreCase));
-					foreach (var currentVendorLedger in processingData)
+					var result = GetNavVendorLedgerDataByClosedByEntryNumber(M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entryNumber);
+					if (result?.VendorLedger?.Count > 0 && result.VendorLedger.Where(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Invoice", StringComparison.OrdinalIgnoreCase)).Any())
 					{
-						tasks.Add(Task.Factory.StartNew(() =>
+						List<Task> tasks = new List<Task>();
+						resultPostedInvoices = new List<CheckPostedInvoice>();
+						var processingData = result.VendorLedger.Where(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Invoice", StringComparison.OrdinalIgnoreCase));
+						foreach (var currentVendorLedger in processingData)
 						{
-							var postedInvoice = NavSalesOrderHelper.GetNavPostedPurchaseInvoiceResponse(M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, M4PLBusinessConfiguration.NavAPIUrl, currentVendorLedger.Document_No);
-							if (postedInvoice != null && postedInvoice.NavPurchaseOrder != null && postedInvoice.NavPurchaseOrder.Count > 0)
+							tasks.Add(Task.Factory.StartNew(() =>
 							{
-								postedInvoice.NavPurchaseOrder.ForEach(x => resultPostedInvoices.Add(new CheckPostedInvoice() { No = x.No,
-									M4PL_JobId = x.Vendor_Invoice_No,
-									Document_Date = x.Document_Date,
-									Vendor_Order_No = x.Vendor_Order_No,
-									Amount = processingData.Where(z => z.Document_No == x.No).FirstOrDefault().Credit_Amount.ToDecimal()
-								}));
-							}
-						}));
-					}
+								var postedInvoice = NavSalesOrderHelper.GetNavPostedPurchaseInvoiceResponse(M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, M4PLBusinessConfiguration.NavAPIUrl, currentVendorLedger.Document_No);
+								if (postedInvoice != null && postedInvoice.NavPurchaseOrder != null && postedInvoice.NavPurchaseOrder.Count > 0)
+								{
+									postedInvoice.NavPurchaseOrder.ForEach(x => resultPostedInvoices.Add(new CheckPostedInvoice()
+									{
+										No = x.No,
+										M4PL_JobId = x.Vendor_Invoice_No,
+										Document_Date = x.Document_Date,
+										Vendor_Order_No = x.Vendor_Order_No,
+										Amount = processingData.Where(z => z.Document_No == x.No).FirstOrDefault().Credit_Amount.ToDecimal()
+									}));
+								}
+							}));
+						}
 
-					if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+						if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+					}
 				}
 			}
 
