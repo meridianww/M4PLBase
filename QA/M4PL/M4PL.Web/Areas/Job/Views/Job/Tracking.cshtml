@@ -6,7 +6,7 @@
     settings.AllowCollapsingByHeaderClick = true;
     settings.ShowCollapseButton = true;
     settings.HeaderText = "Tracking, Cargo, Documents, Notes";
-    settings.Collapsed = true;
+    settings.Collapsed = !ViewBag.IsTrackingCollapsed;
     settings.ControlStyle.CssClass = "form-layout";
     settings.CallbackRouteValues = new { Controller = "Job", Action = "Tracking", Area = "Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
     settings.SetContent(() =>

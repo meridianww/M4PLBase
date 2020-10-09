@@ -129,6 +129,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!SessionProvider.UserSecurities.Any(t => t.SecMainModuleId == MainModule.Job.ToInt()))
                 return PartialView(MvcConstants.ViewNoAccess);
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+            ViewBag.IsTrackingCollapsed = route.IsJGWYOpen;
 
             if (SessionProvider.ViewPagedDataSession.Count > 0
                 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
@@ -274,7 +275,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     resultRoute.ParentRecordId = result.ProgramID == 0 ? preProgramId : Convert.ToInt64(result.ProgramID);
 
                     tabRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionTabViewCallBack);
-                    tabRoute.ParentRecordId= jobView.Id;
+                    tabRoute.ParentRecordId = jobView.Id;
                     tabRoute.Url = tabRoute.ParentRecordId.ToString();
                     Session["SpecialJobId"] = null;
                 }
@@ -472,6 +473,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         public PartialViewResult Tracking(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            ViewBag.IsTrackingCollapsed = true;
             return PartialView(route);
         }
 

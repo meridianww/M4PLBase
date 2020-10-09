@@ -1176,8 +1176,10 @@ M4PLWindow.FormView = function () {
                                                             }
                                                         }
                                                     }
-                                                } else if (sender)
+                                                } else if (sender) {
+                                                    resultRoute.IsJGWYOpen = true;
                                                     sender.PerformCallback({ strRoute: JSON.stringify(resultRoute) });
+                                                }
                                             }
                                             else {
                                                 ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });

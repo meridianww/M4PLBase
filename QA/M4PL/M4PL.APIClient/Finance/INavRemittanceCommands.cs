@@ -11,7 +11,7 @@ namespace M4PL.APIClient.Finance
     public interface INavRemittanceCommands : IBaseCommands<NavRemittanceView>
     {
         IList<NavRemittanceView> GetAllNavRemittance();
-		DocumentData GetPostedInvoicesByCheckNumber(string checkNumber);
+        DocumentStatusModel GetPostedInvoicesByCheckNumber(string checkNumber);
 
 	}
 }

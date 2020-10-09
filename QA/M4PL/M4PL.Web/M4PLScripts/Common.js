@@ -3069,9 +3069,24 @@ M4PLCommon.EmailCCAddressSubscriber = (function () {
 M4PLCommon.NavRemittance = (function () {
 
     var _downloadInvoice = function () {
+        $(".remittance").css("display", "none");
+        $(".remittance-processing").css("display", "block");
         var checkNo = ASPxClientControl.GetControlCollection().GetByName("ChequeNo");
         if (checkNo != null && ChequeNo != "" && ChequeNo != undefined) {
-            window.open(window.location.origin + "/Finance/NavRemittance/DownloadInvoice" + "?checkNo=" + checkNo.GetValue());
+            $.get(window.location.origin + "/Finance/NavRemittance/IsInvoiceAvailable" + "?checkNo=" + checkNo.GetValue(), function (data) {
+                $(".remittance").css("display", "none");
+                if (data != undefined && data != null && (data.Status || data.Status == 'true')) {
+                    $(".remittance-sucess").css("display", "block");
+                    window.open(window.location.origin + "/Finance/NavRemittance/DownloadInvoice");
+                }
+                else if (data != undefined && data != null) {
+                    $(".remittance-fail").empty().append(data.Message);
+                    $(".remittance-fail").css("display", "block");
+                }
+                else {
+                    $(".remittance-fail").css("display", "block");
+                }
+            });
         }
     }
 
