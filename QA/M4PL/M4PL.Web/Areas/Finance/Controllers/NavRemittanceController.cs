@@ -52,12 +52,30 @@ namespace M4PL.Web.Areas.Finance.Controllers
             return PartialView(_formResult);
         }
 
-        public ActionResult DownloadInvoice(string checkNo)
+        public ActionResult IsInvoiceAvailable(string checkNo)
         {
-            if (string.IsNullOrEmpty(checkNo)) return null;
+            if (string.IsNullOrEmpty(checkNo)) return Json(false, JsonRequestBehavior.AllowGet);
             try
             {
                 var result = _navRemittanceCommands.GetPostedInvoicesByCheckNumber(checkNo);
+                if (result != null && !string.IsNullOrEmpty(result.DocumentName) && result.DocumentContent != null)
+                {
+                    TempData["OrderInvoice"] = result;
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DownloadInvoice()
+        {
+            if (TempData["OrderInvoice"] == null) return null;
+            try
+            {
+                var result = (Entities.Document.DocumentData)TempData["OrderInvoice"];
                 if (result != null && !string.IsNullOrEmpty(result.DocumentName) && result.DocumentContent != null)
                     return File(result.DocumentContent, result.ContentType, result.DocumentName);
                 return View();
