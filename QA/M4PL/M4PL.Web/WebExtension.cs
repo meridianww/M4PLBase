@@ -2028,6 +2028,10 @@ namespace M4PL.Web
                     mnu.StatusId = 3;
                 if (mnu.MnuTitle == "Retrieve Invoices")
                     mnu.StatusId = 1;
+                if ((route.Entity == EntitiesAlias.JobCard
+                    || route.Entity == EntitiesAlias.JobAdvanceReport
+                    || route.Entity == EntitiesAlias.Job) && mnu.MnuTitle == "Tracking")
+                    mnu.StatusId = 1;
             });
         }
 
