@@ -55,19 +55,20 @@ namespace M4PL.Web.Areas.Finance.Controllers
         public ActionResult IsInvoiceAvailable(string checkNo)
         {
             if (string.IsNullOrEmpty(checkNo)) return Json(false, JsonRequestBehavior.AllowGet);
+            bool status = false; string responseMessage = string.Empty;
             try
             {
                 var result = _navRemittanceCommands.GetPostedInvoicesByCheckNumber(checkNo);
-                if (result != null && !string.IsNullOrEmpty(result.DocumentName) && result.DocumentContent != null)
+                if (result != null)
                 {
-                    TempData["OrderInvoice"] = result;
-                    return Json(true, JsonRequestBehavior.AllowGet);
+                    responseMessage = result.AdditionalMessage;
+                    status = result.IsSuccess;
+                    if(result.IsSuccess && result.DocumentData != null && !string.IsNullOrEmpty(result.DocumentData.DocumentName) && result.DocumentData.DocumentContent != null)
+                        TempData["OrderInvoice"] = result.DocumentData;
                 }
             }
-            catch (Exception ex)
-            {
-            }
-            return Json(false, JsonRequestBehavior.AllowGet);
+            catch (Exception) { }
+            return Json(new { Status = status, Message = responseMessage }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DownloadInvoice()
@@ -80,7 +81,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
                     return File(result.DocumentContent, result.ContentType, result.DocumentName);
                 return View();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return View();
             }
