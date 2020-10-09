@@ -382,6 +382,7 @@ namespace M4PL.DataAccess
 		public const string DeleteVendor = "dbo.DeleteVendor";
 		public const string GetVendors = "dbo.GetVendors";
 		public const string UpdatePartialVendor = "dbo.UpdPartialVendor";
+		public const string IsUserHasVendorPermission = "dbo.IsUserHasVendorPermission";
 
 		/* Vendor Contact  */
 		public const string GetVendContactView = "dbo.GetVendContactView";

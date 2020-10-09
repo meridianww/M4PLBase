@@ -18,6 +18,7 @@
 //================================================================================================================
 using M4PL.Entities.Finance.PurchaseOrder;
 using M4PL.Entities.Finance.VendorLedger;
+using M4PL.Entities.Support;
 using System.Collections.Generic;
 
 namespace M4PL.Business.Finance.VendorLedger
@@ -27,6 +28,6 @@ namespace M4PL.Business.Finance.VendorLedger
 	/// </summary>
 	public interface INavVendorLedgerCommands : IBaseCommands<NavVendorLedger>
 	{
-		List<CheckPostedInvoice> GetVendorCheckedInvoice(string checkNumber);
+		List<CheckPostedInvoice> GetVendorCheckedInvoice(string checkNumber, ActiveUser activeUser = null);
 	}
 }

@@ -44,18 +44,18 @@ namespace M4PL.Business.Finance.Remittance
 			throw new NotImplementedException();
 		}
 
-		public DocumentData GetPostedInvoiceByCheckNumber(string checkNumber)
+		public DocumentStatusModel GetPostedInvoiceByCheckNumber(string checkNumber)
 		{
-			DocumentData documentData = null;
+			DocumentStatusModel documentDataModel = new DocumentStatusModel();
 			NavVendorLedgerCommands navVendorLedgerCommands = new NavVendorLedgerCommands();
-			var result = navVendorLedgerCommands.GetVendorCheckedInvoice(checkNumber);
+			var result = navVendorLedgerCommands.GetVendorCheckedInvoice(checkNumber, ActiveUser);
 			if (result?.Count > 0)
 			{
 				using (DataTable tblPostedInvoice = GetPostedInvoiceDataTable(result))
 				{
 					if (tblPostedInvoice != null && tblPostedInvoice.Rows.Count > 0)
 					{
-						documentData = new DocumentData();
+						documentDataModel.DocumentData = new DocumentData();
 						using (MemoryStream memoryStream = new MemoryStream())
 						{
 							using (StreamWriter writer = new StreamWriter(memoryStream))
@@ -63,16 +63,22 @@ namespace M4PL.Business.Finance.Remittance
 								WriteDataTable(tblPostedInvoice, writer, true);
 							}
 
-							documentData.DocumentContent = memoryStream.ToArray();
-							documentData.DocumentName = string.Format("PostedInvoice_CheckNo_{0}.csv", checkNumber);
-							documentData.ContentType = "text/csv";
-							documentData.DocumentExtension = ".csv";
+							documentDataModel.DocumentData.DocumentContent = memoryStream.ToArray();
+							documentDataModel.DocumentData.DocumentName = string.Format("PostedInvoice_CheckNo_{0}.csv", checkNumber);
+							documentDataModel.DocumentData.ContentType = "text/csv";
+							documentDataModel.DocumentData.DocumentExtension = ".csv";
+							documentDataModel.IsSuccess = true;
 						}
 					}
 				}
 			}
+			else
+			{
+				documentDataModel.IsSuccess = false;
+				documentDataModel.AdditionalMessage = "No posted invoice data present for the entered Check Number.";
+			}
 
-			return documentData;
+			return documentDataModel;
 		}
 
 		public NavRemittance Patch(NavRemittance entity)

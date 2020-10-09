@@ -12,6 +12,7 @@
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Vendor
@@ -63,6 +64,28 @@ namespace M4PL.DataAccess.Vendor
 			var parameters = GetParameterPartial(vendor);
 			parameters.AddRange(activeUser.PutDefaultParams(vendor.Id, vendor));
 			return Patch(activeUser, parameters, StoredProceduresConstant.UpdatePartialVendor);
+		}
+
+		public static bool IsUserHasVendorPermission(string erpId, long userId)
+		{
+			if (string.IsNullOrEmpty(erpId)) { return false; }
+
+			bool isPermissionPresent = false;
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@userId", userId),
+			   new Parameter("@VendorErpId", erpId)
+		   };
+			try
+			{
+				isPermissionPresent = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.IsUserHasVendorPermission, parameters.ToArray(), false, true);
+			}
+			catch (Exception exp)
+			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Error occuring while getting the Vendor Permission.", "IsUserHasVendorPermission", Utilities.Logger.LogType.Error);
+			}
+
+			return isPermissionPresent;
 		}
 
 		private static List<Parameter> GetParameters(Entities.Vendor.Vendor vendor)
