@@ -134,5 +134,6 @@ namespace M4PL.Entities.Support
         public bool IsPBSReport { get; set; }
         public bool IsEdit { get; set; }
         public bool IsJobParentEntityUpdated { get; set; }
+        public bool IsJGWYOpen { get; set; }
     }
 }
