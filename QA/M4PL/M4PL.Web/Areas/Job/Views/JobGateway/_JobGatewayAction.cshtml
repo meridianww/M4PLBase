@@ -307,6 +307,8 @@
                                                }
                                                else
                                                {
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColAliasName = Model.Record.GwyOrderType == "Original" ? "Schedule Delivery Date" : "Schedule Arrival Date";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColCaption = Model.Record.GwyOrderType == "Original" ? "Schedule Delivery Date" : "Schedule Arrival Date";
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = Model.Record.GwyOrderType == "Original" ? "Reschedule Delivery Date" : "Reschedule Arrival Date";
                                                    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = Model.Record.GwyOrderType == "Original" ? "Reschedule Delivery Date" : "Reschedule Arrival Date";
                                                    if (!Model.Record.IsGatewayCalled)

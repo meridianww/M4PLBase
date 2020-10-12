@@ -945,22 +945,22 @@ namespace M4PL.Business.XCBL
 		{
 			try
 			{
-				if (string.Compare(existingJobData.JobDeliveryPostalCode, request.PostalCode, true) != 0 || string.Compare(existingJobData.JobDeliveryCity, request.City, true) != 0)
+				if (string.Compare(existingJobData.JobDeliveryPostalCode, request.PostalCode?.Trim(), true) != 0 || string.Compare(existingJobData.JobDeliveryCity, request.City?.Trim(), true) != 0)
 				{
 					var deliveryLocationAction = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("City", StringComparison.OrdinalIgnoreCase));
 					string actionCode = deliveryLocationAction != null ? deliveryLocationAction.ActionCode : string.Empty;
 					var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 					if (jobGateway != null && jobGateway.GwyCompleted)
 					{
-						if (string.Compare(existingJobData.JobDeliveryCity, request.City, true) != 0)
+						if (string.Compare(existingJobData.JobDeliveryCity, request.City?.Trim(), true) != 0)
 						{
-							cityandPostalChangeQuery = string.Format("JobDeliveryCity = '{0}'", request.City);
+							cityandPostalChangeQuery = string.Format("JobDeliveryCity = '{0}'", request.City?.Trim());
 						}
 
-						if (string.Compare(existingJobData.JobDeliveryPostalCode, request.PostalCode, true) != 0)
+						if (string.Compare(existingJobData.JobDeliveryPostalCode, request.PostalCode?.Trim(), true) != 0)
 						{
-							cityandPostalChangeQuery = string.IsNullOrEmpty(cityandPostalChangeQuery) ? string.Format("JobDeliveryPostalCode = '{0}'", request.PostalCode) :
-												string.Format("{0}, JobDeliveryPostalCode = '{1}'", cityandPostalChangeQuery, request.PostalCode);
+							cityandPostalChangeQuery = string.IsNullOrEmpty(cityandPostalChangeQuery) ? string.Format("JobDeliveryPostalCode = '{0}'", request.PostalCode?.Trim()) :
+												string.Format("{0}, JobDeliveryPostalCode = '{1}'", cityandPostalChangeQuery, request.PostalCode?.Trim());
 						}
 					}
 
@@ -1054,7 +1054,9 @@ namespace M4PL.Business.XCBL
 					existingJobData.JobDeliveryDateTimeBaseline.HasValue && 
 					request.EstimatedArrivalDate.CompareTo(existingJobData.JobDeliveryDateTimeBaseline) != 0))
 				{
-					if (!string.IsNullOrEmpty(actionCode))
+					if (!string.IsNullOrEmpty(actionCode) && (existingJobData.JobDeliveryDateTimePlanned.HasValue &&
+						request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimePlanned))
+						.TotalHours > 48))
 					{
 						var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 						if (jobGateway != null)
