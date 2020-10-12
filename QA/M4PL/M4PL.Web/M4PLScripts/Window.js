@@ -1178,6 +1178,7 @@ M4PLWindow.FormView = function () {
                                                     }
                                                 } else if (sender) {
                                                     resultRoute.IsJGWYOpen = true;
+                                                    resultRoute.Area = "Job"
                                                     sender.PerformCallback({ strRoute: JSON.stringify(resultRoute) });
                                                 }
                                             }

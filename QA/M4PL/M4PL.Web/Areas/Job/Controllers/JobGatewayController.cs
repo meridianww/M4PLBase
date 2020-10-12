@@ -821,8 +821,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             var ifFilterValue = route.Filters != null ? route.Filters.Value.Split('-') : null;
-            var gatewayCode = route.Filters != null ? (route.Filters.FieldName + "-" +
-                (ifFilterValue != null && ifFilterValue.Count() > 1 ? ifFilterValue[1] : string.Empty)) : string.Empty;
+            var gatewayCode = route.Filters != null ? (route.Filters.FieldName +
+                (ifFilterValue != null && ifFilterValue.Count() > 1 ? ("-" + ifFilterValue[1]) : string.Empty)) : string.Empty;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, entityFor, route.Filters != null && route.Filters.FieldName.Contains("3PL") ? true : false, gatewayCode) ?? new JobGatewayView();
             _formResult.Record.IsGatewayCalled = route.IsPBSReport;
             if (route.Filters != null && !(bool)Session["isEdit"])

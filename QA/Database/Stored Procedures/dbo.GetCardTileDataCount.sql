@@ -72,7 +72,7 @@ BEGIN
 			IF (@CompanyId > 0)
 				BEGIN
 					SET @CountQuery = 'Select Count(DISTINCT JOBDL000Master.Id) From #ProgramTable  					
-							INNER JOIN  JOBDL000Master ON #ProgramTable.ProgramId = JOBDL000Master.ProgramID'					
+							INNER JOIN  JOBDL000Master ON #ProgramTable.ProgramId = JOBDL000Master.ProgramID '					
 					
 				END
 				ELSE
