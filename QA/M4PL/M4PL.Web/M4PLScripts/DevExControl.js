@@ -153,6 +153,8 @@ DevExCtrl.Ribbon = function () {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges() || (route.Action === "Save")) {
             switch (route.Action) {
                 case "FormView":
+                case "AddMultiAction":
+                case "AddMultiGateway":
                     if (route.EntityName == "NAV Rate" || route.EntityName == "Gateway" || route.Controller == "NavRemittance")
                         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
                     else {

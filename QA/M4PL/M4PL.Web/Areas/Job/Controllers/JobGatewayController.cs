@@ -1079,5 +1079,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             return newDate.HasValue
                 ? new DateTime(newDate.Value.Year, newDate.Value.Month, newDate.Value.Day, newDate.Value.Hour, newDate.Value.Minute, newDate.Value.Second) : DateTime.Now;
         }
+
+        public ActionResult AddMultiAction(string strRoute)
+        {
+            return View();
+        }
+
+        public ActionResult AddMultiGateway(string strRoute)
+        {
+            return View();
+        }
     }
 }
