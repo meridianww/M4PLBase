@@ -292,7 +292,7 @@
                                    contactEmailsettings.ControlStyle.CssClass = "delivery-date";
                                    contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
                                    {
-                                       cEmailsettings.Caption = Model.Record.GwyOrderType == "Original" ? "Scheduled Delivery Date" : "Arrival Date Planned";
+                                       cEmailsettings.Caption = Model.Record.GwyOrderType == "Original" ? "Scheduled Delivery Date" : "Scheduled Arrival Date";
                                        cEmailsettings.Items.Add(n =>
                                        {
                                            n.Caption = "";
@@ -301,14 +301,14 @@
                                                if (Model.Record.CurrentAction == "Schedule")
                                                {
                                                    Model.Record.GwyDDPNew = !(bool)Session["isEdit"] ? Model.Record.GwyDDPCurrent : Model.Record.GwyDDPNew;
-                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = Model.Record.GwyOrderType == "Original" ? "Schedule Delivery Date" : "Arrival Date Planned";
-                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = Model.Record.GwyOrderType == "Original" ? "Schedule Delivery Date" : "Arrival Date Planned";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = Model.Record.GwyOrderType == "Original" ? "Schedule Delivery Date" : "Schedule Arrival Date";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = Model.Record.GwyOrderType == "Original" ? "Schedule Delivery Date" : "Schedule Arrival Date";
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                                }
                                                else
                                                {
-                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = Model.Record.GwyOrderType == "Original" ? "Reschedule Delivery Date" : "New Arrival Date Planned";
-                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = Model.Record.GwyOrderType == "Original" ? "Reschedule Delivery Date" : "New Arrival Date Planned";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = Model.Record.GwyOrderType == "Original" ? "Reschedule Delivery Date" : "Reschedule Arrival Date";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = Model.Record.GwyOrderType == "Original" ? "Reschedule Delivery Date" : "Reschedule Arrival Date";
                                                    if (!Model.Record.IsGatewayCalled)
                                                    {
                                                        ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
