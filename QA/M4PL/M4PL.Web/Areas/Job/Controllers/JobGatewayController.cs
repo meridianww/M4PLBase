@@ -1082,11 +1082,27 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public ActionResult AddMultiAction(string strRoute)
         {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            ViewData["jobIds"] = new List<string>();
+            ViewBag.ParentRecordId = 0;
+            if (route.JobIds != null && route.JobIds.Count() > 0)
+            {
+                ViewData["jobIds"] = route.JobIds;
+                ViewBag.ParentRecordId = route.ParentRecordId;
+            }
             return View();
         }
 
         public ActionResult AddMultiGateway(string strRoute)
         {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            ViewData["jobIds"] = new List<string>();
+            ViewBag.ParentRecordId = 0;
+            if (route.JobIds != null && route.JobIds.Count() > 0)
+            {
+                ViewData["jobIds"] = route.JobIds;
+                ViewBag.ParentRecordId = route.ParentRecordId;
+            }
             return View();
         }
     }

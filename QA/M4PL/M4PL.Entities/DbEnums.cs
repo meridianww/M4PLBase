@@ -328,7 +328,10 @@ namespace M4PL.Entities
 
 		PrgEventManagement,
 		EventType,
-		NavRemittance
+		NavRemittance,
+        Action,
+        SubAction,
+        NextGatway
 	}
 
 	public enum ErrorMessages

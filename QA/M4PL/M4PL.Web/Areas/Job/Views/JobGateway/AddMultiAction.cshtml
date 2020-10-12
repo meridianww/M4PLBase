@@ -1,1 +1,23 @@
-﻿
+﻿@using M4PL.Web.Providers;
+@{
+    var jobIds = new List<long>();
+    int parentRecordId = 0;
+    if (ViewData["jobIds"] != null)
+
+    {
+        jobIds = (List<long>)ViewData["jobIds"];
+        parentRecordId = ViewBag.ParentRecordId;
+        var actionDropDownViewModel = FormViewProvider.GetActionDropDown("Action", "Action", parentRecordId);
+        actionDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{M4PLCommon.JobMultiSelect.ActionDropDownChange(s, e); }}");
+        var subActionDropDownViewModel = FormViewProvider.GetActionDropDown("SubAction", "SubAction", parentRecordId);
+    }
+}
+
+@if (jobIds != null && jobIds.Count() > 0)
+{
+
+}
+else
+{
+    <strong class="danger">There is no job/order has been selected.</strong>
+}

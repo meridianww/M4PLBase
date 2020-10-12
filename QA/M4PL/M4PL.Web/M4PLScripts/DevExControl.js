@@ -153,10 +153,9 @@ DevExCtrl.Ribbon = function () {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges() || (route.Action === "Save")) {
             switch (route.Action) {
                 case "FormView":
-                case "AddMultiAction":
-                case "AddMultiGateway":
-                    if (route.EntityName == "NAV Rate" || route.EntityName == "Gateway" || route.Controller == "NavRemittance")
+                    if (route.EntityName == "NAV Rate" || route.EntityName == "Gateway" || route.Controller == "NavRemittance") {
                         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+                    }
                     else {
                         if (AppCbPanel && !AppCbPanel.InCallback()) {
                             route.OwnerCbPanel = appCbPanelName;
@@ -164,6 +163,11 @@ DevExCtrl.Ribbon = function () {
                         }
                         _doCallBack(route);
                     }
+                    break;
+                case "AddMultiAction":
+                case "AddMultiGateway":
+                    route.JobIds = M4PLWindow.MultiSelectedJobIds;
+                    RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
                     break;
                 case "DataView":
                 case "Dashboard":
@@ -213,11 +217,11 @@ DevExCtrl.Ribbon = function () {
                         //window.open("http://localhost:4200" + "/orderdetails;id=" + newRoute.RecordId);
                         window.open(window.location.origin + "/tracking/orderdetails;id=" + newRoute.RecordId);
                     }
-                    //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
-                    //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
-                    //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
-                    //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
-                    //}
+                        //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
+                        //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
+                        //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
+                        //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
+                        //}
                     else
                         //window.open("http://localhost:4200" + "/order");
                         window.open(window.location.origin + "/tracking/order");
@@ -738,7 +742,7 @@ DevExCtrl.ComboBox = function () {
             }
             if (BrandByCustomerProgramCbPanel && !BrandByCustomerProgramCbPanel.InCallback()) {
                 BrandByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-            }            
+            }
             if (ServiceModeByCustomerCbPanel && !ServiceModeByCustomerCbPanel.InCallback()) {
                 ServiceModeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
             }
@@ -1088,7 +1092,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount(); i++) {
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1879,7 +1883,7 @@ DevExCtrl.PageControl = function () {
                     e.reloadContentOnCallback = true;
                 }
             }
-            else if (callbackRoute != null && callbackRoute.Action === "TabView" && callbackRoute.Controller === "JobGateway") {          
+            else if (callbackRoute != null && callbackRoute.Action === "TabView" && callbackRoute.Controller === "JobGateway") {
                 //e.reloadContentOnCallback = true;
             }
             else if (callbackRoute != null && callbackRoute.Action === "TabView" && callbackRoute.Controller === "JobDocReference") {
@@ -1963,7 +1967,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

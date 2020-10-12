@@ -395,6 +395,21 @@ namespace M4PL.Web.Providers
             return GetIntDropDown(selectedId, EntitiesAlias.JobStatusId, fieldName, controlCaption, isRequired, isPopup, "JobStatusId", permission, parentId);
         }
 
+        public static IntDropDownViewModel GetActionDropDown(string fieldName, string controlCaption, int parentId)
+        {
+            return GetIntDropDown(0, EntitiesAlias.Action, fieldName, controlCaption, true, false, "Action", Permission.All, parentId);
+        }
+
+        public static IntDropDownViewModel GetSubActionDropDown(string fieldName, string controlCaption, int parentId)
+        {
+            return GetIntDropDown(0, EntitiesAlias.SubAction, fieldName, controlCaption, true, false, "SubAction", Permission.All, parentId);
+        }
+
+        public static IntDropDownViewModel GetGatewayDropDown(string fieldName, string controlCaption, int parentId)
+        {
+            return GetIntDropDown(0, EntitiesAlias.NextGatway, fieldName, controlCaption, true, false, "NextGatway", Permission.All, parentId);
+        }
+
         public static IntDropDownViewModel GetIntDropDown(this int selectedId, EntitiesAlias entity, string fieldName, string controlCaption, bool isRequired, bool isPopup, string textString, Permission permission, int parentId = 0)
         {
             return new IntDropDownViewModel

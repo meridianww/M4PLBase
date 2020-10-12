@@ -1,1 +1,16 @@
-﻿
+﻿@{
+    var jobIds = new List<long>();
+    if (ViewData["jobIds"] != null)
+    {
+        jobIds = (List<long>)ViewData["jobIds"];
+    }
+}
+
+@if (jobIds != null && jobIds.Count() > 0)
+{
+
+}
+else
+{
+    <strong class="danger">There is no job/order has been selected.</strong>
+}

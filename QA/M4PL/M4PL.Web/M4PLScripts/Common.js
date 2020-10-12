@@ -3094,3 +3094,12 @@ M4PLCommon.NavRemittance = (function () {
         DownloadInvoice: _downloadInvoice
     }
 })();
+
+M4PLCommon.JobMultiSelect = (function () {
+    _actionDropDownChange = function (s, e) {
+
+    }
+    return {
+        ActionDropDownChange: _actionDropDownChange
+    }
+})();
