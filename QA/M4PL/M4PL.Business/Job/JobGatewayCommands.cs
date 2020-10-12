@@ -284,6 +284,7 @@ namespace M4PL.Business.Job
 				}
 				else if (string.Equals(gatewayCode, "POD Completion", StringComparison.OrdinalIgnoreCase))
 				{
+					navOrderRepo.GenerateSalesOrderInNav((long)jobId, NavAPIUrl, NavAPIUserName, NavAPIPassword, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), activeUser);
 					navOrderRepo.GeneratePurchaseOrderInNav((long)jobId, NavAPIUrl, NavAPIUserName, NavAPIPassword, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), activeUser);
 				}
 			});
