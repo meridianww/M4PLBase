@@ -64,6 +64,7 @@ BEGIN TRY
 		,@gwyStatusExceptionId BIGINT = 0
 		,@gwyShipStatusReasonCode VARCHAR(30)
 		,@gwyShipApptmtReasonCode VARCHAR(30)
+		,@gwyOrderType VARCHAR(30)
 
 	SELECT @JobDeliveryTimeZone = JobDeliveryTimeZone
 		,@jobOriginTimeZone = JobOriginTimeZone
@@ -93,9 +94,10 @@ BEGIN TRY
 			END
 		,@gwyShipStatusReasonCode = PgdShipStatusReasonCode
 		,@gwyShipApptmtReasonCode = PgdShipApptmtReasonCode
-	FROM [dbo].[JOBDL000Master] Job
-	INNER JOIN PRGRM010Ref_GatewayDefaults Prg ON Prg.PgdProgramId = JOb.ProgramId
-	WHERE Job.Id = @parentId
+		,@gwyOrderType = PgdOrderType
+	FROM PRGRM010Ref_GatewayDefaults Prg 
+	INNER JOIN [dbo].[JOBDL000Master] Job ON JOb.ProgramId = Prg.PgdProgramId AND JOB.JobType = Prg.PgdOrderType
+	WHERE Job.Id = @parentId AND Prg.PgdGatewayCode = @gatewayCode
 
 	SELECT @CustomerId = PrgCustId
 		,@delDay = DelDay
@@ -184,9 +186,10 @@ WHERE TimeZoneShortName = CASE
 		,@cargoField AS CargoField
 		,@isCargoRequired AS IsCargoRequired
 		,@gwyStatusExceptionId AS GwyExceptionStatusId
-		,@gwyShipStatusReasonCode GwyShipStatusReasonCode
-		,@gwyShipApptmtReasonCode GwyShipApptmtReasonCode
-		,@JobCustomerSalesOrder ContractNumber
+		,@gwyShipStatusReasonCode AS GwyShipStatusReasonCode
+		,@gwyShipApptmtReasonCode AS GwyShipApptmtReasonCode
+		,@JobCustomerSalesOrder AS ContractNumber
+		,@gwyOrderType AS GwyOrderType
 END TRY
 
 BEGIN CATCH
