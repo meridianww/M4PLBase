@@ -637,6 +637,8 @@ namespace M4PL.Web
                                 return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 270;
                             if (columnSetting.ColColumnName == "PecJobField" || columnSetting.ColColumnName == "PecJobField2")
                                 return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 350;
+                            if(columnSetting.ColColumnName == "PemEdiFieldName")
+                                return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 420;
                             return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : 270;
 
                         case SQLDataTypes.datetime2:
