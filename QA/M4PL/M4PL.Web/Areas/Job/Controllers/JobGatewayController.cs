@@ -89,8 +89,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            if (jobGatewayView.GwyCompleted)
-                jobGatewayView.GwyGatewayACD = DateTime.UtcNow.AddHours(jobGatewayView.DeliveryUTCValue);
+            //if (jobGatewayView.GwyCompleted)
+            //    jobGatewayView.GwyGatewayACD = DateTime.UtcNow.AddHours(jobGatewayView.DeliveryUTCValue);
             var result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutWithSettings(jobGatewayView) : _jobGatewayCommands.PostWithSettings(jobGatewayView);
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
