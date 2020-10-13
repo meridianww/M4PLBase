@@ -1012,9 +1012,7 @@ namespace M4PL.Business.XCBL
 		{
 			try
 			{
-				if (existingJobData.JobDeliveryDateTimePlanned.HasValue &&
-						request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimePlanned))
-						.TotalHours <= 48)
+				if (request.EstimatedArrivalDate.Subtract(TimeUtility.GetPacificDateTime()).TotalHours <= 48)
 				{
 					var deliveryDateTimeActualactionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("XCBL-Date", StringComparison.OrdinalIgnoreCase));
 					string actionCode = deliveryDateTimeActualactionCode != null ? deliveryDateTimeActualactionCode.ActionCode : string.Empty;
@@ -1027,7 +1025,7 @@ namespace M4PL.Business.XCBL
 
 							if (jobGateway.GwyCompleted)
 							{
-								if (!existingJobData.JobDeliveryDateTimePlanned.Equals(request.EstimatedArrivalDate))
+								if (DateTime.Compare(existingJobData.JobDeliveryDateTimePlanned.ToDateTime(), request.EstimatedArrivalDate) != 0)
 								{
 									deliveryDateTimeActualQuery = string.Format("JobDeliveryDateTimePlanned = '{0}'", request.EstimatedArrivalDate);
 								}
@@ -1048,15 +1046,10 @@ namespace M4PL.Business.XCBL
 			{
 				var deliveryDateTimePlannedActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("ScheduledDeliveryDate", StringComparison.OrdinalIgnoreCase));
 				string actionCode = deliveryDateTimePlannedActionCode == null ? string.Empty : deliveryDateTimePlannedActionCode.ActionCode;
-				if ((existingJobData.JobDeliveryDateTimePlanned.HasValue && 
-					request.EstimatedArrivalDate.CompareTo(existingJobData.JobDeliveryDateTimePlanned) != 0)
-					|| (!existingJobData.JobDeliveryDateTimePlanned.HasValue && 
-					existingJobData.JobDeliveryDateTimeBaseline.HasValue && 
-					request.EstimatedArrivalDate.CompareTo(existingJobData.JobDeliveryDateTimeBaseline) != 0))
+				DateTime jobDeliveryPlannedDate = existingJobData.JobDeliveryDateTimePlanned.HasValue ? (DateTime)existingJobData.JobDeliveryDateTimePlanned : existingJobData.JobDeliveryDateTimeBaseline.ToDateTime();
+				if (DateTime.Compare(request.EstimatedArrivalDate, jobDeliveryPlannedDate) != 0)
 				{
-					if (!string.IsNullOrEmpty(actionCode) && (existingJobData.JobDeliveryDateTimePlanned.HasValue &&
-						request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimePlanned))
-						.TotalHours > 48))
+					if (!string.IsNullOrEmpty(actionCode) && request.EstimatedArrivalDate.Subtract(TimeUtility.GetPacificDateTime()).TotalHours > 48)
 					{
 						var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 						if (jobGateway != null)
