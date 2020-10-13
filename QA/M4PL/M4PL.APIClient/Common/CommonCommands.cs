@@ -636,6 +636,12 @@ namespace M4PL.APIClient.Common
 					return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgRefGatewayDefaultView>>(content).Results;
 				case EntitiesAlias.EventType:
 					return JsonConvert.DeserializeObject<ApiResult<Entities.Program.EventType>>(content).Results;
+				case EntitiesAlias.Action:
+					return JsonConvert.DeserializeObject<ApiResult<Entities.Program.EventType>>(content).Results;
+				case EntitiesAlias.SubAction:
+					return JsonConvert.DeserializeObject<ApiResult<Entities.Program.EventType>>(content).Results;
+				case EntitiesAlias.Gateway:
+					return JsonConvert.DeserializeObject<ApiResult<Entities.Program.EventType>>(content).Results;
 			}
 			return new object();
 		}
