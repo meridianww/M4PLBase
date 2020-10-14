@@ -10,6 +10,7 @@
 using M4PL.API.Filters;
 using M4PL.Business.BizMobl;
 using M4PL.Entities;
+using M4PL.Entities.BizMobl;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
@@ -42,6 +43,27 @@ namespace M4PL.API.Controllers
 
 			_bizMoblCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _bizMoblCommands.GenerateCSVByFileName(fileName);
+		}
+
+		[HttpPost]
+		[Route("UploadBizMoblCSVData"), ResponseType(typeof(StatusModel))]
+		public StatusModel UploadBizMoblCSVData(BizMoblCSVData bizMoblCSVData)
+		{
+			if (bizMoblCSVData == null)
+			{
+				return new StatusModel() { AdditionalDetail = "Request model can not be null.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
+			}
+			else if (bizMoblCSVData?.FileContent == null)
+			{
+				return new StatusModel() { AdditionalDetail = "File content can not be null.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
+			}
+			else if (string.IsNullOrEmpty(bizMoblCSVData?.DeviceId))
+			{
+				return new StatusModel() { AdditionalDetail = "DeviceId can not be null or empty.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
+			}
+
+			_bizMoblCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _bizMoblCommands.UploadBizMoblCSVData(bizMoblCSVData);
 		}
 	}
 }
