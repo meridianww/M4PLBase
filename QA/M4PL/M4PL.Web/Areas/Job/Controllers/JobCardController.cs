@@ -108,8 +108,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
             bool isExport = false;
             if (Request.ContentType == "application/x-www-form-urlencoded")
+            {
                 isExport = true;
-
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
+            }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 if (filterId > 0)
