@@ -196,8 +196,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             base.DataView(JsonConvert.SerializeObject(route));
             //To Add Actions Operation in ContextMenu
-            if (!isExport)
-                _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
+            //if (!isExport)
+            //    _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
             _gridResult.GridHeading = jobCardRequest != null ? jobCardRequest.CardType + " " + jobCardRequest.CardName : _gridResult.GridSetting.GridName;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
@@ -259,7 +259,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData.Keep();
             base.GridFilteringView(filteringState, strRoute, gridName);
             //To Add Actions Operation in ContextMenu
-            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
+            //_gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
 
             route.Filters = null;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -283,7 +283,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             base.GridSortingView(column, reset, strRoute, gridName);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             //To Add Actions Operation in ContextMenu
-            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
+            //_gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
 
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
@@ -305,7 +305,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             base.GridPagingView(pager, strRoute, gridName);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             //To Add Actions Operation in ContextMenu
-            _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
+            //_gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.JobCard, false);
 
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }

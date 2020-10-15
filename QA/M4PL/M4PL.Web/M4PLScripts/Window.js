@@ -447,7 +447,7 @@ M4PLWindow.DataView = function () {
                 route.RecordId = 0;
                 route.JobIds = M4PLWindow.MultiSelectedJobIds;
                 s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
-                s.Refresh();
+                //s.Refresh();
             }
         }
     }

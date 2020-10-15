@@ -1425,7 +1425,8 @@ namespace M4PL.Web
                     || (route.Entity == EntitiesAlias.NavRate && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.Gateway && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == MvcConstants.ActionForm)
-                    || (route.Entity == EntitiesAlias.NavRemittance && route.Action == MvcConstants.ActionForm))
+                    || (route.Entity == EntitiesAlias.NavRemittance && route.Action == MvcConstants.ActionForm)
+                    || (route.Entity == EntitiesAlias.JobGateway && (route.Action == "AddMultiAction" || route.Action == "AddMultiGateway")))
                     allNavMenus.Remove(saveMenu);
             }
 
@@ -1544,7 +1545,10 @@ namespace M4PL.Web
                 allNavMenus[0].Text = (route.ParentRecordId == 3316 || route.Location.FirstOrDefault() == "Driver Scrub Report") ? "Import Scrub Driver Details"
                      : ((route.ParentRecordId == 3318 || route.Location.FirstOrDefault() == "Capacity Report") ? "Import Projected Capacity" : "Import report");
             }
-
+            if (route.Entity == EntitiesAlias.JobGateway && route.Action == "AddMultiAction")
+            {
+                allNavMenus[0].Text = "Add Action";
+            }
             return allNavMenus;
         }
 
