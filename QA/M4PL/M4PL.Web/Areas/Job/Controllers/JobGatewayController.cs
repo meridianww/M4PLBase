@@ -1132,14 +1132,25 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult AddMultiGateway(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            ViewData["jobIds"] = new List<string>();
             ViewBag.ParentRecordId = 0;
+            ViewBag.Message = "There is no job/order has been selected";
             if (route.JobIds != null && route.JobIds.Count() > 0)
             {
-                ViewData["jobIds"] = route.JobIds;
-                ViewBag.ParentRecordId = route.ParentRecordId;
+                List<long> jobIds = new List<long>();
+                route.JobIds.ForEach(t => { if (!string.IsNullOrEmpty(t)) jobIds.Add(Convert.ToInt64(t)); });
+                if (jobIds.Any())
+                {
+                    var result = _commonCommands.GetJobGateway(0, string.Join(",", jobIds), true);
+                    if (result != null && result.Count() > 0)
+                    {
+                        ViewBag.ParentRecordId = route.ParentRecordId;
+                        ViewData["MultiGatewayComboBox"] = result;
+                    }
+                    else
+                        ViewBag.Message = "The selected jobs/orders are not having same gateways.";
+                }
             }
-            return View();
+            return PartialView(route);
         }
     }
 }

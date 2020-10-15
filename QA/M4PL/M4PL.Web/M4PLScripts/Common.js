@@ -3142,9 +3142,29 @@ M4PLCommon.JobMultiSelect = (function () {
         }
     }
 
+    var _btnSubmitMultiGateway = function (s, e, strRoute) {
+        var multiGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("MultiGatewayComboBox");
+        if (multiGatewayCtrl != undefined && multiGatewayCtrl != null) {
+            var code = multiGatewayCtrl.GetValue();
+            var title = multiGatewayCtrl.GetText();
+            if (code != "" && code != undefined) {
+                var route = JSON.parse(strRoute);
+                route.Filters = {
+                    FieldName: code,
+                    Value: title
+                }
+                route.IsPBSReport = true;
+                route.Action = "FormView";
+                RecordPopupControl.Hide()
+                RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+            }
+        }
+    }
+
     return {
         ActionDropDownChange: _actionDropDownChange,
         SubActionDropDownChange: _subActionDropDownChange,
-        BtnSubmitActionGateway: _btnSubmitActionGateway
+        BtnSubmitActionGateway: _btnSubmitActionGateway,
+        BtnSubmitMultiGateway: _btnSubmitMultiGateway
     }
 })();

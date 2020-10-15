@@ -1,16 +1,40 @@
-﻿@{
-    var jobIds = new List<long>();
-    if (ViewData["jobIds"] != null)
-    {
-        jobIds = (List<long>)ViewData["jobIds"];
-    }
+﻿@using M4PL.Web.Providers;
+@using Newtonsoft.Json;
+@model M4PL.Entities.Support.MvcRoute
+@{
+    List<long> jobIds = new List<long>();
+    Model.JobIds.ForEach(t => { if (!string.IsNullOrEmpty(t)) jobIds.Add(Convert.ToInt64(t)); });
+    long parentRecordId = ViewBag.ParentRecordId;
 }
-
-@if (jobIds != null && jobIds.Count() > 0)
+@if (jobIds != null && jobIds.Count() > 0 && ViewData["MultiGatewayComboBox"] != null)
 {
+    Html.DevExpress().ComboBox(settings =>
+    {
+        settings.Name = "MultiGatewayComboBox";
+        settings.Width = 180;
+        settings.SelectedIndex = 0;
+        settings.CallbackRouteValues = new { Controller = "JobGateway", Action = "AddMultiAction", Area = "Job" };
+        settings.Properties.CallbackPageSize = 15;
+        settings.Properties.TextField = "GwyGatewayCode";
+        settings.Properties.ValueField = "GwyGatewayCode";
+        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+    }).BindList((List<M4PL.Entities.Job.JobGatewayDetails>)ViewData["MultiGatewayComboBox"]).GetHtml();
 
+    Html.DevExpress().Button(
+                    settings =>
+                    {
+                        settings.Name = "BtnSubmitMultiGateway";
+                        settings.Text = "ADD GATEWAY";
+                        settings.Width = 120;
+                        settings.ClientVisible = true;
+                        settings.GroupName = "FakeGroup";
+                        settings.ClientSideEvents.CheckedChanged = string.Format("function(s, e, strRoute){{ M4PLCommon.JobMultiSelect.BtnSubmitMultiGateway(s, e, '{0}'); }}", JsonConvert.SerializeObject(Model));
+                    }
+                )
+                .Render();
 }
 else
 {
-    <strong class="danger">There is no job/order has been selected.</strong>
+    <strong class="danger">@ViewBag.Message</strong>
 }
+

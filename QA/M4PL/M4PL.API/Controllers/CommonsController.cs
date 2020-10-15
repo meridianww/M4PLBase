@@ -258,7 +258,7 @@ namespace M4PL.API.Controllers
         [HttpPost]
         [CustomQueryable]
         [Route("UserSecurities")]
-        public IQueryable<UserSecurity> GetUserSecurities(ActiveUser activeUser )
+        public IQueryable<UserSecurity> GetUserSecurities(ActiveUser activeUser)
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetUserSecurities(activeUser).AsQueryable();
@@ -573,14 +573,16 @@ namespace M4PL.API.Controllers
         /// job gateways by jobid
         /// </summary>
         /// <param name="jobId"></param>
+        /// <param name="jobIds"></param>
+        /// <param name="IsMultiJob"></param>
         /// <returns></returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("GetJobGateway")]
-        public IQueryable<JobGatewayDetails> GetJobGateway(long jobId)
+        public IQueryable<JobGatewayDetails> GetJobGateway(long jobId, string jobIds = null, bool IsMultiJob = false)
         {
             _command.ActiveUser = Models.ApiContext.ActiveUser;
-            return _command.GetJobGateway(jobId).AsQueryable();
+            return _command.GetJobGateway(jobId, jobIds, IsMultiJob).AsQueryable();
         }
 
         [CustomAuthorize]

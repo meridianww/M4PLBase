@@ -133,12 +133,12 @@ namespace M4PL.DataAccess.Common
                 storedProcedure: true);
         }
 
-		public static IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)
-		{
-			return SqlSerializer.Default.DeserializeMultiRecords<JobReportColumnRelation>(StoredProceduresConstant.GetJobReportColumnRelation, new Parameter("@reportTypeId", reportTypeId), false, true);
-		}
+        public static IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)
+        {
+            return SqlSerializer.Default.DeserializeMultiRecords<JobReportColumnRelation>(StoredProceduresConstant.GetJobReportColumnRelation, new Parameter("@reportTypeId", reportTypeId), false, true);
+        }
 
-		public static bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount, ActiveUser activeUser)
+        public static bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount, ActiveUser activeUser)
         {
             var parameters = new[]
             {
@@ -1182,7 +1182,7 @@ namespace M4PL.DataAccess.Common
 
                 string sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
                 string sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
-                var colName=columnAliasList.Find(x => x.ColColumnName == oProperty.Name)?.ColAliasName?? oProperty.Name;
+                var colName = columnAliasList.Find(x => x.ColColumnName == oProperty.Name)?.ColAliasName ?? oProperty.Name;
                 changeHistoryDataList.Add(new ChangeHistoryData() { FieldName = colName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate });
             }
 
@@ -1252,13 +1252,15 @@ namespace M4PL.DataAccess.Common
             return result;
         }
 
-        public static IList<JobGatewayDetails> GetJobGateway(ActiveUser activeUser, long jobId)
+        public static IList<JobGatewayDetails> GetJobGateway(ActiveUser activeUser, long jobId, string jobIds = null, bool IsMultiJob = false)
         {
             var parameters = new List<Parameter>()
             {
                new Parameter("@jobId", jobId),
                new Parameter("@userId", activeUser.UserId),
-               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
+               new Parameter("@jobIds", jobIds),
+               new Parameter("@isMultiJob", IsMultiJob),
             };
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobGatewayDetails>(StoredProceduresConstant.GetJobGateways, parameters.ToArray(), storedProcedure: true);
             return result;
