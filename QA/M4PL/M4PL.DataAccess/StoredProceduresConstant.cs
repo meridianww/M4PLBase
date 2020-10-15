@@ -557,6 +557,8 @@ namespace M4PL.DataAccess
 		public const string InsJobGatewayPODIfPODDocExistsByJobId = "dbo.InsJobGatewayPODIfPODDocExistsByJobId";
 		public const string GetJobExceptionDetail = "dbo.GetJobExceptionDetail";
 		public const string GetJobRescheduleReasonDetail = "dbo.GetJobRescheduleReasonDetail";
+		public const string GetMultiJobActions = "dbo.GetMultiJobActions";
+
 		/* Job Cost Sheet */
 		public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
 		public const string GetJobCostSheet = "dbo.GetJobCostSheet";

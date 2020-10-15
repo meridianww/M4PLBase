@@ -3,7 +3,7 @@
 -- Author:                    Kamal         
 -- Create date:               13/10/2020     
 -- Description:               Get all job Actions
--- Execution:                 EXEC [dbo].[GetMultiJobActions] '191152,191151,191078'
+-- Execution:                 EXEC [dbo].[GetMultiJobActions] '154728'
 -- Modified on:  
 -- Modified Desc:  
 -- =============================================
@@ -30,7 +30,7 @@ BEGIN
 		END
 		IF(@IsSchedule IS NOT NULL AND @IsSchedule =1 )
 		BEGIN
-			SELECT DISTINCT GATEWAY.PgdGatewayCode,GATEWAY.PgdGatewayTitle FROM PRGRM010Ref_GatewayDefaults GATEWAY
+			SELECT DISTINCT GATEWAY.PgdGatewayCode Code,GATEWAY.PgdGatewayTitle Title FROM PRGRM010Ref_GatewayDefaults GATEWAY
 			INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = GATEWAY.PgdProgramID 
 			INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
 			WHERE GATEWAY.GatewayTypeId = 86 AND GATEWAY.StatusId IN (1,2)
@@ -45,7 +45,7 @@ BEGIN
 		END
 		ELSE IF(@IsSchedule IS NOT NULL AND @IsSchedule =0 )
 		BEGIN
-			SELECT DISTINCT GATEWAY.PgdGatewayCode,GATEWAY.PgdGatewayTitle FROM PRGRM010Ref_GatewayDefaults GATEWAY
+			SELECT DISTINCT GATEWAY.PgdGatewayCode Code,GATEWAY.PgdGatewayTitle Title FROM PRGRM010Ref_GatewayDefaults GATEWAY
 			INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = GATEWAY.PgdProgramID 
 			INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
 			WHERE GATEWAY.GatewayTypeId = 86 AND GATEWAY.StatusId IN (1,2)
@@ -57,7 +57,7 @@ BEGIN
 				)
 		END
 		ELSE BEGIN
-			SELECT DISTINCT GATEWAY.PgdGatewayCode,GATEWAY.PgdGatewayTitle FROM PRGRM010Ref_GatewayDefaults GATEWAY
+			SELECT DISTINCT GATEWAY.PgdGatewayCode Code,GATEWAY.PgdGatewayTitle Title FROM PRGRM010Ref_GatewayDefaults GATEWAY
 			INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = GATEWAY.PgdProgramID 
 			INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
 			WHERE GATEWAY.GatewayTypeId = 86 AND GATEWAY.StatusId IN (1,2)

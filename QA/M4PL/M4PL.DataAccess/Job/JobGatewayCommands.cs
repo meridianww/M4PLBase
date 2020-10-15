@@ -110,7 +110,7 @@ namespace M4PL.DataAccess.Job
                 parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
                 new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable);
                 result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-				result.IsFarEyePushRequired = XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
+                result.IsFarEyePushRequired = XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
             }
             catch (Exception exp)
             {
@@ -122,7 +122,7 @@ namespace M4PL.DataAccess.Job
 
         public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway,
             long customerId, long? jobId = null)
-         {
+        {
             JobGateway result = null;
             try
             {
@@ -135,7 +135,7 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@cargoField", jobGateway.CargoField));
                 parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
                 result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-                result.IsFarEyePushRequired =  XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
+                result.IsFarEyePushRequired = XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
             }
             catch (Exception exp)
             {
@@ -437,6 +437,16 @@ namespace M4PL.DataAccess.Job
               new Parameter("@enteredBy", activeuser.UserName)
         };
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.InsJobGatewayPODIfPODDocExistsByJobId, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+
+        public static List<JobActionGateway> GetActionsByJobIds(string jobIds)
+        {
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@jobIds", jobIds),
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobActionGateway>(StoredProceduresConstant.GetMultiJobActions, parameters.ToArray(), storedProcedure: true);
             return result;
         }
     }

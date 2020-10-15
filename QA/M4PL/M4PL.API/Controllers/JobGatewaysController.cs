@@ -34,7 +34,7 @@ namespace M4PL.API.Controllers
     /// <summary>
     /// Job Gateway Services
     /// </summary>
-   
+
     [CustomAuthorize]
     [RoutePrefix("api/JobGateways")]
     public class JobGatewaysController : ApiController
@@ -302,6 +302,19 @@ namespace M4PL.API.Controllers
                 }
             }
             return userSysSetting;
+        }
+
+        /// <summary>
+        /// Get Actions By JobIds
+        /// </summary>
+        /// <param name="jobIds"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetActionsByJobIds")]
+        public List<JobActionGateway> GetActionsByJobIds(string jobIds)
+        {
+            return _jobGatewayCommands.GetActionsByJobIds(jobIds);
         }
     }
 }

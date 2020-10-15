@@ -289,7 +289,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (result is SysRefModel)
             {
                 MvcRoute resRoute = null;
-                var uriQueryString =Request.UrlReferrer.PathAndQuery;
+                var uriQueryString = Request.UrlReferrer.PathAndQuery;
                 if (jobGatewayView.IsGatewayCalled)
                 {
                     var resultRoute = SessionProvider.ActiveUser.LastRoute;
@@ -312,7 +312,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.Action = "FormView";
                         resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                         resultRoute.ParentRecordId = result.ProgramID ?? 0;
-                        resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId") 
+                        resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId")
                                                    ? "AppCbPanel"
                                                    : "JobDataViewCbPanel";
 
@@ -820,17 +820,17 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
 
-            var ifFilterValue = route.Filters != null ? route.Filters.Value.Split('-') : null;
+            var ifFilterValue = route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) ? route.Filters.Value.Split('-') : null;
             var gatewayCode = route.Filters != null ? (route.Filters.FieldName +
                 (ifFilterValue != null && ifFilterValue.Count() > 1 ? ("-" + ifFilterValue[1]) : string.Empty)) : string.Empty;
-            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, entityFor, route.Filters != null && route.Filters.FieldName.Contains("3PL") ? true : false, gatewayCode) ?? new JobGatewayView();
+            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, entityFor, route.Filters != null && (route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName) && route.Filters.FieldName.Contains("3PL")) ? true : false, gatewayCode) ?? new JobGatewayView();
             _formResult.Record.IsGatewayCalled = route.IsPBSReport;
             if (route.Filters != null && !(bool)Session["isEdit"])
             {
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
                 _formResult.Record.GwyGatewayTitle = route.Filters.Value;//.Substring(0, route.Filters.Value.IndexOf('-'));
             }
-            if (route.Filters != null && route.Filters.FieldName.Contains("3PL"))
+            if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName) && route.Filters.FieldName.Contains("3PL"))
                 _formResult.Record.GwyDDPCurrent =
                  Utilities.TimeUtility.GetPacificDateTime().Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay);
             else if (_formResult.Record.GwyDDPCurrent == null)
@@ -1083,14 +1083,50 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult AddMultiAction(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            ViewData["jobIds"] = new List<string>();
             ViewBag.ParentRecordId = 0;
+            ViewBag.Message = "There is no job/order has been selected";
             if (route.JobIds != null && route.JobIds.Count() > 0)
             {
-                ViewData["jobIds"] = route.JobIds;
-                ViewBag.ParentRecordId = route.ParentRecordId;
+                List<long> jobIds = new List<long>();
+                route.JobIds.ForEach(t => { if (!string.IsNullOrEmpty(t)) jobIds.Add(Convert.ToInt64(t)); });
+                if (jobIds.Any())
+                {
+                    var result = _jobGatewayCommands.GetActionsByJobIds(string.Join(",", jobIds));
+                    if (result != null && result.Count() > 0)
+                    {
+                        ViewBag.ParentRecordId = route.ParentRecordId;
+                        TempData["MultiActionComboBox"] = result;
+                        TempData.Keep("MultiActionComboBox");
+                        List<string> action = new List<string>();
+                        result.ForEach(t =>
+                        {
+                            if (!string.IsNullOrEmpty(t.Code))
+                                action.Add(t.Code.Split('-')[0]);
+                        });
+                        ViewData["Actions"] = action.Distinct().ToList();
+                    }
+                }
             }
-            return View();
+            return PartialView(route);
+        }
+
+        public PartialViewResult MultiActionComboBoxPartial(string actionCode)
+        {
+            TempData["MultiActionComboBox"] = TempData.Peek("MultiActionComboBox");
+            TempData.Keep("MultiActionComboBox");
+            if (TempData["MultiActionComboBox"] != null && !string.IsNullOrEmpty(actionCode))
+            {
+                var entity = (List<Entities.Job.JobActionGateway>)TempData["MultiActionComboBox"];
+                if (entity != null && entity.Count() > 0)
+                {
+                    var result = entity.Where(t => t.Code.Contains(actionCode)).ToList();
+                    if (result != null && result.Count() > 0)
+                    {
+                        ViewData["SubActions"] = result;
+                    }
+                }
+            }
+            return PartialView();
         }
 
         public ActionResult AddMultiGateway(string strRoute)

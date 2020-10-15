@@ -1,23 +1,41 @@
 ﻿@using M4PL.Web.Providers;
+@using Newtonsoft.Json;
+@model M4PL.Entities.Support.MvcRoute
 @{
-    var jobIds = new List<long>();
-    int parentRecordId = 0;
-    if (ViewData["jobIds"] != null)
-
-    {
-        jobIds = (List<long>)ViewData["jobIds"];
-        parentRecordId = ViewBag.ParentRecordId;
-        var actionDropDownViewModel = FormViewProvider.GetActionDropDown("Action", "Action", parentRecordId);
-        actionDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{M4PLCommon.JobMultiSelect.ActionDropDownChange(s, e); }}");
-        var subActionDropDownViewModel = FormViewProvider.GetActionDropDown("SubAction", "SubAction", parentRecordId);
-    }
+    List<long> jobIds = new List<long>();
+    Model.JobIds.ForEach(t => { if (!string.IsNullOrEmpty(t)) jobIds.Add(Convert.ToInt64(t)); });
+    long parentRecordId = ViewBag.ParentRecordId;
 }
 
-@if (jobIds != null && jobIds.Count() > 0)
+@if (jobIds != null && jobIds.Count() > 0 && ViewData["Actions"] != null)
 {
+    Html.DevExpress().ComboBox(settings =>
+    {
+        settings.Name = "MultiActionComboBox";
+        settings.Width = 180;
+        settings.SelectedIndex = 0;
+        settings.CallbackRouteValues = new { Controller = "JobGateway", Action = "AddMultiAction", Area = "Job" };
+        settings.Properties.CallbackPageSize = 15;
+        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+        settings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.JobMultiSelect.ActionDropDownChange";
+    }).BindList((List<string>)ViewData["Actions"]).GetHtml();
 
+    Html.RenderAction("MultiActionComboBoxPartial");
+
+    Html.DevExpress().Button(
+                    settings =>
+                    {
+                        settings.Name = "BtnSubmitActionGateway";
+                        settings.Text = "ADD ACTION";
+                        settings.Width = 120;
+                        settings.ClientVisible = false;
+                        settings.GroupName = "FakeGroup";
+                        settings.ClientSideEvents.CheckedChanged = string.Format("function(s, e, strRoute){{ M4PLCommon.JobMultiSelect.BtnSubmitActionGateway(s, e, '{0}'); }}", JsonConvert.SerializeObject(Model));
+                    }
+                )
+                .Render();
 }
 else
 {
-    <strong class="danger">There is no job/order has been selected.</strong>
+    <strong class="danger">@ViewBag.Message</strong>
 }

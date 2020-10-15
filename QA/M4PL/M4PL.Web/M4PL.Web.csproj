@@ -790,7 +790,7 @@
     <Content Include="Areas\Finance\Views\NavRemittance\FormView.cshtml" />
     <Content Include="Areas\Finance\Views\NavRemittance\DownloadInvoice.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\AddMultiAction.cshtml" />
-    <Content Include="Areas\Job\Views\JobGateway\AddMultiGateway.cshtml" />
+    <Content Include="Areas\Job\Views\JobGateway\MultiActionComboBoxPartial.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

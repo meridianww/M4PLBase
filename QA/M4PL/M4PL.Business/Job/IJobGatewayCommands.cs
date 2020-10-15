@@ -19,6 +19,7 @@
 
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
@@ -45,5 +46,7 @@ namespace M4PL.Business.Job
 		Entities.Contact.Contact PostContactCard(Entities.Contact.Contact contact);
 
 		bool InsJobGatewayPODIfPODDocExistsByJobId(long jobId);
+
+		List<JobActionGateway> GetActionsByJobIds(string jobIds);
 	}
 }

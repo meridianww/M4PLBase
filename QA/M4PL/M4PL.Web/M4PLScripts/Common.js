@@ -1026,7 +1026,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1319,7 +1319,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -3096,10 +3096,55 @@ M4PLCommon.NavRemittance = (function () {
 })();
 
 M4PLCommon.JobMultiSelect = (function () {
-    _actionDropDownChange = function (s, e) {
-
+    var _actionDropDownChange = function (s, e) {
+        var MultiActionCtrl = ASPxClientControl.GetControlCollection().GetByName("MultiActionComboBox");
+        var multiSubActionCtrl = ASPxClientControl.GetControlCollection().GetByName("MultiSubActionComboBox");
+        if (multiSubActionCtrl != null && multiSubActionCtrl != undefined
+            && MultiActionCtrl != null && MultiActionCtrl != undefined) {
+            var selectedVal = MultiActionCtrl.GetValue();
+            if (selectedVal != undefined && selectedVal != "") {
+                var btnSubmitActionGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("BtnSubmitActionGateway");
+                if (btnSubmitActionGatewayCtrl != undefined && btnSubmitActionGatewayCtrl != null) {
+                    btnSubmitActionGatewayCtrl.SetVisible(false);
+                }
+                multiSubActionCtrl.PerformCallback({ actionCode: selectedVal });
+            }
+        }
     }
+
+    var _subActionDropDownChange = function (s, e) {
+        var entity = s.GetValue();
+        if (entity != undefined && entity != "") {
+            var btnSubmitActionGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("BtnSubmitActionGateway");
+            if (btnSubmitActionGatewayCtrl != undefined && btnSubmitActionGatewayCtrl != null) {
+                btnSubmitActionGatewayCtrl.SetVisible(true);
+            }
+        }
+    }
+
+    var _btnSubmitActionGateway = function (s, e, strRoute) {
+        var multiSubActionCtrl = ASPxClientControl.GetControlCollection().GetByName("MultiSubActionComboBox");
+        if (multiSubActionCtrl != undefined && multiSubActionCtrl != null) {
+            var code = multiSubActionCtrl.GetValue();
+            var title = multiSubActionCtrl.GetText();
+            if (code != "" && title != "" && code != undefined && title != undefined) {
+                var surfixCode = code.split('-').length > 1 ? ('-' + code.split('-')[1]) : '';
+                var route = JSON.parse(strRoute);
+                route.Filters = {
+                    FieldName: code.split('-')[0],
+                    Value: title + surfixCode
+                }
+                route.IsPBSReport = true;
+                route.Action = "GatewayActionFormView";
+                RecordPopupControl.Hide()
+                RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+            }
+        }
+    }
+
     return {
-        ActionDropDownChange: _actionDropDownChange
+        ActionDropDownChange: _actionDropDownChange,
+        SubActionDropDownChange: _subActionDropDownChange,
+        BtnSubmitActionGateway: _btnSubmitActionGateway
     }
 })();
