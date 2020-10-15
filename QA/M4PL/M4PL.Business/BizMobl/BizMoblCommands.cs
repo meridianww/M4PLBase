@@ -66,6 +66,41 @@ namespace M4PL.Business.BizMobl
 			return new StatusModel() { Status = "Success", StatusCode = 200 };
 		}
 
+		public StatusModel UploadBizMoblCSVData(BizMoblCSVData bizMoblCSVData)
+		{
+			try
+			{
+				string directoryPath = ConfigurationManager.AppSettings["BizMoblFileDirectory"];
+				if (string.IsNullOrEmpty(directoryPath))
+				{
+					return new StatusModel() { AdditionalDetail = "BizMoblFileDirectory key is missing in config.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
+				}
+
+				string filePath = string.Format(@"{0}\{1}_AsTrans.csv", directoryPath, bizMoblCSVData.DeviceId);
+				string trgFilePath = string.Format(@"{0}\{1}.trg", directoryPath, bizMoblCSVData.DeviceId);
+				if (File.Exists(filePath))
+				{
+					File.Delete(filePath);
+				}
+
+				using (File.Create(filePath)) { }
+				File.WriteAllBytes(filePath, bizMoblCSVData.FileContent);
+
+				if (File.Exists(trgFilePath))
+				{
+					File.Delete(trgFilePath);
+				}
+
+				using (File.Create(trgFilePath)) { }
+
+				return new StatusModel() { Status = "Success", StatusCode = 200 };
+			}
+			catch (Exception exp)
+			{
+				return new StatusModel() { StatusCode = 500, Status = "Failure", AdditionalDetail = exp.Message };
+			}
+		}
+
 		public int Delete(long id)
 		{
 			throw new NotImplementedException();

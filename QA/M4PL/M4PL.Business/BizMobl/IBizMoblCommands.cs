@@ -28,5 +28,6 @@ namespace M4PL.Business.BizMobl
 	public interface IBizMoblCommands : IBaseCommands<BizMoblModel>
 	{
 		StatusModel GenerateCSVByFileName(string fileName);
+		StatusModel UploadBizMoblCSVData(BizMoblCSVData bizMoblCSVData);
 	}
 }

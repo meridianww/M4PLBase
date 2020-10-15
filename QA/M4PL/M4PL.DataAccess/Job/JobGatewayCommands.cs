@@ -156,7 +156,7 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = GetParameters(jobGateway);
             parameters.AddRange(activeUser.PutDefaultParams(jobGateway.Id, jobGateway));
-            new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable);
+            parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGateway);
         }
 
@@ -164,7 +164,7 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = GetParameters(jobGateway, userSysSetting);
             parameters.AddRange(activeUser.PutDefaultParams(jobGateway.Id, jobGateway));
-            new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable);
+            parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGateway);
         }
 
