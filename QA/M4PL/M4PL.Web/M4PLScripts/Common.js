@@ -1026,7 +1026,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1319,7 +1319,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -3114,11 +3114,12 @@ M4PLCommon.JobMultiSelect = (function () {
 
     var _subActionDropDownChange = function (s, e) {
         var entity = s.GetValue();
-        if (entity != undefined && entity != "") {
-            var btnSubmitActionGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("BtnSubmitActionGateway");
-            if (btnSubmitActionGatewayCtrl != undefined && btnSubmitActionGatewayCtrl != null) {
-                btnSubmitActionGatewayCtrl.SetVisible(true);
-            }
+        var btnSubmitActionGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("BtnSubmitActionGateway");
+        if (entity != undefined && entity != "" && btnSubmitActionGatewayCtrl != undefined && btnSubmitActionGatewayCtrl != null) {
+            btnSubmitActionGatewayCtrl.SetVisible(true);
+        }
+        else {
+            btnSubmitActionGatewayCtrl.SetVisible(false);
         }
     }
 

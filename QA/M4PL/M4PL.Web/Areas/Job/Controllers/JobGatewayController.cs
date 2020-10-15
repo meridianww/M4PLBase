@@ -1120,10 +1120,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (entity != null && entity.Count() > 0)
                 {
                     var result = entity.Where(t => t.Code.Contains(actionCode)).ToList();
+                    if (actionCode == "Schedule" || actionCode == "Reschedule")
+                        result = result.Where(t => !t.Code.Contains("XCBL")).ToList();
                     if (result != null && result.Count() > 0)
-                    {
                         ViewData["SubActions"] = result;
-                    }
                 }
             }
             return PartialView();

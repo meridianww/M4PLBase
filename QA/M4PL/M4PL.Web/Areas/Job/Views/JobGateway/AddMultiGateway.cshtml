@@ -6,35 +6,54 @@
     Model.JobIds.ForEach(t => { if (!string.IsNullOrEmpty(t)) jobIds.Add(Convert.ToInt64(t)); });
     long parentRecordId = ViewBag.ParentRecordId;
 }
-@if (jobIds != null && jobIds.Count() > 0 && ViewData["MultiGatewayComboBox"] != null)
-{
-    Html.DevExpress().ComboBox(settings =>
+<div class="row form-btns-block" style="height:165px;">
+    @if (jobIds != null && jobIds.Count() > 0 && ViewData["MultiGatewayComboBox"] != null)
     {
-        settings.Name = "MultiGatewayComboBox";
-        settings.Width = 180;
-        settings.SelectedIndex = 0;
-        settings.CallbackRouteValues = new { Controller = "JobGateway", Action = "AddMultiAction", Area = "Job" };
-        settings.Properties.CallbackPageSize = 15;
-        settings.Properties.TextField = "GwyGatewayCode";
-        settings.Properties.ValueField = "GwyGatewayCode";
-        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
-    }).BindList((List<M4PL.Entities.Job.JobGatewayDetails>)ViewData["MultiGatewayComboBox"]).GetHtml();
-
-    Html.DevExpress().Button(
-                    settings =>
+        <div class="col-md-12">
+            @Html.DevExpress().RoundPanel(set =>
+            {
+                set.Name = "pnlMultiGateway";
+                set.AllowCollapsingByHeaderClick = true;
+                set.ShowCollapseButton = false;
+                set.Enabled = false;
+                set.Collapsed = false;
+                set.ShowHeader = false;
+                set.Width = 300;
+                set.SetContent(() =>
+                {
+                    ViewContext.Writer.Write("<div class='form-row-group col-md-6'>");
+                    ViewContext.Writer.Write("<strong>Gateway</strong>");
+                    Html.DevExpress().ComboBox(settings =>
                     {
-                        settings.Name = "BtnSubmitMultiGateway";
-                        settings.Text = "ADD GATEWAY";
-                        settings.Width = 120;
-                        settings.ClientVisible = true;
-                        settings.GroupName = "FakeGroup";
-                        settings.ClientSideEvents.CheckedChanged = string.Format("function(s, e, strRoute){{ M4PLCommon.JobMultiSelect.BtnSubmitMultiGateway(s, e, '{0}'); }}", JsonConvert.SerializeObject(Model));
-                    }
-                )
-                .Render();
-}
-else
-{
-    <strong class="danger">@ViewBag.Message</strong>
-}
-
+                        settings.Name = "MultiGatewayComboBox";
+                        settings.Width = 180;
+                        settings.SelectedIndex = 0;
+                        settings.CallbackRouteValues = new { Controller = "JobGateway", Action = "AddMultiAction", Area = "Job" };
+                        settings.Properties.CallbackPageSize = 15;
+                        settings.Properties.TextField = "GwyGatewayCode";
+                        settings.Properties.ValueField = "GwyGatewayCode";
+                        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+                    }).BindList((List<M4PL.Entities.Job.JobGatewayDetails>)ViewData["MultiGatewayComboBox"]).GetHtml();
+                    ViewContext.Writer.Write("</div>");
+                });
+            }).GetHtml()
+        </div>
+        <div class="col-md-12" style="padding-top:10px;text-align:right;">
+            @Html.DevExpress().Button(settings =>
+            {
+                settings.Name = "BtnSubmitMultiGateway";
+                settings.Text = "ADD GATEWAY";
+                settings.Width = 120;
+                settings.ClientVisible = true;
+                settings.GroupName = "FakeGroup";
+                settings.ClientSideEvents.CheckedChanged = string.Format("function(s, e, strRoute){{ M4PLCommon.JobMultiSelect.BtnSubmitMultiGateway(s, e, '{0}'); }}", JsonConvert.SerializeObject(Model));
+            }).GetHtml()
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <strong class="danger">@ViewBag.Message</strong>
+        </div>
+    }
+</div>

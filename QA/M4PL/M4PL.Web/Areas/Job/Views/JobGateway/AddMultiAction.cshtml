@@ -6,24 +6,44 @@
     Model.JobIds.ForEach(t => { if (!string.IsNullOrEmpty(t)) jobIds.Add(Convert.ToInt64(t)); });
     long parentRecordId = ViewBag.ParentRecordId;
 }
-
-@if (jobIds != null && jobIds.Count() > 0 && ViewData["Actions"] != null)
-{
-    Html.DevExpress().ComboBox(settings =>
+<div class="row form-btns-block" style="height:165px;">
+    @if (jobIds != null && jobIds.Count() > 0 && ViewData["Actions"] != null)
     {
-        settings.Name = "MultiActionComboBox";
-        settings.Width = 180;
-        settings.SelectedIndex = 0;
-        settings.CallbackRouteValues = new { Controller = "JobGateway", Action = "AddMultiAction", Area = "Job" };
-        settings.Properties.CallbackPageSize = 15;
-        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
-        settings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.JobMultiSelect.ActionDropDownChange";
-    }).BindList((List<string>)ViewData["Actions"]).GetHtml();
+        <div class="col-md-12">
+            @Html.DevExpress().RoundPanel(set =>
+       {
+           set.Name = "pnlMultiAction";
+           set.AllowCollapsingByHeaderClick = true;
+           set.ShowCollapseButton = false;
+           set.Enabled = false;
+           set.Collapsed = false;
+           set.ShowHeader = false;
+           set.Width = 300;
+           set.SetContent(() =>
+           {
+               ViewContext.Writer.Write("<div class='form-row-group col-md-6'>");
+               ViewContext.Writer.Write("<strong>Action</strong>");
+               Html.DevExpress().ComboBox(settings =>
+               {
+                   settings.Name = "MultiActionComboBox";
+                   settings.Width = 180;
+                   //settings.SelectedIndex = 0;
+                   settings.CallbackRouteValues = new { Controller = "JobGateway", Action = "AddMultiAction", Area = "Job" };
+                   settings.Properties.CallbackPageSize = 15;
+                   settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+                   settings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.JobMultiSelect.ActionDropDownChange";
+               }).BindList((List<string>)ViewData["Actions"]).GetHtml();
+               ViewContext.Writer.Write("</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-md-6'>");
+               ViewContext.Writer.Write("<strong>Sub-Action</strong>");
+               Html.RenderAction("MultiActionComboBoxPartial");
 
-    Html.RenderAction("MultiActionComboBoxPartial");
-
-    Html.DevExpress().Button(
-                    settings =>
+               ViewContext.Writer.Write("</div>");
+           });
+       }).GetHtml()
+        </div>
+        <div class="col-md-12" style="padding-top:10px;text-align:right;">
+            @Html.DevExpress().Button(settings =>
                     {
                         settings.Name = "BtnSubmitActionGateway";
                         settings.Text = "ADD ACTION";
@@ -31,11 +51,13 @@
                         settings.ClientVisible = false;
                         settings.GroupName = "FakeGroup";
                         settings.ClientSideEvents.CheckedChanged = string.Format("function(s, e, strRoute){{ M4PLCommon.JobMultiSelect.BtnSubmitActionGateway(s, e, '{0}'); }}", JsonConvert.SerializeObject(Model));
-                    }
-                )
-                .Render();
-}
-else
-{
-    <strong class="danger">@ViewBag.Message</strong>
-}
+                    }).GetHtml()
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <strong class="danger">@ViewBag.Message</strong>
+        </div>
+    }
+</div>

@@ -1,17 +1,14 @@
 ﻿@{
-    List<M4PL.Entities.Job.JobActionGateway> result = null;
+    List<M4PL.Entities.Job.JobActionGateway> result = new List<M4PL.Entities.Job.JobActionGateway>();
+    result.Add(new M4PL.Entities.Job.JobActionGateway()
+    {
+        Code = "",
+        Title = ""
+    });
     if (ViewData["SubActions"] != null)
     {
-        result = (List<M4PL.Entities.Job.JobActionGateway>)ViewData["SubActions"];
-    }
-    else
-    {
-        result = new List<M4PL.Entities.Job.JobActionGateway>();
-        result.Add(new M4PL.Entities.Job.JobActionGateway()
-        {
-            Code = "",
-            Title = ""
-        });
+        var entity = (List<M4PL.Entities.Job.JobActionGateway>)ViewData["SubActions"];
+        result.AddRange(entity);
     }
 }
 
