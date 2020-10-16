@@ -739,6 +739,10 @@ M4PLCommon.CheckHasChanges = (function () {
             if (ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl').IsVisible()) {
                 hasDataChanged = M4PLWindow.SubPopupFormViewHasChanges;
             } else if (ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl').IsVisible()) {
+                var chqCtrl = ASPxClientControl.GetControlCollection().GetByName('ChequeNo');
+                if (chqCtrl != null && chqCtrl != undefined) {
+                    M4PLWindow.PopupFormViewHasChanges = false;
+                }
                 hasDataChanged = M4PLWindow.PopupFormViewHasChanges;
                 if (!hasDataChanged) {
                     for (var gridName in M4PLWindow.PopupDataViewHasChanges) {
@@ -1026,7 +1030,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1319,7 +1323,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
