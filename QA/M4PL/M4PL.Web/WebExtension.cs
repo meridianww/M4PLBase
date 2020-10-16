@@ -1547,7 +1547,7 @@ namespace M4PL.Web
             }
             if (route.Entity == EntitiesAlias.JobGateway && route.Action == "AddMultiAction")
             {
-                allNavMenus[0].Text = "Add Action";
+                allNavMenus[0].Text = "Action";
             }
             return allNavMenus;
         }
