@@ -15,7 +15,7 @@
 @using M4PL.APIClient.ViewModels.Job;
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
-@model  M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
+@model  M4PL.Web.Models.AditionalReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 @{
     Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
     var reportTypeChangeEvent = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.ReportTypeChangeEvent(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));

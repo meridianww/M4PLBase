@@ -41,7 +41,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 {
     public class JobAdvanceReportController : BaseController<JobAdvanceReportView>
     {
-        protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
+        protected AditionalReportResult<JobReportView> _reportResult = new AditionalReportResult<JobReportView>();
         private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
 
         private static IJobAdvanceReportCommands _jobAdvanceReportStaticCommands;
@@ -72,7 +72,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 			route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
 			route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-			var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
+			var reportView = WebExtension.SetupAdvancedReportResult(_reportResult, _commonCommands, route, SessionProvider);
 			if (!SessionProvider.ActiveUser.IsSysAdmin)
 			{
 				var currentSecurity = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
