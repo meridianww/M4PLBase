@@ -41,7 +41,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 {
     public class JobAdvanceReportController : BaseController<JobAdvanceReportView>
     {
-        protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
+        protected AditionalReportResult<JobReportView> _reportResult = new AditionalReportResult<JobReportView>();
         private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
 
         private static IJobAdvanceReportCommands _jobAdvanceReportStaticCommands;
@@ -72,7 +72,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 			route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
 			route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-			var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
+			var reportView = WebExtension.SetupAdvancedReportResult(_reportResult, _commonCommands, route, SessionProvider);
 			if (!SessionProvider.ActiveUser.IsSysAdmin)
 			{
 				var currentSecurity = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
@@ -422,6 +422,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView("CargoTitleByJob", _reportResult);
         }
         #endregion
+
+        public PartialViewResult JobAdvanceReportGridPartial(string strRoute)
+        {
+            ViewBag.IsCallBack = true;
+            return PartialView("JobAdvanceReportGridPartial", strRoute);
+        }
+
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
@@ -440,6 +447,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentRecordId = 0;
+            route.RecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
             requestRout.OwnerCbPanel = "JobAdvanceReportGridView";// "JobAdvanceReportGridView";
             SessionProvider.ActiveUser.ReportRoute = null;

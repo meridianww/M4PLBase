@@ -3142,6 +3142,7 @@ M4PLCommon.JobMultiSelect = (function () {
                 route.IsPBSReport = true;
                 route.Action = "GatewayActionFormView";
                 RecordPopupControl.Hide()
+                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                 RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
             }
         }
@@ -3161,6 +3162,7 @@ M4PLCommon.JobMultiSelect = (function () {
                 route.IsPBSReport = true;
                 route.Action = "FormView";
                 RecordPopupControl.Hide()
+                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                 RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
             }
         }

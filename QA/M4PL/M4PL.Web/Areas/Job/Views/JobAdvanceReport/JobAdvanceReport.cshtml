@@ -15,10 +15,10 @@
 @using M4PL.APIClient.ViewModels.Job;
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
-@model  M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
+@model  M4PL.Web.Models.AditionalReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 @{
     Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
-    var reportTypeChangeEvent = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.ReportTypeChangeEvent(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+    var reportTypeChangeEvent = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.ReportTypeChangeEvent(s, e, {0}, {1}); }}", "JobAdvanceReportCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
     customerDropdown.OnInit = "M4PLCommon.AdvancedReport.DefaultSelectedCustomer(s,e);";
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramByCustomerCbPanelChange(s, e)}}");
@@ -43,7 +43,7 @@
     sett.AllowFocus = false;
     sett.ControlStyle.CssClass = "form-btn";
     sett.Width = 90;
-    sett.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.ImportDriverScrub(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(scrubReportmodel));
+    sett.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.ImportDriverScrub(s, e, {0}, {1}); }}", "JobAdvanceReportCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(scrubReportmodel));
 }).GetHtml()
 </div>
 
@@ -135,7 +135,7 @@
             set.AllowFocus = false;
             set.ControlStyle.CssClass = "form-btn";
             set.Width = 90;
-            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "JobAdvanceReportCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
         }).GetHtml());
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
@@ -144,6 +144,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.Partial("JobAdvanceReportGridPartial")
+    @Html.Partial("JobAdvanceReportGridPartial", "");
 }
 
