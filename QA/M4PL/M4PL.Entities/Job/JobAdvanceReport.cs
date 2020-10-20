@@ -162,6 +162,9 @@ namespace M4PL.Entities.Job
 		public decimal RateAmount { get; set; }
 		public long JobId { get; set; }
 		public bool IsPaginationDisable { get; set; }
+        public int CgoQtyShortOver { get; set; }
+        public int CgoQtyDamaged { get; set; }
+        public int CgoQtyOver { get; set; }
 
 		public JobAdvanceReport DeepCopy()
 		{
