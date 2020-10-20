@@ -422,6 +422,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView("CargoTitleByJob", _reportResult);
         }
         #endregion
+
+        public PartialViewResult JobAdvanceReportGridPartial(string strRoute)
+        {
+            ViewBag.IsCallBack = true;
+            return PartialView("JobAdvanceReportGridPartial", strRoute);
+        }
+
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
