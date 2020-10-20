@@ -57,6 +57,8 @@ namespace M4PL.DataAccess.Job
 
             if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
                 pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
+            else if (results.Count > 0)
+                pagedDataInfo.TotalCount = results[0].TotalRows;
             else pagedDataInfo.TotalCount = 0;
 
             return results;

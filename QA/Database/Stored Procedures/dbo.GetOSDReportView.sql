@@ -241,10 +241,10 @@ BEGIN TRY
 		SET @where = REPLACE(@where, 'JobAdvanceReport.JobQtyActual', 'CASE WHEN SO.SysOptionName = ''Appliance'' THEN 1 ELSE 0 END')
 		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
 	END
-	EXEC sp_executesql @TCountQuery
-		,N'@userId BIGINT, @TotalCount INT OUTPUT'
-		,@userId
-		,@TotalCount OUTPUT;
+	--EXEC sp_executesql @TCountQuery
+	--	,N'@userId BIGINT, @TotalCount INT OUTPUT'
+	--	,@userId
+	--	,@TotalCount OUTPUT;
 
 	IF (
 			(ISNULL(@groupBy, '') = '')
@@ -257,6 +257,7 @@ BEGIN TRY
 			SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoQtyDamaged', 'ISNULL(JC.CgoQtyDamaged,0) CgoQtyDamaged');
 			SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoQtyOver', 'ISNULL(JC.CgoQtyOver,0) CgoQtyOver');
 			SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoQtyShortOver', 'ISNULL(JC.CgoQtyShortOver,0) CgoQtyShortOver');
+			SET @sqlCommand=@sqlCommand+' ,TotalRows = COUNT(*) OVER()'
 		END
 		ELSE
 		BEGIN
