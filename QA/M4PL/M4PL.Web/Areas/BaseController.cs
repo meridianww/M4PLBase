@@ -111,12 +111,7 @@ namespace M4PL.Web.Areas
                 || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1) && !route.IsJobParentEntityUpdated)
                 currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
 
-            if (route.Entity == EntitiesAlias.JobAdvanceReport && reportTypeId == 0)
-            {
-                _gridResult.Records = new List<TView>();
-                _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount = 0;
-            }
-            else if (route.Entity == EntitiesAlias.JobHistory)
+            if (route.Entity == EntitiesAlias.JobHistory)
             {
                 route.IsPBSReport = false;
                 currentPagedDataInfo.RecordId = route.RecordId;
