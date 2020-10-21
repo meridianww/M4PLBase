@@ -165,6 +165,7 @@ namespace M4PL.Entities.Job
         public int CgoQtyShortOver { get; set; }
         public int CgoQtyDamaged { get; set; }
         public int CgoQtyOver { get; set; }
+        public int TotalRows { get; set; }
 
 		public JobAdvanceReport DeepCopy()
 		{
