@@ -3136,7 +3136,7 @@ namespace M4PL.Web
                   : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimeActual  IS NOT NULL  AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) <= '{1}' ",
                   Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
                 }
-                else if ((jobAdvanceReportRequest.FileName != "Job Advance Report" && jobAdvanceReportRequest.FileName != "Manifest Report")
+                else if ((jobAdvanceReportRequest.FileName != "Job Advance Report" && jobAdvanceReportRequest.FileName != "Manifest Report" && jobAdvanceReportRequest.FileName != "OSD Report")
                 || (jobAdvanceReportRequest.FileName == null))
                 {
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)

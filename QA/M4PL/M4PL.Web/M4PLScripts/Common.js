@@ -1621,7 +1621,7 @@ M4PLCommon.AdvancedReport = (function () {
         var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         if (reportTypeCtrl != null &&
-            reportTypeCtrl.GetText() != "Job Advance Report" && reportTypeCtrl.GetText() != "Manifest Report") {
+            reportTypeCtrl.GetText() != "Job Advance Report" && reportTypeCtrl.GetText() != "Manifest Report" && reportTypeCtrl.GetText() != "OSD Report") {
             var today = new Date();
             var yeasterday = new Date();
             yeasterday.setDate(yeasterday.getDate() - 1);

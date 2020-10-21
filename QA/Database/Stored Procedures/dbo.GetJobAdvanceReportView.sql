@@ -9,7 +9,7 @@ GO
 -- Create date: 8/18/2020
 -- Description:	Get Job Advance Report View
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobAdvanceReportView] (
+ALTER PROCEDURE [dbo].[GetJobAdvanceReportView] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -327,6 +327,34 @@ BEGIN
 	BEGIN
 	SET @IsCostCharge = CASE WHEN ISNULL(@ReportName, '') = 'Cost Charge' THEN 1 ELSE 0 END
 	EXEC [dbo].[GetCompletedJobRecordsForPostedCharges]  @userId, @roleId, @orgId, @where,@IsCostCharge,@IsExport, @TotalCount OUTPUT
+	END
+	ELSE IF (ISNULL(@ReportName, '') = 'OSD Report')
+	BEGIN
+		EXEC dbo.GetOSDReportView @userId
+			,@roleId
+			,@orgId
+			,@entity
+			,@pageNo
+			,@pageSize
+			,@orderBy
+			,@groupBy
+			,@groupByWhere
+			,@where
+			,@parentId
+			,@isNext
+			,@isEnd
+			,@recordId
+			,@IsExport
+			,@scheduled
+			,@orderType
+			,@DateType
+			,@JobStatus
+			,@SearchText
+			,@gatewayTitles
+			,@PackagingCode
+			,@CargoId
+			,@reportTypeId
+			,@TotalCount OUTPUT
 	END
 END
 GO

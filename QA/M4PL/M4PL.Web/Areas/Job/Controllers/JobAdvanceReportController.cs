@@ -437,7 +437,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (Request.ContentType == "application/x-www-form-urlencoded")
                 isExport = true;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
-            if ((strJobAdvanceReportRequestRoute.FileName != "Job Advance Report" && strJobAdvanceReportRequestRoute.FileName != "Manifest Report")
+            if ((strJobAdvanceReportRequestRoute.FileName != "Job Advance Report" && strJobAdvanceReportRequestRoute.FileName != "Manifest Report" && strJobAdvanceReportRequestRoute.FileName != "OSD Report")
            || (strJobAdvanceReportRequestRoute.FileName == null))
             {
                 if (!strJobAdvanceReportRequestRoute.StartDate.HasValue)
