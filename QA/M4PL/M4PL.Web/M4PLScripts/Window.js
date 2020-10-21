@@ -1069,9 +1069,8 @@ M4PLWindow.FormView = function () {
         if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway"
             && (currentRoute.Action == "GatewayActionFormView" || currentRoute.Action == "FormView")) {
             var s = null;
-            if (currentRoute.OwnerCbPanel == "AppCbPanel")
-                s = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
-            else
+            s = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
+            if (s == null && s == undefined)
                 s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
             //if (s != null && s != undefined && s.GetSelectedKeysOnPage() != null && s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0)
             if (s != null && s != undefined && M4PLWindow.MultiSelectedJobIds.length > 0)
