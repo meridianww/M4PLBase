@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[GetOSDReportView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetOSDReportView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -75,7 +75,68 @@ BEGIN TRY
 					AND SysOptionName = 'Canceled'
 				);
 	END
+	-----------------------------------------Temporary Tables starts
 
+SELECT JC.JobID
+,JC.Id
+,JC.CgoTitle
+	,JC.CgoPartNumCode
+	,JC.CgoQtyDamaged
+	,JC.CgoQtyOver
+	,JC.CgoQtyShortOver
+	,JC.CgoCubes 
+	,JC.CgoWeight 
+	,JC.CgoPackagingTypeId
+	,JC.StatusId
+	INTO #CargoTemp
+	FROM JOBDL010Cargo JC
+	WHERE JC.StatusId = 1
+		AND (
+		JC.CgoQtyDamaged <> 0
+		OR  JC.CgoQtyShortOver  <> 0
+		OR  JC.CgoQtyOver  <> 0
+		)
+
+SELECT 
+	JobAdvanceReport.Id
+	,JobAdvanceReport.JobBOL
+	,JobAdvanceReport.JobCarrierContract
+	,JobAdvanceReport.JobCustomerPurchaseOrder
+	,JobAdvanceReport.JobCustomerSalesOrder
+	,JobAdvanceReport.JobDeliveryCity
+	,JobAdvanceReport.JobDeliveryDateTimeActual
+	,JobAdvanceReport.JobDeliveryDateTimePlanned
+	,JobAdvanceReport.JobDeliveryPostalCode
+	,JobAdvanceReport.JobDeliverySiteName
+	,JobAdvanceReport.JobDeliverySitePOC
+	,JobAdvanceReport.JobDeliverySitePOCEmail
+	,JobAdvanceReport.JobDeliverySitePOCPhone
+	,JobAdvanceReport.JobDeliverySitePOCPhone2
+	,JobAdvanceReport.JobDeliveryState
+	,JobAdvanceReport.JobDeliveryStreetAddress
+	,JobAdvanceReport.JobDeliveryStreetAddress2
+	,JobAdvanceReport.JobGatewayStatus
+	,JobAdvanceReport.JobMileage
+	,JobAdvanceReport.JobOrderedDate
+	,JobAdvanceReport.JobOriginDateTimeActual
+	,JobAdvanceReport.JobOriginDateTimePlanned
+	,JobAdvanceReport.JobSellerSiteName
+	,JobAdvanceReport.JobSellerSitePOCEmail
+	,JobAdvanceReport.JobServiceMode
+	,JobAdvanceReport.JobSiteCode
+	,JobAdvanceReport.PlantIDCode
+	,JobAdvanceReport.StatusId
+	,JobAdvanceReport.JobProductType 
+	,JobAdvanceReport.JobChannel 
+	,JobAdvanceReport.DateEntered
+	,ProgramID
+	INTO #JobTemp
+	FROM JOBDL000Master JobAdvanceReport
+	WHERE JobAdvanceReport.JobSiteCode IS NOT NULL
+	AND JobAdvanceReport.JobSiteCode <> ''
+
+
+-----------------------------------------Temporary Tables ends
 	SELECT @GatewayTypeId = Id
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
@@ -87,7 +148,7 @@ BEGIN TRY
 		AND SysOptionName = 'Action'
 
 	SET @TablesQuery = ' FROM CUST000Master CUST ' + ' INNER JOIN PRGRM000Master PRG ON PRG.PrgCustID = CUST.Id AND CUST.StatusId = 1 AND PRG.StatusId = 1 ' 
-	+ ' INNER JOIN JOBDL000Master ' + @entity + ' ON ' + @entity + '.ProgramID = PRG.Id '
+	+ ' INNER JOIN #JobTemp ' + @entity + ' ON ' + @entity + '.ProgramID = PRG.Id '
 	IF(@JobStatusId >0 )
 	BEGIN
 		SET @TablesQuery += 'AND JobAdvanceReport.StatusId = ' + CONVERT(NVARCHAR(10), @JobStatusId)
@@ -123,7 +184,7 @@ BEGIN TRY
 	END
 
 	------------------------------- Security End---------------------------------------
-	SET @TablesQuery = @TablesQuery + ' INNER JOIN JOBDL010Cargo JC ON JC.JobID = ' + @entity + '.Id AND JC.StatusId = 1'-- AND (ISNULL(JC.CgoQtyDamaged,0)>0 OR ISNULL(JC.CgoQtyShortOver,0)>0 OR ISNULL(JC.CgoQtyOver,0)>0)'
+	SET @TablesQuery = @TablesQuery + ' INNER JOIN #CargoTemp JC ON JC.JobID = ' + @entity + '.Id AND JC.StatusId = 1'-- AND (ISNULL(JC.CgoQtyDamaged,0)>0 OR ISNULL(JC.CgoQtyShortOver,0)>0 OR ISNULL(JC.CgoQtyOver,0)>0)'
 	SET @TablesQuery = @TablesQuery + ' LEFT JOIN SYSTM000Ref_Options SO ON JC.CgoPackagingTypeId = SO.Id '
 	 
 	IF (
@@ -434,7 +495,8 @@ BEGIN TRY
 	BEGIN
 		DROP TABLE #JOBDLGateways
 	END
-
+	DROP TABLE #CargoTemp
+	DROP TABLE #JobTemp
 	END TRY
 
 BEGIN CATCH
