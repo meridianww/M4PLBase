@@ -437,6 +437,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (Request.ContentType == "application/x-www-form-urlencoded")
                 isExport = true;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if ((strJobAdvanceReportRequestRoute.FileName != "Job Advance Report" && strJobAdvanceReportRequestRoute.FileName != "Manifest Report")
            || (strJobAdvanceReportRequestRoute.FileName == null))
             {
@@ -445,9 +446,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (!strJobAdvanceReportRequestRoute.EndDate.HasValue)
                     strJobAdvanceReportRequestRoute.EndDate = DateTime.Now;
             }
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            else
+            {
+                route.RecordId = 0;
+            }
+           
             route.ParentRecordId = 0;
-            route.RecordId = 0;
+            
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
             requestRout.OwnerCbPanel = "JobAdvanceReportGridView";// "JobAdvanceReportGridView";
             SessionProvider.ActiveUser.ReportRoute = null;
