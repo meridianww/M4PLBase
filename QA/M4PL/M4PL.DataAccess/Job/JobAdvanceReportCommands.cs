@@ -57,6 +57,8 @@ namespace M4PL.DataAccess.Job
 
             if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
                 pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
+            else if (results.Count > 0)
+                pagedDataInfo.TotalCount = results[0].TotalRows;
             else pagedDataInfo.TotalCount = 0;
 
             return results;
@@ -390,7 +392,7 @@ namespace M4PL.DataAccess.Job
                     parameters.Add(new Parameter("@SearchText", jobAdvanceReportRequest.Search));
                 if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
                 {
-                    string gatewayTitles = string.Format(" AND  GWY.GwyGatewayCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
+                    string gatewayTitles = string.Format(" AND  JobAdvanceReport.JobGatewayStatus IN ('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
                     parameters.Add(new Parameter("@gatewayTitles", gatewayTitles));
                 }
             }

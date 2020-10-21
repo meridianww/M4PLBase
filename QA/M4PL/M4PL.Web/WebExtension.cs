@@ -158,7 +158,7 @@ namespace M4PL.Web
             return reportView;
         }
 
-        public static APIClient.ViewModels.Administration.ReportView SetupAdvancedReportResult<TView>(this ReportResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
+        public static APIClient.ViewModels.Administration.ReportView SetupAdvancedReportResult<TView>(this AditionalReportResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
         {
             APIClient.ViewModels.Administration.ReportView reportView = null;
             if (route.RecordId < 1)
@@ -309,6 +309,38 @@ namespace M4PL.Web
         }
 
         public static MvcRoute SetEntityAndPermissionInfo<TView>(this ReportResult<TView> reportResult, ICommonCommands commonCommands, SessionProvider sessionProvider)
+        {
+            if (commonCommands != null && Enum.IsDefined(typeof(EntitiesAlias), typeof(TView).BaseType.Name) && typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>() != EntitiesAlias.Common)
+            {
+                var tableRef = commonCommands.Tables[typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>()];
+                var baseRoute = new MvcRoute { Entity = typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>(), Action = MvcConstants.ActionIndex, Area = tableRef.MainModuleName, EntityName = tableRef.TblLangName };
+                reportResult.PageName = baseRoute.EntityName;
+                reportResult.Icon = tableRef.TblIcon;
+                var moduleIdToCompare = (baseRoute.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
+                var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
+                if (security == null)
+                {
+                    reportResult.Permission = Permission.ReadOnly;
+                }
+                else if (security?.UserSubSecurities?.Count == null || security.UserSubSecurities.Count == 0)
+                {
+                    reportResult.Permission = security.SecMenuAccessLevelId.ToEnum<Permission>();
+                }
+                else
+                {
+                    var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
+                    reportResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
+                }
+                if (baseRoute.Entity == EntitiesAlias.JobReport)
+                {
+                    reportResult.Permission = Permission.EditAll;
+                }
+                return baseRoute;
+            }
+            return null;
+        }
+
+        public static MvcRoute SetEntityAndPermissionInfo<TView>(this AditionalReportResult<TView> reportResult, ICommonCommands commonCommands, SessionProvider sessionProvider)
         {
             if (commonCommands != null && Enum.IsDefined(typeof(EntitiesAlias), typeof(TView).BaseType.Name) && typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>() != EntitiesAlias.Common)
             {
@@ -3104,7 +3136,7 @@ namespace M4PL.Web
                   : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimeActual  IS NOT NULL  AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) <= '{1}' ",
                   Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
                 }
-                else if ((jobAdvanceReportRequest.FileName != "Job Advance Report" && jobAdvanceReportRequest.FileName != "Manifest Report")
+                else if ((jobAdvanceReportRequest.FileName != "Job Advance Report" && jobAdvanceReportRequest.FileName != "Manifest Report" && jobAdvanceReportRequest.FileName != "OSD Report")
                 || (jobAdvanceReportRequest.FileName == null))
                 {
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)

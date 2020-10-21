@@ -23,16 +23,20 @@ using System.Collections.Generic;
 
 namespace M4PL.Web.Models
 {
-	public class ReportResult<TView> : ViewResult
+	public class ReportResult<TView> : AditionalReportResult<TView>
 	{
-		public long RecordId { get; set; }
 		public XtraReport Report { get; set; }
-		public TView Record { get; set; }
-		public MvcRoute ReportRoute { get; set; }
-		public MvcRoute ExportRoute { get; set; }
-		public List<string> Location { get; set; }
-		public System.DateTime? StartDate { get; set; }
-		public System.DateTime? EndDate { get; set; }
-		public bool IsPBSReport { get; set; }
 	}
+
+    public class AditionalReportResult<TView> : ViewResult
+    {
+        public long RecordId { get; set; }
+        public TView Record { get; set; }
+        public MvcRoute ReportRoute { get; set; }
+        public MvcRoute ExportRoute { get; set; }
+        public List<string> Location { get; set; }
+        public System.DateTime? StartDate { get; set; }
+        public System.DateTime? EndDate { get; set; }
+        public bool IsPBSReport { get; set; }
+    }
 }

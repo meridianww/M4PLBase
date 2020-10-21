@@ -1577,6 +1577,10 @@ M4PLCommon.AdvancedReport = (function () {
     }
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        var gridCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
+        if (gridCtrl != null && gridCtrl != undefined) {
+            rprtVwrCtrl = gridCtrl;
+        }
         if (reportTypeCtrl != null &&
             ((reportTypeCtrl.GetText() == "Driver Scrub Report")
                 || (reportTypeCtrl.GetText() == "Capacity Report")
@@ -1621,7 +1625,7 @@ M4PLCommon.AdvancedReport = (function () {
         var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         if (reportTypeCtrl != null &&
-            reportTypeCtrl.GetText() != "Job Advance Report" && reportTypeCtrl.GetText() != "Manifest Report") {
+            reportTypeCtrl.GetText() != "Job Advance Report" && reportTypeCtrl.GetText() != "Manifest Report" && reportTypeCtrl.GetText() != "OSD Report") {
             var today = new Date();
             var yeasterday = new Date();
             yeasterday.setDate(yeasterday.getDate() - 1);
@@ -1655,7 +1659,7 @@ M4PLCommon.AdvancedReport = (function () {
                 $(".isDriverbtnScrubreport").show();
                 rprtVwrRoute.IsFormRequest = true;
                 rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
-                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+                //rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
             }
             var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
             customerCtrl.SetValue(0);
@@ -1683,7 +1687,7 @@ M4PLCommon.AdvancedReport = (function () {
             scheduleTypeCtrl.GetInputElement().style.backgroundColor = "#9BEBF2";
             rprtVwrRoute.IsFormRequest = true;
             rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
-            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            //rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
         }
         else {
             controlEnabledDisabled(true);
@@ -1698,7 +1702,7 @@ M4PLCommon.AdvancedReport = (function () {
             $(".isDriverScrubreport").show();
             $(".isDriverbtnScrubreport").show();
             if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
-                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+                //rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
             }
         }
     }
@@ -3142,6 +3146,7 @@ M4PLCommon.JobMultiSelect = (function () {
                 route.IsPBSReport = true;
                 route.Action = "GatewayActionFormView";
                 RecordPopupControl.Hide()
+                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                 RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
             }
         }
@@ -3161,6 +3166,7 @@ M4PLCommon.JobMultiSelect = (function () {
                 route.IsPBSReport = true;
                 route.Action = "FormView";
                 RecordPopupControl.Hide()
+                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                 RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
             }
         }
