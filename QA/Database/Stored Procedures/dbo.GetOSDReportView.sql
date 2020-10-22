@@ -271,7 +271,7 @@ SELECT
 			SET @condition = ' ' + @gatewayTitles
 		END
 
-		SET @GatewayCommand = @GatewayCommand + @condition
+		SET @GatewayCommand = @GatewayCommand + REPLACE(@condition, ' JobAdvanceReport.JobGatewayStatus ',' GWY.GwyGatewayCode ');
 
 		IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL
 		BEGIN
