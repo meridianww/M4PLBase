@@ -41,17 +41,10 @@ BEGIN TRY
 	SET NOCOUNT ON;
 
 	DECLARE @sqlCommand NVARCHAR(MAX)
-		,@TCountQuery NVARCHAR(MAX)
-		,@TablesQuery NVARCHAR(MAX)
-		,@GatewayTypeId INT = 0
-		,@GatewayActionTypeId INT = 0
-		,@GatewayStatus NVARCHAR(MAX) = NULL
-		IF(@gatewayTitles IS NOT NULL AND @gatewayTitles <> '')
-		BEGIN
-		  SET @GatewayStatus = REPLACE(@gatewayTitles, ' GWY.GwyGatewayCode ', ' JobAdvanceReport.JobGatewayStatus ');
-		END
-	DECLARE @AdvanceFilter NVARCHAR(MAX) = ''
-		,@JobStatusId INT = 0;
+		   ,@TCountQuery NVARCHAR(MAX)
+		   ,@TablesQuery NVARCHAR(MAX)
+		   ,@AdvanceFilter NVARCHAR(MAX) = ''
+		   ,@JobStatusId INT = 0;
 
 	IF (@JobStatus = 'Active')
 	BEGIN
@@ -89,22 +82,28 @@ BEGIN TRY
 					AND SysOptionName = 'Canceled'
 				);
 	END
-
-	SELECT @GatewayTypeId = Id
-	FROM SYSTM000Ref_Options
-	WHERE SysLookupCode = 'GatewayType'
-		AND SysOptionName = 'Gateway'
-
-	SELECT @GatewayActionTypeId = Id
-	FROM SYSTM000Ref_Options
-	WHERE SysLookupCode = 'GatewayType'
-		AND SysOptionName = 'Action'
-
+	
 	SET @TablesQuery = ' FROM CUST000Master CUST ' + ' INNER JOIN PRGRM000Master PRG ON PRG.PrgCustID = CUST.Id AND CUST.StatusId = 1 AND PRG.StatusId = 1 ' 
 	+ ' INNER JOIN JOBDL000Master ' + @entity + ' ON ' + @entity + '.ProgramID = PRG.Id '
 	IF(@JobStatusId >0 )
 	BEGIN
-		SET @TablesQuery += 'AND JobAdvanceReport.StatusId = ' + CONVERT(NVARCHAR(10), @JobStatusId)
+		SET @TablesQuery += ' AND JobAdvanceReport.StatusId = ' + CONVERT(NVARCHAR(10), @JobStatusId)
+	END
+	IF ((ISNULL(@orderType, '') <> '' AND ISNULL(@orderType, '') <> 'ALL'))
+	BEGIN
+	   SET @TablesQuery += ' AND JobAdvanceReport.JobType = ''' + @orderType +''''
+	END	
+	IF(ISNULL(@gatewayTitles, '') <> '' AND ISNULL(@gatewayTitles, '') <> 'ALL')
+	BEGIN 
+	  SET @TablesQuery += @gatewayTitles
+	END 
+	IF (ISNULL(@scheduled, '') = 'Not Scheduled')
+	BEGIN
+		SET @TablesQuery += ' AND JobAdvanceReport.JobIsSchedule = 0'  
+	END
+	ELSE IF (ISNULL(@scheduled, '') = 'Scheduled')
+	BEGIN
+		SET @TablesQuery += ' AND JobAdvanceReport.JobIsSchedule = 1'  
 	END
 	--------------------- Security Start----------------------------------------------------------
 	DECLARE @JobCount BIGINT
@@ -152,95 +151,7 @@ BEGIN TRY
 	BEGIN
 		SET @TablesQuery = @TablesQuery + ' AND JC.Id = ' + CONVERT(NVARCHAR(10), @CargoId)
 	END
-
-	IF (
-			(
-				ISNULL(@orderType, '') <> ''
-				AND ISNULL(@orderType, '') <> 'ALL'
-				)
-			OR (
-				ISNULL(@DateType, '') <> ''
-				AND ISNULL(@DateType, '') <> 'ALL'
-				)
-			OR (
-				ISNULL(@gatewayTitles, '') <> ''
-				AND ISNULL(@gatewayTitles, '') <> 'ALL'
-				)
-			OR (
-				ISNULL(@scheduled, '') <> ''
-				AND ISNULL(@scheduled, '') <> 'ALL'
-				)
-			)
-	BEGIN
-		DECLARE @condition NVARCHAR(500) = '';
-		DECLARE @GatewayCommand NVARCHAR(500);
-
-		SET @GatewayCommand = 'SELECT DISTINCT GWY.JobID from  JOBDL020Gateways GWY  (NOLOCK) WHERE (1=1) ' + ' AND GWY.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE GwyCompleted = 1 '
-
-		IF (
-				(
-					ISNULL(@gatewayTitles, '') <> ''
-					AND ISNULL(@gatewayTitles, '') <> 'ALL'
-					)
-				OR (
-					ISNULL(@orderType, '') <> ''
-					AND ISNULL(@orderType, '') <> 'ALL'
-					)
-				)
-		BEGIN
-			SET @GatewayCommand = @GatewayCommand + ' AND GatewayTypeId = ' + CONVERT(VARCHAR, @GatewayTypeId)
-		END
-
-		IF (ISNULL(@scheduled, '') = 'Not Scheduled')
-		BEGIN
-			SET @GatewayCommand = @GatewayCommand + ' AND JobId NOT IN (SELECT DISTINCT JobId FROM JOBDL020Gateways WHERE GatewayTypeId= ' + CONVERT(VARCHAR, @GatewayActionTypeId) + ')  AND JobId IS NOT NULL '
-		END
-		ELSE IF (ISNULL(@scheduled, '') = 'Scheduled')
-		BEGIN
-			SET @GatewayCommand = @GatewayCommand + ' AND JobId IN (SELECT DISTINCT JobId FROM JOBDL020Gateways WHERE GatewayTypeId= ' + CONVERT(VARCHAR, @GatewayActionTypeId) + ')  AND JobId IS NOT NULL'
-		END
-
-		SET @GatewayCommand = @GatewayCommand + ' GROUP BY JobID ) AND GWY.GwyCompleted = 1 '
-
-		IF (ISNULL(@DateType, '') <> '')
-		BEGIN
-			SET @GatewayCommand = 'SELECT DISTINCT GWY.JobID from  JOBDL020Gateways GWY  (NOLOCK) WHERE (1=1) '
-			SET @GatewayCommand += @DateType
-		END
-
-		IF (
-				ISNULL(@orderType, '') <> ''
-				AND ISNULL(@orderType, '') <> 'ALL'
-				)
-		BEGIN
-			SET @GatewayCommand = @GatewayCommand + ' AND GWY.GwyOrderType = ''' + @orderType + ''''
-		END
-
-		IF (
-				ISNULL(@gatewayTitles, '') <> ''
-				AND ISNULL(@gatewayTitles, '') <> 'ALL'
-				)
-		BEGIN
-			SET @condition = ' ' + @gatewayTitles
-		END
-
-		SET @GatewayCommand = @GatewayCommand + @condition
-
-		IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL
-		BEGIN
-			DROP TABLE #JOBDLGateways
-		END
-
-		CREATE TABLE #JOBDLGateways (JobID BIGINT)
-
-		INSERT INTO #JOBDLGateways
-		EXEC sp_executesql @GatewayCommand
-
-		CREATE NONCLUSTERED INDEX ix_tempJobIndexAft ON #JOBDLGateways ([JobID]);
-
-		SET @TablesQuery = @TablesQuery + ' INNER JOIN #JOBDLGateways GWY ON GWY.JobID=JobAdvanceReport.[Id] '
-	END
-
+	
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(' + @entity + '.Id) ' + @TablesQuery
 
 	IF (ISNULL(@where, '') <> '')
@@ -325,10 +236,6 @@ BEGIN TRY
 		IF (ISNULL(@where, '') <> '')
 		BEGIN
 			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
-		END
-		IF(ISNULL(@GatewayStatus, '') <> '')
-		BEGIN 
-		   SET @sqlCommand += @GatewayStatus
 		END
 		IF (
 				(@recordId > 0)
@@ -423,28 +330,6 @@ BEGIN TRY
 		,@orgId = @orgId
 		,@userId = @userId
 		,@groupBy = @groupBy
-
-	IF (
-			(
-				ISNULL(@orderType, '') <> ''
-				AND ISNULL(@orderType, '') <> 'ALL'
-				)
-			OR (
-				ISNULL(@DateType, '') <> ''
-				AND ISNULL(@DateType, '') <> 'ALL'
-				)
-			OR (
-				ISNULL(@gatewayTitles, '') <> ''
-				AND ISNULL(@gatewayTitles, '') <> 'ALL'
-				)
-			OR (
-				ISNULL(@scheduled, '') <> ''
-				AND ISNULL(@scheduled, '') <> 'ALL'
-				)
-			)
-	BEGIN
-		DROP TABLE #JOBDLGateways
-	END
 END TRY
 
 BEGIN CATCH

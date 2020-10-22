@@ -11,7 +11,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetPrideMatrixReportView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetPrideMatrixReportView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -65,13 +65,10 @@ BEGIN TRY
 
 	SET @sqlTempTable = @sqlTempTable + 'Group BY JobAdvanceReport.JobSiteCode'
 
-	Print @sqlTempTable
 	EXEC (@sqlTempTable)
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(Id) From ##JobTemp'
-
-	PRINT @TCountQuery
-
+	
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -87,7 +84,6 @@ BEGIN TRY
 	ApptScheduledReceiving,
 	FourHrWindowDelivery,
 	IsFilterSortDisable From ##JobTemp ' ;
-	Print @sqlCommand
 
 	SET @sqlCommand = @sqlCommand + ' ORDER BY Id '
 
@@ -105,9 +101,6 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
 		END
 	END
-
-	PRINT @sqlCommand
-
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

@@ -7,7 +7,7 @@ GO
 -- Create date: 27-08-2020
 -- Description:	AWC driver scrub report
 -- =============================================
-CREATE PROCEDURE [dbo].[GetAWCDriverScrubReportView]
+ALTER PROCEDURE [dbo].[GetAWCDriverScrubReportView]
 @userId BIGINT
 ,@roleId BIGINT
 ,@orgId BIGINT
@@ -42,10 +42,6 @@ SET NOCOUNT ON;
 DECLARE @sqlCommand NVARCHAR(MAX)
 		,@TCountQuery NVARCHAR(MAX)
 		,@TablesQuery NVARCHAR(MAX)
-		,@GatewayTypeId INT = 0
-		,@GatewayActionTypeId INT = 0;
-	DECLARE @AdvanceFilter NVARCHAR(MAX) = ''
-		,@JobStatusId INT = 0;
 
 IF OBJECT_ID('tempdb..#TempDriverScrub') IS NOT NULL DROP TABLE #TempDriverScrub
 Select AD.Id 

@@ -3,11 +3,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
--- Author:		<Author,,Name>
+-- Author:		Prashant A
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[GetProjectedCapacitybReportView]
+ALTER PROCEDURE [dbo].[GetProjectedCapacitybReportView]
 @userId BIGINT
 ,@roleId BIGINT
 ,@orgId BIGINT
@@ -43,10 +43,6 @@ SET NOCOUNT ON;
 DECLARE @sqlCommand NVARCHAR(MAX)
 		,@TCountQuery NVARCHAR(MAX)
 		,@TablesQuery NVARCHAR(MAX)
-		,@GatewayTypeId INT = 0
-		,@GatewayActionTypeId INT = 0;
-	DECLARE @AdvanceFilter NVARCHAR(MAX) = ''
-		,@JobStatusId INT = 0;
 
 IF OBJECT_ID('tempdb..#TempProjectedCapacity') IS NOT NULL DROP TABLE #TempProjectedCapacity
 CREATE TABLE #TempProjectedCapacity
@@ -78,11 +74,9 @@ Group BY T.id)RT ON RT.Id = TempCapacity.JobId
 
 SET @TCountQuery = 'SELECT @TotalCount = Count(Distinct Location) From #TempProjectedCapacity'
 
-Print @TCountQuery
 EXEC sp_executesql @TCountQuery
 		,N'@TotalCount INT OUTPUT'
 		,@TotalCount OUTPUT;
-
 
 SET @sqlCommand = 'SELECT Max(Job.CapacityId) Id, Job.Location
 ,Job.ProjectedCapacity ProjectedCount
@@ -104,8 +98,6 @@ SET @sqlCommand = @sqlCommand + ' ORDER BY Max(Job.CapacityId)'
 				SET @sqlCommand = @sqlCommand + ' OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
 			END
 		END
-	
-	Print @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT'
 		,@pageNo = @pageNo

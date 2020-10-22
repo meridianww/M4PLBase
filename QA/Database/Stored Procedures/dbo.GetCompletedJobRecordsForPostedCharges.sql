@@ -10,7 +10,7 @@ GO
 -- Description:	Get Completed Job Records For Posted Charges
 -- =============================================
 ALTER PROCEDURE [dbo].[GetCompletedJobRecordsForPostedCharges] (
-	 @userId BIGINT
+	@userId BIGINT
 	,@roleId INT
 	,@orgId INT
 	,@Where NVARCHAR(MAX)
@@ -28,8 +28,11 @@ BEGIN
 		,@IsPriceChargeReport BIT
 		,@TCountQuery NVARCHAR(MAX)
 
-		Select @IsPriceChargeReport = CASE WHEN ISNULL(@IsCostCharge,0) = 0 THEN 1 ELSE 0 END
-	
+	SELECT @IsPriceChargeReport = CASE 
+			WHEN ISNULL(@IsCostCharge, 0) = 0
+				THEN 1
+			ELSE 0
+			END
 
 	SELECT @CanceledStatus = Id
 	FROM SYSTM000Ref_Options
@@ -49,7 +52,8 @@ BEGIN
 		,@orgId
 		,'Job'
 
-	SET @TablesQuery = 'Select JobAdvanceReport.Id Id,
+	SET @TablesQuery = 
+		'Select JobAdvanceReport.Id Id,
 JobAdvanceReport.Id JobId,
 JobAdvanceReport.JobDeliveryDateTimePlanned,
 JobAdvanceReport.JobOriginDateTimePlanned,
@@ -81,11 +85,9 @@ JobAdvanceReport.JobOrderedDate,
 CAST(0 AS BIT) IsIdentityVisible,
 CAST(1 AS BIT) IsFilterSortDisable,
 CAST(1 AS BIT) IsPaginationDisable,
-CAST(1 AS BIT) IsChargeReport, ' +
-'CAST(' + CAST(@IsCostCharge AS Varchar) + ' AS BIT) IsCostChargeReport, ' + 
-'CAST(' + CAST(@IsPriceChargeReport AS Varchar) + ' AS BIT) IsPriceChargeReport ' + 
-' From JobDL000Master JobAdvanceReport INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = JobAdvanceReport.ProgramId '
-SET @TCountQuery = 'SELECT @TotalCount = COUNT(JobAdvanceReport.Id) From JobDL000Master JobAdvanceReport INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = JobAdvanceReport.ProgramId '
+CAST(1 AS BIT) IsChargeReport, ' 
+		+ 'CAST(' + CAST(@IsCostCharge AS VARCHAR) + ' AS BIT) IsCostChargeReport, ' + 'CAST(' + CAST(@IsPriceChargeReport AS VARCHAR) + ' AS BIT) IsPriceChargeReport ' + ' From JobDL000Master JobAdvanceReport INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = JobAdvanceReport.ProgramId '
+	SET @TCountQuery = 'SELECT @TotalCount = COUNT(JobAdvanceReport.Id) From JobDL000Master JobAdvanceReport INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = JobAdvanceReport.ProgramId '
 
 	IF EXISTS (
 			SELECT 1
@@ -107,10 +109,11 @@ SET @TCountQuery = 'SELECT @TotalCount = COUNT(JobAdvanceReport.Id) From JobDL00
 		SET @TablesQuery = @TablesQuery + ' Where ISNULL(JobAdvanceReport.JobCompleted,0) = 1 AND JobAdvanceReport.StatusId <> ' + CAST(@CanceledStatus AS VARCHAR) + ' AND ISNULL(JobAdvanceReport.JobSiteCode,'''') <> '''' '
 		SET @TCountQuery = @TCountQuery + ' Where ISNULL(JobAdvanceReport.JobCompleted,0) = 1 AND JobAdvanceReport.StatusId <> ' + CAST(@CanceledStatus AS VARCHAR) + ' AND ISNULL(JobAdvanceReport.JobSiteCode,'''') <> '''' '
 	END
-	
+
 	EXEC sp_executesql @TCountQuery
-		,N' @TotalCount INT OUTPUT'		
+		,N' @TotalCount INT OUTPUT'
 		,@TotalCount OUTPUT;
+
 	EXEC sp_executesql @TablesQuery
 
 	DROP TABLE #EntityIdTemp
