@@ -49,9 +49,14 @@ namespace M4PL.Entities.Job
 		public string ColumnName { get; set; }
 
 		/// <summary>
-		/// Gets or Sets Existing value from Job Table
+		/// Gets or Sets Column Alias for Column Name
 		/// </summary>
-		public string ExistingValue { get; set; }
+        public string ColumnAlias { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Existing value from Job Table
+        /// </summary>
+        public string ExistingValue { get; set; }
 
 		/// <summary>
 		/// Gets or Sets Existing value from xCBL Table
