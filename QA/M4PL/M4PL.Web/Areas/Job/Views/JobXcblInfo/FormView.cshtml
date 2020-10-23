@@ -37,7 +37,7 @@
                foreach (var item in Model.Record.ColumnMappingData)
                {
                    ViewContext.Writer.Write("<tr><td>"
-                       + Html.Name(item.ColumnName).ToHtmlString() + "</td><td>" +
+                       + Html.Name(item.ColumnAlias).ToHtmlString() + "</td><td>" +
                          Html.Name(item.ExistingValue).ToHtmlString() + "</td><td>" +
                          Html.Name(item.UpdatedValue).ToHtmlString() + "</td></tr>");
                }

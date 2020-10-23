@@ -17,6 +17,7 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobEDIXcblCommands
 //====================================================================================================================
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Entities.XCBL;
@@ -84,13 +85,15 @@ namespace M4PL.Business.Job
 			if (summaryHeaderModel != null && decisionMakerList != null && decisionMakerList.Any() && job != null
 				&& !string.IsNullOrEmpty(gatewayCode))
 			{
+				var columnAlias=Common.CommonCommands.GetColumnSettingsByEntityAlias(EntitiesAlias.Job,false);
 				foreach (var item in decisionMakerList)
 				{
 					//JobXcblInfo jobXcblInfo = new JobXcblInfo();
 
 					if (item.XCBLTableName == "SummaryHeader")
-					{
-						IdentifyJobChanges(jobId, jobXcblInfo, item, job, summaryHeaderModel.SummaryHeader);
+					{				
+
+						IdentifyJobChanges(jobId, jobXcblInfo, item, job, summaryHeaderModel.SummaryHeader, columnAlias.Where(x => x.ColColumnName == item.JobColumnName)?.FirstOrDefault()?.ColAliasName);
 					}
 					else if (item.XCBLTableName == "Address")
 					{
@@ -115,7 +118,7 @@ namespace M4PL.Business.Job
 								{
 									existingValue = GetValuesFromItemByPropertyName(job, existsingValueColumnName);
 									updatedValue = GetValuesFromItemByPropertyName(address, item.xCBLColumnName);
-									AddItemToJobXcblInfoList(jobId, updatedValue, existingValue, existsingValueColumnName, jobXcblInfo);
+									AddItemToJobXcblInfoList(jobId, updatedValue, existingValue, existsingValueColumnName, jobXcblInfo, columnAlias.Where(x => x.ColColumnName == existsingValueColumnName)?.FirstOrDefault()?.ColAliasName);
 								}
 							}
 						}
@@ -126,17 +129,17 @@ namespace M4PL.Business.Job
 						{
 							foreach (var lineDetail in summaryHeaderModel.LineDetail)
 							{
-								IdentifyJobChanges(jobId, jobXcblInfo, item, job, lineDetail);
+								IdentifyJobChanges(jobId, jobXcblInfo, item, job, lineDetail, columnAlias.Where(x => x.ColColumnName == item.JobColumnName)?.FirstOrDefault()?.ColAliasName);
 							}
 						}
 					}
 					else if (item.XCBLTableName == "CustomAttribute")
 					{
-						IdentifyJobChanges(jobId, jobXcblInfo, item, job, summaryHeaderModel.CustomAttribute);
+						IdentifyJobChanges(jobId, jobXcblInfo, item, job, summaryHeaderModel.CustomAttribute, columnAlias.Where(x => x.ColColumnName == item.JobColumnName)?.FirstOrDefault()?.ColAliasName);
 					}
 					else if (item.XCBLTableName == "UserDefinedField")
 					{
-						IdentifyJobChanges(jobId, jobXcblInfo, item, job, summaryHeaderModel.UserDefinedField);
+						IdentifyJobChanges(jobId, jobXcblInfo, item, job, summaryHeaderModel.UserDefinedField, columnAlias.Where(x => x.ColColumnName == item.JobColumnName)?.FirstOrDefault()?.ColAliasName);
 					}
 				}
 			}
@@ -144,11 +147,11 @@ namespace M4PL.Business.Job
 			return jobXcblInfo;
 		}
 
-		private void IdentifyJobChanges(long jobId, JobXcblInfo jobXcblInfo, JobUpdateDecisionMaker item, object oldValueObject, object newValueObject)
+		private void IdentifyJobChanges(long jobId, JobXcblInfo jobXcblInfo, JobUpdateDecisionMaker item, object oldValueObject, object newValueObject, string columnAlias = "")
 		{
 			object existingValue = oldValueObject.GetType().GetProperty(item.JobColumnName).GetValue(oldValueObject);
 			object updatedValue = newValueObject.GetType().GetProperty(item.xCBLColumnName).GetValue(newValueObject);
-			AddItemToJobXcblInfoList(jobId, updatedValue, existingValue, item.JobColumnName, jobXcblInfo);
+			AddItemToJobXcblInfoList(jobId, updatedValue, existingValue, item.JobColumnName, jobXcblInfo, columnAlias);
 		}
 
 		public string GetValuesFromItemByPropertyName(object item, string propertyName)
@@ -157,7 +160,7 @@ namespace M4PL.Business.Job
 			return Convert.ToString(value);
 		}
 
-		private void AddItemToJobXcblInfoList(long jobId, object updatedValue, object existingvalue, string jobColumnName, JobXcblInfo jobXcblInfo)
+		private void AddItemToJobXcblInfoList(long jobId, object updatedValue, object existingvalue, string jobColumnName, JobXcblInfo jobXcblInfo,string columnAlias="")
 		{
 			string updatedValueString = Convert.ToString(updatedValue);
 
@@ -171,7 +174,8 @@ namespace M4PL.Business.Job
 				{
 					ColumnName = jobColumnName,
 					UpdatedValue = updatedValueString,
-					ExistingValue = Convert.ToString(existingvalue)
+					ExistingValue = Convert.ToString(existingvalue),
+					ColumnAlias= columnAlias?? jobColumnName
 				});
 			}
 		}
