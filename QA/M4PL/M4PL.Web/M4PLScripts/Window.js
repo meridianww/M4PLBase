@@ -426,16 +426,29 @@ M4PLWindow.DataView = function () {
         var selectedRowCount = s.GetSelectedRowCount();
 
         var callbackUrl = s.callbackUrl;
-        if (selectedRowCount > 0) {
+        if (selectedRowCount > 0 && !e.isAllRecordsOnPage) {
             if (selectedRowCount == 1 && e.isSelected)
                 M4PLWindow.MultiSelectedJobIds = [];
 
             if (e.isSelected) {
                 M4PLWindow.MultiSelectedJobIds.push(s.GetItemKey(s.GetFocusedRowIndex()));
                 M4PLCommon.Common.EnableJobGridMultiSelection(true);
-            }
-            else
+            } else
                 M4PLWindow.MultiSelectedJobIds = M4PLCommon.Common.ArrayRemove(M4PLWindow.MultiSelectedJobIds, s.GetItemKey(s.GetFocusedRowIndex()));
+        }
+        else if (e.isAllRecordsOnPage) {
+            if (selectedRowCount == 0) {
+                M4PLWindow.MultiSelectedJobIds = [];
+                M4PLCommon.Common.EnableJobGridMultiSelection(false);
+            }
+            else {
+                M4PLCommon.Common.EnableJobGridMultiSelection(true);
+                for (var i = 0; i < selectedRowCount; i++) {
+                    var result = s.GetItemKey(i);
+                    if (result != '' && result != undefined)
+                        M4PLWindow.MultiSelectedJobIds.push(result);
+                }
+            }
         }
         else
             M4PLWindow.MultiSelectedJobIds = [];
@@ -1161,6 +1174,8 @@ M4PLWindow.FormView = function () {
                                                 var sender = ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel);
                                                 if (response.gatewayIds != null && response.gatewayIds != undefined) {
                                                     var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+                                                    if (s == null || s == undefined)
+                                                        s = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
                                                     if (s != null && s != undefined) {
                                                         var callbackUrl = s.callbackUrl;
                                                         if (callbackUrl != undefined && callbackUrl != "") {

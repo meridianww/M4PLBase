@@ -131,17 +131,31 @@ M4PLCommon.Common = function () {
     var _arrayRemove = function (arr, value) { return arr.filter(function (ele) { return ele != value; }); }
 
     var _enableJobGridMultiSelection = function (isEnable) {
+        var isJobGrid = true;
         var sJobGrid = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+        if (sJobGrid == null || sJobGrid == undefined) {
+            sJobGrid = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
+            if (sJobGrid != null && sJobGrid != undefined)
+                isJobGrid = false;
+        }
         if (sJobGrid != null && sJobGrid != undefined) {
             var clearBtnCtrl = ASPxClientControl.GetControlCollection().GetByName("btnClearSelectionJobGridView");
+            if (clearBtnCtrl == null || clearBtnCtrl == undefined)
+                clearBtnCtrl = ASPxClientControl.GetControlCollection().GetByName("btnClearSelectionJobCardGridView");
             if (clearBtnCtrl != null && clearBtnCtrl != undefined) {
                 if (!isEnable) {
                     clearBtnCtrl.SetEnabled(false);
-                    $("#btnClearSelectionJobGridView").addClass("noHover");
+                    if (isJobGrid)
+                        $("#btnClearSelectionJobGridView").addClass("noHover");
+                    else
+                        $("#btnClearSelectionJobCardGridView").addClass("noHover");
                 }
                 else {
                     clearBtnCtrl.SetEnabled(true);
-                    $("#btnClearSelectionJobGridView").removeClass("noHover");
+                    if (isJobGrid)
+                        $("#btnClearSelectionJobGridView").removeClass("noHover");
+                    else
+                        $("#btnClearSelectionJobCardGridView").removeClass("noHover");
                 }
             }
         }

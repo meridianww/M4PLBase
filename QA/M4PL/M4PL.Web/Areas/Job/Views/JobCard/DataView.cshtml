@@ -64,6 +64,8 @@
 
     settings.CommandColumn.Visible = true;
     settings.CommandColumn.ShowSelectCheckbox = true;
+    settings.CommandColumn.ShowClearFilterButton = true;
+    settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
 
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
     settings.SettingsCookies.Enabled = false;
@@ -469,7 +471,15 @@
     settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
     settings.SetStatusBarTemplateContent(c =>
     {
-
+        @Html.DevExpress().Button(btnCancelCheckBox =>
+        {
+            btnCancelCheckBox.Name = "btnClearSelection" + Model.GridSetting.GridName;
+            btnCancelCheckBox.Text = "Clear Selection";
+            btnCancelCheckBox.EnableTheming = true;
+            btnCancelCheckBox.ClientSideEvents.Click = "function(s, e) { JobCardGridView.UnselectRows(); }";
+            btnCancelCheckBox.AllowFocus = false;
+            btnCancelCheckBox.ControlStyle.CssClass = "form-btn";
+        }).Render();
     });
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
 
@@ -609,6 +619,6 @@
             }
         };
     }
-}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml();
+}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
 
 

@@ -136,10 +136,13 @@ namespace M4PL.Business.Job
                 gateway = new JobGateway();
                 foreach (var item in jobGateway.JobIds[0].Split(','))
                 {
-                    gateway = new JobGateway();
-                    gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway,
-                        M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), Convert.ToInt64(item));
-                    gatewaysIds += gateway.Id + ",";
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        gateway = new JobGateway();
+                        gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway,
+                            M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), Convert.ToInt64(item));
+                        gatewaysIds += gateway.Id + ",";
+                    }
                 }
                 gateway.GatewayIds = gatewaysIds.Remove(gatewaysIds.Length - 1);
                 PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId, ActiveUser);
