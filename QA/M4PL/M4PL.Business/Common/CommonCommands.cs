@@ -29,6 +29,7 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities.Logger;
 using System.Collections.Generic;
+using System.Linq;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
 
 namespace M4PL.Business.Common
@@ -283,6 +284,55 @@ namespace M4PL.Business.Common
         public static IList<UserSecurity> GetUserSecurities(ActiveUser activeUser)
         {
             return _commands.GetUserSecurities(activeUser);
+        }
+
+        /// <summary>
+        /// Gets user Securities
+        /// </summary>
+        /// <returns></returns>
+
+        public static M4PL.Entities.JobService.JobPermission GetJobPermissions(ActiveUser activeUser, List<TableReference> tableReferences)
+        {
+            if (activeUser.IsSysAdmin)
+            {
+                return new Entities.JobService.JobPermission
+                {
+                    Job = Permission.All,
+                    Document = Permission.All,
+                    Tracking = Permission.All
+                };
+            }
+            IList<UserSecurity> userSecurity = _commands.GetUserSecurities(activeUser);
+            M4PL.Entities.JobService.JobPermission jobPermission = new Entities.JobService.JobPermission();
+
+            if (userSecurity != null)
+            {
+                var tableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.Job.ToString());
+                if (tableDetails != null)
+                {
+                    var jobSercurity = userSecurity.FirstOrDefault(x => x.SecMainModuleId == tableDetails.TblMainModuleId);
+                    if (jobSercurity != null)
+                    {
+                        jobPermission.Job = (Permission)jobSercurity.SecMenuAccessLevelId;
+                        jobPermission.Document = jobPermission.Tracking = jobPermission.Job;
+
+                        if (jobSercurity.UserSubSecurities != null && jobSercurity.UserSubSecurities.Count > 0)
+                        {
+                            var gatewayTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobGateway.ToString());
+                            var documentTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobDocReference.ToString());
+
+                            foreach (var item in jobSercurity.UserSubSecurities)
+                            {
+                                if (item.RefTableName == gatewayTableDetails.SysRefName)
+                                    jobPermission.Tracking = (Permission)item.SubsMenuAccessLevelId;
+                                else if (item.RefTableName == documentTableDetails.SysRefName)
+                                    jobPermission.Document = (Permission)item.SubsMenuAccessLevelId;
+                            }
+                        }
+                    }
+                }
+            }
+            return jobPermission;
         }
 
         /// <summary>

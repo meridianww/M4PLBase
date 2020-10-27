@@ -276,6 +276,19 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = Common.GetActiveUser();
             return _command.GetUserSecurities(_command.ActiveUser).AsQueryable();
         }
+
+        /// <summary>
+        /// GetUserSecurities
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [CustomQueryable]
+        [Route("JobPermissions")]
+        public M4PL.Entities.JobService.JobPermission GetJobPermissions()
+        {
+            _command.ActiveUser = Common.GetActiveUser();
+            return _command.GetJobPermissions(_command.ActiveUser, GetTables(true).ToList());
+        }
         [HttpPost]
         [CustomQueryable]
         [Route("RefRoleSecurities")]
