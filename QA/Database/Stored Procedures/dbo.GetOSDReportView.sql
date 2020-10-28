@@ -124,6 +124,10 @@ SELECT
 	,JobAdvanceReport.JobChannel 
 	,JobAdvanceReport.DateEntered
 	,ProgramID
+	,JobAdvanceReport.JobBOLMaster
+	,JobAdvanceReport.JobManifestNo
+	,JobAdvanceReport.JobDeliveryStreetAddress3
+	,JobAdvanceReport.JobDeliveryStreetAddress4
 	INTO #JobTemp
 	FROM JOBDL000Master JobAdvanceReport
 	WHERE JobAdvanceReport.JobSiteCode IS NOT NULL
