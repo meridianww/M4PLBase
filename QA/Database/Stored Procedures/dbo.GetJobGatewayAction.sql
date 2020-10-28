@@ -96,7 +96,7 @@ BEGIN TRY
 		,@gwyShipApptmtReasonCode = PgdShipApptmtReasonCode
 		,@gwyOrderType = PgdOrderType
 	FROM PRGRM010Ref_GatewayDefaults Prg 
-	INNER JOIN [dbo].[JOBDL000Master] Job ON JOb.ProgramId = Prg.PgdProgramId AND JOB.JobType = Prg.PgdOrderType
+	INNER JOIN [dbo].[JOBDL000Master] Job ON JOb.ProgramId = Prg.PgdProgramId
 	WHERE Job.Id = @parentId AND Prg.PgdGatewayCode = @gatewayCode
 
 	SELECT @CustomerId = PrgCustId

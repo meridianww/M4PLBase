@@ -67,9 +67,11 @@ namespace M4PL.DataAccess.Program
             var ToEmailEventSubscriberRelation = sets.GetSet<EventSubscriber>("ToEmailEventSubscriberRelation");
             var CCEmailEventSubscriberRelation = sets.GetSet<EventSubscriber>("CCEmailEventSubscriberRelation");
             var eventDetails = sets.GetSet<PrgEventManagement>("Event").ToList().FirstOrDefault();
-            eventDetails.SubscribersSelectedForToEmail = ToEmailEventSubscriberRelation;
-            eventDetails.SubscribersSelectedForCCEmail = CCEmailEventSubscriberRelation;
-
+            if (eventDetails != null)
+            {
+                eventDetails.SubscribersSelectedForToEmail = ToEmailEventSubscriberRelation;
+                eventDetails.SubscribersSelectedForCCEmail = CCEmailEventSubscriberRelation;
+            }
             return eventDetails;
         }
 
@@ -85,7 +87,7 @@ namespace M4PL.DataAccess.Program
             var parameters = GetParameters(prgEventManagement);
             parameters.AddRange(activeUser.PostDefaultParams(prgEventManagement));
             var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsEventManagement, parameters.ToArray(), storedProcedure: true);
-            return Get(activeUser, prgEventManagement.Id);
+            return Get(activeUser, result);
         }
 
         /// <summary>

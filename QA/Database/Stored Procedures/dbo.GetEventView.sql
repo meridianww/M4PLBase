@@ -11,7 +11,7 @@ GO
 -- Execution:                 EXEC [dbo].GetEventView  
 -- =============================================   
 
-CREATE PROCEDURE [dbo].[GetEventView]  
+ALTER PROCEDURE [dbo].[GetEventView]  
 	@userId BIGINT,  
 	@roleId BIGINT,  
 	@orgId BIGINT,  
@@ -71,9 +71,8 @@ SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[EventEntityRelation] eer O
 SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[EventEntityContentDetail] eecd ON eer.[Id] = eecd.[EventEntityRelationId] '
 SET @TCountQuery = @TCountQuery + ' LEFT JOIN #TempSubscriber tmp ON ' + @entity + '.[Id] = tmp.[EventId] AND  tmp.EventSubscriberTypeId = 1 '
 SET @TCountQuery = @TCountQuery + ' LEFT JOIN #TempSubscriber tmp1 ON ' + @entity + '.[Id] = tmp1.[EventId] AND tmp1.EventSubscriberTypeId = 2 '
-
   
-SET @TCountQuery = @TCountQuery + ' WHERE '+ @entity +'.EventTypeId = @EventTypeId ' + ISNULL(@where, '')  
+SET @TCountQuery = @TCountQuery + ' WHERE 1=1 '+ ISNULL(@where, '')  
 EXEC sp_executesql @TCountQuery, N'@EventTypeId INT, @userId BIGINT, @TotalCount INT OUTPUT', @EventTypeId, @userId, @TotalCount OUTPUT;  
 
 IF(@recordId = 0)  
@@ -103,7 +102,7 @@ SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[EventEntityRelation] eer ON 
 SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[EventEntityContentDetail] eecd ON eer.[Id] = eecd.[EventEntityRelationId] '
 SET @sqlCommand = @sqlCommand + ' LEFT JOIN #TempSubscriber tmp ON ' + @entity + '.[Id] = tmp.[EventId] AND  tmp.EventSubscriberTypeId = 1 '
 SET @sqlCommand = @sqlCommand + ' LEFT JOIN #TempSubscriber tmp1 ON ' + @entity + '.[Id] = tmp1.[EventId] AND tmp.EventSubscriberTypeId = 2 '
-print @sqlCommand
+
 	IF(ISNULL(@orderBy, '') <> '')
 	BEGIN
 		DECLARE @orderByJoinClause NVARCHAR(500);
@@ -112,7 +111,6 @@ print @sqlCommand
 		BEGIN 
 			SET @sqlCommand = @sqlCommand + @orderByJoinClause
 		END
-		print 1
 	END
     
 IF((@recordId > 0) AND (((@isNext = 0) AND (@isEnd = 0)) OR ((@isNext = 1) AND (@isEnd = 0))))  
@@ -164,7 +162,6 @@ ELSE
      END  
    END  
  END   
- PRINT @sqlCommand
 EXEC sp_executesql @sqlCommand, N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @parentId BIGINT, @entity NVARCHAR(100),@userId BIGINT' ,  
 	 @entity= @entity,  
      @pageNo= @pageNo,   
