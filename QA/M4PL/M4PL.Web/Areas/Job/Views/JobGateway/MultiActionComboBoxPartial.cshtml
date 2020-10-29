@@ -1,10 +1,10 @@
 ﻿@{
     List<M4PL.Entities.Job.JobActionGateway> result = new List<M4PL.Entities.Job.JobActionGateway>();
-    result.Add(new M4PL.Entities.Job.JobActionGateway()
-    {
-        Code = "",
-        Title = ""
-    });
+    //result.Add(new M4PL.Entities.Job.JobActionGateway()
+    //{
+    //    Code = "",
+    //    Title = ""
+    //});
     if (ViewData["SubActions"] != null)
     {
         var entity = (List<M4PL.Entities.Job.JobActionGateway>)ViewData["SubActions"];
@@ -21,6 +21,6 @@
     settings.Properties.CallbackPageSize = 15;
     settings.Properties.TextField = "Title";
     settings.Properties.ValueField = "Code";
-    settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+    settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
     settings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.JobMultiSelect.SubActionDropDownChange";
 }).BindList(result).GetHtml()

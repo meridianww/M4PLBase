@@ -96,11 +96,6 @@ BEGIN
 					END					
 					ELSE IF (@dashboardCategory = 'Other' AND @dashboardSubCategory = 'NoPODUpload')
 					BEGIN
-						SET @CountQuery = @CountQuery + 'INNER JOIN JOBDL020Gateways ON JOBDL000Master.Id = JOBDL020Gateways.JobId 
-														 INNER JOIN  SYSTM000Ref_Options ON SYSTM000Ref_Options.Id = JOBDL020Gateways.StatusId 
-														 AND SYSTM000Ref_Options.SysOptionName in (''Active'',''Completed'')
-														 INNER JOIN vwNoPODGateways on vwNoPODGateways.JobID = JOBDL020Gateways.JobID 
-														 AND vwNoPODGateways.LatestGatewayId = JOBDL020Gateways.ID '
 						SET @CountQuery = @CountQuery + ' Where 1 = 1 '
 					END
 					ELSE IF ((@dashboardCategory = 'NotScheduled' OR @dashboardCategory = 'SchedulePastDue' OR @dashboardCategory = 'ScheduledForToday') AND @dashboardSubCategory = 'Returns')

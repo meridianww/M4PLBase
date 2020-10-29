@@ -28,10 +28,11 @@
                        settings.Name = "MultiActionComboBox";
                        settings.Width = 180;
                        //settings.SelectedIndex = 0;
-                       settings.CallbackRouteValues = new { Controller = "JobGateway", Action = "AddMultiAction", Area = "Job" };
+                       settings.CallbackRouteValues = new { Controller = "JobGateway", Action = "AddMultiAction", Area = "Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
                        settings.Properties.CallbackPageSize = 15;
                        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
                        settings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.JobMultiSelect.ActionDropDownChange";
+                       settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
                    }).BindList((List<string>)ViewData["Actions"]).GetHtml();
                    ViewContext.Writer.Write("</div>");
                    ViewContext.Writer.Write("<div class='form-row-group col-md-6'>");
