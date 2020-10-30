@@ -166,8 +166,10 @@ namespace M4PL.Entities.Job
         public int CgoQtyDamaged { get; set; }
         public int CgoQtyOver { get; set; }
         public int TotalRows { get; set; }
+        public string CgoSerialNumber { get; set; }
+        public string ExceptionType { get; set; }
 
-		public JobAdvanceReport DeepCopy()
+        public JobAdvanceReport DeepCopy()
 		{
 			return (JobAdvanceReport)this.MemberwiseClone();
 		}
