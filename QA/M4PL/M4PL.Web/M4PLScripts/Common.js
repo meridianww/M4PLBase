@@ -3131,6 +3131,9 @@ M4PLCommon.JobMultiSelect = (function () {
                 }
                 multiSubActionCtrl.PerformCallback({ actionCode: selectedVal });
             }
+            else {
+                multiSubActionCtrl.listBox.ClearItems();
+            }
         }
     }
 
