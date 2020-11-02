@@ -3124,12 +3124,15 @@ M4PLCommon.JobMultiSelect = (function () {
         if (multiSubActionCtrl != null && multiSubActionCtrl != undefined
             && MultiActionCtrl != null && MultiActionCtrl != undefined) {
             var selectedVal = MultiActionCtrl.GetValue();
-            if (selectedVal != undefined && selectedVal != "") {
+            if (selectedVal != undefined && selectedVal != "" && selectedVal != null) {
                 var btnSubmitActionGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("BtnSubmitActionGateway");
                 if (btnSubmitActionGatewayCtrl != undefined && btnSubmitActionGatewayCtrl != null) {
                     btnSubmitActionGatewayCtrl.SetVisible(false);
                 }
                 multiSubActionCtrl.PerformCallback({ actionCode: selectedVal });
+            }
+            else {
+                multiSubActionCtrl.listBox.ClearItems();
             }
         }
     }
@@ -3137,7 +3140,7 @@ M4PLCommon.JobMultiSelect = (function () {
     var _subActionDropDownChange = function (s, e) {
         var entity = s.GetValue();
         var btnSubmitActionGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("BtnSubmitActionGateway");
-        if (entity != undefined && entity != "" && btnSubmitActionGatewayCtrl != undefined && btnSubmitActionGatewayCtrl != null) {
+        if (entity != null && entity != undefined && entity != "" && btnSubmitActionGatewayCtrl != undefined && btnSubmitActionGatewayCtrl != null) {
             btnSubmitActionGatewayCtrl.SetVisible(true);
         }
         else {

@@ -82,6 +82,8 @@ SELECT JC.JobID
 	,JC.CgoWeight 
 	,JC.CgoPackagingTypeId
 	,JC.StatusId
+	,JC.CgoSerialNumber
+	,'OSD' ExceptionType
 	INTO #CargoTemp
 	FROM JOBDL010Cargo JC
 	WHERE JC.StatusId = 1
@@ -91,11 +93,18 @@ SELECT JC.JobID
 		OR  JC.CgoQtyOver  <> 0
 		)
 
+		UPDATE #CargoTemp
+		SET ExceptionType=CASE WHEN ISNULL(CgoQtyDamaged,0)<>0 THEN 'D'
+		WHEN  ISNULL(CgoQtyOver,0)<>0 THEN 'O'
+		WHEN  ISNULL(CgoQtyShortOver,0)<>0 THEN 'S'
+		ELSE 'N'
+		END
+
 SELECT 
 	JobAdvanceReport.Id
 	,JobAdvanceReport.JobBOL
 	,JobAdvanceReport.JobCarrierContract
-	,JobAdvanceReport.JobCustomerPurchaseOrder
+	--,JobAdvanceReport.JobCustomerPurchaseOrder
 	,JobAdvanceReport.JobCustomerSalesOrder
 	,JobAdvanceReport.JobDeliveryCity
 	,JobAdvanceReport.JobDeliveryDateTimeActual
@@ -110,7 +119,7 @@ SELECT
 	,JobAdvanceReport.JobDeliveryStreetAddress
 	,JobAdvanceReport.JobDeliveryStreetAddress2
 	,JobAdvanceReport.JobGatewayStatus
-	,JobAdvanceReport.JobMileage
+	--,JobAdvanceReport.JobMileage
 	,JobAdvanceReport.JobOrderedDate
 	,JobAdvanceReport.JobOriginDateTimeActual
 	,JobAdvanceReport.JobOriginDateTimePlanned
@@ -210,9 +219,14 @@ SELECT
 		SET @where = REPLACE(@where, 'JobAdvanceReport.PackagingCode', 'SO.ID');
 		SET @where = REPLACE(@where, 'JobAdvanceReport.JobTotalWeight', 'JC.CgoWeight');
 		SET @where = REPLACE(@where, 'JobAdvanceReport.JobTotalCubes', 'JC.CgoCubes');
-		SET @where = REPLACE(@where, 'JobAdvanceReport.JobServiceActual', 'CASE WHEN SO.SysOptionName = ''Service'' THEN 1 ELSE 0 END')
-		SET @where = REPLACE(@where, 'JobAdvanceReport.JobPartsActual', 'CASE WHEN SO.SysOptionName = ''Accessory'' THEN 1 ELSE 0 END')
-		SET @where = REPLACE(@where, 'JobAdvanceReport.JobQtyActual', 'CASE WHEN SO.SysOptionName = ''Appliance'' THEN 1 ELSE 0 END')
+		--SET @where = REPLACE(@where, 'JobAdvanceReport.JobServiceActual', 'CASE WHEN SO.SysOptionName = ''Service'' THEN 1 ELSE 0 END')
+		--SET @where = REPLACE(@where, 'JobAdvanceReport.JobPartsActual', 'CASE WHEN SO.SysOptionName = ''Accessory'' THEN 1 ELSE 0 END')
+		--SET @where = REPLACE(@where, 'JobAdvanceReport.JobQtyActual', 'CASE WHEN SO.SysOptionName = ''Appliance'' THEN 1 ELSE 0 END')
+		SET @where = REPLACE(@where, 'JobAdvanceReport.ExceptionType', 'JC.ExceptionType')
+		SET @where = REPLACE(@where, 'JobAdvanceReport.CgoSerialNumber', 'JC.CgoSerialNumber')
+
+
+
 	END
 	IF (
 			(ISNULL(@groupBy, '') = '')
@@ -222,9 +236,12 @@ SELECT
 		IF (@recordId = 0)
 		BEGIN
 			SET @sqlCommand = 'SELECT ' + [dbo].[fnGetJobReportBaseQuery](@entity, @userId, @reportTypeId)
-			SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoQtyDamaged', 'ISNULL(JC.CgoQtyDamaged,0) CgoQtyDamaged');
-			SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoQtyOver', 'ISNULL(JC.CgoQtyOver,0) CgoQtyOver');
-			SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoQtyShortOver', 'ISNULL(JC.CgoQtyShortOver,0) CgoQtyShortOver');
+			--SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoQtyDamaged', 'ISNULL(JC.CgoQtyDamaged,0) CgoQtyDamaged');
+			--SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoQtyOver', 'ISNULL(JC.CgoQtyOver,0) CgoQtyOver');
+			--SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoQtyShortOver', 'ISNULL(JC.CgoQtyShortOver,0) CgoQtyShortOver');
+			SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.ExceptionType', 'JC.ExceptionType');
+			SET @sqlCommand=REPLACE(@sqlCommand, 'JobAdvanceReport.CgoSerialNumber', 'JC.CgoSerialNumber');
+
 			SET @sqlCommand=@sqlCommand+' ,TotalRows = COUNT(*) OVER()'
 		END
 		ELSE
