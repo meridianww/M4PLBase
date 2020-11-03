@@ -116,6 +116,7 @@ namespace M4PL.DataAccess
 		public const string GetEmailDetail = "dbo.GetEmailDetail";
 		public const string UpdateEmailStatus = "dbo.UpdateEmailStatus";
 		public const string GetEmailDetailsForEvent = "dbo.GetEmailDetailsForEvent";
+		public const string InsertEmailProcessingLog = "dbo.InsertEmailProcessingLog";
 		#endregion Generic SPs
 
 		#region Administration

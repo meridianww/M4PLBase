@@ -56,6 +56,7 @@ namespace M4PL.Business.Email
 			if (!string.IsNullOrEmpty(emailBody))
 			{
 				EventBodyHelper.CreateEventMailNotificationForxCBLException(scenarioTypeId, emailBody);
+				DataAccess.Event.EventCommands.InsertEmailProcessingLog(scenarioTypeId);
 				return true;
 			}
 

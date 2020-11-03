@@ -29,5 +29,16 @@ namespace M4PL.DataAccess.Event
 
 			return SqlSerializer.Default.DeserializeSingleRecord<EventEmailDetail>(StoredProceduresConstant.GetEmailDetailsForEvent, parameters.ToArray(), false, true);
 		}
+
+		public static void InsertEmailProcessingLog(int scenarioTypeId)
+		{
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@ScenarioTypeId", scenarioTypeId),
+				new Parameter("@ExecutionDateTime", Utilities.TimeUtility.GetPacificDateTime())
+			};
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.InsertEmailProcessingLog, parameters: parameters.ToArray(), storedProcedure:true);
+		}
 	}
 }
