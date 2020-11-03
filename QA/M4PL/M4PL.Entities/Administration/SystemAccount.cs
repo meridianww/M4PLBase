@@ -153,20 +153,20 @@ namespace M4PL.Entities.Administration
 
         public bool UpdateRoles { get; set; }
 
-        public bool NotScheduleInTransit { get; set; }
-        public bool NotScheduleOnHand { get; set; }
-        public bool NotScheduleOnTruck { get; set; }
-        public bool NotScheduleReturn { get; set; }
-        public bool SchedulePastDueInTransit { get; set; }
-        public bool SchedulePastDueOnHand { get; set; }
-        public bool SchedulePastDueOnTruck { get; set; }
-        public bool SchedulePastDueReturn { get; set; }
-        public bool ScheduleForTodayInTransit { get; set; }
-        public bool ScheduleForTodayOnHand { get; set; }
-        public bool ScheduleForTodayOnTruck { get; set; }
-        public bool ScheduleForTodayReturn { get; set; }
-        public bool xCBLAddressChanged { get; set; }
-        public bool xCBL48HoursChanged { get; set; }
-        public bool NoPODCompletion { get; set; }
+        //public bool NotScheduleInTransit { get; set; }
+        //public bool NotScheduleOnHand { get; set; }
+        //public bool NotScheduleOnTruck { get; set; }
+        //public bool NotScheduleReturn { get; set; }
+        //public bool SchedulePastDueInTransit { get; set; }
+        //public bool SchedulePastDueOnHand { get; set; }
+        //public bool SchedulePastDueOnTruck { get; set; }
+        //public bool SchedulePastDueReturn { get; set; }
+        //public bool ScheduleForTodayInTransit { get; set; }
+        //public bool ScheduleForTodayOnHand { get; set; }
+        //public bool ScheduleForTodayOnTruck { get; set; }
+        //public bool ScheduleForTodayReturn { get; set; }
+        //public bool xCBLAddressChanged { get; set; }
+        //public bool xCBL48HoursChanged { get; set; }
+        //public bool NoPODCompletion { get; set; }
     }
 }
