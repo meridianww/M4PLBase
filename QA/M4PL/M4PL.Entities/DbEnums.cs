@@ -1080,6 +1080,15 @@ namespace M4PL.Entities
 		AWCCargoException = 1,
 		ElectroluxCargoException = 2,
 		JobReActivated = 3,
-		JobCancellation = 4
+		JobCancellation = 4,
+		xCBLInvalidRequests = 5,
+		xCBLInvalidEndpoint = 6,
+		xCBLFTPSite = 7,
+		xCBLCSVFile = 8,
+		EDINoEDIReceived = 9,
+		EDIInvalidEDIData = 10,
+		EDIVendorLocation = 11,
+		EDICannotCreateEDI = 12,
+		EDICannotUploadEDI = 13
 	}
 }

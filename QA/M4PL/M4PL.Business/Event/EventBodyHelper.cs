@@ -167,6 +167,49 @@ namespace M4PL.Business.Event
 			return stringBuilder.ToString();
 		}
 
+		public static string GetxCBLExceptionMailBody(int scenarioTypeId)
+		{
+			Stream stream;
+			using (DataSet ds = new DataSet())
+			{
+				ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
+				ds.DataSetName = "xCBLExceptionDS";
+				DataTable carrierInsauranceInfoData = DataAccess.XCBL.XCBLCommands.GetXcblExceptionInfo(scenarioTypeId);
+				ds.Tables.Add(carrierInsauranceInfoData);
+				ds.Tables[0].TableName = "ExceptionInfo";
+				stream = HtmlGenerator.GenerateHtmlFile(ds, AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\xCBLException.xslt", null);
+			}
+
+			return GetHtmlData(stream);
+		}
+
+		public static void CreateEventMailNotificationForxCBLException(int eventId, string body)
+		{
+			var emailData = DataAccess.Event.EventCommands.GetEventEmailDetail(eventId, 0);
+			if (emailData != null)
+			{
+				EmailDetail emailDetail = new EmailDetail()
+				{
+					FromAddress = emailData.FromMail,
+					Body = string.IsNullOrEmpty(body) ? emailData.Body : body,
+					CCAddress = emailData.CcAddress,
+					EmailPriority = 1,
+					IsBodyHtml = true,
+					Subject = emailData.Subject,
+					ToAddress = emailData.ToAddress
+				};
+
+				if (emailDetail != null && !string.IsNullOrEmpty(emailDetail.ToAddress))
+				{
+					DataAccess.Common.EmailCommands.InsertEmailDetail(emailDetail);
+				}
+				else
+				{
+					DataAccess.Logger.ErrorLogger.Log(new Exception(), "To Email address can not be empty to sent event Notification.", "CreateEventMailNotificationForCargoException", Utilities.Logger.LogType.Informational);
+				}
+			}
+		}
+
 		private static Stream GenerateHtmlFile(SetCollection data, string rootName, string xsltFilePath, Dictionary<string, string> xsltArgumentsDictionary)
 		{
 			if (data == null)
@@ -205,6 +248,21 @@ namespace M4PL.Business.Event
 
 				return HtmlGenerator.GenerateHtmlFile(ds, xsltFilePath, xsltArgumentsDictionary);
 			}
+		}
+
+		private static string GetHtmlData(Stream stream)
+		{
+			StringBuilder sb = new StringBuilder();
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				string line = string.Empty;
+				while ((line = reader.ReadLine()) != null)
+				{
+					sb.Append(line);
+				}
+			}
+
+			return sb.ToString();
 		}
 	}
 }

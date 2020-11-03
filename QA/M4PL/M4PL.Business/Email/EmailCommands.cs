@@ -9,6 +9,7 @@
 
 #endregion Copyright
 
+using M4PL.Business.Event;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using System;
@@ -47,6 +48,18 @@ namespace M4PL.Business.Email
 		public bool UpdateEmailStatus(int id, short emailStatus, short retryAttampts)
 		{
 			return _command.UpdateEmailStatus(id, emailStatus, retryAttampts);
+		}
+
+		public bool xCBLEmailNotification(int scenarioTypeId)
+		{
+			string emailBody = EventBodyHelper.GetxCBLExceptionMailBody(scenarioTypeId);
+			if (!string.IsNullOrEmpty(emailBody))
+			{
+				EventBodyHelper.CreateEventMailNotificationForxCBLException(scenarioTypeId, emailBody);
+				return true;
+			}
+
+			return false;
 		}
 
 		public EmailDetail Patch(EmailDetail entity)

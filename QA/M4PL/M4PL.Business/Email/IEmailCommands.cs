@@ -29,5 +29,6 @@ namespace M4PL.Business.Email
 		SMTPEmailDetail GetSMTPEmailDetail(int emailCount, int toHours, int fromHours);
 
 		bool UpdateEmailStatus(int id, short emailStatus, short retryAttampts);
+		bool xCBLEmailNotification(int scenarioTypeId);
 	}
 }

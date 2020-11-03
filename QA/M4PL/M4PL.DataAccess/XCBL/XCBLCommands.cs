@@ -166,6 +166,11 @@ namespace M4PL.DataAccess.XCBL
 			}
 		}
 
+		public static DataTable GetXcblExceptionInfo(int scenarioTypeId)
+		{
+			return XcblSQLSerializer.Default.DeserializeDataTable(StoredProceduresConstant.GetXcblExceptionInfo, true, new Parameter("@scenarioTypeId", scenarioTypeId));
+		}
+
 		public static void InsertJobDeliveryUpdateLog(string deliveryUpdateXml, string deliveryUpdateResponseString, long jobId)
 		{
 			try

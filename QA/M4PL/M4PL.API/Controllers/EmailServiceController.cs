@@ -62,5 +62,13 @@ namespace M4PL.API.Controllers
 			_emailCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _emailCommands.UpdateEmailStatus(id, emailStatus, retryAttampts);
 		}
+
+		[HttpGet]
+		[Route("xCBLEmailNotification")]
+		public bool xCBLEmailNotification(int scenarioTypeId)
+		{
+			_emailCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _emailCommands.xCBLEmailNotification(scenarioTypeId);
+		}
 	}
 }

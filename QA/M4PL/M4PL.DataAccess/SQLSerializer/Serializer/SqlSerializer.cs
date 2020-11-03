@@ -386,6 +386,12 @@ namespace M4PL.DataAccess.SQLSerializer.Serializer
 			return DeserializeDataTable();
 		}
 
+		public DataTable DeserializeDataTable(string commandText, bool stroredProcedure, params Parameter[] parameters)
+		{
+			SetupCommand(commandText, parameters, stroredProcedure, commandTimeoutInSecs);
+			return DeserializeDataTable();
+		}
+
 		public DataTable DeserializeDataTable()
 		{
 			var dataTable = new DataTable();
