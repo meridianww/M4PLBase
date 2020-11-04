@@ -44,6 +44,7 @@ namespace M4PL.Web.IoC
 			builder.RegisterType<AppDashboardCommands>().As<IAppDashboardCommands>().InstancePerRequest();
 			builder.RegisterType<SystemAccountCommands>().As<ISystemAccountCommands>().InstancePerRequest();
 			builder.RegisterType<StatusLogCommands>().As<IStatusLogCommands>().InstancePerRequest();
+			builder.RegisterType<ITDashboardCommands>().As<IITDashboardCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}

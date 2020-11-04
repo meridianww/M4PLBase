@@ -214,6 +214,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
+    <Compile Include="Areas\Administration\Controllers\ITDashboardController.cs" />
     <Compile Include="Areas\Administration\Controllers\StatusLogController.cs" />
     <Compile Include="Areas\Administration\Controllers\DeliveryStatusController.cs" />
     <Compile Include="Areas\Administration\Controllers\ColumnAliasController.cs" />
@@ -792,6 +793,7 @@
     <Content Include="Areas\Job\Views\JobGateway\AddMultiAction.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\MultiActionComboBoxPartial.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\AddMultiGateway.cshtml" />
+    <Content Include="Areas\Administration\Views\ITDashboard\CardView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

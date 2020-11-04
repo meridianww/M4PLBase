@@ -24,9 +24,11 @@ using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Finance;
 using M4PL.APIClient.Job;
+using M4PL.APIClient.ViewModels.Administration;
 using M4PL.APIClient.ViewModels.Finance;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
+using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
@@ -200,8 +202,8 @@ namespace M4PL.Web
                 //var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
                 route.RecordId = 10;
             }
-            reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ViewJobCardViewDashboard);
-            reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ViewJobCardViewDashboard);
+            reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ViewCardViewDashboard);
+            reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ViewCardViewDashboard);
             ////reportResult.ReportRoute.Url = reportView.RprtName;
             reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
             reportResult.ReportRoute.ParentRecordId = 0;
@@ -3231,6 +3233,36 @@ namespace M4PL.Web
             return views;
         }
 
+        public static IList<ITDashboardView> GetCardViewViews(this IList<ITDashboardView> iTDashboards)
+        {
+            var views = new List<ITDashboardView>();
+            var requestRout = new MvcRoute(EntitiesAlias.ITDashboard, "DataView", "Administration");
+            requestRout.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+            requestRout.Area = "Administration";
+            requestRout.TabIndex = 1;
+            requestRout.Entity = EntitiesAlias.ITDashboard;
+
+            if (iTDashboards != null && iTDashboards.Count > 0)
+            {
+                foreach (var iTDashboardsTile in iTDashboards)
+                {
+                    var iTDashboardView = new APIClient.ViewModels.Administration.ITDashboardView
+                    {
+                        Id = iTDashboardsTile.DashboardCategoryRelationId,
+                        Name = iTDashboardsTile.DashboardSubCategoryDisplayName,
+                        CardCount =  iTDashboardsTile.RecordCount,
+                        CardType = iTDashboardsTile.SortOrder + iTDashboardsTile.DashboardCategoryDisplayName,
+                        BackGroundColor = iTDashboardsTile.BackGroundColor,
+                        FontColor = iTDashboardsTile.FontColor,
+                        DashboardSubCategoryName = iTDashboardsTile.DashboardSubCategoryName,
+                        DashboardCategoryName = iTDashboardsTile.DashboardCategoryName
+                    };
+                    views.Add(iTDashboardView);
+                }
+            }
+            return views;
+        }
+
         public static M4PL.Entities.Job.JobCardRequest GetJobCard(this IList<APIClient.ViewModels.Job.JobCardViewView> recordData, string strRoute, long filterId = 0)
         {
             var jobCard = new M4PL.Entities.Job.JobCardRequest();
@@ -3738,6 +3770,24 @@ namespace M4PL.Web
             }
 
             return rawData;
+        }
+
+        public static void SetupCardResult<TView>(this CardViewResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
+        {
+            if (route.RecordId < 1)
+            {
+                //var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
+                //var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+                route.RecordId = 10;
+            }
+            reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ViewCardViewDashboard);
+            reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ViewCardViewDashboard);
+            ////reportResult.ReportRoute.Url = reportView.RprtName;
+            reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
+            reportResult.ReportRoute.ParentRecordId = 0;
+            reportResult.SessionProvider = sessionProvider;
+            reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
+            reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.ITDashboard);
         }
     }
 }

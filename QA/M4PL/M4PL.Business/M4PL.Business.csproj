@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\IITDashboardCommands.cs" />
+    <Compile Include="Administration\ITDashboardCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
     <Compile Include="Administration\IStatusLogCommands.cs" />

@@ -77,13 +77,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             SessionProvider.CardTileData = null;
             TempData["Destinations"] = null;
-            return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
+            return PartialView(MvcConstants.ViewCardViewDashboard, _reportResult);
         }
         public PartialViewResult JobCardTileByCustomer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
-            var record = _jobCardCommands.GetCardTileData(route.RecordId, destinationSiteWhereCondition);
+            var record = _jobCardCommands.GetCardTileData(route.RecordId, destinationSiteWhereCondition, "Default_Job");
             TempData["JobCardCustomerId"] = route.RecordId;
             if (record != null)
             {
@@ -95,7 +95,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
 
-            return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
+            return PartialView(MvcConstants.ViewCardViewPartial, _reportResult);
         }
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {

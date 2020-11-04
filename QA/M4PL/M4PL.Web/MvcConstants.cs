@@ -260,9 +260,9 @@ namespace M4PL.Web
 		public const string ViewCompanyComboBox = "_CompanyComboBox";
 		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob";
 
-		public const string ViewJobCardViewDashboard = "CardView";
-		public const string ViewJobCardViewPartial = "_CardViewPartial";
-		public const string ViewJobCardViewContentPartial = "_CardViewContentPartial";
+		public const string ViewCardViewDashboard = "CardView";
+		public const string ViewCardViewPartial = "_CardViewPartial";
+		public const string ViewCardViewContentPartial = "_CardViewContentPartial";
 
 		#endregion Views
 

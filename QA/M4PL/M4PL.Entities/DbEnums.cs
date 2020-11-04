@@ -331,7 +331,8 @@ namespace M4PL.Entities
 		NavRemittance,
         Action,
         SubAction,
-        NextGatway
+        NextGatway,
+		ITDashboard
 	}
 
 	public enum ErrorMessages

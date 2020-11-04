@@ -199,7 +199,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (Session["SpecialJobId"] != null)
             {
                 var cancelRoute = new MvcRoute(route, route.ParentRecordId);
-                cancelRoute.Action = MvcConstants.ViewJobCardViewDashboard;
+                cancelRoute.Action = MvcConstants.ViewCardViewDashboard;
                 cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                 cancelRoute.ParentEntity = EntitiesAlias.Common;
                 cancelRoute.Entity = EntitiesAlias.JobCard;

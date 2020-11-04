@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAlias.cs" />
+    <Compile Include="Administration\ITDashboard.cs" />
     <Compile Include="Administration\StatusLog.cs" />
     <Compile Include="Administration\DeliveryStatus.cs" />
     <Compile Include="Administration\MenuAccessLevel.cs" />

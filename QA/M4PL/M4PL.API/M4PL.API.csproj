@@ -276,6 +276,7 @@
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
     <Compile Include="Controllers\EmailServiceController.cs" />
     <Compile Include="Controllers\GatewayImportController.cs" />
+    <Compile Include="Controllers\ITDashboardsController.cs" />
     <Compile Include="Controllers\NavRateController.cs" />
     <Compile Include="Controllers\JobServicesController.cs" />
     <Compile Include="Controllers\NavRemittanceController.cs" />

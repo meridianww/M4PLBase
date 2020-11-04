@@ -46,9 +46,9 @@ namespace M4PL.Business.Job
 			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
 		}
 
-		public IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition)
+		public IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition, string DashboardName)
 		{
-			var result = _commands.GetCardTileData(ActiveUser, companyId);
+			var result = _commands.GetCardTileData(ActiveUser, DashboardName);
 			var permittedEntity = _commands.GetCustomEntityIdByEntityName(ActiveUser, EntitiesAlias.Job);
 			permittedEntity.ForEach(t => t.ID = t.EntityId);
 			List<Task> taskProcess = new List<Task>();

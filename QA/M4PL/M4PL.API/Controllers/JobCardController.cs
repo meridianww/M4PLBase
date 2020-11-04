@@ -30,18 +30,18 @@ namespace M4PL.API.Controllers
     [CustomAuthorize]
     [RoutePrefix("api/JobCard")]
     public class JobCardController : ApiController
-	{
-		private readonly IJobCardCommands _jobCardCommands;
+    {
+        private readonly IJobCardCommands _jobCardCommands;
 
-		/// <summary>
-		/// Functions to get Order details
-		/// </summary>
-		/// <param name="jobCardCommands"></param>
-		public JobCardController(IJobCardCommands jobCardCommands)
-			
-		{
-			_jobCardCommands = jobCardCommands;
-		}
+        /// <summary>
+        /// Functions to get Order details
+        /// </summary>
+        /// <param name="jobCardCommands"></param>
+        public JobCardController(IJobCardCommands jobCardCommands)
+
+        {
+            _jobCardCommands = jobCardCommands;
+        }
 
         /// <summary>
         /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
@@ -135,6 +135,7 @@ namespace M4PL.API.Controllers
             _jobCardCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCardCommands.Patch(jobCard);
         }
+
         /// <summary>
         /// GetCardTileData method is used to get Order data for "Not Scheduled","Schedule Past Due","Scheduled For Today" actions(Order State)
         /// Each above category contain count for following order state-
@@ -150,33 +151,33 @@ namespace M4PL.API.Controllers
         /// Returns response as queryable list of JobCardTileDetail object based on Customer Id(numeric)  and where(string) filter applied.
         /// </returns>
         [CustomAuthorize]
-		[HttpPost]
-		[Route("GetCardTileData")]
-		public IQueryable<JobCardTileDetail> GetCardTileData(JobCardCondition jobCondition)
-		{
-			_jobCardCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCardCommands.GetCardTileData(jobCondition.CompanyId, jobCondition.WhereCondition).AsQueryable();
-		}
+        [HttpPost]
+        [Route("GetCardTileData")]
+        public IQueryable<JobCardTileDetail> GetCardTileData(JobCardCondition jobCondition)
+        {
+            _jobCardCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCardCommands.GetCardTileData(jobCondition.CompanyId, jobCondition.WhereCondition, jobCondition.DashboardName).AsQueryable();
+        }
 
-		/// <summary>
-		/// GetDropDownDataForJobCard method is used to get Manufacturing Locations used for particular customer.
-		/// </summary>
-		/// <param name="customerId">
-		/// Refer to Customer Id (type numeric) value
-		/// </param>
-		/// <param name="entity">
-		/// Refer to Entiy (type string) value = "Destination" always.
-		/// </param>
-		/// <returns>
-		/// Returns response as  list of JobCard object based on Customer Id(numeric) and where(string) filter applied.
-		/// </returns>
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("GetDropDownDataForJobCard")]
-		public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)
-		{
-			_jobCardCommands.ActiveUser = Models.ApiContext.ActiveUser; 
-			return _jobCardCommands.GetDropDownDataForJobCard(customerId, entity);
-		}
-	}
+        /// <summary>
+        /// GetDropDownDataForJobCard method is used to get Manufacturing Locations used for particular customer.
+        /// </summary>
+        /// <param name="customerId">
+        /// Refer to Customer Id (type numeric) value
+        /// </param>
+        /// <param name="entity">
+        /// Refer to Entiy (type string) value = "Destination" always.
+        /// </param>
+        /// <returns>
+        /// Returns response as  list of JobCard object based on Customer Id(numeric) and where(string) filter applied.
+        /// </returns>
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetDropDownDataForJobCard")]
+        public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)
+        {
+            _jobCardCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCardCommands.GetDropDownDataForJobCard(customerId, entity);
+        }
+    }
 }
