@@ -1185,6 +1185,7 @@ M4PLWindow.FormView = function () {
                                                                 var route = JSON.parse(urlParams.getAll('strRoute'));
                                                                 route.RecordId = 0;
                                                                 route.JobIds = s.GetSelectedKeysOnPage();
+                                                                M4PLWindow.MultiSelectedJobIds = [];
                                                                 s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                                                                 s.Refresh();
                                                             }

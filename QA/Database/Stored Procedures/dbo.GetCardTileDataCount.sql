@@ -116,7 +116,6 @@ BEGIN
 					--END
 					 
 					 SET @CountQuery = @CountQuery + @where + @CurrentCustomQuery 
-					 PRINT @CountQuery
 				EXEC sp_executesql @CountQuery
 		END
 		ELSE
