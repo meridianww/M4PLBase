@@ -543,7 +543,7 @@ namespace M4PL.Business.XCBL
             if (orderHeader != null)
             {
                 string deliveryTime = orderHeader != null ? orderHeader.DeliveryTime : string.Empty;
-                deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
+                deliveryTime = (!string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
                                    deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
                                    deliveryTime.Substring(4, 2) : "";
                 summaryHeader.SummaryHeader = new SummaryHeader()

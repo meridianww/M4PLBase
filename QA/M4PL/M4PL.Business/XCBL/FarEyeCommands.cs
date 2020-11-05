@@ -1,0 +1,271 @@
+﻿#region Copyright
+/******************************************************************************
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
+*
+* Proprietary and confidential. Unauthorized copying of this file, via any
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
+******************************************************************************/
+#endregion Copyright
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using M4PL.Entities.Support;
+using M4PL.Entities.XCBL.FarEye.Order;
+using M4PL.Entities.XCBL.Electrolux.OrderRequest;
+using M4PL.Utilities;
+using M4PL.Entities.XCBL.FarEye;
+using System.Net;
+using M4PL.Entities.Job;
+using Newtonsoft.Json;
+using M4PL.Business.XCBL.HelperClasses;
+using M4PL.Entities;
+
+namespace M4PL.Business.XCBL
+{
+	public class FarEyeCommands : BaseCommands<FarEyeOrderDetails>, IFarEyeCommands
+	{
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
+		public int Delete(long id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public FarEyeOrderDetails Get(long id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<FarEyeOrderDetails> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			throw new NotImplementedException();
+		}
+
+		public FarEyeOrderDetails Patch(FarEyeOrderDetails entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public FarEyeOrderDetails Post(FarEyeOrderDetails entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public FarEyeOrderDetails Put(FarEyeOrderDetails entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public FarEyeOrderResponse OrderProcessingFromFarEye(FarEyeOrderDetails orderDetail)
+		{
+			ElectroluxOrderDetails electroluxOrderRequestModel = GetElectroluxOrderDetails(orderDetail);
+			XCBLCommands xcBLCommands = new XCBLCommands();
+			xcBLCommands.ActiveUser = this.ActiveUser;
+			var orderResult = xcBLCommands.ProcessElectroluxOrderRequest(electroluxOrderRequestModel);
+
+			return new FarEyeOrderResponse();
+		}
+
+		public OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent)
+		{
+			if (orderEvent == null)
+			{
+				return new OrderEventResponse() { Status = (int)HttpStatusCode.ExpectationFailed, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { "OrderEvent Object can not be null." } };
+			}
+			else if (string.IsNullOrEmpty(orderEvent.OrderNumber))
+			{
+				return new OrderEventResponse() { Status = (int)HttpStatusCode.ExpectationFailed, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { "OrderNumber can not be null or empty." } };
+			}
+
+			var orderData = M4PL.DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderEvent.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			if (orderData != null && orderData.Id > 0)
+			{
+				DataAccess.Job.JobEDIXcblCommands.Post(ActiveUser, new JobEDIXcbl()
+				{
+					JobId = orderData.Id,
+					EdtCode = "Order Tracking",
+					EdtTypeId = M4PLBusinessConfiguration.XCBLEDTType.ToInt(),
+					EdtData = JsonConvert.SerializeObject(orderEvent),
+					TransactionDate = TimeUtility.GetPacificDateTime(),
+					EdtTitle = "Order Tracking"
+				});
+
+				if (!string.IsNullOrEmpty(orderEvent.StatusCode))
+				{
+					bool isFarEyePushRequired = false;
+					if (orderEvent.StatusCode.Equals("shipment_in_transit", StringComparison.OrdinalIgnoreCase))
+					{
+						M4PL.DataAccess.Job.JobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, orderData.Id, (long)orderData.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+
+						if (isFarEyePushRequired)
+						{
+							FarEyeHelper.PushStatusUpdateToFarEye((long)orderData.Id, ActiveUser);
+						}
+					}
+					else if (orderEvent.StatusCode.Equals("call_to_customer", StringComparison.OrdinalIgnoreCase))
+					{
+						var customerCallActionData = DataAccess.Job.JobGatewayCommands.GetGatewayWithParent(ActiveUser, 0, (long)orderData.Id, "Action", false, "Call Customer");
+						if (customerCallActionData != null)
+						{
+							customerCallActionData.GatewayTypeId = 86;
+							customerCallActionData.GwyGatewayCode = "Call Customer";
+							customerCallActionData.GwyGatewayACD = DateTime.UtcNow.AddHours(customerCallActionData.DeliveryUTCValue);
+							customerCallActionData.GwyGatewayTitle = "Call Customer";
+							customerCallActionData.GwyTitle = "Call Customer";
+							customerCallActionData.GwyCompleted = false;
+							DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, null, customerCallActionData, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), orderData.Id);
+						}
+					}
+					else if (orderEvent.StatusCode.Equals("reschedule", StringComparison.OrdinalIgnoreCase))
+					{
+						var rescheduleActionData = DataAccess.Job.JobGatewayCommands.GetGatewayWithParent(ActiveUser, 0, (long)orderData.Id, "Action", false, "Reschedule-49");
+						if (rescheduleActionData != null)
+						{
+							rescheduleActionData.GatewayTypeId = 86;
+							rescheduleActionData.isScheduleReschedule = true;
+							rescheduleActionData.GwyDDPNew = orderEvent?.Information?.RescheduleDate?.ToDateTime();
+							rescheduleActionData.GwyGatewayCode = "Reschedule-49";
+							rescheduleActionData.GwyGatewayACD = DateTime.UtcNow.AddHours(rescheduleActionData.DeliveryUTCValue);
+							rescheduleActionData.GwyGatewayTitle = "Electrolux Request";
+							rescheduleActionData.GwyTitle = "Electrolux Request";
+							rescheduleActionData.GwyCompleted = true;
+							var gatewayInsertResult = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, null, rescheduleActionData, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), orderData.Id);
+							if (gatewayInsertResult != null && gatewayInsertResult.IsFarEyePushRequired)
+							{
+								FarEyeHelper.PushStatusUpdateToFarEye((long)orderData.Id, ActiveUser);
+							}
+						}
+					}
+				}
+
+				return new OrderEventResponse() { Status = (int)HttpStatusCode.OK, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { string.Format("Order {0} is successfully updated.", orderData.JobCustomerSalesOrder) } };
+			}
+			else
+			{
+				return new OrderEventResponse() { Status = (int)HttpStatusCode.ExpectationFailed, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { "OrderNumber is not present in the Meridian system." } };
+			}
+		}
+
+		private ElectroluxOrderDetails GetElectroluxOrderDetails(FarEyeOrderDetails orderDetail)
+		{
+			ElectroluxOrderDetails electroluxOrderDetail = new ElectroluxOrderDetails();
+
+			electroluxOrderDetail.Header = new Header();
+			electroluxOrderDetail.Body = new Body();
+			electroluxOrderDetail.Body.Order = new Order();
+			electroluxOrderDetail.Body.Order.OrderDescriptionList = new OrderDescriptionList();
+			electroluxOrderDetail.Body.Order.OrderLineDetailList = new OrderLineDetailList() { OrderLineDetail = new List<OrderLineDetail>() };
+			orderDetail.item_list.ForEach(x => electroluxOrderDetail.Body.Order.OrderLineDetailList.OrderLineDetail.Add(new OrderLineDetail()
+			{
+				LineNumber = x.item_reference_number,
+				ItemID = x.item_code,
+				ItemDescription = x.item_material_descritpion,
+				ShipQuantity = x.item_quantity,
+				Weight = x.item_weight.ToDecimal(),
+				WeightUnitOfMeasure = x.item_weight_uom,
+				Volume = x.item_volumn,
+				VolumeUnitOfMeasure = x.item_volumn_uom,
+				SecondaryLocation = x.secondary_location,
+				MaterialType = x.item_material_type,
+				ShipUnitOfMeasure = x.item_uom,
+				CustomerStockNumber = x.customer_stock_number,
+				StatusCode = x.item_status,
+				//EDILINEID = string.Empty,
+				MaterialTypeDescription = x.item_material_descritpion,
+				LineNumberReference = x.item_number_of_reference_item,
+				SerialNumber = x.item_serial_number,
+				LineDescriptionDetails = new LineDescriptionDetails() { LineDescription = new LineDescription() }
+			}));
+
+			electroluxOrderDetail.Body.Order.OrderHeader = new OrderHeader()
+			{
+				SenderID = orderDetail.reference_id
+				// ,RecieverID = string.Empty
+				,OriginalOrderNumber = orderDetail.order_number
+				,OrderNumber = orderDetail.tracking_number
+				,Action = orderDetail.type_of_action.Equals("Create", StringComparison.OrdinalIgnoreCase) ? "Add" : orderDetail.type_of_action
+				// ,ReleaseNum = string.Empty
+				,
+				OrderType = orderDetail.type_of_order
+				,OrderDate = orderDetail?.info?.install_date
+				,CustomerPO = orderDetail?.info?.customer_po
+				//,PurchaseOrderType
+				,CosigneePO = orderDetail?.info?.consignee_po
+				,DeliveryDate = orderDetail?.info?.outbound_delivery_date
+				//,DeliveryTime = string.Empty
+				,RMAIndicator = orderDetail?.info?.rma_indicator
+				,DepartmentNumber = orderDetail?.info?.department_number
+				,FreightCarrierCode = orderDetail?.info?.freight_carrier_code
+				,HotOrder = orderDetail?.info?.hot_order
+				,ASNdata = new ASNdata() { BolNumber = orderDetail?.info?.bill_of_lading, VehicleId = orderDetail?.info?.transport_id }
+				,ShipFrom = new ShipFrom()
+				{
+					LocationID = orderDetail.origin_code
+				   ,LocationName = orderDetail.origin_name
+				   ,ContactFirstName = orderDetail.origin_contact_name
+				   ,ContactLastName = string.Empty
+				   ,ContactEmailID = orderDetail.origin_email
+				   ,AddressLine1 = orderDetail.origin_address_line1
+				   ,AddressLine2 = orderDetail.origin_address_line2
+				   ,AddressLine3 = orderDetail.origin_landmark
+				   ,City = orderDetail.origin_city
+				   ,State = orderDetail.origin_state_province
+				   ,ZipCode = orderDetail.origin_postal_code
+				   ,Country = orderDetail.origin_country
+				   ,ContactNumber = orderDetail.origin_contact_number
+				}
+				,
+				ShipTo = new ShipTo()
+				{
+					LocationID = orderDetail.destination_code
+				   ,LocationName = orderDetail.destination_name
+				   ,ContactFirstName = orderDetail.destination_contact_name
+				   ,ContactLastName = string.Empty
+				   ,ContactEmailID = orderDetail.destination_email
+				   ,AddressLine1 = orderDetail.destination_address_line1
+				   ,AddressLine2 = orderDetail.destination_address_line2
+				   ,AddressLine3 = orderDetail.destination_landmark
+				   ,City = orderDetail.destination_city
+				   ,State = orderDetail.destination_state_province
+				   ,ZipCode = orderDetail.destination_postal_code
+				   ,Country = orderDetail.destination_country
+				   ,ContactNumber = orderDetail.destination_contact_number
+                   ,LotID = orderDetail.destination_lot_id
+				}
+				,
+				DeliverTo = new DeliverTo()
+				{
+					LocationID = orderDetail.deliver_to_code
+				   ,LocationName = orderDetail.deliver_to_name
+				   ,ContactFirstName = orderDetail.deliver_to_contact_name
+				   ,ContactLastName = string.Empty
+				   ,ContactEmailID = orderDetail.deliver_to_email
+				   ,AddressLine1 = orderDetail.deliver_to_address_line1
+				   ,AddressLine2 = orderDetail.deliver_to_address_line2
+				   ,AddressLine3 = orderDetail.deliver_to_landmark
+				   ,City = orderDetail.deliver_to_city
+				   ,State = orderDetail.deliver_to_state_province
+				   ,ZipCode = orderDetail.deliver_to_postal_code
+				   ,Country = orderDetail.deliver_to_country
+				   ,ContactNumber = orderDetail.deliver_to_contact_number
+				   ,LotID = orderDetail.deliver_lot_id
+				}
+			};
+
+			electroluxOrderDetail.Header.Message = new Message() { Subject = orderDetail.type_of_service };
+
+			return electroluxOrderDetail;
+		}
+	}
+}

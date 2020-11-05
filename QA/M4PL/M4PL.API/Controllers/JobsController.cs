@@ -580,19 +580,6 @@ namespace M4PL.API.Controllers
 		}
 
 		/// <summary>
-		/// This API use to push the data for Order Tracking From Far Eye System
-		/// </summary>
-		/// <param name="orderEvent">orderEvent</param>
-		/// <returns>response with the </returns>
-		[HttpPost]
-		[Route("OrderEvent"), ResponseType(typeof(OrderEventResponse))]
-		public OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent)
-		{
-			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-			return _jobCommands.UpdateOrderEvent(orderEvent);
-		}
-
-		/// <summary>
 		/// Update the special instructions for a Order in Meridian System
 		/// </summary>
 		/// <param name="jobSpecialInstruction">jobSpecialInstruction contains a string where instructions needs to pass.</param>

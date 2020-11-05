@@ -88,7 +88,5 @@ namespace M4PL.Business.Job
 		StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber);
 
 		JobContact GetJobContact(long id, long parentId);
-
-		OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent);
 	}
 }
