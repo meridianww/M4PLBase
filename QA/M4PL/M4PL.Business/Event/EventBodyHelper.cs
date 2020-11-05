@@ -173,15 +173,24 @@ namespace M4PL.Business.Event
 			Stream stream;
 			using (DataSet ds = new DataSet())
 			{
-				ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
-				ds.DataSetName = "xCBLExceptionDS";
-				DataTable carrierInsauranceInfoData = DataAccess.XCBL.XCBLCommands.GetXcblExceptionInfo(scenarioTypeId);
-				ds.Tables.Add(carrierInsauranceInfoData);
-				ds.Tables[0].TableName = "ExceptionInfo";
-				stream = HtmlGenerator.GenerateHtmlFile(ds, AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\xCBLException.xslt", null);
+				using (DataTable carrierInsauranceInfoData = DataAccess.XCBL.XCBLCommands.GetXcblExceptionInfo(scenarioTypeId))
+				{
+					ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
+					ds.DataSetName = "xCBLExceptionDS";
+					ds.Tables.Add(carrierInsauranceInfoData);
+					ds.Tables[0].TableName = "ExceptionInfo";
+					if (carrierInsauranceInfoData != null && carrierInsauranceInfoData.Rows != null && carrierInsauranceInfoData.Rows.Count > 0)
+					{
+						stream = HtmlGenerator.GenerateHtmlFile(ds, AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\xCBLException.xslt", null);
+					}
+					else
+					{
+						stream = null;
+					}
+				}
 			}
 
-			return GetHtmlData(stream);
+			return stream == null ? string.Empty : GetHtmlData(stream);
 		}
 
 		internal static string GetEDIExceptionMailBody(int scenarioTypeId)

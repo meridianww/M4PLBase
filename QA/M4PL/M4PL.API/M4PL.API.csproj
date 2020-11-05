@@ -224,6 +224,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\BizMobl\" />
+    <Folder Include="Views\FarEye\" />
     <Folder Include="Views\GatewayImport\" />
     <Folder Include="Views\JobAttachment\" />
     <Folder Include="Views\JobRollup\" />
@@ -275,6 +276,7 @@
     <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
     <Compile Include="Controllers\EmailServiceController.cs" />
+    <Compile Include="Controllers\FarEyeController.cs" />
     <Compile Include="Controllers\GatewayImportController.cs" />
     <Compile Include="Controllers\NavRateController.cs" />
     <Compile Include="Controllers\JobServicesController.cs" />
