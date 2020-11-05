@@ -70,5 +70,12 @@ namespace M4PL.API.Controllers
 			_emailCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _emailCommands.xCBLEmailNotification(scenarioTypeId);
 		}
+		[HttpGet]
+		[Route("EDIEmailNotification")]
+		public bool EDIEmailNotification(int scenarioTypeId)
+        {
+			_emailCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _emailCommands.EDIEmailNotification(scenarioTypeId);
+		}
 	}
 }

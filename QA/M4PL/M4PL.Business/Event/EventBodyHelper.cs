@@ -79,7 +79,8 @@ namespace M4PL.Business.Event
 			}
 		}
 
-		public static string GetCargoExceptionMailBody(ActiveUser activeUser, string exceptionCode, long jobId, string contractNo, DateTime createdDate, string comment, string cgoPartNumCode, string cgoitle, string cgoSerialNumber, string currentGateway)
+
+        public static string GetCargoExceptionMailBody(ActiveUser activeUser, string exceptionCode, long jobId, string contractNo, DateTime createdDate, string comment, string cgoPartNumCode, string cgoitle, string cgoSerialNumber, string currentGateway)
 		{
 			SetCollection setcollection = new SetCollection();
 			Dictionary<string, string> args = new Dictionary<string, string>
@@ -181,6 +182,32 @@ namespace M4PL.Business.Event
 			}
 
 			return GetHtmlData(stream);
+		}
+
+		internal static string GetEDIExceptionMailBody(int scenarioTypeId)
+		{
+			Stream stream;
+			using (DataSet ds = new DataSet())
+			{
+				ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
+				ds.DataSetName = "EDIExceptionDS";
+				DataTable carrierInsauranceInfoData = DataAccess.XCBL.XCBLCommands.GetEDIExceptionInfo(scenarioTypeId);
+				ds.Tables.Add(carrierInsauranceInfoData);
+				ds.Tables[0].TableName = "ExceptionInfo";
+				if (scenarioTypeId == EventNotification.EDINoEDIReceived.ToInt() && ds.Tables[0].Rows[0].Field<int>("isEmpty") == 1)
+				{
+					return "No EDI request received";
+				}
+				if(scenarioTypeId != EventNotification.EDINoEDIReceived.ToInt() && ds.Tables[0].Rows.Count > 0)
+                {
+					stream = HtmlGenerator.GenerateHtmlFile(ds, AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\EDIException.xslt", null);
+					return GetHtmlData(stream);
+				}
+
+				return string.Empty;
+
+			}
+
 		}
 
 		public static void CreateEventMailNotificationForxCBLException(int eventId, string body)

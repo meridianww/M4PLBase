@@ -30,5 +30,6 @@ namespace M4PL.Business.Email
 
 		bool UpdateEmailStatus(int id, short emailStatus, short retryAttampts);
 		bool xCBLEmailNotification(int scenarioTypeId);
+		bool EDIEmailNotification(int scenarioTypeId);
 	}
 }

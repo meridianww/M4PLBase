@@ -12,6 +12,7 @@
 using M4PL.Business.Event;
 using M4PL.Entities;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using _command = M4PL.DataAccess.Common.EmailCommands;
@@ -53,6 +54,19 @@ namespace M4PL.Business.Email
 		public bool xCBLEmailNotification(int scenarioTypeId)
 		{
 			string emailBody = EventBodyHelper.GetxCBLExceptionMailBody(scenarioTypeId);
+			if (!string.IsNullOrEmpty(emailBody))
+			{
+				EventBodyHelper.CreateEventMailNotificationForxCBLException(scenarioTypeId, emailBody);
+				DataAccess.Event.EventCommands.InsertEmailProcessingLog(scenarioTypeId);
+				return true;
+			}
+
+			return false;
+		}
+
+		public bool EDIEmailNotification(int scenarioTypeId)
+        {			 
+			string emailBody = EventBodyHelper.GetEDIExceptionMailBody(scenarioTypeId);
 			if (!string.IsNullOrEmpty(emailBody))
 			{
 				EventBodyHelper.CreateEventMailNotificationForxCBLException(scenarioTypeId, emailBody);
