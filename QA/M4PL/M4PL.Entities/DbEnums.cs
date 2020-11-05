@@ -1065,7 +1065,8 @@ namespace M4PL.Entities
 	public enum ElectroluxMessage
 	{
 		Order = 1,
-		ASN = 2
+		ASN = 2,
+		DeliveryNumber = 3
 	}
 
 	public enum StatusType
