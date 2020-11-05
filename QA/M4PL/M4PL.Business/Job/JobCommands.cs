@@ -551,60 +551,6 @@ namespace M4PL.Business.Job
 			}
 		}
 
-		public OrderStatusModel GetOrderStatus(string orderNumber)
-		{
-			if (string.IsNullOrEmpty(orderNumber))
-			{
-				return new OrderStatusModel()
-				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number."
-				};
-			}
-
-			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
-			if (jobDetail == null || jobDetail?.Id <= 0)
-			{
-				return new OrderStatusModel()
-				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
-				};
-			}
-			else if (jobDetail.CustomerId != M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong())
-			{
-				return new OrderStatusModel()
-				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Status API only avaliable for Electrolux Customer."
-				};
-			}
-			else
-			{
-				var deliveryUpdate = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobDetail.Id, ActiveUser);
-				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
-				{
-					deliveryUpdate.InstallStatus = "Reschedule";
-				}
-
-				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) && !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
-				{
-					deliveryUpdate.InstallStatus = "Canceled";
-				}
-
-				return new OrderStatusModel()
-				{
-					Status = "Success",
-					StatusCode = (int)HttpStatusCode.OK,
-					AdditionalDetail = string.Empty,
-					DeliveryUpdate = deliveryUpdate
-				};
-			}
-		}
-
 		public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting)
 		{
 			if (string.IsNullOrEmpty(orderNumber))

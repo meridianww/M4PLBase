@@ -157,6 +157,95 @@ namespace M4PL.Business.XCBL
 			}
 		}
 
+		public FarEyeOrderCancelResponse CancelOrder(FarEyeOrderCancelRequest farEyeOrderCancelRequest)
+		{
+			DateTime processingStartDateTime = DateTime.Now;
+			FarEyeOrderCancelResponse response = new FarEyeOrderCancelResponse();
+			if (farEyeOrderCancelRequest.tracking_number == null || (farEyeOrderCancelRequest.tracking_number != null && farEyeOrderCancelRequest.tracking_number.Count == 0))
+			{
+				response.errors = new List<string>();
+				response.errors.Add("There is no Tracking number present.");
+				response.status = 400;
+				response.reference_id = farEyeOrderCancelRequest.reference_id;
+				response.order_number = farEyeOrderCancelRequest.order_number;
+				response.timestamp = TimeUtility.UnixTimeNow();
+				response.execution_time = (DateTime.Now - processingStartDateTime).TotalMilliseconds.ToInt();
+			}
+			else
+			{
+				Job.JobCommands jobCommands = new Job.JobCommands();
+				jobCommands.ActiveUser = this.ActiveUser;
+				response.items_track_details = new List<ItemsTrackDetail>();
+				foreach (var trackingNumber in farEyeOrderCancelRequest.tracking_number)
+				{
+					var statusModel = jobCommands.CancelJobByOrderNumber(trackingNumber, farEyeOrderCancelRequest.carrier_code, farEyeOrderCancelRequest.reason);
+					response.items_track_details.Add(new ItemsTrackDetail() { status = statusModel.Status, message = statusModel.AdditionalDetail, tracking_number = trackingNumber });
+				}
+
+				response.status = response.items_track_details.Where(x => x.status.Equals("Failure", StringComparison.OrdinalIgnoreCase)).Any() ? 400 : 200;
+				response.reference_id = farEyeOrderCancelRequest.reference_id;
+				response.order_number = farEyeOrderCancelRequest.order_number;
+				response.timestamp = TimeUtility.UnixTimeNow();
+				response.execution_time = (DateTime.Now - processingStartDateTime).TotalMilliseconds.ToInt();
+			}
+
+			return response;
+		}
+
+		public OrderStatusModel GetOrderStatus(string orderNumber)
+		{
+			if (string.IsNullOrEmpty(orderNumber))
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number."
+				};
+			}
+
+			Entities.Job.Job jobDetail = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
+			if (jobDetail == null || jobDetail?.Id <= 0)
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
+				};
+			}
+			else if (jobDetail.CustomerId != M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong())
+			{
+				return new OrderStatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Status API only avaliable for Electrolux Customer."
+				};
+			}
+			else
+			{
+				var deliveryUpdate = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobDetail.Id, ActiveUser);
+				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
+				{
+					deliveryUpdate.InstallStatus = "Reschedule";
+				}
+
+				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) && !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+				{
+					deliveryUpdate.InstallStatus = "Canceled";
+				}
+
+				return new OrderStatusModel()
+				{
+					Status = "Success",
+					StatusCode = (int)HttpStatusCode.OK,
+					AdditionalDetail = string.Empty,
+					DeliveryUpdate = deliveryUpdate
+				};
+			}
+		}
+
 		private ElectroluxOrderDetails GetElectroluxOrderDetails(FarEyeOrderDetails orderDetail)
 		{
 			ElectroluxOrderDetails electroluxOrderDetail = new ElectroluxOrderDetails();

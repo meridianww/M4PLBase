@@ -12,17 +12,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using M4PL.Entities.XCBL.FarEye.Order;
-using M4PL.Entities.XCBL.FarEye;
-using M4PL.Entities.Job;
 
-namespace M4PL.Business.XCBL
+namespace M4PL.Entities.XCBL.FarEye.Order
 {
-	public interface IFarEyeCommands : IBaseCommands<FarEyeOrderDetails>
+	public class FarEyeOrderCancelResponse
 	{
-		FarEyeOrderResponse OrderProcessingFromFarEye(FarEyeOrderDetails orderDetail);
-		OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent);
-		FarEyeOrderCancelResponse CancelOrder(FarEyeOrderCancelRequest farEyeOrderCancelRequest);
-		OrderStatusModel GetOrderStatus(string orderNumber);
+		public int status { get; set; }
+		public string reference_id { get; set; }
+		public long timestamp { get; set; }
+		public string order_number { get; set; }
+		public int execution_time { get; set; }
+		public List<ItemsTrackDetail> items_track_details { get; set; }
+		public List<string> errors { get; set; }
+	}
+
+	public class ItemsTrackDetail
+	{
+		public string tracking_number { get; set; }
+		public string status { get; set; }
+		public string message { get; set; }
 	}
 }

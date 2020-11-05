@@ -79,8 +79,6 @@ namespace M4PL.Business.Job
 
 		OrderLocationCoordinate GetOrderLocationCoordinate(string orderNumber);
 
-		OrderStatusModel GetOrderStatus(string orderNumber);
-
 		StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting);
 
 		StatusModel AddDriver(DriverContact driverContact);

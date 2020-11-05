@@ -382,6 +382,8 @@
     <Compile Include="XCBL\FarEye\Info.cs" />
     <Compile Include="XCBL\FarEye\OrderEvent.cs" />
     <Compile Include="XCBL\FarEye\OrderEventResponse.cs" />
+    <Compile Include="XCBL\FarEye\Order\FarEyeOrderCancelRequest.cs" />
+    <Compile Include="XCBL\FarEye\Order\FarEyeOrderCancelResponse.cs" />
     <Compile Include="XCBL\FarEye\Order\FarEyeOrderDetails.cs" />
     <Compile Include="XCBL\FarEye\Order\OrderResponse.cs" />
     <Compile Include="XCBL\LineDetail.cs" />
