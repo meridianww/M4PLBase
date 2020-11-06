@@ -203,13 +203,15 @@ namespace M4PL.Business.Event
 				DataTable carrierInsauranceInfoData = DataAccess.XCBL.XCBLCommands.GetEDIExceptionInfo(scenarioTypeId);
 				ds.Tables.Add(carrierInsauranceInfoData);
 				ds.Tables[0].TableName = "ExceptionInfo";
-				if (scenarioTypeId == EventNotification.EDINoEDIReceived.ToInt() && ds.Tables[0].Rows[0].Field<int>("isEmpty") == 1)
+				if (ds.Tables[0].Rows.Count>0)
 				{
-					return "No EDI request received";
-				}
-				if(scenarioTypeId != EventNotification.EDINoEDIReceived.ToInt() && ds.Tables[0].Rows.Count > 0)
-                {
-					stream = HtmlGenerator.GenerateHtmlFile(ds, AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\EDIException.xslt", null);
+					Dictionary<string, string> args = null;
+					if (scenarioTypeId == EventNotification.EDINoEDIReceived.ToInt())
+						args = new Dictionary<string, string>() { {"isOrderNumberAvailable","false" } };
+					else
+						args = new Dictionary<string, string>() { { "isOrderNumberAvailable", "true" } };
+
+					stream = HtmlGenerator.GenerateHtmlFile(ds, AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\EDIException.xslt", args);
 					return GetHtmlData(stream);
 				}
 
