@@ -39,12 +39,19 @@
     || ViewData["ReportName"].ToString() == "Manifest Report" || ViewData["ReportName"].ToString() == "OSD Report")))
     {
         filterSortingEnable = true;
+    }else if (ViewData["ReportName"] == null ||
+    (ViewData["ReportName"] != null
+    && (ViewData["ReportName"].ToString() == "Price Charge" || ViewData["ReportName"].ToString() == "Cost Charge"))
+    && Model.ColumnSettings.Where(x => x.ColColumnName == "RateAmount").Any())
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "RateAmount").DataType = "decimal";
     }
     //var filterSortingEnable = true;
     //if (Model.Records.FirstOrDefault() == null || (Model.Records.FirstOrDefault() != null && Model.Records.FirstOrDefault().IsFilterSortDisable))
     //{
     //    filterSortingEnable = false;
     //}
+
   }
     @Html.DevExpress().GridView(settings =>
 {
