@@ -74,7 +74,18 @@ namespace M4PL.Business.XCBL
 			xcBLCommands.ActiveUser = this.ActiveUser;
 			var orderResult = xcBLCommands.ProcessElectroluxOrderRequest(electroluxOrderRequestModel);
 
-			return new FarEyeOrderResponse();
+			FarEyeOrderResponse farEyeOrderResponse = new FarEyeOrderResponse();
+			farEyeOrderResponse.status = (orderResult == null || (orderResult != null && orderResult.StatusCode == "Failure")) ? 500 : 200;
+			farEyeOrderResponse.orderNumber = orderDetail.order_number;
+			farEyeOrderResponse.trackingNumber = orderDetail.tracking_number;
+			farEyeOrderResponse.timestamp = TimeUtility.UnixTimeNow();
+			if (orderResult != null && orderResult.StatusCode == "Failure" && !string.IsNullOrEmpty(orderResult.Subject))
+			{
+				farEyeOrderResponse.errors = new List<string>();
+				farEyeOrderResponse.errors.Add(orderResult.Subject);
+			}
+
+			return farEyeOrderResponse;
 		}
 
 		public OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent)
@@ -285,8 +296,7 @@ namespace M4PL.Business.XCBL
 				,OrderNumber = orderDetail.tracking_number
 				,Action = orderDetail.type_of_action.Equals("Create", StringComparison.OrdinalIgnoreCase) ? "Add" : orderDetail.type_of_action
 				// ,ReleaseNum = string.Empty
-				,
-				OrderType = orderDetail.type_of_order
+				,OrderType = orderDetail.type_of_order
 				,OrderDate = orderDetail?.info?.install_date
 				,CustomerPO = orderDetail?.info?.customer_po
 				//,PurchaseOrderType
@@ -297,7 +307,7 @@ namespace M4PL.Business.XCBL
 				,DepartmentNumber = orderDetail?.info?.department_number
 				,FreightCarrierCode = orderDetail?.info?.freight_carrier_code
 				,HotOrder = orderDetail?.info?.hot_order
-				,ASNdata = new ASNdata() { BolNumber = orderDetail?.info?.bill_of_lading, VehicleId = orderDetail?.info?.transport_id }
+				,ASNdata = new ASNdata() { BolNumber = orderDetail?.info?.bill_of_lading, VehicleId = orderDetail?.info?.transport_id, Shipdate = orderDetail?.info?.good_issue_date }
 				,ShipFrom = new ShipFrom()
 				{
 					LocationID = orderDetail.origin_code
@@ -352,7 +362,7 @@ namespace M4PL.Business.XCBL
 				}
 			};
 
-			electroluxOrderDetail.Header.Message = new Message() { Subject = orderDetail.type_of_service };
+			electroluxOrderDetail.Header.Message = new Message() { Subject = orderDetail.type_of_service.Equals("DeliveryNumber", StringComparison.OrdinalIgnoreCase) ? "Order" : orderDetail.type_of_service };
 
 			return electroluxOrderDetail;
 		}
