@@ -41,7 +41,7 @@ namespace M4PL.API.Controllers
 		/// <param name="orderDetail">model which contains the fields which are required to create the Order.</param>
 		/// <returns>order response which contains the tracking and Order number</returns>
 		[HttpPost]
-		[Route("Order"), ResponseType(typeof(StatusModel))]
+		[Route("Order"), ResponseType(typeof(FarEyeOrderResponse))]
 		public FarEyeOrderResponse OrderProcessingFromFarEye(FarEyeOrderDetails orderDetail)
 		{
 			_farEyeCommands.ActiveUser = Models.ApiContext.ActiveUser;
