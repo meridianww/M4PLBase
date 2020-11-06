@@ -30,7 +30,7 @@ namespace M4PL.DataAccess.SQLSerializer.Serializer
 			public static string XcblConnectionConnectionStringName = "XcblConnection";
 
 			[ThreadStatic]
-			private static SqlSerializer _defaultThreadLocal;
+			private static XcblSQLSerializer _defaultThreadLocal;
 
 			private static readonly int commandTimeoutInSecs = 180;
 			private readonly SqlCommand _command;
@@ -65,9 +65,9 @@ namespace M4PL.DataAccess.SQLSerializer.Serializer
 				_command = _connection.CreateCommand();
 			}
 
-			public static SqlSerializer Default
+			public static XcblSQLSerializer Default
 			{
-				get { return _defaultThreadLocal ?? (_defaultThreadLocal = new SqlSerializer()); }
+				get { return _defaultThreadLocal ?? (_defaultThreadLocal = new XcblSQLSerializer()); }
 			}
 
 			public static SqlSerializer ByName(string name)
@@ -376,8 +376,13 @@ namespace M4PL.DataAccess.SQLSerializer.Serializer
 				SetupCommand(commandText, parameters, false, commandTimeoutInSecs);
 				return DeserializeDataTable();
 			}
+		    public DataTable DeserializeDataTable(string commandText, bool stroredProcedure, params Parameter[] parameters)
+		    {
+		    	SetupCommand(commandText, parameters, stroredProcedure, commandTimeoutInSecs);
+		    	return DeserializeDataTable();
+		    }
 
-			public DataTable DeserializeDataTable()
+		public DataTable DeserializeDataTable()
 			{
 				var dataTable = new DataTable();
 				using (OpenConnection())
