@@ -31,6 +31,7 @@ using M4PL.Web.Providers;
 using M4PL_Apln.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -461,7 +462,8 @@ namespace M4PL.Web.Controllers
                 Entity = EntitiesAlias.VendDcLocation,
                 EntityFor = EntitiesAlias.Job,
             };
-            ViewData["DCLocationlist"] = _commonCommands.GetPagedSelectedFieldsByTable(RibbondropDownData.Query());
+            var data = _commonCommands.GetPagedSelectedFieldsByTable(RibbondropDownData.Query());
+            ViewData["DCLocationlist"] = data;
             return PartialView("_PrefVdcLocationsPartial", DropDownEditViewModel);
         }
 

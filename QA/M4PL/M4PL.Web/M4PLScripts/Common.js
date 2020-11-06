@@ -1638,17 +1638,19 @@ M4PLCommon.AdvancedReport = (function () {
         var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
         var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
         var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
-        if (reportTypeCtrl != null &&
-            reportTypeCtrl.GetText() != "Job Advance Report" && reportTypeCtrl.GetText() != "Manifest Report" && reportTypeCtrl.GetText() != "OSD Report") {
-            var today = new Date();
-            var yeasterday = new Date();
-            yeasterday.setDate(yeasterday.getDate() - 1);
-            startDateCtrl.SetValue(yeasterday);
-            endDateCtrl.SetValue(today);
-        } else {
-            startDateCtrl.SetValue(null);
-            endDateCtrl.SetValue(null);
-        }
+        //startDateCtrl.SetValue(null);
+        //endDateCtrl.SetValue(null);
+        //if (reportTypeCtrl != null &&
+        //    reportTypeCtrl.GetText() != "Job Advance Report" && reportTypeCtrl.GetText() != "Manifest Report" && reportTypeCtrl.GetText() != "OSD Report") {
+        //    var today = new Date();
+        //    var yeasterday = new Date();
+        //    yeasterday.setDate(yeasterday.getDate() - 1);
+        //    startDateCtrl.SetValue(yeasterday);
+        //    endDateCtrl.SetValue(today);
+        //} else {
+        //    startDateCtrl.SetValue(null);
+        //    endDateCtrl.SetValue(null);
+        //}
 
         if (reportTypeCtrl != null &&
             ((reportTypeCtrl.GetText() == "Driver Scrub Report"))
