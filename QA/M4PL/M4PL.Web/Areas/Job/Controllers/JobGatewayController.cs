@@ -22,6 +22,7 @@ using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using M4PL.Web.Models;
@@ -787,9 +788,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId)?.ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
-        public override ActionResult FormView(string strRoute)
+
+        private void PopulateForm(MvcRoute route)
         {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             Session["isEdit"] = route.IsEdit;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
@@ -798,6 +799,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
                 sessionInfo.PagedDataInfo.RecordId = route.RecordId;
                 sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+                if (route.ParentRecordId == 0 && route.JobIds != null && route.JobIds.Count > 0)
+                {
+                    sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId = Convert.ToInt64(route.JobIds[0]);
+                }
                 var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
                 viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
                 SessionProvider.ViewPagedDataSession = viewPagedDataSession;
@@ -809,7 +814,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!route.IsEdit)
             {
                 if (route.IsPBSReport)
-                    route.ParentRecordId = route.RecordId;
+                {
+                    route.ParentRecordId = route.RecordId > 0 ? route.RecordId : route.ParentRecordId;
+                    if (route.ParentRecordId == 0 && route.JobIds != null && route.JobIds.Count > 0)
+                    {
+                        route.ParentRecordId = Convert.ToInt64(route.JobIds[0]);
+                    }
+                }
+
                 route.RecordId = 0;
                 if (route.Action == "GatewayActionFormView" ||
                     (route.Action == "FormView" && route.Filters == null && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
@@ -890,49 +902,11 @@ namespace M4PL.Web.Areas.Job.Controllers
                     }
                 }
             }
-
-            if (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && (bool)Session["isEdit"])
-            {
-                _formResult.Record.IsAction = true;
-                _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-                _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null
-                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
-
-                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null
-                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
-
-                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null
-                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
-
-                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
-
-                _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
-                var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
-                _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
-                _formResult.Record.StatusCode = _formResult.Record.StatusCode != null ?
-                    _formResult.Record.StatusCode : _formResult.Record.GwyShipApptmtReasonCode;
-                _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
-                _formResult.Permission = Permission.ReadOnly;
-                return PartialView(MvcConstants.ViewGatewayAction, _formResult);
-            }
-            if (((bool)Session["isEdit"] == false && route.Filters == null && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
-                || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment && (bool)Session["isEdit"]))
-            {
-                _formResult.Record.IsAction = false;
-                _formResult.Record.GwyCompleted = true;
-                _formResult.Record.GwyGatewayACD = Utilities.TimeUtility.GetPacificDateTime().AddHours(_formResult.Record.DeliveryUTCValue);
-                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
-                _formResult.Record.DateCancelled = Utilities.TimeUtility.GetPacificDateTime();
-                _formResult.Record.DateComment = Utilities.TimeUtility.GetPacificDateTime();
-                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
-                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
-
-                _formResult.Record.CurrentAction = "Comment";
-                _formResult.Record.GwyGatewayCode = "Comment";
-                _formResult.Record.GwyDDPCurrent = Utilities.TimeUtility.GetPacificDateTime();
-                _formResult.Permission = Permission.ReadOnly;
-                return PartialView(MvcConstants.ViewGatewayComment, _formResult);
-            }
+        }
+        public override ActionResult FormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            PopulateForm(route);
             return PartialView(_formResult);
         }
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
@@ -1047,7 +1021,50 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult GatewayActionFormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            FormView(strRoute);
+            var result = new JobActionCode();
+            PopulateForm(route);
+            if (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && (bool)Session["isEdit"])
+            {
+                _formResult.Record.IsAction = true;
+                _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
+                _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null
+                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
+
+                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null
+                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
+
+                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null
+                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
+
+                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
+
+                _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
+                result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
+                _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
+                _formResult.Record.StatusCode = _formResult.Record.StatusCode != null ?
+                    _formResult.Record.StatusCode : _formResult.Record.GwyShipApptmtReasonCode;
+                _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
+                _formResult.Permission = Permission.ReadOnly;
+                return PartialView(MvcConstants.ViewGatewayAction, _formResult);
+            }
+            if (((bool)Session["isEdit"] == false && route.Filters == null && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
+                || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment && (bool)Session["isEdit"]))
+            {
+                _formResult.Record.IsAction = false;
+                _formResult.Record.GwyCompleted = true;
+                _formResult.Record.GwyGatewayACD = Utilities.TimeUtility.GetPacificDateTime().AddHours(_formResult.Record.DeliveryUTCValue);
+                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
+                _formResult.Record.DateCancelled = Utilities.TimeUtility.GetPacificDateTime();
+                _formResult.Record.DateComment = Utilities.TimeUtility.GetPacificDateTime();
+                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
+                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
+
+                _formResult.Record.CurrentAction = "Comment";
+                _formResult.Record.GwyGatewayCode = "Comment";
+                _formResult.Record.GwyDDPCurrent = Utilities.TimeUtility.GetPacificDateTime();
+                _formResult.Permission = Permission.ReadOnly;
+                return PartialView(MvcConstants.ViewGatewayComment, _formResult);
+            }
             _formResult.Record.IsGatewayCalled = route.IsPBSReport;
             _formResult.Record.IsAction = true;
             _formResult.Record.GwyCompleted = true;
@@ -1065,7 +1082,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             _formResult.Permission = _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && Session["isEdit"] != null
                                    && (bool)Session["isEdit"] == true ? Permission.ReadOnly : Permission.All;
-            var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
+            result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
             _formResult.Record.GwyGatewayACD = _formResult.Record.DateComment = DateTime.UtcNow.AddHours(result.UTCValue);
             _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
