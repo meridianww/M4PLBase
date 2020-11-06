@@ -1575,9 +1575,11 @@ M4PLCommon.AdvancedReport = (function () {
                 rprtVwrRoute.Channel = jobChannelCtrl.GetValue().split(',').map(String);
 
         var startDate = startDateCtrl.GetValue();
-        rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
         var endDate = endDateCtrl.GetValue();
-        rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+        if (startDate != undefined && endDate != undefined && startDate != null && endDate != null) {
+            rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+            rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+        }
         rprtVwrRoute.IsFormRequest = true;
 
         var IsFormValidate = true;
@@ -1604,9 +1606,11 @@ M4PLCommon.AdvancedReport = (function () {
                 var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
                 var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
                 var startDate = startDateCtrl.GetValue();
-                rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
                 var endDate = endDateCtrl.GetValue();
-                rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+                if (startDate != undefined && endDate != undefined && startDate != null && endDate != null) {
+                    rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+                    rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+                }
             }
             if (reportTypeCtrl.GetText() == "Capacity Report") {
                 var yearCtrl = ASPxClientControl.GetControlCollection().GetByName('Year');
