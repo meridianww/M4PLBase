@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl">
     <xsl:output method="xml" indent="yes"/>
-  <xsl:template match="/">
+	<xsl:param name="isOrderNumberAvailable" />
+	<xsl:template match="/">
     <html>
       <head>
         <style>
@@ -31,40 +32,62 @@
                   <td colspan="2" width="100%">
                     <table width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
                       <tr>
-                        <td bgcolor="#c0c0c0" align="center">
+						  <xsl:if test="($isOrderNumberAvailable = 'true')">
+							  <td bgcolor="#c0c0c0" align="center">
                           <font face="Arial,Helvetica" size="2">
                             <strong>Date Entered</strong>
                           </font>
                         </td>
-                        <td bgcolor="#c0c0c0" align="center">
+						  </xsl:if>
+						  <td bgcolor="#c0c0c0" align="center">
                           <font face="Arial,Helvetica" size="2">
                             <strong>Trading Partner</strong>
                           </font>
                         </td>
-                        <td bgcolor="#c0c0c0" align="center">
+						  <xsl:if test="($isOrderNumberAvailable = 'true')">
+							  <td bgcolor="#c0c0c0" align="center">
                           <font face="Arial,Helvetica" size="2">
                             <strong>Order Number </strong>
                           </font>
                         </td>
-                      </tr>
+						  </xsl:if>
+						  <xsl:if test="($isOrderNumberAvailable = 'false')">
+							  <td bgcolor="#c0c0c0" align="center">
+								  <font face="Arial,Helvetica" size="2">
+									  <strong>Customer </strong>
+								  </font>
+							  </td>
+						  </xsl:if>
+					  </tr>
                       <xsl:for-each select="EDIExceptionDS/ExceptionInfo" >
                         <tr>
-                          <td align="center">
+							<xsl:if test="($isOrderNumberAvailable = 'true')">
+								<td align="center">
                             <font face="Arial,Helvetica" size="1">
                               <xsl:value-of select="DateEntered" />
                             </font>
                           </td>
-                          <td align="center">
+							</xsl:if>
+							<td align="center">
                             <font face="Arial,Helvetica" size="1">
                               <xsl:value-of select="TradingPartner" />
                             </font>
                           </td>
-                          <td align="center">
+							<xsl:if test="($isOrderNumberAvailable = 'true')">
+								<td align="center">
                             <font face="Arial,Helvetica" size="1">
                               <xsl:value-of select="OrderNnumber" />
                             </font>
                           </td>
-                        </tr>
+							</xsl:if>
+							<xsl:if test="($isOrderNumberAvailable = 'false')">
+								<td align="center">
+									<font face="Arial,Helvetica" size="1">
+										<xsl:value-of select="Customer" />
+									</font>
+								</td>
+							</xsl:if>
+						</tr>
                       </xsl:for-each>
                     </table>
                   </td>
