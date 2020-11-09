@@ -26,7 +26,6 @@ BEGIN
 		,@CanceledStatus INT
 		,@TablesQuery NVARCHAR(MAX)
 		,@IsPriceChargeReport BIT
-		,@TCountQuery NVARCHAR(MAX)
 
 	SELECT @IsPriceChargeReport = CASE 
 			WHEN ISNULL(@IsCostCharge, 0) = 0
@@ -87,8 +86,7 @@ CAST(1 AS BIT) IsFilterSortDisable,
 CAST(1 AS BIT) IsPaginationDisable,
 CAST(1 AS BIT) IsChargeReport, ' 
 		+ 'CAST(' + CAST(@IsCostCharge AS VARCHAR) + ' AS BIT) IsCostChargeReport, ' + 'CAST(' + CAST(@IsPriceChargeReport AS VARCHAR) + ' AS BIT) IsPriceChargeReport ' + ' From JobDL000Master JobAdvanceReport INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = JobAdvanceReport.ProgramId '
-	SET @TCountQuery = 'SELECT @TotalCount = COUNT(JobAdvanceReport.Id) From JobDL000Master JobAdvanceReport INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = JobAdvanceReport.ProgramId '
-
+	
 	IF EXISTS (
 			SELECT 1
 			FROM #EntityIdTemp
@@ -96,25 +94,20 @@ CAST(1 AS BIT) IsChargeReport, '
 			)
 	BEGIN
 		SET @TablesQuery = @TablesQuery + ' INNER JOIN #EntityIdTemp Tmp on tmp.EntityId = job.Id '
-		SET @TCountQuery = @TCountQuery + ' INNER JOIN #EntityIdTemp Tmp on tmp.EntityId = job.Id '
 	END
 
 	IF (ISNULL(@where, '') <> '')
 	BEGIN
 		SET @TablesQuery = @TablesQuery + ' Where ISNULL(JobAdvanceReport.JobCompleted,0) = 1 AND JobAdvanceReport.StatusId <> ' + CAST(@CanceledStatus AS VARCHAR) + ' AND ISNULL(JobAdvanceReport.JobSiteCode,'''') <> '''' ' + @where
-		SET @TCountQuery = @TCountQuery + ' Where ISNULL(JobAdvanceReport.JobCompleted,0) = 1 AND JobAdvanceReport.StatusId <> ' + CAST(@CanceledStatus AS VARCHAR) + ' AND ISNULL(JobAdvanceReport.JobSiteCode,'''') <> '''' ' + @where
 	END
 	ELSE
 	BEGIN
 		SET @TablesQuery = @TablesQuery + ' Where ISNULL(JobAdvanceReport.JobCompleted,0) = 1 AND JobAdvanceReport.StatusId <> ' + CAST(@CanceledStatus AS VARCHAR) + ' AND ISNULL(JobAdvanceReport.JobSiteCode,'''') <> '''' '
-		SET @TCountQuery = @TCountQuery + ' Where ISNULL(JobAdvanceReport.JobCompleted,0) = 1 AND JobAdvanceReport.StatusId <> ' + CAST(@CanceledStatus AS VARCHAR) + ' AND ISNULL(JobAdvanceReport.JobSiteCode,'''') <> '''' '
 	END
 
-	EXEC sp_executesql @TCountQuery
-		,N' @TotalCount INT OUTPUT'
-		,@TotalCount OUTPUT;
 
 	EXEC sp_executesql @TablesQuery
+	SET @TotalCount=@@ROWCOUNT
 
 	DROP TABLE #EntityIdTemp
 END
