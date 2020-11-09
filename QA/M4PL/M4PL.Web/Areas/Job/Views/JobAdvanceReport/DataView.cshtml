@@ -44,6 +44,7 @@
     && (ViewData["ReportName"].ToString() == "Price Charge" || ViewData["ReportName"].ToString() == "Cost Charge"))
     && Model.ColumnSettings.Where(x => x.ColColumnName == "RateAmount").Any())
     {
+        filterSortingEnable = true;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "RateAmount").DataType = "decimal";
     }
     //var filterSortingEnable = true;

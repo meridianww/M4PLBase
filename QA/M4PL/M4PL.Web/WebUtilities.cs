@@ -751,6 +751,9 @@ namespace M4PL.Web
 
                 case "JobOrderedDate":
                     return columnSetting.MaxLength = 150;
+
+                case "RateAmount":
+                    return columnSetting.MaxLength = 100;
             }
 
             if (!string.IsNullOrWhiteSpace(columnSetting.DataType))
