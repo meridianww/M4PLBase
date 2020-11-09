@@ -127,12 +127,17 @@ namespace M4PL.API.Controllers
             _trainingCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _trainingCommands.Patch(trainingDetail);
         }
+        /// <summary>
+        /// get all traing videos or user guide pdf details based on content type
+        /// </summary>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
         [CustomAuthorize]
 		[HttpGet]
 		[Route("GetAllTrainingDetail")]
-		public List<Category> GetAllTrainingDetail()
+		public List<Category> GetAllTrainingDetail(string contentType)
 		{
-			return _trainingCommands.GetAllTrainingDetail();
+			return _trainingCommands.GetAllTrainingDetail(contentType);
 		}
 	}
 }
