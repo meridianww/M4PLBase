@@ -79,7 +79,7 @@ M4PLWindow.DataView = function () {
     var _allowBatchEdit = {};
 
     var _onBeginCallback = function (s, e, gridName) {
-        if (s && s.name)
+        if (s && s.name) 
             M4PLCommon.Control.UpdateDataViewHasChanges(s.name, false);
         e.customArgs["RowKey"] = s.GetRowKey(s.GetFocusedRowIndex());
     }
@@ -191,6 +191,11 @@ M4PLWindow.DataView = function () {
 
             if (M4PLWindow.MultiSelectedJobIds.length == 0)
                 M4PLCommon.Common.EnableJobGridMultiSelection(false);
+        }
+        if (s.name === "JobAdvanceReportGridView") {
+            if (document.getElementById('ReportType_I').value === "Cost Charge" || document.getElementById('ReportType_I').value === "Price Charge") {
+                document.getElementById('JobAdvanceReportGridView_DXFilterRow').style.display = 'none';
+            }
         }
     }
 

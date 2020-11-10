@@ -326,7 +326,7 @@ BEGIN
 	ELSE IF(ISNULL(@ReportName, '') = 'Cost Charge' OR ISNULL(@ReportName, '') = 'Price Charge')
 	BEGIN
 	SET @IsCostCharge = CASE WHEN ISNULL(@ReportName, '') = 'Cost Charge' THEN 1 ELSE 0 END
-	EXEC [dbo].[GetCompletedJobRecordsForPostedCharges]  @userId, @roleId, @orgId, @where,@IsCostCharge,@IsExport, @TotalCount OUTPUT
+	EXEC [dbo].[GetCompletedJobRecordsForPostedCharges]  @userId, @roleId, @orgId, @where,@IsCostCharge,@IsExport,@orderBy, @TotalCount OUTPUT
 	END
 	ELSE IF (ISNULL(@ReportName, '') = 'OSD Report')
 	BEGIN

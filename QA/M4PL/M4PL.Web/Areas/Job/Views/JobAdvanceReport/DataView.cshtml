@@ -377,7 +377,7 @@
     };
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
     settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";
-    settings.ClientSideEvents.EndCallback = "function(s, e){ M4PLWindow.DataView.OnEndCallback }";
+    settings.ClientSideEvents.EndCallback = "M4PLWindow.DataView.OnEndCallback";
     settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
     settings.CellEditorInitialize = (s, e) =>
     {
