@@ -19,6 +19,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// TrainingController
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/Training")]
 	public class TrainingController : ApiController

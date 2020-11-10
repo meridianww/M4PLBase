@@ -65,6 +65,7 @@ BEGIN TRY
 		,@gwyShipStatusReasonCode VARCHAR(30)
 		,@gwyShipApptmtReasonCode VARCHAR(30)
 		,@gwyOrderType VARCHAR(30)
+		,@gwyShipmentType VARCHAR(30)
 
 	SELECT @JobDeliveryTimeZone = JobDeliveryTimeZone
 		,@jobOriginTimeZone = JobOriginTimeZone
@@ -94,7 +95,8 @@ BEGIN TRY
 			END
 		,@gwyShipStatusReasonCode = PgdShipStatusReasonCode
 		,@gwyShipApptmtReasonCode = PgdShipApptmtReasonCode
-		,@gwyOrderType = PgdOrderType
+		,@gwyOrderType = JobType
+		,@gwyShipmentType = ShipmentType
 	FROM PRGRM010Ref_GatewayDefaults Prg 
 	INNER JOIN [dbo].[JOBDL000Master] Job ON JOb.ProgramId = Prg.PgdProgramId
 	WHERE Job.Id = @parentId AND Prg.PgdGatewayCode = @gatewayCode
@@ -190,6 +192,7 @@ WHERE TimeZoneShortName = CASE
 		,@gwyShipApptmtReasonCode AS GwyShipApptmtReasonCode
 		,@JobCustomerSalesOrder AS ContractNumber
 		,@gwyOrderType AS GwyOrderType
+		,@gwyShipmentType AS GwyShipmentType
 END TRY
 
 BEGIN CATCH

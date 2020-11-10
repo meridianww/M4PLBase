@@ -37,7 +37,7 @@ BEGIN
 			INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = GATEWAY.PgdProgramID 
 			INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
 			WHERE GATEWAY.GatewayTypeId = 86 AND GATEWAY.StatusId IN (1,2)
-			AND GATEWAY.PgdShipmentType = @ShipmentType AND GATEWAY.PgdOrderType = @JobType
+			--AND GATEWAY.PgdShipmentType = @ShipmentType AND GATEWAY.PgdOrderType = @JobType
 			AND GATEWAY.PgdGatewayCode NOT IN (
 							'Schedule-NS'
 							,'Schedule'
@@ -53,7 +53,7 @@ BEGIN
 			INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = GATEWAY.PgdProgramID 
 			INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
 			WHERE GATEWAY.GatewayTypeId = 86 AND GATEWAY.StatusId IN (1,2)
-			AND GATEWAY.PgdShipmentType = @ShipmentType AND GATEWAY.PgdOrderType = @JobType
+			--AND GATEWAY.PgdShipmentType = @ShipmentType AND GATEWAY.PgdOrderType = @JobType
 			AND GATEWAY.PgdGatewayCode <> 'Delivery Window'
 			AND GATEWAY.PgdGatewayCode NOT IN (
 				SELECT PgdGatewayCode
@@ -66,7 +66,7 @@ BEGIN
 			INNER JOIN JOBDL000Master JOB ON JOB.ProgramID = GATEWAY.PgdProgramID 
 			INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
 			WHERE GATEWAY.GatewayTypeId = 86 AND GATEWAY.StatusId IN (1,2)
-			AND GATEWAY.PgdShipmentType = @ShipmentType AND GATEWAY.PgdOrderType = @JobType
+			--AND GATEWAY.PgdShipmentType = @ShipmentType AND GATEWAY.PgdOrderType = @JobType
 			AND GATEWAY.PgdGatewayCode NOT IN (
 							'Schedule-NS'
 							,'Schedule'
