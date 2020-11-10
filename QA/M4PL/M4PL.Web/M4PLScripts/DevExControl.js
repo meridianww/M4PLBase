@@ -211,6 +211,9 @@ DevExCtrl.Ribbon = function () {
                 case "WatchVideo":
                     window.open(window.location.origin + "/m4pltraining");
                     break;
+                case "UserGuide":
+                    window.open(window.location.origin + "/UserGuide");
+                    break;
                 case "TrackingOrder":
                     var newRoute = _onJobReportClick(route);
                     if (newRoute != null && newRoute != "undefined" && newRoute.RecordId != 'undefined' && newRoute.RecordId > 0) {
