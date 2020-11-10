@@ -24,7 +24,10 @@ ALTER PROCEDURE [dbo].[GetJobGatewayAction] @userId BIGINT
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
-
+	IF(@gatewayCode = 'Schedule-Schedule')
+	BEGIN
+	 SET @gatewayCode ='Schedule'
+	END
 	DECLARE @DeliveryUTCValue INT
 		,@OriginUTCValue INT
 		,@JobOriginDateTimeBaseline DATETIME2(7)
