@@ -18,59 +18,63 @@ using _command = M4PL.DataAccess.Training.TrainingCommands;
 
 namespace M4PL.Business.Training
 {
-	public class TrainingCommands : BaseCommands<TrainingDetail>, ITrainingCommands
-	{
-		public int Delete(long id)
-		{
-			throw new NotImplementedException();
-		}
+    public class TrainingCommands : BaseCommands<TrainingDetail>, ITrainingCommands
+    {
+        public int Delete(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+        {
+            throw new NotImplementedException();
+        }
 
-		public TrainingDetail Get(long id)
-		{
-			throw new NotImplementedException();
-		}
+        public TrainingDetail Get(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public List<Category> GetAllTrainingDetail()
-		{
-			var videoData = _command.GetAllTrainingDetail();
+        public List<Category> GetAllTrainingDetail(string traingType)
+        {
+            var videoData = _command.GetAllTrainingDetail(traingType);
+            List<Category> categoryList = new List<Category>();
+            //if (!string.IsNullOrEmpty(traingType) && traingType.ToLower() == "video")
+            //{
+            categoryList = videoData?.GroupBy(t => new { t.CategoryName })
+            ?.Select(t => new Category()
+            {
+                Name = t.Key.CategoryName,
+                Videos = t.Select(s => new Video()
+                {
+                    Name = s.VideoName,
+                    Url = s.VideoURL
+                }).ToList()
+            }).ToList();
+            //}
 
-			List<Category> categoryList = videoData?.GroupBy(t => new { t.CategoryName })
-				?.Select(t => new Category()
-				{
-					Name = t.Key.CategoryName,
-					Videos = t.Select(s => new Video()
-					{
-						Name = s.VideoName,
-						Url = s.VideoURL
-					}).ToList()
-				}).ToList();
 
-			return categoryList;
-		}
+            return categoryList;
+        }
 
-		public IList<TrainingDetail> GetPagedData(PagedDataInfo pagedDataInfo)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<TrainingDetail> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            throw new NotImplementedException();
+        }
 
-		public TrainingDetail Patch(TrainingDetail entity)
-		{
-			throw new NotImplementedException();
-		}
+        public TrainingDetail Patch(TrainingDetail entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public TrainingDetail Post(TrainingDetail entity)
-		{
-			throw new NotImplementedException();
-		}
+        public TrainingDetail Post(TrainingDetail entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public TrainingDetail Put(TrainingDetail entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public TrainingDetail Put(TrainingDetail entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

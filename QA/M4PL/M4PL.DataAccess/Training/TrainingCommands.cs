@@ -17,21 +17,26 @@ using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Training
 {
-	public class TrainingCommands : BaseCommands<TrainingDetail>
-	{
-		public static List<TrainingDetail> GetAllTrainingDetail()
-		{
-			List<TrainingDetail> result = null;
-			try
-			{
-				result = SqlSerializer.Default.DeserializeMultiRecords<TrainingDetail>(StoredProceduresConstant.GetAllTrainingDetail, parameter: null, storedProcedure: true);
-			}
-			catch (Exception exp)
-			{
-				_logger.Log(exp, "Error while getting the TrainingDetail", "GetAllTrainingDetail", Utilities.Logger.LogType.Error);
-			}
+    public class TrainingCommands : BaseCommands<TrainingDetail>
+    {
+        public static List<TrainingDetail> GetAllTrainingDetail(string traingType)
+        {
+            List<TrainingDetail> result = null;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@traingType", traingType)
+            };
 
-			return result;
-		}
-	}
+            try
+            {
+                result = SqlSerializer.Default.DeserializeMultiRecords<TrainingDetail>(StoredProceduresConstant.GetAllTrainingDetail, parameters.ToArray(), storedProcedure: true);
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Error while getting the TrainingDetail", "GetAllTrainingDetail", Utilities.Logger.LogType.Error);
+            }
+
+            return result;
+        }
+    }
 }

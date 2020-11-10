@@ -19,6 +19,6 @@ namespace M4PL.Business.Training
 	/// </summary>
 	public interface ITrainingCommands : IBaseCommands<TrainingDetail>
 	{
-		List<Category> GetAllTrainingDetail();
+		List<Category> GetAllTrainingDetail(string traingType);
 	}
 }

@@ -15,5 +15,6 @@ namespace M4PL.Entities.Training
 		public string CategoryName { get; set; }
 		public string VideoName { get; set; }
 		public string VideoURL { get; set; }
-	}
+        public string ContentType { get; set; }
+    }
 }
