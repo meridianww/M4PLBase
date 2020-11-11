@@ -16,6 +16,7 @@ ALTER PROCEDURE [dbo].[GetCompletedJobRecordsForPostedCharges] (
 	,@Where NVARCHAR(MAX)
 	,@IsCostCharge BIT
 	,@IsExport BIT = 0
+	,@orderBy NVARCHAR(MAX)
 	,@TotalCount INT OUTPUT
 	)
 AS
@@ -105,6 +106,10 @@ CAST(1 AS BIT) IsChargeReport, '
 		SET @TablesQuery = @TablesQuery + ' Where ISNULL(JobAdvanceReport.JobCompleted,0) = 1 AND JobAdvanceReport.StatusId <> ' + CAST(@CanceledStatus AS VARCHAR) + ' AND ISNULL(JobAdvanceReport.JobSiteCode,'''') <> '''' '
 	END
 
+	IF(ISNULL(@orderBy,'')<>'')
+	BEGIN
+	SET @TablesQuery = @TablesQuery + '  ORDER BY  '+@orderBy
+	END
 
 	EXEC sp_executesql @TablesQuery
 	SET @TotalCount=@@ROWCOUNT

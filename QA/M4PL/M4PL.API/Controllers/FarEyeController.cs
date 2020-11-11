@@ -80,8 +80,8 @@ namespace M4PL.API.Controllers
 		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
 		/// <returns>API returns a Model object which contains the details about success or failure with Order Status, in case of failure AdditionalDetail property contains the reson of failure.</returns>
 		[HttpGet]
-		[Route("OrderStatus"), ResponseType(typeof(OrderStatusModel))]
-		public OrderStatusModel GetOrderStatus(string orderNumber)
+		[Route("OrderStatus"), ResponseType(typeof(FarEyeDeliveryStatus))]
+		public FarEyeDeliveryStatus GetOrderStatus(string orderNumber)
 		{
 			_farEyeCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _farEyeCommands.GetOrderStatus(orderNumber);
