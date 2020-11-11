@@ -3,7 +3,7 @@ AS
 SELECT Job.Id Id
 	,CASE 
 		WHEN DATEADD(day, (DATEDIFF(day, '19800104', CURRENT_TIMESTAMP) / 7) * 7, '19800104') > OnHandGateway.GwyGatewayACD
-			AND DATEADD(day, (DATEDIFF(day, '19800104', CURRENT_TIMESTAMP) / 7) * 7, '19800104') < OnTruckGateway.GwyGatewayACD
+			AND DATEADD(day, (DATEDIFF(day, '19800104', CURRENT_TIMESTAMP) / 7) * 7, '19800104') < ISNULL(OnTruckGateway.GwyGatewayACD,GETUTCDATE())
 			THEN CASE 
 					WHEN Prg.PrgCustId = 20047
 						THEN CASE 
@@ -19,8 +19,8 @@ SELECT Job.Id Id
 					END
 		ELSE 0
 		END Cabinets
-FROM JobDL000Master Job
-INNER JOIN dbo.Prgrm000Master Prg ON Prg.Id = Job.ProgramId
+FROM dbo.Prgrm000Master Prg 
+INNER JOIN JobDL000Master Job ON Job.ProgramId = Prg.Id 
 LEFT JOIN dbo.JobDL010Cargo Cargo ON Cargo.JobID = Job.Id
 	AND Cargo.StatusId = 1
 LEFT JOIN dbo.SYSTM000Ref_Options Options ON Options.Id = Cargo.CgoQtyUnitsId
