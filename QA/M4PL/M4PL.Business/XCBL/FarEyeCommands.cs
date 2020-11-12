@@ -73,7 +73,7 @@ namespace M4PL.Business.XCBL
 			ElectroluxOrderDetails electroluxOrderRequestModel = GetElectroluxOrderDetails(orderDetail);
 			XCBLCommands xcBLCommands = new XCBLCommands();
 			xcBLCommands.ActiveUser = this.ActiveUser;
-			var orderResult = xcBLCommands.ProcessElectroluxOrderRequest(electroluxOrderRequestModel);
+			var orderResult = xcBLCommands.ProcessElectroluxOrderRequest(electroluxOrderRequestModel, true);
 
 			FarEyeOrderResponse farEyeOrderResponse = new FarEyeOrderResponse();
 			farEyeOrderResponse.status = (orderResult == null || (orderResult != null && orderResult.StatusCode == "Failure")) ? 500 : 200;
@@ -318,129 +318,77 @@ namespace M4PL.Business.XCBL
 			{
 				SenderID = orderDetail.reference_id
 				// ,RecieverID = string.Empty
-				,
-				OriginalOrderNumber = orderDetail.order_number
-				,
-				OrderNumber = orderDetail.tracking_number
-				,
-				Action = orderDetail.type_of_action.Equals("Create", StringComparison.OrdinalIgnoreCase) ? "Add" : orderDetail.type_of_action
+				,OriginalOrderNumber = orderDetail.order_number
+				,OrderNumber = orderDetail.tracking_number
+				,Action = orderDetail.type_of_action.Equals("Create", StringComparison.OrdinalIgnoreCase) ? "Add" : orderDetail.type_of_action
 				// ,ReleaseNum = string.Empty
-				,
-				OrderType = orderDetail.type_of_order
-				,
-				OrderDate = orderDetail?.info?.install_date
-				,
-				CustomerPO = orderDetail?.info?.customer_po
+				,OrderType = orderDetail.type_of_order
+				,OrderDate = orderDetail?.info?.install_date
+				,CustomerPO = orderDetail?.info?.customer_po
 				//,PurchaseOrderType
-				,
-				CosigneePO = orderDetail?.info?.consignee_po
-				,
-				DeliveryDate = orderDetail?.info?.outbound_delivery_date
+				,CosigneePO = orderDetail?.info?.consignee_po
+				,DeliveryDate = orderDetail?.info?.outbound_delivery_date
 				//,DeliveryTime = string.Empty
-				,
-				RMAIndicator = orderDetail?.info?.rma_indicator
-				,
-				DepartmentNumber = orderDetail?.info?.department_number
-				,
-				FreightCarrierCode = orderDetail?.info?.freight_carrier_code
-				,
-				HotOrder = orderDetail?.info?.hot_order
-				,
-				ASNdata = new ASNdata() { BolNumber = orderDetail?.info?.bill_of_lading, VehicleId = orderDetail?.info?.transport_id, Shipdate = orderDetail?.info?.good_issue_date }
-				,
-				ShipFrom = new ShipFrom()
+				,RMAIndicator = orderDetail?.info?.rma_indicator
+				,DepartmentNumber = orderDetail?.info?.department_number
+				,FreightCarrierCode = orderDetail?.info?.freight_carrier_code
+				,HotOrder = orderDetail?.info?.hot_order
+				,ASNdata = new ASNdata() { BolNumber = orderDetail?.info?.bill_of_lading, VehicleId = orderDetail?.info?.transport_id, Shipdate = orderDetail?.info?.good_issue_date }
+				,ShipFrom = new ShipFrom()
 				{
 					LocationID = orderDetail.origin_code
-				   ,
-					LocationName = orderDetail.origin_name
-				   ,
-					ContactFirstName = orderDetail.origin_contact_name
-				   ,
-					ContactLastName = string.Empty
-				   ,
-					ContactEmailID = orderDetail.origin_email
-				   ,
-					AddressLine1 = orderDetail.origin_address_line1
-				   ,
-					AddressLine2 = orderDetail.origin_address_line2
-				   ,
-					AddressLine3 = orderDetail.origin_landmark
-				   ,
-					City = orderDetail.origin_city
-				   ,
-					State = orderDetail.origin_state_province
-				   ,
-					ZipCode = orderDetail.origin_postal_code
-				   ,
-					Country = orderDetail.origin_country
-				   ,
-					ContactNumber = orderDetail.origin_contact_number
+				   ,LocationName = orderDetail.origin_name
+				   ,ContactFirstName = orderDetail.origin_contact_name
+				   ,ContactLastName = string.Empty
+				   ,ContactEmailID = orderDetail.origin_email
+				   ,AddressLine1 = orderDetail.origin_address_line1
+				   ,AddressLine2 = orderDetail.origin_address_line2
+				   ,AddressLine3 = orderDetail.origin_landmark
+				   ,City = orderDetail.origin_city
+				   ,State = orderDetail.origin_state_province
+				   ,ZipCode = orderDetail.origin_postal_code
+				   ,Country = orderDetail.origin_country
+				   ,ContactNumber = orderDetail.origin_contact_number
 				}
 				,
 				ShipTo = new ShipTo()
 				{
 					LocationID = orderDetail.destination_code
-				   ,
-					LocationName = orderDetail.destination_name
-				   ,
-					ContactFirstName = orderDetail.destination_contact_name
-				   ,
-					ContactLastName = string.Empty
-				   ,
-					ContactEmailID = orderDetail.destination_email
-				   ,
-					AddressLine1 = orderDetail.destination_address_line1
-				   ,
-					AddressLine2 = orderDetail.destination_address_line2
-				   ,
-					AddressLine3 = orderDetail.destination_landmark
-				   ,
-					City = orderDetail.destination_city
-				   ,
-					State = orderDetail.destination_state_province
-				   ,
-					ZipCode = orderDetail.destination_postal_code
-				   ,
-					Country = orderDetail.destination_country
-				   ,
-					ContactNumber = orderDetail.destination_contact_number
-				   ,
-					LotID = orderDetail.destination_lot_id
+				   ,LocationName = orderDetail.destination_name
+				   ,ContactFirstName = orderDetail.destination_contact_name
+				   ,ContactLastName = string.Empty
+				   ,ContactEmailID = orderDetail.destination_email
+				   ,AddressLine1 = orderDetail.destination_address_line1
+				   ,AddressLine2 = orderDetail.destination_address_line2
+				   ,AddressLine3 = orderDetail.destination_landmark
+				   ,City = orderDetail.destination_city
+				   ,State = orderDetail.destination_state_province
+				   ,ZipCode = orderDetail.destination_postal_code
+				   ,Country = orderDetail.destination_country
+				   ,ContactNumber = orderDetail.destination_contact_number
+				   ,LotID = orderDetail.destination_lot_id
 				}
 				,
 				DeliverTo = new DeliverTo()
 				{
 					LocationID = orderDetail.deliver_to_code
-				   ,
-					LocationName = orderDetail.deliver_to_name
-				   ,
-					ContactFirstName = orderDetail.deliver_to_contact_name
-				   ,
-					ContactLastName = string.Empty
-				   ,
-					ContactEmailID = orderDetail.deliver_to_email
-				   ,
-					AddressLine1 = orderDetail.deliver_to_address_line1
-				   ,
-					AddressLine2 = orderDetail.deliver_to_address_line2
-				   ,
-					AddressLine3 = orderDetail.deliver_to_landmark
-				   ,
-					City = orderDetail.deliver_to_city
-				   ,
-					State = orderDetail.deliver_to_state_province
-				   ,
-					ZipCode = orderDetail.deliver_to_postal_code
-				   ,
-					Country = orderDetail.deliver_to_country
-				   ,
-					ContactNumber = orderDetail.deliver_to_contact_number
-				   ,
-					LotID = orderDetail.deliver_lot_id
+				   ,LocationName = orderDetail.deliver_to_name
+				   ,ContactFirstName = orderDetail.deliver_to_contact_name
+				   ,ContactLastName = string.Empty
+				   ,ContactEmailID = orderDetail.deliver_to_email
+				   ,AddressLine1 = orderDetail.deliver_to_address_line1
+				   ,AddressLine2 = orderDetail.deliver_to_address_line2
+				   ,AddressLine3 = orderDetail.deliver_to_landmark
+				   ,City = orderDetail.deliver_to_city
+				   ,State = orderDetail.deliver_to_state_province
+				   ,ZipCode = orderDetail.deliver_to_postal_code
+				   ,Country = orderDetail.deliver_to_country
+				   ,ContactNumber = orderDetail.deliver_to_contact_number
+				   ,LotID = orderDetail.deliver_lot_id
 				}
 			};
 
-			electroluxOrderDetail.Header.Message = new Message() { Subject = orderDetail.type_of_service.Equals("DeliveryNumber", StringComparison.OrdinalIgnoreCase) ? "Order" : orderDetail.type_of_service };
+			electroluxOrderDetail.Header.Message = new Message() { Subject = orderDetail.type_of_service.Equals("DeliveryNumber", StringComparison.OrdinalIgnoreCase) ? "ASN" : orderDetail.type_of_service };
 
 			return electroluxOrderDetail;
 		}
