@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Administration\AccountCommands.cs" />
     <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\IUserGuideUploadCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\DeliveryStatusCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Administration\SystemMessageCommands.cs" />
     <Compile Include="Administration\SystemPageTabNameCommands.cs" />
     <Compile Include="Administration\SystemReferenceCommands.cs" />
+    <Compile Include="Administration\UserGuideUploadCommands.cs" />
     <Compile Include="Administration\ValidationCommands.cs" />
     <Compile Include="Attachment\AttachmentCommands.cs" />
     <Compile Include="Attachment\IAttachmentCommands.cs" />
@@ -279,6 +281,7 @@
     <Compile Include="ViewModels\Administration\SystemPageTabNameView.cs" />
     <Compile Include="ViewModels\Administration\SystemReferenceView.cs" />
     <Compile Include="ViewModels\Administration\SystemAccountView.cs" />
+    <Compile Include="ViewModels\Administration\UserGuidUploadView.cs" />
     <Compile Include="ViewModels\Administration\ValidationView.cs" />
     <Compile Include="ViewModels\CompanyAddress\CompanyAddressView.cs" />
     <Compile Include="ViewModels\Customer\CustDcLocationContactView.cs" />

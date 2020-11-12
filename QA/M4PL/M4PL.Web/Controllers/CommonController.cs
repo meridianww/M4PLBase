@@ -714,24 +714,48 @@ namespace M4PL.Web.Controllers
 
             if (!_commonCommands.Tables.ContainsKey(route.Entity))
             {
-                return PartialView(MvcConstants.NavigationPanePartial, new List<FormNavMenu>()
+                if (route.Entity == EntitiesAlias.UserGuideUpload)
                 {
-                    new FormNavMenu { Text = "Delete More Information",Action =route.Action,SecondNav = false,Enabled = true,ItemClick =  JsConstants.RecordPopupCancelClick, IsPopup=true},
-                    new FormNavMenu {
-                    IsPopup = true,
-                    EntityName = route.EntityName,
-                    Url = route.Url,
-                    OwnerCbPanel = route.OwnerCbPanel,
-                    ParentEntity = route.ParentEntity,
-                    IsNext = true,
-                    IsEnd = true,
-                    IconID = DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16,
-                    Align = 2,
-                    Enabled = true,
-                    SecondNav = true,
-                    ItemClick=JsConstants.RecordPopupCancelClick,
-                    }
-                });
+                    return PartialView(MvcConstants.NavigationPanePartial, new List<FormNavMenu>()
+                    {
+                        new FormNavMenu { Text = "Upload User Guide PDF Document",Action =route.Action,SecondNav = false,Enabled = true,ItemClick =  JsConstants.RecordPopupCancelClick, IsPopup=true},
+                        new FormNavMenu {
+                        IsPopup = true,
+                        EntityName = route.EntityName,
+                        Url = route.Url,
+                        OwnerCbPanel = route.OwnerCbPanel,
+                        ParentEntity = route.ParentEntity,
+                        IsNext = true,
+                        IsEnd = true,
+                        IconID = DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16,
+                        Align = 2,
+                        Enabled = true,
+                        SecondNav = true,
+                        ItemClick=JsConstants.RecordPopupCancelClick,
+                        }
+                    });
+                }
+                else
+                {
+                    return PartialView(MvcConstants.NavigationPanePartial, new List<FormNavMenu>()
+                    {
+                        new FormNavMenu { Text = "Delete More Information",Action =route.Action,SecondNav = false,Enabled = true,ItemClick =  JsConstants.RecordPopupCancelClick, IsPopup=true},
+                        new FormNavMenu {
+                        IsPopup = true,
+                        EntityName = route.EntityName,
+                        Url = route.Url,
+                        OwnerCbPanel = route.OwnerCbPanel,
+                        ParentEntity = route.ParentEntity,
+                        IsNext = true,
+                        IsEnd = true,
+                        IconID = DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16,
+                        Align = 2,
+                        Enabled = true,
+                        SecondNav = true,
+                        ItemClick=JsConstants.RecordPopupCancelClick,
+                        }
+                    });
+                }
             }
 
             TableReference tableRef = new TableReference();

@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\IUserGuideUploadCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
     <Compile Include="Administration\IStatusLogCommands.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Administration\SystemPageTabNameCommands.cs" />
     <Compile Include="Administration\SystemReferenceCommands.cs" />
     <Compile Include="Administration\SystemAccountCommands.cs" />
+    <Compile Include="Administration\UserGuideUploadCommands.cs" />
     <Compile Include="Administration\ValidationCommands.cs" />
     <Compile Include="Attachment\AttachmentCommands.cs" />
     <Compile Include="Attachment\IAttachmentCommands.cs" />
