@@ -23,7 +23,7 @@ namespace M4PL.Business.XCBL
 	{
 		long PostXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequisitionRequest);
 
-		OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails);
+		OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails, bool isFarEyeRequest = false);
 
 		DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId);
 

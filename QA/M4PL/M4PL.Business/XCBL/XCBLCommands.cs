@@ -81,11 +81,12 @@ namespace M4PL.Business.XCBL
             return _commands.InsertxCBLDetailsInDB(request);
         }
 
-        public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
+        public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails, bool isFarEyeRequest = false)
         {
             Entities.Job.Job processingJobDetail = null;
             Entities.Job.Job jobDetails = null;
-            OrderResponse response = null;
+			Entities.Job.Job existingJobDataInDB = null;
+			OrderResponse response = null;
             Task[] tasks = new Task[2];
             JobCargoMapper cargoMapper = new JobCargoMapper();
             OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
@@ -98,7 +99,31 @@ namespace M4PL.Business.XCBL
                 Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
                 Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
-            Entities.Job.Job existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			if (isFarEyeRequest)
+			{
+				if (string.IsNullOrEmpty(orderHeader.OrderNumber))
+				{
+					orderHeader.OrderNumber = string.Format("O-{0}", orderHeader.OriginalOrderNumber);
+					existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+				}
+				else
+				{
+					string tempOrderNumber = string.Format("O-{0}", orderHeader.OriginalOrderNumber);
+					existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, tempOrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					if (existingJobDataInDB != null && existingJobDataInDB.Id > 0)
+					{
+						existingJobDataInDB.JobCustomerSalesOrder = orderHeader.OrderNumber;
+					}
+					else
+					{
+						existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					}
+				}
+			}
+			else
+			{
+				existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			}
 
             // Populate the data in xCBL tables
             tasks[0] = Task.Factory.StartNew(() =>
