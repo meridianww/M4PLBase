@@ -230,6 +230,7 @@
     <Compile Include="Areas\Administration\Controllers\SystemPageTabNameController.cs" />
     <Compile Include="Areas\Administration\Controllers\SystemReferenceController.cs" />
     <Compile Include="Areas\Administration\Controllers\SystemAccountController.cs" />
+    <Compile Include="Areas\Administration\Controllers\UserGuideUploadController.cs" />
     <Compile Include="Areas\Administration\Controllers\ValidationController.cs" />
     <Compile Include="Areas\Attachment\Controllers\AttachmentController.cs" />
     <Compile Include="Areas\Attachment\AttachmentAreaRegistration.cs" />
@@ -792,6 +793,7 @@
     <Content Include="Areas\Job\Views\JobGateway\AddMultiAction.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\MultiActionComboBoxPartial.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\AddMultiGateway.cshtml" />
+    <Content Include="Areas\Administration\Views\UserGuideUpload\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

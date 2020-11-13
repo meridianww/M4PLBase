@@ -66,7 +66,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 							}
 
 							string requestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
-							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
+							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser);
 							DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(requestBody, response, jobId);
 
 							Task.Factory.StartNew(() =>
@@ -77,7 +77,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 									deliveryUpdateModel.RescheduleReason = rescheduleReason;
 									deliveryUpdateModel.InstallStatus = "Reschedule";
 									string rescheduleRequestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
-									string rescheduleResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
+									string rescheduleResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser);
 									DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(rescheduleRequestBody, rescheduleResponse, jobId);
 								}
 								else if (isCanceled)
@@ -86,7 +86,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 									deliveryUpdateModel.CancelDate = canceledDate;
 									deliveryUpdateModel.CancelReason = cancelReason;
 									string cancelledRequestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
-									string cancelledResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey);
+									string cancelledResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser);
 									DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(cancelledRequestBody, cancelledResponse, jobId);
 								}
 							});
@@ -100,9 +100,11 @@ namespace M4PL.Business.XCBL.HelperClasses
 			}
 		}
 
-		private static string SentOrderStatusUpdateToFarEye(DeliveryUpdate deliveryUpdate, string farEyeAPIURL, string farEyeAPIKey)
+		private static string SentOrderStatusUpdateToFarEye(DeliveryUpdate deliveryUpdate, string farEyeAPIURL, string farEyeAPIKey, ActiveUser activeUser)
 		{
-			string electroluxOrderStatusUpdateJson = string.Empty;
+			FarEyeCommands farEyeCommand = new FarEyeCommands();
+			var farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdate, activeUser);
+			string farEyeOrderStatusUpdateJson = string.Empty;
 			string farEyeUpdateURL = string.Empty;
 			string farEyeApiKey = string.Empty;
 			string responseData = string.Empty;
@@ -118,8 +120,8 @@ namespace M4PL.Business.XCBL.HelperClasses
 				request.Headers.Add(HttpRequestHeader.Authorization, farEyeApiKey);
 				using (var streamWriter = new StreamWriter(request.GetRequestStream()))
 				{
-					electroluxOrderStatusUpdateJson = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdate);
-					streamWriter.Write(electroluxOrderStatusUpdateJson);
+					farEyeOrderStatusUpdateJson = Newtonsoft.Json.JsonConvert.SerializeObject(farEyeOrderStatusRequest);
+					streamWriter.Write(farEyeOrderStatusUpdateJson);
 				}
 
 				WebResponse response = request.GetResponse();

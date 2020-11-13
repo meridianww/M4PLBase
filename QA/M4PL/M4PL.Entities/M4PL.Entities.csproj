@@ -58,6 +58,7 @@
     <Compile Include="Administration\Report.cs" />
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="Administration\UserGuidUpload.cs" />
     <Compile Include="BizMobl\BizMoblCSVData.cs" />
     <Compile Include="BizMobl\BizMoblModel.cs" />
     <Compile Include="BusinessConfiguration.cs" />
@@ -383,6 +384,7 @@
     <Compile Include="XCBL\FarEye\Info.cs" />
     <Compile Include="XCBL\FarEye\OrderEvent.cs" />
     <Compile Include="XCBL\FarEye\OrderEventResponse.cs" />
+    <Compile Include="XCBL\FarEye\Order\FarEyeDeliveryStatus.cs" />
     <Compile Include="XCBL\FarEye\Order\FarEyeOrderCancelRequest.cs" />
     <Compile Include="XCBL\FarEye\Order\FarEyeOrderCancelResponse.cs" />
     <Compile Include="XCBL\FarEye\Order\FarEyeOrderDetails.cs" />

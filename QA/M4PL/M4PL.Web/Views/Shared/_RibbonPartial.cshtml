@@ -59,6 +59,14 @@
                             subChild.Route.IsPopup = true;
                             subChild.Route.EntityName = "Gateway";
                         }
+                        if (subChild != null && subChild.MnuTitle == "Upload" && subChild.Route != null)
+                        {
+                            subChild.Route.Entity = M4PL.Entities.EntitiesAlias.UserGuideUpload;
+                            subChild.Route.Area = "Administration";
+                            subChild.Route.IsPopup = true;
+                            subChild.Route.EntityName = "UserGuideUpload";
+                            subChild.Route.Action = "FormView";
+                        }
                         if (subChild.MnuTitle == WebApplicationConstants.Themes)
                         {
 

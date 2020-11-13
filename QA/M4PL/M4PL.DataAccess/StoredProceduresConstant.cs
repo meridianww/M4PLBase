@@ -917,6 +917,10 @@ namespace M4PL.DataAccess
         public const string GetEventSubscriber = "dbo.GetEventSubscriber";
         public const string GetEventSubscriberAndSubscriberType = "dbo.GetEventSubscriberAndSubscriberType";
 
-        #endregion
-    }
+		#endregion
+
+		#region User Guide
+		public const string InsKnowledgeDetail = "dbo.InsKnowledgeDetail";
+		#endregion
+	}
 }

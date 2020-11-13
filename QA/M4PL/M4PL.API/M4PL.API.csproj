@@ -325,6 +325,7 @@
     <Compile Include="Controllers\OrgReportsController.cs" />
     <Compile Include="Controllers\ScrReportsController.cs" />
     <Compile Include="Controllers\SurveyUserController.cs" />
+    <Compile Include="Controllers\UserGuideUploadController.cs" />
     <Compile Include="Controllers\VendDcLocationContactsController.cs" />
     <Compile Include="Controllers\VendReportsController.cs" />
     <Compile Include="Controllers\PrgReportsController.cs" />

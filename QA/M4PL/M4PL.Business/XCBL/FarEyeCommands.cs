@@ -1,27 +1,28 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
+using M4PL.Business.XCBL.HelperClasses;
+using M4PL.Entities;
+using M4PL.Entities.Job;
+using M4PL.Entities.Support;
+using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
+using M4PL.Entities.XCBL.Electrolux.OrderRequest;
+using M4PL.Entities.XCBL.FarEye;
+using M4PL.Entities.XCBL.FarEye.Order;
+using M4PL.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4PL.Entities.Support;
-using M4PL.Entities.XCBL.FarEye.Order;
-using M4PL.Entities.XCBL.Electrolux.OrderRequest;
-using M4PL.Utilities;
-using M4PL.Entities.XCBL.FarEye;
 using System.Net;
-using M4PL.Entities.Job;
-using Newtonsoft.Json;
-using M4PL.Business.XCBL.HelperClasses;
-using M4PL.Entities;
 
 namespace M4PL.Business.XCBL
 {
@@ -72,7 +73,7 @@ namespace M4PL.Business.XCBL
 			ElectroluxOrderDetails electroluxOrderRequestModel = GetElectroluxOrderDetails(orderDetail);
 			XCBLCommands xcBLCommands = new XCBLCommands();
 			xcBLCommands.ActiveUser = this.ActiveUser;
-			var orderResult = xcBLCommands.ProcessElectroluxOrderRequest(electroluxOrderRequestModel);
+			var orderResult = xcBLCommands.ProcessElectroluxOrderRequest(electroluxOrderRequestModel, true);
 
 			FarEyeOrderResponse farEyeOrderResponse = new FarEyeOrderResponse();
 			farEyeOrderResponse.status = (orderResult == null || (orderResult != null && orderResult.StatusCode == "Failure")) ? 500 : 200;
@@ -203,58 +204,83 @@ namespace M4PL.Business.XCBL
 			return response;
 		}
 
-		public OrderStatusModel GetOrderStatus(string orderNumber)
+		public FarEyeDeliveryStatus GetOrderStatus(string orderNumber, DeliveryUpdate deliveryUpdate = null, ActiveUser activeUser = null)
 		{
-			if (string.IsNullOrEmpty(orderNumber))
+			activeUser = activeUser == null ? ActiveUser : activeUser;
+			orderNumber = !string.IsNullOrEmpty(orderNumber) ? orderNumber :
+				deliveryUpdate == null ? string.Empty
+				: deliveryUpdate.OrderNumber;
+			FarEyeDeliveryStatus farEyeDeliveryStatusResponse = null;
+			var jobDetail = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(activeUser, orderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			if (jobDetail != null)
 			{
-				return new OrderStatusModel()
+				deliveryUpdate = deliveryUpdate == null ? DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobDetail.Id, activeUser) : deliveryUpdate;
+				if (deliveryUpdate != null)
 				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number."
-				};
-			}
+					farEyeDeliveryStatusResponse = new FarEyeDeliveryStatus();
+					farEyeDeliveryStatusResponse.order_number = jobDetail.JobServiceMode;
+					farEyeDeliveryStatusResponse.type = "DeliveryNumber";
+					farEyeDeliveryStatusResponse.value = orderNumber;
+					farEyeDeliveryStatusResponse.carrier_code = "Meridian";
+					farEyeDeliveryStatusResponse.carrier_status = deliveryUpdate.InstallStatus;
+					farEyeDeliveryStatusResponse.carrier_status_code = deliveryUpdate.InstallStatus;
+					farEyeDeliveryStatusResponse.carrier_status_description = deliveryUpdate.InstallStatus;
+					farEyeDeliveryStatusResponse.carrier_sub_status = deliveryUpdate.InstallStatus;
+					farEyeDeliveryStatusResponse.carrier_sub_status_description = deliveryUpdate.InstallStatus;
+					farEyeDeliveryStatusResponse.status_received_at = deliveryUpdate.InstallStatusTS;
+					farEyeDeliveryStatusResponse.location_code = jobDetail.JobOriginSiteName;
+					farEyeDeliveryStatusResponse.destination_location = jobDetail.JobDeliverySiteName;
+					farEyeDeliveryStatusResponse.latitude = jobDetail.JobLatitude.ToInt();
+					farEyeDeliveryStatusResponse.longitude = jobDetail.JobLongitude.ToInt();
+					farEyeDeliveryStatusResponse.extra_info = new DeliveryExtraInfo()
+					{
+						comments = deliveryUpdate.AdditionalComments,
+						epod = JsonConvert.SerializeObject(deliveryUpdate.POD),
+						promised_delivery_date = jobDetail.JobOriginDateTimeBaseline.HasValue ? jobDetail.JobOriginDateTimeBaseline.ToString() : string.Empty,
+						expected_delivery_date = jobDetail.JobOriginDateTimePlanned.HasValue ? jobDetail.JobOriginDateTimePlanned.ToString() : string.Empty
+					};
 
-			Entities.Job.Job jobDetail = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
-			if (jobDetail == null || jobDetail?.Id <= 0)
-			{
-				return new OrderStatusModel()
-				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
-				};
-			}
-			else if (jobDetail.CustomerId != M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong())
-			{
-				return new OrderStatusModel()
-				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Status API only avaliable for Electrolux Customer."
-				};
-			}
-			else
-			{
-				var deliveryUpdate = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobDetail.Id, ActiveUser);
-				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
-				{
-					deliveryUpdate.InstallStatus = "Reschedule";
+					farEyeDeliveryStatusResponse.info = new DeliveryInfo();
+					farEyeDeliveryStatusResponse.info.reschedule_reason = deliveryUpdate.RescheduleReason;
+					farEyeDeliveryStatusResponse.info.reschedule_date = deliveryUpdate.RescheduledInstallDate;
+					if (deliveryUpdate.OrderLineDetail != null && deliveryUpdate.OrderLineDetail.OrderLine != null && deliveryUpdate.OrderLineDetail.OrderLine.Count > 0)
+					{
+						farEyeDeliveryStatusResponse.info.LineItems = new List<DeliveryLineItem>();
+						deliveryUpdate.OrderLineDetail.OrderLine.ForEach(
+							x => farEyeDeliveryStatusResponse.info.LineItems.Add(new DeliveryLineItem()
+							{
+								item_number = x.LineNumber,
+								comments = x.ItemInstallComments,
+								exception_code = x.Exceptions?.ExceptionInfo?.ExceptionCode,
+								exception_detail = x.Exceptions?.ExceptionInfo?.ExceptionDetail,
+								item_install_status = x.ItemInstallStatus,
+								material_id = x.ItemNumber
+							}));
+					}
+
+					if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
+					{
+						farEyeDeliveryStatusResponse.carrier_status = "Reschedule";
+						farEyeDeliveryStatusResponse.carrier_status_code = "Reschedule";
+						farEyeDeliveryStatusResponse.carrier_status_description = "Reschedule";
+						farEyeDeliveryStatusResponse.carrier_sub_status = "Reschedule";
+						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Reschedule";
+						farEyeDeliveryStatusResponse.status_received_at = deliveryUpdate.RescheduledInstallDate;
+					}
+
+					if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) && !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+					{
+						farEyeDeliveryStatusResponse.carrier_status = "Canceled";
+						farEyeDeliveryStatusResponse.carrier_status_code = "Canceled";
+						farEyeDeliveryStatusResponse.carrier_status_description = "Canceled";
+						farEyeDeliveryStatusResponse.carrier_sub_status = "Canceled";
+						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Canceled";
+						farEyeDeliveryStatusResponse.status_received_at = deliveryUpdate.CancelDate;
+					}
 				}
-
-				if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) && !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
-				{
-					deliveryUpdate.InstallStatus = "Canceled";
-				}
-
-				return new OrderStatusModel()
-				{
-					Status = "Success",
-					StatusCode = (int)HttpStatusCode.OK,
-					AdditionalDetail = string.Empty,
-					DeliveryUpdate = deliveryUpdate
-				};
 			}
+
+			return farEyeDeliveryStatusResponse;
 		}
 
 		private ElectroluxOrderDetails GetElectroluxOrderDetails(FarEyeOrderDetails orderDetail)
@@ -340,7 +366,7 @@ namespace M4PL.Business.XCBL
 				   ,ZipCode = orderDetail.destination_postal_code
 				   ,Country = orderDetail.destination_country
 				   ,ContactNumber = orderDetail.destination_contact_number
-                   ,LotID = orderDetail.destination_lot_id
+				   ,LotID = orderDetail.destination_lot_id
 				}
 				,
 				DeliverTo = new DeliverTo()
@@ -362,7 +388,7 @@ namespace M4PL.Business.XCBL
 				}
 			};
 
-			electroluxOrderDetail.Header.Message = new Message() { Subject = orderDetail.type_of_service.Equals("DeliveryNumber", StringComparison.OrdinalIgnoreCase) ? "Order" : orderDetail.type_of_service };
+			electroluxOrderDetail.Header.Message = new Message() { Subject = orderDetail.type_of_service.Equals("DeliveryNumber", StringComparison.OrdinalIgnoreCase) ? "ASN" : orderDetail.type_of_service };
 
 			return electroluxOrderDetail;
 		}

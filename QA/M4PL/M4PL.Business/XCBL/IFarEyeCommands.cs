@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using M4PL.Entities.XCBL.FarEye.Order;
 using M4PL.Entities.XCBL.FarEye;
 using M4PL.Entities.Job;
+using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
+using M4PL.Entities.Support;
 
 namespace M4PL.Business.XCBL
 {
@@ -23,6 +25,6 @@ namespace M4PL.Business.XCBL
 		FarEyeOrderResponse OrderProcessingFromFarEye(FarEyeOrderDetails orderDetail);
 		OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent);
 		FarEyeOrderCancelResponse CancelOrder(FarEyeOrderCancelRequest farEyeOrderCancelRequest);
-		OrderStatusModel GetOrderStatus(string orderNumber);
+		FarEyeDeliveryStatus GetOrderStatus(string orderNumber, DeliveryUpdate deliveryUpdate = null, ActiveUser activeUser = null);
 	}
 }
