@@ -18,12 +18,21 @@
 //==========================================================================================================
 namespace M4PL.Entities
 {
+	/// <summary>
+	/// Gets or Sets Base Report Model
+	/// </summary>
 	public class BaseReportModel : BaseModel
 	{
+		/// <summary>
+		/// Default Constructor
+		/// </summary>
 		public BaseReportModel()
 		{
 		}
-
+		/// <summary>
+		/// Copies the instance beaing passed
+		/// </summary>
+		/// <param name="baseReportModel"></param>
 		public BaseReportModel(BaseReportModel baseReportModel)
 		{
 			if (baseReportModel != null)
@@ -36,16 +45,29 @@ namespace M4PL.Entities
 				RprtIsDefault = baseReportModel.RprtIsDefault;
 			}
 		}
-
+		/// <summary>
+		/// Gets or Sets Report ID
+		/// </summary>
 		public int RprtMainModuleId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets varbinary Report Template
+		/// </summary>
 		public byte[] RprtTemplate { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Report Description
+		/// </summary>
 		public string RprtDescription { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Report Name e.g. OSD Report
+		/// </summary>
 		public string RprtName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets if the current report is default e.g. Job Advance Report is default for Job Reports
+		/// </summary>
 		private bool? rprtIsDefault;
+		/// <summary>
+		/// Gets or Sets if the current report is default e.g. Job Advance Report is default for Job Reports
+		/// </summary>
 		public bool? RprtIsDefault { get { return rprtIsDefault; } set { rprtIsDefault = value == null ? false : value; } }
 	}
 }

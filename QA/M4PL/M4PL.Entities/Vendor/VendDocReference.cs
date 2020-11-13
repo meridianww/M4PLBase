@@ -34,7 +34,9 @@ namespace M4PL.Entities.Vendor
         /// The VdrOrgID.
         /// </value>
         public long? VdrOrgID { get; set; }
-
+        /// <summary>
+        /// Gets or sets Vendor Org Name
+        /// </summary>
         public string VdrOrgIDName { get; set; }
 
         /// <summary>
@@ -45,7 +47,9 @@ namespace M4PL.Entities.Vendor
         /// The VdrVendorID.
         /// </value>
         public long? VdrVendorID { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Vendor Name
+        /// </summary>
         public string VdrVendorIDName { get; set; }
 
         /// <summary>

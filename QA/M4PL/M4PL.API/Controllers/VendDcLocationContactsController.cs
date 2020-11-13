@@ -27,6 +27,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Handles DB operation for Vendor DC Location's Contacts
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/VendDcLocationContacts")]
 	public class VendDcLocationContactsController : ApiController
@@ -45,9 +48,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
         /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -134,6 +135,12 @@ namespace M4PL.API.Controllers
             _vendDcLocationContactCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _vendDcLocationContactCommands.Patch(vendDcLocationContact);
         }
+        /// <summary>
+        /// Gets Single record of Vendor DC Location Contact
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="parentId"></param>
+        /// <returns></returns>
         [CustomAuthorize]
 		[HttpGet]
 		[Route("GetVendDcLocationContact")]

@@ -32,7 +32,9 @@ namespace M4PL.Entities.Vendor
         /// The VdcVendorID.
         /// </value>
         public long? VdcVendorID { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Vendor Name
+        /// </summary>
         public string VdcVendorIDName { get; set; }
 
         /// <summary>

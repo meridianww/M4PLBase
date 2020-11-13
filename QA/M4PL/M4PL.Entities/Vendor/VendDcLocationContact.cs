@@ -19,22 +19,55 @@
 
 namespace M4PL.Entities.Vendor
 {
-
+    /// <summary>
+    /// Gets or Sets input/output model for Vendor DC locations
+    /// </summary>
     public class VendDcLocationContact : BaseModel
     {
-
+        /// <summary>
+        /// Gets or Sets Org Id for the contact
+        /// </summary>
         public long ConOrgId { get; set; }
+        /// <summary>
+        /// Gets or Sets Organization of a contact
+        /// </summary>
         public string ConOrgIdName { get; set; }
+        /// <summary>
+        /// Gets or Sets Vendor DC Location ID
+        /// </summary>
         public long? ConPrimaryRecordId { get; set; }
+        /// <summary>
+        /// Gets or Sets Item Number of contact
+        /// </summary>
         public int? ConItemNumber { get; set; }
+        /// <summary>
+        /// Gets or Sets Code Id of a contact
+        /// </summary>
         public long? ConCodeId { get; set; }
+        /// <summary>
+        /// Gets or Sets Code Name of a contact
+        /// </summary>
         public string ConCodeIdName { get; set; }
+        /// <summary>
+        /// Gets or Sets Contact Title 
+        /// </summary>
         public string ConTitle { get; set; }
+        /// <summary>
+        /// Gets or Sets Contact Type ID e.g. 62 for Employee
+        /// </summary>
 
         public int? ConTypeId { get; set; }
+        /// <summary>
+        /// Gets or Sets Contact Id
+        /// </summary>
         public long? ContactMSTRID { get; set; }
+        /// <summary>
+        /// Gets or Sets COntact Name
+        /// </summary>
         public string ContactMSTRIDName { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Contact table Type ID
+        /// </summary>
         public int? ConTableTypeId { get; set; }
 
 
@@ -122,23 +155,32 @@ namespace M4PL.Entities.Vendor
         public string ConBusinessAddress2 { get; set; }
 
         /// <summary>
-        /// Gets or sets the contact's business city.
+        /// Gets or sets the contact's business Mobile Phone.
         /// </summary>
         /// <value>
         /// The ConBusinessCity.
         /// </value>
         public string ConMobilePhone { get; set; }
+        /// <summary>
+        /// Gets or Sets Contact's business City
+        /// </summary>
         public string ConBusinessCity { get; set; }
 
         /// <summary>
-        /// Gets or sets the contact's business zip postal.
+        /// Gets or sets the contact's business state Id
         /// </summary>
         /// <value>
         /// The ConBusinessZipPostal.
         /// </value>
 
         public int? ConBusinessStateId { get; set; }
+        /// <summary>
+        /// Gets or Sets Contact's Business State Name
+        /// </summary>
         public string ConBusinessStateIdName { get; set; }
+        /// <summary>
+        /// Gets or sets the contact's business zip postal.
+        /// </summary>
         public string ConBusinessZipPostal { get; set; }
 
         /// <summary>
@@ -149,6 +191,9 @@ namespace M4PL.Entities.Vendor
         /// </value>
 
         public int? ConBusinessCountryId { get; set; }
+        /// <summary>
+        /// Gets or sets the contact's business conuntry Name.
+        /// </summary>
         public string ConBusinessCountryIdName { get; set; }
         /// <summary>
         /// Gets or sets the type of contact identifier.
@@ -169,8 +214,13 @@ namespace M4PL.Entities.Vendor
         /// </value>
 
         public string ConFullName { get; set; }
+        /// <summary>
+        /// Gets or Sets Contact's Company Id
+        /// </summary>
         public long? ConCompanyId { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Sets Contact's Company Name
+        /// </summary>
         public string ConCompanyIdName { get; set; }
     }
 }

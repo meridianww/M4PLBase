@@ -22,20 +22,33 @@ using System;
 namespace M4PL.Entities
 {
 	/// <summary>
-	///
+	/// Base Model
 	/// </summary>
 	public class BaseModel : SysRefModel
 	{
+		/// <summary>
+		/// Gets or Sets StatusId e.g. 1 for Active
+		/// </summary>
 		public int? StatusId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Date Entered
+		/// </summary>
 		public DateTime? DateEntered { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Date of Updation
+		/// </summary>
 		public DateTime? DateChanged { get; set; }
-
+		/// <summary>
+		/// Gets or Sets User Name who has created the record e.g. Nfujimoto
+		/// </summary>
 		public string EnteredBy { get; set; }
-
+		/// <summary>
+		/// Gets or Sets User Name who has updated the record e.g. nfujimoto
+		/// </summary>
 		public string ChangedBy { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Item Number
+		/// </summary>
 		public int? ItemNumber { get; set; }
 	}
 }
