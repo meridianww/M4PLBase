@@ -137,6 +137,12 @@ namespace M4PL.API
 						// more Xml comment files.
 						string actualPath = string.Format(@"{0}\bin\{1}", System.AppDomain.CurrentDomain.BaseDirectory, "M4PL.API.xml");
 						if (File.Exists(actualPath)) c.IncludeXmlComments(actualPath);
+
+						string entitiesLibrary = string.Format(@"{0}\bin\{1}", System.AppDomain.CurrentDomain.BaseDirectory, "M4PL.Entities.xml");
+						if (File.Exists(entitiesLibrary)) c.IncludeXmlComments(entitiesLibrary);
+
+						string utilityLibrary = string.Format(@"{0}\bin\{1}", System.AppDomain.CurrentDomain.BaseDirectory, "M4PL.Utilities.xml");
+						if (File.Exists(utilityLibrary)) c.IncludeXmlComments(utilityLibrary);
 						//c.IncludeXmlComments(GetXmlCommentsPath());
 
 						// Swashbuckle makes a best attempt at generating Swagger compliant JSON schemas for the various types

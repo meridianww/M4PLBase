@@ -14,8 +14,14 @@ namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest
     [XmlRoot(ElementName = "DeliverySignature")]
     public class DeliverySignature
     {
+        /// <summary>
+        /// Gets or Sets Image URL of Delivery Signature
+        /// </summary>
         [XmlElement(ElementName = "ImageURL")]
         public string ImageURL { get; set; }
+        /// <summary>
+        /// Gets or Sets Signed By details
+        /// </summary>
         [XmlElement(ElementName = "SignedBy")]
         public string SignedBy { get; set; }
     }

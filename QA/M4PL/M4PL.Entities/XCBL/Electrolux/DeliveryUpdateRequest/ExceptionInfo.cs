@@ -14,9 +14,14 @@ namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest
     [XmlRoot(ElementName = "Exceptions")]
     public class ExceptionInfo
     {
+        /// <summary>
+        /// Gets or Sets Exception Code e.g. Exception-O
+        /// </summary>
         [XmlElement(ElementName = "ExceptionCode")]
         public string ExceptionCode { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Exception Detail e.g. Product Overage
+        /// </summary>
         [XmlElement(ElementName = "ExceptionDetail")]
         public string ExceptionDetail { get; set; }
     }

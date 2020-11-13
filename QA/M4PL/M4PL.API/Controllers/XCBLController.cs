@@ -47,14 +47,10 @@ namespace M4PL.API.Controllers
 		}
 
         /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
+        /// Gets the Page Data to feed the DataGrid
         /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
-        /// <returns>
-        /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
-        /// </returns>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
         [CustomQueryable]
         [HttpPost]
         [Route("PagedData")]
@@ -65,10 +61,10 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Get method gets the single record based on numeric Id parameter passed for the xCBLToM4PLRequest.
+        /// Gets the current Entity and Record for the supplied id (Not Implemented)
         /// </summary>
-        /// <param name="id">Refer to  Record Id as numeric value.</param>
-        /// <returns>Returns response as single object.</returns>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         //[Route("{id}")]
         public virtual XCBLToM4PLRequest Get(long id)
@@ -78,10 +74,10 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Post method is used to add a new single record for new xCBLToM4PLRequest object passed as parameter.
+        /// Insert xcbl request (Not Implemented)
         /// </summary>
-        /// <param name="xCBLToM4PLRequest">Refers to xCBLToM4PLRequest object to add.</param>
-        /// <returns>Returns response as object newly added.</returns>
+        /// <param name="xCBLToM4PLRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         public virtual XCBLToM4PLRequest Post(XCBLToM4PLRequest xCBLToM4PLRequest)
         {
@@ -90,9 +86,9 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Put method is used to update record values completely based on xCBLToM4PLRequest object passed.
+        /// Put method is used to update record values completely based on xCBLToM4PLRequest object passed. (Not Implemented)
         /// </summary>
-        /// <param name="xCBLToM4PLRequest">Refers to xCBLToM4PLRequest object to update.</param>
+        /// <param name="xCBLToM4PLRequest"></param>
         /// <returns>Returns updated single object.</returns>
         [HttpPut]
         public virtual XCBLToM4PLRequest Put(XCBLToM4PLRequest xCBLToM4PLRequest)
@@ -114,7 +110,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// DeleteList method is used to delete a multiple records for ids passed as comma seprated list of string.
+        /// DeleteList method is used to delete a multiple records for ids passed as comma seprated list of string. (Not Implemented)
         /// </summary>
         /// <param name="ids">Refers to comma seprated ids as string.</param>
         /// <param name="statusId">Refers to numeric value, It can have value 3 to make record archive.</param>
@@ -128,7 +124,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Patch method is used to update partially or completely record values based on xCBLToM4PLRequest object passed.
+        /// Patch method is used to update partially or completely record values based on xCBLToM4PLRequest object passed. (Not Implemented)
         /// </summary>
         /// <param name="xCBLToM4PLRequest">Refers object to update.</param>
         /// <returns>Returns response as updated single object.</returns>
@@ -144,7 +140,7 @@ namespace M4PL.API.Controllers
         /// For Shipping Schedule Request.It will compare the fields with existing job.If there the a change in fields, action Codes Mapped in the Decision Maker will be Added to the Job.
         /// If the Added Gateway/Action is Marked as complete based on the settings from Program the new values will be Updated in Job else On completion of Gateway/Action new values will be updated.
         /// </summary>
-        /// <param name="xCBLToM4PLRequest">The request may be type of either Shipping schedule or Requisition</param>
+        /// <param name="xCBLToM4PLRequest"></param>
         /// <returns>Inserted Xcbl Summary Header Id</returns>
         [CustomAuthorize]
 		[HttpPost]
@@ -163,7 +159,7 @@ namespace M4PL.API.Controllers
 		///If the request is of type ASN and the ACTION is of type ADD then requested Job will be updated with the details also price and cost details also updated. If the Action is of type DELTE then nothing will happen.
 		///For the ASN request if the Gateway status in In Production In Transit gateway will be added automatically.
 		/// </summary>
-		/// <param name="electroluxOrderDetails">Electrolux Order details request may be either type of Order or ASN. Order is to create new order and ASN is to update existing Order.</param>
+		/// <param name="electroluxOrderDetails"></param>
 		/// <returns>Order response with Job Id and Status Code and message</returns>
 		[CustomAuthorize]
 		[HttpPost]
@@ -174,13 +170,13 @@ namespace M4PL.API.Controllers
             return _xcblCommands.ProcessElectroluxOrderRequest(electroluxOrderDetails);
 		}
 
-		/// <summary>
-		/// The changes made in M4PL will be sent to Electrolux for the supplied job Id.
-		/// The url for the Electrolux endpoint is configurable. Then delivery update will be inserted into EDI table.
-		/// </summary>
-		/// <param name="deliveryUpdate">Model which contains delivery update to an order.</param>
-		/// <returns>Response returned from Electrolux</returns>
-		[CustomAuthorize]
+        /// <summary>
+        /// Sends Delivery update to Electrolux throgh Electrolux API for supplied JobId
+        /// </summary>
+        /// <param name="deliveryUpdate"></param>
+        /// <param name="jobId">Job Id</param>
+        /// <returns></returns>
+        [CustomAuthorize]
 		[HttpPost]
 		[Route("Electrolux/OrderDeliveryUpdate"), ResponseType(typeof(DeliveryUpdateResponse))]
 		public DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId)

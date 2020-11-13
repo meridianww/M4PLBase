@@ -9,9 +9,18 @@
 
 namespace M4PL.Entities.XCBL
 {
+    /// <summary>
+    /// XCBL Model class to Get or Set Details
+    /// </summary>
     public class XCBLToM4PLRequest
     {
+        /// <summary>
+        /// Gets or Sets Id for the Entity
+        /// </summary>
         public int EntityId { get; set; }
+        /// <summary>
+        /// Dynamic Request object which will be converted based on requirement e.g. Converted as SummaryHeader model to insert into Summary Header table
+        /// </summary>
         public object Request { get; set; }
     }
 }
