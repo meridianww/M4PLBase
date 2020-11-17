@@ -127,8 +127,8 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				var dimensions = CommonCommands.GetSalesOrderDimensionValues(navAPIUserName, navAPIPassword, navAPIUrl);
 				if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
 				{
-					divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()
-						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
+					divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()
+						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
 						: string.Empty;
 
 					if (!string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_County))
@@ -214,8 +214,8 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				var dimensions = CommonCommands.GetSalesOrderDimensionValues(navAPIUserName, navAPIPassword, navAPIUrl);
 				if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
 				{
-					divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()
-						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
+					divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()
+						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
 						: string.Empty;
 
 					if (!string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_County))
