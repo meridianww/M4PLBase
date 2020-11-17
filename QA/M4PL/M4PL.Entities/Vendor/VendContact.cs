@@ -31,7 +31,9 @@ namespace M4PL.Entities.Vendor
         /// The VendVendorID.
         /// </value>
         public long? ConPrimaryRecordId { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Vendor Contact Name
+        /// </summary>
         public string ConPrimaryRecordIdName { get; set; }
 
         /// <summary>
@@ -49,7 +51,9 @@ namespace M4PL.Entities.Vendor
         /// The VendContactCode.
         /// </value>
         public long? ConCodeId { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Vendor contact Type Name e.g. Employee
+        /// </summary>
         public string ConCodeIdName { get; set; }
 
         /// <summary>
@@ -67,28 +71,53 @@ namespace M4PL.Entities.Vendor
         /// The VendContactMSTRID.
         /// </value>
         public long? ContactMSTRID { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Vendor's Master Contact Name
+        /// </summary>
         public string ContactMSTRIDName { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Job Title of Vendor Contact
+        /// </summary>
         public string ConJobTitle { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Email Address of Vendor's Contact
+        /// </summary>
         public string ConEmailAddress { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Mobile Number of Vendor Contact
+        /// </summary>
         public string ConMobilePhone { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Business Phone of Vendor Contact
+        /// </summary>
         public string ConBusinessPhone { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Business Address of a Vendor Contact
+        /// </summary>
         public string ConBusinessAddress1 { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Business Address of a Vendor Contact
+        /// </summary>
         public string ConBusinessAddress2 { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Business City of a Vendor Contact
+        /// </summary>
         public string ConBusinessCity { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Business Status Name of a Vendor Contact
+        /// </summary>
         public string ConBusinessStateIdName { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Business ZipCode of a Vendor Contact
+        /// </summary>
         public string ConBusinessZipPostal { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Business Country Name of a Vendor Contact
+        /// </summary>
         public string ConBusinessCountryIdName { get; set; }
+        /// <summary>
+        /// Gets or Sets Business Full Address of a Vendor Contact
+        /// </summary>
         public string ConBusinessFullAddress { get; set; }
     }
 }
