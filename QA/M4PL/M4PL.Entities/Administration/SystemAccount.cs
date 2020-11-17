@@ -27,7 +27,7 @@ namespace M4PL.Entities.Administration
     public class SystemAccount : BaseModel
     {
         /// <summary>
-        /// Gets or sets the System account for specified contact
+        /// Gets or sets the ContactID for System Account User
         /// </summary>
         /// <value>
         /// The SysUserContactID.
@@ -35,7 +35,7 @@ namespace M4PL.Entities.Administration
         public long? SysUserContactID { get; set; }
 
         /// <summary>
-        /// Gets or sets the System account for specified contact name on grid data display
+        /// Gets or sets the System account for specified contact name on grid data display e.g. nfujimoto
         /// </summary>
         /// <value>
         /// The SysUserContactIDName.
@@ -43,7 +43,7 @@ namespace M4PL.Entities.Administration
         public string SysUserContactIDName { get; set; }
 
         /// <summary>
-        /// Gets or sets the Screen Name for the loggedIn contact on application
+        /// Gets or sets the Screen Name for the loggedIn contact on application e.g. nfujimoto
         /// </summary>
         /// <value>
         /// The SysScreenName.
@@ -74,7 +74,9 @@ namespace M4PL.Entities.Administration
         /// The SysOrgId.
         /// </value>
         public long? SysOrgId { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Org Name
+        /// </summary>
         public string SysOrgIdName { get; set; }
 
         /// <summary>
@@ -94,7 +96,7 @@ namespace M4PL.Entities.Administration
         public string SysOrgRefRoleIdName { get; set; }
 
         /// <summary>
-        /// Gets or sets the user to SysAdmin
+        /// Gets or sets flag for the user to SysAdmin
         /// </summary>
         /// <value>
         /// The IsSysAdmin.
@@ -148,9 +150,13 @@ namespace M4PL.Entities.Administration
         /// The SysLoggedInEnd.
         /// </value>
         public DateTime? SysLoggedInEnd { get; set; }
-
+        /// <summary>
+        /// Gets or Sets flag if the User Account has Admin privilege
+        /// </summary>
         public bool IsSysAdminPrev { get; set; }
-
+        /// <summary>
+        /// Gets or Sets flag if System Admin Role changed
+        /// </summary>
         public bool UpdateRoles { get; set; }
 
         //public bool NotScheduleInTransit { get; set; }

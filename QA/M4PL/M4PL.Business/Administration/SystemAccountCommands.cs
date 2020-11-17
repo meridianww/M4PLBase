@@ -97,7 +97,11 @@ namespace M4PL.Business.Administration
 		{
 			return _commands.Delete(ActiveUser, ids, statusId);
 		}
-
+		/// <summary>
+		/// Patches an existing record(Not Implemented)
+		/// </summary>
+		/// <param name="entity"></param>
+		/// <returns></returns>
 		public SystemAccount Patch(SystemAccount entity)
 		{
 			throw new NotImplementedException();

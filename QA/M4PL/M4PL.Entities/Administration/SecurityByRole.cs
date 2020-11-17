@@ -31,9 +31,13 @@ namespace M4PL.Entities.Administration
 		/// The Org identifier.
 		/// </value>
 		public long? OrgId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Org Name
+		/// </summary>
 		public string OrgIdName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Security Line Order
+		/// </summary>
 		public int? SecLineOrder { get; set; }
 
 		/// <summary>
@@ -67,7 +71,9 @@ namespace M4PL.Entities.Administration
 		/// The ActRole Code identifier.
 		/// </value>
 		public long OrgRefRoleId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Org Red Role Name
+		/// </summary>
 		public string OrgRefRoleIdName { get; set; }
 	}
 }

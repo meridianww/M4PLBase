@@ -18,6 +18,9 @@
 //==========================================================================================================
 namespace M4PL.Entities.Administration
 {
+	/// <summary>
+	/// Model class for Report
+	/// </summary>
 	public class Report : BaseReportModel
 	{
 	}

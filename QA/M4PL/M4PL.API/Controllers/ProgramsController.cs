@@ -29,6 +29,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for Programs
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/Programs")]
 	public class ProgramsController : ApiController
@@ -45,12 +48,8 @@ namespace M4PL.API.Controllers
 			_programCommands = programCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -140,8 +139,8 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// ProgramTree
         /// </summary>
-        /// <param name="parentId"></param>
-        /// <param name="isCustNode"></param>
+        /// <param name="parentId">Parent Id if the current node is not a CustomerNode</param>
+        /// <param name="isCustNode">Flag if the current node is customer Node</param>
         /// <returns></returns>
         [CustomAuthorize]
 		[HttpGet]
@@ -150,7 +149,12 @@ namespace M4PL.API.Controllers
 		{
 			return _programCommands.ProgramTree(Models.ApiContext.ActiveUser, Models.ApiContext.ActiveUser.OrganizationId, parentId, isCustNode).AsQueryable(); ;
 		}
-
+        /// <summary>
+        /// Get a single program base on Program Id and Parent Id
+        /// </summary>
+        /// <param name="id">Program ID</param>
+        /// <param name="parentId">Parent Id</param>
+        /// <returns></returns>
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("GetProgram")]
@@ -158,7 +162,14 @@ namespace M4PL.API.Controllers
 		{
 			return _programCommands.GetProgram(Models.ApiContext.ActiveUser, id, parentId);
 		}
-
+        /// <summary>
+        /// Copies Program Tree
+        /// </summary>
+        /// <param name="programId"> Program ID</param>
+        /// <param name="parentId">Parent ID</param>
+        /// <param name="isCustNode">Is Customer Node flag</param>
+        /// <param name="isSource">Is the Source flag</param>
+        /// <returns></returns>
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("ProgramCopyTree")]
@@ -166,7 +177,11 @@ namespace M4PL.API.Controllers
 		{
 			return _programCommands.ProgramCopyTree(Models.ApiContext.ActiveUser, programId, parentId, isCustNode, isSource).AsQueryable(); ;
 		}
-
+        /// <summary>
+        /// Copies PPP Model (Program, Project and Phase)
+        /// </summary>
+        /// <param name="copyPPPMopdel"></param>
+        /// <returns></returns>
 		[CustomAuthorize]
 		[HttpPost]
 		[Route("CopyPPPModel")]
@@ -175,7 +190,11 @@ namespace M4PL.API.Controllers
 			var output = await Task.Run(() => _programCommands.CopyPPPModel(copyPPPMopdel, Models.ApiContext.ActiveUser));
 			return output;
 		}
-
+        /// <summary>
+        /// Gets List of Programs based on customer Id
+        /// </summary>
+        /// <param name="custId">Customer Id</param>
+        /// <returns></returns>
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("GetProgramsByCustomer")]

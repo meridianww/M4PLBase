@@ -25,7 +25,7 @@ namespace M4PL.Entities.Administration
 	public class SystemMessage : BaseModel
 	{
 		/// <summary>
-		/// Gets or sets the System message code.
+		/// Gets or sets the System message code. e.g. NavVendor
 		/// </summary>
 		/// <value>
 		/// The SysMessageCode.
@@ -33,7 +33,7 @@ namespace M4PL.Entities.Administration
 		public string SysMessageCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the System message screen's title.
+		/// Gets or sets the System message screen's title. e.g. Info
 		/// </summary>
 		/// <value>
 		/// The SysMessageScreenTitle.
@@ -41,7 +41,7 @@ namespace M4PL.Entities.Administration
 		public string SysMessageScreenTitle { get; set; }
 
 		/// <summary>
-		/// Gets or sets the System message's title.
+		/// Gets or sets the System message's title. e.g. Data Updated
 		/// </summary>
 		/// <value>
 		/// The SysMessageScreenTitle.
@@ -49,7 +49,7 @@ namespace M4PL.Entities.Administration
 		public string SysMessageTitle { get; set; }
 
 		/// <summary>
-		/// Gets or sets the System message's description.
+		/// Gets or sets the System message's description. e.g. Vendor records have been synced successfully with Dynamics NAV.
 		/// </summary>
 		/// <value>
 		/// The SysMessageDescription.
@@ -65,7 +65,7 @@ namespace M4PL.Entities.Administration
 		public string SysMessageInstruction { get; set; }
 
 		/// <summary>
-		/// Gets or sets the count of button presses.
+		/// Gets or sets the Message Selection of button presses. e.g. Ok or Ok, Cancel
 		/// </summary>
 		/// <value>
 		/// The SysMessageButtonSelection.

@@ -66,7 +66,7 @@ namespace M4PL.Entities
 		/// </summary>
 		private bool? rprtIsDefault;
 		/// <summary>
-		/// Gets or Sets if the current report is default e.g. Job Advance Report is default for Job Reports
+		/// Gets or Sets flag if the current report is default e.g. Job Advance Report is default for Job Reports
 		/// </summary>
 		public bool? RprtIsDefault { get { return rprtIsDefault; } set { rprtIsDefault = value == null ? false : value; } }
 	}

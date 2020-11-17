@@ -43,12 +43,8 @@ namespace M4PL.API.Controllers
 			_statusLogCommands = statusLogCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -74,9 +70,7 @@ namespace M4PL.API.Controllers
             return _statusLogCommands.Get(id);
         }
 
-        /// <summary>
-        /// Post method is used to add a new single record for new statusLog object passed as parameter.
-        /// </summary>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
         /// <param name="statusLog">Refers to statusLog object to add.</param>
         /// <returns>Returns response as object newly added.</returns>
         [HttpPost]

@@ -222,14 +222,29 @@ namespace M4PL.Entities.Program
 		/// </value>
 
 		public bool PckDay { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Flag if the Program has RollUp Billing
+		/// </summary>
 		public bool PrgRollUpBilling { get; set; }
+		/// <summary>
+		/// Gets or Sets Id for Roll Up Bill
+		/// </summary>
 		public long? PrgRollUpBillingJobFieldId { get; set; }
+		/// <summary>
+		/// Gets or Sets Name for Roll Up Bill Name
+		/// </summary>
 		public string PrgRollUpBillingJobFieldIdName { get; set; }
+		/// <summary>
+		/// Gets or Sets If the Program Invoice is Electronic generated
+		/// </summary>
 		public bool PrgElectronicInvoice { get; set; }
-
+		/// <summary>
+		/// Gets or Sets flag if the Program have permission levels
+		/// </summary>
 		public bool PrgIsHavingPermission { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Customer code for Program
+		/// </summary>
 		public string PrgCustomerCode { get; set; }
 	}
 }

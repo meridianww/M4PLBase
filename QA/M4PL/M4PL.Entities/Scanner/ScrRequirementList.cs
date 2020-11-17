@@ -18,13 +18,34 @@
 //==========================================================================================================
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner Requirement List
+	/// </summary>
 	public class ScrRequirementList : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets ProgramID
+		/// </summary>
 		public long? ProgramID { get; set; }
+		/// <summary>
+		/// Gets or Sets Program Name
+		/// </summary>
 		public string ProgramIDName { get; set; }
+		/// <summary>
+		/// Gets or Sets Scanner Requirement Line Item
+		/// </summary>
 		public int? RequirementLineItem { get; set; }
+		/// <summary>
+		/// Gets or Sets Scanner Requirement Code
+		/// </summary>
 		public string RequirementCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Requirement Title
+		/// </summary>
 		public string RequirementTitle { get; set; }
+		/// <summary>
+		/// Gets or Sets Description
+		/// </summary>
 		public byte[] RequirementDesc { get; set; }
 	}
 }
