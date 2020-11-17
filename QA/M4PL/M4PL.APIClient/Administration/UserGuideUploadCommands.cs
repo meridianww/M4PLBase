@@ -38,10 +38,11 @@ namespace M4PL.APIClient.Administration
         }
         public bool UploadUserGuide(UserGuidUploadView userGuidUploadView)
         {
-            var content = RestClient.Execute(
-                            HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "UploadUserGuide"), ActiveUser)
-                            .AddObject(userGuidUploadView)).Content;
-            var result = JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results?.FirstOrDefault();
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UploadUserGuide");
+            var request = HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser);
+            request.AddJsonBody(userGuidUploadView.FileContent);
+            request.AddFileBytes("PostedFile", (userGuidUploadView.FileContent != null && userGuidUploadView.FileContent.Length > 1) ? userGuidUploadView.FileContent : new byte[] { }, userGuidUploadView.DocumentName, "multipart/form-data");
+            var result = JsonConvert.DeserializeObject<ApiResult<bool>>(RestClient.Execute(request).Content).Results?.FirstOrDefault();
             return result.HasValue ? (bool)result : false;
         }
 
