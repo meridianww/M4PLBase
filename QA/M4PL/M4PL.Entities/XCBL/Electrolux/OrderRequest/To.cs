@@ -14,8 +14,14 @@ namespace M4PL.Entities.XCBL.Electrolux.OrderRequest
     [XmlRoot(ElementName = "to")]
     public class To
     {
+        /// <summary>
+        /// Gets or Sets Organization ID
+        /// </summary>
         [XmlElement(ElementName = "orgID")]
         public string OrgID { get; set; }
+        /// <summary>
+        /// Gets or Sets Location ID
+        /// </summary>
         [XmlElement(ElementName = "locationID")]
         public string LocationID { get; set; }
     }

@@ -27,6 +27,9 @@ using M4PL.API.Filters;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Vendors Controller handles DB Operations for Vendor Module
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/Vendors")]
 	public class VendorsController : ApiController

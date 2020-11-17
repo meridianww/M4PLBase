@@ -14,6 +14,9 @@ namespace M4PL.Entities.XCBL.Electrolux.OrderRequest
     [XmlRoot(ElementName = "lineDescriptionDetails")]
     public class LineDescriptionDetails
     {
+        /// <summary>
+        /// Gets or Sets Line Description
+        /// </summary>
         [XmlElement(ElementName = "lineDescription")]
         public LineDescription LineDescription { get; set; }
     }

@@ -15,6 +15,9 @@ namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest
     [XmlRoot(ElementName = "OrderLineDetail")]
     public class OrderLineDetails
     {
+        /// <summary>
+        /// Gets or Sets List of Order lines
+        /// </summary>
         [XmlElement(ElementName = "OrderLine")]
         public List<OrderLine> OrderLine { get; set; }
     }

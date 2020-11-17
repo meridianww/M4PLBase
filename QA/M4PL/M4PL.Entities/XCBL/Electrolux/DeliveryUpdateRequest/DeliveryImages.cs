@@ -14,6 +14,9 @@ namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest
     [XmlRoot(ElementName = "DeliveryImages")]
     public class DeliveryImages
     {
+        /// <summary>
+        /// Gets or Sets Image URL of Delivery Image
+        /// </summary>
         [XmlElement(ElementName = "ImageURL")]
         public string ImageURL { get; set; }
     }
