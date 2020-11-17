@@ -47,7 +47,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Uploads PDF files i.e. User Guide
         /// </summary>
         /// <param name="userGuidUpload"></param>
         /// <returns></returns>

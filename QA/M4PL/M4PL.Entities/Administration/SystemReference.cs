@@ -26,8 +26,13 @@ namespace M4PL.Entities.Administration
 	/// </summary>
 	public class SystemReference
 	{
+		/// <summary>
+		/// Gets or Sets Id of System References
+		/// </summary>
 		public int Id { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Language Code e.g. EN for english
+		/// </summary>
 		public string LangCode { get; set; }
 
 		/// <summary>
@@ -37,7 +42,9 @@ namespace M4PL.Entities.Administration
 		/// The LookupId.
 		/// </value>
 		public int SysLookupId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Look Up Code e.g. WeightUnitType
+		/// </summary>
 		public string SysLookupCode { get; set; }
 
 		/// <summary>
@@ -71,17 +78,29 @@ namespace M4PL.Entities.Administration
 		/// The Column Status.
 		/// </value>
 		public bool IsSysAdmin { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Status Id e.g. 1 for Active
+		/// </summary>
 		public int? StatusId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Record Entered Date
+		/// </summary>
 		public DateTime DateEntered { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Record Updated Date
+		/// </summary>
 		public DateTime? DateChanged { get; set; }
-
+		/// <summary>
+		/// Gets or Sets UserName who has created the record e.g. nfujimoto
+		/// </summary>
 		public string EnteredBy { get; set; }
-
+		/// <summary>
+		/// Gets or Sets UserName who has updated the record e.g. nfujimoto
+		/// </summary>
 		public string ChangedBy { get; set; }
-
+		/// <summary>
+		/// Gets or Sets flag if the current request is for Form View
+		/// </summary>
 		public bool IsFormView { get; set; }
 	}
 }

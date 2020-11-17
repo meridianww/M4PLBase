@@ -73,7 +73,7 @@ namespace M4PL.Business.Administration
 		/// <summary>
 		/// Deletes a specific system page tab name record based on the userid
 		/// </summary>
-		/// <param name="id"></param>
+		/// <param name="id">Id for the record to be deleted</param>
 		/// <returns></returns>
 
 		public int Delete(long id)
@@ -84,14 +84,18 @@ namespace M4PL.Business.Administration
 		/// <summary>
 		/// Deletes a list of system page tab name record
 		/// </summary>
-		/// <param name="ids"></param>
+		/// <param name="ids">List of Ids to be deleted</param>
 		/// <returns></returns>
 
 		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
 		{
 			return _commands.Delete(ActiveUser, ids, statusId);
 		}
-
+		/// <summary>
+		/// Updates an existing system page tab name record (Not Implemented)
+		/// </summary>
+		/// <param name="entity"></param>
+		/// <returns></returns>
 		public SystemPageTabName Patch(SystemPageTabName entity)
 		{
 			throw new NotImplementedException();

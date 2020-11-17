@@ -40,7 +40,9 @@ namespace M4PL.Entities.Administration
 		/// The RefTabPageId.
 		/// </value>
 		public long? RefTabPageId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets the referred table page Name
+		/// </summary>
 		public string RefTabPageIdName { get; set; }
 
 		/// <summary>

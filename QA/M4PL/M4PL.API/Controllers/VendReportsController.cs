@@ -47,7 +47,7 @@ namespace M4PL.API.Controllers
 		}
 
         /// <summary>
-        /// Gets the Page Data to feed the DataGrid
+        /// Gets the Page Data(RecordSet) to feed the DataGrid
         /// </summary>
         /// <param name="pagedDataInfo"></param>
         /// <returns>
