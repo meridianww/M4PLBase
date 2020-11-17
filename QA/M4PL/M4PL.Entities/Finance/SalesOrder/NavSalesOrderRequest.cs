@@ -49,5 +49,6 @@ namespace M4PL.Entities.Finance.SalesOrder
 		public decimal Mileage { get; set; }
 		public decimal Storage { get; set; }
 		public bool Electronic_Invoice { get; set; }
+		public string Posting_Date { get; set; }
 	}
 }

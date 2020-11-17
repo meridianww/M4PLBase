@@ -27,7 +27,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 			get { return CoreCache.GetBusinessConfiguration("EN"); }
 		}
 
-		public static void PushStatusUpdateToFarEye(long jobId, ActiveUser activeUser)
+		public static void PushStatusUpdateToFarEye(long jobId, ActiveUser activeUser, bool isNewOrder = false)
 		{
 			bool isFarEyePushNeeded = M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean();
 			if (isFarEyePushNeeded)
@@ -47,7 +47,11 @@ namespace M4PL.Business.XCBL.HelperClasses
 							string cancelReason = string.Empty;
 							bool isCanceled = false;
 							bool isRescheduled = false;
-							if (!string.IsNullOrEmpty(deliveryUpdateModel.RescheduledInstallDate))
+							if (isNewOrder)
+							{
+								deliveryUpdateModel.OrderNumber = deliveryUpdateModel.OrderNumber.Replace("O-", string.Empty);
+							}
+							else if (!string.IsNullOrEmpty(deliveryUpdateModel.RescheduledInstallDate))
 							{
 								rescheduleDate = deliveryUpdateModel.RescheduledInstallDate;
 								rescheduleReason = deliveryUpdateModel.RescheduleReason;
@@ -55,8 +59,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 								deliveryUpdateModel.RescheduleReason = string.Empty;
 								isRescheduled = true;
 							}
-
-							if (!string.IsNullOrEmpty(deliveryUpdateModel.CancelDate) && !string.IsNullOrEmpty(deliveryUpdateModel.InstallStatus) && !deliveryUpdateModel.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+							else if (!string.IsNullOrEmpty(deliveryUpdateModel.CancelDate) && !string.IsNullOrEmpty(deliveryUpdateModel.InstallStatus) && !deliveryUpdateModel.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
 							{
 								canceledDate = deliveryUpdateModel.CancelDate;
 								cancelReason = deliveryUpdateModel.CancelReason;
@@ -66,7 +69,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 							}
 
 							string requestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
-							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser);
+							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser, isNewOrder);
 							DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(requestBody, response, jobId);
 
 							Task.Factory.StartNew(() =>
@@ -100,10 +103,32 @@ namespace M4PL.Business.XCBL.HelperClasses
 			}
 		}
 
-		private static string SentOrderStatusUpdateToFarEye(DeliveryUpdate deliveryUpdate, string farEyeAPIURL, string farEyeAPIKey, ActiveUser activeUser)
+		private static string SentOrderStatusUpdateToFarEye(DeliveryUpdate deliveryUpdate, string farEyeAPIURL, string farEyeAPIKey, ActiveUser activeUser, bool isNewOrder = false)
 		{
 			FarEyeCommands farEyeCommand = new FarEyeCommands();
 			var farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdate, activeUser);
+			if (farEyeOrderStatusRequest != null && isNewOrder)
+			{
+				farEyeOrderStatusRequest.order_number = farEyeOrderStatusRequest.value;
+				farEyeOrderStatusRequest.value = string.Empty;
+				farEyeOrderStatusRequest.fareye_status = "Order Confirmation";
+				farEyeOrderStatusRequest.fareye_status_code = "order_confirmation";
+				farEyeOrderStatusRequest.fareye_status_description = "Order Confirmation";
+				farEyeOrderStatusRequest.fareye_sub_status = "Order Confirmation";
+				farEyeOrderStatusRequest.fareye_sub_status_code = "order_confirmation";
+				farEyeOrderStatusRequest.fareye_sub_status_description = "Order Confirmation";
+				farEyeOrderStatusRequest.carrier_status = "Order Confirmation";
+				farEyeOrderStatusRequest.carrier_status_code = "order_confirmation";
+				farEyeOrderStatusRequest.carrier_status_description = "Order Confirmation";
+				farEyeOrderStatusRequest.carrier_sub_status = "Order Confirmation";
+				farEyeOrderStatusRequest.carrier_sub_status_description = "Order Confirmation";
+				farEyeOrderStatusRequest.type = "Order";
+				if (farEyeOrderStatusRequest.info?.LineItems != null)
+				{
+					farEyeOrderStatusRequest.info.LineItems.ForEach(x => x.item_install_status = "Order Confirmation");
+				}
+			}
+
 			string farEyeOrderStatusUpdateJson = string.Empty;
 			string farEyeUpdateURL = string.Empty;
 			string farEyeApiKey = string.Empty;
