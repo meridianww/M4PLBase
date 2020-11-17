@@ -85,6 +85,14 @@ namespace M4PL.Business.XCBL
 				farEyeOrderResponse.errors = new List<string>();
 				farEyeOrderResponse.errors.Add(orderResult.Subject);
 			}
+			else if(orderResult != null && orderResult.StatusCode == "Success")
+			{
+				long jobId = orderResult.ClientMessageID.ToLong();
+				if (jobId > 0)
+				{
+					FarEyeHelper.PushStatusUpdateToFarEye(jobId, ActiveUser, true);
+				}
+			}
 
 			return farEyeOrderResponse;
 		}
@@ -265,6 +273,12 @@ namespace M4PL.Business.XCBL
 						farEyeDeliveryStatusResponse.carrier_status_description = "Reschedule";
 						farEyeDeliveryStatusResponse.carrier_sub_status = "Reschedule";
 						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Reschedule";
+						farEyeDeliveryStatusResponse.fareye_status = "Reschedule";
+						farEyeDeliveryStatusResponse.fareye_status_code = "Reschedule";
+						farEyeDeliveryStatusResponse.fareye_status_description = "Reschedule";
+						farEyeDeliveryStatusResponse.fareye_sub_status = "Reschedule";
+						farEyeDeliveryStatusResponse.fareye_sub_status_code = "Reschedule";
+						farEyeDeliveryStatusResponse.fareye_sub_status_description = "Reschedule";
 						farEyeDeliveryStatusResponse.status_received_at = deliveryUpdate.RescheduledInstallDate;
 					}
 
@@ -275,6 +289,12 @@ namespace M4PL.Business.XCBL
 						farEyeDeliveryStatusResponse.carrier_status_description = "Canceled";
 						farEyeDeliveryStatusResponse.carrier_sub_status = "Canceled";
 						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Canceled";
+						farEyeDeliveryStatusResponse.fareye_status = "Canceled";
+						farEyeDeliveryStatusResponse.fareye_status_code = "Canceled";
+						farEyeDeliveryStatusResponse.fareye_status_description = "Canceled";
+						farEyeDeliveryStatusResponse.fareye_sub_status = "Canceled";
+						farEyeDeliveryStatusResponse.fareye_sub_status_code = "Canceled";
+						farEyeDeliveryStatusResponse.fareye_sub_status_description = "Canceled";
 						farEyeDeliveryStatusResponse.status_received_at = deliveryUpdate.CancelDate;
 					}
 				}
@@ -320,7 +340,7 @@ namespace M4PL.Business.XCBL
 				// ,RecieverID = string.Empty
 				,OriginalOrderNumber = orderDetail.order_number
 				,OrderNumber = orderDetail.tracking_number
-				,Action = orderDetail.type_of_action.Equals("Create", StringComparison.OrdinalIgnoreCase) ? "Add" : orderDetail.type_of_action
+				,Action = "Add"
 				// ,ReleaseNum = string.Empty
 				,OrderType = orderDetail.type_of_order
 				,OrderDate = orderDetail?.info?.install_date
