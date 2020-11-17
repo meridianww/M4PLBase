@@ -22,8 +22,12 @@ using M4PL.API.Filters;
 using M4PL.Business.Administration;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -53,8 +57,22 @@ namespace M4PL.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UploadUserGuide")]
-        public bool UploadUserGuide(UserGuidUpload userGuidUpload)
+        public bool UploadUserGuide()
         {
+            UserGuidUpload userGuidUpload = new UserGuidUpload();
+            var streamProvider = new MultipartMemoryStreamProvider();
+            var strByteArray = HttpContext.Current.Request.Form["application/json"];
+            var postedFile = HttpContext.Current.Request.Files["PostedFile"];
+            if (!string.IsNullOrEmpty(strByteArray) && postedFile != null && postedFile.ContentLength > 0)
+            {
+                using (BinaryReader binaryReader = new BinaryReader(postedFile.InputStream))
+                {
+                    int bytesToRead = postedFile.ContentLength;
+                    userGuidUpload.DocumentName = postedFile.FileName;
+                    userGuidUpload.FileContent = binaryReader.ReadBytes(bytesToRead);
+                }
+            }
+
             return _userGuideUploadCommands.UploadUserGuide(userGuidUpload);
         }
         /// <summary>

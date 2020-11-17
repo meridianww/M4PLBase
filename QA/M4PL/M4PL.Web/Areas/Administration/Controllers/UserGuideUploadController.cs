@@ -97,15 +97,13 @@ namespace M4PL.Web.Areas.Administration.Controllers
             {
                 UserGuidUploadView userGuidUploadView = new UserGuidUploadView();
                 var isFileUploaded = false;
-                Stream fs = e.UploadedFile.FileContent;
-                BinaryReader br = new BinaryReader(fs);
-                userGuidUploadView.FileContent = br.ReadBytes((Int32)fs.Length);
+                userGuidUploadView.FileContent = e.UploadedFile.FileBytes;// br.ReadBytes((Int32)fs.Length);
                 userGuidUploadView.DocumentName = e.UploadedFile.FileName;
                 isFileUploaded = _userGuideUploadStaticCommands.UploadUserGuide(userGuidUploadView);
                 if (isFileUploaded)
                 {
                     string url = System.Web.HttpContext.Current.Request.Url.Authority;                    
-                    userGuidUploadView.Url = "https://" + url + ".com";
+                    userGuidUploadView.Url = "https://" + url;
                     bool result = _userGuideUploadStaticCommands.GenerateKnowledgeDetail(userGuidUploadView);
                     if (!result)
                         displayMessage.Description = "Due to internal server issue file is not uploaded successfully";
