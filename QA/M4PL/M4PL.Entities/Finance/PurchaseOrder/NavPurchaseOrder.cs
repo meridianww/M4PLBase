@@ -126,5 +126,6 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 		public decimal Mileage { get; set; }
 		public decimal Storage { get; set; }
 		public bool Electronic_Invoice { get; set; }
+		public string Parent_ID { get; set; }
 	}
 }

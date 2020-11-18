@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\M4PL.Utilities.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -61,6 +62,7 @@
     <Compile Include="Logger\LogEntry.cs" />
     <Compile Include="Logger\Logger.cs" />
     <Compile Include="Logger\LogType.cs" />
+    <Compile Include="Logger\M4PLException.cs" />
     <Compile Include="Logger\M4PLTraceListener.cs" />
     <Compile Include="Logger\RequestExtensions.cs" />
     <Compile Include="MappingAttribute.cs" />

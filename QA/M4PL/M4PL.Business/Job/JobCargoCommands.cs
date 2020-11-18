@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -17,9 +17,11 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobCargoCommands
 //====================================================================================================================
 
+using M4PL.Business.Event;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,77 +30,82 @@ using _commands = M4PL.DataAccess.Job.JobCargoCommands;
 
 namespace M4PL.Business.Job
 {
-    public class JobCargoCommands : BaseCommands<JobCargo>, IJobCargoCommands
-    {
-        /// <summary>
-        /// Get list of job cargo data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<JobCargo> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class JobCargoCommands : BaseCommands<JobCargo>, IJobCargoCommands
+	{
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
 
-        /// <summary>
-        /// Gets specific job cargo record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Get list of job cargo data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<JobCargo> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        public JobCargo Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		/// <summary>
+		/// Gets specific job cargo record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        /// <summary>
-        /// Creates a newjob cargo record
-        /// </summary>
-        /// <param name="jobCargo"></param>
-        /// <returns></returns>
+		public JobCargo Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        public JobCargo Post(JobCargo jobCargo)
-        {
-            return _commands.Post(ActiveUser, jobCargo);
-        }
+		/// <summary>
+		/// Creates a newjob cargo record
+		/// </summary>
+		/// <param name="jobCargo"></param>
+		/// <returns></returns>
 
-        /// <summary>
-        /// Updates an existing job cargo record
-        /// </summary>
-        /// <param name="jobCargo"></param>
-        /// <returns></returns>
+		public JobCargo Post(JobCargo jobCargo)
+		{
+			return _commands.Post(ActiveUser, jobCargo);
+		}
 
-        public JobCargo Put(JobCargo jobCargo)
-        {
-            return _commands.Put(ActiveUser, jobCargo);
-        }
+		/// <summary>
+		/// Updates an existing job cargo record
+		/// </summary>
+		/// <param name="jobCargo"></param>
+		/// <returns></returns>
 
-        /// <summary>
-        /// Deletes a specific job cargo record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		public JobCargo Put(JobCargo jobCargo)
+		{
+			return _commands.Put(ActiveUser, jobCargo);
+		}
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		/// <summary>
+		/// Deletes a specific job cargo record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        /// <summary>
-        /// Deletes a list of job cargo record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		/// <summary>
+		/// Deletes a list of job cargo record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public JobCargo Patch(JobCargo entity)
-        {
-            throw new NotImplementedException();
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
+
+		public JobCargo Patch(JobCargo entity)
+		{
+			throw new NotImplementedException();
+		}
 
 		public StatusModel CreateCargoException(JobCargoException jobCargoException, long cargoId)
 		{
@@ -107,11 +114,34 @@ namespace M4PL.Business.Job
 			StatusModel statusModel = CargoExceptionValidation(jobCargoException, cargoId, out selectedJobExceptionInfo, out selectedJobInstallStatus);
 			if (statusModel != null) { return statusModel; }
 
-			statusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, jobCargoException.CargoQuantity, jobCargoException.CgoReasonCodeOSD, jobCargoException.CgoDateLastScan, ActiveUser);
+			var exceptionStatusModel = _commands.CreateCargoException(cargoId, selectedJobExceptionInfo, selectedJobInstallStatus, jobCargoException.CargoQuantity, jobCargoException.CgoReasonCodeOSD, jobCargoException.CgoDateLastScan, ActiveUser);
 
-			if (statusModel == null) { return new StatusModel() { AdditionalDetail = "There is some issue while processing the request.", Status = "Failure", StatusCode = 500 };}
+			if (exceptionStatusModel == null)
+			{
+				return new StatusModel()
+				{
+					AdditionalDetail = "There is some issue while processing the request.",
+					Status = "Failure",
+					StatusCode = 500
+				};
+			}
+			else
+			{
+				var jobCargo = _commands.Get(ActiveUser, cargoId);
+				int scenarioId = jobCargo.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : jobCargo.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
+				if (scenarioId > 0)
+				{
+					string cargoExceptionBody = EventBodyHelper.GetCargoExceptionMailBody(ActiveUser, jobCargoException.ExceptionCode, exceptionStatusModel.JobId, exceptionStatusModel.ContractNumber, Utilities.TimeUtility.GetPacificDateTime(), string.Empty, jobCargo.CgoPartNumCode, jobCargo.CgoTitle, jobCargo.CgoSerialNumber, jobCargo.JobGatewayStatus);
+					EventBodyHelper.CreateEventMailNotificationForCargoException(scenarioId, (long)exceptionStatusModel.ProgramId, exceptionStatusModel.ContractNumber, cargoExceptionBody);
+				}
 
-			return statusModel;
+				return new StatusModel()
+				{
+					StatusCode = exceptionStatusModel.StatusCode,
+					Status = exceptionStatusModel.Status,
+					AdditionalDetail = exceptionStatusModel.AdditionalDetail
+				};
+			}
 		}
 
 		private StatusModel CargoExceptionValidation(JobCargoException jobCargoException, long cargoId, out JobExceptionInfo selectedJobExceptionInfo, out JobInstallStatus selectedJobInstallStatus)

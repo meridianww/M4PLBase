@@ -28,7 +28,9 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 	public class PostedPurchaseOrder
 	{
 		public string No { get; set; }
-
 		public string M4PL_Job_ID { get; set; }
+		public string Vendor_Invoice_No { get; set; }
+		public string Document_Date { get; set; }
+		public string Vendor_Order_No { get; set; }
 	}
 }

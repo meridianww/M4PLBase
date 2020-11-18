@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -21,22 +21,22 @@ using System.Collections.Generic;
 
 namespace M4PL.Business
 {
-    public interface IBaseCommands<TEntity>
-    {
-        ActiveUser ActiveUser { get; set; }
+	public interface IBaseCommands<TEntity>
+	{
+		ActiveUser ActiveUser { get; set; }
 
-        IList<TEntity> GetPagedData(PagedDataInfo pagedDataInfo);
+		IList<TEntity> GetPagedData(PagedDataInfo pagedDataInfo);
 
-        TEntity Get(long id);
+		TEntity Get(long id);
 
-        TEntity Post(TEntity entity);
+		TEntity Post(TEntity entity);
 
-        TEntity Put(TEntity entity);
+		TEntity Put(TEntity entity);
 
-        TEntity Patch(TEntity entity);
+		TEntity Patch(TEntity entity);
 
-        int Delete(long id);
+		int Delete(long id);
 
-        IList<IdRefLangName> Delete(List<long> ids, int statusId);
-    }
+		IList<IdRefLangName> Delete(List<long> ids, int statusId);
+	}
 }

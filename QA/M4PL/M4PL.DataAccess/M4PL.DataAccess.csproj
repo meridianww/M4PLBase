@@ -64,12 +64,14 @@
     <Compile Include="Administration\SystemPageTabNameCommands.cs" />
     <Compile Include="Administration\SystemReferenceCommands.cs" />
     <Compile Include="Administration\SystemAccountCommands.cs" />
+    <Compile Include="Administration\UserGuideUploadCommands.cs" />
     <Compile Include="Administration\ValidationCommands.cs" />
     <Compile Include="Attachment\AttachmentCommands.cs" />
     <Compile Include="BaseCommands.cs" />
     <Compile Include="CacheCommands.cs" />
     <Compile Include="Common\AppDashboardCommands.cs" />
     <Compile Include="Common\CommonCommands.cs" />
+    <Compile Include="Common\EmailCommands.cs" />
     <Compile Include="CompanyAddress\CompanyAddressCommands.cs" />
     <Compile Include="Contact\ContactCommands.cs" />
     <Compile Include="Contact\ConReportCommands.cs" />
@@ -81,6 +83,8 @@
     <Compile Include="Customer\CustomerCommands.cs" />
     <Compile Include="Customer\CustContactCommands.cs" />
     <Compile Include="Customer\CustReportCommands.cs" />
+    <Compile Include="Event\EventCommands.cs" />
+    <Compile Include="Finance\GatewayCommands.cs" />
     <Compile Include="Finance\NavCostCodeCommands.cs" />
     <Compile Include="Finance\NavCustomerCommands.cs" />
     <Compile Include="Finance\NAVOrderItemCommands.cs" />
@@ -131,6 +135,7 @@
     <Compile Include="Program\PrgVendLocationComments.cs" />
     <Compile Include="Program\PrgBillableRateCommands.cs" />
     <Compile Include="Program\PrgCostLocationCommands.cs" />
+    <Compile Include="Program\PrgEventManagementCommands.cs" />
     <Compile Include="Program\ProgramCommands.cs" />
     <Compile Include="Program\PrgCostRateCommands.cs" />
     <Compile Include="Program\PrgRoleCommands.cs" />
@@ -192,6 +197,7 @@
     <Compile Include="SQLSerializer\Serializer\SetCollection.cs" />
     <Compile Include="SQLSerializer\Serializer\SqlConnectionContext.cs" />
     <Compile Include="SQLSerializer\Serializer\SqlSerializer.cs" />
+    <Compile Include="SQLSerializer\Serializer\XcblSQLSerializer.cs" />
     <Compile Include="StoredProceduresConstant.cs" />
     <Compile Include="Survey\SurveyUserCommands.cs" />
     <Compile Include="Survey\JobSurveyCommands.cs" />
@@ -211,6 +217,10 @@
     <Folder Include="EDI\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\M4PL.APIClient\M4PL.APIClient.csproj">
+      <Project>{45432255-74AE-45E3-BEEF-BAF721678C2E}</Project>
+      <Name>M4PL.APIClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\M4PL.Entities\M4PL.Entities.csproj">
       <Project>{60651f0d-2334-4372-977a-fdfa87a80372}</Project>
       <Name>M4PL.Entities</Name>

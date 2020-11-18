@@ -7,18 +7,28 @@
     //Program Name:                                 JobAdvanceReportGridPartial
     //Purpose:                                      Provides view for the JobAdvanceReportGridPartial with advance search and filter
     //====================================================================================================================================================*@
+@model string
+@{ 
+    var isCallBack = ViewBag.IsCallBack != null ? ViewBag.IsCallBack : false;
+    var strRoute = string.IsNullOrEmpty(Model) ? "" : Model;
+}
 @Html.DevExpress().CallbackPanel(settings =>
 {
     settings.Name = "JobAdvanceReportCbPanel";
     settings.CallbackRouteValues = new
     {
         Controller = "JobAdvanceReport",
-        Action = "DataView",
+        Action = "JobAdvanceReportGridPartial",
         Area = "Job",
         OwnerCbPanel = "JobAdvanceReportCbPanel"
     };
     settings.SetContent(() =>
     {
-        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDataView, M4PL.Entities.EntitiesAlias.JobAdvanceReport.ToString()));
+        if (isCallBack)
+        {
+            ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row isDriverScrubreport'>");
+            ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDataView, M4PL.Entities.EntitiesAlias.JobAdvanceReport.ToString(), new { strRout = strRoute }));
+            ViewContext.Writer.Write("</div>");
+        }
     });
 }).GetHtml()

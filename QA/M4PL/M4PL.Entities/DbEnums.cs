@@ -177,6 +177,7 @@ namespace M4PL.Entities
 		NavPriceCode,
 		NavSalesOrder,
 		NavRate,
+		Gateway,
 
 		Customer,
 		CustBusinessTerm,
@@ -214,7 +215,8 @@ namespace M4PL.Entities
 		PrgCostLocation,
 		PrgBillableLocation,
 
-		PrgRefRole,
+
+        PrgRefRole,
 		ProgramRole,
 		AssignPrgVendor,
 		UnAssignPrgVendor,
@@ -322,7 +324,15 @@ namespace M4PL.Entities
 		JobXcblInfo,
 		GwyExceptionCode,
 		GwyExceptionStatusCode,
-		JobHistory
+		JobHistory,
+
+		PrgEventManagement,
+		EventType,
+		NavRemittance,
+        Action,
+        SubAction,
+        NextGatway,
+		UserGuideUpload
 	}
 
 	public enum ErrorMessages
@@ -688,7 +698,11 @@ namespace M4PL.Entities
 	{
 		Document = 205,
 		POD = 206,
-		Damaged = 207
+		Damaged = 207,
+		Approval = 3285,
+		Image = 3286,
+		Signature = 3307,
+		All = 9999
 	}
 
 	public enum ValidationEnum
@@ -1052,7 +1066,8 @@ namespace M4PL.Entities
 	public enum ElectroluxMessage
 	{
 		Order = 1,
-		ASN = 2
+		ASN = 2,
+		DeliveryNumber = 3
 	}
 
 	public enum StatusType
@@ -1060,5 +1075,22 @@ namespace M4PL.Entities
 		Active = 1,
 		Archive = 2,
 		Delete = 3
+	}
+
+	public enum EventNotification
+	{
+		AWCCargoException = 1,
+		ElectroluxCargoException = 2,
+		JobReActivated = 3,
+		JobCancellation = 4,
+		xCBLInvalidRequests = 5,
+		xCBLInvalidEndpoint = 6,
+		xCBLFTPSite = 7,
+		xCBLCSVFile = 8,
+		EDINoEDIReceived = 9,
+		EDIInvalidEDIData = 10,
+		EDIVendorLocation = 11,
+		EDICannotCreateEDI = 12,
+		EDICannotUploadEDI = 13
 	}
 }

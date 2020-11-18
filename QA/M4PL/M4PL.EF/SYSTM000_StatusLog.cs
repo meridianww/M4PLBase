@@ -15,15 +15,11 @@ namespace M4PL.EF
     public partial class SYSTM000_StatusLog
     {
         public long Id { get; set; }
-        public Nullable<long> ProgramID { get; set; }
-        public Nullable<long> JobID { get; set; }
         public string SiteName { get; set; }
         public Nullable<long> GatewayID { get; set; }
         public string GatewayCode { get; set; }
         public string GatewayType { get; set; }
         public string StatusCode { get; set; }
-        public Nullable<int> SeverityId { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

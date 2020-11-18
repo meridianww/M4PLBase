@@ -17,10 +17,12 @@
 // Purpose:                                      Set of rules for NavSalesOrderCommands
 //=============================================================================================================
 using M4PL.APIClient.ViewModels.Finance;
+using M4PL.Entities.Finance;
 
 namespace M4PL.APIClient.Finance
 {
 	public interface INavSalesOrderCommands : IBaseCommands<NavSalesOrderView>
 	{
+		M4PLOrderCreationResponse GenerateOrdersInNav(long jobId);
 	}
 }

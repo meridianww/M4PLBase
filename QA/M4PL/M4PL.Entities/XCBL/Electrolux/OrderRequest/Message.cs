@@ -14,8 +14,14 @@ namespace M4PL.Entities.XCBL.Electrolux.OrderRequest
     [XmlRoot(ElementName = "message")]
     public class Message
     {
+        /// <summary>
+        /// Gets or Set Subject e.g. Order
+        /// </summary>
         [XmlElement(ElementName = "subject")]
         public string Subject { get; set; }
+        /// <summary>
+        /// Gets or Sets PayloadType e.g. FXS-2.0
+        /// </summary>
         [XmlElement(ElementName = "payloadType")]
         public string PayloadType { get; set; }
     }

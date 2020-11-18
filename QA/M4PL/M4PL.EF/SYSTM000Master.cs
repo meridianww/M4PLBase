@@ -17,13 +17,11 @@ namespace M4PL.EF
         public long Id { get; set; }
         public string LangCode { get; set; }
         public string SysMessageCode { get; set; }
-        public int SysRefId { get; set; }
         public string SysMessageScreenTitle { get; set; }
         public string SysMessageTitle { get; set; }
         public string SysMessageDescription { get; set; }
         public string SysMessageInstruction { get; set; }
         public string SysMessageButtonSelection { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

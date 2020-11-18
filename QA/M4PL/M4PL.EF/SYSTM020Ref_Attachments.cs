@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class SYSTM020Ref_Attachments
     {
         public long Id { get; set; }
-        public string AttTableName { get; set; }
         public Nullable<long> AttPrimaryRecordID { get; set; }
         public Nullable<int> AttItemNumber { get; set; }
         public string AttTitle { get; set; }

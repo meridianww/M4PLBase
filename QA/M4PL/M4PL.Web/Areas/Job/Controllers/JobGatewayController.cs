@@ -22,6 +22,7 @@ using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using M4PL.Web.Models;
@@ -38,7 +39,6 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobGatewayController : BaseController<JobGatewayView>
     {
         private readonly IJobGatewayCommands _jobGatewayCommands;
-
         /// <summary>
         /// Interacts with the interfaces to get the Job's gateway details and renders to the page
         /// Gets the page related information on the cache basis
@@ -51,7 +51,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             _commonCommands = commonCommands;
             _jobGatewayCommands = jobGatewayCommands;
         }
-
         public override ActionResult AddOrEdit(JobGatewayView jobGatewayView)
         {
             jobGatewayView.IsFormView = true;
@@ -91,14 +90,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            if (jobGatewayView.GwyCompleted)
-                jobGatewayView.GwyGatewayACD = DateTime.UtcNow.AddHours(jobGatewayView.DeliveryUTCValue);
+            //if (jobGatewayView.GwyCompleted)
+            //    jobGatewayView.GwyGatewayACD = DateTime.UtcNow.AddHours(jobGatewayView.DeliveryUTCValue);
             var result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutWithSettings(jobGatewayView) : _jobGatewayCommands.PostWithSettings(jobGatewayView);
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)
             {
                 MvcRoute resRoute = null;
+                var uriQueryString = Request.UrlReferrer.PathAndQuery;
                 if (jobGatewayView.IsGatewayCalled)
                 {
                     var resultRoute = SessionProvider.ActiveUser.LastRoute;
@@ -121,9 +121,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.Action = "FormView";
                         resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                         resultRoute.ParentRecordId = result.ProgramID ?? 0; ;
-                        resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
-                                                   ? WebApplicationConstants.AppCbPanel
-                                                   : "JobDataViewCbPanel";
+                        resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId")
+                                                     ? "AppCbPanel"
+                                                     : "JobDataViewCbPanel";
 
                         resRoute = new MvcRoute(resultRoute, MvcConstants.ActionForm);
                         resRoute.Url = resRoute.ParentRecordId.ToString();
@@ -135,7 +135,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }
-
         public ActionResult JobActionAddOrEdit(JobGatewayView jobGatewayView)
         {
             jobGatewayView.IsFormView = true;
@@ -222,6 +221,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             jobGatewayViewAction.Id = jobGatewayView.Id;
             jobGatewayViewAction.JobID = jobGatewayView.JobID;
+            jobGatewayViewAction.ContractNumber = jobGatewayView.ContractNumber;
             jobGatewayViewAction.ProgramID = jobGatewayView.ProgramID;
             jobGatewayViewAction.GwyTitle = jobGatewayView.GwyTitle;
             jobGatewayViewAction.GwyGatewayCode = jobGatewayView.CurrentAction;
@@ -290,7 +290,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (result is SysRefModel)
             {
                 MvcRoute resRoute = null;
-
+                var uriQueryString = Request.UrlReferrer.PathAndQuery;
                 if (jobGatewayView.IsGatewayCalled)
                 {
                     var resultRoute = SessionProvider.ActiveUser.LastRoute;
@@ -313,8 +313,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.Action = "FormView";
                         resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                         resultRoute.ParentRecordId = result.ProgramID ?? 0;
-                        resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
-                                                   ? WebApplicationConstants.AppCbPanel
+                        resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId")
+                                                   ? "AppCbPanel"
                                                    : "JobDataViewCbPanel";
 
                         resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
@@ -331,7 +331,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }
-
         [HttpPost, ValidateInput(false)]
         public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<JobGatewayView, long> jobGatewayView, string strRoute, string gridName)
         {
@@ -366,13 +365,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
 
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
 
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
 
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-
         public override Dictionary<long, string> BatchUpdate(MVCxGridViewBatchUpdateValues<JobGatewayView, long> batchEdit, MvcRoute route, string gridName)
         {
             var batchError = new Dictionary<long, string>();
@@ -456,38 +454,29 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return batchError;
         }
-
         #region Paging
-
         public override PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return base.GridPagingView(pager, strRoute, gridName);
         }
-
         #endregion Paging
-
         #region Filtering & Sorting
-
         public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return base.GridFilteringView(filteringState, strRoute, gridName);
         }
-
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return base.GridSortingView(column, reset, strRoute, gridName);
         }
-
         #endregion Filtering & Sorting
-
         #region RichEdit
-
         public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
         {
             long newDocumentId;
@@ -501,7 +490,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
             return base.RichEditFormView(byteArray);
         }
-
         public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
         {
             long newDocumentId;
@@ -515,9 +503,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
             return base.RichEditFormView(byteArray);
         }
-
         #endregion RichEdit
-
         public ActionResult TabView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -535,7 +521,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
         }
-
         public PartialViewResult JobGatewayDataView(string strRoute, long selectedId = 0)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -573,7 +558,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //AddActionsInActionContextMenu(route);
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
 
             _gridResult.GridSetting.GridName = currentGridName;
 
@@ -583,7 +568,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
-
         public PartialViewResult JobGatewayActions(string strRoute, long selectedId = 0)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -600,7 +584,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = " AND JobGateway.isActionAdded = 1";
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = " AND JobGateway.isActionAdded = 1 AND JobGateway.GatewayTypeId = 86";
             var currentGridName = string.Format("Actions_{0}", WebUtilities.GetGridName(route));
 
             base.DataView(strRoute, currentGridName);
@@ -617,13 +601,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
 
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
+
             _gridResult.GridSetting.GridName = currentGridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
-
         //private void AddActionsInActionContextMenu(MvcRoute currentRoute)
         //{
         //    var route = currentRoute;
@@ -727,7 +711,6 @@ namespace M4PL.Web.Areas.Job.Controllers
         //        }
         //    }
         //}
-
         public PartialViewResult JobGatewayLog(string strRoute, long selectedId = 0)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -762,13 +745,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
 
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
             _gridResult.GridSetting.GridName = currentGridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
-
         public PartialViewResult JobGatewayAll(string strRoute, long selectedId = 0)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -799,19 +781,16 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _gridResult.GridSetting.ContextMenu.Remove(_commonCommands.GetOperation(OperationTypeEnum.New));
             }
             //To Add Actions Operation in ContextMenu
-            //AddActionsInActionContextMenu(route);
             _gridResult = _gridResult.AddActionsInActionContextMenu(route, _commonCommands, EntitiesAlias.Job, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
-
             //To Add Gateways Operation in ContextMenu
-            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands);
+            _gridResult = _gridResult.AddGatewayInGatewayContextMenu(route, _commonCommands, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity);
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId)?.ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
 
-        public override ActionResult FormView(string strRoute)
+        private void PopulateForm(MvcRoute route)
         {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             Session["isEdit"] = route.IsEdit;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
@@ -820,6 +799,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
                 sessionInfo.PagedDataInfo.RecordId = route.RecordId;
                 sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+                if (route.ParentRecordId == 0 && route.JobIds != null && route.JobIds.Count > 0)
+                {
+                    sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId = Convert.ToInt64(route.JobIds[0]);
+                }
                 var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
                 viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
                 SessionProvider.ViewPagedDataSession = viewPagedDataSession;
@@ -831,10 +814,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!route.IsEdit)
             {
                 if (route.IsPBSReport)
-                    route.ParentRecordId = route.RecordId;
+                {
+                    route.ParentRecordId = route.RecordId > 0 ? route.RecordId : route.ParentRecordId;
+                    if (route.ParentRecordId == 0 && route.JobIds != null && route.JobIds.Count > 0)
+                    {
+                        route.ParentRecordId = Convert.ToInt64(route.JobIds[0]);
+                    }
+                }
+
                 route.RecordId = 0;
                 if (route.Action == "GatewayActionFormView" ||
-                    (route.Action == "FormView" && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
+                    (route.Action == "FormView" && route.Filters == null && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
                     entityFor = JobGatewayType.Action.ToString();
                 else
                 {
@@ -842,17 +832,17 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
 
-            var ifFilterValue = route.Filters != null ? route.Filters.Value.Split('-') : null;
-            var gatewayCode = route.Filters != null ? (route.Filters.FieldName + "-" +
-                (ifFilterValue != null && ifFilterValue.Count() > 1 ? ifFilterValue[1] : string.Empty)) : string.Empty;
-            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, entityFor, route.Filters != null && route.Filters.FieldName.Contains("3PL") ? true : false, gatewayCode) ?? new JobGatewayView();
+            var ifFilterValue = route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) ? route.Filters.Value.Split('-') : null;
+            var gatewayCode = route.Filters != null ? (route.Filters.FieldName +
+                (ifFilterValue != null && ifFilterValue.Count() > 1 ? ("-" + ifFilterValue[1]) : string.Empty)) : string.Empty;
+            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, entityFor, route.Filters != null && (route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName) && route.Filters.FieldName.Contains("3PL")) ? true : false, gatewayCode) ?? new JobGatewayView();
             _formResult.Record.IsGatewayCalled = route.IsPBSReport;
             if (route.Filters != null && !(bool)Session["isEdit"])
             {
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
                 _formResult.Record.GwyGatewayTitle = route.Filters.Value;//.Substring(0, route.Filters.Value.IndexOf('-'));
             }
-            if (route.Filters != null && route.Filters.FieldName.Contains("3PL"))
+            if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName) && route.Filters.FieldName.Contains("3PL"))
                 _formResult.Record.GwyDDPCurrent =
                  Utilities.TimeUtility.GetPacificDateTime().Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay);
             else if (_formResult.Record.GwyDDPCurrent == null)
@@ -912,52 +902,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                     }
                 }
             }
-
-            if (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && (bool)Session["isEdit"])
-            {
-                _formResult.Record.IsAction = true;
-                _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-                _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null
-                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
-
-                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null
-                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
-
-                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null
-                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
-
-                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
-
-                _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
-                var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
-                _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
-                _formResult.Record.StatusCode = _formResult.Record.StatusCode != null ?
-                    _formResult.Record.StatusCode : _formResult.Record.GwyShipApptmtReasonCode;
-                _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
-                _formResult.Permission = Permission.ReadOnly;
-                return PartialView(MvcConstants.ViewGatewayAction, _formResult);
-            }
-            if (((bool)Session["isEdit"] == false && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
-                || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment && (bool)Session["isEdit"]))
-            {
-                _formResult.Record.IsAction = false;
-                _formResult.Record.GwyCompleted = true;
-                _formResult.Record.GwyGatewayACD = Utilities.TimeUtility.GetPacificDateTime().AddHours(_formResult.Record.DeliveryUTCValue);
-                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
-                _formResult.Record.DateCancelled = Utilities.TimeUtility.GetPacificDateTime();
-                _formResult.Record.DateComment = Utilities.TimeUtility.GetPacificDateTime();
-                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
-                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
-
-                _formResult.Record.CurrentAction = "Comment";
-                _formResult.Record.GwyGatewayCode = "Comment";
-                _formResult.Record.GwyDDPCurrent = Utilities.TimeUtility.GetPacificDateTime();
-                _formResult.Permission = Permission.ReadOnly;
-                return PartialView(MvcConstants.ViewGatewayComment, _formResult);
-            }
+        }
+        public override ActionResult FormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            PopulateForm(route);
             return PartialView(_formResult);
         }
-
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -970,7 +921,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-
         public JsonResult OnUnitChange(int unitType, JobGatewayView jobGateway)
         {
             if (unitType > 0)
@@ -983,7 +933,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return Json(new { status = false }, JsonRequestBehavior.AllowGet);
         }
-
         public JsonResult OnDateRefChange(int dateRef, JobGatewayView jobGateway)
         {
             if (dateRef > 0)
@@ -999,7 +948,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return Json(new { status = false }, JsonRequestBehavior.AllowGet);
         }
-
         private void SetGatewayDates(JobGatewayView jobGateway, ref JobGatewayView jobGatewayNew, double duration, JobGatewayUnit unitType, int dateRef)
         {
             jobGatewayNew.GwyGatewayDuration = jobGateway.GwyGatewayDuration;// duration.ToDecimal();
@@ -1018,7 +966,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                     jobGatewayNew.GwyGatewayACD = jobGateway.GwyGatewayACD;// jobGateway.JobDeliveryDateTimeActual.SubstractFrom(duration, unitType);
             }
         }
-
         //private double Duration(DateTime deliveryDate, DateTime pickUpDate, JobGatewayUnit unitType)
         //{
         //    switch (unitType)
@@ -1038,13 +985,12 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         //    return (deliveryDate - pickUpDate).TotalHours;
         //}
-
         public PartialViewResult GatewayComplete(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
             var formResult = new FormResult<JobGatewayComplete>();
-            //formResult.Permission = _formResult.Permission;
+            formResult.Permission = _formResult.Permission;
             formResult.CallBackRoute = route;
             formResult.SessionProvider = SessionProvider;
             formResult.FormId = "GatewayComplete" + formResult.FormId;
@@ -1054,7 +1000,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData[MvcConstants.OkLangName] = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess).Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString())).LangName;
             return PartialView("Complete", formResult);
         }
-
         public JsonResult UpdateJobGatewayComplete(JobGatewayComplete jobGateway)
         {
             SessionProvider.ActiveUser.SetRecordDefaults(jobGateway, Request.Params[WebApplicationConstants.UserDateTime]);
@@ -1067,18 +1012,59 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return Json(new { status = true, record = result, ownerCbPanel = jobGateway.SysRefName }, JsonRequestBehavior.AllowGet);
         }
-
         [HttpGet]
         public ActionResult IsScheduled(long id, long parentId)
         {
             //return Json(new { isScheduled = _jobGatewayCommands.GetGatewayWithParent(id, parentId).isScheduled, actionSchedule = GatewayActionType.Schedule.ToString() }, JsonRequestBehavior.AllowGet);
             return Json(new { isScheduled = false, actionSchedule = WebUtilities.JobGatewayActions.Schedule.ToString() }, JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult GatewayActionFormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            FormView(strRoute);
+            var result = new JobActionCode();
+            PopulateForm(route);
+            if (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && (bool)Session["isEdit"])
+            {
+                _formResult.Record.IsAction = true;
+                _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
+                _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null
+                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
+
+                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null
+                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
+
+                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null
+                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
+
+                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
+
+                _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
+                result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
+                _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
+                _formResult.Record.StatusCode = _formResult.Record.StatusCode != null ?
+                    _formResult.Record.StatusCode : _formResult.Record.GwyShipApptmtReasonCode;
+                _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
+                _formResult.Permission = Permission.ReadOnly;
+                return PartialView(MvcConstants.ViewGatewayAction, _formResult);
+            }
+            if (((bool)Session["isEdit"] == false && route.Filters == null && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
+                || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment && (bool)Session["isEdit"]))
+            {
+                _formResult.Record.IsAction = false;
+                _formResult.Record.GwyCompleted = true;
+                _formResult.Record.GwyGatewayACD = Utilities.TimeUtility.GetPacificDateTime().AddHours(_formResult.Record.DeliveryUTCValue);
+                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
+                _formResult.Record.DateCancelled = Utilities.TimeUtility.GetPacificDateTime();
+                _formResult.Record.DateComment = Utilities.TimeUtility.GetPacificDateTime();
+                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
+                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
+
+                _formResult.Record.CurrentAction = "Comment";
+                _formResult.Record.GwyGatewayCode = "Comment";
+                _formResult.Record.GwyDDPCurrent = Utilities.TimeUtility.GetPacificDateTime();
+                _formResult.Permission = Permission.ReadOnly;
+                return PartialView(MvcConstants.ViewGatewayComment, _formResult);
+            }
             _formResult.Record.IsGatewayCalled = route.IsPBSReport;
             _formResult.Record.IsAction = true;
             _formResult.Record.GwyCompleted = true;
@@ -1096,7 +1082,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             _formResult.Permission = _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && Session["isEdit"] != null
                                    && (bool)Session["isEdit"] == true ? Permission.ReadOnly : Permission.All;
-            var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
+            result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
             _formResult.Record.GwyGatewayACD = _formResult.Record.DateComment = DateTime.UtcNow.AddHours(result.UTCValue);
             _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
@@ -1105,11 +1091,83 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return PartialView(MvcConstants.ViewGatewayAction, _formResult);
         }
-
         private DateTime GetDdpNewDate(DateTime? newDate)
         {
             return newDate.HasValue
                 ? new DateTime(newDate.Value.Year, newDate.Value.Month, newDate.Value.Day, newDate.Value.Hour, newDate.Value.Minute, newDate.Value.Second) : DateTime.Now;
+        }
+
+        public ActionResult AddMultiAction(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            ViewBag.ParentRecordId = 0;
+            ViewBag.Message = "There is no job/order has been selected";
+            if (route.JobIds != null && route.JobIds.Count() > 0)
+            {
+                List<long> jobIds = new List<long>();
+                route.JobIds.ForEach(t => { if (!string.IsNullOrEmpty(t)) jobIds.Add(Convert.ToInt64(t)); });
+                if (jobIds.Any())
+                {
+                    var result = _jobGatewayCommands.GetActionsByJobIds(string.Join(",", jobIds));
+                    if (result != null && result.Count() > 0)
+                    {
+                        ViewBag.ParentRecordId = route.ParentRecordId;
+                        TempData["MultiActionComboBox"] = result;
+                        TempData.Keep("MultiActionComboBox");
+                        List<string> action = new List<string>();
+                        result.ForEach(t =>
+                        {
+                            if (!string.IsNullOrEmpty(t.Code))
+                                action.Add(t.Code.Split('-')[0]);
+                        });
+                        ViewData["Actions"] = action.Distinct().ToList();
+                    }
+                }
+            }
+            return PartialView(route);
+        }
+
+        public PartialViewResult MultiActionComboBoxPartial(string actionCode)
+        {
+            TempData["MultiActionComboBox"] = TempData.Peek("MultiActionComboBox");
+            TempData.Keep("MultiActionComboBox");
+            if (TempData["MultiActionComboBox"] != null && !string.IsNullOrEmpty(actionCode))
+            {
+                var entity = (List<Entities.Job.JobActionGateway>)TempData["MultiActionComboBox"];
+                if (entity != null && entity.Count() > 0)
+                {
+                    var result = entity.Where(t => t.Code.Contains(actionCode)).ToList();
+                    if (actionCode == "Schedule" || actionCode == "Reschedule")
+                        result = result.Where(t => !t.Code.Contains("XCBL")).ToList();
+                    if (result != null && result.Count() > 0)
+                        ViewData["SubActions"] = result;
+                }
+            }
+            return PartialView();
+        }
+
+        public ActionResult AddMultiGateway(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            ViewBag.ParentRecordId = 0;
+            ViewBag.Message = "There is no job/order has been selected";
+            if (route.JobIds != null && route.JobIds.Count() > 0)
+            {
+                List<long> jobIds = new List<long>();
+                route.JobIds.ForEach(t => { if (!string.IsNullOrEmpty(t)) jobIds.Add(Convert.ToInt64(t)); });
+                if (jobIds.Any())
+                {
+                    var result = _commonCommands.GetJobGateway(0, string.Join(",", jobIds), true);
+                    if (result != null && result.Count() > 0)
+                    {
+                        ViewBag.ParentRecordId = route.ParentRecordId;
+                        ViewData["MultiGatewayComboBox"] = result;
+                    }
+                    else
+                        ViewBag.Message = "The selected jobs/orders are not having same gateways.";
+                }
+            }
+            return PartialView(route);
         }
     }
 }

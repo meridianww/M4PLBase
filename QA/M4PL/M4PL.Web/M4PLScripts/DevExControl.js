@@ -153,8 +153,9 @@ DevExCtrl.Ribbon = function () {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges() || (route.Action === "Save")) {
             switch (route.Action) {
                 case "FormView":
-                    if (route.EntityName == "NAV Rate")
+                    if (route.EntityName == "NAV Rate" || route.EntityName == "Gateway" || route.Controller == "NavRemittance" || route.Controller == "UserGuideUpload") {
                         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+                    }
                     else {
                         if (AppCbPanel && !AppCbPanel.InCallback()) {
                             route.OwnerCbPanel = appCbPanelName;
@@ -162,6 +163,11 @@ DevExCtrl.Ribbon = function () {
                         }
                         _doCallBack(route);
                     }
+                    break;
+                case "AddMultiAction":
+                case "AddMultiGateway":
+                    route.JobIds = M4PLWindow.MultiSelectedJobIds;
+                    RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
                     break;
                 case "DataView":
                 case "Dashboard":
@@ -204,6 +210,24 @@ DevExCtrl.Ribbon = function () {
                     break;
                 case "WatchVideo":
                     window.open(window.location.origin + "/m4pltraining");
+                    break;
+                case "UserGuide":
+                    window.open(window.location.origin + "/UserGuide");
+                    break;
+                case "TrackingOrder":
+                    var newRoute = _onJobReportClick(route);
+                    if (newRoute != null && newRoute != "undefined" && newRoute.RecordId != 'undefined' && newRoute.RecordId > 0) {
+                        //window.open("http://localhost:4200" + "/orderdetails;id=" + newRoute.RecordId);
+                        window.open(window.location.origin + "/tracking/orderdetails;id=" + newRoute.RecordId);
+                    }
+                        //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
+                        //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
+                        //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
+                        //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
+                        //}
+                    else
+                        //window.open("http://localhost:4200" + "/order");
+                        window.open(window.location.origin + "/tracking/order");
                     break;
                 case "DownloadBOL":
                     var jobIds = _onJobReportClickMultiSelect();
@@ -254,7 +278,7 @@ DevExCtrl.Ribbon = function () {
                     var jobIds = _onJobReportClickMultiSelect();
                     route = _onJobReportClick(route);
                     if ((jobIds !== null && jobIds !== '') || (route.RecordId != null && route.RecordId > 0))
-                        var result =  M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJobInNAV(route.RecordId, jobIds);
+                        var result = M4PLCommon.DocumentStatus.IsCostCodeDataPresentForJobInNAV(route.RecordId, jobIds);
                     else
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     if (result == true) {
@@ -326,9 +350,18 @@ DevExCtrl.Ribbon = function () {
 
     var _doCallBack = function (route) {
         // M4PLRibbon.SetVisible((route.Action != "Dashboard"));
-        if (RibbonCbPanel && !RibbonCbPanel.InCallback()) {
+        var ctrlRibbonCbPanel = ASPxClientControl.GetControlCollection().GetByName("RibbonCbPanel");
+        if (ctrlRibbonCbPanel != undefined && ctrlRibbonCbPanel != null) {   // && !RibbonCbPanel.InCallback()) {
             route.OwnerCbPanel = "RibbonCbPanel";
             RibbonCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+        }
+        else {
+            if (route != null && route != undefined) {
+                var ctrl = ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel);
+                if (ctrl != null && ctrl != undefined) {
+                    ctrl.PerformCallback({ strRoute: JSON.stringify(route) });
+                }
+            }
         }
         M4PLCommon.Error.CheckServerError();
     }
@@ -675,53 +708,59 @@ DevExCtrl.ComboBox = function () {
     }
 
     var _onProgramByCustomerCbPanelChange = function (s, e) {
-        if (ProgramByCustomerCbPanel && !ProgramByCustomerCbPanel.InCallback()) {
-            ProgramByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        if (reportTypeCtrl != null &&
+            ((reportTypeCtrl.GetText() == "Driver Scrub Report"))
+            || (reportTypeCtrl.GetText() == "Capacity Report")
+            || (reportTypeCtrl.GetText() == "Pride Metric Report")) {
+            if (reportTypeCtrl.GetText() != "Pride Metric Report") {
+                if (customerCtrl != null && customerCtrl.GetText() != "ALL" && parseInt(customerCtrl.GetValue()) > 0) {
+                    $(".isDriverImport").show();
+                    $(".isDriverbtnScrubreport").show();
+                    var btnReportCtrl = ASPxClientControl.GetControlCollection().GetByName('btnImportReport');
+                    if (btnReportCtrl != null && btnReportCtrl != undefined) {
+                        if (reportTypeCtrl.GetText() == "Driver Scrub Report")
+                            btnReportCtrl.SetText("Import Scrub Driver");
+                        else if (reportTypeCtrl.GetText() == "Capacity Report")
+                            btnReportCtrl.SetText("Import Projected Capacity");
+                        else
+                            btnReportCtrl.SetText("Import Report");
+                    }
+                } else {
+                    $(".isDriverImport").hide();
+                    $(".isDriverbtnScrubreport").hide();
+                }
+            }
         }
-        if (OrginByCustomerCbPanel && !OrginByCustomerCbPanel.InCallback()) {
-            OrginByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        else {
+            if (ProgramByCustomerCbPanel && !ProgramByCustomerCbPanel.InCallback()) {
+                ProgramByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (OrginByCustomerCbPanel && !OrginByCustomerCbPanel.InCallback()) {
+                OrginByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
+                DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (BrandByCustomerProgramCbPanel && !BrandByCustomerProgramCbPanel.InCallback()) {
+                BrandByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (ServiceModeByCustomerCbPanel && !ServiceModeByCustomerCbPanel.InCallback()) {
+                ServiceModeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (ProductTypeByCustomerCbPanel && !ProductTypeByCustomerCbPanel.InCallback()) {
+                ProductTypeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
+            if (reportTypeCtrl == null || (reportTypeCtrl != null && !(reportTypeCtrl.GetText() == "Price Charge" || reportTypeCtrl.GetText() == "Cost Charge"))) {
+                if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
+                    GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+                }
+            }
+            if (JobChannelByProgramCustomerCbPanel && !JobChannelByProgramCustomerCbPanel.InCallback()) {
+                JobChannelByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            }
         }
-        if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
-            DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        if (BrandByCustomerProgramCbPanel && !BrandByCustomerProgramCbPanel.InCallback()) {
-            BrandByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
-            GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        if (ServiceModeByCustomerCbPanel && !ServiceModeByCustomerCbPanel.InCallback()) {
-            ServiceModeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        if (ProductTypeByCustomerCbPanel && !ProductTypeByCustomerCbPanel.InCallback()) {
-            ProductTypeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        //if (JobStatusIdByCustomerProgramCbPanel && !JobStatusIdByCustomerProgramCbPanel.InCallback()) {
-        //    JobStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        //if (OrderTypeByCustomerProgramCbPanel && !OrderTypeByCustomerProgramCbPanel.InCallback()) {
-        //    OrderTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        //if (ScheduledByCustomerProgramCbPanel && !ScheduledByCustomerProgramCbPanel.InCallback()) {
-        //    ScheduledByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        if (JobChannelByProgramCustomerCbPanel && !JobChannelByProgramCustomerCbPanel.InCallback()) {
-            JobChannelByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
-        }
-        //if (DateTypeByCustomerProgramCbPanel && !DateTypeByCustomerProgramCbPanel.InCallback()) {
-        //    DateTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-    };
-    var _onDestinationByProgramCustomerCbPanelChange = function (s, e) {
-        //if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
-        //    DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        //if (ServiceModeByCustomerProgramCbPanel && !ServiceModeByCustomerProgramCbPanel.InCallback()) {
-        //    ServiceModeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
-        //if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
-        //    GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        //}
     };
     return {
         OnComboBoxInit: _onComboBoxInit,
@@ -745,7 +784,6 @@ DevExCtrl.ComboBox = function () {
         CustomerLocationCbPanelChange: _onCustomerLocationCbPanelChange,
         CustomerCardTileCbPanelChange: _onCustomerCardTileCbPanelChange,
         ProgramByCustomerCbPanelChange: _onProgramByCustomerCbPanelChange,
-        DestinationByProgramCustomerCbPanelChange: _onDestinationByProgramCustomerCbPanelChange,
     };
 }();
 
@@ -1571,8 +1609,38 @@ DevExCtrl.PopupControl = function () {
                 ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl').Hide();
             } else {
                 RecordPopupControl.Hide();
+                M4PLCommon.IsIgnoreClick = false;
             }
-        } else {
+        }
+
+        else if (RecordPopupControl.cpRoute.Entity == "JobXcblInfo" || RecordPopupControl.cpRoute.Entity == "JobGateway") {
+
+            var currentGrid = ASPxClientControl.GetControlCollection().GetByName("JobGatewayGridView");
+            if (currentGrid) {
+                var listOfElements = document.getElementsByClassName("dxgvBatchEditModifiedCell_Office2010Black");
+                if (listOfElements.length != 0) {
+                    var nextElement = $('#' + listOfElements[listOfElements.length - 1].closest('tr').id).next('tr').attr('id').match(/\d+$/);
+                    if (nextElement == null) {
+                        var currentElementIndex = listOfElements[listOfElements.length - 1].closest('tr').id.match(/\d+$/)[0];
+                    }
+                    else {
+                        var currentElementIndex = nextElement[0] - 1;
+                    }
+                    currentGrid.CancelEdit(currentElementIndex);
+                    ASPxClientControl.GetControlCollection().GetByName("btnSaveJobGatewayGridView").SetEnabled(false);
+                    ASPxClientControl.GetControlCollection().GetByName("btnCancelJobGatewayGridView").SetEnabled(false);
+                    $("#btnSaveJobGatewayGridView").addClass("noHover");
+                    $("#btnCancelJobGatewayGridView").addClass("noHover");
+                    M4PLWindow.PopupDataViewHasChanges[currentGrid] = false;
+                    M4PLWindow.DataViewsHaveChanges[currentGrid] = false;
+                }
+            }
+
+            RecordPopupControl.Hide();
+            M4PLCommon.IsIgnoreClick = false;
+        }
+
+        else {
             M4PLCommon.CallerNameAndParameters = { "Caller": _close, "Parameters": [] };
             M4PLCommon.CheckHasChanges.ShowConfirmation();
         }
@@ -1818,7 +1886,10 @@ DevExCtrl.PageControl = function () {
                     e.reloadContentOnCallback = true;
                 }
             }
-            else if (callbackRoute != null && callbackRoute.Action === "TabView" && (callbackRoute.Controller === "JobDocReference" || callbackRoute.Controller === "JobGateway")) {
+            else if (callbackRoute != null && callbackRoute.Action === "TabView" && callbackRoute.Controller === "JobGateway") {
+                //e.reloadContentOnCallback = true;
+            }
+            else if (callbackRoute != null && callbackRoute.Action === "TabView" && callbackRoute.Controller === "JobDocReference") {
                 e.reloadContentOnCallback = true;
             }
             else if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Program") {
@@ -1907,6 +1978,15 @@ DevExCtrl.ReportDesigner = function () {
         }
     }
 
+    var _endCallback = function (s, e) {
+
+        $("#VOCReport_Splitter_Viewer_ContentFrame")[0].contentWindow.document.body.onclick =
+            function () {
+                if (ASPxClientControl.GetControlCollection().GetByName("CustomerLocationCbPanelClosed")) {
+                    ASPxClientControl.GetControlCollection().GetByName("CustomerLocationCbPanelClosed").HideDropDown();
+                }
+            }
+    }
     var _customizeActions = function (s, e) {
         //add custom action
         e.Actions.push({
@@ -1922,6 +2002,7 @@ DevExCtrl.ReportDesigner = function () {
     return {
         OnExit: _onExit,
         InitViewer: _initViewer,
+        EndCallback: _endCallback,
         CustomizeActions: _customizeActions
     }
 }();
@@ -1937,43 +2018,22 @@ DevExCtrl.TokenBox = function () {
                     s.RemoveTokenByText(it.text);
             }
         }
+        var ctrlAnalystDriverResonsible = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver")
 
-        CallbackPanelAnalystResponsibleDriver.PerformCallback();
-
-        var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
-
-        if (ASPxClientControl.GetControlCollection().GetByName("JobJobGatewayTabView2GatewaysCbPanel")) {
-            var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
-            var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
-            var route = JSON.parse(strRoute);
-            route.Filters = {};
-            route.Filters.FieldName = JobSiteCode.GetValue();
-            if (index < 0)
-                route.Filters.FieldName = null;
-            JobJobGatewayTabView2GatewaysCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
-            JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+        if (ctrlAnalystDriverResonsible != null && ctrlAnalystDriverResonsible !== "undefined") {
+            ctrlAnalystDriverResonsible.PerformCallback();
         }
     }
 
-    var _init = function (s, e, CallbackPanelAnalystResponsibleDriver) {
-        var tokenCollection = s.GetTokenCollection();
-        var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
-        if (tokenCollection.length > 0) {
-            CallbackPanelAnalystResponsibleDriver.PerformCallback();
-            if (ASPxClientControl.GetControlCollection().GetByName("JobJobGatewayTabView2GatewaysCbPanel")) {
-                var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
-                var route = JSON.parse(strRoute);
-                route.Filters = {};
-                route.Filters.FieldName = JobSiteCode.GetValue();
-                if (index < 0)
-                    route.Filters.FieldName = null;
-                JobJobGatewayTabView2GatewaysCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
-                JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
-            }
-        }
+    var _driverPanelInit = function () {
+        var ctrlJobSiteCode = ASPxClientControl.GetControlCollection().GetByName("JobSiteCode");
+        var tokenCollection = ctrlJobSiteCode.GetTokenCollection();
+        var ctrlAnalystDriverResonsible = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver")
+        if (tokenCollection.length > 0 && ctrlAnalystDriverResonsible != null && ctrlAnalystDriverResonsible !== "undefined")
+            ctrlAnalystDriverResonsible.PerformCallback();
     }
     return {
         ValueChanged: _valueChanged,
-        Init: _init
+        DriverPanelInit: _driverPanelInit
     }
 }();

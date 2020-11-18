@@ -26,6 +26,7 @@ namespace M4PL.API.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<XCBLCommands>().As<IXCBLCommands>().InstancePerRequest();
+			builder.RegisterType<FarEyeCommands>().As<IFarEyeCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}

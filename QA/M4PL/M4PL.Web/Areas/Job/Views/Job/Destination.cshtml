@@ -1,0 +1,18 @@
+﻿@model M4PL.Entities.Support.MvcRoute
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlDestinationTabs";
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Destination";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.CallbackRouteValues = new { Controller = "Job", Action = "Destination", Area = "Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
+        Html.RenderAction("DeliveryTabView", "Job", new { Area = "Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) });
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()

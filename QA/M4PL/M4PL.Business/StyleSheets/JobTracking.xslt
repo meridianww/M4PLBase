@@ -1,7 +1,7 @@
 ﻿<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl">
-  <xsl:output method="xml" indent="yes"/>
-  <xsl:param name="ImagePath"/>
+  <xsl:output method="xml" indent="yes" />
+  <xsl:param name="ImagePath" />
   <xsl:template match="/">
     <html>
       <head>
@@ -40,15 +40,15 @@
                                   </xsl:attribute>
                                 </img>
                               </td>
-                              <td width ="25%" >
+                              <td width ="25%">
                                 <table width ="100%">
                                   <tr>
                                     <td width="15%" style="text-align: center;">
                                       <b> Tracking</b>
                                     </td>
-                                    <td >
+                                    <td>
                                     </td>
-                                    <td align="left" valign="middle" >
+                                    <td align="left" valign="middle">
                                     </td>
                                   </tr>
                                   <tr>
@@ -77,16 +77,16 @@
                     <tbody>
                       <tr>
                         <td  valign="top">
-                          <table cellpadding="0" cellspacing="0" >
-                            <tbody >
-                              <tr >
+                          <table cellpadding="0" cellspacing="0">
+                            <tbody>
+                              <tr>
                                 <td valign="top" align="left" style="width:206%;">
-                                  <table   >
+                                  <table>
                                     <tbody>
                                       <tr>
                                         <td style="width:21%;border : 1px solid black;">
 
-                                          <table border="0" width="100%" valign="top" align="left" >
+                                          <table border="0" width="100%" valign="top" align="left">
 
                                             <tbody>
                                               <tr>
@@ -102,7 +102,7 @@
                                                 <td  align="left">
                                                   <b>BOL Number : </b>
                                                 </td>
-                                                <td align="left" >
+                                                <td align="left">
                                                   <xsl:value-of select="JobTrackingDS/Header/BOLNumber" />
                                                 </td>
                                               </tr>
@@ -116,9 +116,8 @@
                                               </tr>
                                             </tbody>
                                           </table>
-
                                         </td>
-                                        <td style="width:21%;border : 1px solid black;"  >
+                                        <td style="width:21%;border : 1px solid black;">
                                           <div>
                                             <table border="0" width="100%" valign="top" align="left">
                                               <tbody>
@@ -374,7 +373,6 @@
                                                           </td>
                                                         </xsl:if>
                                                       </tr>
-
                                                     </tbody>
                                                   </table>
                                                 </td>
@@ -439,7 +437,7 @@
                                                 <td> </td>
                                                 <xsl:choose>
                                                   <xsl:when test="JobTrackingDS/Header/DestinationCity != ''">
-                                                    <td align="left" >
+                                                    <td align="left">
                                                       <xsl:value-of select="JobTrackingDS/Header/DestinationCity" /> , <xsl:value-of select="JobTrackingDS/Header/DestinationStateCode" /> <span> </span> <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text> <xsl:value-of select="JobTrackingDS/Header/DestinationPostalCode" />
                                                     </td>
                                                   </xsl:when>
@@ -505,7 +503,6 @@
                                                   </td>
                                                 </xsl:if>
                                               </tr>
-
                                             </tbody>
                                           </table>
                                         </td>
@@ -536,7 +533,6 @@
                           </table>
                         </td>
                       </tr>
-
 
                       <tr>
                         <td colspan="2" width="100%">
@@ -592,14 +588,12 @@
                                     <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="8%">
                                       <xsl:value-of select="Cubes" />
                                     </td>
-
                                   </tr>
                                 </xsl:for-each>
                               </tbody>
                             </table>
                           </div>
                         </td>
-
                       </tr>
                       <tr>
                         <td colspan="2" width="100%">
@@ -677,14 +671,14 @@
     <xsl:variable name="year">
       <xsl:value-of select="substring($DateTime,3,2)" />
     </xsl:variable>
-    <xsl:value-of select="$mo"/>
+    <xsl:value-of select="$mo" />
     <xsl:if test="$mo != ''">
       <b>/</b>
     </xsl:if>
-    <xsl:value-of select="$day"/>
+    <xsl:value-of select="$day" />
     <xsl:if test="$day != ''">
       <b>/</b>
     </xsl:if>
-    <xsl:value-of select="$year"/>
+    <xsl:value-of select="$year" />
   </xsl:template>
 </xsl:stylesheet>

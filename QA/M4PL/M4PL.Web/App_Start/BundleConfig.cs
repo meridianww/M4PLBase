@@ -44,11 +44,11 @@ namespace M4PL.Web
 				 "~/M4PLScripts/Job.js"
 				));
 
-			bundles.Add(new ScriptBundle("~/bundles/M4PLPopupWindow").Include(
-				"~/M4PLScripts/Common.js",
-				 "~/M4PLScripts/DevExControl.js",
-				  "~/Scripts/moment.js"
-				));
+			//bundles.Add(new ScriptBundle("~/bundles/M4PLPopupWindow").Include(
+			//	"~/M4PLScripts/Common.js",
+			//	 "~/M4PLScripts/DevExControl.js",
+			//	  "~/Scripts/moment.js"
+			//	));
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 				"~/Content/bootstrap.css",

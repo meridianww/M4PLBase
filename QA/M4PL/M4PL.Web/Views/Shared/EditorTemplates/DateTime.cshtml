@@ -18,7 +18,7 @@
     {
         if (!columnSetting.ColIsReadOnly)
         {
-            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll;
+            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditActuals;
         }
         @Html.DevExpress().DateEdit(settings =>
    {
@@ -41,7 +41,8 @@
 
        settings.Properties.CalendarProperties.ShowClearButton = false;
        settings.Properties.TimeSectionProperties.Visible = ViewData[WebApplicationConstants.EnableTimeSection] != null;
-
+       if (columnSetting.ColColumnName == "CgoDateLastScan")
+           settings.Properties.TimeSectionProperties.Visible = true;
        settings.Properties.AllowNull = true;
        settings.Properties.EditFormat = EditFormat.Custom;
        settings.Properties.NullText = columnSetting.ColAliasName;
@@ -85,10 +86,10 @@
                settings.Properties.TimeSectionProperties.TimeEditProperties.SpinButtons.Enabled = false;
            }
        }
-       else
-       {
-           settings.Properties.ClientSideEvents.DropDown = string.Format("function(s, e){{ DevExCtrl.DateEdit.Data_DropDown(s,e, '{0}'); }}", default(DateTime));
-       }
+       //else
+       //{
+       //    settings.Properties.ClientSideEvents.DropDown = string.Format("function(s, e){{ DevExCtrl.DateEdit.Data_DropDown(s,e, '{0}'); }}", default(DateTime));
+       //}
 
    }).Bind(Model.HasValue ? Model.Value : Model).GetHtml()
     }

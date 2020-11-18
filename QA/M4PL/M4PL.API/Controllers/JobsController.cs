@@ -22,6 +22,7 @@ using M4PL.Business.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Entities.XCBL.FarEye;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -152,7 +153,7 @@ namespace M4PL.API.Controllers
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.GetJobByProgram(id, parentId);
-        }
+		}
 
         /// <summary>
         /// Get the Destination detials by Job Id, if Job id is zero Pickup and delivery information from program
@@ -169,13 +170,28 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJobDestination(id, parentId);
         }
 
-        /// <summary>
-        /// Get the Origin , Delivery Site POC2 details , Origin and Delivery Address by Job Id and if job id is zero Pickup and Delivery Time Information from Parent will be returned
-        /// </summary>
-        /// <param name="id">Job Id</param>
-        /// <param name="parentId">Program Id</param>
-        /// <returns>Site POC 2 and Origin and Delivery Address</returns>
-        [CustomAuthorize]
+		/// <summary>
+		/// Get the Destination detials by Job Id, if Job id is zero Pickup and delivery information from program
+		/// </summary>
+		/// <param name="id">Job Id</param>
+		/// <param name="parentId">Program Id</param>
+		/// <returns>Job Destination details</returns>
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("Contact"), ResponseType(typeof(JobDestination))]
+		public JobContact GetJobContact(long id, long parentId)
+		{
+			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _jobCommands.GetJobContact(id, parentId);
+		}
+
+		/// <summary>
+		/// Get the Origin , Delivery Site POC2 details , Origin and Delivery Address by Job Id and if job id is zero Pickup and Delivery Time Information from Parent will be returned
+		/// </summary>
+		/// <param name="id">Job Id</param>
+		/// <param name="parentId">Program Id</param>
+		/// <returns>Site POC 2 and Origin and Delivery Address</returns>
+		[CustomAuthorize]
         [HttpGet]
         [Route("Poc")]
         public Job2ndPoc GetJob2ndPoc(long id, long parentId)
@@ -490,19 +506,32 @@ namespace M4PL.API.Controllers
 		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
 		[HttpPost]
 		[Route("CancelOrder"), ResponseType(typeof(StatusModel))]
-		public StatusModel CancelOrder(string orderNumber)
+		public StatusModel CancelOrder(CancelOrder cancelJob)
 		{
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.CancelJobByOrderNumber(orderNumber);
+            return _jobCommands.CancelJobByOrderNumber(cancelJob.OrderNumber, cancelJob.CancelComment, cancelJob.CancelReason);
 		}
 
-		/// <summary>
-		/// Reschedule a Existing Order From Meridian System
-		/// </summary>
-		/// <param name="jobRescheduleDetail">jobRescheduleDetail</param>
-		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
-		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
-		[HttpPost]
+        /// <summary>
+        /// Uncancel an existing Order from Meridian System
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+        [HttpPost]
+        [Route("UnCancelOrder"), ResponseType(typeof(StatusModel))]
+        public StatusModel UnCancelOrder(UnCancelOrder unCancelOrder)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.UnCancelJobByOrderNumber(unCancelOrder.OrderNumber, unCancelOrder.UnCancelReason, unCancelOrder.UnCancelComment);
+        }
+
+        /// <summary>
+        /// Reschedule a Existing Order From Meridian System
+        /// </summary>
+        /// <param name="jobRescheduleDetail">jobRescheduleDetail</param>
+        /// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+        /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+        [HttpPost]
 		[Route("RescheduleOrder"), ResponseType(typeof(StatusModel))]
 		public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber)
 		{
@@ -511,30 +540,30 @@ namespace M4PL.API.Controllers
 			return _jobCommands.RescheduleJobByOrderNumber(jobRescheduleDetail, orderNumber, sysSetting);
 		}
 
-		/// <summary>
-		/// Return the location cordinates for a Order from Meridian System
+        /// <summary>
+		/// Reschedule a Existing Order From Meridian System
 		/// </summary>
-		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
-		/// <returns>API returns a Model object which contains the details about success or failure with Latitude and Longitude, in case of failure AdditionalDetail property contains the reson of failure.</returns>
-		[HttpGet]
+		/// <param name="driverContact">driverContact</param>
+		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+		[HttpPost]
+        [Route("AddDriver"), ResponseType(typeof(StatusModel))]
+        public StatusModel AddDriver(DriverContact driverContact)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.AddDriver(driverContact);
+        }
+
+        /// <summary>
+        /// Return the location cordinates for a Order from Meridian System
+        /// </summary>
+        /// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+        /// <returns>API returns a Model object which contains the details about success or failure with Latitude and Longitude, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+        [HttpGet]
 		[Route("LocationCoordinate"), ResponseType(typeof(OrderLocationCoordinate))]
 		public OrderLocationCoordinate LocationCoordinate(string orderNumber)
 		{
 			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _jobCommands.GetOrderLocationCoordinate(orderNumber);
-		}
-
-		/// <summary>
-		/// Return the current status of a Order from Meridian System
-		/// </summary>
-		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
-		/// <returns>API returns a Model object which contains the details about success or failure with Order Status, in case of failure AdditionalDetail property contains the reson of failure.</returns>
-		[HttpGet]
-		[Route("OrderStatus"), ResponseType(typeof(OrderStatusModel))]
-		public OrderStatusModel GetOrderStatus(string orderNumber)
-		{
-			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-			return _jobCommands.GetOrderStatus(orderNumber);
 		}
 
 		/// <summary>

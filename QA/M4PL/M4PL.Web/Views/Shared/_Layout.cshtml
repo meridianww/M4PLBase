@@ -18,12 +18,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <title>@ViewBag.Title</title>
 
-    @Scripts.Render("~/bundles/jquery" + WebUtilities.GetBundlingVersion())
-    @Scripts.Render("~/bundles/modernizr" + WebUtilities.GetBundlingVersion())
-    @Scripts.Render("~/bundles/unobtrusive" + WebUtilities.GetBundlingVersion())
-    @Scripts.Render("~/bundles/bootstrap" + WebUtilities.GetBundlingVersion())
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/unobtrusive")
+    @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/M4PLWindow" + WebUtilities.GetBundlingVersion())
-
     @Html.DevExpress().GetStyleSheets(
             new StyleSheet { ExtensionSuite = ExtensionSuite.Icons },
             new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
@@ -39,17 +38,17 @@
         )
 
     @Html.DevExpress().GetScripts(
-        new Script { ExtensionSuite = ExtensionSuite.Icons },
-        new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-        new Script { ExtensionSuite = ExtensionSuite.SpellChecker },
-        new Script { ExtensionSuite = ExtensionSuite.RichEdit },
-        new Script { ExtensionSuite = ExtensionSuite.Editors },
-        new Script { ExtensionSuite = ExtensionSuite.Spreadsheet },
-        new Script { ExtensionSuite = ExtensionSuite.GridView },
-        new Script { ExtensionSuite = ExtensionSuite.CardView },
-        new Script { ExtensionSuite = ExtensionSuite.TreeList },
-        new Script { ExtensionSuite = ExtensionSuite.Dashboard },
-        new Script { ExtensionSuite = ExtensionSuite.Report }
+            new Script { ExtensionSuite = ExtensionSuite.Icons },
+            new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+            new Script { ExtensionSuite = ExtensionSuite.SpellChecker },
+            new Script { ExtensionSuite = ExtensionSuite.RichEdit },
+            new Script { ExtensionSuite = ExtensionSuite.Editors },
+            new Script { ExtensionSuite = ExtensionSuite.Spreadsheet },
+            new Script { ExtensionSuite = ExtensionSuite.GridView },
+            new Script { ExtensionSuite = ExtensionSuite.CardView },
+            new Script { ExtensionSuite = ExtensionSuite.TreeList },
+            new Script { ExtensionSuite = ExtensionSuite.Dashboard },
+            new Script { ExtensionSuite = ExtensionSuite.Report }
     )
 
     @Styles.Render("~/Content/css" + WebUtilities.GetBundlingVersion())

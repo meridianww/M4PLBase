@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,76 +25,76 @@ using _commands = M4PL.DataAccess.Scanner.ScnCargoDetailCommands;
 
 namespace M4PL.Business.Scanner
 {
-    public class ScnCargoDetailCommands : BaseCommands<Entities.Scanner.ScnCargoDetail>, IScnCargoDetailCommands
-    {
-        /// <summary>
-        /// Get list of ScnCargoDetails data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<Entities.Scanner.ScnCargoDetail> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class ScnCargoDetailCommands : BaseCommands<Entities.Scanner.ScnCargoDetail>, IScnCargoDetailCommands
+	{
+		/// <summary>
+		/// Get list of ScnCargoDetails data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<Entities.Scanner.ScnCargoDetail> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific ScnCargoDetail record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific ScnCargoDetail record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public Entities.Scanner.ScnCargoDetail Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public Entities.Scanner.ScnCargoDetail Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Creates a new ScnCargoDetail record
-        /// </summary>
-        /// <param name="scnCargoDetail"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new ScnCargoDetail record
+		/// </summary>
+		/// <param name="scnCargoDetail"></param>
+		/// <returns></returns>
 
-        public Entities.Scanner.ScnCargoDetail Post(Entities.Scanner.ScnCargoDetail scnCargoDetail)
-        {
-            return _commands.Post(ActiveUser, scnCargoDetail);
-        }
+		public Entities.Scanner.ScnCargoDetail Post(Entities.Scanner.ScnCargoDetail scnCargoDetail)
+		{
+			return _commands.Post(ActiveUser, scnCargoDetail);
+		}
 
-        /// <summary>
-        /// Updates an existing ScnCargoDetail record
-        /// </summary>
-        /// <param name="scnCargoDetail"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing ScnCargoDetail record
+		/// </summary>
+		/// <param name="scnCargoDetail"></param>
+		/// <returns></returns>
 
-        public Entities.Scanner.ScnCargoDetail Put(Entities.Scanner.ScnCargoDetail scnCargoDetail)
-        {
-            return _commands.Put(ActiveUser, scnCargoDetail);
-        }
+		public Entities.Scanner.ScnCargoDetail Put(Entities.Scanner.ScnCargoDetail scnCargoDetail)
+		{
+			return _commands.Put(ActiveUser, scnCargoDetail);
+		}
 
-        /// <summary>
-        /// Deletes a specific ScnCargoDetail record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific ScnCargoDetail record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of ScnCargoDetails records
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of ScnCargoDetails records
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
-        public ScnCargoDetail Patch(ScnCargoDetail entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public ScnCargoDetail Patch(ScnCargoDetail entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

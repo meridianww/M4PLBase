@@ -18,11 +18,13 @@
 //====================================================================================================================================================*/
 
 using M4PL.API.Filters;
+using M4PL.API.Handlers;
 using M4PL.API.Models;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities.Logger;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -66,6 +68,14 @@ namespace M4PL.API.Controllers
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetRibbonMenus(forceUpdate).AsQueryable();
+        }
+
+        [HttpGet]
+        [Route("BusinessConfiguration")]
+        public BusinessConfiguration GetBusinessConfiguration(bool forceUpdate = false)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetBusinessConfiguration(forceUpdate);
         }
 
         [HttpGet]
@@ -122,6 +132,15 @@ namespace M4PL.API.Controllers
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetGridColumnSettingsByEntityAlias(entity, forceUpdate, isGridSetting).AsQueryable();
+        }
+
+        [HttpGet]
+        [CustomQueryable]
+        [Route("GetJobReportColumnRelation")]
+        public IQueryable<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetJobReportColumnRelation(reportTypeId).AsQueryable();
         }
 
         [HttpGet]
@@ -245,6 +264,31 @@ namespace M4PL.API.Controllers
             return _command.GetUserSecurities(activeUser).AsQueryable();
         }
 
+        /// <summary>
+        /// GetUserSecurities
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [CustomQueryable]
+        [Route("UserSecurity")]
+        public IQueryable<UserSecurity> GetUserSecurities()
+        {
+            _command.ActiveUser = Common.GetActiveUser();
+            return _command.GetUserSecurities(_command.ActiveUser).AsQueryable();
+        }
+
+        /// <summary>
+        /// GetUserSecurities
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [CustomQueryable]
+        [Route("JobPermissions")]
+        public M4PL.Entities.JobService.JobPermission GetJobPermissions()
+        {
+            _command.ActiveUser = Common.GetActiveUser();
+            return _command.GetJobPermissions(_command.ActiveUser, GetTables(true).ToList());
+        }
         [HttpPost]
         [CustomQueryable]
         [Route("RefRoleSecurities")]
@@ -542,14 +586,25 @@ namespace M4PL.API.Controllers
         /// job gateways by jobid
         /// </summary>
         /// <param name="jobId"></param>
+        /// <param name="jobIds"></param>
+        /// <param name="IsMultiJob"></param>
         /// <returns></returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("GetJobGateway")]
-        public IQueryable<JobGatewayDetails> GetJobGateway(long jobId)
+        public IQueryable<JobGatewayDetails> GetJobGateway(long jobId, string jobIds = null, bool IsMultiJob = false)
         {
             _command.ActiveUser = Models.ApiContext.ActiveUser;
-            return _command.GetJobGateway(jobId).AsQueryable();
+            return _command.GetJobGateway(jobId, jobIds, IsMultiJob).AsQueryable();
+        }
+
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("InsertErrorLog")]
+        public bool InsertErrorLog(M4PLException m4plException)
+        {
+            _command.ActiveUser = Models.ApiContext.ActiveUser;
+            return _command.InsertErrorLog(m4plException);
         }
     }
 }

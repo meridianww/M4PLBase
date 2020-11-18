@@ -14,10 +14,19 @@ namespace M4PL.Entities.XCBL.Electrolux.OrderRequest
     [XmlRoot(ElementName = "OrderDescription")]
     public class OrderDescription
     {
+        /// <summary>
+        /// Gets or Sets Order Description
+        /// </summary>
         [XmlElement(ElementName = "DescriptionText")]
         public string DescriptionText { get; set; }
+        /// <summary>
+        /// Gets or Sets PickTicketIndicator
+        /// </summary>
         [XmlElement(ElementName = "pickTicketIndicator")]
         public string PickTicketIndicator { get; set; }
+        /// <summary>
+        /// Gets or Sets Bill of Lading Indicator
+        /// </summary>
         [XmlElement(ElementName = "billOfLadingIndicator")]
         public string BillOfLadingIndicator { get; set; }
     }

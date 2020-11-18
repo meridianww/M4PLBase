@@ -32,9 +32,9 @@ body {
     padding-left: 0px;
 }
 
-div#JobSiteCode_DDD_PW-1[style] {
+/*div#JobSiteCode_DDD_PW-1[style] {
     padding: 0 !important;
-}
+}*/
 
 .headerPane {
     background-color: #EDEDED;
@@ -50,7 +50,7 @@ div#JobSiteCode_DDD_PW-1[style] {
 #ReportDesigner .dx-popup-wrapper {
     position: fixed !important;
 }
-
+/*
 #JobSiteCode_ET.dxeRoot_Office2010Black > table {
     border-collapse: collapse;
     overflow: auto;
@@ -68,7 +68,7 @@ div#JobSiteCode_DDD_PW-1 > div > div.dxpc-contentWrapper {
 
 div#JobSiteCode_DDD_L_D {
     height: auto !important;
-}
+}*/
 
 .dxrd-wizard .dxrd-wizard-content .dxrd-report-type-page {
     margin-top: 2% !important;
@@ -704,6 +704,10 @@ label {
     width: 232px;
 }
 
+.col-fixed-35 {
+    width: 280px;
+}
+
 .col-fixed-45 {
     width: 360px;
 }
@@ -734,6 +738,10 @@ label {
 
 .col-fixed-75 {
     width: 553px;
+}
+
+.col-fixed-80 {
+    width: 580px;
 }
 
 .col-fixed-21p {
@@ -4787,12 +4795,20 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         width: 749px !important;
     }
 
+     .prgEventManagement-grouping {
+        width: 100%;
+    }
+
     .billable-rate {
         width: 436px;
     }
 
     .prog-castrate-code {
         width: 137px;
+    }
+
+    .prgEventManagement-castrate-code {
+        width: 100%;
     }
 
     .expression01-logic {
@@ -5078,4 +5094,17 @@ div#btnCardRefresh {
      #JobDriverAlert_I{
 		 height : 21px !important;
 	 }
+}
+
+.marRight30 {
+    margin-right: 30px !important;
+}
+
+.marRight25 {
+    margin-right: 25px !important;
+}
+
+#pageControl_LPV{
+    width:7% !important;
+    border:none;
 }

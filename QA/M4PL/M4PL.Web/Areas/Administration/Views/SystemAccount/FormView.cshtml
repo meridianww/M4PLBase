@@ -102,6 +102,44 @@
     });
 }).GetHtml()
 
+    @*@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlSysCardMapping";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Card Mapping";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.NotScheduleInTransit).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.NotScheduleOnHand).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.NotScheduleOnTruck).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.NotScheduleReturn).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.SchedulePastDueInTransit).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.SchedulePastDueOnHand).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.SchedulePastDueOnTruck).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.SchedulePastDueReturn).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.ScheduleForTodayInTransit).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.ScheduleForTodayOnHand).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.ScheduleForTodayOnTruck).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.ScheduleForTodayReturn).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.xCBLAddressChanged).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.xCBL48HoursChanged).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.EditorFor(m => m.Record.NoPODCompletion).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()*@
     @Html.DevExpress().RoundPanel(settings =>
 {
     settings.Name = "pnlSysComment";

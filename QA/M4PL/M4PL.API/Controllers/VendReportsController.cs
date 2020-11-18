@@ -27,6 +27,9 @@ using M4PL.API.Filters;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// This Controller handles DB operations for Vendor Reports
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/VendReports")]
 	public class VendReportsController : ApiController
@@ -44,11 +47,9 @@ namespace M4PL.API.Controllers
 		}
 
         /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
+        /// Gets the Page Data(RecordSet) to feed the DataGrid
         /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -64,7 +65,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Get method gets the single record based on numeric Id parameter passed for the vendReport.
         /// </summary>
-        /// <param name="id">Refer to  Record Id as numeric value.</param>
+        /// <param name="id">Refer to  Report Id as numeric value. (refers to SYSTM000Ref_Report table Id)</param>
         /// <returns>Returns response as single object.</returns>
         [HttpGet]
         //[Route("{id}")]
@@ -77,7 +78,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Post method is used to add a new single record for new vendReport object passed as parameter.
         /// </summary>
-        /// <param name="vendReport">Refers to vendReport object to add.</param>
+        /// <param name="vendReport"></param>
         /// <returns>Returns response as object newly added.</returns>
         [HttpPost]
         public virtual VendReport Post(VendReport vendReport)
@@ -89,7 +90,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Put method is used to update record values completely based on vendReport object passed.
         /// </summary>
-        /// <param name="vendReport">Refers to vendReport object to update.</param>
+        /// <param name="vendReport"></param>
         /// <returns>Returns updated single object.</returns>
         [HttpPut]
         public virtual VendReport Put(VendReport vendReport)
@@ -101,7 +102,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Delete method is used to make a single record archive.
         /// </summary>
-        /// <param name="id">Refers to numeric value of record to archive.</param>
+        /// <param name="id">Refers to numeric value of record to archive. (refers to SYSTM000Ref_Report table Id)</param>
         /// <returns>Returns response as numeric value.</returns>
         [HttpDelete]
         protected virtual int Delete(long id)
@@ -127,7 +128,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Patch method is used to update partially or completely record values based on vendReport object passed.
         /// </summary>
-        /// <param name="vendReport">Refers object to update.</param>
+        /// <param name="vendReport"></param>
         /// <returns>Returns response as updated single object.</returns>
         [HttpPatch]
         public virtual VendReport Patch(VendReport vendReport)

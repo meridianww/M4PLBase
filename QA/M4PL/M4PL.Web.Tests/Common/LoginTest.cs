@@ -32,19 +32,13 @@ namespace M4PL.Web.Tests.Common
         public static void loginToApplication(string UserName, string Password, ChromeDriver driver)
         {
 
-            driver.Navigate().GoToUrl("http://172.30.244.22:2453/");
-            Thread.Sleep(1000);
+            driver.Navigate().GoToUrl("http://172.30.255.53:2453/");
             driver.Manage().Window.Maximize();
-
-
-
             driver.FindElementById(Login.Email_Id).SendKeys(UserName);
             driver.FindElementById(Login.Password_Field).SendKeys(Password);
             driver.FindElementById(Login.Login_Btn).Click();
-            Thread.Sleep(6000);
             String expectedText = "Welcome, Diksha";
             Assert.AreEqual("Welcome, Diksha", expectedText);
-
         }
 
         public static void InvalidLogin(string userName, string password, ChromeDriver driver)

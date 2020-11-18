@@ -41,8 +41,8 @@
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
     //settings.ControlStyle.CssClass = "gridfields-text-visible";
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
-    settings.SettingsCookies.Enabled = true;
-    settings.SettingsCookies.StoreColumnsWidth = true;
+    settings.SettingsCookies.Enabled = false;
+    settings.SettingsCookies.StoreColumnsWidth = false;
     settings.SettingsCookies.StorePaging = false;
     settings.SettingsCookies.StoreGroupingAndSorting = false;
 
@@ -223,7 +223,8 @@
                             }
                             else
                             {
-                                var modelRecords = (IEnumerable<JobCostSheetView>)Model.Records;
+                                var modelRecords = (IEnumerable<JobCostSheetView>
+    )Model.Records;
                                 if (modelRecords.Any())
                                 {
                                     var modelRecord = modelRecords.FirstOrDefault();
@@ -253,15 +254,22 @@
                 else if (colSetting.DataType.Equals(SQLDataTypes.datetime2.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
-                    column.ColumnType = MVCxGridViewColumnType.DateEdit;
-                    column.PropertiesEdit.DisplayFormatString = colSetting.ColDisplayFormat;
+                    //column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                    column.PropertiesEdit.DisplayFormatString = colSetting.ColDisplayFormat;                   
+                    column.EditorProperties().DateEdit(dtEdit =>
+                    {
+                        column.PropertiesEdit.DisplayFormatString = colSetting.ColDisplayFormat;
+                        //if (colSetting.ColColumnName == "CgoDateLastScan")
+                        dtEdit.TimeSectionProperties.Visible = true;
+                    });
 
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands && colSetting.ColColumnName != SysRefTabPageNameColumns.TabTableName.ToString())
                 {
                     column.SetFilterTemplateContent(lookup =>
                     {
-                        var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
+                        var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>
+                            )(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
                         //if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
                         //{
                         //    var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysStatusesIn);
@@ -271,7 +279,8 @@
                         //        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
                         //    }
                         //}
-                        var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
+                        var allFilters = (Dictionary<string, string>
+                            )ViewData[MvcConstants.Filters];
                         string relatedValue = null;
                         allFilters.TryGetValue(column.FieldName, out relatedValue);
                         ViewContext.Writer.Write(Html.DevExpress().ComboBox(cs =>

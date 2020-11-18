@@ -28,6 +28,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for Program Vendor Locations
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/PrgVendLocations")]
 	public class PrgVendLocationsController : ApiController
@@ -44,12 +47,8 @@ namespace M4PL.API.Controllers
 			_prgVendLocationCommands = prgVendLocationCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -143,7 +142,11 @@ namespace M4PL.API.Controllers
 		{
 			return _prgVendLocationCommands.ProgramVendorTree(Models.ApiContext.ActiveUser, Models.ApiContext.ActiveUser.OrganizationId, isAssignedprgVendor, programId, parentId, isChild).AsQueryable();
 		}
-
+        /// <summary>
+        /// Maps Vendor Locations to a program
+        /// </summary>
+        /// <param name="programVendorMap"></param>
+        /// <returns></returns>
 		[CustomAuthorize]
 		[HttpPost]
 		[Route("MapVendorLocations")]

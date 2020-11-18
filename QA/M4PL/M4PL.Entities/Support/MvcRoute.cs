@@ -91,6 +91,7 @@ namespace M4PL.Entities.Support
             IsPBSReport = route.IsPBSReport;
             IsEdit = route.IsEdit;
             IsJobParentEntityUpdated = route.IsJobParentEntityUpdated;
+            JobIds = route.JobIds;
         }
 
         public MvcRoute(MvcRoute route, string action, long? companyId) : this(route)
@@ -109,54 +110,30 @@ namespace M4PL.Entities.Support
         /// Entity Name
         /// </summary>
         public EntitiesAlias Entity { get; set; }
-
         /// <summary>
         /// Area if any
         /// </summary>
         public string Area { get; set; }
-
         public long RecordId { get; set; }
-
         public long? PreviousRecordId { get; set; }
-
         public long ParentRecordId { get; set; }
-
         public string EntityName { get; set; }
-
         public Filter Filters { get; set; }
-
         public bool IsPopup { get; set; }
-
         public string Controller { get { return Entity.ToString(); } }
-
         public string Url { get; set; }
-
         public EntitiesAlias ParentEntity { get; set; }
-
         public string OwnerCbPanel { get; set; }
-
         public int TabIndex { get; set; }
-
         public long RecordIdToCopy { get; set; }
-
         public long? CompanyId { get; set; }
-
         public List<string> Location { get; set; }
-
+        public List<string> JobIds { get; set; }
         public System.DateTime? StartDate { get; set; }
-
         public System.DateTime? EndDate { get; set; }
-
         public bool IsPBSReport { get; set; }
         public bool IsEdit { get; set; }
-
-        //public long DashCategoryRelationId { get; set; }
-
-        //public bool IsJobCardEntity { get; set; }
-        //public long CustomerId { get; set; }
-
-        //public bool IsDataView { get; set; }
-
         public bool IsJobParentEntityUpdated { get; set; }
+        public bool IsJGWYOpen { get; set; }
     }
 }

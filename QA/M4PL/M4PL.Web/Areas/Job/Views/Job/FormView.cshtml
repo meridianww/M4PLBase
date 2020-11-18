@@ -17,10 +17,27 @@
     var IsJobDocReferenceTypeActive = false;
 
     ViewBag.Title = Model.PageName;
-
-    var responsibleContactDropDownModel = Model.Record.JobDeliveryResponsibleContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryResponsibleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
-    responsibleContactDropDownModel.EntityFor = EntitiesAlias.PPPJobRespContact;
-    responsibleContactDropDownModel.ParentEntity = EntitiesAlias.Job;
+    if (Model.SessionProvider.ActiveUser.IsSysAdmin)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOrderedDate").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobShipmentDate").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimeBaseline").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimePlanned").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimeActual").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "WindowPckStartTime").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "WindowPckEndTime").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeBaseline").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimePlanned").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeActual").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "WindowDelStartTime").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "WindowDelEndTime").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "StatusId").ColIsReadOnly = false;
+    }
+    else if(Model.Permission == Permission.EditActuals)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimeActual").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeActual").ColIsReadOnly = false;
+    }
 
     var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
     tabRoute.Url = tabRoute.ParentRecordId.ToString();
@@ -28,24 +45,13 @@
     if (Session["tabName"] != null)
     {
         var jobDocReferenceType = (JobDocReferenceType)Enum.Parse(typeof(JobDocReferenceType), (string)Session["tabName"], true);
-        if (jobDocReferenceType == JobDocReferenceType.Document || jobDocReferenceType == JobDocReferenceType.POD || jobDocReferenceType == JobDocReferenceType.Damaged)
+        if (jobDocReferenceType == JobDocReferenceType.Document || jobDocReferenceType == JobDocReferenceType.POD || jobDocReferenceType == JobDocReferenceType.Damaged || jobDocReferenceType == JobDocReferenceType.Approval || jobDocReferenceType == JobDocReferenceType.Image || jobDocReferenceType == JobDocReferenceType.Signature)
         {
             IsJobDocReferenceTypeActive = true;
             tabRoute.TabIndex = 2;
         }
     }
-    var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model,
-(Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
-: (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId), Model.Record.CompanyId);
-    analystContactDropDownModel.EntityFor = EntitiesAlias.PPPJobAnalystContact;
-    analystContactDropDownModel.ParentEntity = EntitiesAlias.Job;
 
-    var driverContactDropDownModel = Model.Record.JobDriverId.GetValueOrDefault().GetContactDropDown("JobDriverId", Model,
-        (Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
-        : (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId)
-        , Model.Record.CompanyId);
-    driverContactDropDownModel.EntityFor = EntitiesAlias.JobDriverContactInfo;
-    driverContactDropDownModel.ParentEntity = EntitiesAlias.Job;
     var columnSetting = Model.ColumnSettings.FirstOrDefault("JobSiteCode");
     var changeEvent = "function(s,e,extnNameOrSuffix,tabNames){ M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "');}";
     var changeEventWithCheckDateValid = "M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "'); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
@@ -59,11 +65,12 @@
     {
         programDropdown.IsReadOnly = true;
     }
-
+    var uriQueryString = HttpContext.Current.Request.QueryString["jobId"];
+    var isReboonRequired = uriQueryString != null && !string.IsNullOrEmpty(uriQueryString) ? false : true;
+  
 }
 
-@if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity)
-                                        && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
+@if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity) && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
 {
     <div class='col-lg-12 col-md-12 col-sm-12 form-group' style='padding-bottom: 0px;height:45px;background-color:#808080;color:#ffffff;line-height:45px;font-weight:bold;font-size:18px;'>
         <div class='col-lg-6 col-md-10 col-sm-6 form-group'>
@@ -84,10 +91,10 @@
 }
 else
 {
-    if (!isRequiredNavPanel)
+    @*if (!isRequiredNavPanel)
     {
         @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
-    }
+    }*@
 }
 
 @if (Model != null && Model.Record != null && Model.Record.ProgramID > 0)
@@ -128,9 +135,15 @@ else
                        tokensettings.Properties.IncrementalFilteringDelay = 500;
                        tokensettings.Properties.CaptionSettings.ShowColon = false;
                        tokensettings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                       if (Model.Permission <= Permission.ReadOnly)
+                       {
+                           tokensettings.ReadOnly = true;
+                           tokensettings.ControlStyle.CssClass = "readonlyBgColor";
+                           ViewData["jobSiteCode"] = null;
+                       }
+
                        tokensettings.Properties.Caption = columnSetting.ColAliasName;
-                       tokensettings.Properties.ClientSideEvents.ValueChanged = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.ValueChanged(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
-                       tokensettings.Properties.ClientSideEvents.Init = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.Init(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
+                       tokensettings.Properties.ClientSideEvents.ValueChanged = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.ValueChanged(s, e, '{0}')}}", string.Format("CallbackPanelAnalystResponsibleDriver"));                  
                        tokensettings.Name = "JobSiteCode";
                    }).BindList(ViewData["jobSiteCode"]).GetHtml() + "</div>");
                    ViewContext.Writer.Write("</div>");
@@ -181,9 +194,10 @@ else
                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
                    ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobServiceActual).ToHtmlString() + "</div>");
                    ViewContext.Writer.Write("</div>");
-
-                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, "MultilineText").ToHtmlString() + "</div>");
-
+                   if (Model.Permission > Permission.ReadOnly)
+                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, "MultilineText").ToHtmlString() + "</div>");
+                   else
+                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, new { IsReadOnly = true }).ToHtmlString() + "</div>");
                    //ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
 
                    ViewContext.Writer.Write("</div>");
@@ -216,119 +230,10 @@ else
         </div>
 
         <div class="col-sm-12 col-md-12 col-lg-12  no-padding">
-            @Html.DevExpress().RoundPanel(settings =>
-       {
-           settings.Name = "pnlContactStatusDetail";
-           settings.Width = Unit.Percentage(100);
-           settings.AllowCollapsingByHeaderClick = true;
-           settings.ShowCollapseButton = true;
-           settings.HeaderText = "Analyst,Responsible and Driver Details";
-           settings.Collapsed = true;
-           settings.ControlStyle.CssClass = "form-layout";
-           settings.SetContent(() =>
-           {
-               ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 team-div no-padding'>");
-               @Html.DevExpress().FormLayout(
-                               contactEmailsettings =>
-                               {
-                                   contactEmailsettings.Name = "AnalystTeamMemberResponsible";
-                                   contactEmailsettings.ControlStyle.CssClass = "team-analyst";
-
-                                   contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
-                                   {
-                                       cEmailsettings.Caption = "Team Member Analyst";
-                                       cEmailsettings.Items.Add(n =>
-                                       {
-                                           n.Caption = "";
-                                           n.SetNestedContent(() =>
-                                           {
-                                               ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
-                                               ViewContext.Writer.Write(Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(analystContactDropDownModel) }));
-                                               ViewContext.Writer.Write("</div>");
-
-                                           });
-                                       });
-                                   });
-                               }
-                           ).GetHtml();
-               ViewContext.Writer.Write("</div>");
-
-               ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 team-div no-padding'>");
-               @Html.DevExpress().FormLayout(
-                               contactEmailsettings =>
-                               {
-                                   contactEmailsettings.Name = "TeamMemberResponsible";
-                                   contactEmailsettings.ControlStyle.CssClass = "team-member";
-
-                                   contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
-                                   {
-                                       cEmailsettings.Caption = "Team Member Responsible";
-                                       cEmailsettings.Items.Add(n =>
-                                       {
-                                           n.Caption = "";
-                                           n.SetNestedContent(() =>
-                                           {
-                                               ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
-                                               ViewContext.Writer.Write(Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(responsibleContactDropDownModel) }));
-                                               ViewContext.Writer.Write("</div>");
-
-                                           });
-                                       });
-                                   });
-                               }
-                           ).GetHtml();
-               ViewContext.Writer.Write("</div>");
-
-               ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 team-div no-padding'>");
-
-               @Html.DevExpress().FormLayout(
-                       contactEmailsettings =>
-                       {
-                           contactEmailsettings.Name = "JobDriverPanel";
-                           contactEmailsettings.ControlStyle.CssClass = "team-driver";
-
-                           contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
-                           {
-                               cEmailsettings.Caption = "Job Driver";
-                               cEmailsettings.Items.Add(n =>
-                               {
-                                   n.Caption = "";
-                                   n.SetNestedContent(() =>
-                                   {
-                                       ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
-                                       ViewContext.Writer.Write(Html.Action("JobDriverPartial", M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(driverContactDropDownModel) }));
-                                       ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member job-rout'>" + Html.EditorFor(m => m.Record.JobRouteId).ToHtmlString() + "</div>");
-                                       ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member'>" + Html.EditorFor(m => m.Record.JobStop).ToHtmlString() + "</div>");
-                                       ViewContext.Writer.Write("</div>");
-
-                                   });
-                               });
-                           });
-                       }
-                   ).GetHtml();
-               ViewContext.Writer.Write("</div>");
-           });
-       }).GetHtml()
+          @Html.Partial("JobContact", Model.CallBackRoute)
         </div>
 
-        @Html.DevExpress().RoundPanel(settings =>
-           {
-               settings.Name = "pnlDestinationTabs";
-               settings.Width = Unit.Percentage(100);
-               settings.AllowCollapsingByHeaderClick = true;
-               settings.ShowCollapseButton = true;
-               settings.HeaderText = "Destination";
-               settings.Collapsed = true;
-               settings.ControlStyle.CssClass = "form-layout";
-               settings.SetContent(() =>
-               {
-                   ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
-                   Html.RenderAction("DeliveryTabView", Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) });
-
-                   ViewContext.Writer.Write("</div>");
-
-               });
-           }).GetHtml()
+        @Html.Partial("Destination", tabRoute)
 
         @Html.DevExpress().RoundPanel(settings =>
     {
@@ -375,7 +280,7 @@ else
                         ).GetHtml();
             ViewContext.Writer.Write("</div>");
 
-            ViewContext.Writer.Write("<div class='col-md-6 col-lg-6 received-window style='margin-left:-30px'>");
+            ViewContext.Writer.Write("<div class='col-md-6 col-lg-6 received-window' style='margin-left:-30px'>");
             @Html.DevExpress().FormLayout(
                                originPickupsettings =>
                                {
@@ -444,7 +349,7 @@ else
                            ).GetHtml();
             ViewContext.Writer.Write("</div>");
 
-            ViewContext.Writer.Write("<div class='col-md-6 col-lg-6 delivery-window style='margin-left:-30px'>");
+            ViewContext.Writer.Write("<div class='col-md-6 col-lg-6 delivery-window' style='margin-left:-30px'>");
 
             @Html.DevExpress().FormLayout(
                                       contactEmailsettings =>
@@ -516,7 +421,8 @@ else
         });
     }).GetHtml()
 
-        @Html.Action(MvcConstants.ActionTabViewCallBack, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) })
+        @Html.Partial("Tracking", tabRoute)
+        @*@Html.Action(MvcConstants.ActionTabViewCallBack, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) })*@
 
         <div class="col-sm-12 col-md-12 col-lg-12  no-padding">
             @Html.DevExpress().RoundPanel(settings =>
@@ -555,13 +461,13 @@ else
                    settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
                    settings.AllowFocus = false;
                    settings.ControlStyle.CssClass = "form-btn pull-right";
-                   settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+                   settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditActuals) : !(Model.Permission < Permission.EditActuals);
                    settings.ClientSideEvents.Click = Model.SubmitClick;
                    settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
                }).GetHtml()
                 </div>
                 <div class="col-md-2">
-                    @if (!Model.CallBackRoute.IsPBSReport)
+                    @if (!Model.CallBackRoute.IsPBSReport && isReboonRequired)
                     {
                         @Html.DevExpress().Button(settings =>
                               {
@@ -610,7 +516,7 @@ else
 {
     <script>
         $(document).ready(function () {
-            M4PLCommon.DocumentStatus.DisplayMessage("Invalid", "The job you are trying to search does not exist, please contact system administrator", 2,"NoAccess");
+            M4PLCommon.DocumentStatus.DisplayMessage("Invalid", "The job you are trying to search does not exist, please contact system administrator", 2, "NoAccess");
         })
     </script>
 }

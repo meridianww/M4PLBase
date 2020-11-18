@@ -14,12 +14,24 @@ namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateResponse
     [XmlRoot(ElementName = "UpdatedRecord")]
     public class UpdatedRecord
     {
+        /// <summary>
+        /// Gets or Sets Service Provider ID
+        /// </summary>
         [XmlElement(ElementName = "ServiceProviderID")]
         public string ServiceProviderID { get; set; }
+        /// <summary>
+        /// Gets or Sets EDCCode
+        /// </summary>
         [XmlElement(ElementName = "EDCCode")]
         public string EDCCode { get; set; }
+        /// <summary>
+        /// Gets or Sets OrderNumber
+        /// </summary>
         [XmlElement(ElementName = "OrderNumber")]
         public string OrderNumber { get; set; }
+        /// <summary>
+        /// Gets or Sets Order Date
+        /// </summary>
         [XmlElement(ElementName = "OrderDate")]
         public string OrderDate { get; set; }
     }

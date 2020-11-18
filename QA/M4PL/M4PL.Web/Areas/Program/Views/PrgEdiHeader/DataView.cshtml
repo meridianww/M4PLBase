@@ -34,8 +34,8 @@
     settings.SettingsBehavior.AllowEllipsisInText = true;
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
-    settings.SettingsCookies.Enabled = true;
-    settings.SettingsCookies.StoreColumnsWidth = true;
+    settings.SettingsCookies.Enabled = false;
+    settings.SettingsCookies.StoreColumnsWidth = false;
     settings.SettingsCookies.StorePaging = false;
     settings.SettingsCookies.StoreGroupingAndSorting = false;
     settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
@@ -64,7 +64,7 @@
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
 
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
-    settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnChanged";
+    //settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnChanged";
     settings.SettingsResizing.Visualization = ResizingMode.Live;
 
     settings.SettingsPager.EnableAdaptivity = true;

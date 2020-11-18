@@ -17,13 +17,12 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavCostCodeCommands
 //==============================================================================================================
 using M4PL.Business.Common;
+using M4PL.Entities;
 using M4PL.Entities.Document;
 using M4PL.Entities.Finance.CostCode;
 using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.PurchaseOrder;
 using M4PL.Entities.Finance.PurchaseOrderItem;
-using M4PL.Entities.Finance.SalesOrder;
-using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System;
@@ -42,6 +41,11 @@ namespace M4PL.Business.Finance.CostCode
 {
 	public class NavCostCodeCommands : BaseCommands<NavCostCode>, INavCostCodeCommands
 	{
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
 		public int Delete(long id)
 		{
 			throw new NotImplementedException();
@@ -55,7 +59,7 @@ namespace M4PL.Business.Finance.CostCode
 		public IList<NavCostCode> GetAllCostCode()
 		{
 			List<NavCostCode> navCostCodeList = null;
-			if (!M4PBusinessContext.ComponentSettings.NavRateReadFromItem)
+			if (!M4PLBusinessConfiguration.NavRateReadFromItem.ToBoolean())
 			{
 				navCostCodeList = GetNavCostCodeData();
 				if (navCostCodeList != null && navCostCodeList.Count > 0)
@@ -103,13 +107,13 @@ namespace M4PL.Business.Finance.CostCode
 
 		private List<NavCostCode> GetNavCostCodeData()
 		{
-			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			string navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+			string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+			string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
 			NavCostCodeResponse navCostCodeResponse = null;
 			try
 			{
-				string serviceCall = string.Format("{0}('{1}')/PurchasePrices", navAPIUrl, "Meridian");
+				string serviceCall = string.Format("{0}/PurchasePrices", navAPIUrl);
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
@@ -293,7 +297,7 @@ namespace M4PL.Business.Finance.CostCode
 			Entities.Job.Job jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(activeUser, jobId, 0);
 			DataTable tblJobCostCodeReport = new DataTable();
 			tblJobCostCodeReport.Columns.Add("Job ID");
-			tblJobCostCodeReport.Columns.Add("Delivery Date Planned");
+			tblJobCostCodeReport.Columns.Add("Scheduled Delivery Date");
 			tblJobCostCodeReport.Columns.Add("Arrival Date Planned");
 			tblJobCostCodeReport.Columns.Add("Job Gateway Scheduled");
 			tblJobCostCodeReport.Columns.Add("Site Code");
@@ -330,7 +334,7 @@ namespace M4PL.Business.Finance.CostCode
 				{
 					var row = tblJobCostCodeReport.NewRow();
 					row["Job ID"] = jobDetails.Id;
-					row["Delivery Date Planned"] = jobDetails.JobDeliveryDateTimePlanned;
+					row["Scheduled Delivery Date"] = jobDetails.JobDeliveryDateTimePlanned;
 					row["Arrival Date Planned"] = jobDetails.JobOriginDateTimePlanned;
 					row["Job Gateway Scheduled"] = jobDetails.JobGatewayStatus;
 					row["Site Code"] = jobDetails.JobSiteCode;

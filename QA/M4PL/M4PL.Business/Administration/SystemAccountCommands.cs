@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -27,80 +27,84 @@ using _commands = M4PL.DataAccess.Administration.SystemAccountCommands;
 
 namespace M4PL.Business.Administration
 {
-    public class SystemAccountCommands : BaseCommands<SystemAccount>, ISystemAccountCommands
-    {
-        /// <summary>
-        /// Get list of systemAccounts data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<SystemAccount> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo).ToList();
-        }
+	public class SystemAccountCommands : BaseCommands<SystemAccount>, ISystemAccountCommands
+	{
+		/// <summary>
+		/// Get list of systemAccounts data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<SystemAccount> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo).ToList();
+		}
 
-        /// <summary>
-        /// Gets specific systemAccount record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific systemAccount record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public SystemAccount Get(long id)
-        {
-            var data = _commands.Get(ActiveUser, id);
-            data.SysPassword = SecureString.Decrypt(data.SysPassword);
-            return data;
-        }
+		public SystemAccount Get(long id)
+		{
+			var data = _commands.Get(ActiveUser, id);
+			data.SysPassword = SecureString.Decrypt(data.SysPassword);
+			return data;
+		}
 
-        /// <summary>
-        /// Creates a new systemAccount record
-        /// </summary>
-        /// <param name="systemAccount"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new systemAccount record
+		/// </summary>
+		/// <param name="systemAccount"></param>
+		/// <returns></returns>
 
-        public SystemAccount Post(SystemAccount systemAccount)
-        {
-            systemAccount.SysPassword = SecureString.Encrypt(systemAccount.SysPassword);
-            return _commands.Post(ActiveUser, systemAccount);
-        }
+		public SystemAccount Post(SystemAccount systemAccount)
+		{
+			systemAccount.SysPassword = SecureString.Encrypt(systemAccount.SysPassword);
+			return _commands.Post(ActiveUser, systemAccount);
+		}
 
-        /// <summary>
-        ///  Updates an existing systemAccount record
-        /// </summary>
-        /// <param name="systemAccount"></param>
-        /// <returns></returns>
+		/// <summary>
+		///  Updates an existing systemAccount record
+		/// </summary>
+		/// <param name="systemAccount"></param>
+		/// <returns></returns>
 
-        public SystemAccount Put(SystemAccount systemAccount)
-        {
-            systemAccount.SysPassword = SecureString.Encrypt(systemAccount.SysPassword);
-            return _commands.Put(ActiveUser, systemAccount);
-        }
+		public SystemAccount Put(SystemAccount systemAccount)
+		{
+			systemAccount.SysPassword = SecureString.Encrypt(systemAccount.SysPassword);
+			return _commands.Put(ActiveUser, systemAccount);
+		}
 
-        /// <summary>
-        /// Deletes a specific systemAccount record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific systemAccount record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of systemAccounts record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of systemAccounts record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
-
-        public SystemAccount Patch(SystemAccount entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
+		/// <summary>
+		/// Patches an existing record(Not Implemented)
+		/// </summary>
+		/// <param name="entity"></param>
+		/// <returns></returns>
+		public SystemAccount Patch(SystemAccount entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

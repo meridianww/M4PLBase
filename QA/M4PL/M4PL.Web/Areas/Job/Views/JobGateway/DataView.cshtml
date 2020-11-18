@@ -20,6 +20,10 @@
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobCard"));
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobXcblInfo"));
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobHistory"));
+    if (Model.Permission == Permission.EditActuals || Model.SessionProvider.ActiveUser.IsSysAdmin)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayACD").ColIsReadOnly = false;
+    }
     var xCBLStrRoute = new M4PL.Entities.Support.MvcRoute();
     xCBLStrRoute.Entity = EntitiesAlias.JobXcblInfo;
     xCBLStrRoute.Action = MvcConstants.ActionForm;
@@ -50,8 +54,8 @@
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
-    settings.SettingsCookies.Enabled = true;
-    settings.SettingsCookies.StoreColumnsWidth = true;
+    settings.SettingsCookies.Enabled = false;
+    settings.SettingsCookies.StoreColumnsWidth = false;
     settings.SettingsCookies.StorePaging = false;
     settings.SettingsCookies.StoreGroupingAndSorting = false;
 
@@ -505,6 +509,7 @@
                                 subChildCommand.Enabled = false;
                             else
                                 subChildCommand.Enabled = true;
+                            subChildCommand.Items.Clear();
                             childCommand.Items.Add(subChildCommand);
                         }
                         command.Items.Add(childCommand);

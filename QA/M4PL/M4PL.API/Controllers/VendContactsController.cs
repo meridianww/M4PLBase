@@ -27,6 +27,9 @@ using M4PL.API.Filters;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Handles Db operation for Vendor Contacts
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/VendContacts")]
 	public class VendContactsController : ApiController
@@ -42,12 +45,8 @@ namespace M4PL.API.Controllers
 			_vendContactCommands = vendContactCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -110,7 +109,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// DeleteList method is used to delete a multiple records for ids passed as comma seprated list of string.
+        /// DeleteList method is used to delete multiple records for ids passed as comma seprated list of string.
         /// </summary>
         /// <param name="ids">Refers to comma seprated ids as string.</param>
         /// <param name="statusId">Refers to numeric value, It can have value 3 to make record archive.</param>

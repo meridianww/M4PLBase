@@ -14,6 +14,9 @@ namespace M4PL.Entities.XCBL.Electrolux.OrderRequest
     [XmlRoot(ElementName = "body")]
     public class Body
     {
+        /// <summary>
+        /// Gets or Sets Order Information
+        /// </summary>
         [XmlElement(ElementName = "Order")]
         public Order Order { get; set; }
     }

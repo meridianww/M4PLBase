@@ -60,12 +60,6 @@ namespace M4PL.DataAccess.Finance
 			return parameters;
 		}
 
-		/// <summary>
-		/// GetQuoteRequestDT - Method to get Quote Request in a datatable
-		/// </summary>
-		/// <param name="quoteRequest">quoteRequest</param>
-		/// <param name="quoteServiceType">quoteServiceType</param>
-		/// <returns>DataTable</returns>
 		public static DataTable GetNavCustomerDT(List<NavCustomer> customerList)
 		{
 			if (customerList == null)
@@ -73,22 +67,22 @@ namespace M4PL.DataAccess.Finance
 				throw new ArgumentNullException("customer", "NavCustomerCommands.GetNavCustomerDT() - Argument null Exception");
 			}
 
-			using (var quoteRequestUTT = new DataTable("uttNavCustomer"))
+			using (var uttNavCustomerUTT = new DataTable("uttNavCustomer"))
 			{
-				quoteRequestUTT.Locale = CultureInfo.InvariantCulture;
-				quoteRequestUTT.Columns.Add("CustomerId");
-				quoteRequestUTT.Columns.Add("ERPId");
+				uttNavCustomerUTT.Locale = CultureInfo.InvariantCulture;
+				uttNavCustomerUTT.Columns.Add("CustomerId");
+				uttNavCustomerUTT.Columns.Add("ERPId");
 
 				foreach (var customer in customerList)
 				{
-					var row = quoteRequestUTT.NewRow();
+					var row = uttNavCustomerUTT.NewRow();
 					row["CustomerId"] = customer.M4PLCustomerId;
 					row["ERPId"] = string.IsNullOrEmpty(customer.ERPId) ? null : customer.ERPId;
-					quoteRequestUTT.Rows.Add(row);
-					quoteRequestUTT.AcceptChanges();
+					uttNavCustomerUTT.Rows.Add(row);
+					uttNavCustomerUTT.AcceptChanges();
 				}
 
-				return quoteRequestUTT;
+				return uttNavCustomerUTT;
 			}
 		}
 	}

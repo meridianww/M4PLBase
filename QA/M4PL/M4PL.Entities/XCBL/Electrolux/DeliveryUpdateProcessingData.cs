@@ -11,9 +11,21 @@ namespace M4PL.Entities.XCBL.Electrolux
 {
     public class DeliveryUpdateProcessingData
     {
+        /// <summary>
+        /// Gets or Sets ID of JobDL070DeliveryUpdateProcessingLog
+        /// </summary>
         public long Id { get; set; }
+        /// <summary>
+        /// Gets or Sets flag if the update is processed
+        /// </summary>
         public bool IsProcessed { get; set; }
+        /// <summary>
+        /// Gets or Sets JobId
+        /// </summary>
         public long JobId { get; set; }
+        /// <summary>
+        /// Gets or Sets Order Number
+        /// </summary>
         public string OrderNumber { get; set; }
     }
 }

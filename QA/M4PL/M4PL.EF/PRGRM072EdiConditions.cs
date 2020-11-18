@@ -16,7 +16,6 @@ namespace M4PL.EF
     {
         public long Id { get; set; }
         public Nullable<long> PecParentProgramId { get; set; }
-        public Nullable<long> PecProgramId { get; set; }
         public string PecJobField { get; set; }
         public string PecCondition { get; set; }
         public string PerLogical { get; set; }

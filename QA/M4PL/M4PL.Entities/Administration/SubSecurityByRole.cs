@@ -24,9 +24,21 @@ namespace M4PL.Entities.Administration
 	/// </summary>
 	public class SubSecurityByRole : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Security By Role Id i.e. SYSTM000SecurityByRole table id which is referenced by Role table
+		/// </summary>
 		public long? SecByRoleId { get; set; }
+		/// <summary>
+		/// Gets or Sets Reference Table Name e.g. JobGateway
+		/// </summary>
 		public string RefTableName { get; set; }
+		/// <summary>
+		/// Gets or Sets Sub Menu Option Level ID e.g. 24 for Reports
+		/// </summary>
 		public int SubsMenuOptionLevelId { get; set; }
+		/// <summary>
+		/// Gets or Sets Sub Menu Access Level ID e.g. 18 for Edit Actuals
+		/// </summary>
 		public int SubsMenuAccessLevelId { get; set; }
 	}
 }

@@ -1,6 +1,6 @@
 ﻿@using M4PL.Web.Providers
 @using System.Web.UI.WebControls
-@model M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
+@model M4PL.Web.Models.AditionalReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 @{
     var gatewayStatusCodeDropDown = Model.Record.ProgramIdCode.GetStringDropDown(M4PL.Entities.EntitiesAlias.JobAdvanceReport, "ProgramIdCode", "GatewayStatusId", "Gateway Status", false, false, string.Empty, M4PL.Entities.Permission.All, Model.Record.ProgramId);
     gatewayStatusCodeDropDown.OnInit = "M4PLCommon.AdvancedReport.DefaultSelectedGatewayStatusId(s,e);";

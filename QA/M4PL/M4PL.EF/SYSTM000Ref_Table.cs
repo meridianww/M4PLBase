@@ -34,7 +34,6 @@ namespace M4PL.EF
         public string TblTableName { get; set; }
         public Nullable<int> TblMainModuleId { get; set; }
         public byte[] TblIcon { get; set; }
-        public Nullable<int> TblTypeId { get; set; }
         public string TblPrimaryKeyName { get; set; }
         public string TblParentIdFieldName { get; set; }
         public string TblItemNumberFieldName { get; set; }

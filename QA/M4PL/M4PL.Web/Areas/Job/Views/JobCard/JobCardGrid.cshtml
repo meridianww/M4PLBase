@@ -1,0 +1,29 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   KIRTY
+    //Date Programmed:                              26/01/2020
+    //Program Name:                                 JobCardGrid
+    //Purpose:                                      Provides view for the JobAdvanceReportGridPartial with advance search and filter
+    //====================================================================================================================================================*@
+@model M4PL.Entities.Support.MvcRoute
+
+@using (Html.BeginForm())
+{
+    Html.DevExpress().CallbackPanel(settings =>
+    {
+        settings.Name = "JobCardViewCbPanel";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "JobCard",
+            Action = "DataView",
+            Area = "Job",
+            OwnerCbPanel = "AppCbPanel"
+        };
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDataView, M4PL.Entities.EntitiesAlias.JobCard.ToString(), new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model), filterId = ViewBag.FilterId }));
+        });
+    }).GetHtml();
+}

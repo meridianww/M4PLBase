@@ -1,0 +1,48 @@
+﻿@using System.Web.UI.WebControls;
+@using M4PL.Entities;
+@model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.NavRemittance.NavRemittanceView>
+@{
+    ViewBag.Title = "Retrieve Posted Invoice";
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "ChequeNo").ColIsReadOnly = false;
+}
+
+<div class="row form-btns-block" style="height:165px;">
+    <div class="col-md-12">
+        @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlDownloadInvoice";
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = false;
+    settings.Enabled = false;
+    settings.Collapsed = false;
+    settings.ShowHeader = false;
+    settings.Width = 300;
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='form-row-group col-md-12'>"
+            + Html.EditorFor(m => m.Record.ChequeNo).ToHtmlString() + "</div>");
+    });
+}).GetHtml()
+    </div>
+    <div class="col-md-12">
+        <ul>
+            <li class="remittance remittance-fail" style="color:red;display:none"><strong>Invoice is not available.</strong></li>
+            <li class="remittance remittance-processing" style="color:red;display:none"><strong>Processing...</strong></li>
+            <li class="remittance remittance-sucess" style="color:green;display:none"><strong>Download Sucessfuly!</strong></li>
+        </ul>
+    </div>
+    <div class="col-md-12">
+        @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btnNavRemittanceSave";
+           settings.EnableTheming = true;
+           settings.Text = "Submit";//(Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn pull-right";
+           settings.Enabled = true;// (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditActuals) : !(Model.Permission < Permission.EditActuals);
+           settings.ClientSideEvents.Click = "M4PLCommon.NavRemittance.DownloadInvoice";
+       }).GetHtml()
+    </div>
+</div>
+
+

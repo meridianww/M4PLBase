@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,76 +25,76 @@ using _commands = M4PL.DataAccess.Administration.MenuOptionLevelCommands;
 
 namespace M4PL.Business.Administration
 {
-    public class MenuOptionLevelCommands : BaseCommands<MenuOptionLevel>, IMenuOptionLevelCommands
-    {
-        /// <summary>
-        /// Get list of memu option data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<MenuOptionLevel> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class MenuOptionLevelCommands : BaseCommands<MenuOptionLevel>, IMenuOptionLevelCommands
+	{
+		/// <summary>
+		/// Get list of memu option data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<MenuOptionLevel> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific menu option record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific menu option record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public MenuOptionLevel Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public MenuOptionLevel Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Creates a new menu option record
-        /// </summary>
-        /// <param name="menuOptionLevel"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new menu option record
+		/// </summary>
+		/// <param name="menuOptionLevel"></param>
+		/// <returns></returns>
 
-        public MenuOptionLevel Post(MenuOptionLevel menuOptionLevel)
-        {
-            return _commands.Post(ActiveUser, menuOptionLevel);
-        }
+		public MenuOptionLevel Post(MenuOptionLevel menuOptionLevel)
+		{
+			return _commands.Post(ActiveUser, menuOptionLevel);
+		}
 
-        /// <summary>
-        /// Updates an existing menu option record
-        /// </summary>
-        /// <param name="menuOptionLevel"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing menu option record
+		/// </summary>
+		/// <param name="menuOptionLevel"></param>
+		/// <returns></returns>
 
-        public MenuOptionLevel Put(MenuOptionLevel menuOptionLevel)
-        {
-            return _commands.Put(ActiveUser, menuOptionLevel);
-        }
+		public MenuOptionLevel Put(MenuOptionLevel menuOptionLevel)
+		{
+			return _commands.Put(ActiveUser, menuOptionLevel);
+		}
 
-        /// <summary>
-        /// Deletes a specific menu option record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific menu option record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of menu option record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of menu option record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids);
+		}
 
-        public MenuOptionLevel Patch(MenuOptionLevel entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public MenuOptionLevel Patch(MenuOptionLevel entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

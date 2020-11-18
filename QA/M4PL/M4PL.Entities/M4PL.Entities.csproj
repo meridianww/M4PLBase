@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\M4PL.Entities.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +58,11 @@
     <Compile Include="Administration\Report.cs" />
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="Administration\UserGuidUpload.cs" />
+    <Compile Include="BizMobl\BizMoblCSVData.cs" />
+    <Compile Include="BizMobl\BizMoblModel.cs" />
+    <Compile Include="BusinessConfiguration.cs" />
+    <Compile Include="CargoExceptionStatusModel.cs" />
     <Compile Include="ChangeHistory.cs" />
     <Compile Include="ChangeHistoryData.cs" />
     <Compile Include="CommonIds.cs" />
@@ -65,10 +71,18 @@
     <Compile Include="Document\BOLHeader.cs" />
     <Compile Include="Document\CargoItem.cs" />
     <Compile Include="Document\DocumentStatus.cs" />
+    <Compile Include="Document\DocumentStatusModel.cs" />
     <Compile Include="Document\JobCostReport.cs" />
     <Compile Include="Document\JobPriceReport.cs" />
     <Compile Include="Document\TrackingItem.cs" />
+    <Compile Include="EmailAttachment.cs" />
+    <Compile Include="EmailDetail.cs" />
+    <Compile Include="Event\EventEmailDetail.cs" />
+    <Compile Include="Event\EventSubscriberAndSubscriberType.cs" />
+    <Compile Include="Event\EventSubscriber.cs" />
+    <Compile Include="Event\EventSubscriberType.cs" />
     <Compile Include="Finance\CostCode\SalesLineCostCodeResponse.cs" />
+    <Compile Include="Finance\Customer\Gateway.cs" />
     <Compile Include="Finance\Customer\NavRate.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
     <Compile Include="Finance\CostCode\NavCostCode.cs" />
@@ -76,6 +90,7 @@
     <Compile Include="Finance\Customer\NavCustomer.cs" />
     <Compile Include="Finance\Customer\NavCustomerData.cs" />
     <Compile Include="Finance\Customer\NavCustomerResponse.cs" />
+    <Compile Include="Finance\M4PLOrderCreationResponse.cs" />
     <Compile Include="Finance\OrderItem\NAVOrderItem.cs" />
     <Compile Include="Finance\OrderItem\NAVOrderItemResponse.cs" />
     <Compile Include="Finance\PriceCode\NavPriceCode.cs" />
@@ -84,12 +99,16 @@
     <Compile Include="Finance\PriceCode\PurchaseLinePriceCodeResponse.cs" />
     <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItemResponse.cs" />
     <Compile Include="Finance\PurchaseOrderItem\PurchaseOrderItem.cs" />
+    <Compile Include="Finance\PurchaseOrder\CheckPostedInvoice.cs" />
+    <Compile Include="Finance\PurchaseOrder\M4PLPurchaseOrderCreationResponse.cs" />
     <Compile Include="Finance\PurchaseOrder\NavJobPurchaseOrder.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrder.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderPostedInvoiceResponse.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderRequest.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderResponse.cs" />
     <Compile Include="Finance\CostCode\SalesLineCostCode.cs" />
+    <Compile Include="Finance\Remittance\NavRemittance.cs" />
+    <Compile Include="Finance\SalesOrder\M4PLSalesOrderCreationResponse.cs" />
     <Compile Include="Finance\SalesOrder\NavJobSalesOrder.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrder.cs" />
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionResponse.cs" />
@@ -102,6 +121,8 @@
     <Compile Include="Finance\SalesOrder\NavSalesOrderResponse.cs" />
     <Compile Include="Finance\ShippingItem\NavSalesOrderItemResponse.cs" />
     <Compile Include="Finance\ShippingItem\SalesOrderItem.cs" />
+    <Compile Include="Finance\VendorLedger\NavVendorCheckedInvoice.cs" />
+    <Compile Include="Finance\VendorLedger\NavVendorLedger.cs" />
     <Compile Include="Finance\Vendor\NavVendor.cs" />
     <Compile Include="Finance\Vendor\NavVendorData.cs" />
     <Compile Include="Finance\Vendor\NavVendorResponse.cs" />
@@ -110,12 +131,24 @@
     <Compile Include="JobGatewayModelforPanel.cs" />
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
+    <Compile Include="JobService\JobDocument.cs" />
+    <Compile Include="JobService\JobGatewayComment.cs" />
+    <Compile Include="JobService\JobPermission.cs" />
     <Compile Include="JobService\OrderDetails.cs" />
+    <Compile Include="JobService\OrderDocumentDetails.cs" />
     <Compile Include="JobService\OrderGatewayDetails.cs" />
     <Compile Include="JobService\SearchOrder.cs" />
+    <Compile Include="Job\AWCDriverScrubReportRawData.cs" />
     <Compile Include="Job\BatchJobDetail.cs" />
+    <Compile Include="Job\CancelOrder.cs" />
+    <Compile Include="Job\CommonDriverScrubReportRawData.cs" />
+    <Compile Include="Job\JobActionGateway.cs" />
+    <Compile Include="Job\JobControlRelation.cs" />
+    <Compile Include="Job\DriverContact.cs" />
     <Compile Include="Job\JobAdditionalInfo.cs" />
     <Compile Include="Job\JobCargoException.cs" />
+    <Compile Include="Job\JobContact.cs" />
+    <Compile Include="Job\JobDriverScrubReportData.cs" />
     <Compile Include="Job\JobExceptionDetail.cs" />
     <Compile Include="Job\JobActionCode.cs" />
     <Compile Include="Job\JobAdvanceReport.cs" />
@@ -147,14 +180,22 @@
     <Compile Include="Job\JobXcblInfo.cs" />
     <Compile Include="Job\OrderLocationCoordinate.cs" />
     <Compile Include="Job\OrderStatusModel.cs" />
+    <Compile Include="Job\ProjectedCapacityData.cs" />
+    <Compile Include="Job\ProjectedCapacityRawData.cs" />
     <Compile Include="Job\SelectedJobList.cs" />
+    <Compile Include="Job\UnCancelJobResponse.cs" />
+    <Compile Include="Job\UnCancelOrder.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
+    <Compile Include="Program\EventType.cs" />
     <Compile Include="Program\NextGatewayModel.cs" />
     <Compile Include="Program\PrgBillableLocation.cs" />
     <Compile Include="Program\PrgCostLocation.cs" />
     <Compile Include="Program\PrgEdiCondition.cs" />
+    <Compile Include="Program\PrgEventManagement.cs" />
     <Compile Include="Signature\JobSignature.cs" />
+    <Compile Include="SMTPEmailDetail.cs" />
+    <Compile Include="SMTPServerDetail.cs" />
     <Compile Include="StatusModel.cs" />
     <Compile Include="Support\CargoComboBox.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />
@@ -162,6 +203,7 @@
     <Compile Include="Support\EnumKeyValue.cs" />
     <Compile Include="Support\GwyExceptionCodeComboBox.cs" />
     <Compile Include="Support\GwyExceptionStatusCodeComboBox.cs" />
+    <Compile Include="Support\JobReportColumnRelation.cs" />
     <Compile Include="Support\PreferredLocation.cs" />
     <Compile Include="Support\ProgramRollupBillingJob.cs" />
     <Compile Include="Support\SysSetting.cs" />
@@ -338,9 +380,19 @@
     <Compile Include="XCBL\Electrolux\OrderRequest\ShipTo.cs" />
     <Compile Include="XCBL\Electrolux\OrderRequest\To.cs" />
     <Compile Include="XCBL\Electrolux\OrderResponse\OrderResponse.cs" />
+    <Compile Include="XCBL\FarEye\ExtraInfo.cs" />
+    <Compile Include="XCBL\FarEye\Info.cs" />
+    <Compile Include="XCBL\FarEye\OrderEvent.cs" />
+    <Compile Include="XCBL\FarEye\OrderEventResponse.cs" />
+    <Compile Include="XCBL\FarEye\Order\FarEyeDeliveryStatus.cs" />
+    <Compile Include="XCBL\FarEye\Order\FarEyeOrderCancelRequest.cs" />
+    <Compile Include="XCBL\FarEye\Order\FarEyeOrderCancelResponse.cs" />
+    <Compile Include="XCBL\FarEye\Order\FarEyeOrderDetails.cs" />
+    <Compile Include="XCBL\FarEye\Order\OrderResponse.cs" />
     <Compile Include="XCBL\LineDetail.cs" />
     <Compile Include="XCBL\SummaryHeader.cs" />
     <Compile Include="XCBL\UserDefinedField.cs" />
+    <Compile Include="XCBL\XcblException.cs" />
     <Compile Include="XCBL\XCBLSummaryHeaderModel.cs" />
     <Compile Include="XCBL\XCBLToM4PLRequest.cs" />
     <Compile Include="XCBL\XCBLToM4PLRequisitionRequest.cs" />

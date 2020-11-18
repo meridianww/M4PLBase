@@ -20,11 +20,29 @@ namespace M4PL.Entities.Scanner
 {
 	public class ScrReturnReasonList : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Program ID
+		/// </summary>
 		public long? ProgramID { get; set; }
+		/// <summary>
+		/// Gets or Sets Program Name
+		/// </summary>
 		public string ProgramIDName { get; set; }
+		/// <summary>
+		/// Gets or Sets number of Return Reason Line Item for Scanner module 
+		/// </summary>
 		public int? ReturnReasonLineItem { get; set; }
+		/// <summary>
+		/// Gets or SetsReturn Reason Code for Scanner Module
+		/// </summary>
 		public string ReturnReasonCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Return Reason Title for Scanner Module
+		/// </summary>
 		public string ReturnReasonTitle { get; set; }
+		/// <summary>
+		/// Gets or Sets Description
+		/// </summary>
 		public byte[] ReturnReasonDesc { get; set; }
 	}
 }

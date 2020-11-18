@@ -39,41 +39,41 @@
        {
 
            ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 job-origin-destination  no-padding'>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerSiteName).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-30 state-privance'>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-30 state-privance marRight30'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerSitePOC).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group state-privance col-fixed-16 remove-margin-right'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerSitePOCPhone, new { MakeSkypeCall = true }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerSitePOCEmail).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerStreetAddress).ToHtmlString());
            ViewContext.Writer.Write("</div>");
 
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerStreetAddress2).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerStreetAddress3).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerStreetAddress4).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerCity).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(sellerStateDropDownViewModel) }) + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance marRight25'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(sellerStateDropDownViewModel) }) + "</div>");
 
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerPostalCode).ToHtmlString());
            ViewContext.Writer.Write("</div>");
 
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25  state-privance remove-margin-right'>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25  state-privance marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerCountry).ToHtmlString());
            ViewContext.Writer.Write("</div>");
 
@@ -94,13 +94,13 @@
        settings.SetContent(() =>
        {
            ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerSitePOC2).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerSitePOCPhone2, new { MakeSkypeCall = true }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerSitePOCEmail2).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("</div>");
@@ -123,41 +123,41 @@
        settings.SetContent(() =>
        {
            ViewContext.Writer.Write("<div class='col-md-12 col-lg-10 job-origin-destination no-padding'>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromSiteName).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-30 state-privance'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromSitePOC).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group state-privance col-fixed-16 remove-margin-right'>");
+           ViewContext.Writer.Write("<div class='form-row-group state-privance col-fixed-16 marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromSitePOCPhone, new { MakeSkypeCall = true }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromSitePOCEmail).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromStreetAddress).ToHtmlString());
            ViewContext.Writer.Write("</div>");
 
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromStreetAddress2).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromStreetAddress3).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromStreetAddress4).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromCity).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(shipFromStateDropDownViewModel) }) + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance marRight25'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(shipFromStateDropDownViewModel) }) + "</div>");
 
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 '>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromPostalCode).ToHtmlString());
            ViewContext.Writer.Write("</div>");
 
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right' >");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance marRight25' >");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromCountry).ToHtmlString());
            ViewContext.Writer.Write("</div>");
 
@@ -176,13 +176,13 @@
        settings.SetContent(() =>
        {
            ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromSitePOC2).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromSitePOCPhone2, new { MakeSkypeCall = true }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name marRight25'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromSitePOCEmail2).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("</div>");

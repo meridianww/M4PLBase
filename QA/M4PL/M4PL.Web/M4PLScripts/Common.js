@@ -131,17 +131,31 @@ M4PLCommon.Common = function () {
     var _arrayRemove = function (arr, value) { return arr.filter(function (ele) { return ele != value; }); }
 
     var _enableJobGridMultiSelection = function (isEnable) {
+        var isJobGrid = true;
         var sJobGrid = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+        if (sJobGrid == null || sJobGrid == undefined) {
+            sJobGrid = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
+            if (sJobGrid != null && sJobGrid != undefined)
+                isJobGrid = false;
+        }
         if (sJobGrid != null && sJobGrid != undefined) {
             var clearBtnCtrl = ASPxClientControl.GetControlCollection().GetByName("btnClearSelectionJobGridView");
+            if (clearBtnCtrl == null || clearBtnCtrl == undefined)
+                clearBtnCtrl = ASPxClientControl.GetControlCollection().GetByName("btnClearSelectionJobCardGridView");
             if (clearBtnCtrl != null && clearBtnCtrl != undefined) {
                 if (!isEnable) {
                     clearBtnCtrl.SetEnabled(false);
-                    $("#btnClearSelectionJobGridView").addClass("noHover");
+                    if (isJobGrid)
+                        $("#btnClearSelectionJobGridView").addClass("noHover");
+                    else
+                        $("#btnClearSelectionJobCardGridView").addClass("noHover");
                 }
                 else {
                     clearBtnCtrl.SetEnabled(true);
-                    $("#btnClearSelectionJobGridView").removeClass("noHover");
+                    if (isJobGrid)
+                        $("#btnClearSelectionJobGridView").removeClass("noHover");
+                    else
+                        $("#btnClearSelectionJobCardGridView").removeClass("noHover");
                 }
             }
         }
@@ -739,6 +753,10 @@ M4PLCommon.CheckHasChanges = (function () {
             if (ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl').IsVisible()) {
                 hasDataChanged = M4PLWindow.SubPopupFormViewHasChanges;
             } else if (ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl').IsVisible()) {
+                var chqCtrl = ASPxClientControl.GetControlCollection().GetByName('ChequeNo');
+                if (chqCtrl != null && chqCtrl != undefined) {
+                    M4PLWindow.PopupFormViewHasChanges = false;
+                }
                 hasDataChanged = M4PLWindow.PopupFormViewHasChanges;
                 if (!hasDataChanged) {
                     for (var gridName in M4PLWindow.PopupDataViewHasChanges) {
@@ -1026,7 +1044,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1194,18 +1212,17 @@ M4PLCommon.VocReport = (function () {
         var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
         if (destinationCtrl != null)
             if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
-                var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
+                var dest = destinationCtrl.GetValue().split(',').map(String);
                 route.Location = dest;
             }
-
         var dashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         route.CompanyId = customerCtrl.GetValue();
         M4PLCommon.IsIgnoreCardGridClick = true;
-        if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback())
+        if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId });
-        //route.Action = "RibbonMenu";
-        //route.Entity = "Common";
+        }
+
         DevExCtrl.Ribbon.DoCallBack(route);
     }
     var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
@@ -1282,15 +1299,10 @@ M4PLCommon.VocReport = (function () {
 M4PLCommon.AdvancedReport = (function () {
     var _init = function () {
         $(".isAdditional").hide();
+        $(".isDriverImport").hide();
+        $(".isVisibleCapacityReport").hide();
+        $(".isManifestReport").hide();
     }
-    //var _isExtrafieldCheckBoxEventChange = function (s, e) {
-    //    if (s.GetValue()) {
-    //        $(".isAdditional").show();
-    //    }
-    //    else {
-    //        $(".isAdditional").hide();
-    //    }
-    //};
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
     }
@@ -1325,7 +1337,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -1504,31 +1516,26 @@ M4PLCommon.AdvancedReport = (function () {
         return values;
     }
 
-    var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
-
+    function priceCostReload(s, e, rprtVwrCtrl, rprtVwrRoute) {
         if ($('.errorMessages') != undefined) {
             $('.errorMessages').html('');
         }
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         var programCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
         var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
         var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
         var brandCtrl = ASPxClientControl.GetControlCollection().GetByName('BrandByCustomerProgramCbPanelClosed');
-        var gatewayCtrl = ASPxClientControl.GetControlCollection().GetByName('GatewayStatusIdByCustomerProgramCbPanelClosed');
         var serviceModeCtrl = ASPxClientControl.GetControlCollection().GetByName('ServiceModeByCustomerCbPanelforClosed');
         var productTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ProductTypeByCustomerCbPanelforClosed');
-        var scheduleTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ScheduleByCustomerProgramCbPanelClosed');
-        var orderTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('OrderTypeByCustomerProgramCbPanelClosed');
         var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
         var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
         var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
-        var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
         var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
-        var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
-        var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('PackagingTypeByJobCbPanelClosed');
-        var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
 
+        rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
         rprtVwrRoute.CustomerId = customerCtrl.GetValue();
+        rprtVwrRoute.FileName = reportTypeCtrl.GetText();
 
         if (programCtrl != null) {
             if (programCtrl.GetValue() != null && programCtrl != undefined && programCtrl.GetValue() != "ALL") {
@@ -1553,15 +1560,233 @@ M4PLCommon.AdvancedReport = (function () {
         if (brandCtrl != null)
             if (brandCtrl.GetValue() != null && brandCtrl.GetValue() != undefined)
                 rprtVwrRoute.Brand = brandCtrl.GetValue().split(',').map(String);//resetVal(brandCtrl.GetValue(), checkListBoxBrandByCustomerProgramCbPanelClosed);
-        if (gatewayCtrl != null)
-            if (gatewayCtrl.GetValue() != null && gatewayCtrl.GetValue() != undefined)
-                rprtVwrRoute.GatewayTitle = gatewayCtrl.GetValue().split(',').map(String);//resetVal(gatewayCtrl.GetValue(), checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed);
         if (serviceModeCtrl != null)
             if (serviceModeCtrl.GetValue() != null && serviceModeCtrl.GetValue() != undefined)
                 rprtVwrRoute.ServiceMode = serviceModeCtrl.GetValue().split(',').map(String);//resetVal(serviceModeCtrl.GetValue(), checkListBoxServiceModeByCustomerCbPanelforClosed);
         if (productTypeCtrl != null)
             if (productTypeCtrl.GetValue() != null && productTypeCtrl.GetValue() != undefined)
                 rprtVwrRoute.ProductType = productTypeCtrl.GetValue().split(',').map(String);//resetVal(productTypeCtrl.GetValue(), checkListBoxProductTypeByCustomerCbPanelforClosed);
+
+        if (dateTypeCtrl != null)
+            rprtVwrRoute.DateTypeName = dateTypeCtrl.GetText();
+
+        if (jobChannelCtrl != null)
+            if (jobChannelCtrl.GetValue() != null && jobChannelCtrl.GetValue() != undefined)
+                rprtVwrRoute.Channel = jobChannelCtrl.GetValue().split(',').map(String);
+
+        var startDate = startDateCtrl.GetValue();
+        var endDate = endDateCtrl.GetValue();
+        if (startDate != undefined && endDate != undefined && startDate != null && endDate != null) {
+            rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+            rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+        }
+        rprtVwrRoute.IsFormRequest = true;
+
+        var IsFormValidate = true;
+        if ((startDateCtrl.GetValue() != "" && endDateCtrl.GetValue() != "" && startDateCtrl.GetValue() != null && endDateCtrl.GetValue() != null) && new Date(startDateCtrl.GetValue()) > new Date(endDateCtrl.GetValue())) {
+            if ($('.errorMessages') != undefined) {
+                $('.errorMessages').append('<p>* End date should be greater than start date.</p>');
+            }
+            IsFormValidate = false;
+        }
+        return IsFormValidate;
+    }
+    var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        var gridCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
+        if (gridCtrl != null && gridCtrl != undefined) {
+            rprtVwrCtrl = gridCtrl;
+        }
+        if (reportTypeCtrl != null &&
+            ((reportTypeCtrl.GetText() == "Driver Scrub Report")
+                || (reportTypeCtrl.GetText() == "Capacity Report")
+                || (reportTypeCtrl.GetText() == "Pride Metric Report"))) {
+            var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+            if (reportTypeCtrl.GetText() == "Driver Scrub Report" || (reportTypeCtrl.GetText() == "Pride Metric Report")) {
+                var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+                var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+                var startDate = startDateCtrl.GetValue();
+                var endDate = endDateCtrl.GetValue();
+                if (startDate != undefined && endDate != undefined && startDate != null && endDate != null) {
+                    rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+                    rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
+                }
+            }
+            if (reportTypeCtrl.GetText() == "Capacity Report") {
+                var yearCtrl = ASPxClientControl.GetControlCollection().GetByName('Year');
+                rprtVwrRoute.ProjectedYear = yearCtrl.GetText() != null ? parseInt(yearCtrl.GetText()) : yearCtrl.GetText();
+            }
+            rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
+            rprtVwrRoute.CustomerId = customerCtrl.GetValue();
+
+            rprtVwrRoute.IsFormRequest = true;
+            rprtVwrRoute.FileName = reportTypeCtrl.GetText();
+            $(".isDriverScrubreport").show();
+            $(".isDriverbtnScrubreport").show();
+            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        }
+        else if (reportTypeCtrl != null && (reportTypeCtrl.GetText() == "Price Charge" || reportTypeCtrl.GetText() == "Cost Charge")) {
+            if (priceCostReload(s, e, rprtVwrCtrl, rprtVwrRoute)) {
+                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            }
+        }
+        else {
+            if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
+                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            }
+        }
+    }
+    var _reportTypeChangeEvent = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        $(".isVisibleCapacityReport").hide();
+        $(".isDriverImport").hide();
+        var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+        var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        //startDateCtrl.SetValue(null);
+        //endDateCtrl.SetValue(null);
+        //if (reportTypeCtrl != null &&
+        //    reportTypeCtrl.GetText() != "Job Advance Report" && reportTypeCtrl.GetText() != "Manifest Report" && reportTypeCtrl.GetText() != "OSD Report") {
+        //    var today = new Date();
+        //    var yeasterday = new Date();
+        //    yeasterday.setDate(yeasterday.getDate() - 1);
+        //    startDateCtrl.SetValue(yeasterday);
+        //    endDateCtrl.SetValue(today);
+        //} else {
+        //    startDateCtrl.SetValue(null);
+        //    endDateCtrl.SetValue(null);
+        //}
+
+        if (reportTypeCtrl != null &&
+            ((reportTypeCtrl.GetText() == "Driver Scrub Report"))
+            || (reportTypeCtrl.GetText() == "Capacity Report")
+            || (reportTypeCtrl.GetText() == "Pride Metric Report")) {
+            controlEnabledDisabled(false);
+            if (reportTypeCtrl.GetText() == "Capacity Report") {
+                startDateCtrl.SetEnabled(false);
+                endDateCtrl.SetEnabled(false);
+                $(".isVisibleCapacityReport").show();
+            } else {
+                startDateCtrl.SetEnabled(true);
+                endDateCtrl.SetEnabled(true);
+                $(".isVisibleCapacityReport").hide();
+            }
+
+            if ((reportTypeCtrl.GetText() != "Pride Metric Report")) {
+                $(".isDriverScrubreport").hide();
+                $(".isDriverbtnScrubreport").hide();
+            } else {
+                $(".isDriverScrubreport").show();
+                $(".isDriverbtnScrubreport").show();
+                rprtVwrRoute.IsFormRequest = true;
+                rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
+                //rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            }
+            var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+            customerCtrl.SetValue(0);
+        }
+        else if (reportTypeCtrl != null && (reportTypeCtrl.GetText() == "Price Charge" || reportTypeCtrl.GetText() == "Cost Charge")) {
+            startDateCtrl.SetEnabled(true);
+            endDateCtrl.SetEnabled(true);
+            $(".isManifestReport").hide();
+            $(".isVisibleCapacityReport").hide();
+            $(".isDriverScrubreport").show();
+            $(".isDriverbtnScrubreport").show();
+            var gatewayCtrl = ASPxClientControl.GetControlCollection().GetByName('GatewayStatusIdByCustomerProgramCbPanelClosed');
+            var scheduleTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ScheduleByCustomerProgramCbPanelClosed');
+            var orderTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('OrderTypeByCustomerProgramCbPanelClosed');
+            var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
+            var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
+            gatewayCtrl.SetEnabled(false);
+            scheduleTypeCtrl.SetEnabled(false);
+            orderTypeCtrl.SetEnabled(false);
+            jobStatusCtrl.SetEnabled(false);
+            searchCtrl.SetEnabled(false);
+
+            jobStatusCtrl.GetInputElement().style.backgroundColor = "#9BEBF2";
+            orderTypeCtrl.GetInputElement().style.backgroundColor = "#9BEBF2";
+            scheduleTypeCtrl.GetInputElement().style.backgroundColor = "#9BEBF2";
+            rprtVwrRoute.IsFormRequest = true;
+            rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
+            //rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        }
+        else {
+            controlEnabledDisabled(true);
+            startDateCtrl.SetEnabled(true);
+            endDateCtrl.SetEnabled(true);
+            if (reportTypeCtrl.GetText() == "Manifest Report") {
+                $(".isManifestReport").show();
+            } else {
+                $(".isManifestReport").hide();
+            }
+            $(".isVisibleCapacityReport").hide();
+            $(".isDriverScrubreport").show();
+            $(".isDriverbtnScrubreport").show();
+            if (reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute)) {
+                //rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            }
+        }
+    }
+
+    function reloadresult(s, e, rprtVwrCtrl, rprtVwrRoute) {
+        if ($('.errorMessages') != undefined) {
+            $('.errorMessages').html('');
+        }
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        var programCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
+        var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
+        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+        var brandCtrl = ASPxClientControl.GetControlCollection().GetByName('BrandByCustomerProgramCbPanelClosed');
+        var gatewayCtrl = ASPxClientControl.GetControlCollection().GetByName('GatewayStatusIdByCustomerProgramCbPanelClosed');
+        var serviceModeCtrl = ASPxClientControl.GetControlCollection().GetByName('ServiceModeByCustomerCbPanelforClosed');
+        var productTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ProductTypeByCustomerCbPanelforClosed');
+        var scheduleTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ScheduleByCustomerProgramCbPanelClosed');
+        var orderTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('OrderTypeByCustomerProgramCbPanelClosed');
+        var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+        var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+        var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
+        var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
+        var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
+        var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
+        var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('PackagingTypeByJobCbPanelClosed');
+        var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
+
+        rprtVwrRoute.ReportType = reportTypeCtrl.GetValue();
+        rprtVwrRoute.CustomerId = customerCtrl.GetValue();
+        rprtVwrRoute.FileName = reportTypeCtrl.GetText();
+
+        if (programCtrl != null) {
+            if (programCtrl.GetValue() != null && programCtrl != undefined && programCtrl.GetValue() != "ALL") {
+                var programCheckCtrl = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
+                if (programCheckCtrl != null) {
+                    var selctedItems = programCheckCtrl.GetSelectedItems();
+                    var item = [];
+                    for (var i = 0; i < selctedItems.length; i++) {
+                        item.push(parseInt(selctedItems[i].value));
+                    }
+                    rprtVwrRoute.ProgramId = item;
+                }
+            }
+        }
+
+        if (originCtrl != null)
+            if (originCtrl.GetValue() != null && originCtrl.GetValue() != undefined)
+                rprtVwrRoute.Origin = originCtrl.GetValue().split(',').map(String);
+        if (destinationCtrl != null)
+            if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined)
+                rprtVwrRoute.Destination = destinationCtrl.GetValue().split(',').map(String);
+        if (brandCtrl != null)
+            if (brandCtrl.GetValue() != null && brandCtrl.GetValue() != undefined)
+                rprtVwrRoute.Brand = brandCtrl.GetValue().split(',').map(String);
+        if (gatewayCtrl != null)
+            if (gatewayCtrl.GetValue() != null && gatewayCtrl.GetValue() != undefined)
+                rprtVwrRoute.GatewayTitle = gatewayCtrl.GetValue().split(',').map(String);
+        if (serviceModeCtrl != null)
+            if (serviceModeCtrl.GetValue() != null && serviceModeCtrl.GetValue() != undefined)
+                rprtVwrRoute.ServiceMode = serviceModeCtrl.GetValue().split(',').map(String);
+        if (productTypeCtrl != null)
+            if (productTypeCtrl.GetValue() != null && productTypeCtrl.GetValue() != undefined)
+                rprtVwrRoute.ProductType = productTypeCtrl.GetValue().split(',').map(String);
 
         if (dateTypeCtrl != null)
             rprtVwrRoute.DateTypeName = dateTypeCtrl.GetText();
@@ -1578,14 +1803,17 @@ M4PLCommon.AdvancedReport = (function () {
             rprtVwrRoute.JobStatus = jobStatusCtrl.GetText();
         if (searchCtrl != null)
             rprtVwrRoute.Search = searchCtrl.GetValue();
-        rprtVwrRoute.StartDate = startDateCtrl.GetValue();
-        rprtVwrRoute.EndDate = endDateCtrl.GetValue();
+        var startDate = startDateCtrl.GetValue();
+        if (startDate != null)
+            rprtVwrRoute.StartDate = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+        var endDate = endDateCtrl.GetValue();
+        if (endDate != null)
+            rprtVwrRoute.EndDate = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();
         rprtVwrRoute.IsFormRequest = true;
         if (packagingTypeCtrl != null)
             rprtVwrRoute.PackagingCode = packagingTypeCtrl.GetText();
         if (cargoTitleCtrl != null)
             rprtVwrRoute.CargoId = cargoTitleCtrl.GetValue();
-        // }
         var IsFormValidate = true;
         if ((startDateCtrl.GetValue() != "" && endDateCtrl.GetValue() != "" && startDateCtrl.GetValue() != null && endDateCtrl.GetValue() != null) && new Date(startDateCtrl.GetValue()) > new Date(endDateCtrl.GetValue())) {
             if ($('.errorMessages') != undefined) {
@@ -1593,20 +1821,61 @@ M4PLCommon.AdvancedReport = (function () {
             }
             IsFormValidate = false;
         }
-
-        var manifestCtrl = ASPxClientControl.GetControlCollection().GetByName('Manifest');
-        rprtVwrRoute.Manifest = manifestCtrl != null && manifestCtrl != undefined ? manifestCtrl.GetValue() : false;
-
-        if (IsFormValidate) {
-            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-            var grdCtrl = ASPxClientControl.GetControlCollection().GetByName('JobAdvanceReportGridView');
-            //if (grdCtrl != null && grdCtrl != undefined)
-            //    grdCtrl.ClearFilter();
-        } else {
-            return false;
-        }
+        return IsFormValidate;
     }
+    function controlEnabledDisabled(isEnabled) {
+        var prgmCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
+        var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
+        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+        var brandCtrl = ASPxClientControl.GetControlCollection().GetByName('BrandByCustomerProgramCbPanelClosed');
+        var gatewayCtrl = ASPxClientControl.GetControlCollection().GetByName('GatewayStatusIdByCustomerProgramCbPanelClosed');
+        var serviceModeCtrl = ASPxClientControl.GetControlCollection().GetByName('ServiceModeByCustomerCbPanelforClosed');
+        var productTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ProductTypeByCustomerCbPanelforClosed');
+        var scheduleTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ScheduleByCustomerProgramCbPanelClosed');
+        var orderTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('OrderTypeByCustomerProgramCbPanelClosed');
+        var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
+        var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
+        var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
+        var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
 
+        prgmCtrl.SetEnabled(isEnabled);
+        originCtrl.SetEnabled(isEnabled);
+        destinationCtrl.SetEnabled(isEnabled);
+        brandCtrl.SetEnabled(isEnabled);
+        gatewayCtrl.SetEnabled(isEnabled);
+        serviceModeCtrl.SetEnabled(isEnabled);
+        productTypeCtrl.SetEnabled(isEnabled);
+        jobChannelCtrl.SetEnabled(isEnabled);
+        searchCtrl.SetEnabled(isEnabled);
+
+        jobStatusCtrl.SetEnabled(isEnabled);
+        dateTypeCtrl.SetEnabled(isEnabled);
+        scheduleTypeCtrl.SetEnabled(isEnabled);
+        orderTypeCtrl.SetEnabled(isEnabled);
+
+        var bgColor = !isEnabled ? "#9BEBF2" : '#fff';
+        dateTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+        jobStatusCtrl.GetInputElement().style.backgroundColor = bgColor;
+        orderTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+        scheduleTypeCtrl.GetInputElement().style.backgroundColor = bgColor;
+    }
+    var _importDriverScrub = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        rprtVwrRoute.Action = "FormView";
+        rprtVwrRoute.OwnerCbPanel = "JobAdvanceReportCbPanel";
+        rprtVwrRoute.IsPopup = true;
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        var reportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ReportType');
+        if (customerCtrl != null)
+            rprtVwrRoute.RecordId = customerCtrl.GetValue() != null && customerCtrl.GetValue() > 0
+                ? parseInt(customerCtrl.GetValue()) : 0;
+        if (reportTypeCtrl != null) {
+            rprtVwrRoute.ParentRecordId = reportTypeCtrl.GetValue() != null && reportTypeCtrl.GetValue() > 0
+                ? parseInt(reportTypeCtrl.GetValue()) : 0;
+            rprtVwrRoute.Location = [];
+            rprtVwrRoute.Location.push(reportTypeCtrl.GetText());
+        }
+        RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+    }
     return {
         Init: _init,
         DefaultSelectedCustomer: _defaultSelectedCustomer,
@@ -1632,8 +1901,9 @@ M4PLCommon.AdvancedReport = (function () {
         JobStatus_OnClickViewSelected: _jobStatus_OnClickViewSelected,
         OrderType_OnClickViewSelected: _orderType_OnClickViewSelected,
         Schedule_OnClickViewSelected: _schedule_OnClickViewSelected,
-        //IsExtrafieldCheckBoxEventChange: _isExtrafieldCheckBoxEventChange,
         GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter,
+        ReportTypeChangeEvent: _reportTypeChangeEvent,
+        ImportDriverScrub: _importDriverScrub
     }
 })();
 
@@ -2143,6 +2413,7 @@ M4PLCommon.DropDownEdit = (function () {
 M4PLCommon.PrgGateway = (function () {
     var textSeparator = ",";
     function _onListBoxSelectionChanged(s, args) {
+        ASPxClientControl.GetControlCollection().GetByName('MappingIdListBox');
         _updateText(s);
     }
 
@@ -2259,7 +2530,7 @@ M4PLCommon.CardView = (function () {
         $.each($("#CardView tbody td table tbody td div"), function (key, value) {
             if (value != "" && value != undefined && value.innerText != "" && value.innerText.includes("Card Type:")) {
                 var valueCardType = value.innerText.replace('Card Type: ', '');
-                value.innerText = valueCardType;
+                value.innerText = valueCardType.replace(/[0-9]/g, '');
             }
         });
     };
@@ -2381,7 +2652,7 @@ M4PLCommon.DocumentStatus = (function () {
         return isPriceCodeDataPresent
     };
 
-    var _isPriceCodeDataPresentForJobInNAV = function (jobId,jobIds) {
+    var _isPriceCodeDataPresentForJobInNAV = function (jobId, jobIds) {
 
         var isPriceCodeDataPresent = false;
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
@@ -2611,5 +2882,323 @@ M4PLCommon.Clipboard = (function () {
     return {
         SetClipboard: _setClipboard,
         GetClipboard: _getClipboard
+    }
+})();
+
+M4PLCommon.ToAddressSubscriber = (function () {
+    var textSeparator = ",";
+    function _onListBoxSelectionChanged(s, args) {
+        _updateText(s);
+    }
+
+    var _initToAddressSubscriberListBox = function (s, e, selectedToAddressSubscriber) {
+
+        if (selectedToAddressSubscriber != null && selectedToAddressSubscriber.indexOf("3") > -1)
+            $(".isToEmail").show();
+        else
+            $(".isToEmail").hide();
+
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('ToAddressSubscriberIdListBox');
+        if (checkListBox != null) {
+            if (selectedToAddressSubscriber !== null && selectedToAddressSubscriber !== undefined && selectedToAddressSubscriber.length > 0 && selectedToAddressSubscriber[0] != 'ALL') {
+                checkListBox.SelectValues(selectedToAddressSubscriber);
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+
+            var ToAddressSubscriber = ASPxClientControl.GetControlCollection().GetByName("ToAddressSubscriberId");
+            if (ToAddressSubscriber != null)
+                ToAddressSubscriber.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
+    var _updateText = function (listBox, Id) {
+        var selectedItems = listBox.GetSelectedItems();
+        var isCustomExists = _isElementExistsInList(selectedItems, 'Custom');
+        if (isCustomExists)
+            $(".isToEmail").show();
+        else
+            $(".isToEmail").hide();
+
+        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
+        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
+        var values = _getSelectedItemsText(selectedItems);
+        dropDownControl.SetText(values);
+    }
+
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
+        checkListControl.ownerName = dropDown.name;
+
+        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
+        checkListControl.SelectValues(values);
+        _updateText(checkListControl);
+    }
+
+    var _closeUp = function (s, e) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
+        checkListControl.ownerName = s.name;
+
+        if (checkListControl != null) {
+            var selectedItems = checkListControl.GetSelectedItems();
+        }
+    }
+
+    var _isElementExistsInList = function (list, item) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].text == item)
+                return true;
+        }
+        return false;
+    }
+
+    var _getSelectedItemsValue = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+
+    var _getSelectedItemsText = function (items, listBox) {
+        var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        //}
+        return texts.join(textSeparator);
+    }
+
+    var _getValuesByTexts = function (checkListControl, texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListControl.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+
+    return {
+        InitToAddressSubscriberListBox: _initToAddressSubscriberListBox,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        CloseUp: _closeUp
+    }
+})();
+
+M4PLCommon.EmailCCAddressSubscriber = (function () {
+    var textSeparator = ",";
+    function _onListBoxSelectionChanged(s, args) {
+        _updateText(s);
+    }
+
+    var _initEmailCCAddressSubscriberListBox = function (s, e, selectedEmailCCAddressSubscriber) {
+
+        if (selectedEmailCCAddressSubscriber != null && selectedEmailCCAddressSubscriber.indexOf("3") > -1)
+            $(".isCcEMail").show();
+        else
+            $(".isCcEMail").hide();
+
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('EmailCCAddressSubscriberIdListBox');
+        if (checkListBox != null) {
+            if (selectedEmailCCAddressSubscriber !== null && selectedEmailCCAddressSubscriber !== undefined && selectedEmailCCAddressSubscriber.length > 0 && selectedEmailCCAddressSubscriber[0] != 'ALL') {
+                checkListBox.SelectValues(selectedEmailCCAddressSubscriber);
+            }
+
+            var selectedItems = checkListBox.GetSelectedItems();
+            var EmailCCAddressSubscriber = ASPxClientControl.GetControlCollection().GetByName("EmailCCAddressSubscriberId");
+            if (EmailCCAddressSubscriber != null)
+                EmailCCAddressSubscriber.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
+    var _updateText = function (listBox, Id) {
+        var selectedItems = listBox.GetSelectedItems();
+        var isCustomExists = _isElementExistsInList(selectedItems, 'Custom');
+
+        if (isCustomExists)
+            $(".isCcEMail").show();
+        else
+            $(".isCcEMail").hide();
+
+        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
+        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
+        var values = _getSelectedItemsText(selectedItems);
+        dropDownControl.SetText(values);
+    }
+
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
+        checkListControl.ownerName = dropDown.name;
+
+        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
+        checkListControl.SelectValues(values);
+        _updateText(checkListControl);
+    }
+
+    var _closeUp = function (s, e) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
+        checkListControl.ownerName = s.name;
+
+        if (checkListControl != null) {
+            var selectedItems = checkListControl.GetSelectedItems();
+        }
+    }
+
+    var _isElementExistsInList = function (list, item) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].text == item)
+                return true;
+        }
+        return false;
+    }
+
+    var _getSelectedItemsValue = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+
+    var _getSelectedItemsText = function (items, listBox) {
+        var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        //}
+        return texts.join(textSeparator);
+    }
+
+    var _getValuesByTexts = function (checkListControl, texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListControl.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+
+    return {
+        InitEmailCCAddressSubscriberListBox: _initEmailCCAddressSubscriberListBox,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        CloseUp: _closeUp
+    }
+})();
+
+M4PLCommon.NavRemittance = (function () {
+
+    var _downloadInvoice = function () {
+        $(".remittance").css("display", "none");
+        $(".remittance-processing").css("display", "block");
+        var checkNo = ASPxClientControl.GetControlCollection().GetByName("ChequeNo");
+        if (checkNo != null && ChequeNo != "" && ChequeNo != undefined) {
+            $.get(window.location.origin + "/Finance/NavRemittance/IsInvoiceAvailable" + "?checkNo=" + checkNo.GetValue(), function (data) {
+                $(".remittance").css("display", "none");
+                if (data != undefined && data != null && (data.Status || data.Status == 'true')) {
+                    $(".remittance-sucess").css("display", "block");
+                    window.open(window.location.origin + "/Finance/NavRemittance/DownloadInvoice");
+                }
+                else if (data != undefined && data != null) {
+                    $(".remittance-fail").empty().append(data.Message);
+                    $(".remittance-fail").css("display", "block");
+                }
+                else {
+                    $(".remittance-fail").css("display", "block");
+                }
+            });
+        }
+    }
+
+    return {
+        DownloadInvoice: _downloadInvoice
+    }
+})();
+
+M4PLCommon.JobMultiSelect = (function () {
+    var _actionDropDownChange = function (s, e) {
+        var MultiActionCtrl = ASPxClientControl.GetControlCollection().GetByName("MultiActionComboBox");
+        var multiSubActionCtrl = ASPxClientControl.GetControlCollection().GetByName("MultiSubActionComboBox");
+        if (multiSubActionCtrl != null && multiSubActionCtrl != undefined
+            && MultiActionCtrl != null && MultiActionCtrl != undefined) {
+            var selectedVal = MultiActionCtrl.GetValue();
+            if (selectedVal != undefined && selectedVal != "" && selectedVal != null) {
+                var btnSubmitActionGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("BtnSubmitActionGateway");
+                if (btnSubmitActionGatewayCtrl != undefined && btnSubmitActionGatewayCtrl != null) {
+                    btnSubmitActionGatewayCtrl.SetVisible(false);
+                }
+                multiSubActionCtrl.PerformCallback({ actionCode: selectedVal });
+            }
+            else {
+                multiSubActionCtrl.listBox.ClearItems();
+            }
+        }
+    }
+
+    var _subActionDropDownChange = function (s, e) {
+        var entity = s.GetValue();
+        var btnSubmitActionGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("BtnSubmitActionGateway");
+        if (entity != null && entity != undefined && entity != "" && btnSubmitActionGatewayCtrl != undefined && btnSubmitActionGatewayCtrl != null) {
+            btnSubmitActionGatewayCtrl.SetVisible(true);
+        }
+        else {
+            btnSubmitActionGatewayCtrl.SetVisible(false);
+        }
+    }
+
+    var _btnSubmitActionGateway = function (s, e, strRoute) {
+        var multiSubActionCtrl = ASPxClientControl.GetControlCollection().GetByName("MultiSubActionComboBox");
+        if (multiSubActionCtrl != undefined && multiSubActionCtrl != null) {
+            var code = multiSubActionCtrl.GetValue();
+            var title = multiSubActionCtrl.GetText();
+            if (code != "" && title != "" && code != undefined && title != undefined) {
+                var surfixCode = code.split('-').length > 1 ? ('-' + code.split('-')[1]) : '';
+                var route = JSON.parse(strRoute);
+                route.Filters = {
+                    FieldName: code.split('-')[0],
+                    Value: title + surfixCode
+                }
+                route.IsPBSReport = true;
+                route.Action = "GatewayActionFormView";
+                RecordPopupControl.Hide()
+                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+                RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+            }
+        }
+    }
+
+    var _btnSubmitMultiGateway = function (s, e, strRoute) {
+        var multiGatewayCtrl = ASPxClientControl.GetControlCollection().GetByName("MultiGatewayComboBox");
+        if (multiGatewayCtrl != undefined && multiGatewayCtrl != null) {
+            var code = multiGatewayCtrl.GetValue();
+            var title = multiGatewayCtrl.GetText();
+            if (code != "" && code != undefined) {
+                var route = JSON.parse(strRoute);
+                route.Filters = {
+                    FieldName: code,
+                    Value: title
+                }
+                route.IsPBSReport = true;
+                route.Action = "FormView";
+                RecordPopupControl.Hide()
+                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+                RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+            }
+        }
+    }
+
+    return {
+        ActionDropDownChange: _actionDropDownChange,
+        SubActionDropDownChange: _subActionDropDownChange,
+        BtnSubmitActionGateway: _btnSubmitActionGateway,
+        BtnSubmitMultiGateway: _btnSubmitMultiGateway
     }
 })();

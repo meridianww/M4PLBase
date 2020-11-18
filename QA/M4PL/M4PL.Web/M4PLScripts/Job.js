@@ -57,8 +57,9 @@ M4PLJob.FormView = function () {
                         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
                             if (!isFromConfirmSave) {
                                 window.setTimeout(function () {
-                                    if (response.tabRoute != null) {
-                                        ASPxClientControl.GetControlCollection().GetByName("pageControl").PerformCallback({ strRoute: response.tabRoute });
+                                    var pageControlCtrl = ASPxClientControl.GetControlCollection().GetByName("pageControl");
+                                    if (response.tabRoute != null && pageControlCtrl != undefined && pageControlCtrl != null) {
+                                        pageControlCtrl.PerformCallback({ strRoute: response.tabRoute });
                                     }
                                     if (response.refreshContent === true || response.route.Entity !== "Job") {
                                         ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route) });
@@ -359,6 +360,16 @@ M4PLJob.FormView = function () {
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(strRoute) });
         }
     };
+
+    var _onDocTypeChange = function (s, e) {
+        var codeCtrl = ASPxClientControl.GetControlCollection().GetByName("JdrCode_popup");
+        var titleCtrl = ASPxClientControl.GetControlCollection().GetByName("JdrTitle_popup");
+        var setText = s.GetText();
+        if (codeCtrl != null)
+            codeCtrl.SetText(setText);
+        if (titleCtrl != null)
+            titleCtrl.SetText(setText);
+    };
     return {
         OnAddOrEdit: _onAddOrEdit,
         SetJobOriginDestinationCtrlValues: _setJobOriginDestinationCtrlValues,
@@ -372,7 +383,8 @@ M4PLJob.FormView = function () {
         OnGatewayCompleteClick: _onGatewayCompleteClick,
         SetJobOriginDestinationCtrlValuesAnsSetWindowTime: _setJobOriginDestinationCtrlValuesAnsSetWindowTime,
         OpenJobFormViewByID: _openJobFormViewByID,
-        JobHistoryPopUpClick: _jobHistoryPopUpClick
+        JobHistoryPopUpClick: _jobHistoryPopUpClick,
+        OnDocTypeChange: _onDocTypeChange
     }
 }();
 

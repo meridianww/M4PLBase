@@ -63,12 +63,13 @@ namespace M4PL.DataAccess.Finance
 			return SqlSerializer.Default.DeserializeMultiRecords<PurchaseOrderItem>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
 		}
 
-		public static long UpdateJobOrderMapping(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, bool electronicInvoice)
+		public static long UpdateJobOrderMapping(ActiveUser activeUser, List<long> jobIdList, string soNumber, bool electronicInvoice, bool isParentOrder)
 		{
 			var parameters = new List<Parameter>
 		   {
 			   new Parameter("@JobIdList", jobIdList.ToIdListDataTable(), "uttIDList"),
 			   new Parameter("@SONumber", soNumber),
+			   new Parameter("@isParentOrder", isParentOrder),
 			   new Parameter("@IsElectronicInvoiced", electronicInvoice),
 			   new Parameter("@EnteredBy", activeUser.UserName)
 		   };
@@ -122,12 +123,13 @@ namespace M4PL.DataAccess.Finance
 			SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderItemMapping, new Parameter("@JobOrderItemMappingId", jobOrderItemMappingId), true);
 		}
 
-		public static void DeleteJobOrderMapping(string documentNumber, string entityName)
+		public static void DeleteJobOrderMapping(long jobId, bool isElectronicInvoice, string entityName)
 		{
 			var parameters = new List<Parameter>
 		   {
 			   new Parameter("@EntityName", entityName),
-			   new Parameter("@documentNumber", documentNumber)
+			   new Parameter("@jobId", jobId),
+			   new Parameter("@isElectronicInvoice", isElectronicInvoice)
 		   };
 
 			SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderMapping, parameters.ToArray(), true);

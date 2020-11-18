@@ -28,6 +28,7 @@ M4PLWindow.OrderId = 0;
 M4PLWindow.JobIsScheduled = false;
 M4PLWindow.JobGatewayStatus = '';
 M4PLWindow.MultiSelectedJobIds = [];
+M4PLWindow.Count = 0;
 
 M4PLWindow.CallBackPanel = function () {
     var params;
@@ -50,9 +51,13 @@ M4PLWindow.CallBackPanel = function () {
     var _onEndCallBack = function (s, e) {
         if (ASPxClientControl.GetControlCollection().GetByName("MainSplitter"))
             ASPxClientControl.GetControlCollection().GetByName("MainSplitter").GetPaneByName("Content").SetScrollTop(0);
-        if (s.cpRibbonRoute) {
+
+        if (s.cpRibbonRoute && M4PLWindow.Count == 0) {
+            M4PLWindow.Count = M4PLWindow.Count + 1;
             DevExCtrl.Ribbon.DoCallBack(s.cpRibbonRoute);
             delete s.cpRibbonRoute;
+        } else {
+            M4PLWindow.Count = 0;
         }
         M4PLCommon.Error.CheckServerError();
     }
@@ -74,7 +79,7 @@ M4PLWindow.DataView = function () {
     var _allowBatchEdit = {};
 
     var _onBeginCallback = function (s, e, gridName) {
-        if (s && s.name)
+        if (s && s.name) 
             M4PLCommon.Control.UpdateDataViewHasChanges(s.name, false);
         e.customArgs["RowKey"] = s.GetRowKey(s.GetFocusedRowIndex());
     }
@@ -187,6 +192,11 @@ M4PLWindow.DataView = function () {
             if (M4PLWindow.MultiSelectedJobIds.length == 0)
                 M4PLCommon.Common.EnableJobGridMultiSelection(false);
         }
+        if (s.name === "JobAdvanceReportGridView") {
+            if (document.getElementById('ReportType_I').value === "Cost Charge" || document.getElementById('ReportType_I').value === "Price Charge") {
+                document.getElementById('JobAdvanceReportGridView_DXFilterRow').style.display = 'none';
+            }
+        }
     }
 
     var _onBatchEditStartEditing = function (s, e, isReadOnly, disableEditor, fieldToCheck, hiddenFieldName) {
@@ -203,6 +213,8 @@ M4PLWindow.DataView = function () {
                     editor.SetEnabled(true);
             }
         }
+        if (s.name.split("SubSecurityByRoleGridView").length === 2) // as using parent id as suffix in name
+            e.rowValues[s.GetColumnByField("StatusId").index].value = 1; // set status to active
     }
 
     var _onActRoleBatchEditStartEditing = function (s, e, isReadOnly, roleId, orgId, statusIdFieldName, roleTitleFieldName) {
@@ -317,6 +329,8 @@ M4PLWindow.DataView = function () {
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }
         M4PLCommon.Error.CheckServerError();
+        //if (s.name == "JobAdvanceReportGridView")
+        //    $(".isDriverScrubreport").show();
     }
 
     var _onComboBoxValueChanged = function (s, e, currentGridControl, nameFieldName) {
@@ -417,59 +431,41 @@ M4PLWindow.DataView = function () {
         var selectedRowCount = s.GetSelectedRowCount();
 
         var callbackUrl = s.callbackUrl;
-        if (selectedRowCount > 0) {
-
+        if (selectedRowCount > 0 && !e.isAllRecordsOnPage) {
             if (selectedRowCount == 1 && e.isSelected)
                 M4PLWindow.MultiSelectedJobIds = [];
 
-            if (e.isSelected)
+            if (e.isSelected) {
                 M4PLWindow.MultiSelectedJobIds.push(s.GetItemKey(s.GetFocusedRowIndex()));
-            else
+                M4PLCommon.Common.EnableJobGridMultiSelection(true);
+            } else
                 M4PLWindow.MultiSelectedJobIds = M4PLCommon.Common.ArrayRemove(M4PLWindow.MultiSelectedJobIds, s.GetItemKey(s.GetFocusedRowIndex()));
+        }
+        else if (e.isAllRecordsOnPage) {
+            if (selectedRowCount == 0) {
+                M4PLWindow.MultiSelectedJobIds = [];
+                M4PLCommon.Common.EnableJobGridMultiSelection(false);
+            }
+            else {
+                M4PLCommon.Common.EnableJobGridMultiSelection(true);
+                for (var i = 0; i < selectedRowCount; i++) {
+                    var result = s.GetItemKey(i);
+                    if (result != '' && result != undefined)
+                        M4PLWindow.MultiSelectedJobIds.push(result);
+                }
+            }
         }
         else
             M4PLWindow.MultiSelectedJobIds = [];
-
-        var isJobIsScheduled = M4PLWindow.JobIsScheduled != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobIsSchedule');
-        var isJobGatewayStatus = M4PLWindow.JobGatewayStatus != s.batchEditApi.GetCellValue(s.lastMultiSelectIndex, 'JobGatewayStatus');
-
-        if (selectedRowCount == 1 && !e.isSelected) {
-            M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValueByKey(M4PLWindow.MultiSelectedJobIds[0], 'JobIsSchedule', '')
-            M4PLWindow.JobGatewayStatus = s.batchEditApi.GetCellValueByKey(M4PLWindow.MultiSelectedJobIds[0], 'JobGatewayStatus', '')
-        }
-
-        if (selectedRowCount == 1 && e.isSelected) {
-            M4PLWindow.JobIsScheduled = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobIsSchedule');
-            M4PLWindow.JobGatewayStatus = s.batchEditApi.GetCellValue(s.GetFocusedRowIndex(), 'JobGatewayStatus');
-            M4PLCommon.Common.EnableJobGridMultiSelection(true);
-        }
-        else if (selectedRowCount != 0 && (isJobIsScheduled || isJobGatewayStatus)) {
-            if (callbackUrl != undefined && callbackUrl != "") {
-                var callbackUri = new URL(callbackUrl, window.location.origin);
-                var urlParams = new URLSearchParams(callbackUri.search);
-                if (urlParams.has('strRoute')) {
-                    var route = JSON.parse(urlParams.getAll('strRoute'));
-                    route.RecordId = 0;
-                    route.Location = s.GetSelectedKeysOnPage();
-                    s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
-                    s.Refresh();
-                }
-            }
-            return;
-        }
-        if (selectedRowCount <= 1 && selectedRowCount >= 0) {
-            var selectedJobId = selectedRowCount == 0 ? 0
-                : (selectedRowCount == 1 && !e.isSelected ? M4PLWindow.MultiSelectedJobIds[0] : s.GetItemKey(s.GetFocusedRowIndex()));
-            if (callbackUrl != undefined && callbackUrl != "") {
-                var callbackUri = new URL(callbackUrl, window.location.origin);
-                var urlParams = new URLSearchParams(callbackUri.search);
-                if (urlParams.has('strRoute')) {
-                    var route = JSON.parse(urlParams.getAll('strRoute'));
-                    route.RecordId = selectedJobId;
-                    route.Location = s.GetSelectedKeysOnPage();
-                    s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
-                    s.Refresh();
-                }
+        if (callbackUrl != undefined && callbackUrl != "") {
+            var callbackUri = new URL(callbackUrl, window.location.origin);
+            var urlParams = new URLSearchParams(callbackUri.search);
+            if (urlParams.has('strRoute')) {
+                var route = JSON.parse(urlParams.getAll('strRoute'));
+                route.RecordId = 0;
+                route.JobIds = M4PLWindow.MultiSelectedJobIds;
+                s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
+                //s.Refresh();
             }
         }
     }
@@ -935,6 +931,22 @@ M4PLWindow.FormView = function () {
 
             putOrPostData.push({ name: "IsSecurityDefined", value: totalRecords > 0 });
         }
+
+
+        var route = JSON.parse(strRoute);
+        if (route.Controller == "PrgEventManagement" && route.Action == "DataView") {
+
+            var toemailsubscriber = ASPxClientControl.GetControlCollection().GetByName('ToAddressSubscriberIdListBox');
+            var toemailsubscribervalues = toemailsubscriber.GetSelectedItems().map(function (el) { return el.text; });
+
+            var ccemailsubscriber = ASPxClientControl.GetControlCollection().GetByName('EmailCCAddressSubscriberIdListBox');
+            var ccemailsubscribervalues = ccemailsubscriber.GetSelectedItems().map(function (el) { return el.text; });
+
+            putOrPostData.push({ name: "ToEmailSubscribers", value: toemailsubscribervalues });
+            putOrPostData.push({ name: "CcEMailSubscribers", value: ccemailsubscribervalues });
+
+        }
+
         var conditionsGrid = null;
         if (typeof PrgEdiConditionGridView !== "undefined" && ASPxClientUtils.IsExists(PrgEdiConditionGridView) && ASPxClientUtils.IsExists(PrgEdiConditionGridView)) {
             conditionsGrid = ASPxClientControl.GetControlCollection().GetByName('PrgEdiConditionGridView');
@@ -994,6 +1006,14 @@ M4PLWindow.FormView = function () {
                                 else if (response.reloadApplication && response.reloadApplication === true) {
                                     M4PLCommon.Common.ReloadApplication();
                                     return;
+                                }
+                                if (route.Controller === "PrgEventManagement") {
+                                    route.Action = response.route.Action;
+                                    if (response.displayMessage && route.Action == "FormView") {
+                                        response.displayMessage.HeaderIcon = null;
+                                        response.displayMessage.MessageTypeIcon = null;
+                                        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
+                                    }
                                 }
                                 else if (route.Controller === "PrgEdiHeader") {
                                     if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
@@ -1066,7 +1086,10 @@ M4PLWindow.FormView = function () {
         }
         if (currentRoute.IsPBSReport && currentRoute.Controller == "JobGateway"
             && (currentRoute.Action == "GatewayActionFormView" || currentRoute.Action == "FormView")) {
-            var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+            var s = null;
+            s = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
+            if (s == null && s == undefined)
+                s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
             //if (s != null && s != undefined && s.GetSelectedKeysOnPage() != null && s.GetSelectedKeysOnPage() != undefined && s.GetSelectedKeysOnPage().length > 0)
             if (s != null && s != undefined && M4PLWindow.MultiSelectedJobIds.length > 0)
                 putOrPostData.push({ name: "JobIds", value: M4PLWindow.MultiSelectedJobIds });
@@ -1099,9 +1122,12 @@ M4PLWindow.FormView = function () {
                 success: function (response) {
                     if (response && response.status && response.status === true) {
                         var ownerCbPanel = ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel);
+                        if (ownerCbPanel == null) {
+                            ownerCbPanel = ASPxClientControl.GetControlCollection().GetByName(response.route.OwnerCbPanel);
+                        }
                         if (currentRoute.OwnerCbPanel === "pnlJobDetail" && currentRoute.Action === "ContactCardFormView") {
-                            if (ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver")) {
-                                var driverpanel = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver");
+                            var driverpanel = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver")
+                            if (driverpanel != null && driverpanel != 'undefined') {
                                 driverpanel.PerformCallback({ 'selectedId': response.route.RecordId });
                             }
                         }
@@ -1109,8 +1135,8 @@ M4PLWindow.FormView = function () {
                             attachmentGrid.callbackCustomArgs["docRefId"] = response.route.RecordId;
                             attachmentGrid.UpdateEdit();
                         }
+
                         if (ownerCbPanel && !ownerCbPanel.InCallback()) {
-                            response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
                             response.route.IsPopup = currentRoute.IsPopup;
                             if (!response.route.ParentEntity) {
                                 response.route.ParentEntity = currentRoute.ParentEntity;
@@ -1130,8 +1156,14 @@ M4PLWindow.FormView = function () {
                                                 response.route.Controller = "Job";
                                                 response.route.Entity = "Job";
                                                 response.route.RecordId = currentRoute.ParentRecordId;
-                                                JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                                                if (response.route.OwnerCbPanel == "pnlJobDetail")
+                                                    pnlJobDetail.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                                                else {
+                                                    response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
+                                                    JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                                                }
                                                 RecordPopupControl.Hide();
+                                                _resetCustomBatchView();
                                                 if (response.displayMessage)
                                                     DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
                                                 DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
@@ -1140,12 +1172,15 @@ M4PLWindow.FormView = function () {
                                             // ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
                                         } else if (response.route.Controller === "JobGateway"
                                             || response.route.Controller === "JobDocReference") {
+                                            response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
                                             var resultRoute = response.tabRoute;
                                             if (resultRoute != null) {
                                                 resultRoute.Controller = "Job";
                                                 var sender = ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel);
                                                 if (response.gatewayIds != null && response.gatewayIds != undefined) {
                                                     var s = ASPxClientControl.GetControlCollection().GetByName("JobGridView");
+                                                    if (s == null || s == undefined)
+                                                        s = ASPxClientControl.GetControlCollection().GetByName("JobCardGridView");
                                                     if (s != null && s != undefined) {
                                                         var callbackUrl = s.callbackUrl;
                                                         if (callbackUrl != undefined && callbackUrl != "") {
@@ -1154,19 +1189,24 @@ M4PLWindow.FormView = function () {
                                                             if (urlParams.has('strRoute')) {
                                                                 var route = JSON.parse(urlParams.getAll('strRoute'));
                                                                 route.RecordId = 0;
-                                                                route.Location = s.GetSelectedKeysOnPage();
+                                                                route.JobIds = s.GetSelectedKeysOnPage();
+                                                                M4PLWindow.MultiSelectedJobIds = [];
                                                                 s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                                                                 s.Refresh();
                                                             }
                                                         }
                                                     }
-                                                } else if (sender)
+                                                } else if (sender) {
+                                                    resultRoute.IsJGWYOpen = true;
+                                                    resultRoute.Area = "Job"
                                                     sender.PerformCallback({ strRoute: JSON.stringify(resultRoute) });
+                                                }
                                             }
                                             else {
                                                 ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
                                             }
                                         } else {
+                                            response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
                                             ownerCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route), selectedId: response.route.RecordId, strDropDownViewModel: (!strDropDownViewModel) ? null : JSON.stringify(strDropDownViewModel) });
                                         }
                                     }
@@ -1246,6 +1286,8 @@ M4PLWindow.FormView = function () {
                         if (ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel)) {
                             var grid = ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel);
                             var rowIndex = grid.GetFocusedRowIndex();
+                            M4PLWindow.PopupDataViewHasChanges[grid] = false;
+                            M4PLWindow.DataViewsHaveChanges[grid] = false;
                             if (grid.batchEditApi.GetColumnIndex("GwyCompleted") !== null)
                                 grid.batchEditApi.SetCellValue(rowIndex, 'GwyCompleted', true);
 
@@ -1611,6 +1653,14 @@ M4PLWindow.FormView = function () {
         }
     }
 
+    var _resetCustomBatchView = function () {
+        $('td.dxgvBatchEditModifiedCell_Office2010Black').removeClass('dxgvBatchEditModifiedCell_Office2010Black');
+        ASPxClientControl.GetControlCollection().GetByName("btnSaveJobGatewayGridView").SetEnabled(false);
+        ASPxClientControl.GetControlCollection().GetByName("btnCancelJobGatewayGridView").SetEnabled(false);
+        $("#btnSaveJobGatewayGridView").addClass("noHover");
+        $("#btnCancelJobGatewayGridView").addClass("noHover");
+    }
+
     return {
         init: init,
         OnAddOrEdit: _onAddOrEdit,
@@ -1855,6 +1905,36 @@ M4PLWindow.ChooseColumns = function () {
                             }
                         }
                     }
+
+
+                }
+                if (currentRoute.Action == "ChooseColumns" && currentRoute.Controller == "JobDocReference") {
+                    if (ASPxClientControl.GetControlCollection().GetByName("Document_JobCargoPageControl")) {
+                        var index = ASPxClientControl.GetControlCollection().GetByName("Document_JobCargoPageControl").activeTabIndex;
+                        switch (index) {
+                            case 0:
+                                actionToAssign = "DocumentDataView";
+                                break;
+                            case 1:
+                                actionToAssign = "DocApprovalsDataView";
+                                break;
+                            case 2:
+                                actionToAssign = "DocDamagedDataView";
+                                break;
+                            case 3:
+                                actionToAssign = "DocDocumentDataView";
+                                break;
+                            case 4:
+                                actionToAssign = "DocImageDataView";
+                                break;
+                            case 5:
+                                actionToAssign = "DocDeliveryPodDataView";
+                                break;
+                            case 6:
+                                actionToAssign = "DocSignatureDataView";
+                                break;
+                        }
+                    }
                 }
                 currentRoute.Action = actionToAssign;
 
@@ -1937,14 +2017,8 @@ M4PLWindow.UploadFileDragDrop = function () {
     }
 
     var _onUploadControlFileUploadComplete = function (s, e, callBackRoute) {
-        //if (e != null && e != undefined) {
-        //    if (e.isValid)
-        //        $("#uploadedImage").attr("src", e.callbackData);
-        //    //_setElementVisible(s, e, "uploadedImage", e.isValid);
-        //}
         DevExCtrl.PopupControl.Close();
         DisplayMessageControl.PerformCallback({ strDisplayMessage: e.callbackData });
-        //ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute) });
     }
 
     var _onImageLoad = function () {
@@ -1970,6 +2044,7 @@ M4PLWindow.UploadFileDragDrop = function () {
             }
         }
     }
+
 
     return {
         Init: _init,

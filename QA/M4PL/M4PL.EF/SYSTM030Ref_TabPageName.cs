@@ -16,13 +16,10 @@ namespace M4PL.EF
     {
         public long Id { get; set; }
         public string LangCode { get; set; }
-        public string RefTableName { get; set; }
         public Nullable<int> TabSortOrder { get; set; }
-        public string TabTableName { get; set; }
         public string TabPageTitle { get; set; }
         public string TabExecuteProgram { get; set; }
         public byte[] TabPageIcon { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

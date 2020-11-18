@@ -22,7 +22,6 @@ namespace M4PL.EF
     
         public long Id { get; set; }
         public Nullable<bool> PehParentEDI { get; set; }
-        public Nullable<long> PehProgramID { get; set; }
         public Nullable<int> PehItemNumber { get; set; }
         public string PehEdiCode { get; set; }
         public string PehEdiTitle { get; set; }
@@ -52,13 +51,17 @@ namespace M4PL.EF
         public string UDF09 { get; set; }
         public string UDF10 { get; set; }
         public Nullable<int> PehAttachments { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> PehDateStart { get; set; }
         public Nullable<System.DateTime> PehDateEnd { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
+        public string PehFtpServerUrl { get; set; }
+        public string PehFtpUsername { get; set; }
+        public string PehFtpPassword { get; set; }
+        public string PehFtpPort { get; set; }
+        public bool IsSFTPUsed { get; set; }
     
         public virtual PRGRM000Master PRGRM000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }

@@ -21,6 +21,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
 using M4PL.DataAccess.SQLSerializer.Serializer;
+using M4PL.Entities;
 using M4PL.Entities.Document;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
@@ -28,6 +29,7 @@ using M4PL.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.IO.Compression;
@@ -40,6 +42,11 @@ namespace M4PL.Business.Attachment
 {
 	public class AttachmentCommands : BaseCommands<Entities.Attachment>, IAttachmentCommands
 	{
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
 		/// <summary>
 		/// Get list of contacts data
 		/// </summary>
@@ -138,7 +145,7 @@ namespace M4PL.Business.Attachment
 			if (setcollection != null)
 			{
 				documentData = new DocumentData();
-				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationLocalURL + "Content/Images/M4plLogo.png" } };
+				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", ConfigurationManager.AppSettings["M4PLApplicationLocalURL"] + "Content/Images/M4plLogo.png" } };
 				Stream stream = GenerateHtmlFile(setcollection, "JobBOLDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobBOL.xslt", args);
 				StringBuilder stringBuilder = new StringBuilder();
 				using (StreamReader reader = new StreamReader(stream))
@@ -179,7 +186,7 @@ namespace M4PL.Business.Attachment
 			if (setcollection != null)
 			{
 				documentData = new DocumentData();
-				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationLocalURL + "Content/Images/M4plLogo.png" } };
+				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", ConfigurationManager.AppSettings["M4PLApplicationLocalURL"] + "Content/Images/M4plLogo.png" } };
 				Stream stream = GenerateHtmlFile(setcollection, "JobTrackingDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobTracking.xslt", args);
 				StringBuilder stringBuilder = new StringBuilder();
 				using (StreamReader reader = new StreamReader(stream))
@@ -216,7 +223,7 @@ namespace M4PL.Business.Attachment
 		public DocumentData GetPriceCodeReportDocumentByJobId(long jobId)
 		{
 			DocumentData documentData = null;
-			DataTable tblResult = _commands.GetJobPriceReportDataTable(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			DataTable tblResult = _commands.GetJobPriceReportDataTable(ActiveUser, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), jobId);
 			if (tblResult != null && tblResult.Rows.Count > 0)
 			{
 				documentData = new DocumentData();
@@ -239,7 +246,7 @@ namespace M4PL.Business.Attachment
 		public DocumentData GetCostCodeReportDocumentByJobId(long jobId)
 		{
 			DocumentData documentData = null;
-			DataTable tblResult = _commands.GetJobCostReportDataTable(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			DataTable tblResult = _commands.GetJobCostReportDataTable(ActiveUser, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), jobId);
 			if (tblResult != null && tblResult.Rows.Count > 0)
 			{
 				documentData = new DocumentData();
@@ -287,7 +294,7 @@ namespace M4PL.Business.Attachment
 		public DocumentStatus IsPriceCodeDataPresentForJob(List<long> selectedJobId)
 		{
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
-			var priceCodeData = _commands.GetMultipleJobPriceReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, selectedJobId);
+			var priceCodeData = _commands.GetMultipleJobPriceReportData(ActiveUser, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), selectedJobId);
 			if (priceCodeData != null && priceCodeData.Count > 0)
 			{
 				documentStatus.IsAttachmentPresent = true;
@@ -299,12 +306,12 @@ namespace M4PL.Business.Attachment
 		public DocumentStatus IsCostCodeDataPresentForJob(List<long> selectedJobId)
 		{
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
-			var costCodeData = _commands.GetMultipleJobCostReportData(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, selectedJobId);
+			var costCodeData = _commands.GetMultipleJobCostReportData(ActiveUser, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), selectedJobId);
 			if (costCodeData != null && costCodeData.Count > 0)
 			{
 				documentStatus.IsAttachmentPresent = true;
 			}
-			
+
 			return documentStatus;
 		}
 

@@ -107,9 +107,9 @@ namespace M4PL.Web
             var chooseColumnOperation = commonCommands.GetOperation(OperationTypeEnum.ChooseColumn).SetRoute(route, MvcConstants.ActionChooseColumn);
             chooseColumnOperation.Route.IsPopup = route.IsPopup;
             var actionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
+            var gatewaysContextMenu = commonCommands.GetOperation(OperationTypeEnum.Gateways);
             var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
             var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
-            var gatewaysContextMenu = commonCommands.GetOperation(OperationTypeEnum.Gateways);
             var gridRefresh = commonCommands.GetOperation(OperationTypeEnum.Refresh).SetRoute(route, MvcConstants.ActionDataView);
 
             switch (route.Entity)
@@ -249,6 +249,7 @@ namespace M4PL.Web
                     break;
 
                 case EntitiesAlias.JobCard:
+                    gridViewSetting.EnableClientSideExportAPI = true;
                     gridViewSetting.Mode = GridViewEditingMode.Batch;
                     gridViewSetting.ContextMenu.Add(gridRefresh);
                     break;
@@ -279,6 +280,7 @@ namespace M4PL.Web
                     gridViewSetting.IsJobCardEntity = true;
                     //editOperation.Route.IsJobCardEntity = true;
                     gridViewSetting.ContextMenu.Add(editOperation);
+                    //gridViewSetting.ContextMenu.Add(actionsContextMenu);
                 }
                 else if (hasRecords
                     && route.Entity != EntitiesAlias.PrgCostLocation
@@ -290,42 +292,49 @@ namespace M4PL.Web
                     gridViewSetting.ContextMenu.Add(editOperation);
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
                         gridViewSetting.ContextMenu.Add(copyOperation);
-                    if (route.Entity == EntitiesAlias.Job)
-                    {
-                        var moduleIdToCompare = MainModule.Job.ToInt();
-                        var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
-                        int? permission = security?.SecMenuAccessLevelId;
-                        if (security?.UserSubSecurities != null && security.UserSubSecurities.Count > 0)
-                        {
-                            var tableRef = commonCommands.Tables[EntitiesAlias.JobGateway];
-                            string refTableName = tableRef.SysRefName != null ? Convert.ToString(tableRef.SysRefName).ToUpper() : tableRef.SysRefName;
-                            var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && x.RefTableName.ToUpper() == refTableName);
+                    //if (route.Entity == EntitiesAlias.Job && sessionProvider != null)
+                    //{
+                    //    var moduleIdToCompare = MainModule.Job.ToInt();
+                    //    var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
+                    //    int? permission = security?.SecMenuAccessLevelId;
+                    //    if (security?.UserSubSecurities != null && security.UserSubSecurities.Count > 0)
+                    //    {
+                    //        var tableRef = commonCommands.Tables[EntitiesAlias.JobGateway];
+                    //        string refTableName = tableRef.SysRefName != null ? Convert.ToString(tableRef.SysRefName).ToUpper() : tableRef.SysRefName;
+                    //        var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && x.RefTableName.ToUpper() == refTableName);
 
-                            permission = subSecurity != null ? subSecurity.SubsMenuAccessLevelId : permission;
-                        }
-                        if (permission.HasValue && permission.Value > (int)Permission.ReadOnly)
-                        {
-                            gridViewSetting.ContextMenu.Add(actionsContextMenu);
-                            gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
-                        }
-                    }
-                    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly) //action context menu should come after new and edit. So, Have added this here
+                    //        permission = subSecurity != null ? subSecurity.SubsMenuAccessLevelId : permission;
+                    //    }
+                    //    if (permission.HasValue && permission.Value > (int)Permission.ReadOnly)
+                    //    {
+                    //        gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                    //        gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                    //    }
+                    //}
+                    if ((route.Entity == EntitiesAlias.JobGateway) && currentPermission > Permission.ReadOnly) // || route.Entity == EntitiesAlias.JobCard action context menu should come after new and edit. So, Have added this here
                     {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                        //if (route.Entity != EntitiesAlias.JobCard)
                         gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
                     }
                 }
-                else if (!hasRecords && !gridViewSetting.IsJobCardEntity)
+                //else if (!hasRecords && !gridViewSetting.IsJobCardEntity)
+                //{
+                //    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly)
+                //    {
+                //        gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                //        gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                //    }
+                //    //if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard)
+                //    //{
+                //    //    gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                //    //}
+                //}
+
+                else if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly)
                 {
-                    if (route.Entity == EntitiesAlias.JobGateway && currentPermission > Permission.ReadOnly)
-                    {
-                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
-                        gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
-                    }
-                    if (route.Entity == EntitiesAlias.Job)
-                    {
-                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
-                    }
+                    gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                    gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
                 }
 
                 if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
@@ -425,7 +434,7 @@ namespace M4PL.Web
                 //editOperation.Route.IsJobCardEntity = true;
                 gridViewSetting.ContextMenu.Add(editOperation);
             }
-            if (route.Entity != EntitiesAlias.JobHistory)
+            if (route.Entity != EntitiesAlias.JobHistory || route.Entity != EntitiesAlias.JobAdvanceReport)
                 gridViewSetting.ContextMenu.Add(chooseColumnOperation);
             if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet
                 || (route.Entity == EntitiesAlias.JobGateway &&
@@ -449,11 +458,14 @@ namespace M4PL.Web
             }
             else if (!hasRecords && route.Action == "JobGatewayActions")
                 toggleOperation.Route.Action = MvcConstants.ActionToggleFilter;
-
-            gridViewSetting.ContextMenu.Add(Copy);
-            gridViewSetting.ContextMenu.Add(Cut);
-            gridViewSetting.ContextMenu.Add(Paste);
-
+            if (route.Entity != EntitiesAlias.JobAdvanceReport)
+            {
+                gridViewSetting.ContextMenu.Add(Copy);
+                gridViewSetting.ContextMenu.Add(Cut);
+                gridViewSetting.ContextMenu.Add(Paste);
+            }
+            if (currentPermission <= Permission.ReadOnly)
+                gridViewSetting.ContextMenu.Remove(addOperation);
             return gridViewSetting;
         }
 
@@ -479,6 +491,14 @@ namespace M4PL.Web
                         gridName = string.Format("DocDeliveryPod_{0}", gridName);
                     else if (route.Action == MvcConstants.ActionDocDamagedDataView)
                         gridName = string.Format("DocDamagedDataView_{0}", gridName);
+                    else if (route.Action == MvcConstants.ActionDocDocumentDataView)
+                        gridName = string.Format("DocDocumentDataView_{0}", gridName);
+                    else if (route.Action == MvcConstants.ActionDocApprovalsDataView)
+                        gridName = string.Format("DocApprovalsDataView_{0}", gridName);
+                    else if (route.Action == MvcConstants.ActionDocImageDataView)
+                        gridName = string.Format("DocImageDataView_{0}", gridName);
+                    else if (route.Action == MvcConstants.ActionDocSignatureDataView)
+                        gridName = string.Format("DocSignatureDataView_{0}", gridName);
                     return gridName;
 
                 default:
@@ -621,6 +641,10 @@ namespace M4PL.Web
                         case SQLDataTypes.varchar:
                             if (columnSetting.ColColumnName == "JobDeliveryState")
                                 return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 270;
+                            if (columnSetting.ColColumnName == "PecJobField" || columnSetting.ColColumnName == "PecJobField2")
+                                return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 350;
+                            if (columnSetting.ColColumnName == "PemEdiFieldName")
+                                return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 420;
                             return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : 270;
 
                         case SQLDataTypes.datetime2:
@@ -727,6 +751,9 @@ namespace M4PL.Web
 
                 case "JobOrderedDate":
                     return columnSetting.MaxLength = 150;
+
+                case "RateAmount":
+                    return columnSetting.MaxLength = 100;
             }
 
             if (!string.IsNullOrWhiteSpace(columnSetting.DataType))
@@ -1349,6 +1376,7 @@ namespace M4PL.Web
             Exception,
             NotAction,
             ThreePL,
+            SchedulePickUp
         }
 
         public static List<string> ContactColumnsUsedAsVirtualInOtherEntities()

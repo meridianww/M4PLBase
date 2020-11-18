@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -26,86 +26,86 @@ using _commands = M4PL.DataAccess.Program.PrgVendLocationComments;
 
 namespace M4PL.Business.Program
 {
-    public class PrgVendLocationCommands : BaseCommands<PrgVendLocation>, IPrgVendLocationCommands
-    {
-        /// <summary>
-        /// Gets list of prgvendlocation data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<PrgVendLocation> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class PrgVendLocationCommands : BaseCommands<PrgVendLocation>, IPrgVendLocationCommands
+	{
+		/// <summary>
+		/// Gets list of prgvendlocation data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<PrgVendLocation> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific prgvendlocation record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific prgvendlocation record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public PrgVendLocation Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public PrgVendLocation Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Creates a new prgvendlocation record
-        /// </summary>
-        /// <param name="prgVendLocation"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new prgvendlocation record
+		/// </summary>
+		/// <param name="prgVendLocation"></param>
+		/// <returns></returns>
 
-        public PrgVendLocation Post(PrgVendLocation prgVendLocation)
-        {
-            return _commands.Post(ActiveUser, prgVendLocation);
-        }
+		public PrgVendLocation Post(PrgVendLocation prgVendLocation)
+		{
+			return _commands.Post(ActiveUser, prgVendLocation);
+		}
 
-        /// <summary>
-        /// Updates an existing prgvendlocation record
-        /// </summary>
-        /// <param name="prgVendLocation"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing prgvendlocation record
+		/// </summary>
+		/// <param name="prgVendLocation"></param>
+		/// <returns></returns>
 
-        public PrgVendLocation Put(PrgVendLocation prgVendLocation)
-        {
-            return _commands.Put(ActiveUser, prgVendLocation);
-        }
+		public PrgVendLocation Put(PrgVendLocation prgVendLocation)
+		{
+			return _commands.Put(ActiveUser, prgVendLocation);
+		}
 
-        /// <summary>
-        /// Deletes a specific prgvendlocation record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific prgvendlocation record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of prgvendlocation record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of prgvendlocation record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
-        public IList<TreeModel> ProgramVendorTree(ActiveUser activeUser, long orgId, bool isAssignedPrgVendor, long programId, long? parentId, bool isChild)
-        {
-            return _commands.ProgramVendorTree(activeUser, orgId, isAssignedPrgVendor, programId, parentId, isChild);
-        }
+		public IList<TreeModel> ProgramVendorTree(ActiveUser activeUser, long orgId, bool isAssignedPrgVendor, long programId, long? parentId, bool isChild)
+		{
+			return _commands.ProgramVendorTree(activeUser, orgId, isAssignedPrgVendor, programId, parentId, isChild);
+		}
 
-        public bool MapVendorLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap)
-        {
-            return _commands.MapVendorLocations(activeUser, programVendorMap);
-        }
+		public bool MapVendorLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap)
+		{
+			return _commands.MapVendorLocations(activeUser, programVendorMap);
+		}
 
-        public PrgVendLocation Patch(PrgVendLocation entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public PrgVendLocation Patch(PrgVendLocation entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

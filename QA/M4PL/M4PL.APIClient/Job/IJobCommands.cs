@@ -56,5 +56,6 @@ namespace M4PL.APIClient.Job
 		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
 
 		List<ChangeHistoryData> GetChangeHistory(long jobId);
+		JobContact GetJobContact(long recordId, long parentRecordId);
 	}
 }

@@ -31,6 +31,7 @@ using M4PL.Web.Providers;
 using M4PL_Apln.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -387,7 +388,7 @@ namespace M4PL.Web.Controllers
                 });
             }
 
-            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && (defaultRoute.Entity == EntitiesAlias.JobCargo ? true : !GetPrimaryKeyColumns().Contains(c.ColColumnName))).Select(x => x.DeepCopy()).ToList();
+            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && ((defaultRoute.Entity == EntitiesAlias.JobCargo || defaultRoute.Entity == EntitiesAlias.Job) ? true : !GetPrimaryKeyColumns().Contains(c.ColColumnName))).Select(x => x.DeepCopy()).ToList();
             ViewData[MvcConstants.DefaultGroupByColumns] = columnSettingsFromColumnAlias.Where(x => x.ColIsGroupBy).Select(x => x.ColColumnName).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
@@ -461,7 +462,8 @@ namespace M4PL.Web.Controllers
                 Entity = EntitiesAlias.VendDcLocation,
                 EntityFor = EntitiesAlias.Job,
             };
-            ViewData["DCLocationlist"] = _commonCommands.GetPagedSelectedFieldsByTable(RibbondropDownData.Query());
+            var data = _commonCommands.GetPagedSelectedFieldsByTable(RibbondropDownData.Query());
+            ViewData["DCLocationlist"] = data;
             return PartialView("_PrefVdcLocationsPartial", DropDownEditViewModel);
         }
 
@@ -561,13 +563,13 @@ namespace M4PL.Web.Controllers
         }
 
         public ActionResult IsHistoryPresentForJob(long jobId, string jobIds)
-		{
-			List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
-			string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
-			return Json(new { status = true, documentStatus = _commonCommands.IsHistoryPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
-		}
+        {
+            List<long> selectedJobId = !string.IsNullOrEmpty(jobIds) ? jobIds.Split(',').Select(Int64.Parse).ToList() : null;
+            string requestedJobId = selectedJobId == null ? jobId.ToString() : selectedJobId?.Count == 1 ? selectedJobId[0].ToString() : jobIds;
+            return Json(new { status = true, documentStatus = _commonCommands.IsHistoryPresentForJob(requestedJobId) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public ActionResult GetContactType(string lookupName)
+        public ActionResult GetContactType(string lookupName)
         {
             return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
         }
@@ -666,7 +668,7 @@ namespace M4PL.Web.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CommonIds maxMinFormData = null;
-            if (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
+            if ((route.Entity != EntitiesAlias.NavRate || route.Entity != EntitiesAlias.Gateway) && route.Action != MvcConstants.ActionForm)
                 maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
 
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
@@ -712,24 +714,48 @@ namespace M4PL.Web.Controllers
 
             if (!_commonCommands.Tables.ContainsKey(route.Entity))
             {
-                return PartialView(MvcConstants.NavigationPanePartial, new List<FormNavMenu>()
+                if (route.Entity == EntitiesAlias.UserGuideUpload)
                 {
-                    new FormNavMenu { Text = "Delete More Information",Action =route.Action,SecondNav = false,Enabled = true,ItemClick =  JsConstants.RecordPopupCancelClick, IsPopup=true},
-                    new FormNavMenu {
-                    IsPopup = true,
-                    EntityName = route.EntityName,
-                    Url = route.Url,
-                    OwnerCbPanel = route.OwnerCbPanel,
-                    ParentEntity = route.ParentEntity,
-                    IsNext = true,
-                    IsEnd = true,
-                    IconID = DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16,
-                    Align = 2,
-                    Enabled = true,
-                    SecondNav = true,
-                    ItemClick=JsConstants.RecordPopupCancelClick,
-                    }
-                });
+                    return PartialView(MvcConstants.NavigationPanePartial, new List<FormNavMenu>()
+                    {
+                        new FormNavMenu { Text = "Upload User Guide PDF Document",Action =route.Action,SecondNav = false,Enabled = true,ItemClick =  JsConstants.RecordPopupCancelClick, IsPopup=true},
+                        new FormNavMenu {
+                        IsPopup = true,
+                        EntityName = route.EntityName,
+                        Url = route.Url,
+                        OwnerCbPanel = route.OwnerCbPanel,
+                        ParentEntity = route.ParentEntity,
+                        IsNext = true,
+                        IsEnd = true,
+                        IconID = DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16,
+                        Align = 2,
+                        Enabled = true,
+                        SecondNav = true,
+                        ItemClick=JsConstants.RecordPopupCancelClick,
+                        }
+                    });
+                }
+                else
+                {
+                    return PartialView(MvcConstants.NavigationPanePartial, new List<FormNavMenu>()
+                    {
+                        new FormNavMenu { Text = "Delete More Information",Action =route.Action,SecondNav = false,Enabled = true,ItemClick =  JsConstants.RecordPopupCancelClick, IsPopup=true},
+                        new FormNavMenu {
+                        IsPopup = true,
+                        EntityName = route.EntityName,
+                        Url = route.Url,
+                        OwnerCbPanel = route.OwnerCbPanel,
+                        ParentEntity = route.ParentEntity,
+                        IsNext = true,
+                        IsEnd = true,
+                        IconID = DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16,
+                        Align = 2,
+                        Enabled = true,
+                        SecondNav = true,
+                        ItemClick=JsConstants.RecordPopupCancelClick,
+                        }
+                    });
+                }
             }
 
             TableReference tableRef = new TableReference();
@@ -744,6 +770,10 @@ namespace M4PL.Web.Controllers
                 tableRef = _commonCommands.Tables[route.Entity];
 
             route.EntityName = tableRef.TblLangName;
+            if (route.Entity.Equals(M4PL.Entities.EntitiesAlias.JobXcblInfo) && route.Controller == "JobXcblInfo")
+            {
+                route.EntityName = _commonCommands.GetGatewayTypeByJobID(route.RecordId).Title;
+            }
 
             var moduleIdToCompare = (route.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
             var security = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);

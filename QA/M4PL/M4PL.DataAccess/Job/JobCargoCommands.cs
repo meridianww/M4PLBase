@@ -152,9 +152,9 @@ namespace M4PL.DataAccess.Job
 			return Delete(activeUser, ids, EntitiesAlias.JobCargo, statusId, ReservedKeysEnum.StatusId);
 		}
 
-		public static StatusModel CreateCargoException(long cargoId, JobExceptionInfo selectedJobExceptionInfo, JobInstallStatus selectedJobInstallStatus, int cargoQuantity, string cgoReasonCodeOSD, DateTime? cgoDateLastScan, ActiveUser activeUser)
+		public static CargoExceptionStatusModel CreateCargoException(long cargoId, JobExceptionInfo selectedJobExceptionInfo, JobInstallStatus selectedJobInstallStatus, int cargoQuantity, string cgoReasonCodeOSD, DateTime? cgoDateLastScan, ActiveUser activeUser)
 		{
-			StatusModel statusModel = null;
+			CargoExceptionStatusModel statusModel = null;
 			try
 			{
 				string[] codeArray = selectedJobExceptionInfo.ExceptionReferenceCode.Split('-');
@@ -176,7 +176,7 @@ namespace M4PL.DataAccess.Job
 
 			 };
 
-				statusModel = SqlSerializer.Default.DeserializeSingleRecord<StatusModel>(StoredProceduresConstant.InsertCargoException, parameters.ToArray(), storedProcedure: true);
+				statusModel = SqlSerializer.Default.DeserializeSingleRecord<CargoExceptionStatusModel>(StoredProceduresConstant.InsertCargoException, parameters.ToArray(), storedProcedure: true);
 			}
 			catch (Exception exp)
 			{

@@ -18,6 +18,7 @@
 //==========================================================================================================
 
 using System;
+using System.Collections.Generic;
 
 namespace M4PL.Entities.Job
 {
@@ -490,7 +491,7 @@ namespace M4PL.Entities.Job
 		public DateTime? WindowDelEndTime { get; set; }
 		public DateTime? WindowPckStartTime { get; set; }
 		public DateTime? WindowPckEndTime { get; set; }
-		public int? JobRouteId { get; set; }
+		public string JobRouteId { get; set; }
 		public string JobStop { get; set; }
 		public string JobSignText { get; set; }
 		public string JobSignLatitude { get; set; }
@@ -533,8 +534,8 @@ namespace M4PL.Entities.Job
 		public string JobShipFromSitePOCPhone2 { get; set; }
 		public string JobShipFromSitePOCEmail2 { get; set; }
 
-		public long CustomerERPId { get; set; }
-		public long VendorERPId { get; set; }
+		public string CustomerERPId { get; set; }
+		public string VendorERPId { get; set; }
 
 		public bool JobElectronicInvoice { get; set; }
 		public string JobOriginStreetAddress3 { get; set; }
@@ -573,6 +574,12 @@ namespace M4PL.Entities.Job
 		public string JobPurchaseInvoiceNumber { get; set; }
 		public bool JobIsSchedule { get; set; }
 		public string InstallStatus { get; set; }
-		public bool IsCancelled { get; set; }
+		public bool? IsCancelled { get; set; }
+		public string StatusIdName { get; set; }
+
+		public IList<JobsSiteCode> JobsSiteCodeList { get; set; }
+        public bool JobIsDirtyDestination { get; set; }
+		public bool JobIsDirtyContact { get; set; }
+		public bool IsParentOrder { get; set; }
 	}
 }

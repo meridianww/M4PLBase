@@ -1,0 +1,74 @@
+﻿@using M4PL.Web.Providers
+@model M4PL.APIClient.ViewModels.DropDownEditViewModel
+
+@{
+    ViewBag.Text = "";
+}
+
+@Html.DevExpress().CallbackPanel(setings =>
+{
+    setings.Name = "EmailCCAddressSubscriberIdCbPanel";
+    setings.ControlStyle.CssClass += "custom-cb-panel-container ";
+    setings.CallbackRouteValues = new { Controller = "PrgEventManagementController", Action = "CcEmailSubscriber", Area = "Program", selectedItems = "", programId = 0, shipmentType = "", orderType = "", gatewayType = "" };
+
+    setings.SetContent(() =>
+    {
+        Html.DevExpress().Label(
+                              settings =>
+                              {
+                                  settings.Name = "lblCCAddressSubscriberType";
+                                  settings.Text = "CC Address";
+                                  settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
+                              }).GetHtml();
+
+        Html.DevExpress().DropDownEdit(DDEsettings =>
+        {
+            DDEsettings.Name = "EmailCCAddressSubscriberId";
+            DDEsettings.ControlStyle.CssClass += "custom-cb-panel-container ";
+            DDEsettings.SetDropDownWindowTemplateContent(set =>
+            {
+                Html.DevExpress().ListBox(listBoxSettings =>
+                {
+                    listBoxSettings.Name = "EmailCCAddressSubscriberIdListBox";
+                    listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                    listBoxSettings.Properties.ValueField = "Id";
+                    listBoxSettings.Properties.TextField = "SubscriberDescription";
+
+                    listBoxSettings.Properties.ValueType = typeof(string);
+                    listBoxSettings.Properties.EnableSelectAll = true;
+                    listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.EmailCCAddressSubscriber.OnListBoxSelectionChanged";
+                    listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedEmailCCAddressSubscriber) {{M4PLCommon.EmailCCAddressSubscriber.InitEmailCCAddressSubscriberListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
+                    if (ViewData["CCEmailSubscriberTypeList"] != null)
+                    {
+                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Event.EventSubscriberView>)ViewData["CCEmailSubscriberTypeList"])
+                        {
+                            listBoxSettings.Properties.Items.Add(item.SubscriberDescription, item.Id.ToString());
+                        }
+                    }
+
+                    if (Model.SelectedDropDownStringArray != null && Model.SelectedDropDownStringArray.Length != 0)
+                    {
+                        listBoxSettings.Init = (sender, e) =>
+                        {
+                            MVCxListBox cbl = (MVCxListBox)sender;
+                            foreach (ListEditItem item in cbl.Items)
+                            {
+                                item.Selected = Model.SelectedDropDownStringArray.Contains((string)item.Value);
+                            }
+                        };
+                    }
+                }).Render();
+            });
+
+            DDEsettings.Properties.AnimationType = AnimationType.None;
+            DDEsettings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.EmailCCAddressSubscriber.SynchronizeListBoxValues";
+            DDEsettings.Properties.ClientSideEvents.DropDown = "M4PLCommon.EmailCCAddressSubscriber.SynchronizeListBoxValues";
+            DDEsettings.Properties.ClientSideEvents.CloseUp = "M4PLCommon.EmailCCAddressSubscriber.CloseUp";
+            //    DDEsettings.Properties.Caption = "Next Gateway";
+
+        }).Render();
+    });
+}).GetHtml()

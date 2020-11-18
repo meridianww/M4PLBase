@@ -117,7 +117,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 			System.Int64.TryParse(route.Url, out expandRowId);
 			base.DataView(strRoute);
 			_gridResult.GridSetting.ChildGridRoute.ParentRecordId = expandRowId;
-			return PartialView(_gridResult);
+			return PartialView(MvcConstants.GridViewPartial, _gridResult);
 		}
 	}
 }

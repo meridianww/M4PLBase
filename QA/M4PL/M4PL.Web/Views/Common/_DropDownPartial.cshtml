@@ -115,6 +115,8 @@
                     settings.Properties.NullText = WebUtilities.GetNullText(Model.ControlCaption);
                     settings.Properties.TextFormatString = "{0}";
                     settings.Properties.TextField = Model.TextString;
+                    if(settings.Name== "ProgramID" && Model.TextString== "PrgProgramCode")
+                        settings.Properties.TextFormatString = "{1}";
                     if (M4PL.Web.Providers.FormViewProvider.ComboBoxColumns.ContainsKey(Model.Entity))
                     {
                         for (var i = 0; i < M4PL.Web.Providers.FormViewProvider.ComboBoxColumns[Model.Entity].Length; i++)

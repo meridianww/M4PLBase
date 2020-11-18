@@ -40,6 +40,34 @@
 
                     foreach (var subChild in child.Children)
                     {
+                        if (subChild != null && subChild.MnuTitle == "Retrieve Invoices" && subChild.Route != null)
+                        {
+                            subChild.Route.Entity = M4PL.Entities.EntitiesAlias.NavRemittance;
+                            subChild.Route.Area = "Finance";
+                            subChild.Route.IsPopup = true;
+                        }
+                        if (subChild != null && subChild.MnuTitle == "Action" && subChild.Route != null)
+                        {
+                            subChild.Route.Entity = M4PL.Entities.EntitiesAlias.JobGateway;
+                            subChild.Route.Area = "Job";
+                            subChild.Route.IsPopup = true;
+                            subChild.Route.EntityName = "Action";
+                        }
+                        if (subChild != null && subChild.MnuTitle == "Gateway" && subChild.Route != null)
+                        {
+                            subChild.Route.Entity = M4PL.Entities.EntitiesAlias.JobGateway;
+                            subChild.Route.Area = "Job";
+                            subChild.Route.IsPopup = true;
+                            subChild.Route.EntityName = "Gateway";
+                        }
+                        if (subChild != null && subChild.MnuTitle == "Upload" && subChild.Route != null)
+                        {
+                            subChild.Route.Entity = M4PL.Entities.EntitiesAlias.UserGuideUpload;
+                            subChild.Route.Area = "Administration";
+                            subChild.Route.IsPopup = true;
+                            subChild.Route.EntityName = "UserGuideUpload";
+                            subChild.Route.Action = "FormView";
+                        }
                         if (subChild.MnuTitle == WebApplicationConstants.Themes)
                         {
 

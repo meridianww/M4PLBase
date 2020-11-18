@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Administration\AccountCommands.cs" />
     <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\IUserGuideUploadCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\DeliveryStatusCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Administration\SystemMessageCommands.cs" />
     <Compile Include="Administration\SystemPageTabNameCommands.cs" />
     <Compile Include="Administration\SystemReferenceCommands.cs" />
+    <Compile Include="Administration\UserGuideUploadCommands.cs" />
     <Compile Include="Administration\ValidationCommands.cs" />
     <Compile Include="Attachment\AttachmentCommands.cs" />
     <Compile Include="Attachment\IAttachmentCommands.cs" />
@@ -115,14 +117,18 @@
     <Compile Include="Finance\INavCustomerCommands.cs" />
     <Compile Include="Finance\INavPriceCodeCommands.cs" />
     <Compile Include="Finance\INavPurchaseOrderCommands.cs" />
+    <Compile Include="Finance\IGatewayCommands.cs" />
     <Compile Include="Finance\INavRateCommands.cs" />
+    <Compile Include="Finance\INavRemittanceCommands.cs" />
     <Compile Include="Finance\INavSalesOrderCommands.cs" />
     <Compile Include="Finance\INavVendorCommands.cs" />
     <Compile Include="Finance\NavCostCodeCommands.cs" />
     <Compile Include="Finance\NavCustomerCommands.cs" />
     <Compile Include="Finance\NavPriceCodeCommands.cs" />
     <Compile Include="Finance\NavPurchaseOrderCommands.cs" />
+    <Compile Include="Finance\GatewayCommands.cs" />
     <Compile Include="Finance\NavRateCommands.cs" />
+    <Compile Include="Finance\NavRemittanceCommands.cs" />
     <Compile Include="Finance\NavSalesOrderCommands.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="HttpRestClient.cs" />
@@ -185,6 +191,7 @@
     <Compile Include="Program\IPrgVendLocationCommands.cs" />
     <Compile Include="Program\IPrgBillableRateCommands.cs" />
     <Compile Include="Program\IPrgCostLocationCommands.cs" />
+    <Compile Include="Program\IPrgEventManagementCommands.cs" />
     <Compile Include="Program\IProgramCommands.cs" />
     <Compile Include="Program\IPrgCostRateCommands.cs" />
     <Compile Include="Program\IPrgRoleCommands.cs" />
@@ -202,6 +209,7 @@
     <Compile Include="Program\PrgVendLocationCommands.cs" />
     <Compile Include="Program\PrgBillableRateCommands.cs" />
     <Compile Include="Program\PrgCostLocationCommands.cs" />
+    <Compile Include="Program\PrgEventManagementCommands.cs" />
     <Compile Include="Program\ProgramCommands.cs" />
     <Compile Include="Program\PrgCostRateCommands.cs" />
     <Compile Include="Program\PrgRoleCommands.cs" />
@@ -273,12 +281,15 @@
     <Compile Include="ViewModels\Administration\SystemPageTabNameView.cs" />
     <Compile Include="ViewModels\Administration\SystemReferenceView.cs" />
     <Compile Include="ViewModels\Administration\SystemAccountView.cs" />
+    <Compile Include="ViewModels\Administration\UserGuidUploadView.cs" />
     <Compile Include="ViewModels\Administration\ValidationView.cs" />
     <Compile Include="ViewModels\CompanyAddress\CompanyAddressView.cs" />
     <Compile Include="ViewModels\Customer\CustDcLocationContactView.cs" />
     <Compile Include="ViewModels\Document\DocumentStatusView.cs" />
     <Compile Include="ViewModels\Document\DocumentView.cs" />
     <Compile Include="ViewModels\DropDownEditViewModel.cs" />
+    <Compile Include="ViewModels\Event\EventSubscriberTypeView.cs" />
+    <Compile Include="ViewModels\Finance\GatewayView.cs" />
     <Compile Include="ViewModels\Finance\NavCostCodeView.cs" />
     <Compile Include="ViewModels\Finance\NavCustomerView.cs" />
     <Compile Include="ViewModels\Finance\NavPriceCodeView.cs" />
@@ -296,9 +307,11 @@
     <Compile Include="ViewModels\Job\JobCardViewView.cs" />
     <Compile Include="ViewModels\Job\VocReportView.cs" />
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />
+    <Compile Include="ViewModels\NavRemittance\NavRemittanceView.cs" />
     <Compile Include="ViewModels\Program\PrgBillableLocationView.cs" />
     <Compile Include="ViewModels\Program\PrgCostLocationView.cs" />
     <Compile Include="ViewModels\Program\PrgEdiConditionView.cs" />
+    <Compile Include="ViewModels\Program\PrgEventManagementView.cs" />
     <Compile Include="ViewModels\Scanner\AppDashboardView.cs" />
     <Compile Include="ViewModels\Attachment\ContactView.cs" />
     <Compile Include="ViewModels\ColumnSetting.cs" />

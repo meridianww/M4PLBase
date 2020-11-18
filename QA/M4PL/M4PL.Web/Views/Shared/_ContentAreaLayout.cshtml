@@ -10,6 +10,8 @@
 
 @{
     Layout = "~/Views/Shared/_ContentLayout.cshtml";
+    var uriQueryString = HttpContext.Current.Request.QueryString["jobId"];
+    var isReboonRequired = uriQueryString != null && !string.IsNullOrEmpty(uriQueryString) ? false : true;
 }
 
 @Html.DevExpress().Splitter(settings =>
@@ -20,27 +22,37 @@
     settings.Styles.Pane.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
     settings.Styles.Pane.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
     settings.ClientSideEvents.PaneResized = "function(s, e) { if(window.GridView && e.pane.name == 'ContentCenter') GridView.SetHeight(e.pane.GetClientHeight()); }";
-    settings.Panes.Add(subpane =>
+    if (isReboonRequired)
     {
-        subpane.Name = "ContentLeft";
-        subpane.AutoHeight = true;
-        subpane.PaneStyle.CssClass = "leftPane";
-        subpane.ShowCollapseBackwardButton = DefaultBoolean.True;
-        subpane.Size = System.Web.UI.WebControls.Unit.Percentage(15);
-        subpane.MinSize = System.Web.UI.WebControls.Unit.Pixel(240);
-        subpane.PaneStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(1);
-        subpane.ScrollBars = System.Web.UI.WebControls.ScrollBars.None;
-        subpane.SetContent(() =>
+        settings.Panes.Add(subpane =>
         {
-            Html.RenderAction(MvcConstants.ActionLeftMenu);
+            subpane.Name = "ContentLeft";
+            subpane.AutoHeight = true;
+            subpane.PaneStyle.CssClass = "leftPane";
+            subpane.ShowCollapseBackwardButton = DefaultBoolean.True;
+            subpane.Size = System.Web.UI.WebControls.Unit.Percentage(15);
+            subpane.MinSize = System.Web.UI.WebControls.Unit.Pixel(240);
+            subpane.PaneStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(1);
+            subpane.ScrollBars = System.Web.UI.WebControls.ScrollBars.None;
+            subpane.SetContent(() =>
+            {
+                Html.RenderAction(MvcConstants.ActionLeftMenu);
+            });
         });
-    });
+    }
 
     settings.Panes.Add(subpane =>
     {
         subpane.Name = "ContentCenter";
         subpane.PaneStyle.CssClass = "contentPane";
-        subpane.ScrollBars = System.Web.UI.WebControls.ScrollBars.None;
+        if (isReboonRequired)
+        {
+            subpane.ScrollBars = System.Web.UI.WebControls.ScrollBars.None;
+        }
+        else
+        {
+            subpane.ScrollBars = System.Web.UI.WebControls.ScrollBars.Auto;
+        }
         subpane.Separator.Visible = DefaultBoolean.True;
 
         subpane.Separator.SeparatorStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);

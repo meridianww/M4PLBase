@@ -223,10 +223,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\BizMobl\" />
+    <Folder Include="Views\FarEye\" />
+    <Folder Include="Views\GatewayImport\" />
     <Folder Include="Views\JobAttachment\" />
     <Folder Include="Views\JobRollup\" />
     <Folder Include="Views\NavRate\" />
+    <Folder Include="Views\NavRemittance\" />
     <Folder Include="Views\NavSalesOrder\" />
+    <Folder Include="Views\NavVendorLedger\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -267,10 +272,17 @@
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\AuthService.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\BizMoblController.cs" />
     <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
+    <Compile Include="Controllers\EmailServiceController.cs" />
+    <Compile Include="Controllers\FarEyeController.cs" />
+    <Compile Include="Controllers\GatewayImportController.cs" />
     <Compile Include="Controllers\NavRateController.cs" />
     <Compile Include="Controllers\JobServicesController.cs" />
+    <Compile Include="Controllers\NavRemittanceController.cs" />
+    <Compile Include="Controllers\NavVendorLedgerController.cs" />
+    <Compile Include="Controllers\PrgEventManagementController.cs" />
     <Compile Include="Controllers\TrainingController.cs" />
     <Compile Include="Controllers\JobAdvanceReportController.cs" />
     <Compile Include="Controllers\JobAttachmentController.cs" />
@@ -313,6 +325,7 @@
     <Compile Include="Controllers\OrgReportsController.cs" />
     <Compile Include="Controllers\ScrReportsController.cs" />
     <Compile Include="Controllers\SurveyUserController.cs" />
+    <Compile Include="Controllers\UserGuideUploadController.cs" />
     <Compile Include="Controllers\VendDcLocationContactsController.cs" />
     <Compile Include="Controllers\VendReportsController.cs" />
     <Compile Include="Controllers\PrgReportsController.cs" />
@@ -380,7 +393,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\Common.cs" />
     <Compile Include="Handlers\MetadataHandler.cs" />
+    <Compile Include="IoC\BizMoblModule.cs" />
+    <Compile Include="IoC\EmailModule.cs" />
     <Compile Include="IoC\FinanceModule.cs" />
     <Compile Include="IoC\JobRollupModule.cs" />
     <Compile Include="IoC\Jobservice.cs" />
@@ -414,7 +430,6 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="M4PL.Business.config" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

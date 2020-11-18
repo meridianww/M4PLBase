@@ -166,6 +166,15 @@ namespace M4PL.DataAccess.XCBL
 			}
 		}
 
+		public static DataTable GetXcblExceptionInfo(int scenarioTypeId)
+		{
+			return XcblSQLSerializer.Default.DeserializeDataTable(StoredProceduresConstant.GetXcblExceptionInfo, true, new Parameter("@scenarioTypeId", scenarioTypeId));
+		}
+		public static DataTable GetEDIExceptionInfo(int scenarioTypeId)
+		{
+			return XcblSQLSerializer.Default.DeserializeDataTable(StoredProceduresConstant.GetEDIExceptionInfo, true, new Parameter("@scenarioTypeId", scenarioTypeId));
+		}
+
 		public static void InsertJobDeliveryUpdateLog(string deliveryUpdateXml, string deliveryUpdateResponseString, long jobId)
 		{
 			try
@@ -180,6 +189,27 @@ namespace M4PL.DataAccess.XCBL
 			};
 
 				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobDeliveryUpdateLog, parameters.ToArray(), true);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error is happening while inserting data for Delivery update log", "InsertJobDeliveryUpdateLog", Utilities.Logger.LogType.Error);
+			}
+		}
+
+		public static void InsertFarEyeJobDeliveryUpdateLog(string deliveryUpdateRequest, string deliveryUpdateResponseString, long jobId)
+		{
+			try
+			{
+				var parameters = new List<Parameter>
+			{
+				new Parameter("@JobId", jobId),
+				new Parameter("@DeliveryUpdateRequest", deliveryUpdateRequest),
+				new Parameter("@DeliveryUpdateResponse", deliveryUpdateResponseString),
+				new Parameter("@IsProcessed", string.IsNullOrEmpty(deliveryUpdateResponseString) ? false : true),
+				new Parameter("@ProcessingDate", Utilities.TimeUtility.GetPacificDateTime())
+			};
+
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertFarEyeJobDeliveryUpdateLog, parameters.ToArray(), true);
 			}
 			catch (Exception exp)
 			{
@@ -235,7 +265,7 @@ namespace M4PL.DataAccess.XCBL
 
 		public static bool InsertDeliveryUpdateProcessingLog(long jobId, long customerId)
 		{
-			bool result = true;
+			bool result = false;
 			try
 			{
 				var parameters = new List<Parameter>
@@ -243,7 +273,7 @@ namespace M4PL.DataAccess.XCBL
 				new Parameter("@JobId", jobId),
 				new Parameter("@customerId", customerId)
 			};
-				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertDeliveryUpdateProcessingLog, parameters.ToArray(), true);
+				result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.InsertDeliveryUpdateProcessingLog, parameters.ToArray(), false, true);
 			}
 			catch (Exception exp)
 			{

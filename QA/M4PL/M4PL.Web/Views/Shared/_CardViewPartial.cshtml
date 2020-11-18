@@ -21,10 +21,17 @@
 
 @{
     string fromName = "CardView";
-    var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "DataView", "Job");
+    var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "JobCardGrid", "Job");
     cancelRoute.OwnerCbPanel = "AppCbPanel";
     cancelRoute.EntityName = "JobCard";
     cancelRoute.Url = string.Empty;
+
+    if (Model != null && Model.Records != null && Model.Records.Count() > 0
+        && Model.Records.FirstOrDefault(x => x.DashboardCategoryName == "ScheduledForToday" && x.DashboardSubCategoryName == "OnHand").CardCount > 0)
+    {
+        Model.Records.FirstOrDefault(x => x.DashboardCategoryName == "ScheduledForToday" && x.DashboardSubCategoryName == "OnHand").BackGroundColor = "#FFFF00";
+        Model.Records.FirstOrDefault(x => x.DashboardCategoryName == "ScheduledForToday" && x.DashboardSubCategoryName == "OnHand").FontColor = "#000000";
+    }
 }
 
 @Html.DevExpress().CardView(settings =>
@@ -64,13 +71,14 @@
 
     settings.SetCardTemplateContent(c =>
     {
+        var urlImg = Url.Content("~/Content/Images/Logistic/" + DataBinder.Eval(c.DataItem, "DashboardSubCategoryName") + ".png");
         ViewContext.Writer.Write(
                  "<div style='cursor: pointer; background:" + DataBinder.Eval(c.DataItem, "BackGroundColor") + ";color: " + DataBinder.Eval(c.DataItem, "FontColor") + ";text-align:center;padding: 5px;'>"
                 + "<strong>" + DataBinder.Eval(c.DataItem, "Name") + "</strong>"
                 + "</div>"
                 + "<div class='col-xs-12' style='cursor: pointer; padding: 10px 0px 10px 0px;background: #efefef;'>"
                 + "<div class='col-xs-8'>"
-                + "<img width='35px' src='../Content/Images/Logistic/" + DataBinder.Eval(c.DataItem, "DashboardSubCategoryName") + ".png' />"
+                + "<img width='35px' src='"+ urlImg + "' />"
                 + "</div>"
                 + "<div class='col-xs-4'style= 'padding: 0px; font-size: 10px;'>"
                 + "<strong>" + DataBinder.Eval(c.DataItem, "CardCount") + "</strong>"

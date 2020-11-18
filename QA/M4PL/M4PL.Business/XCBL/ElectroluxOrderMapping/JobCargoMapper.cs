@@ -1,10 +1,12 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 using M4PL.Entities.Administration;
@@ -17,28 +19,28 @@ using System.Linq;
 
 namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 {
-    public class JobCargoMapper
-    {
-        public List<JobCargo> ToJobCargoMapper(IEnumerable<OrderLineDetail> orderLineDetail, long jobId, List<SystemReference> systemOptionList)
-        {
-            if (orderLineDetail == null)
-            {
-                return null;
-            }
+	public class JobCargoMapper
+	{
+		public List<JobCargo> ToJobCargoMapper(IEnumerable<OrderLineDetail> orderLineDetail, long jobId, List<SystemReference> systemOptionList)
+		{
+			if (orderLineDetail == null)
+			{
+				return null;
+			}
 
-            var jobCargos = new List<JobCargo>();
-            int applienceId = (int)systemOptionList?.
-                Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
-                Where(y => y.SysOptionName.Equals("Appliance", StringComparison.OrdinalIgnoreCase))?.
-                FirstOrDefault().Id;
-            int accessoryId = (int)systemOptionList?.
-                Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
-                Where(y => y.SysOptionName.Equals("Accessory", StringComparison.OrdinalIgnoreCase))?.
-                FirstOrDefault().Id;
-            int serviceId = (int)systemOptionList?.
-                Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
-                Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
-                FirstOrDefault().Id;
+			var jobCargos = new List<JobCargo>();
+			int applienceId = (int)systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Appliance", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id;
+			int accessoryId = (int)systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Accessory", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id;
+			int serviceId = (int)systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id;
 			int weightUnitKg = (int)systemOptionList?.
 				Where(x => x.SysLookupCode.Equals("UnitWeight", StringComparison.OrdinalIgnoreCase))?.
 				Where(y => y.SysOptionName.Equals("KGs", StringComparison.OrdinalIgnoreCase))?.
@@ -57,32 +59,32 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 			FirstOrDefault().Id;
 
 			jobCargos.AddRange(orderLineDetail.Select(cargoitem => new JobCargo
-            {
-                JobID = jobId,
-                CgoLineItem = cargoitem.LineNumber.ToInt(), //Nathan will ask to Electrolux,
-                CgoPartNumCode = cargoitem.ItemID,
-                CgoTitle = (!string.IsNullOrEmpty(cargoitem.ItemDescription) && cargoitem.ItemDescription.Contains(cargoitem.ItemID)) ? cargoitem.ItemDescription.Replace(cargoitem.ItemID, string.Empty) : cargoitem.ItemDescription,
-                CgoSerialNumber = cargoitem.SerialNumber,
-                CgoPackagingTypeIdName = cargoitem.MaterialType,
-                CgoWeight = cargoitem.Weight,
+			{
+				JobID = jobId,
+				CgoLineItem = cargoitem.LineNumber.ToInt(), //Nathan will ask to Electrolux,
+				CgoPartNumCode = cargoitem.ItemID,
+				CgoTitle = (!string.IsNullOrEmpty(cargoitem.ItemDescription) && cargoitem.ItemDescription.Contains(cargoitem.ItemID)) ? cargoitem.ItemDescription.Replace(cargoitem.ItemID, string.Empty) : cargoitem.ItemDescription,
+				CgoSerialNumber = cargoitem.SerialNumber,
+				CgoPackagingTypeIdName = cargoitem.MaterialType,
+				CgoWeight = cargoitem.Weight,
 				CgoWeightUnitsId = cargoitem.WeightUnitOfMeasure?.ToUpper() == "KGM" ? weightUnitKg : weightUnitLbs,
-                CgoCubes = cargoitem.Volume.ToDecimal(),
-                CgoVolumeUnitsId = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? volumeUnitMeters : volumeUnitFeet,
+				CgoCubes = cargoitem.Volume.ToDecimal(),
+				CgoVolumeUnitsId = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? volumeUnitMeters : volumeUnitFeet,
 				CgoWeightUnitsIdName = cargoitem.WeightUnitOfMeasure?.ToUpper() == "KGM" ? "KGs" : "Lbs",
 				CgoVolumeUnitsIdName = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? "Meters" : "Cubic Feet",
 				CgoQtyOrdered = cargoitem.ShipQuantity,
-                CgoQtyUnitsIdName = "EA",
-                CgoQtyUnitsId = systemOptionList?.
-                Where(x => x.SysLookupCode.Equals("CargoUnit", StringComparison.OrdinalIgnoreCase))?.
-                Where(y => y.SysOptionName.Equals("Each", StringComparison.OrdinalIgnoreCase))?.
-                FirstOrDefault().Id,
-                CgoPackagingTypeId = cargoitem.MaterialType.Equals("ACCESSORY", StringComparison.OrdinalIgnoreCase) ? accessoryId
-                : (cargoitem.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || cargoitem.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))
-                ? serviceId : applienceId,
-                StatusId = (int)Entities.StatusType.Active
-            }));
+				CgoQtyUnitsIdName = "EA",
+				CgoQtyUnitsId = systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("CargoUnit", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Each", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id,
+				CgoPackagingTypeId = cargoitem.MaterialType.Equals("ACCESSORY", StringComparison.OrdinalIgnoreCase) ? accessoryId
+				: (cargoitem.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || cargoitem.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))
+				? serviceId : applienceId,
+				StatusId = (int)Entities.StatusType.Active
+			}));
 
-            return jobCargos;
-        }
-    }
+			return jobCargos;
+		}
+	}
 }

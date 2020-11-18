@@ -17,26 +17,37 @@
 //Purpose:                                      Contains Actions to render view on Jobs's AdvanceReport page
 //====================================================================================================================================================*/
 
+using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.EF;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
     public class JobAdvanceReportController : BaseController<JobAdvanceReportView>
     {
-        protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
+        protected AditionalReportResult<JobReportView> _reportResult = new AditionalReportResult<JobReportView>();
         private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
+
+        private static IJobAdvanceReportCommands _jobAdvanceReportStaticCommands;
+        public static ICommonCommands _commonStaticCommands;
+        public static long _CustomerId = 0;
+        public static string _ReportText = string.Empty;
 
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
@@ -50,71 +61,147 @@ namespace M4PL.Web.Areas.Job.Controllers
             _commonCommands = commonCommands;
             _jobAdvanceReportCommands = JobAdvanceReportCommands;
         }
+		public ActionResult Report(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+			{
+				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
+				SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition = null;
+			}
 
-        public ActionResult Report(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-            {
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition = null;
-            }
+			route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
+			route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+			var reportView = WebExtension.SetupAdvancedReportResult(_reportResult, _commonCommands, route, SessionProvider);
+			if (!SessionProvider.ActiveUser.IsSysAdmin)
+			{
+				var currentSecurity = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
+				if (currentSecurity != null)
+				{
+					var subSecurityCostCharge = currentSecurity.UserSubSecurities.FirstOrDefault(t => t.RefTableName == EntitiesAlias.JobCostSheet.ToString());
+					if (currentSecurity.UserSubSecurities != null && subSecurityCostCharge != null)
+					{
+						foreach (var res in _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Cost Charge")).FirstOrDefault().Value)
+						{
+							if (res.SysRefName.ToLower() == "cost charge" && subSecurityCostCharge.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess)
+							{
+								_reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Cost Charge")).FirstOrDefault().Value.Remove(res);
+								break;
+							}
+						}
+						foreach (var res in _reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Price Charge")).FirstOrDefault().Value)
+						{
+							if (res.SysRefName.ToLower() == "price charge" && subSecurityCostCharge.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.NoAccess)
+							{
+								_reportResult.ComboBoxProvider.Where(x => x.Value.Any(t => t.SysRefName == "Price Charge")).FirstOrDefault().Value.Remove(res);
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (reportView != null && reportView.Id > 0)
+			{
+				List<Task> tasks = new List<Task>();
+				ViewData["isFirstLoadProductType"] = true;
+				ViewData["isFirstLoadServiceType"] = true;
+				ViewData["isFirstLoadOrderType"] = true;
+				ViewData["isFirstDestination"] = true;
+				ViewData["isFirstProgram"] = true;
+				ViewData["isFirstLoadOrgin"] = true;
+				ViewData["isFirstBrand"] = true;
+				ViewData["isFirstLoadGatewayStatus"] = true;
+				ViewData["isFirstLoadChannel"] = true;
+				ViewData["isFirstLoadWeightUnitType"] = true;
+				ViewData["isFirstLoadPackagingCode"] = true;
+				ViewData["isFirstLoadCargoTitle"] = true;
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Program");
+				}));
 
-            route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
-            route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Origin");
+				}));
 
-            if (reportView != null && reportView.Id > 0)
-            {
-                ViewData["isFirstLoadProductType"] = true;
-                ViewData["isFirstLoadServiceType"] = true;
-                ViewData["isFirstLoadOrderType"] = true;
-                ViewData["isFirstDestination"] = true;
-                ViewData["isFirstProgram"] = true;
-                ViewData["isFirstLoadOrgin"] = true;
-                ViewData["isFirstBrand"] = true;
-                ViewData["isFirstLoadGatewayStatus"] = true;
-                ViewData["isFirstLoadChannel"] = true;
-                ViewData["isFirstLoadWeightUnitType"] = true;
-                ViewData["isFirstLoadPackagingCode"] = true;
-                ViewData["isFirstLoadCargoTitle"] = true;
-                ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Program");
-                ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Origin");
-                ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Destination");
-                ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Brand");
-                ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "GatewayStatus");
-                ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ServiceMode");
-                ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ProductType");
-                ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "OrderType");
-                ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobStatus");
-                ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobChannel");
-                ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
-                ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
-                ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "PackagingCode");
-                //ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "WeightUnit");
-                //ViewData["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "CargoTitle");
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Destination");
+				}));
 
-                _reportResult.ReportRoute.Action = "AdvanceReportViewer";
-                _reportResult.Record = new JobReportView(reportView);
-                _reportResult.Record.StartDate = Utilities.TimeUtility.GetPacificDateTime().AddDays(-1);
-                _reportResult.Record.EndDate = Utilities.TimeUtility.GetPacificDateTime();
-                _reportResult.Record.ProgramCode = "ALL";
-                _reportResult.Record.Origin = "ALL";
-                _reportResult.Record.Destination = "ALL";
-                _reportResult.Record.Brand = "ALL";
-                _reportResult.Record.GatewayStatus = "ALL";
-                _reportResult.Record.ServiceMode = "ALL";
-                _reportResult.Record.ProductType = "ALL";
-                _reportResult.Record.PackagingCode = "ALL";
-                //_reportResult.Record.CgoWeightUnitTypeId = 0;
-                //_reportResult.Record.CargoId = "ALL";
-                _reportResult.Record.ProgramId = 0;
-                ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-                return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
-            }
-            return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
-        }
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Brand");
+					}));
 
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ServiceMode");
+					}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "GatewayStatus");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ProductType");
+					}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "OrderType");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobChannel");
+					}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobStatus");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
+					}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+				{
+					ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
+				}));
+
+				tasks.Add(Task.Factory.StartNew(() =>
+					{
+						ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "PackagingCode");
+					}));
+
+				if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+				_reportResult.ReportRoute.Action = "AdvanceReportViewer";
+				_reportResult.Record = new JobReportView(reportView);
+				//_reportResult.Record.StartDate = DateTime.Now.AddDays(-1);
+				//_reportResult.Record.EndDate = DateTime.Now;
+				_reportResult.Record.ProgramCode = "ALL";
+				_reportResult.Record.Origin = "ALL";
+				_reportResult.Record.Destination = "ALL";
+				_reportResult.Record.Brand = "ALL";
+				_reportResult.Record.GatewayStatus = "ALL";
+				_reportResult.Record.ServiceMode = "ALL";
+				_reportResult.Record.ProductType = "ALL";
+				_reportResult.Record.PackagingCode = "ALL";
+				_reportResult.Record.JobStatusIdName = "ALL";
+				ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+				return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
+			}
+
+			return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
+		}
+
+        #region dropdown
         public PartialViewResult ProgramByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -133,7 +220,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Program");
             return PartialView("ProgramByCustomer", _reportResult);
         }
-
         public PartialViewResult OrginByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -151,7 +237,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Origin");
             return PartialView("OrginByCustomer", _reportResult);
         }
-
         public PartialViewResult DestinationByProgramCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -169,7 +254,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Destination");
             return PartialView("DestinationByProgramCustomer", _reportResult);
         }
-
         public PartialViewResult BrandByProgramCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -186,7 +270,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Brand");
             return PartialView("BrandByProgramCustomer", _reportResult);
         }
-
         public PartialViewResult GatewayStatusByProgramCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -203,7 +286,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "GatewayStatus");
             return PartialView("GatewayStatusByProgramCustomer", _reportResult);
         }
-
         public PartialViewResult ServiceModeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -221,7 +303,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "ServiceMode");
             return PartialView("ServiceModeByCustomer", _reportResult);
         }
-
         public PartialViewResult ProductTypeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -238,7 +319,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "ProductType");
             return PartialView("ProductTypeByCustomer", _reportResult);
         }
-
         public PartialViewResult ScheduleByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -253,7 +333,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Scheduled");
             return PartialView("ScheduleByCustomer", _reportResult);
         }
-
         public PartialViewResult OrderTypeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -268,7 +347,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "OrderType");
             return PartialView("OrderTypeByCustomer", _reportResult);
         }
-
         public PartialViewResult JobStatusIdByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -278,12 +356,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "JobStatusIdByCustomer", "Job");
             _reportResult.Record = record;
-            _reportResult.Record.JobStatusIdName = "Active";
+            //_reportResult.Record.JobStatusIdName = "Active";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobStatus");
             return PartialView("JobStatusIdByCustomer", _reportResult);
         }
-
         public PartialViewResult ChannelByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -300,7 +377,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobChannel");
             return PartialView("ChannelByCustomer", _reportResult);
         }
-
         public PartialViewResult DateTypeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -314,7 +390,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "DateType");
             return PartialView("DateTypeByCustomer", _reportResult);
         }
-
         public PartialViewResult PackagingTypeByJob(string model, long id = 0)
         {
             if (id == 0)
@@ -329,23 +404,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "PackagingCode");
             return PartialView("PackagingTypeByJob", _reportResult);
         }
-
-        //public PartialViewResult WeightUnitTypeByJob(string model, long id = 0)
-        //{
-        //    if (id == 0)
-        //    {
-        //        ViewData["isFirstLoadWeightUnitType"] = false;
-        //        return null;
-        //    }
-        //    var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
-        //    _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "WeightUnitTypeByJob", "Job");
-        //    _reportResult.Record = record;
-        //    //_reportResult.Record.JobStatusIdName = "Active";
-        //    _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
-        //    ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "WeightUnit");
-        //    return PartialView("WeightUnitTypeByJob", _reportResult);
-        //}
-
         public PartialViewResult CargoTitleByJob(string model, long id = 0)
         {
             if (id == 0)
@@ -363,29 +421,42 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "CargoTitle");
             return PartialView("CargoTitleByJob", _reportResult);
         }
+        #endregion
+
+        public PartialViewResult JobAdvanceReportGridPartial(string strRoute)
+        {
+            ViewBag.IsCallBack = true;
+            return PartialView("JobAdvanceReportGridPartial", strRoute);
+        }
 
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
+            bool isExport = false;
+            if (Request.ContentType == "application/x-www-form-urlencoded")
+                isExport = true;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if ((strJobAdvanceReportRequestRoute.FileName != "Job Advance Report" && strJobAdvanceReportRequestRoute.FileName != "Manifest Report" && strJobAdvanceReportRequestRoute.FileName != "OSD Report" && strJobAdvanceReportRequestRoute.FileName != "Price Charge" && strJobAdvanceReportRequestRoute.FileName != "Cost Charge")
+           || (strJobAdvanceReportRequestRoute.FileName == null))
+            {
+                if (!strJobAdvanceReportRequestRoute.StartDate.HasValue)
+                    strJobAdvanceReportRequestRoute.StartDate = DateTime.Now.AddDays(-1);
+                if (!strJobAdvanceReportRequestRoute.EndDate.HasValue)
+                    strJobAdvanceReportRequestRoute.EndDate = DateTime.Now;
+            }
+            else
+            {
+                route.RecordId = 0;
+            }
+           
             route.ParentRecordId = 0;
+            
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
             requestRout.OwnerCbPanel = "JobAdvanceReportGridView";// "JobAdvanceReportGridView";
             SessionProvider.ActiveUser.ReportRoute = null;
 
-            TimeZoneInfo localTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZone.CurrentTimeZone.StandardName);
-            if (strJobAdvanceReportRequestRoute != null && strJobAdvanceReportRequestRoute.StartDate.HasValue
-                && strJobAdvanceReportRequestRoute.StartDate != null)
-            {
-                strJobAdvanceReportRequestRoute.StartDate = TimeZoneInfo.ConvertTimeFromUtc(strJobAdvanceReportRequestRoute.StartDate.Value, localTimeZone);
-            }
-            if (strJobAdvanceReportRequestRoute != null && strJobAdvanceReportRequestRoute.EndDate.HasValue
-                && strJobAdvanceReportRequestRoute.EndDate != null)
-            {
-                strJobAdvanceReportRequestRoute.EndDate = TimeZoneInfo.ConvertTimeFromUtc(strJobAdvanceReportRequestRoute.EndDate.Value, localTimeZone);
-            }
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -412,68 +483,184 @@ namespace M4PL.Web.Areas.Job.Controllers
                     strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params);
                 }
             }
-
-            SetGridResult(requestRout, "", false, true, null);
-            if (!strJobAdvanceReportRequestRoute.Manifest)
-            {
-                var result = _gridResult.ColumnSettings.Where(x => x.ColColumnName == "PackagingCode" || x.ColColumnName == "CgoPartCode"
-               || x.ColColumnName == "CargoTitle").ToList();
-                foreach (var item in result)
-                {
-                    _gridResult.ColumnSettings.Remove(item);
-                }
-            }
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsExport = isExport;
+            if (!string.IsNullOrEmpty(strJobAdvanceReportRequestRoute.FileName))
+                ViewData["ReportName"] = strJobAdvanceReportRequestRoute.FileName;
+            SetGridResult(requestRout, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
             _gridResult.Permission = Permission.ReadOnly;
-
-            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
-        }
-        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<JobAdvanceReportView, long> JobCardView, string strRoute, string gridName)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            //JobCardView.Insert.ForEach(c => { c.ProgramID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            //JobCardView.Update.ForEach(c => { c.ProgramID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = base.BatchUpdate(JobCardView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
-            {
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
-                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
-                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-            }
-            SetGridResult(route);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             _gridResult.Permission = Permission.ReadOnly;
-            return base.GridSortingView(column, reset, strRoute, gridName);
-        }
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+            sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+            sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+            sessionInfo.PagedDataInfo.OrderBy = column.BuildGridSortCondition(reset, route.Entity, _commonCommands);
+            sessionInfo.GridViewColumnState = column;
+            sessionInfo.GridViewColumnStateReset = reset;
+            var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(sessionInfo.PagedDataInfo.Params);
+            SetGridResult(route, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
 
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+        public override PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
+        {
+            if (TempData["RowHashes"] != null)
+                TempData.Keep();
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var currentPageSize = GetorSetUserGridPageSize();
+            GetorSetUserGridPageSize(pager.PageSize);
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+            sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+            sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+            sessionInfo.PagedDataInfo.PageNumber = pager.PageIndex + 1;
+            sessionInfo.PagedDataInfo.PageSize = pager.PageSize;
+            var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
+            viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
+            SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+            _gridResult.SessionProvider = SessionProvider;
+            var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(sessionInfo.PagedDataInfo.Params);
+            SetGridResult(route, gridName, (currentPageSize != pager.PageSize), reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
+            _gridResult.GridViewModel.ApplyPagingState(pager);
+            _gridResult.Permission = Permission.ReadOnly;
+
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
         public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
         {
+            var filters = new Dictionary<string, string>();
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition == null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition =
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
+            }
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && route.RecordId > 0)
+            {
+                route.RecordId = 0;
+            }
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+            sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+            sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+
+            if (sessionInfo.Filters == null)
+                sessionInfo.Filters = new Dictionary<string, string>();
+            if (string.IsNullOrEmpty(filteringState.FilterExpression) && (filteringState.ModifiedColumns.Count > 0))
+                route.Filters = null;
+
+            //used to reset page index of the grid when Filter applied and pageing is opted
+            ViewData[WebApplicationConstants.ViewDataFilterPageNo] = sessionInfo.PagedDataInfo.PageNumber;
+            sessionInfo.PagedDataInfo.WhereCondition = filteringState.BuildGridFilterWhereCondition(route.Entity, ref filters, _commonCommands);
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                sessionInfo.PagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition
+                    + sessionInfo.PagedDataInfo.WhereCondition;
+            }
+            if (sessionInfo.Filters != null && filters.Count > 0 && sessionInfo.Filters.Count != filters.Count)//Have to search from starting if setup filter means from page 1
+                sessionInfo.PagedDataInfo.PageNumber = 1;
+            sessionInfo.Filters = filters;
+            sessionInfo.GridViewFilteringState = filteringState;
+            SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
+            _gridResult.SessionProvider = SessionProvider;
+            var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(sessionInfo.PagedDataInfo.Params);
+            SetGridResult(route, "", false, true, null, reportTypeId: Convert.ToInt32(strJobAdvanceReportRequestRoute.ReportType));
 
             route.Filters = null;
-            strRoute = JsonConvert.SerializeObject(route);
-            return base.GridFilteringView(filteringState, strRoute, gridName);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
+        public override ActionResult FormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _formResult.SessionProvider = SessionProvider;
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
+            }
 
-        //public override PartialViewResult GridGroupingView(GridViewColumnState column, string strRoute, string gridName = "")
-        //{
-        //    var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-        //    var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
-        //    _gridResult.SessionProvider = SessionProvider;
-        //    SetGridResult(route, gridName);
-        //    sessionInfo.GridViewColumnGroupingState = column;
-        //    _gridResult.GridViewModel.ApplyGroupingState(column);
-        //    if (_gridResult.Records?.FirstOrDefault().Manifest != null && _gridResult.Records.FirstOrDefault().Manifest)
-        //    {
-        //        var result = _gridResult.ColumnSettings.Where(x => x.ColColumnName == "PackagingCode" || x.ColColumnName == "CgoPartCode"
-        //       || x.ColColumnName == "CargoTitle").FirstOrDefault();
+            _formResult.IsPopUp = true;
 
-        //        _gridResult.ColumnSettings.Remove(result);
-        //    }
-        //    return base.ProcessCustomBinding(route, MvcConstants.ActionDataView);
-        //}
+            _jobAdvanceReportStaticCommands = _jobAdvanceReportCommands;
+            _commonStaticCommands = _commonCommands;
+            _formResult.Record = new JobAdvanceReportView();
+            _formResult.Record.Id = route.RecordId;
+            _formResult.Record.ParentId = route.ParentRecordId;
+            _formResult.Record.ReportName = route.Location.FirstOrDefault();
+            _CustomerId = route.RecordId;
+            _ReportText = route.Location.FirstOrDefault();
+            return PartialView(_formResult);
+        }
+        #region upload
+        [HttpPost]
+        public ActionResult ImportScrubDriver([ModelBinder(typeof(DragAndDropSupportDemoBinder))] IEnumerable<UploadedFile> ucDragAndDropImportDriver, long ParentId = 0)
+        {
+            return null;
+        }
+        public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
+        {
+            public DragAndDropSupportDemoBinder()
+            {
+                UploadControlBinderSettings.FileUploadCompleteHandler = ucDragAndDrop_FileUploadComplete;
+            }
+        }
+        public static void ucDragAndDrop_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
+        {
+            var displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.DriverScrubReport);
+            if (e.UploadedFile != null && e.UploadedFile.IsValid && e.UploadedFile.FileBytes != null)
+            {
+                byte[] uploadedFileData = e.UploadedFile.FileBytes;
+                try
+                {
+                    DateTime startDate, endDate; string filterDescription;
+                    if (_ReportText.Equals("Driver Scrub Report", StringComparison.OrdinalIgnoreCase))
+                    {
+                        using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayDriverScrubReport(uploadedFileData, out filterDescription, out startDate, out endDate))
+                        {
+                            var awcDriverScrubReport = csvDataTable.GetObjectByAWCDriverScrubReportDatatable();
+                            var commonDriverScrubReport = csvDataTable.GetObjectByCommonDriverScrubReportDatatable();
+                            var result = _jobAdvanceReportStaticCommands.ImportScrubDriverDetails(new JobDriverScrubReportData
+                            {
+                                CustomerId = _CustomerId,
+                                Description = filterDescription,
+                                StartDate = startDate,
+                                EndDate = endDate,
+                                AWCDriverScrubReportRawData = awcDriverScrubReport,
+                                CommonDriverScrubReportRawData = commonDriverScrubReport
+                            });
+                            displayMessage.Description = result.AdditionalDetail;
+                        }
+                    }
+                    if (_ReportText.Equals("Capacity Report", StringComparison.OrdinalIgnoreCase))
+                    {
+                        int year = 0;
+                        using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArrayProjectedCapacity(uploadedFileData, out year))
+                        {
+                            var projectedCapacityReport = csvDataTable.GetObjectByProjectedCapacityReportDatatable();
+                            var result = _jobAdvanceReportStaticCommands.ImportProjectedCapacityDetails(new ProjectedCapacityData
+                            {
+                                CustomerId = _CustomerId,
+                                Year = year,
+                                ProjectedCapacityRawData = projectedCapacityReport
+                            });
+                            displayMessage.Description = result.AdditionalDetail;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    displayMessage.Description = "Please select a valid CSV file for upload.";
+                }
+            }
+            else
+                displayMessage.Description = "Please select a CSV file for upload.";
+
+            e.CallbackData = JsonConvert.SerializeObject(displayMessage);
+        }
+        #endregion
     }
 }

@@ -32,6 +32,23 @@
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsFreezed = true;
     }
+
+    if (Model.Permission == Permission.EditActuals)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimeActual").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeActual").ColIsReadOnly = false;
+    }
+
+    if (Model.SessionProvider.ActiveUser.IsSysAdmin)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimeActual").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeActual").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimePlanned").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimePlanned").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOrderedDate").ColIsReadOnly = false;
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "StatusId").ColIsReadOnly = false;
+    }
+
     //Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobIsSchedule").ColIsVisible = false;
 }
 @if (Model.IsAccessPermission)
@@ -60,11 +77,13 @@
         {
             settings.CommandColumn.Visible = true;
             settings.CommandColumn.ShowSelectCheckbox = true;
+            settings.CommandColumn.ShowClearFilterButton = true;
+            settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
         }
 
         settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
-        settings.SettingsCookies.Enabled = true;
-        settings.SettingsCookies.StoreColumnsWidth = true;
+        settings.SettingsCookies.Enabled = false;
+        settings.SettingsCookies.StoreColumnsWidth = false;
         settings.SettingsCookies.StorePaging = false;
         settings.SettingsCookies.StoreGroupingAndSorting = false;
 
@@ -431,8 +450,6 @@
             {
                 foreach (var contexMenu in Model.GridSetting.ContextMenu)
                 {
-
-
                     var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
                     command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
                     command.Enabled = true;

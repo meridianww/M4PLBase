@@ -89,9 +89,8 @@ namespace M4PL.APIClient.Common
 		IList<ConditionalOperator> GetConditionalOperators(bool forceUpdate = false);
 
 		IList<ViewModels.ColumnSetting> GetColumnSettings(EntitiesAlias entity, bool forceUpdate = false);
-
 		IList<ViewModels.ColumnSetting> GetGridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false);
-
+		IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId);
 		IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false);
 
 		void ReloadCacheForAllEntites();
@@ -224,6 +223,6 @@ namespace M4PL.APIClient.Common
         DocumentStatusView IsHistoryPresentForJob(string jobId);
 
 		IList<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null);
-        IList<JobGatewayDetails> GetJobGateway(long parentRecordId);
-    }
+		IList<JobGatewayDetails> GetJobGateway(long parentRecordId, string jobIds = null, bool IsMultiJob = false);
+	}
 }

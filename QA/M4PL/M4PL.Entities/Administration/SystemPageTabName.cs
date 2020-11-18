@@ -25,7 +25,7 @@ namespace M4PL.Entities.Administration
 	public class SystemPageTabName : BaseModel
 	{
 		/// <summary>
-		/// Gets or sets the parent table name.
+		/// Gets or sets the parent table name. e.g. JobDelivery
 		/// </summary>
 		/// <value>
 		/// The  parent table name.
@@ -41,7 +41,7 @@ namespace M4PL.Entities.Administration
 		public int? TabSortOrder { get; set; }
 
 		/// <summary>
-		/// Gets or sets the referenced table controller.
+		/// Gets or sets the referenced table controller. e.g. Job
 		/// </summary>
 		/// <value>
 		/// The tab controller.
@@ -49,7 +49,7 @@ namespace M4PL.Entities.Administration
 		public string TabTableName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the referenced language name.
+		/// Gets or sets the referenced language name. e.g. Destination
 		/// </summary>
 		/// <value>
 		/// The RefTabName.
@@ -57,7 +57,7 @@ namespace M4PL.Entities.Administration
 		public string TabPageTitle { get; set; }
 
 		/// <summary>
-		/// Gets or sets the page URL.
+		/// Gets or sets the page URL. e.g. DestinationFormView
 		/// </summary>
 		/// <value>
 		/// The TabPageUrl.

@@ -1,13 +1,13 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
-
-
 
 //=================================================================================================================
 // Program Title:                                Meridian 4th Party Logistics(M4PL)
@@ -25,76 +25,76 @@ using _commands = M4PL.DataAccess.Customer.CustDocReferenceCommands;
 
 namespace M4PL.Business.Customer
 {
-    public class CustDocReferenceCommands : BaseCommands<CustDocReference>, ICustDocReferenceCommands
-    {
-        /// <summary>
-        /// Get list of customer document reference data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<CustDocReference> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
+	public class CustDocReferenceCommands : BaseCommands<CustDocReference>, ICustDocReferenceCommands
+	{
+		/// <summary>
+		/// Get list of customer document reference data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<CustDocReference> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+		}
 
-        /// <summary>
-        /// Gets specific customer document reference record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets specific customer document reference record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public CustDocReference Get(long id)
-        {
-            return _commands.Get(ActiveUser, id);
-        }
+		public CustDocReference Get(long id)
+		{
+			return _commands.Get(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Creates a new customer document reference record
-        /// </summary>
-        /// <param name="customerDocumentReference"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new customer document reference record
+		/// </summary>
+		/// <param name="customerDocumentReference"></param>
+		/// <returns></returns>
 
-        public CustDocReference Post(CustDocReference customerDocumentReference)
-        {
-            return _commands.Post(ActiveUser, customerDocumentReference);
-        }
+		public CustDocReference Post(CustDocReference customerDocumentReference)
+		{
+			return _commands.Post(ActiveUser, customerDocumentReference);
+		}
 
-        /// <summary>
-        /// Updates an existingcustomer document reference record
-        /// </summary>
-        /// <param name="customerDocumentReference"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existingcustomer document reference record
+		/// </summary>
+		/// <param name="customerDocumentReference"></param>
+		/// <returns></returns>
 
-        public CustDocReference Put(CustDocReference customerDocumentReference)
-        {
-            return _commands.Put(ActiveUser, customerDocumentReference);
-        }
+		public CustDocReference Put(CustDocReference customerDocumentReference)
+		{
+			return _commands.Put(ActiveUser, customerDocumentReference);
+		}
 
-        /// <summary>
-        /// Deletes a specific customer document reference record based on the userid
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific customer document reference record based on the userid
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public int Delete(long id)
-        {
-            return _commands.Delete(ActiveUser, id);
-        }
+		public int Delete(long id)
+		{
+			return _commands.Delete(ActiveUser, id);
+		}
 
-        /// <summary>
-        /// Deletes a list of customer document reference record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of customer document reference record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
-        public CustDocReference Patch(CustDocReference entity)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public CustDocReference Patch(CustDocReference entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

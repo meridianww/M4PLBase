@@ -17,11 +17,14 @@
 // Purpose:                                      Contains commands to call DAL logic for {Namespace:Class name} like M4PL.DAL.Job.JobCommands
 //====================================================================================================================
 
+using M4PL.Business.Event;
 using M4PL.Business.XCBL.HelperClasses;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Entities.XCBL.FarEye;
 using M4PL.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -35,19 +38,9 @@ namespace M4PL.Business.Job
 {
 	public class JobCommands : BaseCommands<Entities.Job.Job>, IJobCommands
 	{
-		public string NavAPIUrl
+		public BusinessConfiguration M4PLBusinessConfiguration
 		{
-			get { return M4PBusinessContext.ComponentSettings.NavAPIUrl; }
-		}
-
-		public string NavAPIUserName
-		{
-			get { return M4PBusinessContext.ComponentSettings.NavAPIUserName; }
-		}
-
-		public string NavAPIPassword
-		{
-			get { return M4PBusinessContext.ComponentSettings.NavAPIPassword; }
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
 		}
 
 		/// <summary>
@@ -65,7 +58,6 @@ namespace M4PL.Business.Job
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-
 		public Entities.Job.Job Get(long id)
 		{
 			return _commands.Get(ActiveUser, id);
@@ -76,10 +68,9 @@ namespace M4PL.Business.Job
 		/// </summary>
 		/// <param name="job"></param>
 		/// <returns></returns>
-
 		public Entities.Job.Job Post(Entities.Job.Job job)
 		{
-			long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
+			long customerId = M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong();
 			bool isUpdateRequired = customerId == job.CustomerId ? false : true;
 			return _commands.Post(ActiveUser, job, isUpdateRequired, isManualUpdate: true);
 		}
@@ -89,14 +80,13 @@ namespace M4PL.Business.Job
 		/// </summary>
 		/// <param name="job"></param>
 		/// <returns></returns>
-
 		public Entities.Job.Job Put(Entities.Job.Job job)
 		{
 			ActiveUser activeUser = ActiveUser;
-			long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
+			long customerId = M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong();
 			bool isUpdateRequired = customerId == job.CustomerId ? false : true;
 			Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate: isUpdateRequired, isServiceCall: false, customerId: customerId, isManualUpdate: true);
-			if (jobResult != null && jobResult.JobCompleted)
+			if (jobResult != null && jobResult.JobCompleted && job.JobDeliveryDateTimeActual.HasValue && job.JobOriginDateTimeActual.HasValue)
 			{
 				Task.Run(() =>
 				{
@@ -107,17 +97,17 @@ namespace M4PL.Business.Job
 					}
 					else
 					{
-						isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+						isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 					}
 
 					if (isDeliveryChargeRemovalRequired)
 					{
-						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete);
+						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 					}
 
 					try
 					{
-						JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+						JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword);
 					}
 					catch (Exception exp)
 					{
@@ -126,7 +116,7 @@ namespace M4PL.Business.Job
 
 					if (isDeliveryChargeRemovalRequired)
 					{
-						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Active);
+						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Active, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 					}
 				});
 			}
@@ -139,7 +129,6 @@ namespace M4PL.Business.Job
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-
 		public int Delete(long id)
 		{
 			return _commands.Delete(ActiveUser, id);
@@ -150,7 +139,6 @@ namespace M4PL.Business.Job
 		/// </summary>
 		/// <param name="ids"></param>
 		/// <returns></returns>
-
 		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
 		{
 			return _commands.Delete(ActiveUser, ids, statusId);
@@ -159,6 +147,11 @@ namespace M4PL.Business.Job
 		public JobDestination GetJobDestination(long id, long parentId)
 		{
 			return _commands.GetJobDestination(ActiveUser, id, parentId);
+		}
+
+		public JobContact GetJobContact(long id, long parentId)
+		{
+			return _commands.GetJobContact(ActiveUser, id, parentId);
 		}
 
 		public Job2ndPoc GetJob2ndPoc(long id, long parentId)
@@ -240,7 +233,17 @@ namespace M4PL.Business.Job
 
 		public bool InsertJobGateway(long jobId, string gatewayStatusCode)
 		{
-			return _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode);
+			bool result = _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode);
+			if (result)
+			{
+				bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+				if (isFarEyePushRequired)
+				{
+					FarEyeHelper.PushStatusUpdateToFarEye(jobId, ActiveUser);
+				}
+			}
+
+			return result;
 		}
 
 		public long CreateJobFromEDI204(long eshHeaderID)
@@ -284,11 +287,13 @@ namespace M4PL.Business.Job
 				if (existingJobDetails?.Id > 0)
 				{
 					existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
+					existingJobDetails.JobIsDirtyDestination = false;
+					existingJobDetails.JobIsDirtyContact = false;
 					var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails, false, true, true, isManualUpdate: true);
 					result = updatedJobDetails?.Id > 0 ? true : false;
 				}
 
-				if (result && jobInvoiceData.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId && jobInvoiceData.IsCustomerUpdateRequired)
+				if (result && jobInvoiceData.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() && jobInvoiceData.IsCustomerUpdateRequired)
 				{
 					var deliveryUpdateModel = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobInvoiceData.JobId, ActiveUser);
 					if (deliveryUpdateModel != null)
@@ -346,7 +351,7 @@ namespace M4PL.Business.Job
 			return _commands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail, ActiveUser);
 		}
 
-		public StatusModel CancelJobByOrderNumber(string orderNumber)
+		public StatusModel CancelJobByOrderNumber(string orderNumber, string cancelComment, string cancelReason)
 		{
 			if (string.IsNullOrEmpty(orderNumber))
 			{
@@ -380,7 +385,7 @@ namespace M4PL.Business.Job
 						AdditionalDetail = "Order number passed in the service is already completed in Meridian System, please contact to Meridian support team for any further action."
 					};
 				}
-				else if (jobDetail?.Id > 0 && jobDetail.IsCancelled)
+				else if (jobDetail?.Id > 0 && jobDetail.IsCancelled.HasValue && jobDetail.IsCancelled.Value)
 				{
 					return new StatusModel()
 					{
@@ -389,28 +394,32 @@ namespace M4PL.Business.Job
 						AdditionalDetail = "Order number passed in the service is already cancelled in Meridian System, please contact to Meridian support team for any further action."
 					};
 				}
-				else if (jobDetail?.Id > 0 && jobDetail.JobDeliveryDateTimePlanned.HasValue)
-				{
-					string timeZone = string.IsNullOrEmpty(jobDetail.JobDeliveryTimeZone) ? "Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Equals("Unknown", StringComparison.OrdinalIgnoreCase) ?
-						"Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Any(char.IsDigit) ?
-						jobDetail.JobDeliveryTimeZone : string.Format("{0} Standard Time", jobDetail.JobDeliveryTimeZone);
-					TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-					DateTime destinationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo);
-					int jobStatusUpdateValidationHours = M4PBusinessContext.ComponentSettings.JobStatusUpdateValidationHours;
-					if (((DateTime)jobDetail.JobDeliveryDateTimePlanned - destinationTime).TotalHours < jobStatusUpdateValidationHours)
-					{
-						return new StatusModel()
-						{
-							Status = "Failure",
-							StatusCode = (int)HttpStatusCode.PreconditionFailed,
-							AdditionalDetail = string.Format("Order number passed in the service can not be cancelled before {0} hours of delivery, please contact to Meridian support team for any further action.", jobStatusUpdateValidationHours)
-						};
-					}
-				}
 
-				long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+				long gatewayId = _commands.CancelJobByCustomerSalesOrderNumber(ActiveUser, jobDetail, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), cancelComment, cancelReason);
 				if (gatewayId > 0)
 				{
+					if (jobDetail.JobDeliveryDateTimePlanned.HasValue)
+					{
+						string timeZone = string.IsNullOrEmpty(jobDetail.JobDeliveryTimeZone) ? "Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Equals("Unknown", StringComparison.OrdinalIgnoreCase) ?
+							"Pacific Standard Time" : jobDetail.JobDeliveryTimeZone.Any(char.IsDigit) ?
+							jobDetail.JobDeliveryTimeZone : string.Format("{0} Standard Time", jobDetail.JobDeliveryTimeZone);
+						TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+						DateTime destinationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo);
+						int jobStatusUpdateValidationHours = M4PLBusinessConfiguration.JobStatusUpdateValidationHours.ToInt();
+						double timeDiffrence = ((DateTime)jobDetail.JobDeliveryDateTimePlanned - destinationTime).TotalHours;
+						if (timeDiffrence < jobStatusUpdateValidationHours)
+						{
+							string emailBody = EventBodyHelper.GetJobCancellationMailBody(jobDetail.Id, timeDiffrence.ToInt().ToString(), jobDetail.JobCustomerSalesOrder, ActiveUser.UserName);
+							EventBodyHelper.CreateEventMailNotification((int)EventNotification.JobCancellation, (long)jobDetail.ProgramID, orderNumber, emailBody);
+						}
+					}
+
+					bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobDetail.Id, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					if (isFarEyePushRequired)
+					{
+						FarEyeHelper.PushStatusUpdateToFarEye(jobDetail.Id, ActiveUser);
+					}
+
 					return new StatusModel()
 					{
 						Status = "Success",
@@ -428,7 +437,7 @@ namespace M4PL.Business.Job
 					};
 				}
 			}
-			catch(Exception exp)
+			catch (Exception exp)
 			{
 				DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while cancelling a order from API.", "Cancel  Order", Utilities.Logger.LogType.Error);
 				return new StatusModel()
@@ -436,6 +445,63 @@ namespace M4PL.Business.Job
 					Status = "Failure",
 					StatusCode = (int)HttpStatusCode.InternalServerError,
 					AdditionalDetail = "There is some error occuring while cancelling the order, please try after sometime."
+				};
+			}
+		}
+
+		public StatusModel UnCancelJobByOrderNumber(string orderNumber, string unCancelReason, string unCancelComment)
+		{
+			if (string.IsNullOrEmpty(orderNumber))
+			{
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Order number can not be empty while calling the unCancel job service, please pass a order number."
+				};
+			}
+			try
+			{
+				var result = _commands.UnCancelJobByCustomerSalesOrderNumber(ActiveUser, orderNumber, unCancelReason, unCancelComment, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+				long jobId = result.JobId;
+				long gatewayId = result.CurrentGatewayId;
+				string errorMessage = result.ErrorMessage;
+				if (gatewayId > 0 && result.IsSuccess)
+				{
+					bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					if (isFarEyePushRequired)
+					{
+						FarEyeHelper.PushStatusUpdateToFarEye(jobId, ActiveUser);
+					}
+
+					var DateEntered = TimeUtility.GetPacificDateTime();
+					string emailBody = EventBodyHelper.GetJobReactivationMailBody(jobId, DateEntered.ToString("MM/dd/yyyy"), DateEntered.ToString("hh:mm tt"), orderNumber, result.JobOriginDateTimePlanned == null ? "NA" : result.JobOriginDateTimePlanned.Value.ToString("MM/dd/yyyy hh:mm tt"), result.JobDeliveryDateTimePlanned == null ? "NA" : result.JobDeliveryDateTimePlanned.Value.ToString("MM/dd/yyyy hh:mm tt"));
+					EventBodyHelper.CreateEventMailNotification((int)EventNotification.JobReActivated, result.ProgramId, orderNumber, emailBody);
+					return new StatusModel()
+					{
+						Status = "Success",
+						StatusCode = (int)HttpStatusCode.OK,
+						AdditionalDetail = "Order number passed in the service has been uncanceled in the Meridian System."
+					};
+				}
+				else
+				{
+					return new StatusModel()
+					{
+						Status = "Failure",
+						StatusCode = (int)HttpStatusCode.InternalServerError,
+						AdditionalDetail = errorMessage
+					};
+				}
+			}
+			catch (Exception exp)
+			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while revoking cancelation of order from API.", "UnCancel  Order", Utilities.Logger.LogType.Error);
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.InternalServerError,
+					AdditionalDetail = "There is some error occuring while revoking cancelation of order, please try after sometime."
 				};
 			}
 		}
@@ -485,41 +551,6 @@ namespace M4PL.Business.Job
 			}
 		}
 
-		public OrderStatusModel GetOrderStatus(string orderNumber)
-		{
-			if (string.IsNullOrEmpty(orderNumber))
-			{
-				return new OrderStatusModel()
-				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Order number can not be empty while calling the cancellation service, please pass a order number."
-				};
-			}
-
-			Entities.Job.Job jobDetail = _commands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, 0);
-
-			if (jobDetail == null || jobDetail?.Id <= 0)
-			{
-				return new OrderStatusModel()
-				{
-					Status = "Failure",
-					StatusCode = (int)HttpStatusCode.PreconditionFailed,
-					AdditionalDetail = "Order number passed in the service is not exist in Meridian System, please pass a valid order number."
-				};
-			}
-			else
-			{
-				return new OrderStatusModel()
-				{
-					Status = "Success",
-					StatusCode = (int)HttpStatusCode.OK,
-					AdditionalDetail = string.Empty,
-					OrderStatus = jobDetail.InstallStatus
-				};
-			}
-		}
-
 		public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber, SysSetting sysSetting)
 		{
 			if (string.IsNullOrEmpty(orderNumber))
@@ -554,7 +585,7 @@ namespace M4PL.Business.Job
 						AdditionalDetail = "Order number passed in the service is already completed in Meridian System, please contact to Meridian support team for any further action."
 					};
 				}
-				else if (jobDetail?.Id > 0 && jobDetail.IsCancelled)
+				else if (jobDetail?.Id > 0 && jobDetail.IsCancelled.HasValue && jobDetail.IsCancelled.Value)
 				{
 					return new StatusModel()
 					{
@@ -566,13 +597,19 @@ namespace M4PL.Business.Job
 
 				JobExceptionInfo selectedJobExceptionInfo = null;
 				JobInstallStatus selectedJobInstallStatus = null;
-				bool isElectroluxOrder = jobDetail.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
+				bool isElectroluxOrder = jobDetail.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? true : false;
 				StatusModel statusModel = JobRescheduleValidation(jobDetail.Id, jobDetail.CustomerId, jobRescheduleDetail, jobDetail.JobDeliveryDateTimePlanned, isElectroluxOrder, out selectedJobExceptionInfo, out selectedJobInstallStatus);
 				if (statusModel != null) { return statusModel; }
 
 				var gatewayResult = RescheduleOrderGateway(jobDetail, selectedJobExceptionInfo, jobRescheduleDetail.RescheduleDate, selectedJobInstallStatus, sysSetting);
 				if (gatewayResult?.Id > 0)
 				{
+					bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobDetail.Id, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					if (isFarEyePushRequired)
+					{
+						FarEyeHelper.PushStatusUpdateToFarEye(jobDetail.Id, ActiveUser);
+					}
+
 					return new StatusModel()
 					{
 						Status = "Success",
@@ -587,6 +624,57 @@ namespace M4PL.Business.Job
 						Status = "Failure",
 						StatusCode = (int)HttpStatusCode.InternalServerError,
 						AdditionalDetail = "There is some error occuring while rescheduling the order, please try after sometime."
+					};
+				}
+			}
+			catch (Exception exp)
+			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while cancelling a order from API.", "Cancel  Order", Utilities.Logger.LogType.Error);
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.InternalServerError,
+					AdditionalDetail = "There is some error occuring while cancelling the order, please try after sometime."
+				};
+			}
+		}
+
+		public StatusModel AddDriver(DriverContact driverContact)
+		{
+			if (!(driverContact != null
+				&& !string.IsNullOrEmpty(driverContact.FirstName)
+				&& !string.IsNullOrEmpty(driverContact.LastName)
+				&& !string.IsNullOrEmpty(driverContact.LocationCode)
+				&& driverContact.JobId > 0
+				&& !string.IsNullOrEmpty(driverContact.BizMoblContactID)))
+			{
+				return new StatusModel()
+				{
+					Status = "Failure",
+					StatusCode = (int)HttpStatusCode.PreconditionFailed,
+					AdditionalDetail = "Please Provide Valid Input."
+				};
+			}
+
+			try
+			{
+				DriverContact addedDriverContact = _commands.AddDriver(ActiveUser, driverContact);
+				if (addedDriverContact != null && addedDriverContact.Id.HasValue && addedDriverContact.Id.Value > 0)
+				{
+					return new StatusModel()
+					{
+						Status = "Success",
+						StatusCode = (int)HttpStatusCode.OK,
+						AdditionalDetail = "Driver Information is Updated Successfully ."
+					};
+				}
+				else
+				{
+					return new StatusModel()
+					{
+						Status = "Success",
+						StatusCode = (int)HttpStatusCode.OK,
+						AdditionalDetail = "JobId or location with respect to Job not found."
 					};
 				}
 			}
@@ -656,7 +744,7 @@ namespace M4PL.Business.Job
 				jobGateway.GwyUprDate = rescheduleData.AddHours(jobGateway.GwyUprWindow.HasValue ? (double)jobGateway.GwyUprWindow : 0);
 				jobGateway.GwyLwrDate = rescheduleData.AddHours(jobGateway.GwyLwrWindow.HasValue ? (double)jobGateway.GwyLwrWindow : 0);
 				jobGateway.StatusCode = codeArray.Length > 1 ? codeArray[1] : jobGateway.StatusCode;
-				if (jobDetail.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId)
+				if (jobDetail.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong())
 				{
 					jobGateway.GwyTitle = jobExceptionInfo.ExceptionReasonCode;
 					jobGateway.GwyGatewayTitle = jobExceptionInfo.ExceptionReasonCode;
@@ -669,9 +757,9 @@ namespace M4PL.Business.Job
 					jobGateway.GwyGatewayTitle = jobExceptionInfo.ExceptionTitle;
 				}
 
-				result = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, sysSetting, jobGateway, jobDetail.CustomerId, jobDetail.Id);
+				result = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, sysSetting, jobGateway, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), jobDetail.Id);
 			}
-			catch(Exception exp)
+			catch (Exception exp)
 			{
 				DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while Rescheduling a order from API.", "Cancel  Order", Utilities.Logger.LogType.Error);
 			}
@@ -689,12 +777,12 @@ namespace M4PL.Business.Job
 				return new StatusModel() { AdditionalDetail = "Request model can not be empty.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
 			}
 
-			if(!scheduledDate.HasValue)
+			if (!scheduledDate.HasValue)
 			{
 				return new StatusModel() { AdditionalDetail = "Order can not be reschedule as status is not updated to scheduled yet.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
 			}
 
-			if (jobRescheduleDetail.RescheduleDate < new DateTime(1999,1,1))
+			if (jobRescheduleDetail.RescheduleDate < new DateTime(1999, 1, 1))
 			{
 				return new StatusModel() { AdditionalDetail = "Passed reschedule date is not valid.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
 			}
@@ -714,7 +802,7 @@ namespace M4PL.Business.Job
 				return new StatusModel() { AdditionalDetail = "RescheduleReason can not be empty, please sent a RescheduleReason for processing.", StatusCode = (int)HttpStatusCode.PreconditionFailed, Status = "Failure" };
 			}
 
-			var jobExceptionDetail = M4PL.DataAccess.Common.CommonCommands.GetJobRescheduledDetail(jobId, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId == customerId ? true : false);
+			var jobExceptionDetail = M4PL.DataAccess.Common.CommonCommands.GetJobRescheduledDetail(jobId, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() == customerId ? true : false);
 			if (jobExceptionDetail != null)
 			{
 				if (jobExceptionDetail.JobExceptionInfo != null && jobExceptionDetail.JobExceptionInfo.Count > 0)

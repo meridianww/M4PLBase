@@ -7,6 +7,7 @@
 ******************************************************************************/
 #endregion Copyright
 
+using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,6 @@ namespace M4PL.Entities.Job
 		public int StatusCode { get; set; }
 		public string Status { get; set; }
 		public string AdditionalDetail { get; set; }
-		public string OrderStatus { get; set; }
+		public DeliveryUpdate DeliveryUpdate { get; set; }
 	}
 }

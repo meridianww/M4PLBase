@@ -36,8 +36,6 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> PrgOrgID { get; set; }
-        public Nullable<long> PrgCustID { get; set; }
         public string PrgItemNumber { get; set; }
         public string PrgProgramCode { get; set; }
         public string PrgProjectCode { get; set; }
@@ -50,7 +48,6 @@ namespace M4PL.EF
         public Nullable<decimal> PckEarliest { get; set; }
         public Nullable<decimal> PckLatest { get; set; }
         public Nullable<bool> PckDay { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> PrgDateStart { get; set; }
         public Nullable<System.DateTime> PrgDateEnd { get; set; }
         public Nullable<System.DateTime> PrgDeliveryTimeDefault { get; set; }
@@ -62,6 +59,9 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
+        public Nullable<bool> PrgRollUpBilling { get; set; }
+        public Nullable<long> PrgRollUpBillingJobFieldId { get; set; }
+        public bool PrgElectronicInvoice { get; set; }
     
         public virtual CUST000Master CUST000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

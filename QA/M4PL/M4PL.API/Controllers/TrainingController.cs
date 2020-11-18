@@ -19,6 +19,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// TrainingController
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/Training")]
 	public class TrainingController : ApiController
@@ -35,12 +38,8 @@ namespace M4PL.API.Controllers
 			_trainingCommands = trainingCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -127,12 +126,17 @@ namespace M4PL.API.Controllers
             _trainingCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _trainingCommands.Patch(trainingDetail);
         }
+        /// <summary>
+        /// get all traing videos or user guide pdf details based on content type
+        /// </summary>
+        /// <param name="contentType">traingType e.g. BizMobl Training </param>
+        /// <returns></returns>
         [CustomAuthorize]
 		[HttpGet]
 		[Route("GetAllTrainingDetail")]
-		public List<Category> GetAllTrainingDetail()
+		public List<Category> GetAllTrainingDetail(string contentType)
 		{
-			return _trainingCommands.GetAllTrainingDetail();
+			return _trainingCommands.GetAllTrainingDetail(contentType);
 		}
 	}
 }

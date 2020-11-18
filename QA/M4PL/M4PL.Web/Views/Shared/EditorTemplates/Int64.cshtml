@@ -18,7 +18,7 @@
     {
         if (!columnSetting.ColIsReadOnly)
         {
-            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll;
+            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditActuals;
         }
         @Html.DevExpress().SpinEdit(settings =>
    {

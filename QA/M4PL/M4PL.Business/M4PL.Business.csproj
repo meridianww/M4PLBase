@@ -52,6 +52,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\IUserGuideUploadCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
     <Compile Include="Administration\IStatusLogCommands.cs" />
@@ -88,10 +92,13 @@
     <Compile Include="Administration\SystemPageTabNameCommands.cs" />
     <Compile Include="Administration\SystemReferenceCommands.cs" />
     <Compile Include="Administration\SystemAccountCommands.cs" />
+    <Compile Include="Administration\UserGuideUploadCommands.cs" />
     <Compile Include="Administration\ValidationCommands.cs" />
     <Compile Include="Attachment\AttachmentCommands.cs" />
     <Compile Include="Attachment\IAttachmentCommands.cs" />
     <Compile Include="BaseCommands.cs" />
+    <Compile Include="BizMobl\BizMoblCommands.cs" />
+    <Compile Include="BizMobl\IBizMoblCommands.cs" />
     <Compile Include="Common\AppDashboardCommands.cs" />
     <Compile Include="Common\CommonCommands.cs" />
     <Compile Include="Common\IAppDashboardCommands.cs" />
@@ -118,15 +125,28 @@
     <Compile Include="Customer\ICustFinancialCalendarCommands.cs" />
     <Compile Include="Customer\ICustomerCommands.cs" />
     <Compile Include="Customer\ICustReportCommands.cs" />
+    <Compile Include="Email\EmailCommands.cs" />
+    <Compile Include="Email\IEmailCommands.cs" />
+    <Compile Include="Event\EventBodyHelper.cs" />
+    <Compile Include="Event\EventCommands.cs" />
+    <Compile Include="Event\IEventCommands.cs" />
     <Compile Include="Finance\CostCode\INavCostCodeCommands.cs" />
     <Compile Include="Finance\Customer\INavCustomerCommands.cs" />
+    <Compile Include="Finance\Gateway\IGatewayCommands.cs" />
+    <Compile Include="Finance\Gateway\GatewayCommands.cs" />
     <Compile Include="Finance\NavRate\INavRateCommands.cs" />
     <Compile Include="Finance\NavRate\NavRateCommands.cs" />
     <Compile Include="Finance\OrderItem\INavOrderItemCommands.cs" />
     <Compile Include="Finance\OrderItem\NavOrderItemCommands.cs" />
+    <Compile Include="Finance\Order\INavOrderCommands.cs" />
+    <Compile Include="Finance\Order\NavOrderCommands.cs" />
     <Compile Include="Finance\PriceCode\INavPriceCodeCommands.cs" />
     <Compile Include="Finance\PurchaseOrder\INavPurchaseOrderCommands.cs" />
+    <Compile Include="Finance\Remittance\INavRemittanceCommands.cs" />
+    <Compile Include="Finance\Remittance\NavRemittanceCommands.cs" />
     <Compile Include="Finance\SalesOrder\INavSalesOrderCommands.cs" />
+    <Compile Include="Finance\VendorLedger\INavVendorLedgerCommands.cs" />
+    <Compile Include="Finance\VendorLedger\NavVendorLedgerCommands.cs" />
     <Compile Include="Finance\Vendor\INavVendorCommands.cs" />
     <Compile Include="Finance\CostCode\NavCostCodeCommands.cs" />
     <Compile Include="Finance\Customer\NavCustomerCommands.cs" />
@@ -172,8 +192,6 @@
     <Compile Include="Job\JobCostSheetCommands.cs" />
     <Compile Include="Job\JobRefStatusCommands.cs" />
     <Compile Include="Job\JobRollupHelper.cs" />
-    <Compile Include="M4PBusinessConfiguration.cs" />
-    <Compile Include="M4PBusinessContext.cs" />
     <Compile Include="Organization\OrgReportCommands.cs" />
     <Compile Include="Organization\IOrgReportCommands.cs" />
     <Compile Include="Organization\IOrganizationCommands.cs" />
@@ -202,6 +220,7 @@
     <Compile Include="Program\IPrgVendLocationCommands.cs" />
     <Compile Include="Program\IPrgBillableRateCommands.cs" />
     <Compile Include="Program\IPrgCostLocationCommands.cs" />
+    <Compile Include="Program\IPrgEventManagementCommands.cs" />
     <Compile Include="Program\IProgramCommands.cs" />
     <Compile Include="Program\IPrgCostRateCommands.cs" />
     <Compile Include="Program\IPrgRoleCommands.cs" />
@@ -219,6 +238,7 @@
     <Compile Include="Program\PrgVendLocationCommands.cs" />
     <Compile Include="Program\PrgBillableRateCommands.cs" />
     <Compile Include="Program\PrgCostLocationCommands.cs" />
+    <Compile Include="Program\PrgEventManagementCommands.cs" />
     <Compile Include="Program\ProgramCommands.cs" />
     <Compile Include="Program\PrgCostRateCommands.cs" />
     <Compile Include="Program\PrgRoleCommands.cs" />
@@ -285,7 +305,11 @@
     <Compile Include="XCBL\ElectroluxOrderMapping\JobASNDataMapper.cs" />
     <Compile Include="XCBL\ElectroluxOrderMapping\JobBasicDetailMapper.cs" />
     <Compile Include="XCBL\ElectroluxOrderMapping\JobCargoMapper.cs" />
+    <Compile Include="XCBL\FarEyeCommands.cs" />
+    <Compile Include="XCBL\FarEyeOrderMapping\FarEyeModelToxCBLModel.cs" />
     <Compile Include="XCBL\HelperClasses\ElectroluxHelper.cs" />
+    <Compile Include="XCBL\HelperClasses\FarEyeHelper.cs" />
+    <Compile Include="XCBL\IFarEyeCommands.cs" />
     <Compile Include="XCBL\IXCBLCommands.cs" />
     <Compile Include="XCBL\XCBLCommands.cs" />
   </ItemGroup>
@@ -316,9 +340,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="M4PL.Business.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="M4PL.Business.licenseheader" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -326,10 +347,25 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="StyleSheets\CargoException.xslt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StyleSheets\EDIException.xslt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="StyleSheets\JobBOL.xslt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="StyleSheets\JobCancel.xslt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StyleSheets\JobReactivation.xslt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="StyleSheets\JobTracking.xslt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StyleSheets\xCBLException.xslt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

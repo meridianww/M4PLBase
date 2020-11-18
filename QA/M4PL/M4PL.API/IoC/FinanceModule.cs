@@ -21,11 +21,14 @@ using Autofac;
 using M4PL.Business.Common;
 using M4PL.Business.Finance.CostCode;
 using M4PL.Business.Finance.Customer;
+using M4PL.Business.Finance.Gateway;
 using M4PL.Business.Finance.NavRate;
 using M4PL.Business.Finance.PriceCode;
 using M4PL.Business.Finance.PurchaseOrder;
+using M4PL.Business.Finance.Remittance;
 using M4PL.Business.Finance.SalesOrder;
 using M4PL.Business.Finance.Vendor;
+using M4PL.Business.Finance.VendorLedger;
 
 namespace M4PL.API.IoC
 {
@@ -48,6 +51,9 @@ namespace M4PL.API.IoC
 			builder.RegisterType<NavSalesOrderCommands>().As<INavSalesOrderCommands>().InstancePerRequest();
 			builder.RegisterType<NavPurchaseOrderCommands>().As<INavPurchaseOrderCommands>().InstancePerRequest();
 			builder.RegisterType<NavRateCommands>().As<INavRateCommands>().InstancePerRequest();
+			builder.RegisterType<GatewayCommands>().As<IGatewayCommands>().InstancePerRequest();
+			builder.RegisterType<NavVendorLedgerCommands>().As<INavVendorLedgerCommands>().InstancePerRequest();
+			builder.RegisterType<NavRemittanceCommands>().As<INavRemittanceCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}

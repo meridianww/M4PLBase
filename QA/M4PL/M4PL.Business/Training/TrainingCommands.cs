@@ -1,19 +1,20 @@
 ﻿#region Copyright
+
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 using M4PL.Entities.Support;
 using M4PL.Entities.Training;
-using System.Collections.Generic;
 using System;
-using _command = M4PL.DataAccess.Training.TrainingCommands;
+using System.Collections.Generic;
 using System.Linq;
-using M4PL.Utilities;
+using _command = M4PL.DataAccess.Training.TrainingCommands;
 
 namespace M4PL.Business.Training
 {
@@ -34,20 +35,24 @@ namespace M4PL.Business.Training
             throw new NotImplementedException();
         }
 
-        public List<Category> GetAllTrainingDetail()
+        public List<Category> GetAllTrainingDetail(string traingType)
         {
-            var videoData = _command.GetAllTrainingDetail();
-
-            List<Category> categoryList = videoData?.GroupBy(t => new { t.CategoryName })
-                ?.Select(t => new Category()
+            var videoData = _command.GetAllTrainingDetail(traingType);
+            List<Category> categoryList = new List<Category>();
+            //if (!string.IsNullOrEmpty(traingType) && traingType.ToLower() == "video")
+            //{
+            categoryList = videoData?.GroupBy(t => new { t.CategoryName })
+            ?.Select(t => new Category()
+            {
+                Name = t.Key.CategoryName,
+                Videos = t.Select(s => new Video()
                 {
-                    Name = t.Key.CategoryName,
-                    Videos = t.Select(s => new Video()
-                    {
-                        Name = s.VideoName,
-                        Url = s.VideoURL
-                    }).ToList()
-                }).ToList();
+                    Name = s.VideoName,
+                    Url = s.VideoURL
+                }).ToList()
+            }).ToList();
+            //}
+
 
             return categoryList;
         }

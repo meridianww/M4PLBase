@@ -1,10 +1,12 @@
 ﻿#region Copyright
+
 /******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
 * medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
+
 #endregion Copyright
 
 using M4PL.Business.XCBL.ElectroluxOrderMapping;
@@ -36,7 +38,11 @@ namespace M4PL.Business.XCBL
 {
     public class XCBLCommands : BaseCommands<XCBLToM4PLRequest>, IXCBLCommands
     {
-        public int M4PLBusinessConfiguration { get; private set; }
+        public BusinessConfiguration M4PLBusinessConfiguration
+        {
+            get { return CoreCache.GetBusinessConfiguration("EN"); }
+        }
+
         #region Public Methods
 
         public int Delete(long id)
@@ -75,11 +81,12 @@ namespace M4PL.Business.XCBL
             return _commands.InsertxCBLDetailsInDB(request);
         }
 
-        public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
+        public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails, bool isFarEyeRequest = false)
         {
             Entities.Job.Job processingJobDetail = null;
             Entities.Job.Job jobDetails = null;
-            OrderResponse response = null;
+			Entities.Job.Job existingJobDataInDB = null;
+			OrderResponse response = null;
             Task[] tasks = new Task[2];
             JobCargoMapper cargoMapper = new JobCargoMapper();
             OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
@@ -92,7 +99,31 @@ namespace M4PL.Business.XCBL
                 Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
                 Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
-            Entities.Job.Job existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+			if (isFarEyeRequest)
+			{
+				if (string.IsNullOrEmpty(orderHeader.OrderNumber))
+				{
+					orderHeader.OrderNumber = string.Format("O-{0}", orderHeader.OriginalOrderNumber);
+					existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+				}
+				else
+				{
+					string tempOrderNumber = string.Format("O-{0}", orderHeader.OriginalOrderNumber);
+					existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, tempOrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					if (existingJobDataInDB != null && existingJobDataInDB.Id > 0)
+					{
+						existingJobDataInDB.JobCustomerSalesOrder = orderHeader.OrderNumber;
+					}
+					else
+					{
+						existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					}
+				}
+			}
+			else
+			{
+				existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			}
 
             // Populate the data in xCBL tables
             tasks[0] = Task.Factory.StartNew(() =>
@@ -198,11 +229,22 @@ namespace M4PL.Business.XCBL
                         }
                         else if (jobDetails?.Id > 0 && !isJobCancelled)
                         {
+                            jobDetails.JobIsDirtyDestination = true;
+                            jobDetails.JobIsDirtyContact = true;
                             processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
                             if (processingJobDetail?.Id > 0)
                             {
                                 InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-                                _jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                                if (!M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean())
+                                {
+                                    bool isFarEyePushRequired = false;
+                                    _jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+                                    if (isFarEyePushRequired)
+                                    {
+                                        FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
+                                    }
+                                }
+
                                 List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
                                 if (jobCargos != null && jobCargos.Count > 0)
                                 {
@@ -278,14 +320,15 @@ namespace M4PL.Business.XCBL
             return _commands.UpdateDeliveryUpdateProcessingLog(deliveryUpdateProcessingData);
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Private Methods
 
         private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
         {
-            _jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+            _jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), string.Empty, string.Empty);
         }
+
         private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails, List<SystemReference> systemOptionList)
         {
             Entities.Job.Job jobCreationData = null;
@@ -293,12 +336,13 @@ namespace M4PL.Business.XCBL
             JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
             var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
             var orderLineDetailList = electroluxOrderDetails.Body?.Order?.OrderLineDetailList;
-            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            long programId = M4PLBusinessConfiguration.ElectroluxProgramId.ToLong();
             basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref jobCreationData, programId, orderLineDetailList, false, systemOptionList);
             addressMapper.ToJobAddressModel(orderDetails, ref jobCreationData);
 
             return jobCreationData;
         }
+
         private Entities.Job.Job GetJobModelForElectroluxOrderUpdation(ElectroluxOrderDetails electroluxOrderDetails, List<SystemReference> systemOptionList, Entities.Job.Job existingJobData)
         {
             JobAddressMapper addressMapper = new JobAddressMapper();
@@ -316,68 +360,113 @@ namespace M4PL.Business.XCBL
 
             return existingJobData;
         }
+
         private XCBLSummaryHeaderModel GetSummaryHeaderModel(XCBLToM4PLRequest xCBLToM4PLRequest)
         {
-            dynamic request;
+            dynamic request = null;
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();
+            ActiveUser activeUser = ActiveUser;
+            List<Task> tasks = new List<Task>();
             if (xCBLToM4PLRequest.EntityId == (int)XCBLRequestType.ShippingSchedule)
             {
-                List<long> copiedGatewayIds = new List<long>();
-                request = ProcessShippingScheduleRequestForAWC(xCBLToM4PLRequest, ref copiedGatewayIds);
-                //request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
-                summaryHeader.SummaryHeader = new SummaryHeader()
+                List<long> copiedGatewayIds = null;
+                var xcBLToM4PLShippingScheduleRequest = Newtonsoft.Json.JsonConvert.DeserializeObject<XCBLToM4PLShippingScheduleRequest>(xCBLToM4PLRequest.Request.ToString());
+                if (xcBLToM4PLShippingScheduleRequest != null)
                 {
-                    CustomerReferenceNo = request.OrderNumber,
-                    ProcessingDate = request.ScheduleIssuedDate,
-                    SetPurpose = request.PurposeCoded,
-                    SpecialNotes = request.ShippingInstruction,
-                    Latitude = request.Latitude,
-                    Longitude = request.Longitude,
-                    LocationId = request.LocationID,
-                    OrderType = request.OrderType,
-                    ScheduledDeliveryDate = request.EstimatedArrivalDate
-                };
-                summaryHeader.Address = new List<Address>()
+                    var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, xcBLToM4PLShippingScheduleRequest.OrderNumber, M4PLBusinessConfiguration.AWCCustomerId.ToLong());
+                    if (existingJobData != null && existingJobData.Id > 0)
+                    {
+                        tasks.Add(Task.Factory.StartNew(() =>
+                        {
+                            try
+                            {
+                                copiedGatewayIds = ProcessShippingScheduleRequestForAWC(existingJobData, xcBLToM4PLShippingScheduleRequest, activeUser);
+                            }
+                            catch (Exception exp)
+                            {
+                                DataAccess.Logger.ErrorLogger.Log(exp, "Error occured while processing the shipping request.", "Shipping Schedule Processing", Utilities.Logger.LogType.Error);
+                            }
+                        }));
+
+                        tasks.Add(Task.Factory.StartNew(() =>
+                        {
+                            try
+                            {
+                                InsertxCBLDetailsInTableForAWC(existingJobData.Id, xCBLToM4PLRequest, "Shipping Schedule");
+                            }
+                            catch (Exception exp)
+                            {
+                                DataAccess.Logger.ErrorLogger.Log(exp, "Error occured while inserting data in edi xcbl table for shipping schedule.", "Shipping Schedule Processing", Utilities.Logger.LogType.Error);
+                            }
+                        }));
+                    }
+
+                    tasks.Add(Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            summaryHeader.SummaryHeader = new SummaryHeader()
+                            {
+                                CustomerReferenceNo = xcBLToM4PLShippingScheduleRequest != null ? xcBLToM4PLShippingScheduleRequest.OrderNumber : string.Empty,
+                                ProcessingDate = xcBLToM4PLShippingScheduleRequest.ScheduleIssuedDate,
+                                SetPurpose = xcBLToM4PLShippingScheduleRequest.PurposeCoded,
+                                SpecialNotes = xcBLToM4PLShippingScheduleRequest.ShippingInstruction,
+                                Latitude = xcBLToM4PLShippingScheduleRequest.Latitude,
+                                Longitude = xcBLToM4PLShippingScheduleRequest.Longitude,
+                                LocationId = xcBLToM4PLShippingScheduleRequest.LocationID,
+                                OrderType = xcBLToM4PLShippingScheduleRequest.OrderType,
+                                ScheduledDeliveryDate = xcBLToM4PLShippingScheduleRequest.EstimatedArrivalDate
+                            };
+                            summaryHeader.Address = new List<Address>()
                 {
                     new Address()
                     {
                         AddressTypeId = Convert.ToByte(xCBLAddressType.ShipTo),
-                        Address1 = request.Street,
-                        Address2 = request.Streetsupplement1,
-                        City = request.City,
-                        CountryCode = GetCountryCodeAndStateCode(request.RegionCoded,  true),
-                        State = GetCountryCodeAndStateCode(request.RegionCoded,  false),
-                        Name = request.Name1,
-                        PostalCode = request.PostalCode
+                        Address1 = xcBLToM4PLShippingScheduleRequest.Street,
+                        Address2 = xcBLToM4PLShippingScheduleRequest.Streetsupplement1,
+                        City = xcBLToM4PLShippingScheduleRequest.City,
+                        CountryCode = GetCountryCodeAndStateCode(xcBLToM4PLShippingScheduleRequest.RegionCoded,  true),
+                        State = GetCountryCodeAndStateCode(xcBLToM4PLShippingScheduleRequest.RegionCoded,  false),
+                        Name = xcBLToM4PLShippingScheduleRequest.Name1,
+                        PostalCode = xcBLToM4PLShippingScheduleRequest.PostalCode
                     }
                 };
 
-                summaryHeader.CustomAttribute = new CustomAttribute()
-                {
+                            summaryHeader.CustomAttribute = new CustomAttribute()
+                            {
+                            };
 
-                };
+                            summaryHeader.UserDefinedField = new UserDefinedField()
+                            {
+                                UDF01 = xcBLToM4PLShippingScheduleRequest.Other_FirstStop,
+                                UDF02 = xcBLToM4PLShippingScheduleRequest.Other_Before7,
+                                UDF03 = xcBLToM4PLShippingScheduleRequest.Other_Before9,
+                                UDF04 = xcBLToM4PLShippingScheduleRequest.Other_Before12,
+                                UDF05 = xcBLToM4PLShippingScheduleRequest.Other_SameDay,
+                                UDF06 = xcBLToM4PLShippingScheduleRequest.Other_OwnerOccupied,
+                            };
 
-                summaryHeader.UserDefinedField = new UserDefinedField()
-                {
-                    UDF01 = request.Other_FirstStop,
-                    UDF02 = request.Other_Before7,
-                    UDF03 = request.Other_Before9,
-                    UDF04 = request.Other_Before12,
-                    UDF05 = request.Other_SameDay,
-                    UDF06 = request.Other_OwnerOccupied,
-                };
+                            summaryHeader.LineDetail = new List<LineDetail>()
+                            {
+                            };
+                        }
+                        catch (Exception exp)
+                        {
+                            DataAccess.Logger.ErrorLogger.Log(exp, "Error occured while inserting data in edi tables table for shipping schedule.", "Shipping Schedule Processing", Utilities.Logger.LogType.Error);
+                        }
+                    }));
 
-                summaryHeader.LineDetail = new List<LineDetail>()
-                {
-
-                };
-                List<CopiedGateway> gatewayIds = new List<CopiedGateway>();
-                copiedGatewayIds.ForEach(d =>
-                {
-                    gatewayIds.Add(new CopiedGateway() { Id = d });
-                });
-                summaryHeader.CopiedGatewayIds = gatewayIds;
-
+                    if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+                    if (copiedGatewayIds != null && copiedGatewayIds.Count > 0)
+                    {
+                        List<CopiedGateway> gatewayIds = new List<CopiedGateway>();
+                        copiedGatewayIds.ForEach(d =>
+                        {
+                            gatewayIds.Add(new CopiedGateway() { Id = d });
+                        });
+                        summaryHeader.CopiedGatewayIds = gatewayIds;
+                    }
+                }
             }
             else
             {
@@ -427,7 +516,6 @@ namespace M4PL.Business.XCBL
                 summaryHeader.CustomAttribute = new CustomAttribute();
                 summaryHeader.LineDetail = new List<LineDetail>()
                 {
-
                 };
 
                 summaryHeader.UserDefinedField = new UserDefinedField()
@@ -438,7 +526,6 @@ namespace M4PL.Business.XCBL
                     UDF04 = request.StartTransportLocation_Latitude,
                     UDF05 = request.StartTransportLocation_Longitude
                 };
-
             }
 
             return summaryHeader;
@@ -456,10 +543,13 @@ namespace M4PL.Business.XCBL
                     {
                         case "US":
                             return "USA";
+
                         case "MX":
                             return "MEX";
+
                         case "CA":
                             return "CAN";
+
                         default:
                             return "USA";
                     }
@@ -468,6 +558,7 @@ namespace M4PL.Business.XCBL
                     return regionCode.Substring(2, 2);
             }
         }
+
         private XCBLSummaryHeaderModel GetSummaryHeaderModel(ElectroluxOrderDetails electroluxOrderDetails)
         {
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();
@@ -477,7 +568,7 @@ namespace M4PL.Business.XCBL
             if (orderHeader != null)
             {
                 string deliveryTime = orderHeader != null ? orderHeader.DeliveryTime : string.Empty;
-                deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
+                deliveryTime = (!string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
                                    deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
                                    deliveryTime.Substring(4, 2) : "";
                 summaryHeader.SummaryHeader = new SummaryHeader()
@@ -602,279 +693,117 @@ namespace M4PL.Business.XCBL
 
             summaryHeader.CustomAttribute = new CustomAttribute()
             {
-
             };
 
             summaryHeader.UserDefinedField = new UserDefinedField()
             {
-
             };
 
             return summaryHeader;
         }
-        private XCBLToM4PLShippingScheduleRequest ProcessShippingScheduleRequestForAWC(XCBLToM4PLRequest xCBLToM4PLRequest, ref List<long> copiedGatewayIds)
+
+        private List<long> ProcessShippingScheduleRequestForAWC(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, ActiveUser activeUser)
         {
-            bool isChanged = false;
+            List<long> copiedGatewayIds = new List<long>();
+            string geoCordinateQuery = string.Empty;
+            string cityandPostalChangeQuery = string.Empty;
+            string deliverySiteNameQuery = string.Empty;
+            string deliveryDateTimeActualQuery = string.Empty;
+            string estimatedArrivalDateTimeQuery = string.Empty;
             bool isLatLongUpdatedFromXCBL = false;
-            var request = Newtonsoft.Json.JsonConvert.DeserializeObject<XCBLToM4PLShippingScheduleRequest>(xCBLToM4PLRequest.Request.ToString());
-            var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber, M4PBusinessContext.ComponentSettings.AWCCustomerId);
+            string finalSQLUpdateQuery = string.Empty;
             string actionCode = string.Empty;
-
-            JobGateway jobGateway;
             List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList = _jobCommands.GetJobUpdateDecisionMaker();
-
-            if (existingJobData.JobLatitude != request.Latitude || existingJobData.JobLongitude != request.Longitude)
+            if (existingJobData.JobIsSchedule && jobUpdateDecisionMakerList != null && jobUpdateDecisionMakerList.Count > 0 && jobUpdateDecisionMakerList.Where(x => x.xCBLColumnName == "ScheduledDeliveryDate").Any())
             {
-                isLatLongUpdatedFromXCBL = true;
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "Latitude") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "Latitude").ActionCode : string.Empty;
-                jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                if (jobGateway != null && jobGateway.GwyCompleted)
-                {
-                    isChanged = true;
-                    existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
-                    existingJobData.JobLongitude = existingJobData.JobLongitude != request.Longitude ? request.Longitude : existingJobData.JobLongitude;
-                }
-
-                if (jobGateway != null)
-                {
-                    copiedGatewayIds.Add(jobGateway.Id);
-                }
-            }
-            if (existingJobData.JobDeliveryPostalCode != request.PostalCode ||
-                existingJobData.JobDeliveryCity != request.City)
-            {
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "City") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "City").ActionCode : string.Empty;
-                jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                if (jobGateway != null && jobGateway.GwyCompleted)
-                {
-                    isChanged = true;
-                    existingJobData.JobDeliveryCity = existingJobData.JobDeliveryCity != request.City ? request.City : existingJobData.JobDeliveryCity;
-                    existingJobData.JobDeliveryPostalCode = existingJobData.JobDeliveryPostalCode != request.PostalCode ? request.PostalCode : existingJobData.JobDeliveryPostalCode;
-                }
-
-                if (jobGateway != null)
-                {
-                    copiedGatewayIds.Add(jobGateway.Id);
-                }
+                jobUpdateDecisionMakerList.Where(x => x.xCBLColumnName == "ScheduledDeliveryDate").FirstOrDefault().ActionCode = "XCBL-Reschedule";
             }
 
-            if (existingJobData.JobDeliverySiteName != request.Name1 ||
-                existingJobData.JobDeliveryStreetAddress != request.Street ||
-                existingJobData.JobDeliveryStreetAddress2 != request.Streetsupplement1)
+            if (jobUpdateDecisionMakerList != null && jobUpdateDecisionMakerList.Count > 0)
             {
-                isChanged = true;
-                existingJobData.JobDeliverySiteName = existingJobData.JobDeliverySiteName != request.Name1 ? request.Name1 : existingJobData.JobDeliverySiteName;
-                existingJobData.JobDeliveryStreetAddress = existingJobData.JobDeliveryStreetAddress != request.Street ? request.Street : existingJobData.JobDeliveryStreetAddress;
-                existingJobData.JobDeliveryStreetAddress2 = existingJobData.JobDeliveryStreetAddress2 != request.Streetsupplement1 ? request.Streetsupplement1 : existingJobData.JobDeliveryStreetAddress2;
-            }
-
-            if (existingJobData.JobDeliveryDateTimeActual.HasValue &&
-                request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual))
-                .TotalHours <= 48)
-            {
-
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "XCBL-Date") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "XCBL-Date").ActionCode : string.Empty;
-
-                if (!string.IsNullOrEmpty(actionCode))
+                // Update the Geo Cordinates If Anything Update
+                UpdateJobGeoCordinates(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList, out isLatLongUpdatedFromXCBL, ref geoCordinateQuery);
+                // Update Delivery City and Postal Code If Anything Update
+                UpdateJobDeliveryCityAndPostalCode(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList, ref cityandPostalChangeQuery);
+                // Update Delivery Site or Street Name
+                UpdateDeliverySiteNameWithReasonUpdate(existingJobData, request, ref deliverySiteNameQuery);
+                // Update Delivery Date Time Actual
+                UpdateDeliveryDateTimePlanned(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList, ref deliveryDateTimeActualQuery);
+                // Update Estimated Arrival Date
+                UpdateEstimatedArrivalDateTime(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList, ref estimatedArrivalDateTimeQuery);
+                // Schedule First Stop Update
+                UpdateScheduleFirstStop(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList);
+                // Update Schedule Before 7
+                UpdateScheduleBefore7(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList);
+                // Update Schedule Before 9
+                UpdateScheduleBefore9(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList);
+                // Update Schedule Before 12
+                UpdateScheduleBefore12(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList);
+                // Update Same Day Schedule
+                UpdateSameDaySchedule(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList);
+                // Owner Occupied Update
+                UpdateOwnerOccupied(existingJobData, request, copiedGatewayIds, jobUpdateDecisionMakerList);
+                // Update Shipping Schedule
+                if (!string.IsNullOrEmpty(request.ShippingInstruction))
                 {
-                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                    if (jobGateway != null)
+                    try
                     {
-                        copiedGatewayIds.Add(jobGateway.Id);
-
-                        if (jobGateway.GwyCompleted)
-                        {
-                            isChanged = true;
-                            existingJobData.JobDeliveryDateTimeActual = existingJobData.JobDeliveryDateTimeActual != request.EstimatedArrivalDate ? request.EstimatedArrivalDate : existingJobData.JobDeliveryDateTimeActual;
-                        }
+                        _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "Comment", request.ShippingInstruction);
+                    }
+                    catch (Exception exp)
+                    {
+                        M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "CopyJobGatewayFromProgramForXcBL", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
                     }
                 }
-            }
 
-            if (request.Other_Before7 == "Y")
-            {
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF02") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF02").ActionCode : string.Empty;
-                if (!string.IsNullOrEmpty(actionCode))
+                if (!string.IsNullOrEmpty(geoCordinateQuery))
                 {
-                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                    if (jobGateway != null)
-                    {
-                        copiedGatewayIds.Add(jobGateway.Id);
-                        if (jobGateway.GwyCompleted)
-                        {
-                            isChanged = true;
-                        }
-                    }
+                    finalSQLUpdateQuery = geoCordinateQuery;
+                }
+
+                if (!string.IsNullOrEmpty(cityandPostalChangeQuery))
+                {
+                    finalSQLUpdateQuery = string.IsNullOrEmpty(finalSQLUpdateQuery) ? cityandPostalChangeQuery : string.Format("{0}, {1}", finalSQLUpdateQuery, cityandPostalChangeQuery);
+                }
+
+                if (!string.IsNullOrEmpty(deliverySiteNameQuery))
+                {
+                    finalSQLUpdateQuery = string.IsNullOrEmpty(finalSQLUpdateQuery) ? deliverySiteNameQuery : string.Format("{0}, {1}", finalSQLUpdateQuery, deliverySiteNameQuery);
+                }
+
+                if (!string.IsNullOrEmpty(deliveryDateTimeActualQuery))
+                {
+                    finalSQLUpdateQuery = string.IsNullOrEmpty(finalSQLUpdateQuery) ? deliveryDateTimeActualQuery : string.Format("{0}, {1}", finalSQLUpdateQuery, deliveryDateTimeActualQuery);
+                }
+
+                if (!string.IsNullOrEmpty(estimatedArrivalDateTimeQuery))
+                {
+                    finalSQLUpdateQuery = string.IsNullOrEmpty(finalSQLUpdateQuery) ? estimatedArrivalDateTimeQuery : string.Format("{0}, {1}", finalSQLUpdateQuery, estimatedArrivalDateTimeQuery);
+                }
+
+                if (!string.IsNullOrEmpty(finalSQLUpdateQuery))
+                {
+                    finalSQLUpdateQuery = string.Format("Update dbo.JobDL000Master SET {0}, ChangedBy = '{1}' , DateChanged = '{2}' Where Id = {3}", finalSQLUpdateQuery, activeUser.UserName, DateTime.UtcNow.AddHours(-7), existingJobData.Id);
+                    _jobCommands.UpdateJobPartialDataByShippingSchedule(finalSQLUpdateQuery);
                 }
             }
 
-
-            if (request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimePlanned)).TotalMinutes > 0)
-            {
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "ScheduledDeliveryDate") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "ScheduledDeliveryDate").ActionCode : string.Empty;
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                    if (jobGateway != null)
-                    {
-                        copiedGatewayIds.Add(jobGateway.Id);
-                        if (jobGateway.GwyCompleted)
-                        {
-                            isChanged = true;
-                            existingJobData.JobDeliveryDateTimePlanned = request.EstimatedArrivalDate;
-                        }
-                    }
-                }
-            }
-
-            else if (request.Other_Before7 == "N")
-            {
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF02") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF02").ActionCode : string.Empty;
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                }
-            }
-
-            if (request.Other_Before9 == "Y")
-            {
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF03") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF03").ActionCode : string.Empty;
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-
-                    if (jobGateway != null)
-                    {
-                        copiedGatewayIds.Add(jobGateway.Id);
-                    }
-                }
-            }
-
-            else if (request.Other_Before9 == "N")
-            {
-
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF03") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF03").ActionCode : string.Empty;
-
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                }
-            }
-
-            if (request.Other_Before12 == "Y")
-            {
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF04") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF04").ActionCode : string.Empty;
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-
-                    if (jobGateway != null)
-                    {
-                        copiedGatewayIds.Add(jobGateway.Id);
-                    }
-                }
-            }
-
-            else if (request.Other_Before12 == "N")
-            {
-
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF04") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF04").ActionCode : string.Empty;
-
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                }
-            }
-
-            if (request.Other_SameDay == "Y")
-            {
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF05") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF05").ActionCode : string.Empty;
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-
-                    if (jobGateway != null)
-                    {
-                        copiedGatewayIds.Add(jobGateway.Id);
-                    }
-                }
-            }
-
-            else if (request.Other_SameDay == "N")
-            {
-
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF05") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF05").ActionCode : string.Empty;
-
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                }
-            }
-
-            if (request.Other_FirstStop == "Y")
-            {
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF01") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF01").ActionCode : string.Empty;
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-
-                    if (jobGateway != null)
-                    {
-                        copiedGatewayIds.Add(jobGateway.Id);
-                    }
-                }
-            }
-
-            else if (request.Other_FirstStop == "N")
-            {
-
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF01") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF01").ActionCode : string.Empty;
-
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                }
-            }
-
-            if (request.Other_OwnerOccupied == "Y")
-            {
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF06") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF06").ActionCode : string.Empty;
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-
-                    if (jobGateway != null)
-                    {
-                        copiedGatewayIds.Add(jobGateway.Id);
-                    }
-                }
-            }
-
-            else if (request.Other_OwnerOccupied == "N")
-            {
-
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF06") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF06").ActionCode : string.Empty;
-
-                if (!string.IsNullOrEmpty(actionCode))
-                {
-                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                }
-            }
-
-
-            if (!string.IsNullOrEmpty(request.ShippingInstruction))
-            {
-                jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "Comment", request.ShippingInstruction);
-            }
-
-
-            if (isChanged)
-            {
-                _jobCommands.Put(ActiveUser, existingJobData, isLatLongUpdatedFromXCBL);
-            }
-
-            return request;
+            return copiedGatewayIds;
         }
+
+        private void InsertxCBLDetailsInTableForAWC(long jobId, XCBLToM4PLRequest xCBLToM4PLRequest, string title)
+        {
+            _jobEDIxCBLCommand.Post(ActiveUser, new JobEDIXcbl()
+            {
+                JobId = jobId,
+                EdtCode = title,
+                EdtTypeId = M4PLBusinessConfiguration.XCBLEDTType.ToInt(),
+                EdtData = Newtonsoft.Json.JsonConvert.SerializeObject(xCBLToM4PLRequest),
+                TransactionDate = Utilities.TimeUtility.GetPacificDateTime(),
+                EdtTitle = title
+            });
+        }
+
         private void InsertxCBLDetailsInTable(long jobId, ElectroluxOrderDetails orderDetails)
         {
             string orderXml = string.Empty;
@@ -893,7 +822,7 @@ namespace M4PL.Business.XCBL
             {
                 JobId = jobId,
                 EdtCode = message,
-                EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
+                EdtTypeId = M4PLBusinessConfiguration.XCBLEDTType.ToInt(),
                 EdtData = orderXml,
                 TransactionDate = Utilities.TimeUtility.GetPacificDateTime(),
                 EdtTitle = string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase)
@@ -947,6 +876,378 @@ namespace M4PL.Business.XCBL
             return response;
         }
 
-        #endregion
+        #endregion Private Methods
+
+        #region Shipping Schedule Processing Methods
+
+        private void UpdateJobGeoCordinates(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList, out bool isLatLongUpdatedFromXCBL, ref string geoCordinateQuery)
+        {
+            isLatLongUpdatedFromXCBL = false;
+            try
+            {
+                if (string.Compare(existingJobData.JobLatitude, request.Latitude, true) != 0 || string.Compare(existingJobData.JobLongitude, request.Longitude, true) != 0)
+                {
+                    isLatLongUpdatedFromXCBL = true;
+                    var coordinateAction = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("Latitude", StringComparison.OrdinalIgnoreCase));
+                    string actionCode = coordinateAction != null ? coordinateAction.ActionCode : string.Empty;
+                    var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                    if (jobGateway != null && jobGateway.GwyCompleted)
+                    {
+                        if (string.Compare(existingJobData.JobLatitude, request.Latitude, true) != 0)
+                        {
+                            geoCordinateQuery = string.Format("JobLatitude = '{0}'", request.Latitude);
+                        }
+
+                        if (string.Compare(existingJobData.JobLongitude, request.Longitude, true) != 0)
+                        {
+                            geoCordinateQuery = string.IsNullOrEmpty(geoCordinateQuery) ? string.Format("JobLongitude = '{0}'", request.Longitude) :
+                                                string.Format("{0}, JobLongitude = '{1}'", geoCordinateQuery, request.Longitude);
+                        }
+                    }
+
+                    if (jobGateway != null)
+                    {
+                        copiedGatewayIds.Add(jobGateway.Id);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateJobGeoCordinates", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateJobDeliveryCityAndPostalCode(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList, ref string cityandPostalChangeQuery)
+        {
+            try
+            {
+                if (string.Compare(existingJobData.JobDeliveryPostalCode, request.PostalCode?.Trim(), true) != 0 || string.Compare(existingJobData.JobDeliveryCity, request.City?.Trim(), true) != 0)
+                {
+                    var deliveryLocationAction = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("City", StringComparison.OrdinalIgnoreCase));
+                    string actionCode = deliveryLocationAction != null ? deliveryLocationAction.ActionCode : string.Empty;
+                    var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                    if (jobGateway != null && jobGateway.GwyCompleted)
+                    {
+                        if (string.Compare(existingJobData.JobDeliveryCity, request.City?.Trim(), true) != 0)
+                        {
+                            cityandPostalChangeQuery = string.Format("JobDeliveryCity = '{0}'", request.City?.Trim());
+                        }
+
+                        if (string.Compare(existingJobData.JobDeliveryPostalCode, request.PostalCode?.Trim(), true) != 0)
+                        {
+                            cityandPostalChangeQuery = string.IsNullOrEmpty(cityandPostalChangeQuery) ? string.Format("JobDeliveryPostalCode = '{0}'", request.PostalCode?.Trim()) :
+                                                string.Format("{0}, JobDeliveryPostalCode = '{1}'", cityandPostalChangeQuery, request.PostalCode?.Trim());
+                        }
+                    }
+
+                    if (jobGateway != null)
+                    {
+                        copiedGatewayIds.Add(jobGateway.Id);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateJobDeliveryCityAndPostalCode", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateDeliverySiteNameWithReasonUpdate(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, ref string deliverySiteNameQuery)
+        {
+            try
+            {
+                if (string.Compare(existingJobData.JobDeliverySiteName, request.Name1, true) != 0 ||
+                            string.Compare(existingJobData.JobDeliveryStreetAddress, request.Street, true) != 0 ||
+                            string.Compare(existingJobData.JobDeliveryStreetAddress2, request.Streetsupplement1, true) != 0)
+                {
+                    if (string.Compare(existingJobData.JobDeliverySiteName, request.Name1, true) != 0)
+                    {
+                        deliverySiteNameQuery = string.Format("JobDeliverySiteName = '{0}'", request.Name1);
+                    }
+
+                    if (string.Compare(existingJobData.JobDeliveryStreetAddress, request.Street, true) != 0)
+                    {
+                        deliverySiteNameQuery = string.IsNullOrEmpty(deliverySiteNameQuery) ? string.Format("JobDeliveryStreetAddress = '{0}'", request.Street) :
+                                                string.Format("{0}, JobDeliveryStreetAddress = '{1}'", deliverySiteNameQuery, request.Street);
+                    }
+
+                    if (string.Compare(existingJobData.JobDeliveryStreetAddress2, request.Streetsupplement1, true) != 0)
+                    {
+                        deliverySiteNameQuery = string.IsNullOrEmpty(deliverySiteNameQuery) ? string.Format("JobDeliveryStreetAddress2 = '{0}'", request.Streetsupplement1) :
+                                                string.Format("{0}, JobDeliveryStreetAddress2 = '{1}'", deliverySiteNameQuery, request.Streetsupplement1);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateDeliverySiteNameWithReasonUpdate", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateDeliveryDateTimePlanned(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList, ref string deliveryDateTimeActualQuery)
+        {
+            try
+            {
+                if (request.EstimatedArrivalDate.Subtract(TimeUtility.GetPacificDateTime()).TotalHours <= 48)
+                {
+                    var deliveryDateTimeActualactionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("XCBL-Date", StringComparison.OrdinalIgnoreCase));
+                    string actionCode = deliveryDateTimeActualactionCode != null ? deliveryDateTimeActualactionCode.ActionCode : string.Empty;
+                    if (!string.IsNullOrEmpty(actionCode))
+                    {
+                        var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                        if (jobGateway != null)
+                        {
+                            copiedGatewayIds.Add(jobGateway.Id);
+
+                            if (jobGateway.GwyCompleted)
+                            {
+                                if (DateTime.Compare(existingJobData.JobDeliveryDateTimePlanned.ToDateTime(), request.EstimatedArrivalDate) != 0)
+                                {
+                                    deliveryDateTimeActualQuery = string.Format("JobDeliveryDateTimePlanned = '{0}'", request.EstimatedArrivalDate);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateJobDeliveryDateTimePlanned", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateEstimatedArrivalDateTime(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList, ref string estimatedArrivalDateTimeQuery)
+        {
+            try
+            {
+                var deliveryDateTimePlannedActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("ScheduledDeliveryDate", StringComparison.OrdinalIgnoreCase));
+                string actionCode = deliveryDateTimePlannedActionCode == null ? string.Empty : deliveryDateTimePlannedActionCode.ActionCode;
+                DateTime jobDeliveryPlannedDate = existingJobData.JobDeliveryDateTimePlanned.HasValue ? (DateTime)existingJobData.JobDeliveryDateTimePlanned : existingJobData.JobDeliveryDateTimeBaseline.ToDateTime();
+                if (DateTime.Compare(request.EstimatedArrivalDate, jobDeliveryPlannedDate) != 0)
+                {
+                    if (!string.IsNullOrEmpty(actionCode) && request.EstimatedArrivalDate.Subtract(TimeUtility.GetPacificDateTime()).TotalHours > 48)
+                    {
+                        var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                        if (jobGateway != null)
+                        {
+                            copiedGatewayIds.Add(jobGateway.Id);
+                            if (jobGateway.GwyCompleted)
+                            {
+                                estimatedArrivalDateTimeQuery = string.Format("JobDeliveryDateTimePlanned = '{0}'", request.EstimatedArrivalDate);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (!existingJobData.JobIsSchedule)
+                    {
+                        if (!string.IsNullOrEmpty(actionCode))
+                        {
+                            var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                            if (jobGateway != null)
+                            {
+                                copiedGatewayIds.Add(jobGateway.Id);
+                                if (jobGateway.GwyCompleted)
+                                {
+                                    estimatedArrivalDateTimeQuery = string.Format("JobDeliveryDateTimePlanned = '{0}'", request.EstimatedArrivalDate);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateEstimatedArrivalDateTime", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateScheduleFirstStop(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(request.Other_FirstStop))
+                {
+                    var firstStopActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("UDF01", StringComparison.OrdinalIgnoreCase));
+                    if (firstStopActionCode != null && !string.IsNullOrEmpty(firstStopActionCode.ActionCode))
+                    {
+                        if (request.Other_FirstStop.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, firstStopActionCode.ActionCode);
+
+                            if (jobGateway != null)
+                            {
+                                copiedGatewayIds.Add(jobGateway.Id);
+                            }
+                        }
+                        else if (request.Other_FirstStop.Equals("N", StringComparison.OrdinalIgnoreCase))
+                        {
+                            _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, firstStopActionCode.ActionCode);
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateScheduleFirstStop", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateScheduleBefore7(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(request.Other_Before7))
+                {
+                    var befor7ActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("UDF02", StringComparison.OrdinalIgnoreCase));
+                    if (befor7ActionCode != null && !string.IsNullOrEmpty(befor7ActionCode.ActionCode))
+                    {
+                        if (request.Other_Before7.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, befor7ActionCode.ActionCode);
+                            if (jobGateway != null)
+                            {
+                                copiedGatewayIds.Add(jobGateway.Id);
+                            }
+                        }
+                        else if (request.Other_Before7.Equals("N", StringComparison.OrdinalIgnoreCase))
+                        {
+                            _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, befor7ActionCode.ActionCode);
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateScheduleBefore7", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateScheduleBefore9(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(request.Other_Before9))
+                {
+                    var befor9ActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("UDF03", StringComparison.OrdinalIgnoreCase));
+                    if (befor9ActionCode != null && !string.IsNullOrEmpty(befor9ActionCode.ActionCode))
+                    {
+                        if (request.Other_Before9.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, befor9ActionCode.ActionCode);
+
+                            if (jobGateway != null)
+                            {
+                                copiedGatewayIds.Add(jobGateway.Id);
+                            }
+                        }
+                        else if (request.Other_Before9.Equals("N", StringComparison.OrdinalIgnoreCase))
+                        {
+                            _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, befor9ActionCode.ActionCode);
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateScheduleBefore9", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateScheduleBefore12(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(request.Other_Before12))
+                {
+                    var befor12ActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("UDF04", StringComparison.OrdinalIgnoreCase));
+                    if (befor12ActionCode != null && !string.IsNullOrEmpty(befor12ActionCode.ActionCode))
+                    {
+                        if (request.Other_Before12.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, befor12ActionCode.ActionCode);
+
+                            if (jobGateway != null)
+                            {
+                                copiedGatewayIds.Add(jobGateway.Id);
+                            }
+                        }
+                        else if (request.Other_Before12.Equals("N", StringComparison.OrdinalIgnoreCase))
+                        {
+                            _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, befor12ActionCode.ActionCode);
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateScheduleBefore12", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateSameDaySchedule(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(request.Other_SameDay))
+                {
+                    var sameDayActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("UDF05", StringComparison.OrdinalIgnoreCase));
+                    if (sameDayActionCode != null && !string.IsNullOrEmpty(sameDayActionCode.ActionCode))
+                    {
+                        if (request.Other_SameDay.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, sameDayActionCode.ActionCode);
+
+                            if (jobGateway != null)
+                            {
+                                copiedGatewayIds.Add(jobGateway.Id);
+                            }
+                        }
+                        else if (request.Other_SameDay.Equals("N", StringComparison.OrdinalIgnoreCase))
+                        {
+                            _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, sameDayActionCode.ActionCode);
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateSameDaySchedule", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        private void UpdateOwnerOccupied(Entities.Job.Job existingJobData, XCBLToM4PLShippingScheduleRequest request, List<long> copiedGatewayIds, List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(request.Other_OwnerOccupied))
+                {
+                    var ownerOccupiedActionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && obj.xCBLColumnName.Equals("UDF06", StringComparison.OrdinalIgnoreCase));
+                    if (ownerOccupiedActionCode != null && !string.IsNullOrEmpty(ownerOccupiedActionCode.ActionCode))
+                    {
+                        if (request.Other_OwnerOccupied.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, ownerOccupiedActionCode.ActionCode);
+
+                            if (jobGateway != null)
+                            {
+                                copiedGatewayIds.Add(jobGateway.Id);
+                            }
+                        }
+                        else if (request.Other_OwnerOccupied.Equals("N", StringComparison.OrdinalIgnoreCase))
+                        {
+                            _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, ownerOccupiedActionCode.ActionCode);
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "UpdateOwnerOccupied", "Error occuring while processing shipping schedule.", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        #endregion Shipping Schedule Processing Methods
     }
 }

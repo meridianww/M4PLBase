@@ -35,7 +35,6 @@ namespace M4PL.EF
         public Nullable<System.TimeSpan> SpmStartTime { get; set; }
         public Nullable<System.TimeSpan> SpmEndTime { get; set; }
         public Nullable<System.DateTime> SpmLastRun { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

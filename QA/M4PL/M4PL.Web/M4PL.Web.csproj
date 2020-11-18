@@ -230,6 +230,7 @@
     <Compile Include="Areas\Administration\Controllers\SystemPageTabNameController.cs" />
     <Compile Include="Areas\Administration\Controllers\SystemReferenceController.cs" />
     <Compile Include="Areas\Administration\Controllers\SystemAccountController.cs" />
+    <Compile Include="Areas\Administration\Controllers\UserGuideUploadController.cs" />
     <Compile Include="Areas\Administration\Controllers\ValidationController.cs" />
     <Compile Include="Areas\Attachment\Controllers\AttachmentController.cs" />
     <Compile Include="Areas\Attachment\AttachmentAreaRegistration.cs" />
@@ -254,11 +255,13 @@
     <Compile Include="Areas\Customer\Controllers\CustReportController.cs" />
     <Compile Include="Areas\Customer\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
+    <Compile Include="Areas\Finance\Controllers\GatewayController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavRateController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavCostCodeController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavCustomerController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavPriceCodeController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavPurchaseOrderController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavRemittanceController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavSalesOrderController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavVendorController.cs" />
     <Compile Include="Areas\Finance\FinanceAreaRegistration.cs" />
@@ -310,6 +313,7 @@
     <Compile Include="Areas\Program\Controllers\PrgShipStatusReasonCodeController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgVendLocationController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgCostLocationController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgEventManagementController.cs" />
     <Compile Include="Areas\Program\Controllers\ProgramController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgEdiConditionController.cs" />
     <Compile Include="Areas\Program\ProgramAreaRegistration.cs" />
@@ -444,10 +448,15 @@
     <Content Include="Content\Images\exit.png" />
     <Content Include="Content\Images\fm_meridian_branding_logo_filled_small_v1.png" />
     <Content Include="Content\Images\groups.png" />
+    <Content Include="Content\Images\Logistic\48HourChange.png" />
+    <Content Include="Content\Images\Logistic\AddressChange.png" />
+    <Content Include="Content\Images\Logistic\GPSCoordinates.png" />
     <Content Include="Content\Images\Logistic\InTransit.png" />
+    <Content Include="Content\Images\Logistic\NoPODUpload.png" />
     <Content Include="Content\Images\Logistic\OnHand.png" />
     <Content Include="Content\Images\Logistic\LoadOnTruck.png" />
     <Content Include="Content\Images\Logistic\Returns.png" />
+    <Content Include="Content\Images\Logistic\ScheduleChange.png" />
     <Content Include="Content\Images\question.png" />
     <Content Include="Content\Images\setting.png" />
     <Content Include="Content\Images\SupportInbox.png" />
@@ -770,6 +779,21 @@
     <Content Include="Areas\Job\Views\JobAdvanceReport\CargoTitleByJob.cshtml" />
     <Content Include="M4PL.Web.licenseheader" />
     <Content Include="Areas\Finance\Views\NavRate\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEventManagement\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEventManagement\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\Gateway\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCard\JobCardGrid.cshtml" />
+    <Content Include="Areas\Job\Views\Job\Tracking.cshtml" />
+    <Content Include="Areas\Job\Views\Job\Destination.cshtml" />
+    <Content Include="Areas\Job\Views\Job\JobContactFormView.cshtml" />
+    <Content Include="Areas\Job\Views\Job\JobContact.cshtml" />
+    <Content Include="Areas\Finance\Views\NavRemittance\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\NavRemittance\DownloadInvoice.cshtml" />
+    <Content Include="Areas\Job\Views\JobGateway\AddMultiAction.cshtml" />
+    <Content Include="Areas\Job\Views\JobGateway\MultiActionComboBoxPartial.cshtml" />
+    <Content Include="Areas\Job\Views\JobGateway\AddMultiGateway.cshtml" />
+    <Content Include="Areas\Administration\Views\UserGuideUpload\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -930,6 +954,9 @@
     <Content Include="Views\Shared\_CardViewPartial.cshtml" />
     <Content Include="Views\Common\_PrefVdcLocationsPartial.cshtml" />
     <Content Include="Views\Shared\_NoAccess.cshtml" />
+    <Content Include="Views\Shared\SubscriberType.cshtml" />
+    <Content Include="Views\Shared\EmailCCAddressSubscriber.cshtml" />
+    <Content Include="Views\Shared\EmailToAddressSubscriber.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\UploadTemp\" />
@@ -1015,11 +1042,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56126</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56180/</IISUrl>
+          <IISUrl>http://localhost:56136/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -1,0 +1,16 @@
+
+
+;WITH CTE AS 
+(
+   SELECT GwyGatewayCode,
+		  JobID, 
+          ROW_NUMBER() OVER (PARTITION BY JOBID ORDER BY ID DESC) rn
+   FROM JOBDL020Gateways WHERE GatewayTypeId =85
+)
+
+UPDATE JOB SET JobGatewayStatus = GATEWAY.GwyGatewayCode FROM JOBDL000Master JOB
+INNER JOIN CTE GATEWAY ON GATEWAY.JobID = JOB.Id 
+AND GATEWAY.rn = 1 
+
+
+     

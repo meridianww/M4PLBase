@@ -24,7 +24,12 @@
     settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
     settings.Styles.Header.Wrap = DefaultBoolean.True;
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    if (Model.GridSetting.GridName != "SecurityByRoleGridView")
+        settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    else
+    {
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(76);
+    }
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
     //settings.Settings.VerticalScrollableHeight = 300;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
@@ -35,8 +40,8 @@
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.ControlStyle.CssClass = "gridfields-text-visible";
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
-    settings.SettingsCookies.Enabled = true;
-    settings.SettingsCookies.StoreColumnsWidth = true;
+    settings.SettingsCookies.Enabled = false;
+    settings.SettingsCookies.StoreColumnsWidth = false;
     settings.SettingsCookies.StorePaging = false;
     settings.SettingsCookies.StoreGroupingAndSorting = false;
     settings.SettingsBehavior.AutoExpandAllGroups = true;
@@ -97,7 +102,7 @@
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Grouping, new { Action = Model.GridSetting.GroupingCallBackRoute.Action, Controller = Model.GridSetting.GroupingCallBackRoute.Controller, Area = Model.GridSetting.GroupingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.GroupingCallBackRoute), gridName = Model.GridSetting.GridName });
 
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
-    settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
+    //settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
     settings.SettingsResizing.Visualization = ResizingMode.Live;
 
     settings.SettingsPager.EnableAdaptivity = true;

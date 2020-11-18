@@ -49,7 +49,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 			MvcRoute resRoute = null;
 			if (result)
 			{
-				if (jobXcblInfoView.JobId > 0)
+                jobXcblInfoView.JobId = jobXcblInfoView.JobId > 0 ? jobXcblInfoView.JobId : (long)TempData["JobId"];
+                if (jobXcblInfoView.JobId > 0)
 				{
 					var preProgramId = Session["ParentId"] != null ? (long)Session["ParentId"] : 0;
 					var resultRoute = SessionProvider.ActiveUser.LastRoute;
@@ -58,7 +59,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 					resultRoute.Action = "FormView";
 					resultRoute.RecordId = jobXcblInfoView.JobId;
 					resultRoute.ParentRecordId = preProgramId;
-					resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
+					resultRoute.OwnerCbPanel = "pnlJobDetail";
 
 					resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
 					resRoute.Url = resRoute.ParentRecordId.ToString();
@@ -95,7 +96,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 			_formResult.CallBackRoute = new MvcRoute(BaseRoute, _formResult.Record.Id);
 			_formResult.CallBackRoute.RecordId = route.RecordId;
 			_formResult.CallBackRoute.ParentRecordId = route.ParentRecordId;
-			return PartialView(_formResult);
+            TempData["JobId"] = route.ParentRecordId;
+            return PartialView(_formResult);
 		}
 
 		public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)

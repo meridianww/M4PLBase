@@ -265,8 +265,9 @@ namespace M4PL.Web.Areas.Contact.Controllers
 			if (route.OwnerCbPanel == WebApplicationConstants.JobDriverCBPanel)
 			{
 				_formResult.ColumnSettings.Where(c => c.ColColumnName == ContactColumnNames.ConTypeId.ToString()).FirstOrDefault().ColIsReadOnly = true;
-				if (_formResult.ComboBoxProvider.ContainsKey(Convert.ToInt32(LookupEnums.ContactType)))
-					_formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)].UpdateComboBoxToEditor(Convert.ToInt32(LookupEnums.ContactType), EntitiesAlias.JobDriverContactInfo);
+				//Commenting below two lines to solve Defect:50879
+				//if (_formResult.ComboBoxProvider.ContainsKey(Convert.ToInt32(LookupEnums.ContactType)))
+				//	_formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)].UpdateComboBoxToEditor(Convert.ToInt32(LookupEnums.ContactType), EntitiesAlias.JobDriverContactInfo);
 			}
 			ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
 			return PartialView(MvcConstants.ViewContactCardPartial, _formResult);

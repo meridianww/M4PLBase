@@ -42,6 +42,14 @@ namespace M4PL.DataAccess.Job
 {
 	public class JobCommands : BaseCommands<Entities.Job.Job>
 	{
+		public static IList<IdRefLangName> SysOptionList
+		{
+			get
+			{
+				return CacheCommands.GetIdRefLangNames("EN", 39);
+			}
+		}
+
 		public static DateTime DayLightSavingStartDate
 		{
 			get
@@ -92,8 +100,14 @@ namespace M4PL.DataAccess.Job
 			List<Task> tasks = new List<Task>();
 			tasks.Add(Task.Factory.StartNew(() =>
 			{
-				var permittedProgramEntity = GetCustomEntityIdByEntityName(activeUser, EntitiesAlias.Job, false);
-				jobIsHavingPermission = permittedProgramEntity != null && permittedProgramEntity.Any(t => t.EntityId == -1 || t.EntityId == id);
+				var parameters = new List<Parameter>
+				{
+					   new Parameter("@userId", activeUser.UserId),
+					   new Parameter("@orgId", activeUser.OrganizationId),
+					   new Parameter("@jobId", id)
+				 };
+
+				jobIsHavingPermission = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.IsJobPermissionPresentForUser, parameters.ToArray(), false, true);
 			}));
 
 			tasks.Add(Task.Factory.StartNew(() =>
@@ -126,6 +140,7 @@ namespace M4PL.DataAccess.Job
 				result.JobWeightUnitTypeIdName = jobAdditionalInfo.JobWeightUnitTypeIdName;
 				result.JobOriginResponsibleContactIDName = jobAdditionalInfo.JobOriginResponsibleContactIDName;
 				result.JobDriverIdName = jobAdditionalInfo.JobDriverIdName;
+				result.IsParentOrder = jobAdditionalInfo.IsParentOrder;
 			}
 			if (result != null) { result.JobIsHavingPermission = jobIsHavingPermission; }
 
@@ -137,11 +152,18 @@ namespace M4PL.DataAccess.Job
 			bool jobIsHavingPermission = false;
 			Entities.Job.Job result = null;
 			Entities.Job.JobAdditionalInfo jobAdditionalInfo = null;
+			IList<JobsSiteCode> jobsSiteCodeListResult = null;
 			List<Task> tasks = new List<Task>();
 			tasks.Add(Task.Factory.StartNew(() =>
 			{
-				var permittedProgramEntity = GetCustomEntityIdByEntityName(activeUser, EntitiesAlias.Job, false);
-				jobIsHavingPermission = permittedProgramEntity != null && permittedProgramEntity.Any(t => t.EntityId == -1 || t.EntityId == id);
+				var parameters = new List<Parameter>
+				{
+					   new Parameter("@userId", activeUser.UserId),
+					   new Parameter("@orgId", activeUser.OrganizationId),
+					   new Parameter("@jobId", id)
+				 };
+
+				jobIsHavingPermission = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.IsJobPermissionPresentForUser, parameters.ToArray(), false, true);
 			}));
 
 			tasks.Add(Task.Factory.StartNew(() =>
@@ -159,9 +181,15 @@ namespace M4PL.DataAccess.Job
 				result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
 			}));
 
+			tasks.Add(Task.Factory.StartNew(() =>
+			{
+				jobsSiteCodeListResult = GetJobsSiteCodeByProgram(activeUser, id, parentId, true);
+			}));
+
 			if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
 			if (jobAdditionalInfo != null && result != null)
 			{
+				result.JobsSiteCodeList = jobsSiteCodeListResult;
 				result.CustomerERPId = jobAdditionalInfo.CustomerERPId;
 				result.VendorERPId = jobAdditionalInfo.VendorERPId;
 				result.JobSONumber = jobAdditionalInfo.JobSONumber;
@@ -175,10 +203,23 @@ namespace M4PL.DataAccess.Job
 				result.JobWeightUnitTypeIdName = jobAdditionalInfo.JobWeightUnitTypeIdName;
 				result.JobOriginResponsibleContactIDName = jobAdditionalInfo.JobOriginResponsibleContactIDName;
 				result.JobDriverIdName = jobAdditionalInfo.JobDriverIdName;
+				result.IsParentOrder = jobAdditionalInfo.IsParentOrder;
 			}
 			if (result != null) { result.JobIsHavingPermission = jobIsHavingPermission; }
 
 			return result ?? new Entities.Job.Job();
+		}
+
+		public static JobContact GetJobContact(ActiveUser activeUser, long id, long parentId)
+		{
+			var parameters = new List<Parameter>()
+			{
+			     new Parameter("@parentId", parentId),
+			     new Parameter("@id", id)
+			};
+
+			var result = SqlSerializer.Default.DeserializeSingleRecord<JobContact>(StoredProceduresConstant.GetJobContact, parameters.ToArray(), storedProcedure: true);
+			return result ?? new JobContact();
 		}
 
 		public static Entities.Job.Job GetJobByCustomerSalesOrder(ActiveUser activeUser, string jobSalesOrderNumber, long customerId)
@@ -194,6 +235,28 @@ namespace M4PL.DataAccess.Job
 
 			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobByCustomerSalesOrder, parameters.ToArray(), storedProcedure: true);
 			return result ?? new Entities.Job.Job();
+		}
+
+		public static DriverContact AddDriver(ActiveUser activeUser, DriverContact driverContact)
+		{
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@roleId", activeUser.RoleId),
+				new Parameter("@orgId", activeUser.OrganizationId),
+				new Parameter("@bizMoblContactID", driverContact.BizMoblContactID),
+				new Parameter("@locationCode", driverContact.LocationCode),
+				new Parameter("@firstName", driverContact.FirstName),
+				new Parameter("@lastName", driverContact.LastName),
+				new Parameter("@jobId", driverContact.JobId),
+				new Parameter("@routeId", driverContact.JobRouteId),
+				new Parameter("@JobStop", driverContact.JobStop),
+				new Parameter("@enteredBy", activeUser.UserName),
+				new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
+			};
+
+			var result = SqlSerializer.Default.DeserializeSingleRecord<DriverContact>(StoredProceduresConstant.InsDriverContact, parameters.ToArray(), storedProcedure: true);
+			return result ?? new DriverContact();
 		}
 
 		public static JobGateway CopyJobGatewayFromProgramForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode, string shippingInstruction = "")
@@ -263,8 +326,9 @@ namespace M4PL.DataAccess.Job
 			return jobGateway;
 		}
 
-		public static bool CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser activeUser, long jobId, long programId, string gatewayCode, long customerId)
+		public static bool CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser activeUser, long jobId, long programId, string gatewayCode, long customerId, out bool isFarEyePushRequired)
 		{
+			isFarEyePushRequired = false;
 			try
 			{
 				var parameters = new List<Parameter>
@@ -280,8 +344,9 @@ namespace M4PL.DataAccess.Job
 				var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBLForElectrolux, parameters.ToArray(), storedProcedure: true);
 				if (result && string.Equals(gatewayCode, "In Transit", StringComparison.InvariantCultureIgnoreCase))
 				{
-					XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
+					isFarEyePushRequired = XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, customerId);
 				}
+
 				return result;
 			}
 			catch (Exception)
@@ -290,7 +355,7 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job, long customerId)
+		public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job, long customerId, string cancelComment, string cancelReason)
 		{
 			long insertedGatewayId = 0;
 			try
@@ -308,7 +373,42 @@ namespace M4PL.DataAccess.Job
 				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
 				if (insertedGatewayId > 0)
 				{
-					InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
+					if (!string.IsNullOrEmpty(cancelReason))
+					{
+						var result = JobGatewayCommands.GetGatewayWithParent(activeUser, 0, job.Id, "Action", false, "Comment");
+						if (result != null && result.JobID > 0)
+						{
+							result.GatewayTypeId = 86;
+							result.GwyGatewayCode = "Comment";
+							result.GwyGatewayACD = DateTime.UtcNow.AddHours(result.DeliveryUTCValue);
+							result.GwyGatewayTitle = cancelReason;
+							result.GwyTitle = cancelReason;
+							result.GwyCompleted = true;
+							var gatewayResult = JobGatewayCommands.PostWithSettings(activeUser, null, result, customerId, result.JobID);
+							if (gatewayResult != null && gatewayResult.Id > 0 && !string.IsNullOrEmpty(cancelComment))
+							{
+								RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+								richEditDocumentServer.Document.AppendHtmlText(cancelComment);
+								ByteArray byteArray = new ByteArray()
+								{
+									Id = gatewayResult.Id,
+									Entity = EntitiesAlias.JobGateway,
+									FieldName = "GwyGatewayDescription",
+									IsPopup = false,
+									FileName = null,
+									Type = SQLDataTypes.varbinary,
+									DocumentText = cancelComment,
+									Bytes = richEditDocumentServer.OpenXmlBytes
+								};
+
+								CommonCommands.SaveBytes(byteArray, activeUser);
+							}
+						}
+					}
+					else
+					{
+						InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
+					}
 				}
 			}
 			catch (Exception exp)
@@ -317,6 +417,69 @@ namespace M4PL.DataAccess.Job
 			}
 
 			return insertedGatewayId;
+		}
+
+		public static UnCancelJobResponse UnCancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string salesOrderNumber, string unCancelReason, string unCancelComment, long customerId)
+		{
+			long insertedGatewayId = 0;
+			long jobId = 0;
+			string errorMessage = string.Empty;
+			bool isSuccess = false;
+			UnCancelJobResponse result = new UnCancelJobResponse();
+			try
+			{
+				var parameters = new List<Parameter>
+			{
+				new Parameter("@JobCustomerSalesOrder", salesOrderNumber),
+				new Parameter("@dateEntered", TimeUtility.GetPacificDateTime()),
+				new Parameter("@enteredBy", activeUser.UserName),
+				new Parameter("@userId", activeUser.UserId)
+			};
+
+				result = SqlSerializer.Default.DeserializeSingleRecord<UnCancelJobResponse>(StoredProceduresConstant.UnCancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
+				insertedGatewayId = result.CurrentGatewayId;
+				jobId = result.JobId;
+				errorMessage = result.ErrorMessage;
+				isSuccess = result.IsSuccess;
+				if (insertedGatewayId > 0 && jobId > 0 && !string.IsNullOrEmpty(unCancelReason))
+				{
+					var gatewayResult = JobGatewayCommands.GetGatewayWithParent(activeUser, 0, jobId, "Action", false, "Comment");
+					if (gatewayResult != null && gatewayResult.JobID > 0)
+					{
+						gatewayResult.GatewayTypeId = 86;
+						gatewayResult.GwyGatewayCode = "Comment";
+						gatewayResult.GwyGatewayACD = DateTime.UtcNow.AddHours(gatewayResult.DeliveryUTCValue);
+						gatewayResult.GwyGatewayTitle = unCancelReason;
+						gatewayResult.GwyTitle = unCancelReason;
+						gatewayResult.GwyCompleted = true;
+						var gatewayInsertResult = JobGatewayCommands.PostWithSettings(activeUser, null, gatewayResult, customerId, gatewayResult.JobID);
+						if (gatewayInsertResult != null && gatewayInsertResult.Id > 0 && !string.IsNullOrEmpty(unCancelComment))
+						{
+							RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+							richEditDocumentServer.Document.AppendHtmlText(unCancelComment);
+							ByteArray byteArray = new ByteArray()
+							{
+								Id = gatewayInsertResult.Id,
+								Entity = EntitiesAlias.JobGateway,
+								FieldName = "GwyGatewayDescription",
+								IsPopup = false,
+								FileName = null,
+								Type = SQLDataTypes.varbinary,
+								DocumentText = unCancelComment,
+								Bytes = richEditDocumentServer.OpenXmlBytes
+							};
+
+							CommonCommands.SaveBytes(byteArray, activeUser);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Exception is occuring while cancelling a job requested by customer.", "Job Cancellation", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
 		}
 
 		public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
@@ -350,6 +513,8 @@ namespace M4PL.DataAccess.Job
 
 		public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, bool isManualUpdate = false)
 		{
+			int CancelId = SysOptionList.FirstOrDefault(x => x.SysRefName.Equals("Canceled", StringComparison.OrdinalIgnoreCase)).SysRefId;
+			job.IsCancelled = job.StatusId == CancelId ? true : false;
 			Entities.Job.Job createdJobData = null;
 			if (IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID))
 			{
@@ -390,6 +555,8 @@ namespace M4PL.DataAccess.Job
 		public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
 			bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, long customerId = 0, bool isManualUpdate = false)
 		{
+			int CancelId = SysOptionList.FirstOrDefault(x => x.SysRefName.Equals("Canceled", StringComparison.OrdinalIgnoreCase)).SysRefId;
+			job.IsCancelled = job.StatusId == CancelId ? true : false;
 			Entities.Job.Job updatedJobDetails = null;
 			Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
 			bool isExistsRecord = true;
@@ -402,32 +569,29 @@ namespace M4PL.DataAccess.Job
 
 			if (isExistsRecord)
 			{
-				var mapRoute = GetJobMapRoute(activeUser, job.Id);
-				CalculateJobMileage(ref job, mapRoute);
-				//Calculate Latitude and Longitude only if its is updated by the user.
-				if (!isLatLongUpdatedFromXCBL)
+				UpdateJobHeaderInformation(job, existingJobDetail, activeUser, isRelatedAttributeUpdate, isManualUpdate);
+				if (job.JobIsDirtyDestination)
 				{
-					if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
-						&& (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
-							|| mapRoute.isAddressUpdated)
-						SetLatitudeAndLongitudeFromAddress(ref job);
+					var mapRoute = GetJobMapRoute(activeUser, job.Id);
+					CalculateJobMileage(ref job, mapRoute);
+					if (!isLatLongUpdatedFromXCBL)
+					{
+						if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
+							&& (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
+								|| mapRoute.isAddressUpdated)
+							SetLatitudeAndLongitudeFromAddress(ref job);
+					}
+
+					UpdateJobLocationInformation(job, activeUser, isRelatedAttributeUpdate, isManualUpdate);
 				}
 
-				var parameters = GetParameters(job);
-				parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-				parameters.Add(new Parameter("@IsSellerTabEdited", job.IsSellerTabEdited));
-				parameters.Add(new Parameter("@IsPODTabEdited", job.IsPODTabEdited));
-				parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
-				parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
-				parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
-				updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
-
-				if (existingJobDetail != null && updatedJobDetails != null)
+				if (job.JobIsDirtyContact)
 				{
-					CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
+					UpdateJobContactInformation(job);
 				}
 
-				if (!isServiceCall && ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID)))
+				updatedJobDetails = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
+				if (!isServiceCall && updatedJobDetails != null && ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID)))
 				{
 					Task.Run(() =>
 					{
@@ -443,6 +607,22 @@ namespace M4PL.DataAccess.Job
 			}
 
 			return updatedJobDetails;
+		}
+
+		private static void UpdateJobContactInformation(Entities.Job.Job job)
+		{
+			var parameters = new List<Parameter>()
+			{
+				new Parameter("@jobDeliveryAnalystContactID", job.JobDeliveryAnalystContactID),
+				new Parameter("@jobDeliveryResponsibleContactId", job.JobDeliveryResponsibleContactID),
+				new Parameter("@jobRouteId", job.JobRouteId),
+				new Parameter("@jobStop", job.JobStop),
+				new Parameter("@jobDriverId", job.JobDriverId),
+				new Parameter("@id", job.Id),
+				new Parameter("@isFormView", job.IsFormView)
+			};
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobContactInformation, parameters.ToArray(), true);
 		}
 
 		/// <summary>
@@ -644,6 +824,18 @@ namespace M4PL.DataAccess.Job
 			return insertedGatewayId > 0 ? true : false;
 		}
 
+		public static void UpdateJobPartialDataByShippingSchedule(string finalSQLUpdateQuery)
+		{
+			try
+			{
+				SqlSerializer.Default.Execute(finalSQLUpdateQuery, null);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "UpdateJobPartialDataByShippingSchedule", string.Format("Error occuring while processing shipping schedule. Query was: {0}", finalSQLUpdateQuery), Utilities.Logger.LogType.Error);
+			}
+		}
+
 		public static bool IsJobNotDuplicate(string customerSalesOrderNo, long programId)
 		{
 			bool isJobDuplicate = false;
@@ -686,13 +878,14 @@ namespace M4PL.DataAccess.Job
 			return isDeliveryChargeRemovalRequired;
 		}
 
-		public static bool UpdateJobPriceOrCostCodeStatus(long jobId, int statusId)
+		public static bool UpdateJobPriceOrCostCodeStatus(long jobId, int statusId, long customerId)
 		{
 			bool isDefaultChargeUpdate = false;
 			var parameters = new List<Parameter>
 			{
 			   new Parameter("@JobId", jobId),
-			   new Parameter("@StatusId", statusId)
+			   new Parameter("@StatusId", statusId),
+			   new Parameter("@CustomerId", customerId)
 			};
 
 			try
@@ -707,6 +900,54 @@ namespace M4PL.DataAccess.Job
 
 			return isDefaultChargeUpdate;
 		}
+
+		public static bool UpdateJobPriceCodeStatus(long jobId, int statusId, long customerId)
+		{
+			bool isDefaultChargeUpdate = false;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@StatusId", statusId),
+			   new Parameter("@CustomerId", customerId)
+			};
+
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobPriceCodeStatus, parameters.ToArray(), true);
+				isDefaultChargeUpdate = true;
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error occuring in method UpdateJobPriceCodeStatus", "UpdateJobPriceCodeStatus", Utilities.Logger.LogType.Error);
+			}
+
+			return isDefaultChargeUpdate;
+		}
+
+		public static bool UpdateJobCostCodeStatus(long jobId, int statusId, long customerId)
+		{
+			bool isDefaultChargeUpdate = false;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@StatusId", statusId),
+			   new Parameter("@CustomerId", customerId)
+			};
+
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobCostCodeStatus, parameters.ToArray(), true);
+				isDefaultChargeUpdate = true;
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error occuring in method UpdateJobCostCodeStatus", "UpdateJobCostCodeStatus", Utilities.Logger.LogType.Error);
+			}
+
+			return isDefaultChargeUpdate;
+		}
+
+
 
 		public static bool IsJobCancelled(long jobId)
 		{
@@ -901,8 +1142,8 @@ namespace M4PL.DataAccess.Job
 			}
 			else
 			{
-				jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForOrder(jobId, activeUser, programBillableRate, quantity);
-				jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForOrder(jobId, activeUser, programCostRate, quantity);
+				jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForOrder(jobId, activeUser, programBillableRate, quantity, locationCode);
+				jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForOrder(jobId, activeUser, programCostRate, quantity, locationCode);
 			}
 
 			jobBillableSheetList = jobBillableSheetList == null ? new List<JobBillableSheet>() : jobBillableSheetList;
@@ -1033,7 +1274,7 @@ namespace M4PL.DataAccess.Job
 							PrcUnitId = costItem.CstUnitId,
 							ChargeTypeId = costItem.ChargeTypeId,
 							StatusId = costItem.StatusId,
-							PrcQuantity = costItem.CstQuantity > 1 ? costItem.CstQuantity : 1 ,
+							PrcQuantity = costItem.CstQuantity > 1 ? costItem.CstQuantity : 1,
 							PrcRate = decimal.Zero,
 							PrcElectronicBilling = costItem.CstElectronicBilling,
 							DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
@@ -1260,10 +1501,198 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@JobServiceActual", job.JobServiceActual),
 			   new Parameter("@IsJobVocSurvey", job.IsJobVocSurvey),
 			   new Parameter("@ProFlags12", job.ProFlags12),
-			   new Parameter("@JobDriverAlert", job.JobDriverAlert)
+			   new Parameter("@JobDriverAlert", job.JobDriverAlert),
+			   new Parameter("@IsCancelled", job.IsCancelled)
+		};
+
+			return parameters;
+		}
+
+		private static List<Parameter> GetJobHeaderParameters(Entities.Job.Job job)
+		{
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@jobMITJobId", job.JobMITJobID),
+			   new Parameter("@programId", job.ProgramID),
+			   new Parameter("@jobSiteCode", job.JobSiteCode),
+			   new Parameter("@jobConsigneeCode", job.JobConsigneeCode),
+			   new Parameter("@jobCustomerSalesOrder", job.JobCustomerSalesOrder),
+			   new Parameter("@jobBOL", job.JobBOL),
+			   new Parameter("@jobBOLMaster", job.JobBOLMaster),
+			   new Parameter("@jobBOLChild", job.JobBOLChild),
+			   new Parameter("@jobCustomerPurchaseOrder", job.JobCustomerPurchaseOrder),
+			   new Parameter("@jobCarrierContract", job.JobCarrierContract),
+			   new Parameter("@jobManifestNo", job.JobManifestNo),
+			   new Parameter("@jobGatewayStatus", job.JobGatewayStatus),
+			   new Parameter("@statusId", job.StatusId),
+			   new Parameter("@jobStatusedDate", job.JobStatusedDate),
+			   new Parameter("@jobCompleted", job.JobCompleted),
+			   new Parameter("@jobType", job.JobType),
+			   new Parameter("@shipmentType", job.ShipmentType),
+			   new Parameter("@jobDeliveryDateTimePlanned", job.JobDeliveryDateTimePlanned),
+			   new Parameter("@jobDeliveryDateTimeActual", job.JobDeliveryDateTimeActual),
+			   new Parameter("@jobDeliveryDateTimeBaseline", job.JobDeliveryDateTimeBaseline),
+			   new Parameter("@jobDeliveryRecipientPhone", job.JobDeliveryRecipientPhone),
+			   new Parameter("@jobDeliveryRecipientEmail", job.JobDeliveryRecipientEmail),
+			   new Parameter("@jobOriginResponsibleContactId", job.JobOriginResponsibleContactID),
+			   new Parameter("@jobOriginDateTimePlanned",job.JobOriginDateTimePlanned ),
+			   new Parameter("@jobOriginDateTimeActual",job.JobOriginDateTimeActual),
+			   new Parameter("@jobOriginDateTimeBaseline",job.JobOriginDateTimeBaseline),
+			   new Parameter("@jobProcessingFlags", job.JobProcessingFlags),
+			   new Parameter("@jobUser01", job.JobUser01),
+			   new Parameter("@jobUser02", job.JobUser02),
+			   new Parameter("@jobUser03", job.JobUser03),
+			   new Parameter("@jobUser04", job.JobUser04),
+			   new Parameter("@jobUser05", job.JobUser05),
+			   new Parameter("@jobStatusFlags", job.JobStatusFlags),
+			   new Parameter("@jobScannerFlags", job.JobScannerFlags),
+			   new Parameter("@plantIDCode", job.PlantIDCode),
+			   new Parameter("@carrierID", job.CarrierID),
+			   new Parameter("@windowDelStartTime", job.WindowDelStartTime.HasValue && (job.WindowDelStartTime.Value !=DateUtility.SystemEarliestDateTime)  ? job.WindowDelStartTime.Value.ToUniversalTime() :job.WindowDelStartTime ),
+			   new Parameter("@windowDelEndTime", job.WindowDelEndTime.HasValue  && (job.WindowDelEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowDelEndTime.Value.ToUniversalTime() :job.WindowDelEndTime),
+			   new Parameter("@windowPckStartTime", job.WindowPckStartTime.HasValue && (job.WindowPckStartTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckStartTime.Value.ToUniversalTime() :job.WindowPckStartTime),
+			   new Parameter("@windowPckEndTime", job.WindowPckEndTime.HasValue && (job.WindowPckEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckEndTime.Value.ToUniversalTime() :job.WindowPckEndTime),
+			   new Parameter("@jobSignText", job.JobSignText),
+			   new Parameter("@jobQtyOrdered", job.JobQtyOrdered),
+			   new Parameter("@jobQtyActual", job.JobQtyActual),
+			   new Parameter("@jobQtyUnitTypeId", job.JobQtyUnitTypeId),
+			   new Parameter("@jobPartsOrdered", job.JobPartsOrdered),
+			   new Parameter("@jobPartsActual", job.JobPartsActual),
+			   new Parameter("@JobTotalCubes", job.JobTotalCubes),
+			   new Parameter("@jobServiceMode", job.JobServiceMode),
+			   new Parameter("@jobChannel", job.JobChannel),
+			   new Parameter("@jobProductType", job.JobProductType),
+			   new Parameter("@JobOrderedDate", job.JobOrderedDate),
+			   new Parameter("@JobShipmentDate", job.JobShipmentDate),
+			   new Parameter("@JobInvoicedDate", job.JobInvoicedDate),
+			   new Parameter("@jobElectronicInvoice", job.JobElectronicInvoice),
+			   new Parameter("@JobCubesUnitTypeId", job.JobCubesUnitTypeId),
+			   new Parameter("@JobTotalWeight", job.JobTotalWeight),
+			   new Parameter("@JobWeightUnitTypeId", job.JobWeightUnitTypeId),
+			   new Parameter("@JobServiceOrder", job.JobServiceOrder),
+			   new Parameter("@JobServiceActual", job.JobServiceActual),
+			   new Parameter("@ProFlags12", job.ProFlags12),
+			   new Parameter("@JobDriverAlert", job.JobDriverAlert),
+			   new Parameter("@IsCancelled", job.IsCancelled),
+			   new Parameter("@jobDeliveryTimeZone", job.JobDeliveryTimeZone),
+			   new Parameter("@jobOriginTimeZone", job.JobOriginTimeZone),
+			   new Parameter("@JobIsDirtyDestination", job.JobIsDirtyDestination),
+			   new Parameter("@jobOriginPostalCode", job.JobOriginPostalCode)
+		};
+
+			return parameters;
+		}
+
+		private static List<Parameter> GetJobDestinationParameters(Entities.Job.Job job)
+		{
+			var parameters = new List<Parameter>
+			{
+				 new Parameter("@jobOriginSiteName", job.JobOriginSiteName),
+				 new Parameter("@jobOriginSitePOC", job.JobOriginSitePOC),
+				 new Parameter("@jobOriginSitePOCPhone", job.JobOriginSitePOCPhone),
+				 new Parameter("@jobOriginSitePOCEmail", job.JobOriginSitePOCEmail),
+				 new Parameter("@jobOriginStreetAddress", job.JobOriginStreetAddress),
+				 new Parameter("@jobOriginStreetAddress2", job.JobOriginStreetAddress2),
+				 new Parameter("@JobOriginStreetAddress3", job.JobOriginStreetAddress3),
+				 new Parameter("@JobOriginStreetAddress4", job.JobOriginStreetAddress4),
+				 new Parameter("@jobOriginCity", job.JobOriginCity),
+				 new Parameter("@jobOriginState", job.JobOriginState),
+				 new Parameter("@jobOriginCountry", job.JobOriginCountry),
+				 new Parameter("@jobOriginPostalCode", job.JobOriginPostalCode),
+				 new Parameter("@jobDeliverySiteName", job.JobDeliverySiteName),
+				 new Parameter("@jobDeliverySitePOC", job.JobDeliverySitePOC),
+				 new Parameter("@jobDeliverySitePOCPhone", job.JobDeliverySitePOCPhone),
+				 new Parameter("@jobDeliverySitePOCEmail", job.JobDeliverySitePOCEmail),
+				 new Parameter("@jobDeliveryStreetAddress", job.JobDeliveryStreetAddress),
+				 new Parameter("@jobDeliveryStreetAddress2", job.JobDeliveryStreetAddress2),
+				 new Parameter("@JobDeliveryStreetAddress3", job.JobDeliveryStreetAddress3),
+				 new Parameter("@JobDeliveryStreetAddress4", job.JobDeliveryStreetAddress4),
+				 new Parameter("@jobDeliveryCity", job.JobDeliveryCity),
+				 new Parameter("@jobDeliveryState", job.JobDeliveryState),
+				 new Parameter("@jobDeliveryCountry", job.JobDeliveryCountry),
+				 new Parameter("@jobDeliveryPostalCode", job.JobDeliveryPostalCode),
+				 new Parameter("@jobDeliverySitePOC2", job.JobDeliverySitePOC2),
+				 new Parameter("@jobDeliverySitePOCPhone2", job.JobDeliverySitePOCPhone2),
+				 new Parameter("@jobDeliverySitePOCEmail2", job.JobDeliverySitePOCEmail2),
+				 new Parameter("@jobOriginSitePOC2", job.JobOriginSitePOC2),
+				 new Parameter("@jobOriginSitePOCPhone2", job.JobOriginSitePOCPhone2),
+				 new Parameter("@jobOriginSitePOCEmail2", job.JobOriginSitePOCEmail2),
+				 new Parameter("@JobPreferredMethod", job.JobPreferredMethod),
+				 new Parameter("@IsJobVocSurvey", job.IsJobVocSurvey),
+				 new Parameter("@jobSellerCode", job.JobSellerCode),
+				 new Parameter("@jobSellerSitePOC", job.JobSellerSitePOC),
+				 new Parameter("@jobSellerSitePOCPhone", job.JobSellerSitePOCPhone),
+				 new Parameter("@jobSellerSitePOCEmail", job.JobSellerSitePOCEmail),
+				 new Parameter("@jobSellerSitePOC2", job.JobSellerSitePOC2),
+				 new Parameter("@jobSellerSitePOCPhone2", job.JobSellerSitePOCPhone2),
+				 new Parameter("@jobSellerSitePOCEmail2", job.JobSellerSitePOCEmail2),
+				 new Parameter("@jobSellerSiteName", job.JobSellerSiteName),
+				 new Parameter("@jobSellerStreetAddress", job.JobSellerStreetAddress),
+				 new Parameter("@jobSellerStreetAddress2", job.JobSellerStreetAddress2),
+				 new Parameter("@jobSellerCity", job.JobSellerCity),
+				 new Parameter("@jobSellerState", job.JobSellerState),
+				 new Parameter("@jobSellerPostalCode", job.JobSellerPostalCode),
+				 new Parameter("@jobSellerCountry", job.JobSellerCountry),
+				 new Parameter("@JobShipFromSiteName", job.JobShipFromSiteName),
+				 new Parameter("@JobShipFromStreetAddress", job.JobShipFromStreetAddress),
+				 new Parameter("@JobShipFromStreetAddress2", job.JobShipFromStreetAddress2),
+				 new Parameter("@JobShipFromCity", job.JobShipFromCity),
+				 new Parameter("@JobShipFromState", job.JobShipFromState),
+				 new Parameter("@JobShipFromPostalCode", job.JobShipFromPostalCode),
+				 new Parameter("@JobShipFromCountry", job.JobShipFromCountry),
+				 new Parameter("@JobShipFromSitePOC", job.JobShipFromSitePOC),
+				 new Parameter("@JobShipFromSitePOCPhone", job.JobShipFromSitePOCPhone),
+				 new Parameter("@JobShipFromSitePOCEmail", job.JobShipFromSitePOCEmail),
+				 new Parameter("@JobShipFromSitePOC2", job.JobShipFromSitePOC2),
+				 new Parameter("@JobShipFromSitePOCPhone2", job.JobShipFromSitePOCPhone2),
+				 new Parameter("@JobShipFromSitePOCEmail2", job.JobShipFromSitePOCEmail2),
+				 new Parameter("@JobSellerStreetAddress3", job.JobSellerStreetAddress3),
+				 new Parameter("@JobSellerStreetAddress4", job.JobSellerStreetAddress4),
+				 new Parameter("@JobShipFromStreetAddress3", job.JobShipFromStreetAddress3),
+				 new Parameter("@JobShipFromStreetAddress4", job.JobShipFromStreetAddress4),
+				 new Parameter("@jobLatitude", job.JobLatitude),
+				 new Parameter("@jobLongitude", job.JobLongitude),
+				 new Parameter("@JobMileage", job.JobMileage),
+				 new Parameter("@IsSellerTabEdited", job.IsSellerTabEdited),
+				 new Parameter("@IsPODTabEdited", job.IsPODTabEdited),
+				 new Parameter("@jobSignText", job.JobSignText),
+				 new Parameter("@jobSignLatitude", job.JobSignLatitude),
+				 new Parameter("@jobSignLongitude", job.JobSignLongitude)
 			};
 
 			return parameters;
+		}
+
+		private static void UpdateJobHeaderInformation(Entities.Job.Job updatedJob, Entities.Job.Job existingJob, ActiveUser activeUser, bool isRelatedAttributeUpdate, bool isManualUpdate)
+		{
+			var parameters = GetJobHeaderParameters(updatedJob);
+			parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+			parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+			parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
+			parameters.Add(new Parameter("@OldOrderType", existingJob.JobType));
+			parameters.Add(new Parameter("@OldShipmentType", existingJob.ShipmentType));
+			if (updatedJob.IsCancelled.HasValue && !updatedJob.IsCancelled.Value && updatedJob.StatusId == (int)StatusType.Active && existingJob.IsCancelled.HasValue && existingJob.IsCancelled.Value)
+			{
+				updatedJob.JobGatewayStatus = isRelatedAttributeUpdate ? "In Transit" : "In Production";
+				parameters.Add(new Parameter("@IsJobReactivated", true));
+			}
+			else
+			{
+				parameters.Add(new Parameter("@IsJobReactivated", false));
+			}
+
+			parameters.AddRange(activeUser.PutDefaultParams(updatedJob.Id, updatedJob));
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobHeaderInformation, parameters.ToArray(), true);
+		}
+
+		private static void UpdateJobLocationInformation(Entities.Job.Job job, ActiveUser activeUser, bool isRelatedAttributeUpdate, bool isManualUpdate)
+		{
+			var parameters = GetJobDestinationParameters(job);
+			parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+			parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+			parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
+			parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobLocationInformation, parameters.ToArray(), true);
 		}
 
 		private static void CalculateJobMileage(ref Entities.Job.Job job, JobMapRoute mapRoute = null)

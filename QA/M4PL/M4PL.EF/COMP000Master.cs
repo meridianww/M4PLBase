@@ -22,12 +22,10 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public long CompOrgId { get; set; }
         public string CompTableName { get; set; }
         public long CompPrimaryRecordId { get; set; }
         public string CompCode { get; set; }
         public string CompTitle { get; set; }
-        public int StatusId { get; set; }
         public System.DateTime DateEntered { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }

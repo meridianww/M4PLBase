@@ -44,6 +44,7 @@ namespace M4PL.DataAccess
 		public const string GetDisplayMessagesByCode = "dbo.GetDisplayMessagesByCode";
 		public const string GetDataForChangeHistory = "dbo.GetDataForChangeHistory";
 		public const string GetJobChangeHistory = "GetJobChangeHistory";
+		public const string GetBusinessConfiguration = "GetBusinessConfiguration";
 
 		public const string GetUserSecurities = "dbo.GetUserSecurities";
 		public const string GetComboBoxContacts = "dbo.GetComboBoxContacts";
@@ -111,7 +112,11 @@ namespace M4PL.DataAccess
 		public const string GetByteArrayByIdAndEntity = "dbo.GetByteArrayByIdAndEntity";
 		public const string GetModuleMenus = "dbo.GetModuleMenus";
 		public const string GetSystemSettings = "dbo.GetSystemSettings";
-
+		public const string InsertEmailDetail = "dbo.InsertEmailDetail";
+		public const string GetEmailDetail = "dbo.GetEmailDetail";
+		public const string UpdateEmailStatus = "dbo.UpdateEmailStatus";
+		public const string GetEmailDetailsForEvent = "dbo.GetEmailDetailsForEvent";
+		public const string InsertEmailProcessingLog = "dbo.InsertEmailProcessingLog";
 		#endregion Generic SPs
 
 		#region Administration
@@ -228,6 +233,7 @@ namespace M4PL.DataAccess
 		public const string UpdateNavCostCode = "dbo.UpdateNavCostCode";
 		public const string UpdateNavCostCodeByItem = "dbo.UpdateNavCostCodeByItem";
 		public const string UpdateNavRateByLocation = "dbo.UpdateNavRateByLocation";
+		public const string ImportGatewayActionForProgram = "dbo.ImportGatewayActionForProgram";
 
 		/* Sync Nav PriceCode */
 		public const string UpdateNavPriceCode = "dbo.UpdateNavPriceCode";
@@ -359,9 +365,11 @@ namespace M4PL.DataAccess
 		public const string InsertOrgRefRole = "dbo.InsOrgRefRole";
 		public const string UpdateOrgRefRole = "dbo.UpdOrgRefRole";
 		public const string GetRefRoleSecurities = "dbo.GetRefRoleSecurities";
+		public const string GetJobReportColumnRelation = "dbo.GetJobReportColumnRelation";
 
 		/* Get permitted items by userid as per entity */
 		public const string GetCustomEntityIdByEntityName = "dbo.GetCustomEntityIdByEntityName";
+		public const string IsJobPermissionPresentForUser = "dbo.IsJobPermissionPresentForUser";
 
 		#endregion Organization
 
@@ -375,6 +383,7 @@ namespace M4PL.DataAccess
 		public const string DeleteVendor = "dbo.DeleteVendor";
 		public const string GetVendors = "dbo.GetVendors";
 		public const string UpdatePartialVendor = "dbo.UpdPartialVendor";
+		public const string IsUserHasVendorPermission = "dbo.IsUserHasVendorPermission";
 
 		/* Vendor Contact  */
 		public const string GetVendContactView = "dbo.GetVendContactView";
@@ -425,13 +434,15 @@ namespace M4PL.DataAccess
 		public const string GetJobByCustomerView = "dbo.GetJobByCustomerView";
 		public const string GetJobDataFromEDI204 = "dbo.GetJobDataFromEDI204";
 		public const string GetJobByCustomerSalesOrder = "dbo.GetJobByCustomerSalesOrder";
-		public const string CopyJobGatewayFromProgramForXcBL = "dbo.CopyJobGatewayFromProgramForXcBL";
+        public const string InsDriverContact = "dbo.InsDriverContact";
+        public const string CopyJobGatewayFromProgramForXcBL = "dbo.CopyJobGatewayFromProgramForXcBL";
 		public const string CopyJobGatewayFromProgramForXcBLForElectrolux = "dbo.CopyJobGatewayFromProgramForXcblElectrolux";
 		public const string ArchiveJobGatewayForXcBL = "dbo.ArchiveJobGatewayForXcBL";
 		public const string GetActionCodeByxCBLColumnName = "dbo.GetActionCodeByxCBLColumnName";
 		public const string GetJobUpdateDecisionMaker = "dbo.GetJobUpdateDecisionMaker";
 		public const string UpdatexCBLRejected = "xcbl.UpdatexCBLRejected";
 		public const string CancelExistingJobAsRequestByCustomer = "dbo.CancelExistingJobAsRequestByCustomer";
+		public const string UnCancelExistingJobAsRequestByCustomer = "dbo.Uncancelpreviouslycancelledjob";
 		public const string InsertJobCargoData = "dbo.InsertJobCargoData";
 		public const string GetJobComments = "dbo.GetJobComments";
 		public const string GetJobGatewayCode = "dbo.GetJobGatewayCode";
@@ -442,9 +453,13 @@ namespace M4PL.DataAccess
 		public const string InsertJob = "dbo.InsJob";
 		public const string UpdateJob = "dbo.UpdJob";
 		public const string DeleteJob = "dbo.DeleteJob";
+		public const string UpdateJobHeaderInformation = "dbo.UpdateJobHeaderInformation";
+		public const string UpdateJobLocationInformation = "dbo.UpdateJobLocationInformation";
+		public const string UpdateJobContactInformation = "dbo.UpdateJobContactInformation";
 
 		/* Job Destination */
 		public const string GetJobDestination = "dbo.GetJobDestination";
+		public const string GetJobContact = "dbo.GetJobContact";
 		public const string InsJobDestination = "dbo.InsJobDestination";
 		public const string UpdJobDestination = "dbo.UpdJobDestination";
 		public const string UpdateJobFomXCBL = "dbo.UpdateJobFromXCBL";
@@ -476,6 +491,9 @@ namespace M4PL.DataAccess
 		/* JobAdvanceReport */
 		public const string GetJobAdvanceReportView = "dbo.GetJobAdvanceReportView";
 		public const string GetJobAdvanceReport = "dbo.GetJobAdvanceReport";
+		public const string InsertDriverScrubReportRawData = "dbo.InsertDriverScrubReportRawData";
+		public const string InsertProjectedCapacityRawData = "dbo.InsertProjectedCapacityRawData";
+		public const string GetJobIdByActualControlId = "dbo.GetJobIdByActualControlId";
 
 		/* Job Card */
 		public const string GetJobCardView = "dbo.GetJobCardView";
@@ -500,10 +518,13 @@ namespace M4PL.DataAccess
 		public const string InsertXcblData = "Xcbl.InsertXcblData";
 		public const string GetXCBLDataBySummaryHeaderId = "Xcbl.GetXCBLDataBySummaryHeaderId";
 		public const string InsertJobDeliveryUpdateLog = "dbo.InsertJobDeliveryUpdateLog";
+		public const string InsertFarEyeJobDeliveryUpdateLog = "dbo.InsertFarEyeJobDeliveryUpdateLog";
 		public const string GetDeliveryUpdateProcessingData = "dbo.GetDeliveryUpdateProcessingData";
 		public const string UpdateDeliveryUpdateProcessingLog = "dbo.UpdateDeliveryUpdateProcessingLog";
 		public const string InsertDeliveryUpdateProcessingLog = "dbo.InsertDeliveryUpdateProcessingLog";
 		public const string GetxCBLDeliveryUpdateModel = "dbo.GetxCBLDeliveryUpdateModel";
+		public const string GetXcblExceptionInfo = "dbo.GetXcblExceptionInfo";
+		public const string GetEDIExceptionInfo = "dbo.GetEDIExceptionInfo";
 
 		/* Job Cargo Detail */
 		public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";
@@ -539,6 +560,8 @@ namespace M4PL.DataAccess
 		public const string InsJobGatewayPODIfPODDocExistsByJobId = "dbo.InsJobGatewayPODIfPODDocExistsByJobId";
 		public const string GetJobExceptionDetail = "dbo.GetJobExceptionDetail";
 		public const string GetJobRescheduleReasonDetail = "dbo.GetJobRescheduleReasonDetail";
+		public const string GetMultiJobActions = "dbo.GetMultiJobActions";
+
 		/* Job Cost Sheet */
 		public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
 		public const string GetJobCostSheet = "dbo.GetJobCostSheet";
@@ -570,6 +593,8 @@ namespace M4PL.DataAccess
 		public const string CheckJobCancellation = "dbo.CheckJobCancellation";
 		public const string GetJobDeliveryChargeRemovalRequired = "GetJobDeliveryChargeRemovalRequired";
 		public const string UpdateJobPriceOrCostCodeStatus = "dbo.UpdateJobPriceOrCostCodeStatus";
+		public const string UpdateJobPriceCodeStatus = "dbo.UpdateJobPriceCodeStatus";
+		public const string UpdateJobCostCodeStatus = "dbo.UpdateJobCostCodeStatus";
 
 		/* Job Roll up */
 		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";
@@ -876,6 +901,26 @@ namespace M4PL.DataAccess
 		#region JobServices
 		public const string GetSearchJobOrders = "dbo.GetSearchJobOrders";
 		public const string GetOrderDetailsById = "dbo.GetOrderDetailsById";
+		public const string GetGatewayDetailsByJobID = "dbo.GetGatewayDetailsByJobID";
+		public const string GetDocumentDetailsByJobID = "dbo.GetDocumentDetailsByJobID";
+		public const string InsJobServiceDocReference = "dbo.InsJobServiceDocReference";
+		#endregion
+
+		#region Program Event Management
+
+		public const string GetEventManagementView = "dbo.GetEventView";
+		public const string GetEventManagement = "dbo.GetEventDetail";
+		public const string InsEventManagement = "dbo.InsEvent";
+		public const string UpdProgramEventManagement = "dbo.UpdEvent";
+		public const string DeleteProgramEventManagement = "dbo.DeleteProgramEventManagement";
+		public const string GetEventTypeDropDown = "dbo.GetEventTypeDropDown";
+        public const string GetEventSubscriber = "dbo.GetEventSubscriber";
+        public const string GetEventSubscriberAndSubscriberType = "dbo.GetEventSubscriberAndSubscriberType";
+
+		#endregion
+
+		#region User Guide
+		public const string InsKnowledgeDetail = "dbo.InsKnowledgeDetail";
 		#endregion
 	}
 }

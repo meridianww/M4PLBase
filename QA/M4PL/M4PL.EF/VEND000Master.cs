@@ -28,20 +28,14 @@ namespace M4PL.EF
     
         public long Id { get; set; }
         public string VendERPID { get; set; }
-        public Nullable<long> VendOrgID { get; set; }
         public Nullable<int> VendItemNumber { get; set; }
         public string VendCode { get; set; }
         public string VendTitle { get; set; }
         public byte[] VendDescription { get; set; }
-        public Nullable<long> VendWorkAddressId { get; set; }
-        public Nullable<long> VendBusinessAddressId { get; set; }
-        public Nullable<long> VendCorporateAddressId { get; set; }
         public Nullable<int> VendContacts { get; set; }
         public byte[] VendLogo { get; set; }
         public byte[] VendNotes { get; set; }
-        public Nullable<int> VendTypeId { get; set; }
         public string VendWebPage { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

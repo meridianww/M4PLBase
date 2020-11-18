@@ -17,6 +17,7 @@
         settings =>
         {
             settings.ClientSideEvents.Init = "DevExCtrl.ReportDesigner.InitViewer";
+            settings.ClientSideEvents.EndCallback = "DevExCtrl.ReportDesigner.EndCallback";
             settings.Name = Model.Report.Name;
             settings.Report = Model.Report;
             settings.SettingsSplitter.DocumentMapCollapsed = true;
@@ -24,3 +25,4 @@
             settings.ExportRouteValues = new { Controller = Model.ExportRoute.Controller, Action = Model.ExportRoute.Action, Area = Model.ExportRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ExportRoute) };
         }).GetHtml()
 }
+

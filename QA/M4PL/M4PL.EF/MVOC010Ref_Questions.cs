@@ -21,13 +21,10 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public Nullable<long> MVOCID { get; set; }
         public Nullable<int> QueQuestionNumber { get; set; }
         public string QueCode { get; set; }
         public string QueTitle { get; set; }
         public byte[] QueDescription { get; set; }
-        public Nullable<int> QuesTypeId { get; set; }
-        public Nullable<int> StatusId { get; set; }
         public Nullable<bool> QueType_YNAnswer { get; set; }
         public Nullable<bool> QueType_YNDefault { get; set; }
         public Nullable<int> QueType_RangeLo { get; set; }

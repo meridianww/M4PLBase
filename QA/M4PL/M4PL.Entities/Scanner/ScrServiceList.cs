@@ -20,11 +20,29 @@ namespace M4PL.Entities.Scanner
 {
 	public class ScrServiceList : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets ProgramID
+		/// </summary>
 		public long? ProgramID { get; set; }
+		/// <summary>
+		/// Gets or Sets Program Name
+		/// </summary>
 		public string ProgramIDName { get; set; }
+		/// <summary>
+		/// Gets or Sets Service Line Item for Scanner
+		/// </summary>
 		public int? ServiceLineItem { get; set; }
+		/// <summary>
+		/// Gets or Sets Service Code for Scanner
+		/// </summary>
 		public string ServiceCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Service Title for Scanner
+		/// </summary>
 		public string ServiceTitle { get; set; }
+		/// <summary>
+		/// Gets or Sets Description
+		/// </summary>
 		public byte[] ServiceDescription { get; set; }
 	}
 }

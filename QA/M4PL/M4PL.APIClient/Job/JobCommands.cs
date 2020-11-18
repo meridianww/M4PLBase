@@ -44,6 +44,13 @@ namespace M4PL.APIClient.Job
 				HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "Destination"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId)).Content).Results?.FirstOrDefault();
 		}
 
+		public JobContact GetJobContact(long recordId, long parentRecordId)
+		{
+			return JsonConvert.DeserializeObject<ApiResult<JobContact>>(
+			RestClient.Execute(
+				HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "Contact"), ActiveUser).AddParameter("id", recordId).AddParameter("parentId", parentRecordId)).Content).Results?.FirstOrDefault();
+		}
+
 		public Job2ndPoc GetJob2ndPoc(long id, long parentId)
 		{
 			return JsonConvert.DeserializeObject<ApiResult<Job2ndPoc>>(

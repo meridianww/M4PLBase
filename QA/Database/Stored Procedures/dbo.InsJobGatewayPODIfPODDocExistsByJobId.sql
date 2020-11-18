@@ -29,7 +29,7 @@ BEGIN
 		,@IsPODExists BIT = 0
 		,@ProgramId BIGINT
 		,@updatedItemNumber INT
-		,@gwyGatewayCode VARCHAR(20) = N'POD Upload'
+		,@gwyGatewayCode VARCHAR(20) = N'POD Completion'
 		,@gwyGatewayTitle VARCHAR(50) = N'Proof of Delivery Image Upload'
 		,@gwyGatewayDuration DECIMAL(18, 2) = 2
 		,@gwyGatewayDefault BIT = 1
@@ -87,7 +87,7 @@ BEGIN
 	SELECT @PODTransitionStatusId = Id
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'TransitionStatus'
-		AND SysOptionName = 'POD Upload'
+		AND SysOptionName = 'POD Completion'
 
 	SELECT @gwyDateRefTypeId = Id
 	FROM SYSTM000Ref_Options
@@ -163,7 +163,7 @@ BEGIN
 			SELECT 1
 			FROM JOBDL000Master
 			WHERE Id = @jobId
-				AND JobGatewayStatus = 'POD Upload'
+				AND JobGatewayStatus = 'POD Completion'
 			)
 	BEGIN
 		SET @IsEligible = 1

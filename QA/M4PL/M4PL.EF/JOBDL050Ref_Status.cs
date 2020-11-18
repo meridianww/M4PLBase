@@ -15,13 +15,10 @@ namespace M4PL.EF
     public partial class JOBDL050Ref_Status
     {
         public long Id { get; set; }
-        public Nullable<long> JobID { get; set; }
         public string JbsOutlineCode { get; set; }
         public string JbsStatusCode { get; set; }
         public string JbsTitle { get; set; }
         public byte[] JbsDescription { get; set; }
-        public Nullable<int> StatusId { get; set; }
-        public Nullable<int> SeverityId { get; set; }
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }

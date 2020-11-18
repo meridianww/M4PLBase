@@ -154,7 +154,7 @@ namespace M4PL.Entities.Finance.SalesOrder
 		public bool EDI_Cancellation_Generated { get; set; }
 		public decimal Mileage { get; set; }
 		public decimal Storage { get; set; }
-		public long VendorNo { get; set; }
+		public string VendorNo { get; set; }
 		public bool Electronic_Invoice { get; set; }
 
 		public string ManualSalesOrderNo { get; set; }
@@ -162,5 +162,6 @@ namespace M4PL.Entities.Finance.SalesOrder
 
 		public string ManualPurchaseOrderNo { get; set; }
 		public string ElectronicPurchaseOrderNo { get; set; }
+		public string Parent_ID { get; set; }
 	}
 }

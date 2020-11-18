@@ -33,7 +33,9 @@ namespace M4PL.Entities.Vendor
         /// The Organization Identifier
         /// </value>
         public long? VbtOrgID { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Organozation Name for associated Vendor
+        /// </summary>
         public string VbtOrgIDName { get; set; }
 
         /// <summary>
@@ -44,6 +46,9 @@ namespace M4PL.Entities.Vendor
         /// </value>
 
         public long? VbtVendorID { get; set; }
+        /// <summary>
+        /// Gets or Sets Vendor Name
+        /// </summary>
         public string VbtVendorIDName { get; set; }
 
         /// <summary>

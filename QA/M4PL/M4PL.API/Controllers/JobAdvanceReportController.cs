@@ -19,6 +19,7 @@
 
 using M4PL.API.Filters;
 using M4PL.Business.Job;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
@@ -150,5 +151,28 @@ namespace M4PL.API.Controllers
 			_jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser; 
 			return _jobAdvanceReportCommands.GetDropDownDataForProgram(Models.ApiContext.ActiveUser, customerId, entity);
 		}
-	}
+
+        /// <summary>
+        /// GenerateScrubDriverDetails
+        /// </summary>
+        /// <param name="scriberDriverView"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("GenerateScrubDriverDetails"), ResponseType(typeof(StatusModel))]
+        public StatusModel GenerateScrubDriverDetails(JobDriverScrubReportData scriberDriverView)
+        {
+            _jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobAdvanceReportCommands.GenerateScrubDriverDetails(Models.ApiContext.ActiveUser, scriberDriverView);
+        }
+
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("GenerateProjectedCapacityDetails"), ResponseType(typeof(StatusModel))]
+        public StatusModel GenerateProjectedCapacityDetails(ProjectedCapacityData projectedCapacityView)
+        {
+            _jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobAdvanceReportCommands.GenerateProjectedCapacityDetails(Models.ApiContext.ActiveUser, projectedCapacityView);
+        }
+    }
 }

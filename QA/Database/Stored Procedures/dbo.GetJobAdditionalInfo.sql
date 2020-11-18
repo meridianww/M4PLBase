@@ -9,7 +9,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobAdditionalInfo] (@id BIGINT)
+CREATE PROCEDURE [dbo].[GetJobAdditionalInfo]  (@id BIGINT)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -114,8 +114,8 @@ BEGIN
 					)
 			END;
 
-	SELECT CAST(ISNULL(Customer.CustERPID, 0) AS BIGINT) CustomerERPId
-		,CAST(ISNULL(Vendor.VendERPID, 0) AS BIGINT) VendorERPId
+	SELECT Customer.CustERPID CustomerERPId
+		,Vendor.VendERPID VendorERPId
 		,JOM.SONumber JobSONumber
 		,JPM.PONumber JobPONumber
 		,EJOM.SONumber JobElectronicInvoiceSONumber
@@ -127,6 +127,7 @@ BEGIN
 		,@JobWeightUnitTypeIdName AS JobWeightUnitTypeIdName
 		,@JobOriginResponsibleContactIDName AS JobOriginResponsibleContactIDName
 		,@JobDriverIdName AS JobDriverIdName
+		,CASE WHEN ISNULL(JOM.IsParentOrder, 0) = 0 THEN EJOM.IsParentOrder ELSE JOM.IsParentOrder END IsParentOrder
 	FROM [dbo].[JOBDL000Master] job
 	INNER JOIN PRGRM000MASTER prg ON job.ProgramID = prg.Id
 	INNER JOIN dbo.CUST000Master Customer ON Customer.Id = prg.PrgCustID
@@ -136,11 +137,11 @@ BEGIN
 	LEFT JOIN dbo.Vend000Master Vendor ON Vendor.Id = PVC.PvlVendorId
 	LEFT JOIN dbo.NAV000JobSalesOrderMapping JOM ON JOM.JobId = Job.Id
 		AND ISNULL(JOM.IsElectronicInvoiced, 0) = 0
-	LEFT JOIN dbo.NAV000JobPurchaseOrderMapping JPM ON JPM.JobSalesOrderMappingId = JOM.JobSalesOrderMappingId
+	LEFT JOIN dbo.NAV000JobPurchaseOrderMapping JPM ON JPM.JobId = Job.Id
 		AND ISNULL(JPM.IsElectronicInvoiced, 0) = 0
 	LEFT JOIN dbo.NAV000JobSalesOrderMapping EJOM ON EJOM.JobId = Job.Id
 		AND ISNULL(EJOM.IsElectronicInvoiced, 0) = 1
-	LEFT JOIN dbo.NAV000JobPurchaseOrderMapping EJPM ON EJPM.JobSalesOrderMappingId = EJOM.JobSalesOrderMappingId
+	LEFT JOIN dbo.NAV000JobPurchaseOrderMapping EJPM ON EJPM.JobId = Job.Id
 		AND ISNULL(EJPM.IsElectronicInvoiced, 0) = 1
 	WHERE job.[Id] = @id
 END

@@ -26,9 +26,9 @@ namespace M4PL.Entities.Finance.Customer
 	/// </summary>
 	public class NavCustomer : BaseModel
 	{
-		/// <summary>
-		/// Gets Or Sets ERPId
-		/// </summary>
+		 /// <summary>
+	    /// Gets Or Sets ERPId
+	    /// </summary>
 		public string ERPId { get; set; }
 
 		/// <summary>

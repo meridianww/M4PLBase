@@ -1,9 +1,9 @@
 ﻿#region Copyright
 /******************************************************************************
-* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved. 
+* Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
-* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group. 
+* medium is strictly prohibited without the explicit permission of Meridian Worldwide Transportation Group.
 ******************************************************************************/
 #endregion Copyright
 
@@ -65,7 +65,13 @@ namespace M4PL.Utilities
             return IsDayLightSavingEnable ? DateTime.UtcNow.AddHours(-7) : DateTime.UtcNow.AddHours(-8);
         }
 
-        public static DateTime SetTime(this DateTime date, string timeString)
+		public static long UnixTimeNow()
+		{
+			var timeSpan = (GetPacificDateTime() - new DateTime(1970, 1, 1, 0, 0, 0));
+			return (long)timeSpan.TotalSeconds;
+		}
+
+		public static DateTime SetTime(this DateTime date, string timeString)
         {
             if (string.IsNullOrEmpty(timeString)) return date;
             if (timeString.Length != 5) return date;
