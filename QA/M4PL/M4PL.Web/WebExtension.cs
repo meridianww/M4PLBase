@@ -1890,7 +1890,7 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Tracking")
+                if (mnu.MnuTitle == "Tracking" && mnu.MnuExecuteProgram != "TrackingOrder")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.JobAdvanceReport)

@@ -1655,7 +1655,11 @@ M4PLCommon.AdvancedReport = (function () {
         //    startDateCtrl.SetValue(null);
         //    endDateCtrl.SetValue(null);
         //}
-
+        if (reportTypeCtrl != null && reportTypeCtrl.GetText() == "Manifest Report") {
+            $(".isManifestReport").show();
+        } else {
+            $(".isManifestReport").hide();
+        }
         if (reportTypeCtrl != null &&
             ((reportTypeCtrl.GetText() == "Driver Scrub Report"))
             || (reportTypeCtrl.GetText() == "Capacity Report")

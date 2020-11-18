@@ -35,7 +35,7 @@
     var filterSortingEnable = false;
     if (ViewData["ReportName"] == null ||
     (ViewData["ReportName"] != null
-    && (ViewData["ReportName"].ToString() == "Job Advance Report"
+    && (ViewData["ReportName"].ToString() == "Job Advance Report" 
     || ViewData["ReportName"].ToString() == "Manifest Report" || ViewData["ReportName"].ToString() == "OSD Report")))
     {
         filterSortingEnable = true;
@@ -150,7 +150,7 @@
                 }
                 else
                 {
-                    column.Settings.AllowSort = DefaultBoolean.False;
+                    column.Settings.AllowSort = DefaultBoolean.True;
                     column.Settings.AllowAutoFilter = DefaultBoolean.False;
                     column.Settings.AutoFilterCondition = AutoFilterCondition.Default;
                 }
