@@ -27,7 +27,9 @@ using M4PL.API.Filters;
 
 namespace M4PL.API.Controllers
 {
-	
+	/// <summary>
+    /// Controller for Program Roles
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/PrgRoles")]
     public class PrgRolesController : ApiController

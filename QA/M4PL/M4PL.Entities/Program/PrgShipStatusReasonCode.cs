@@ -31,7 +31,9 @@ namespace M4PL.Entities.Program
 		/// The organization identifier.
 		/// </value>
 		public long? PscOrgID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Org Name
+		/// </summary>
 		public string PscOrgIDName { get; set; }
 
 		/// <summary>
@@ -41,7 +43,9 @@ namespace M4PL.Entities.Program
 		/// The program identifier.
 		/// </value>
 		public long? PscProgramID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Name 
+		/// </summary>
 		public string PscProgramIDName { get; set; }
 
 		/// <summary>

@@ -31,7 +31,9 @@ namespace M4PL.Entities.Program
 		/// The PacOrgID.
 		/// </value>
 		public long? PacOrgID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets OrgName
+		/// </summary>
 		public string PacOrgIDName { get; set; }
 
 		/// <summary>
@@ -42,6 +44,9 @@ namespace M4PL.Entities.Program
 		/// </value>
 
 		public long? PacProgramID { get; set; }
+		/// <summary>
+		/// Gets or Sets Program Name
+		/// </summary>
 		public string PacProgramIDName { get; set; }
 		/// <summary>
 		/// Gets or sets the sorting order.
