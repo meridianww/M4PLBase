@@ -20,12 +20,16 @@ ALTER PROCEDURE [dbo].[InsKnowledgeDetail]
 @FileName NVARCHAR(90)
 AS
 BEGIN
-	IF NOT EXISTS(SELECT 1 FROM SYSTM000KnowdlegeDetail WHERE CategoryId=2 AND Name= @DocumentName)
+	IF NOT EXISTS(SELECT 1 FROM SYSTM000KnowdlegeDetail WHERE CategoryId=2 AND Name= @DocumentName AND StatusId=1)
 		BEGIN
 			INSERT INTO dbo.SYSTM000KnowdlegeDetail (CategoryId, Name, DisplayName, URL, DateEntered, EnteredBy, StatusId)
 			VALUES (2, @DocumentName, @FileName,
 			@Url+'/Video/Document/'+ @DocumentName , GETUTCDATE(), 'System', 1)
 			SELECT 1;
+		END
+	ELSE IF EXISTS(SELECT 1 FROM SYSTM000KnowdlegeDetail WHERE CategoryId=2 AND Name= @DocumentName AND StatusId=1)
+		BEGIN
+		  SELECT 1;
 		END
 	ELSE
 		BEGIN
