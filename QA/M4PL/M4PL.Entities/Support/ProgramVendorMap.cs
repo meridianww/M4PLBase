@@ -23,11 +23,29 @@ namespace M4PL.Entities.Support
 {
     public class ProgramVendorMap
     {
+        /// <summary>
+        /// Gets or Sets flag if Assigning or not
+        /// </summary>
         public bool Assign { get; set; }
+        /// <summary>
+        /// Gets or Sets Parent Id
+        /// </summary>
         public long ParentId { get; set; }
+        /// <summary>
+        /// Gets or Sets comma seperated Location Ids
+        /// </summary>
         public string LocationIds { get; set; }
+        /// <summary>
+        /// Gets or Sets comma seperated Vendor Ids
+        /// </summary>
         public string VendorIds { get; set; }
+        /// <summary>
+        /// Gets or Sets Dictionary vendor id key with Location Ids as values
+        /// </summary>
         public IDictionary<long, IList<long>> VendorLocations { get; set; }
+        /// <summary>
+        /// Gets or Sets assignement Date
+        /// </summary>
         public DateTime? AssignedOn { get; set; }
     }
 }

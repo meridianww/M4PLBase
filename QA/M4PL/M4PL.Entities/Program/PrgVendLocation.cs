@@ -33,7 +33,9 @@ namespace M4PL.Entities.Program
 		/// The program identifier.
 		/// </value>
 		public long? PvlProgramID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Program Name
+		/// </summary>
 		public string PvlProgramIDName { get; set; }
 
 		/// <summary>
@@ -43,7 +45,9 @@ namespace M4PL.Entities.Program
 		/// The  vendor identifier.
 		/// </value>
 		public long? PvlVendorID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Vendor Name
+		/// </summary>
 		public string PvlVendorIDName { get; set; }
 
 		/// <summary>
@@ -85,7 +89,9 @@ namespace M4PL.Entities.Program
 		/// The PvlContactMSTRID.
 		/// </value>
 		public long? PvlContactMSTRID { get; set; }
-
+		/// <summary>
+		/// Gets or sets the master contact name
+		/// </summary>
 		public string PvlContactMSTRIDName { get; set; }
 
 		/// <summary>
@@ -143,11 +149,17 @@ namespace M4PL.Entities.Program
 		/// The PvlUserCode5.
 		/// </value>
 		public string PvlUserCode5 { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Vendor Code
+		/// </summary>
 		public string VendorCode { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Company Id
+		/// </summary>
 		public long ConCompanyId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Company Name
+		/// </summary>
 		public string ConCompanyIdName { get; set; }
 	}
 }
