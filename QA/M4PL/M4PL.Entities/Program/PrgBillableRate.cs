@@ -27,17 +27,19 @@ namespace M4PL.Entities.Program
 	public class PrgBillableRate : BaseModel
 	{
 		/// <summary>
-		/// Gets or sets the progra, identifier.
+		/// Gets or sets the program location identifier.
 		/// </summary>
 		/// <value>
 		/// The ProgramLocationId.
 		/// </value>
 		public long? ProgramLocationId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Program Location identifier's name
+		/// </summary>
 		public string ProgramLocationIdName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the type of the program.
+		/// Gets or sets the Program Billable Rate Code e.g. 4402ABQDEL
 		/// </summary>
 		/// <value>
 		/// The PbrCode.
@@ -45,7 +47,7 @@ namespace M4PL.Entities.Program
 		public string PbrCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the program location identifier.
+		/// Gets or sets the program identifier.
 		/// </summary>
 		/// <value>
 		/// The ProgramId.
@@ -53,7 +55,7 @@ namespace M4PL.Entities.Program
 		public long ProgramId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the type of customer.
+		/// Gets or sets the PBR customer Code. e.g. 4402ABQDEL
 		/// </summary>
 		/// <value>
 		/// The PbrCustomerCode.
@@ -69,7 +71,7 @@ namespace M4PL.Entities.Program
 		public DateTime? PbrEffectiveDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the title.
+		/// Gets or sets the title. e.g. Delivery Charge
 		/// </summary>
 		/// <value>
 		/// The PbrTitle.
@@ -85,7 +87,7 @@ namespace M4PL.Entities.Program
 		public int? RateCategoryTypeId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the  rate type identifier.
+		/// Gets or sets the  rate type identifier. (From SYSTM000Ref_Options)
 		/// </summary>
 		/// <value>
 		/// The RateTypeId.
@@ -101,7 +103,7 @@ namespace M4PL.Entities.Program
 		public decimal PbrBillablePrice { get; set; }
 
 		/// <summary>
-		/// Gets or sets the rate unit type identifier.
+		/// Gets or sets the rate unit type identifier. (FROM SYSTM000Ref_Options)
 		/// </summary>
 		/// <value>
 		/// The RateUnitTypeId.
@@ -211,11 +213,17 @@ namespace M4PL.Entities.Program
 		/// The PbrVendLocationID.
 		/// </value>
 		public long? PbrVendLocationID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Vendor Location Identifier's Name
+		/// </summary>
 		public string PbrVendLocationIDName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Flag if Electronic Billing is enabled
+		/// </summary>
 		public bool PbrElectronicBilling { get; set; }
-
+		/// <summary>
+		/// Gets or Sets if Default Rate or not
+		/// </summary>
 		public bool IsDefault { get; set; }
 	}
 }

@@ -18,12 +18,21 @@
 //==========================================================================================================
 namespace M4PL.Entities.Organization
 {
+	/// <summary>
+	/// Model class for Organization Report
+	/// </summary>
 	public class OrgReport : BaseReportModel
 	{
+		/// <summary>
+		/// Default Constructor
+		/// </summary>
 		public OrgReport()
 		{
 		}
-
+		/// <summary>
+		/// Parameterised cunstructor to Pass Base Report Model
+		/// </summary>
+		/// <param name="baseReportModel"></param>
 		public OrgReport(BaseReportModel baseReportModel) : base(baseReportModel)
 		{
 		}

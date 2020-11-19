@@ -21,8 +21,13 @@ namespace M4PL.Entities.Program
 {
 	public class PrgBillableLocation : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Program ID
+		/// </summary>
 		public long? PblProgramID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Program Identifier's Name
+		/// </summary>
 		public string PblProgramIDName { get; set; }
 
 		/// <summary>
@@ -32,7 +37,9 @@ namespace M4PL.Entities.Program
 		/// The  vendor identifier.
 		/// </value>
 		public long? PblVendorID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Vendor Identifier's Name
+		/// </summary>
 		public string PblVendorIDName { get; set; }
 
 		/// <summary>
@@ -44,7 +51,7 @@ namespace M4PL.Entities.Program
 		public int PblItemNumber { get; set; }
 
 		/// <summary>
-		/// Gets or sets the vendor location type.
+		/// Gets or sets the vendor location type.  e.g. SACRAMENTO CA
 		/// </summary>
 		/// <value>
 		/// The PblLocationCode.
@@ -52,7 +59,7 @@ namespace M4PL.Entities.Program
 		public string PblLocationCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the location code of customer.
+		/// Gets or sets the location code of customer. e.g. Default
 		/// </summary>
 		/// <value>
 		/// The PblLocationCodeCustomer.
@@ -60,7 +67,7 @@ namespace M4PL.Entities.Program
 		public string PblLocationCodeVendor { get; set; }
 
 		/// <summary>
-		/// Gets or sets the title.
+		/// Gets or sets the title.  e.g. Pacific Storage - Sacramento
 		/// </summary>
 		/// <value>
 		/// The PblLocationTitle.
