@@ -928,7 +928,7 @@ namespace M4PL.Web.Areas
             var ownerName = string.Empty;
             var callbackMethod = string.Empty;
             var routeToSend = string.Empty;
-            return Json(new { status = true, ownerName = ownerName, callbackMethod = callbackMethod, route = routeToSend }, JsonRequestBehavior.AllowGet);
+            return Json(new { status = true, ownerName = ownerName, callbackMethod = callbackMethod, route = routeToSend, gridViewName = route.Controller + "GridView" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SortAsc(string strRoute)
