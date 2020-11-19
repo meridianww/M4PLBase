@@ -44,12 +44,8 @@ namespace M4PL.API.Controllers
 			_prgEdiHeaderCommands = prgEdiHeaderCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -136,6 +132,12 @@ namespace M4PL.API.Controllers
             _prgEdiHeaderCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _prgEdiHeaderCommands.Patch(prgEdiHeader);
         }
+        /// <summary>
+        /// Fetch The Program Tree View model 
+        /// </summary>
+        /// <param name="parentId">ProgramId</param>
+        /// <param name="model">Flag if the current Node is Customer Node or not</param>
+        /// <returns></returns>
         [CustomAuthorize]
 		[HttpGet]
 		[Route("EdiTree")]
@@ -143,7 +145,11 @@ namespace M4PL.API.Controllers
 		{
 			return _prgEdiHeaderCommands.EdiTree(Models.ApiContext.ActiveUser.OrganizationId, parentId, model).AsQueryable();
 		}
-
+        /// <summary>
+        /// Fetch Tree level by ProgramId e.g. return 1 for Program, 2 For Project and 3 for Phase
+        /// </summary>
+        /// <param name="programId">Program ID</param>
+        /// <returns></returns>
 		[HttpGet]
 		[Route("getProgramLevel")]
 		public virtual int GetProgramLevel(long? programId)

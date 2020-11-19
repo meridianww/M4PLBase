@@ -33,11 +33,25 @@ namespace M4PL.Entities.Support
 			SysRefId = sysRefId;
 			LangName = langName;
 		}
-
+		/// <summary>
+		/// Gets or Sets System Reference Identifier
+		/// </summary>
 		public int SysRefId { get; set; }
+		/// <summary>
+		/// Gets or Sets Parent Id
+		/// </summary>
 		public long ParentId { get; set; }
+		/// <summary>
+		/// Gets or Sets System reference Name
+		/// </summary>
 		public string SysRefName { get; set; }
+		/// <summary>
+		/// Gets or Sets Language e.g. EN for English
+		/// </summary>
 		public string LangName { get; set; }
+		/// <summary>
+		/// Gets or Sets Flag for default record
+		/// </summary>
 		public bool IsDefault { get; set; }
 	}
 }
