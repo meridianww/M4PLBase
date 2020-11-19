@@ -27,27 +27,31 @@ namespace M4PL.Entities.Program
 	public class PrgMvoc : BaseModel
 	{
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Organization ID.
 		/// </summary>
 		/// <value>
 		/// The identifier.
 		/// </value>
 		public long? VocOrgID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Org Name
+		/// </summary>
 		public string VocOrgIDName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Program identifier.
 		/// </summary>
 		/// <value>
 		/// The identifier.
 		/// </value>
 		public long? VocProgramID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Program Name
+		/// </summary>
 		public string VocProgramIDName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the SurveyCode. e.g. VOC01 for Customer Survey
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -55,7 +59,7 @@ namespace M4PL.Entities.Program
 		public string VocSurveyCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Survey Title e.g. Customer Survey
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -63,7 +67,7 @@ namespace M4PL.Entities.Program
 		public string VocSurveyTitle { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Description.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -71,7 +75,7 @@ namespace M4PL.Entities.Program
 		public byte[] VocDescription { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Date Time of VOC when it gets open.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -79,7 +83,7 @@ namespace M4PL.Entities.Program
 		public DateTime? VocDateOpen { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Date Time of VOC when it gets closed.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -87,7 +91,7 @@ namespace M4PL.Entities.Program
 		public DateTime? VocDateClose { get; set; }
 
 		/// <summary>
-		/// Gets Or Sets VocAllStar
+		/// Gets Or Sets flag for VocAllStar
 		/// </summary>
 		public bool VocAllStar { get; set; }
 	}

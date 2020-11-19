@@ -34,7 +34,9 @@ namespace M4PL.Entities.Program
 		/// The Program identifier.
 		/// </value>
 		public long? PgdProgramID { get; set; }
-
+		/// <summary>
+		/// Gets ro Sets Program Name
+		/// </summary>
 		public string PgdProgramIDName { get; set; }
 
 		/// <summary>
@@ -124,20 +126,61 @@ namespace M4PL.Entities.Program
 		/// The PgdScanner.
 		/// </value>
 		public bool Scanner { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Ship Appointment Reason Code e.g. AF for Accident
+		/// </summary>
 		public string PgdShipApptmtReasonCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Ship Status Reason Code e.g. AG for Estimated Delivery
+		/// </summary>
 		public string PgdShipStatusReasonCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Order Type e.g. Original or Return
+		/// </summary>
 		public string PgdOrderType { get; set; }
+		/// <summary>
+		/// Gets or Sets Shipment Type e.g. Cross-Dock Shipment
+		/// </summary>
 		public string PgdShipmentType { get; set; }
+		/// <summary>
+		/// Gets or Sets Contact ID for Responsible contact
+		/// </summary>
 		public long? PgdGatewayResponsible { get; set; }
+		/// <summary>
+		/// Gets or Sets ContactID for Analyst contact
+		/// </summary>
 		public long? PgdGatewayAnalyst { get; set; }
+		/// <summary>
+		/// Gets or Sets Name of Responsible Contact
+		/// </summary>
 		public string PgdGatewayResponsibleName { get; set; }
+		/// <summary>
+		/// Gets or Sets Name of Analyst Contact
+		/// </summary>
 		public string PgdGatewayAnalystName { get; set; }
+		/// <summary>
+		/// Gets or Sets flag If the Gateway is default completed
+		/// </summary>
 		public bool PgdGatewayDefaultComplete { get; set; }
+		/// <summary>
+		/// Gets or Sets Installation Status Id e.g. 1 for Cancelled
+		/// </summary>
 		public long InstallStatusId { get; set; }
+		/// <summary>
+		/// Gets or Sets Status Text
+		/// </summary>
 		public string InstallStatusIdName { get; set; }
+		/// <summary>
+		/// Gets or Sets flag if the Gateway is for a specific Customer
+		/// </summary>
 		public bool IsSpecificCustomer { get; set; }
+		/// <summary>
+		/// Gets or Sets Gateway Status Code e.g. In Transit
+		/// </summary>
 		public string PgdGatewayStatusCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Customer Id
+		/// </summary>
 		public long CustomerId { get; set; }
 
 		/// <summary>

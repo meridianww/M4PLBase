@@ -21,10 +21,22 @@ using System.Collections.Generic;
 
 namespace M4PL.Entities.Support
 {
+    /// <summary>
+    /// Model class for System Settings
+    /// </summary>
     public class SysSetting : SysRefModel
     {
+        /// <summary>
+        /// Gets or Sets Settings in Json format (Containes details like Theme, IsSysAdmin etc.)
+        /// </summary>
         public string SysJsonSetting { get; set; }
+        /// <summary>
+        /// Gets or Sets UserIcon in VarBinary format
+        /// </summary>
         public byte[] UserIcon { get; set; }
+        /// <summary>
+        /// Gets or Sets Reference Settings
+        /// </summary>
         public IList<RefSetting> Settings { get; set; }
     }
 }

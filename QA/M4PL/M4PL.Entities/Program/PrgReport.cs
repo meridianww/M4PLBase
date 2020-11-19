@@ -18,12 +18,21 @@
 //==========================================================================================================
 namespace M4PL.Entities.Program
 {
+	/// <summary>
+	/// Model class for Program Reports
+	/// </summary>
 	public class PrgReport : BaseReportModel
 	{
+		/// <summary>
+		/// Default constructor for PrgReport
+		/// </summary>
 		public PrgReport()
 		{
 		}
-
+		/// <summary>
+		/// Parameterized constructor to pass Base Report model
+		/// </summary>
+		/// <param name="baseReportModel"></param>
 		public PrgReport(BaseReportModel baseReportModel) : base(baseReportModel)
 		{
 		}
