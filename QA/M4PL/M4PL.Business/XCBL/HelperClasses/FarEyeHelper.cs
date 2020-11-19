@@ -68,9 +68,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 								isCanceled = true;
 							}
 
-							string requestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
-							string response = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser, isNewOrder);
-							DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(requestBody, response, jobId);
+							SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
 
 							Task.Factory.StartNew(() =>
 							{
@@ -79,18 +77,14 @@ namespace M4PL.Business.XCBL.HelperClasses
 									deliveryUpdateModel.RescheduledInstallDate = rescheduleDate;
 									deliveryUpdateModel.RescheduleReason = rescheduleReason;
 									deliveryUpdateModel.InstallStatus = "Reschedule";
-									string rescheduleRequestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
-									string rescheduleResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser);
-									DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(rescheduleRequestBody, rescheduleResponse, jobId);
+									SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId);
 								}
 								else if (isCanceled)
 								{
 									deliveryUpdateModel.InstallStatus = "Canceled";
 									deliveryUpdateModel.CancelDate = canceledDate;
 									deliveryUpdateModel.CancelReason = cancelReason;
-									string cancelledRequestBody = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryUpdateModel);
-									string cancelledResponse = SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser);
-									DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(cancelledRequestBody, cancelledResponse, jobId);
+									SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId);
 								}
 							});
 						}
@@ -103,7 +97,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 			}
 		}
 
-		private static string SentOrderStatusUpdateToFarEye(DeliveryUpdate deliveryUpdate, string farEyeAPIURL, string farEyeAPIKey, ActiveUser activeUser, bool isNewOrder = false)
+		private static string SentOrderStatusUpdateToFarEye(DeliveryUpdate deliveryUpdate, string farEyeAPIURL, string farEyeAPIKey, ActiveUser activeUser, long jobId, bool isNewOrder = false)
 		{
 			FarEyeCommands farEyeCommand = new FarEyeCommands();
 			var farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdate, activeUser);
@@ -157,6 +151,8 @@ namespace M4PL.Business.XCBL.HelperClasses
 						responseData = electroluxDeliveryUpdateResponseReader.ReadToEnd();
 					}
 				}
+
+				DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(farEyeOrderStatusUpdateJson, responseData, jobId);
 			}
 			catch (Exception exp)
 			{
