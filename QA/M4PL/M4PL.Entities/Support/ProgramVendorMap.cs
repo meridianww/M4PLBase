@@ -21,6 +21,9 @@ using System.Collections.Generic;
 
 namespace M4PL.Entities.Support
 {
+    /// <summary>
+    /// Model Class for Program Vendor Mapping
+    /// </summary>
     public class ProgramVendorMap
     {
         /// <summary>

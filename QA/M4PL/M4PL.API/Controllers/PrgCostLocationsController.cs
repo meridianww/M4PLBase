@@ -20,6 +20,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for Program Cost Locations
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/PrgCostLocations")]
 	public class PrgCostLocationsController :ApiController
@@ -36,12 +39,8 @@ namespace M4PL.API.Controllers
 			_prgCostLocationCommands = prgCostLocationCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -128,6 +127,14 @@ namespace M4PL.API.Controllers
             _prgCostLocationCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _prgCostLocationCommands.Patch(prgCostLocation);
         }
+        /// <summary>
+        /// Fetch Tree Model for Cost Locations
+        /// </summary>
+        /// <param name="parentId">Parent Id</param>
+        /// <param name="isChild">Flag if current Node is Child Node</param>
+        /// <param name="isAssignedCostLocation">Flag to identify if Cost Location Assigned</param>
+        /// <param name="programId">Program ID</param>
+        /// <returns></returns>
         //[CustomAuthorize]
         [HttpGet]
 		[Route("CostLocation")]
@@ -135,7 +142,11 @@ namespace M4PL.API.Controllers
 		{
 			return _prgCostLocationCommands.CostLocationTree(Models.ApiContext.ActiveUser.OrganizationId, isAssignedCostLocation, programId, parentId, isChild).AsQueryable();
 		}
-
+        /// <summary>
+        /// Insert Program Vendor Mapping
+        /// </summary>
+        /// <param name="programVendorMap"></param>
+        /// <returns></returns>
 		[HttpPost]
 		[Route("MapVendorCostLocations")]
 		public bool Post(ProgramVendorMap programVendorMap)

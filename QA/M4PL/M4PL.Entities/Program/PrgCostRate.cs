@@ -33,11 +33,13 @@ namespace M4PL.Entities.Program
 		/// The ProgramLocationId.
 		/// </value>
 		public long? ProgramLocationId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Program Location Name
+		/// </summary>
 		public string ProgramLocationIdName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the program location identifier.
+		/// Gets or sets the program Id.
 		/// </summary>
 		/// <value>
 		/// The ProgramId.
@@ -45,7 +47,7 @@ namespace M4PL.Entities.Program
 		public long ProgramId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Charge Code. e.g. 44TSPROCNCBLDEL
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -53,7 +55,7 @@ namespace M4PL.Entities.Program
 		public string PcrCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Vendor Code e.g. TSP-ROC_NC
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -61,7 +63,7 @@ namespace M4PL.Entities.Program
 		public string PcrVendorCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Charge Effective Date
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -69,7 +71,7 @@ namespace M4PL.Entities.Program
 		public DateTime? PcrEffectiveDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Charge title e.g. Builder Delivery Charge
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -77,7 +79,7 @@ namespace M4PL.Entities.Program
 		public string PcrTitle { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Rate Category Type identifier e.g. Id from Sys Options of RateCategoryType 
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -85,7 +87,7 @@ namespace M4PL.Entities.Program
 		public int? RateCategoryTypeId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the identifier. e.g. Id from Sys Options of RateType
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -93,7 +95,7 @@ namespace M4PL.Entities.Program
 		public int? RateTypeId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Charge
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -101,7 +103,7 @@ namespace M4PL.Entities.Program
 		public decimal PcrCostRate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the identifier. for Unit Type e.g. Id form Sys Options of UnitType
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -109,7 +111,7 @@ namespace M4PL.Entities.Program
 		public int? RateUnitTypeId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Charge format
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -117,7 +119,7 @@ namespace M4PL.Entities.Program
 		public string PcrFormat { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Description.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -125,7 +127,7 @@ namespace M4PL.Entities.Program
 		public byte[] PcrDescription { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Charge Expression
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -133,7 +135,7 @@ namespace M4PL.Entities.Program
 		public string PcrExpression01 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Gets or sets the Cost Charge Logic
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -141,7 +143,7 @@ namespace M4PL.Entities.Program
 		public string PcrLogic01 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Gets or sets the Cost Charge Expression
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -149,7 +151,7 @@ namespace M4PL.Entities.Program
 		public string PcrExpression02 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Gets or sets the Cost Charge Logic
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -157,7 +159,7 @@ namespace M4PL.Entities.Program
 		public string PcrLogic02 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Gets or sets the Cost Charge Expression
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -165,7 +167,7 @@ namespace M4PL.Entities.Program
 		public string PcrExpression03 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Gets or sets the Cost Charge Logic
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -173,7 +175,7 @@ namespace M4PL.Entities.Program
 		public string PcrLogic03 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Gets or sets the Cost Charge Expression
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -181,7 +183,7 @@ namespace M4PL.Entities.Program
 		public string PcrExpression04 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Gets or sets the Cost Charge Logic
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -189,7 +191,7 @@ namespace M4PL.Entities.Program
 		public string PcrLogic04 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Gets or sets the Cost Charge Expression
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -197,7 +199,7 @@ namespace M4PL.Entities.Program
 		public string PcrExpression05 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Gets or sets the Cost Charge Logic
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -205,17 +207,23 @@ namespace M4PL.Entities.Program
 		public string PcrLogic05 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Customer Id.
 		/// </summary>
 		/// <value>
 		/// The identifier.
 		/// </value>
 		public long? PcrCustomerID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Customer name
+		/// </summary>
 		public string PcrCustomerIDName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets flag if it's Electronic Billing
+		/// </summary>
 		public bool PcrElectronicBilling { get; set; }
-
+		/// <summary>
+		/// Gets or Sets if It's Default Cost Rate
+		/// </summary>
 		public bool IsDefault { get; set; }
 	}
 }

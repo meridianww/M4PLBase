@@ -19,6 +19,9 @@
 
 namespace M4PL.Entities.Program
 {
+	/// <summary>
+	/// Model Class for Program Cost Locations
+	/// </summary>
 	public class PrgCostLocation : BaseModel
 	{
 		/// <summary>
@@ -28,7 +31,9 @@ namespace M4PL.Entities.Program
 		/// The program identifier.
 		/// </value>
 		public long? PclProgramID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Program Identifier's Name
+		/// </summary>
 		public string PclProgramIDName { get; set; }
 
 		/// <summary>
@@ -38,7 +43,9 @@ namespace M4PL.Entities.Program
 		/// The  vendor identifier.
 		/// </value>
 		public long? PclVendorID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Vendor Identifier's Name
+		/// </summary>
 		public string PclVendorIDName { get; set; }
 
 		/// <summary>
@@ -50,7 +57,7 @@ namespace M4PL.Entities.Program
 		public int PclItemNumber { get; set; }
 
 		/// <summary>
-		/// Gets or sets the vendor location type.
+		/// Gets or sets the vendor location Code. e.g. SACRAMENTO CA
 		/// </summary>
 		/// <value>
 		/// The PclLocationCode.
@@ -58,7 +65,7 @@ namespace M4PL.Entities.Program
 		public string PclLocationCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the location code of customer.
+		/// Gets or sets the location code of customer. e.g. Default
 		/// </summary>
 		/// <value>
 		/// The PclLocationCodeCustomer.
@@ -66,7 +73,7 @@ namespace M4PL.Entities.Program
 		public string PclLocationCodeCustomer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the title.
+		/// Gets or sets the title. e.g. Pacific Storage - Sacramento
 		/// </summary>
 		/// <value>
 		/// The PclLocationTitle.

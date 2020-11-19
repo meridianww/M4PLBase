@@ -31,11 +31,13 @@ namespace M4PL.Entities.Program
 		/// The identifier.
 		/// </value>
 		public long? MVOCID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets VOC Name
+		/// </summary>
 		public string MVOCIDName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Survey Question Number.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -43,7 +45,7 @@ namespace M4PL.Entities.Program
 		public int? QueQuestionNumber { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Question code
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -51,7 +53,7 @@ namespace M4PL.Entities.Program
 		public string QueCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Survey Question Title
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -59,7 +61,7 @@ namespace M4PL.Entities.Program
 		public string QueTitle { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Description
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -67,7 +69,7 @@ namespace M4PL.Entities.Program
 		public byte[] QueDescription { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Question Type Id
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -75,7 +77,7 @@ namespace M4PL.Entities.Program
 		public int? QuesTypeId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Flag for answer as Yes or No
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -83,7 +85,7 @@ namespace M4PL.Entities.Program
 		public bool QueType_YNAnswer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the default flag  for answer as Yes or No
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -91,7 +93,7 @@ namespace M4PL.Entities.Program
 		public bool QueType_YNDefault { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the lowest range for a Question.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -99,7 +101,7 @@ namespace M4PL.Entities.Program
 		public int? QueType_RangeLo { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Highest Range for a Question.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -107,7 +109,7 @@ namespace M4PL.Entities.Program
 		public int? QueType_RangeHi { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Range of Answer.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -115,7 +117,7 @@ namespace M4PL.Entities.Program
 		public int? QueType_RangeAnswer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Default range.
 		/// </summary>
 		/// <value>
 		/// The identifier.

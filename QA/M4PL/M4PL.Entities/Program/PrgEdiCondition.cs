@@ -29,21 +29,25 @@ namespace M4PL.Entities.Program
 		/// </value>
 
 		public long? PecParentProgramId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets parent program name
+		/// </summary>
 		public string PecParentProgramIdName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Edi header  identifier.
+		/// Gets or sets the Program Id
 		/// </summary>
 		/// <value>
 		/// The  Edi header identifier.
 		/// </value>
 		public long? PecProgramId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Program Name 
+		/// </summary>
 		public string PecProgramIdName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the PecJobField.
+		/// Gets or sets the PecJobField. e.g. eshCustomerReferenceNo
 		/// </summary>
 		/// <value>
 		/// The JobField1.
@@ -51,7 +55,7 @@ namespace M4PL.Entities.Program
 		public string PecJobField { get; set; }
 
 		/// <summary>
-		/// Gets or sets the PecCondition.
+		/// Gets or sets the PecCondition. e.g. RP%, KP%, NP%
 		/// </summary>
 		/// <value>
 		/// The Condition1.
@@ -59,7 +63,7 @@ namespace M4PL.Entities.Program
 		public string PecCondition { get; set; }
 
 		/// <summary>
-		/// Gets or sets the PerLogical.
+		/// Gets or sets the PerLogical. e.g. AND
 		/// </summary>
 		/// <value>
 		/// The Logical.
@@ -67,7 +71,7 @@ namespace M4PL.Entities.Program
 		public string PerLogical { get; set; }
 
 		/// <summary>
-		/// Gets or sets the PecJobField2.
+		/// Gets or sets the PecJobField2. e.g. eshLocationNumber
 		/// </summary>
 		/// <value>
 		/// The JobField2.
@@ -77,7 +81,7 @@ namespace M4PL.Entities.Program
 		/// <summary>
 
 		/// <summary>
-		/// Gets or sets the PecCondition2
+		/// Gets or sets the PecCondition2 e.g. %/B
 		/// </summary>
 		/// <value>
 		/// The Condition2.

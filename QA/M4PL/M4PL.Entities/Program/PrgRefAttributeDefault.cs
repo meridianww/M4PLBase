@@ -31,7 +31,9 @@ namespace M4PL.Entities.Program
 		/// The program identifier.
 		/// </value>
 		public long? ProgramID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Program Name
+		/// </summary>
 		public string ProgramIDName { get; set; }
 
 		/// <summary>
@@ -44,7 +46,7 @@ namespace M4PL.Entities.Program
 		public int? AttItemNumber { get; set; }
 
 		/// <summary>
-		/// Gets or sets the type identifier.
+		/// Gets or sets the Attribute Code
 		/// </summary>
 		/// <value>
 		/// The AttCode.

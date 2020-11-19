@@ -60,19 +60,50 @@ namespace M4PL.Entities
         public string SelectedNode { get; set; }
         public long? RecordId { get; set; }
     }
-
+    /// <summary>
+    /// Model Class for Tree Model
+    /// </summary>
     public class TreeModel
     {
+        /// <summary>
+        /// Gets or Sets Id of Tree model
+        /// </summary>
         public long Id { get; set; }
+        /// <summary>
+        /// Gets or Sets ParentId if any 
+        /// </summary>
         public long? ParentId { get; set; }
+        /// <summary>
+        /// Gets or Sets Name which is like customerId_ProgramId
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Gets or Sets Text for the Program Code/CustCode
+        /// </summary>
         public string Text { get; set; }
+        /// <summary>
+        /// Gets or Sets ToolTip from CustTitle or ProgramTitle
+        /// </summary>
         public string ToolTip { get; set; }
+        /// <summary>
+        /// Gets or Sets Image in Varbinary format
+        /// </summary>
         public byte[] Image { get; set; }
+        /// <summary>
+        /// Gets or Sets flag if enabled
+        /// </summary>
         public bool Enabled { get; set; }
+        /// <summary>
+        /// Gets or Sets flag e.g. for Customer Node 0 and for Program Node 1
+        /// </summary>
         public bool IsLeaf { get; set; }
+        /// <summary>
+        /// Gets or Sets Model
+        /// </summary>
         public string Model { get; set; }
-
+        /// <summary>
+        /// Gets or Sets CSS for Icon
+        /// </summary>
         public string IconCss { get; set; }
     }
 }
