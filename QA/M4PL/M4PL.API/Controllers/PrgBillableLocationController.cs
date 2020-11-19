@@ -20,25 +20,26 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    
+    /// <summary>
+    /// Program Billabel Location Controller
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/PrgBillableLocation")]
     public class PrgBillableLocationController : ApiController
     {
         private readonly IPrgBillableLocationCommands _prgBillableLocationCommands;
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="prgBillableLocationCommands"></param>
         public PrgBillableLocationController(IPrgBillableLocationCommands prgBillableLocationCommands)
 
         {
             _prgBillableLocationCommands = prgBillableLocationCommands;
         }
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -125,13 +126,25 @@ namespace M4PL.API.Controllers
             _prgBillableLocationCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _prgBillableLocationCommands.Patch(prgBillableLocation);
         }
+        /// <summary>
+        /// Gets Tree model
+        /// </summary>
+        /// <param name="parentId">Parent Id</param>
+        /// <param name="isChild">If current node is Chile Node</param>
+        /// <param name="isAssignedBillableLocation">If Location is AssignedBillable</param>
+        /// <param name="programId"> Program ID</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("BillableLocation")]
         public IQueryable<TreeModel> BillableLocationTree(long? parentId, bool isChild, bool isAssignedBillableLocation, long programId)
         {
             return _prgBillableLocationCommands.BillableLocationTree(Models.ApiContext.ActiveUser.OrganizationId, isAssignedBillableLocation, programId, parentId, isChild).AsQueryable();
         }
-
+        /// <summary>
+        /// Program Vendor Mapping for Vendor Billable Locations mapping to Program
+        /// </summary>
+        /// <param name="programVendorMap"></param>
+        /// <returns></returns>
         [CustomAuthorize]
         [HttpPost]
         [Route("MapVendorBillableLocations")]
