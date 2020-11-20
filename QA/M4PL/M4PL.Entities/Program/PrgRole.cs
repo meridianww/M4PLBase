@@ -31,7 +31,9 @@ namespace M4PL.Entities.Program
 		/// The organization identifier.
 		/// </value>
 		public long? OrgID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Organization Identifier's Name
+		/// </summary>
 		public string OrgIDName { get; set; }
 
 		/// <summary>
@@ -41,7 +43,9 @@ namespace M4PL.Entities.Program
 		/// The program identifier.
 		/// </value>
 		public long? ProgramID { get; set; }
-
+		/// <summary>
+		/// Gets or sets the program identifier's Name
+		/// </summary>
 		public string ProgramIDName { get; set; }
 
 		/// <summary>
@@ -99,7 +103,9 @@ namespace M4PL.Entities.Program
 		/// The PrgRoleContactID.
 		/// </value>
 		public long? PrgRoleContactID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Contact Idenfier's Name
+		/// </summary>
 		public string PrgRoleContactIDName { get; set; }
 
 		/// <summary>
@@ -127,9 +133,21 @@ namespace M4PL.Entities.Program
 		public byte[] PrgComments { get; set; }
 
 		public string ProgramRoleCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Flag if the role is Job Default Analyst
+		/// </summary>
 		public bool PrxJobDefaultAnalyst { get; set; }
+		/// <summary>
+		/// Gets or Sets Flag if the role is Job Default Responsible 
+		/// </summary>
 		public bool PrxJobDefaultResponsible { get; set; }
+		/// <summary>
+		/// Gets or Sets Flag if the role is Job Gateway Default Analyst
+		/// </summary>
 		public bool PrxJobGWDefaultAnalyst { get; set; }
+		/// <summary>
+		/// Gets or Sets Flag if the role is Job Gateway Default Responsible
+		/// </summary>
 		public bool PrxJobGWDefaultResponsible { get; set; }
 	}
 }

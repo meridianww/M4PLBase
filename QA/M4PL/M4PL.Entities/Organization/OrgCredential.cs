@@ -27,17 +27,34 @@ namespace M4PL.Entities.Organization
 	/// </summary>
 	public class OrgCredential : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Org ID
+		/// </summary>
 		public long? OrgID { get; set; }
+		/// <summary>
+		/// Gets or Sets Org Identifier's Name
+		/// </summary>
 		public string OrgIDName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Sorting Order
+		/// </summary>
 		public int? CreItemNumber { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Credential Code e.g. CRED03
+		/// </summary>
 		public string CreCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Credential Title e.g. Credentials Details
+		/// </summary>
 
 		public string CreTitle { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Description
+		/// </summary>
 		public byte[] CreDescription { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Credentials Expiry Date
+		/// </summary>
 		public DateTime? CreExpDate { get; set; }
 
 		/// <summary>

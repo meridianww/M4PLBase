@@ -24,28 +24,43 @@ namespace M4PL.Entities.Organization
 	/// </summary>
 	public class Organization : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Organization Code e.g. MWWTG
+		/// </summary>
 		public string OrgCode { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Org Title e.g. Meridian Worldwide Transportation Group
+		/// </summary>
 		public string OrgTitle { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Organization group Id e.g. 68 for Home Delivery
+		/// </summary>
 		public int? OrgGroupId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Sorting Order
+		/// </summary>
 		public int? OrgSortOrder { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Description
+		/// </summary>
 		public byte[] OrgDescription { get; set; }
 
 		//public long? OrgContactId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Organization image/icon in varbinary format
+		/// </summary>
 		public byte[] OrgImage { get; set; }
 
 		/// <summary>
-		/// Gets or sets the vendor's work address identifier.
+		/// Gets or sets the Org's work address identifier.
 		/// </summary>
 		/// <value>
 		/// The OrgWorkAddressId.
 		/// </value>
 		public long? OrgWorkAddressId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets  Org's work address identifier's Name
+		/// </summary>
 		public string OrgWorkAddressIdName { get; set; }
 
 		/// <summary>
@@ -55,7 +70,9 @@ namespace M4PL.Entities.Organization
 		/// The OrgBusinessAddressId.
 		/// </value>
 		public long? OrgBusinessAddressId { get; set; }
-
+		/// <summary>
+		/// Gets or sets the Org's business address identifier's Name
+		/// </summary>
 		public string OrgBusinessAddressIdName { get; set; }
 
 		/// <summary>
@@ -65,7 +82,9 @@ namespace M4PL.Entities.Organization
 		/// The OrgCorporateAddressId.
 		/// </value>
 		public long? OrgCorporateAddressId { get; set; }
-
+		/// <summary>
+		/// Gets or sets the Org's corporate address identifier's Name
+		/// </summary>
 		public string OrgCorporateAddressIdName { get; set; }
 
 		/// <summary>
@@ -92,14 +111,18 @@ namespace M4PL.Entities.Organization
 		/// Gets Or Sets BusinessStateId
 		/// </summary>
 		public int? BusinessStateId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets BusinessStateId's Name
+		/// </summary>
 		public string BusinessStateIdName { get; set; }
 
 		/// <summary>
 		/// Gets Or Sets BusinessCountryId
 		/// </summary>
 		public int? BusinessCountryId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets BusinessCountryId's Name
+		/// </summary>
 		public string BusinessCountryIdName { get; set; }
 
 		/// <summary>
@@ -176,7 +199,9 @@ namespace M4PL.Entities.Organization
 		/// Gets Or Sets WorkCountryId
 		/// </summary>
 		public int WorkCountryId { get; set; }
-
+		/// <summary>
+		/// Gets Or Sets WorkCountryId's Name
+		/// </summary>
 		public string WorkCountryIdName { get; set; }
 	}
 }

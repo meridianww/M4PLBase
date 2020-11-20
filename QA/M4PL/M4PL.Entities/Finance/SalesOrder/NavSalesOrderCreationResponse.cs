@@ -11,9 +11,18 @@
 
 namespace M4PL.Entities.Finance.SalesOrder
 {
+	/// <summary>
+	/// Model class for Nav Sales Order Response for Order Creation
+	/// </summary>
 	public class NavSalesOrderCreationResponse
 	{
+		/// <summary>
+		/// Gets or Sets Electronic Nav Salves Order
+		/// </summary>
 		public NavSalesOrder ElectronicNavSalesOrder { get; set; }
+		/// <summary>
+		/// Gets or Sets Manual Nav Sales Order
+		/// </summary>
 		public NavSalesOrder ManualNavSalesOrder { get; set; }
 	}
 }
