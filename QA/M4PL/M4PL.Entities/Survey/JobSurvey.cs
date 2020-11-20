@@ -21,18 +21,35 @@ using System.Collections.Generic;
 
 namespace M4PL.Entities.Survey
 {
+    /// <summary>
+    /// Controller for Job Survey
+    /// </summary>
     public class JobSurvey
     {
+        /// <summary>
+        /// Gets or Sets Job Id
+        /// </summary>
         public long JobId { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Survey Id
+        /// </summary>
         public long? SurveyId { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Survey Title
+        /// </summary>
         public string SurveyTitle { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Survey UserId
+        /// </summary>
         public long? SurveyUserId { get; set; }
-
+        /// <summary>
+        /// Gets or Sets VocAllStar
+        /// </summary>
         public bool VocAllStar { get; set; }
-
+        /// <summary>
+        /// Gets or Sets Job Survey Questions
+        /// </summary>
         public List<JobSurveyQuestion> JobSurveyQuestions { get; set; }
+
     }
 }
