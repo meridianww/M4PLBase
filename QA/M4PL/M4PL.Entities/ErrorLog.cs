@@ -21,15 +21,42 @@ using System;
 
 namespace M4PL.Entities
 {
-	public class ErrorLog
-	{
-		public long Id { get; set; }
-		public string ErrRelatedTo { get; set; }
-		public string ErrInnerException { get; set; }
-		public string ErrMessage { get; set; }
-		public string ErrSource { get; set; }
-		public string ErrStackTrace { get; set; }
-		public string ErrAdditionalMessage { get; set; }
-		public DateTime ErrDateStamp { get; set; }
-	}
+    /// <summary>
+    /// Model for ErrorLog
+    /// </summary>
+    public class ErrorLog
+    {
+        /// <summary>
+        /// Get or Set for ID
+        /// </summary>
+        public long Id { get; set; }
+        /// <summary>
+        /// Get or Set for ErrRelatedTo
+        /// </summary>
+        public string ErrRelatedTo { get; set; }
+        /// <summary>
+        /// Get or Set for ErrInnerException
+        /// </summary>
+        public string ErrInnerException { get; set; }
+        /// <summary>
+        /// Get or Set for ErrMessage
+        /// </summary>
+        public string ErrMessage { get; set; }
+        /// <summary>
+        /// Get or Set for ErrSource
+        /// </summary>
+        public string ErrSource { get; set; }
+        /// <summary>
+        /// Get or Set for ErrStackTrace
+        /// </summary>
+        public string ErrStackTrace { get; set; }
+        /// <summary>
+        /// Get or Set for ErrAdditionalMessage
+        /// </summary>
+        public string ErrAdditionalMessage { get; set; }
+        /// <summary>
+        /// Get or Set for ErrDateStamp
+        /// </summary>
+        public DateTime ErrDateStamp { get; set; }
+    }
 }

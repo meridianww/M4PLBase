@@ -19,17 +19,34 @@
 
 namespace M4PL.Entities
 {
+	/// <summary>
+	/// Model class of application Dashboard
+	/// </summary>
 	public class AppDashboard : BaseModel
 	{
+		/// <summary>
+		/// Get or Set for Dashboard Main module Id
+		/// </summary>
 		public int DshMainModuleId { get; set; }
-
+		/// <summary>
+		/// Get or Set for Dashboard Template
+		/// </summary>
 		public byte[] DshTemplate { get; set; }
-
+		/// <summary>
+		/// Get or Set for Dashboard Description
+		/// </summary>
 		public string DshDescription { get; set; }
-
+		/// <summary>
+		/// Get or Set for Dashboard Name
+		/// </summary>
 		public string DshName { get; set; }
-
+		/// <summary>
+		/// private property of Dashboard is default or not
+		/// </summary>
 		private bool? dshIsDefault;
+		/// <summary>
+		/// Get or Set for Dashboard is default or not
+		/// </summary>
 		public bool? DshIsDefault { get { return dshIsDefault; } set { dshIsDefault = value == null ? false : value; } }
 	}
 }

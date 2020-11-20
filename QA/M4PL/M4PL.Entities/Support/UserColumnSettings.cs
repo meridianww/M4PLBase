@@ -20,10 +20,13 @@
 namespace M4PL.Entities.Support
 {
     /// <summary>
-    ///
+    /// Model for UserColumnSettings
     /// </summary>
     public class UserColumnSettings
     {
+        /// <summary>
+        /// Constructor of UserColumnSettings
+        /// </summary>
         public UserColumnSettings()
         {
             ColSortOrder = string.Empty;
@@ -33,14 +36,37 @@ namespace M4PL.Entities.Support
             ColGroupBy = string.Empty;
             ColGridLayout = string.Empty;
         }
-
+        /// <summary>
+        /// Get or Set for column user Id
+        /// </summary>
         public long? ColUserId { get; set; }
+        /// <summary>
+        /// Get or Set for column user table
+        /// </summary>
         public string ColTableName { get; set; }
+        /// <summary>
+        /// Get or Set for column sort order
+        /// </summary>
         public string ColSortOrder { get; set; }
+        /// <summary>
+        /// Get or Set for column is visible or not
+        /// </summary>
         public string ColNotVisible { get; set; }
+        /// <summary>
+        /// Get or Set for column is frezed or not
+        /// </summary>
         public string ColIsFreezed { get; set; }
+        /// <summary>
+        /// Get or Set for column is default or not
+        /// </summary>
         public string ColIsDefault { get; set; }
+        /// <summary>
+        /// Get or Set for column group by
+        /// </summary>
         public string ColGroupBy { get; set; }
+        /// <summary>
+        /// Get or Set for column gr id layout
+        /// </summary>
         public string ColGridLayout { get; set; }
     }
 }

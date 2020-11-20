@@ -36,6 +36,9 @@ using _command = M4PL.Business.Common.CommonCommands;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for Commons API use purpose
+    /// </summary>
     [RoutePrefix("api/Commons")]
     public class CommonsController : ApiController
     {
@@ -52,6 +55,11 @@ namespace M4PL.API.Controllers
 
         #region Cached Results
 
+        /// <summary>
+        /// Get all table details and cached details for future purpose
+        /// </summary>
+        /// <param name="forceUpdate">Optional parameter to get table details if required after any update ar created the details</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("Tables")]
@@ -61,6 +69,11 @@ namespace M4PL.API.Controllers
             return _command.GetTables(forceUpdate).AsQueryable();
         }
 
+        /// <summary>
+        /// Get Ribbon menus details show details in ribbon
+        /// </summary>
+        /// <param name="forceUpdate">Optional parameter to get ribbon menus if required forcefully to passing true value</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("RibbonMenus")]
@@ -70,6 +83,11 @@ namespace M4PL.API.Controllers
             return _command.GetRibbonMenus(forceUpdate).AsQueryable();
         }
 
+        /// <summary>
+        /// Get Business Configuration details show details in ribbon
+        /// </summary>
+        /// <param name="forceUpdate">Optional parameter to get Business Configuration details if required forcefully to passing true value</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("BusinessConfiguration")]
         public BusinessConfiguration GetBusinessConfiguration(bool forceUpdate = false)
@@ -77,6 +95,12 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetBusinessConfiguration(forceUpdate);
         }
+        /// <summary>
+        /// Get system option details for any common drop down 
+        /// </summary>
+        /// <param name="lookupId">pass the look up id to get option details from system reference</param>
+        /// <param name="forceUpdate">Optional parameter to get system option details if required forcefully to passing true value</param>
+        /// <returns></returns>  
 
         [HttpGet]
         [CustomQueryable]
@@ -87,6 +111,12 @@ namespace M4PL.API.Controllers
             return _command.GetIdRefLangNames(lookupId, forceUpdate).AsQueryable();
         }
 
+        /// <summary>
+        /// Get system Operations details for any common drop down 
+        /// </summary>
+        /// <param name="lookup">pass the look up enum to get Operations details from system reference</param>
+        /// <param name="forceUpdate">Optional parameter to get system Operations details if required forcefully to passing true value</param>
+        /// <returns></returns>  
         [HttpGet]
         [CustomQueryable]
         [Route("Operations")]
@@ -96,6 +126,12 @@ namespace M4PL.API.Controllers
             return _command.GetOperations(lookup, forceUpdate).AsQueryable();
         }
 
+        /// <summary>
+        /// Get page info detail by EntitiesAlias
+        /// </summary>
+        /// <param name="entity">Pass the EntitiesAlias to get pageinfo details</param>
+        /// <param name="forceUpdate">Optional parameter to get page info details if required forcefully to passing true value</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("PageAndTabNames")]
@@ -105,6 +141,13 @@ namespace M4PL.API.Controllers
             return _command.GetPageInfos(entity, forceUpdate).AsQueryable();
         }
 
+        /// <summary>
+        /// Get dispaly message details for update result to the end user 
+        /// </summary>
+        /// <param name="messageType">pass meassge type enum </param>
+        /// <param name="messageCode">pass meassge code</param>
+        /// <param name="forceUpdate">Optional parameter to get  dispaly message details if required forcefully to passing true value</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("DisplayMessage")]
         [AllowAnonymous]
@@ -116,6 +159,12 @@ namespace M4PL.API.Controllers
             return _command.GetDisplayMessageByCode(messageType, messageCode, forceUpdate);
         }
 
+        /// <summary>
+        /// Get column settings details by use EntitiesAlias for caching
+        /// </summary>
+        /// <param name="entity">pass EntitiesAlias </param>
+        /// <param name="forceUpdate">Optional parameter to get column settings details if required forcefully to passing true value</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("ColumnSettings")]
@@ -125,6 +174,13 @@ namespace M4PL.API.Controllers
             return _command.GetColumnSettingsByEntityAlias(entity, forceUpdate).AsQueryable();
         }
 
+        /// <summary>
+        /// Get grid column settings details by use EntitiesAlias for caching eg: job ,advance report,job card, etc grid
+        /// </summary>
+        /// <param name="entity">pass EntitiesAlias </param>
+        /// <param name="forceUpdate">Optional parameter to get grid column settings details if required forcefully to passing true value</param>
+        /// <param name="isGridSetting">Optional parameter to get grid column settings details if required seeting is true</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("GridColumnSettings")]
@@ -134,6 +190,11 @@ namespace M4PL.API.Controllers
             return _command.GetGridColumnSettingsByEntityAlias(entity, forceUpdate, isGridSetting).AsQueryable();
         }
 
+        /// <summary>
+        /// Get diffrent cobination of columns by report type for caching
+        /// </summary>
+        /// <param name="reportTypeId">pass reprt type to get diffrent cobination of columns</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("GetJobReportColumnRelation")]
@@ -143,6 +204,12 @@ namespace M4PL.API.Controllers
             return _command.GetJobReportColumnRelation(reportTypeId).AsQueryable();
         }
 
+        /// <summary>
+        /// Get all validation settings by entity for caching
+        /// </summary>
+        /// <param name="entity">pass entity alias to get validation settings</param>
+        /// <param name="forceUpdate">Optional parameter to get validation settings details if required forcefully to passing true value</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("ValidationRegExps")]
@@ -152,6 +219,12 @@ namespace M4PL.API.Controllers
             return _command.GetValidationRegExpsByEntityAlias(entity, forceUpdate).AsQueryable();
         }
 
+        /// <summary>
+        /// Get all master details table by entity for caching
+        /// </summary>
+        /// <param name="entity">Pasing the enity get master table details by entity </param>
+        /// <param name="forceUpdate">Optional parameter to get Master Tables details if required forcefully to passing true value</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("MasterTables")]
@@ -161,6 +234,11 @@ namespace M4PL.API.Controllers
             return _command.GetMasterTableObject(entity, forceUpdate);
         }
 
+        /// <summary>
+        /// Get all Conditional Operators for advance searching for caching
+        /// </summary>
+        /// <param name="forceUpdate">Optional parameter to get all Conditional Operators details if required forcefully to passing true value</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("ConditionalOperators")]
@@ -170,6 +248,11 @@ namespace M4PL.API.Controllers
             return _command.GetConditionalOperators(forceUpdate).AsQueryable();
         }
 
+        /// <summary>
+        /// Get all system setting details for caching
+        /// </summary>
+        /// <param name="forceUpdate">Optional parameter to get all system setting details if required forcefully to passing true value</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("SysSettings")]
         public SysSetting GetSystemSettings(bool forceUpdate = false)
@@ -179,7 +262,11 @@ namespace M4PL.API.Controllers
         }
 
         #endregion Cached Results
-
+        /// <summary>
+        /// Get Field is unique or not
+        /// </summary>
+        /// <param name="uniqueValidation"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("IsUniqueField")]
         public bool GetIsFieldUnique(UniqueValidation uniqueValidation)
@@ -187,7 +274,12 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetIsFieldUnique(uniqueValidation);
         }
-
+        /// <summary>
+        ///  Get valid site code or not by jobsite code and program id
+        /// </summary>
+        /// <param name="jobSiteCode"> pass job site code(eg: ANDREWS SC)</param>
+        /// <param name="programId">pass program id(eg: 10012)</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("IsValidJobSiteCode")]
         public string IsValidJobSiteCode(string jobSiteCode, long programId)
@@ -195,7 +287,12 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.IsValidJobSiteCode(jobSiteCode, programId);
         }
-
+        /// <summary>
+        /// Get vendor id by jobsitecode and program id
+        /// </summary>
+        /// <param name="jobSiteCode"> pass job site code(eg: ANDREWS SC)</param>
+        /// <param name="programId">pass program id(eg: 10012)</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetVendorIdforSiteCode")]
         public long GetVendorIdforSiteCode(string jobSiteCode, long programId)
@@ -204,6 +301,11 @@ namespace M4PL.API.Controllers
             return _command.GetVendorIdforSiteCode(jobSiteCode, programId);
         }
 
+        /// <summary>
+        /// Update syn with system account and contact bridge table
+        /// </summary>
+        /// <param name="systemAccount"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("UpdSysAccAndConBridgeRole")]
         public bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
@@ -212,6 +314,11 @@ namespace M4PL.API.Controllers
             return _command.UpdSysAccAndConBridgeRole(systemAccount);
         }
 
+        /// <summary>
+        /// Get all user column setting by entity
+        /// </summary>
+        /// <param name="entity">pass valid enity to get all details by user provided set-up</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("UserColumnSettings")]
         public UserColumnSettings UserColumnSettings(EntitiesAlias entity)
@@ -220,6 +327,10 @@ namespace M4PL.API.Controllers
             return _command.GetUserColumnSettings(entity);
         }
 
+        /// <summary>
+        /// Get all user system setings
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("UserSysSettings")]
         public SysSetting GetUserSysSettings()
@@ -228,6 +339,10 @@ namespace M4PL.API.Controllers
             return _command.GetUserSysSettings();
         }
 
+        /// <summary>
+        /// get all menus througout all module
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("ModuleMenus")]
@@ -237,6 +352,11 @@ namespace M4PL.API.Controllers
             return _command.GetModuleMenus().AsQueryable();
         }
 
+        /// <summary>
+        /// Get all drop down value based upon dropDownDataInfo model
+        /// </summary>
+        /// <param name="dropDownDataInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomQueryable]
         [Route("PagedSelectedFields")]
@@ -246,6 +366,11 @@ namespace M4PL.API.Controllers
             return _command.GetPagedSelectedFieldsByTable(dropDownDataInfo);
         }
 
+        /// <summary>
+        /// Get program Descendants based upon dropDownDataInfo model
+        /// </summary>
+        /// <param name="dropDownDataInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomQueryable]
         [Route("GetProgramDescendants")]
@@ -255,6 +380,11 @@ namespace M4PL.API.Controllers
             return _command.GetProgramDescendants(dropDownDataInfo);
         }
 
+        /// <summary>
+        /// Get all user securites and sub securites by active user model
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomQueryable]
         [Route("UserSecurities")]
@@ -265,7 +395,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// GetUserSecurities
+        /// Get all user securites and sub securites for mobile application 
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -278,7 +408,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// GetUserSecurities
+        /// Get the permission of job
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -289,6 +419,12 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = Common.GetActiveUser();
             return _command.GetJobPermissions(_command.ActiveUser, GetTables(true).ToList());
         }
+
+        /// <summary>
+        /// Get ref role securities by active user model
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomQueryable]
         [Route("RefRoleSecurities")]
@@ -298,6 +434,11 @@ namespace M4PL.API.Controllers
             return _command.GetRefRoleSecurities(activeUser).AsQueryable();
         }
 
+        /// <summary>
+        /// Inser or update column of specific grid by userColumnSettings model
+        /// </summary>
+        /// <param name="userColumnSettings"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomQueryable]
         [Route("InsAndUpdChooseColumn")]
@@ -307,6 +448,10 @@ namespace M4PL.API.Controllers
             return _command.InsAndUpdChooseColumn(userColumnSettings);
         }
 
+        /// <summary>
+        /// Save the byte document into data base
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("SaveBytes")]
         public int SaveBytes()
@@ -333,6 +478,11 @@ namespace M4PL.API.Controllers
             return 0;
         }
 
+        /// <summary>
+        /// Get the look up refrerence by entity
+        /// </summary>
+        /// <param name="entitiesAlias">Pass valid entity to get look up reference details</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("RefLookup")]
@@ -342,6 +492,12 @@ namespace M4PL.API.Controllers
             return _command.GetRefLookup(entitiesAlias).AsQueryable();
         }
 
+        /// <summary>
+        /// Checking record are changed or not to show the confirmatipn to the end user
+        /// </summary>
+        /// <param name="allRecordIds">pass the ids details in comma separated to fetch the details of unsaved record</param>
+        /// <param name="entity">pass the valid entity get details of unsaved record</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("CheckRecordUsed")]
         public bool CheckRecordUsed(string allRecordIds, EntitiesAlias entity)
@@ -350,6 +506,11 @@ namespace M4PL.API.Controllers
             return _command.CheckRecordUsed(allRecordIds, entity);
         }
 
+        /// <summary>
+        /// Get Byte array id and entity my byteArray model
+        /// </summary>
+        /// <param name="byteArray"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ByteArrayByIdAndEntity")]
         public ByteArray GetByteArrayByIdAndEntity(ByteArray byteArray)
@@ -358,6 +519,12 @@ namespace M4PL.API.Controllers
             return _command.GetByteArrayByIdAndEntity(byteArray);
         }
 
+        /// <summary>
+        /// Inser/Update Prefered Locations by location separeted with comma string and contact type id eg 62(employee)
+        /// </summary>
+        /// <param name="locations">location separeted with comma string</param>
+        /// <param name="contTypeId">Contact type of employee (62)</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("AddorEditPreferedLocations")]
         public IList<PreferredLocation> AddorEditPreferedLocations(string locations, int contTypeId)
@@ -365,7 +532,11 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.AddorEditPreferedLocations(locations, contTypeId);
         }
-
+        /// <summary>
+        /// Get all Prefered Locations by contact type id
+        /// </summary>
+        /// <param name="contTypeId">Pass the contact type to get all Prefered locations</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetPreferedLocations")]
         public IList<PreferredLocation> GetPreferedLocations(int contTypeId)
@@ -374,6 +545,10 @@ namespace M4PL.API.Controllers
             return _command.GetPreferedLocations(contTypeId);
         }
 
+        /// <summary>
+        /// Get all user contact type
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetUserContactType")]
         public int GetUserContactType()
@@ -382,6 +557,11 @@ namespace M4PL.API.Controllers
             return _command.GetUserContactType();
         }
 
+        /// <summary>
+        /// Get all contact by record id
+        /// </summary>
+        /// <param name="recordId"> Passing record id to get all contact</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("ContactById")]
         public Entities.Contact.Contact GetContactById(long recordId)
@@ -390,6 +570,11 @@ namespace M4PL.API.Controllers
             return _command.GetContactById(recordId);
         }
 
+        /// <summary>
+        /// Get all contact type by comany id 
+        /// </summary>
+        /// <param name="companyId">passing a valid company id to get all contact details by valid company id </param>
+        /// <returns>List of contact</returns>
         [HttpGet]
         [Route("ContactAddressByCompany")]
         public Entities.Contact.Contact GetContactAddressByCompany(long companyId)
@@ -398,6 +583,11 @@ namespace M4PL.API.Controllers
             return _command.GetContactAddressByCompany(companyId);
         }
 
+        /// <summary>
+        /// Insert/update contact card by contact model
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <returns>List of contact</returns>
         [HttpPost]
         [CustomQueryable]
         [Route("ContactCardAddOrEdit")]
@@ -407,6 +597,11 @@ namespace M4PL.API.Controllers
             return _command.ContactCardAddOrEdit(contact);
         }
 
+        /// <summary>
+        /// Get last item number by pagedDataInfo model
+        /// </summary>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("LastItemNumber")]
         public int GetLastItemNumber(PagedDataInfo pagedDataInfo)
@@ -414,7 +609,11 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetLastItemNumber(pagedDataInfo);
         }
-
+        /// <summary>
+        /// Get reset item number by pagedDataInfo model
+        /// </summary>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ResetItemNumber")]
         public bool ResetItemNumber(PagedDataInfo pagedDataInfo)
@@ -423,6 +622,12 @@ namespace M4PL.API.Controllers
             return _command.ResetItemNumber(pagedDataInfo);
         }
 
+        /// <summary>
+        /// Get Customer,program,project,phase tree by customer id and their parent id
+        /// </summary>
+        /// <param name="custId">pass valid customer id</param>
+        /// <param name="parentId">pass valid parent id</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("CustPPPTree")]
         public virtual IQueryable<TreeListModel> GetCustPPPTree(long? custId, long? parentId)
@@ -430,7 +635,11 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetCustPPPTree(ActiveUser, ActiveUser.OrganizationId, custId, parentId).AsQueryable(); ;
         }
-
+        /// <summary>
+        /// Update the line number for job cost sheet by valid job id
+        /// </summary>
+        /// <param name="jobId">passing a valid job id</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("UpdateLineNumberForJobCostSheet")]
         public virtual bool UpdateLineNumberForJobCostSheet(long? jobId)
@@ -438,7 +647,11 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.UpdateLineNumberForJobCostSheet(ActiveUser, ActiveUser.OrganizationId, jobId); ;
         }
-
+        /// <summary>
+        /// Update the line number for job Billable sheet by valid job id
+        /// </summary>
+        /// <param name="jobId">passing a valid job id</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("UpdateLineNumberForJobBillableSheet")]
         public virtual bool UpdateLineNumberForJobBillableSheet(long? jobId)
@@ -446,7 +659,11 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.UpdateLineNumberForJobBillableSheet(ActiveUser, ActiveUser.OrganizationId, jobId); ;
         }
-
+        /// <summary>
+        /// Get any error log details in system by errorLog model
+        /// </summary>
+        /// <param name="errorLog"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomQueryable]
         [Route("ErrorLog")]
@@ -456,6 +673,11 @@ namespace M4PL.API.Controllers
             return _command.GetOrInsErrorLog(errorLog);
         }
 
+        /// <summary>
+        /// Get all table associations by pagedDataInfo model
+        /// </summary>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomQueryable]
         [Route("TableAssociations")]
@@ -465,6 +687,11 @@ namespace M4PL.API.Controllers
             return _command.GetTableAssociations(pagedDataInfo).AsQueryable();
         }
 
+        /// <summary>
+        /// Get user dash board by main module id
+        /// </summary>
+        /// <param name="mainModuleId">Pass a valid main module id to get user dash board</param>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("UserDashboards")]
@@ -474,6 +701,11 @@ namespace M4PL.API.Controllers
             return _command.GetUserDashboards(mainModuleId).AsQueryable();
         }
 
+        /// <summary>
+        /// Get Next breakdown structure for ribbon by true/false parameter
+        /// </summary>
+        /// <param name="ribbon">pass boolean parameter</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("NextBreakDownStructure")]
         public string GetNextBreakDownStructure(bool ribbon)
@@ -481,7 +713,11 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetNextBreakDownStructure(ribbon);
         }
-
+        /// <summary>
+        /// Get job is completed or not by job id
+        /// </summary>
+        /// <param name="jobId">passing the valid job id to confirmed job is competed or not</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("JobIsCompleted")]
         public bool GetJobIsCompleted(long jobId)
@@ -489,7 +725,11 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetJobIsCompleted(jobId);
         }
-
+        /// <summary>
+        /// Get Organization reference role by a id 
+        /// </summary>
+        /// <param name="id">pasing valid id parameter to get all ref role data in organization</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
         public Entities.Organization.OrgRefRole GetOrgRefRole(long id)
@@ -498,6 +738,10 @@ namespace M4PL.API.Controllers
             return _command.GetOrgRefRole(id);
         }
 
+        /// <summary>
+        /// Get all Organization Role Details 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [CustomQueryable]
         [Route("OrganizationRoleDetail")]
@@ -507,6 +751,10 @@ namespace M4PL.API.Controllers
             return _command.GetOrganizationRoleDetails().AsQueryable();
         }
 
+        /// <summary>
+        /// Update User System Settings details by SysSetting
+        /// </summary>
+        /// <param name="userSystemSettings"></param>
         [HttpPost]
         [Route("UserSystemSettings")]
         public void UpdateUserSystemSettings(SysSetting userSystemSettings)
@@ -515,6 +763,11 @@ namespace M4PL.API.Controllers
             _command.UpdateUserSystemSettings(userSystemSettings);
         }
 
+        /// <summary>
+        /// Get all delete info modules by PagedDataInfo model
+        /// </summary>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomQueryable]
         [Route("GetDeleteInfoModules")]
@@ -524,6 +777,11 @@ namespace M4PL.API.Controllers
             return _command.GetDeleteInfoModules(pagedDataInfo).AsQueryable();
         }
 
+        /// <summary>
+        /// Get all delete info records by PagedDataInfo model
+        /// </summary>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         [CustomQueryable]
         [Route("GetDeleteInfoRecords")]
@@ -533,6 +791,10 @@ namespace M4PL.API.Controllers
             return _command.GetDeleteInfoRecords(pagedDataInfo);
         }
 
+        /// <summary>
+        /// Remove Delete Info Records by PagedDataInfo model
+        /// </summary>
+        /// <param name="pagedDataInfo"></param>
         [HttpPost]
         [Route("RemoveDeleteInfoRecords")]
         public void RemoveDeleteInfoRecords(PagedDataInfo pagedDataInfo)
@@ -541,6 +803,12 @@ namespace M4PL.API.Controllers
             _command.RemoveDeleteInfoRecords(pagedDataInfo);
         }
 
+        /// <summary>
+        /// Get Dashboard Access by table name and dashboard id
+        /// </summary>
+        /// <param name="tableName">Passing a valid table name</param>
+        /// <param name="dashboardId">Passing a valid dashboard id</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetDashboardAccess")]
         public UserSecurity GetDashboardAccess(string tableName, long dashboardId)
@@ -549,6 +817,13 @@ namespace M4PL.API.Controllers
             return _command.GetDashboardAccess(tableName, dashboardId);
         }
 
+        /// <summary>
+        /// Get Maximum and Minimum Record id By Entity to get next and previous record
+        /// </summary>
+        /// <param name="entity">Passing a valid entity</param>
+        /// <param name="RecordID">Passing a valid Record</param>  
+        /// <param name="ID">Passing a valid id</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetMaxMinRecordsByEntity")]
         public CommonIds GetMaxMinRecordsByEntity(string entity, long RecordID, long ID)
@@ -557,6 +832,11 @@ namespace M4PL.API.Controllers
             return _command.GetMaxMinRecordsByEntity(entity, RecordID, ActiveUser.OrganizationId, ID);
         }
 
+        /// <summary>
+        /// Get gateway type by a valid job gateway id
+        /// </summary>
+        /// <param name="jobGatewayateId">Passing a valid jobGatewayateId</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetGatewayTypeByJobID")]
         public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
@@ -565,6 +845,11 @@ namespace M4PL.API.Controllers
             return _command.GetGatewayTypeByJobID(jobGatewayateId);
         }
 
+        /// <summary>
+        /// Get Company Corporate Address by company id 
+        /// </summary>
+        /// <param name="compId">passing a valid company id to get details</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetCompCorpAddress")]
         public CompanyCorpAddress GetCompCorpAddress(int compId)
@@ -573,6 +858,13 @@ namespace M4PL.API.Controllers
             return _command.GetCompCorpAddress(compId);
         }
 
+        /// <summary>
+        /// Get all job action by job id 
+        /// </summary>
+        /// <param name="jobId">Passing a valid job id</param>
+        /// <param name="entity">Optional entity parameter</param>
+        /// <param name="isScheduleAciton">Optional parameter passing is schedule or not</param>
+        /// <returns></returns>
         [CustomAuthorize]
         [HttpGet]
         [Route("JobAction")]
@@ -598,6 +890,11 @@ namespace M4PL.API.Controllers
             return _command.GetJobGateway(jobId, jobIds, IsMultiJob).AsQueryable();
         }
 
+        /// <summary>
+        /// Inser the error log record to database by M4PLException model
+        /// </summary>
+        /// <param name="m4plException"></param>
+        /// <returns></returns>
         [CustomAuthorize]
         [HttpPost]
         [Route("InsertErrorLog")]

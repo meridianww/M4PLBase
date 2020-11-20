@@ -29,6 +29,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller from Attachments
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/Attachments")]
     public class AttachmentsController : ApiController
@@ -48,9 +51,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
         /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <param name="pagedDataInfo"> </param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -79,7 +80,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Post method is used to add a new single record for new attachment object passed as parameter.
         /// </summary>
-        /// <param name="attachment">Refers to attachment object to add.</param>
+        /// <param name="attachment"></param>
         /// <returns>Returns response as object newly added.</returns>
         [HttpPost]
         public virtual Attachment Post(Attachment attachment)
@@ -91,7 +92,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Put method is used to update record values completely based on attachment object passed.
         /// </summary>
-        /// <param name="attachment">Refers to attachment object to update.</param>
+        /// <param name="attachment"></param>
         /// <returns>Returns updated single object.</returns>
         [HttpPut]
         public virtual Attachment Put(Attachment attachment)
@@ -129,7 +130,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Patch method is used to update partially or completely record values based on attachment object passed.
         /// </summary>
-        /// <param name="attachment">Refers object to update.</param>
+        /// <param name="attachment"></param>
         /// <returns>Returns response as updated single object.</returns>
         [HttpPatch]
         public virtual Attachment Patch(Attachment attachment)
@@ -137,6 +138,15 @@ namespace M4PL.API.Controllers
             _attachmentCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _attachmentCommands.Patch(attachment);
         }
+
+        /// <summary>
+        /// Delete method to get update/deleted attchment count details
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="statusId"></param>
+        /// <param name="parentTable"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("DeleteAndUpdateAttachmentCount")]
         public virtual IList<IdRefLangName> DeleteAndUpdateAttachmentCount(string ids, int statusId, string parentTable, string fieldName)
@@ -245,7 +255,11 @@ namespace M4PL.API.Controllers
         #endregion
 
         #region API's to Check the Different Job Document Existence
-
+        /// <summary>
+        /// Get method for price code data is available in job or not
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("IsPriceCodeDataPresentForJob")]
         public Entities.Document.DocumentStatus IsPriceCodeDataPresentForJob(string jobId)
@@ -254,6 +268,11 @@ namespace M4PL.API.Controllers
             return _attachmentCommands.IsPriceCodeDataPresentForJob(selectedJobId);
         }
 
+        /// <summary>
+        /// Get method for cost code data is available in job or not by job id
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("IsCostCodeDataPresentForJob")]
         public Entities.Document.DocumentStatus IsCostCodeDataPresentForJob(string jobId)
@@ -261,7 +280,11 @@ namespace M4PL.API.Controllers
             List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
             return _attachmentCommands.IsCostCodeDataPresentForJob(selectedJobId);
         }
-
+        /// <summary>
+        /// Get method for job history data is available in job or not by job id
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("IsHistoryPresentForJob")]
         public Entities.Document.DocumentStatus IsHistoryPresentForJob(string jobId)
@@ -270,6 +293,11 @@ namespace M4PL.API.Controllers
             return _attachmentCommands.IsHistoryPresentForJob(selectedJobId);
         }
 
+        /// <summary>
+        /// Get method for job document status in job by job id
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetDocumentStatusByJobId")]
         public Entities.Document.DocumentStatus GetDocumentStatusByJobId(string jobId)

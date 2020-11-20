@@ -44,6 +44,9 @@ using ApiSecurity = Orbit.WebApi.Core.Security;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for Account
+    /// </summary>
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -169,7 +172,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Posts the specified login.
         /// </summary>
-        /// <param name="loginModel">The login.</param>
+        /// <param name="loginModel"></param>
         /// <returns></returns>
         [AllowAnonymous]
         public async Task<HttpResponseMessage> Post(Login loginModel)
@@ -228,7 +231,11 @@ namespace M4PL.API.Controllers
         //    return Ok();
         //}
 
-        // POST api/Account/RegisterExternal
+        /// <summary>
+        /// Regostraion done from exteranal resources
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("RegisterExternal")]
         public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
@@ -290,7 +297,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Posts the specified login.
         /// </summary>
-        /// <param name="login">The login.</param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
@@ -434,6 +441,10 @@ namespace M4PL.API.Controllers
             return _command.ActiveUser;
         }
 
+        /// <summary>
+        /// Log out from the application(clean the existing session value)
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("Logout")]
         [AllowAnonymous]
@@ -444,6 +455,11 @@ namespace M4PL.API.Controllers
             return AuthenticationCommands.SetTokenExpires();
         }
 
+        /// <summary>
+        /// Switch to diffrent Organization
+        /// </summary>
+        /// <param name="loginModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SwitchOrganization")]
         [AllowAnonymous]

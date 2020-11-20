@@ -22,8 +22,14 @@ using M4PL.Entities.Support;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// AuthService for authentication
+	/// </summary>
 	public class AuthService
-	{
+	{/// <summary>
+	/// Get Current user details
+	/// </summary>
+	/// <returns></returns>
 		internal ActiveUser GetCurrentUser()
 		{
 			return new ActiveUser { UserId = ApiContext.UserId };

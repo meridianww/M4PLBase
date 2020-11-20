@@ -66,7 +66,9 @@ namespace M4PL.Entities.Support
 		/// The  contact identifier.
 		/// </value>
 		public long ContactId { get; set; }
-
+		/// <summary>
+		/// Gets or sets the contact type id.
+		/// </summary>
 		public int ConTypeId { get; set; }
 
 		/// <summary>
@@ -158,20 +160,15 @@ namespace M4PL.Entities.Support
 		public DateTime LastAccessDateTime { get; set; }
 
 		/// <summary>
-		///  Gets or sets the SysSetting
-		/// </summary>
-		/// <value>
-		/// The SysSetting.
-		/// </value>
-
-		/// <summary>
 		/// Gets or sets the role of the user.
 		/// </summary>
 		/// <value>
 		/// The Roles.
 		/// </value>
 		public IList<Role> Roles { get; set; }
-
+		/// <summary>
+		/// Gets or sets the System Message.
+		/// </summary>
 		public string SystemMessage { get; set; }
 
 		/// <summary>

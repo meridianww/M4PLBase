@@ -28,6 +28,9 @@ using M4PL.API.Filters;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for ColumnAliases entity
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/ColumnAliases")]
 	public class ColumnAliasesController : ApiController
@@ -47,9 +50,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
         /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -78,7 +79,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Post method is used to add a new single record for new columnAlias object passed as parameter.
         /// </summary>
-        /// <param name="columnAlias">Refers to columnAlias object to add.</param>
+        /// <param name="columnAlias"></param>
         /// <returns>Returns response as object newly added.</returns>
         [HttpPost]
         public virtual ColumnAlias Post(ColumnAlias columnAlias)
@@ -90,7 +91,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Put method is used to update record values completely based on columnAlias object passed.
         /// </summary>
-        /// <param name="columnAlias">Refers to columnAlias object to update.</param>
+        /// <param name="columnAlias"></param>
         /// <returns>Returns updated single object.</returns>
         [HttpPut]
         public virtual ColumnAlias Put(ColumnAlias columnAlias)
@@ -128,7 +129,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Patch method is used to update partially or completely record values based on columnAlias object passed.
         /// </summary>
-        /// <param name="columnAlias">Refers object to update.</param>
+        /// <param name="columnAlias"></param>
         /// <returns>Returns response as updated single object.</returns>
         [HttpPatch]
         public virtual ColumnAlias Patch(ColumnAlias columnAlias)

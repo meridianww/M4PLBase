@@ -70,9 +70,14 @@ namespace M4PL.Entities.Support
         /// </value>
         public long OrganizationId { get; set; }
 
-
+        /// <summary>
+        /// Gets or sets a value indicating Job Id from link
+        /// </summary>
         public long JobId { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating Tab  to which place redirection from external link
+        /// </summary>
         public string TabName { get; set; }
     }
 }

@@ -27,6 +27,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller of application Dashboard
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/AppDashboards")]
 	public class AppDashboardsController : ApiController
@@ -46,9 +49,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
         /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <param name="pagedDataInfo"> /// </param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -77,7 +78,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Post method is used to add a new single record for new appDashboard object passed as parameter.
         /// </summary>
-        /// <param name="appDashboard">Refers to appDashboard object to add.</param>
+        /// <param name="appDashboard"></param>
         /// <returns>Returns response as object newly added.</returns>
         [HttpPost]
         public virtual AppDashboard Post(AppDashboard appDashboard)
@@ -89,7 +90,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Put method is used to update record values completely based on appDashboard object passed.
         /// </summary>
-        /// <param name="appDashboard">Refers to appDashboard object to update.</param>
+        /// <param name="appDashboard"></param>
         /// <returns>Returns updated single object.</returns>
         [HttpPut]
         public virtual AppDashboard Put(AppDashboard appDashboard)
@@ -127,7 +128,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Patch method is used to update partially or completely record values based on appDashboard object passed.
         /// </summary>
-        /// <param name="appDashboard">Refers object to update.</param>
+        /// <param name="appDashboard"></param>
         /// <returns>Returns response as updated single object.</returns>
         [HttpPatch]
         public virtual AppDashboard Patch(AppDashboard appDashboard)

@@ -194,6 +194,12 @@ namespace M4PL.Entities.Contact
 		/// </value>
 
 		public int? ConBusinessStateId { get; set; }
+		/// <summary>
+		/// Gets or sets the contact's buiness state province id name
+		/// </summary>
+		/// <value>
+		/// The ConBusinessStateIdName.
+		/// </value>
 		public string ConBusinessStateIdName { get; set; }
 
 		/// <summary>
@@ -213,6 +219,12 @@ namespace M4PL.Entities.Contact
 		/// </value>
 
 		public int? ConBusinessCountryId { get; set; }
+		/// <summary>
+		/// Gets or sets the contact's buiness country province id name
+		/// </summary>
+		/// <value>
+		/// The ConBusinessCountryIdName.
+		/// </value>
 		public string ConBusinessCountryIdName { get; set; }
 
 		/// <summary>
@@ -250,6 +262,12 @@ namespace M4PL.Entities.Contact
 		/// </value>
 
 		public int? ConHomeStateId { get; set; }
+		/// <summary>
+		/// Gets or sets the contact's home state id name
+		/// </summary>
+		/// <value>
+		/// The ConHomeStateIdName.
+		/// </value>
 		public string ConHomeStateIdName { get; set; }
 
 		/// <summary>
@@ -341,8 +359,20 @@ namespace M4PL.Entities.Contact
 
 		public string ConOutlookId { get; set; }
 
+		/// <summary>
+		/// Gets or sets the Business Address
+		/// </summary>
+		/// <value>
+		/// The BusinessAddress.
+		/// </value>
 		public string BusinessAddress { get; set; }
 
+		/// <summary>
+		/// Gets or sets the ConUDF01
+		/// </summary>
+		/// <value>
+		/// The ConUDF01.
+		/// </value>
 		public int? ConUDF01 { get; set; }
 
 		/// <summary>
@@ -359,7 +389,9 @@ namespace M4PL.Entities.Contact
 		/// Gets Or Sets CompanyType
 		/// </summary>
 		public string CompanyType { get; set; }
-
+		/// <summary>
+		/// Get or Set Job Site code
+		/// </summary>
 		public string JobSiteCode { get; set; }
 	}
 }

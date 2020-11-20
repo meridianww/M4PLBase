@@ -18,14 +18,38 @@
 //==========================================================================================================
 namespace M4PL.Entities.Support
 {
+    /// <summary>
+    /// Model for Unique Validation
+    /// </summary>
     public class UniqueValidation
     {
+        /// <summary>
+        /// Get or Set Entity by EntitiesAlias enum
+        /// </summary>
         public EntitiesAlias Entity { get; set; }
+        /// <summary>
+        /// Get or Set for Record Id
+        /// </summary>
         public long RecordId { get; set; }
+        /// <summary>
+        /// Get or Set for Field Name
+        /// </summary>
         public string FieldName { get; set; }
+        /// <summary>
+        /// Get or Set For Field Value
+        /// </summary>
         public string FieldValue { get; set; }
+        /// <summary>
+        /// Get or Set For Parent Filter
+        /// </summary>
         public string ParentFilter { get; set; }
+        /// <summary>
+        /// Get or Set For Parent Id
+        /// </summary>
         public long? ParentId { get; set; }
+        /// <summary>
+        /// Get or Set For is validate or not
+        /// </summary>
         public bool isValidate { get; set; }
     }
 }

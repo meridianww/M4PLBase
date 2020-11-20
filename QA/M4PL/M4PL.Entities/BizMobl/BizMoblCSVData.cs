@@ -15,10 +15,18 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.BizMobl
 {
+	/// <summary>
+	/// Model class for Biz Mobile CSV Data
+	/// </summary>
 	public class BizMoblCSVData
 	{
+		/// <summary>
+		/// Get or Set File content in CSV file
+		/// </summary>
 		public byte[] FileContent { get; set; }
-
+		/// <summary>
+		/// Get or Set Biz Mobile Device Id
+		/// </summary>
 		public string DeviceId { get; set; }
 	}
 }
