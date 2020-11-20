@@ -16,6 +16,9 @@ using M4PL.Entities.Finance.PurchaseOrder;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// Controller for NAV Vendor Ledger
+	/// </summary>
 	[CustomAuthorize]
 	[RoutePrefix("api/NavVendorLedger")]
 	public class NavVendorLedgerController : ApiController
@@ -29,7 +32,11 @@ namespace M4PL.API.Controllers
 		{
 			_navVendorLedgerCommands = navVendorLedgerCommands;
 		}
-
+		/// <summary>
+		/// Gets a list of Posted Invoice's for the supplied Check Number
+		/// </summary>
+		/// <param name="checkNumber">Check Number</param>
+		/// <returns></returns>
 		[HttpGet]
 		[Route("GetPostedInvoicesByCheckNumber")]
 		public virtual List<CheckPostedInvoice> GetPostedInvoicesByCheckNumber(string checkNumber)

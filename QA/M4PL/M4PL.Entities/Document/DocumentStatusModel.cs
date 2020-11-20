@@ -15,10 +15,22 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Document
 {
+	/// <summary>
+	/// Model class for Response of NAV Posted Invoices
+	/// </summary>
 	public class DocumentStatusModel
 	{
+		/// <summary>
+		/// Gets or Sets flag if the Response is Success
+		/// </summary>
 		public bool IsSuccess { get; set; }
+		/// <summary>
+		/// Gets or Sets Additional Message
+		/// </summary>
 		public string AdditionalMessage { get; set; }
+		/// <summary>
+		/// Gets or Sets Invoice Document Data from NAV
+		/// </summary>
 		public DocumentData DocumentData { get; set; }
 	}
 }

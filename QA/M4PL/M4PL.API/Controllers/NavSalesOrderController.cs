@@ -39,12 +39,8 @@ namespace M4PL.API.Controllers
 			_navSalesOrderCommands = navSalesOrderCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -131,6 +127,11 @@ namespace M4PL.API.Controllers
             _navSalesOrderCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navSalesOrderCommands.Patch(navSalesOrder);
         }
+        /// <summary>
+        /// Create NAV Order From M4PL Jobs
+        /// </summary>
+        /// <param name="jobIdList">List of M4PL Job Id</param>
+        /// <returns></returns>
         [CustomAuthorize]
 		[HttpPost]
 		[Route("GenerateSalesOrder")]
@@ -139,7 +140,11 @@ namespace M4PL.API.Controllers
             _navSalesOrderCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navSalesOrderCommands.CreateOrderInNAVFromM4PLJob(jobIdList);
 		}
-
+        /// <summary>
+        /// Update Sales Order in NAV From M4PL Job
+        /// </summary>
+        /// <param name="jobIdList">List of M4PL Job ID</param>
+        /// <returns></returns>
 		[CustomAuthorize]
 		[HttpPut]
 		[Route("UpdateSalesOrder")]
@@ -148,7 +153,11 @@ namespace M4PL.API.Controllers
             _navSalesOrderCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navSalesOrderCommands.CreateOrderInNAVFromM4PLJob(jobIdList);
 		}
-
+        /// <summary>
+        /// Create Single NAV Order From M4PL Job
+        /// </summary>
+        /// <param name="jobId">M4PL Job Id</param>
+        /// <returns></returns>
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("GenerateOrdersInNav")]

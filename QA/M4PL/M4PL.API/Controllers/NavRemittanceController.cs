@@ -20,6 +20,9 @@ using M4PL.Business.Finance.Remittance;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// Controller for NAV Remittance
+	/// </summary>
 	[CustomAuthorize]
 	[RoutePrefix("api/NavRemittance")]
 	public class NavRemittanceController : ApiController
@@ -34,7 +37,11 @@ namespace M4PL.API.Controllers
 		{
 			_navRemittanceCommands = navRemittanceCommands;
 		}
-
+		/// <summary>
+		/// Gets Posted Invoices from NAV by supplied Check Number
+		/// </summary>
+		/// <param name="checkNumber">NAV Check Number</param>
+		/// <returns></returns>
 		[HttpGet]
 		[Route("GetPostedInvoicesByCheckNumber")]
 		public DocumentStatusModel GetPostedInvoiceByCheckNumber(string checkNumber)
