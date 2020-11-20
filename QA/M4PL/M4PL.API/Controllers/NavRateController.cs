@@ -18,6 +18,9 @@ using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// Controller for Nav Rate
+	/// </summary>
 	[CustomAuthorize]
 	[RoutePrefix("api/NavRate")]
 	public class NavRateController : ApiController
@@ -32,7 +35,11 @@ namespace M4PL.API.Controllers
 		{
 			_navRateCommands = navRateCommands;
 		}
-
+		/// <summary>
+		/// Generates Program's Price Cost Code
+		/// </summary>
+		/// <param name="navRateList"></param>
+		/// <returns></returns>
 		[HttpPost]
 		[Route("GenerateProgramPriceCostCode"), ResponseType(typeof(StatusModel))]
 		public StatusModel GenerateProgramPriceCostCode(List<Entities.Finance.Customer.NavRate> navRateList)

@@ -38,12 +38,8 @@ namespace M4PL.API.Controllers
 			_navCostCodeCommands = navCostCodeCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -130,6 +126,10 @@ namespace M4PL.API.Controllers
             _navCostCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navCostCodeCommands.Patch(navCostCode);
         }
+        /// <summary>
+        /// Gets list of all Cost Codes from NAV
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
 		[Route("GetAllCostCode")]
 		public virtual IList<NavCostCode> GetAllCostCode()
@@ -137,6 +137,11 @@ namespace M4PL.API.Controllers
 			_navCostCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navCostCodeCommands.GetAllCostCode();
 		}
+        /// <summary>
+        /// Gets Document for Cost Code from NAV for Supplied JobId
+        /// </summary>
+        /// <param name="jobId">JobId</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetCostCodeReportByJobId")]
         public virtual Entities.Document.DocumentData GetCostCodeReportByJobId( string jobId)
@@ -144,6 +149,11 @@ namespace M4PL.API.Controllers
             _navCostCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navCostCodeCommands.GetCostCodeReportByJobId(jobId);
         }
+        /// <summary>
+        /// Checks if Cost Code Data available in NAV for a supplied JobId
+        /// </summary>
+        /// <param name="jobId">JobId</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("IsCostCodeDataPresentForJobInNAV")]
         public virtual Entities.Document.DocumentStatus IsCostCodeDataPresentForJobInNAV(string jobId)
