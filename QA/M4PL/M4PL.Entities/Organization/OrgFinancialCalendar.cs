@@ -26,7 +26,13 @@ namespace M4PL.Entities.Organization
 	/// </summary>
 	public class OrgFinancialCalendar : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Org ID
+		/// </summary>
 		public long? OrgID { get; set; }
+		/// <summary>
+		/// Gets or Sets Org Identifier's Name
+		/// </summary>
 		public string OrgIDName { get; set; }
 
 		public int? FclPeriod { get; set; }

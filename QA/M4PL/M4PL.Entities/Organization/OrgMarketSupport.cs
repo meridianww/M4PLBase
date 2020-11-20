@@ -22,20 +22,32 @@ namespace M4PL.Entities.Organization
 	public class OrgMarketSupport : BaseModel
 	{
 		/// <summary>
-		///
+		/// Gets or Sets Organization Identifier
 		/// </summary>
 		public long? OrgID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Organization Identifier's Name
+		/// </summary>
 		public string OrgIDName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Sorting Order
+		/// </summary>
 		public int? MrkOrder { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Market Code
+		/// </summary>
 		public string MrkCode { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Title
+		/// </summary>
 		public string MrkTitle { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Description
+		/// </summary>
 		public byte[] MrkDescription { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Instructions
+		/// </summary>
 		public byte[] MrkInstructions { get; set; }
 	}
 }
