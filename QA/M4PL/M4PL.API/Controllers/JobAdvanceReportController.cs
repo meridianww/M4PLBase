@@ -48,12 +48,8 @@ namespace M4PL.API.Controllers
 			_jobAdvanceReportCommands = jobAdvanceReportCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -143,6 +139,9 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Get the job advance report filter, based upon customerId and jobAdvanceReport and if customerId is 0 return all result by jobAdvanceReport
         /// </summary>
+        /// <param name="customerId">Customer Id</param>
+        /// <param name="entity">Entity Name</param>
+        /// <returns>List of Job Advance Report Filters</returns>
         [CustomAuthorize]
 		[HttpGet]
         [Route("AdvanceReport"), ResponseType(typeof(IList<JobAdvanceReportFilter>))]
@@ -165,7 +164,11 @@ namespace M4PL.API.Controllers
             _jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobAdvanceReportCommands.GenerateScrubDriverDetails(Models.ApiContext.ActiveUser, scriberDriverView);
         }
-
+        /// <summary>
+        /// Generates Projected Capacity Details
+        /// </summary>
+        /// <param name="projectedCapacityView"></param>
+        /// <returns></returns>
         [CustomAuthorize]
         [HttpPost]
         [Route("GenerateProjectedCapacityDetails"), ResponseType(typeof(StatusModel))]
