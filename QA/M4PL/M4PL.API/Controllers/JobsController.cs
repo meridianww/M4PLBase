@@ -32,6 +32,9 @@ using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for Job/Orders
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/Jobs")]
     public class JobsController : ApiController
@@ -48,12 +51,8 @@ namespace M4PL.API.Controllers
             _jobCommands = jobCommands;
         }
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"> </param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -257,7 +256,11 @@ namespace M4PL.API.Controllers
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.PutJobDestination(jobDestination);
         }
-
+        /// <summary>
+        /// Updated Job 2nd POC details
+        /// </summary>
+        /// <param name="job2ndPoc"></param>
+        /// <returns>Updated record of Job 2nd POC details</returns>
         [CustomAuthorize]
         [HttpPut]
         [Route("Job2ndPoc")]
@@ -266,7 +269,11 @@ namespace M4PL.API.Controllers
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.PutJob2ndPoc(job2ndPoc);
         }
-
+        /// <summary>
+        /// Updates Job Seller details
+        /// </summary>
+        /// <param name="jobSeller"></param>
+        /// <returns></returns>
         [CustomAuthorize]
         [HttpPut]
         [Route("JobSeller")]
@@ -275,7 +282,11 @@ namespace M4PL.API.Controllers
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.PutJobSeller(jobSeller);
         }
-
+        /// <summary>
+        /// Updates Job Map Route
+        /// </summary>
+        /// <param name="jobMapRoute"></param>
+        /// <returns></returns>
         [CustomAuthorize]
         [HttpPut]
         [Route("JobMapRoute")]
@@ -499,12 +510,12 @@ namespace M4PL.API.Controllers
             return _jobCommands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail);
 		}
 
-		/// <summary>
-		/// Cancel a Existing Order From Meridian System
-		/// </summary>
-		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
-		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
-		[HttpPost]
+        /// <summary>
+        /// Cancel a Existing Order From Meridian System
+        /// </summary>
+        /// <param name="cancelJob"></param>
+        /// <returns>Status Model which contsins Status result of current operation</returns>
+        [HttpPost]
 		[Route("CancelOrder"), ResponseType(typeof(StatusModel))]
 		public StatusModel CancelOrder(CancelOrder cancelJob)
 		{
@@ -513,10 +524,10 @@ namespace M4PL.API.Controllers
 		}
 
         /// <summary>
-        /// Uncancel an existing Order from Meridian System
+        /// Revokes cancellation of current cancelled order
         /// </summary>
-        /// <param name="orderNumber"></param>
-        /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+        /// <param name="unCancelOrder"></param>
+        /// <returns>Status Model which contsins Status result of current operation</returns>
         [HttpPost]
         [Route("UnCancelOrder"), ResponseType(typeof(StatusModel))]
         public StatusModel UnCancelOrder(UnCancelOrder unCancelOrder)
@@ -529,7 +540,7 @@ namespace M4PL.API.Controllers
         /// Reschedule a Existing Order From Meridian System
         /// </summary>
         /// <param name="jobRescheduleDetail">jobRescheduleDetail</param>
-        /// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+        /// <param name="orderNumber">Contract #</param>
         /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
         [HttpPost]
 		[Route("RescheduleOrder"), ResponseType(typeof(StatusModel))]
@@ -541,7 +552,7 @@ namespace M4PL.API.Controllers
 		}
 
         /// <summary>
-		/// Reschedule a Existing Order From Meridian System
+		/// Adds a Driver Contact 
 		/// </summary>
 		/// <param name="driverContact">driverContact</param>
 		/// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
@@ -556,7 +567,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Return the location cordinates for a Order from Meridian System
         /// </summary>
-        /// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+        /// <param name="orderNumber">Contract #</param>
         /// <returns>API returns a Model object which contains the details about success or failure with Latitude and Longitude, in case of failure AdditionalDetail property contains the reson of failure.</returns>
         [HttpGet]
 		[Route("LocationCoordinate"), ResponseType(typeof(OrderLocationCoordinate))]
@@ -570,7 +581,7 @@ namespace M4PL.API.Controllers
 		/// Update the special instructions for a Order in Meridian System
 		/// </summary>
 		/// <param name="jobSpecialInstruction">jobSpecialInstruction contains a string where instructions needs to pass.</param>
-		/// <param name="orderNumber">orderNumber is a unique identifier for a order of type string.</param>
+		/// <param name="orderNumber">Contract #</param>
 		/// <returns>API returns a Model object which contains the details about success or failure with Order Status, in case of failure AdditionalDetail property contains the reson of failure.</returns>
 		[HttpPost]
 		[Route("specialInstruction"), ResponseType(typeof(StatusModel))]
@@ -579,7 +590,10 @@ namespace M4PL.API.Controllers
 			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _jobCommands.InsertOrderSpecialInstruction(jobSpecialInstruction, orderNumber);
 		}
-
+        /// <summary>
+        /// Updates Currently Active User Settings
+        /// </summary>
+        /// <returns></returns>
 		protected SysSetting UpdateActiveUserSettings()
 		{
 			M4PL.Business.Common.CommonCommands.ActiveUser = Models.ApiContext.ActiveUser;

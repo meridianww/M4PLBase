@@ -18,8 +18,14 @@
 //==========================================================================================================
 namespace M4PL.Entities.Job
 {
+	/// <summary>
+	/// Model class for Job POD
+	/// </summary>
 	public class JobPod : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Control Name Prefix as EntityName_POD
+		/// </summary>
 		public string ControlNamePrefix { get; set; }
 	}
 }

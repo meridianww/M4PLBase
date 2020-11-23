@@ -43,13 +43,21 @@ namespace M4PL.Entities.Job
 		/// The JobLongitude.
 		/// </value>
 		public decimal JobMileage { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Delivery Full Address
+		/// </summary>
 		public string DeliveryFullAddress { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Origin Full Address
+		/// </summary>
 		public string OriginFullAddress { get; set; }
-
+		/// <summary>
+		/// Gets or Sets flag if Address Updated
+		/// </summary>
 		public bool isAddressUpdated { get; set; }
-
+		/// <summary>
+		/// Gets or Sets flag if IsOnlyCountryCodeExistsForDeliveryAddress
+		/// </summary>
 		public bool IsOnlyCountryCodeExistsForDeliveryAddress { get; set; }
 	}
 }

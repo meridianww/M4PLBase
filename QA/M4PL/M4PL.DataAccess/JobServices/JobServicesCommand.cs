@@ -19,10 +19,10 @@ namespace M4PL.DataAccess.JobServices
     public class JobServicesCommand
     {
         /// <summary>
-        /// GetSearchOrder
+        /// Gets the job details based on search text
         /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="search"></param>
+        /// <param name="activeUser">User Details</param>
+        /// <param name="search">search text</param>
         /// <returns></returns>
         public static async Task<List<SearchOrder>> GetSearchOrder(string search, ActiveUser activeUser)
         {
@@ -32,10 +32,10 @@ namespace M4PL.DataAccess.JobServices
             return result;
         }
         /// <summary>
-        /// GetOrderDetailsById
+        /// Get Job/Order details by Job Id
         /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="activeUser"></param>
+        /// <param name="Id">Job ID</param>
+        /// <param name="activeUser">User Details</param>
         /// <returns></returns>
         public static async Task<OrderDetails> GetOrderDetailsById(long Id, ActiveUser activeUser)
         {
@@ -60,10 +60,10 @@ namespace M4PL.DataAccess.JobServices
             return orderDetails;
         }
         /// <summary>
-        /// GetDocumentDetailsByJobID
+        /// Gets List of Gateways by supplied Job Id
         /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="activeUser"></param>
+        /// <param name="Id">Job Id</param>
+        /// <param name="activeUser">User Details</param>
         /// <returns></returns>
         public static async Task<List<OrderGatewayDetails>> GetGatewayDetailsByJobID(long Id, ActiveUser activeUser)
         {
@@ -73,10 +73,10 @@ namespace M4PL.DataAccess.JobServices
             return result;
         }
         /// <summary>
-        /// GetDocumentDetailsByJobID
+        /// Gets Order related documents for supplied Job Id
         /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="activeUser"></param>
+        /// <param name="Id">Job Id</param>
+        /// <param name="activeUser">User Details</param>
         /// <returns></returns>
         public static async Task<List<OrderDocumentDetails>> GetDocumentDetailsByJobID(long Id, ActiveUser activeUser)
         {
@@ -86,7 +86,7 @@ namespace M4PL.DataAccess.JobServices
             return result;
         }
         /// <summary>
-        /// InsertComment
+        /// Inserts Job Gateway Comment
         /// </summary>
         /// <param name="jobGatewayComment"></param>
         /// <param name="activeUser"></param>
@@ -120,7 +120,7 @@ namespace M4PL.DataAccess.JobServices
             return result;
         }
         /// <summary>
-        /// UploadDocument
+        /// Uploads Job reference Document
         /// </summary>
         /// <param name="jobDocument"></param>
         /// <param name="activeUser"></param>
@@ -146,10 +146,10 @@ namespace M4PL.DataAccess.JobServices
             return currentId > 0 ? true : false;
         }
         /// <summary>
-        /// GetDocumentAttachmentListDT
+        /// Get List of Document Attachment in Data Table format
         /// </summary>
-        /// <param name="documentAttachment"></param>
-        /// <returns></returns>
+        /// <param name="documentAttachment">List of Document attachments</param>
+        /// <returns>Returns List of Document Attachment in Data Table format</returns>
 		private static DataTable GetDocumentAttachmentListDT(List<DocumentAttachment> documentAttachment)
         {
             int recordCount = 1;

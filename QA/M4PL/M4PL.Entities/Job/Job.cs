@@ -42,7 +42,9 @@ namespace M4PL.Entities.Job
 		/// The Program identifier.
 		/// </value>
 		public long? ProgramID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Program Identifier's Name
+		/// </summary>
 		public string ProgramIDName { get; set; }
 
 		/// <summary>
@@ -165,7 +167,9 @@ namespace M4PL.Entities.Job
 		/// The JobDeliveryResponsibleContact identifier.
 		/// </value>
 		public long? JobDeliveryResponsibleContactID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets job delivery responsible contact Identifier's name
+		/// </summary>
 		public string JobDeliveryResponsibleContactIDName { get; set; }
 
 		/// <summary>
@@ -327,7 +331,9 @@ namespace M4PL.Entities.Job
 		/// The JobOriginResponsibleContactID.
 		/// </value>
 		public long? JobOriginResponsibleContactID { get; set; }
-
+		/// <summary>
+		/// Gets or sets the responsible Contact identifier's Name
+		/// </summary>
 		public string JobOriginResponsibleContactIDName { get; set; }
 
 		/// <summary>
@@ -449,137 +455,486 @@ namespace M4PL.Entities.Job
 		/// The JobProcessingFlags.
 		/// </value>
 		public string JobProcessingFlags { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Job BOL Number
+		/// </summary>
 		public string JobBOL { get; set; }
-
+		/// <summary>
+		/// Gets or Sets second Job Delivery Site POC
+		/// </summary>
 		public string JobDeliverySitePOC2 { get; set; }
+		/// <summary>
+		/// Gets or Sets second Job Delivery Site POC Phone
+		/// </summary>
 		public string JobDeliverySitePOCPhone2 { get; set; }
+		/// <summary>
+		/// Gets or Sets second Job Delivery Site POC Email
+		/// </summary>
 		public string JobDeliverySitePOCEmail2 { get; set; }
+		/// <summary>
+		/// Gets or Sets second Job Origin Site POC
+		/// </summary>
 		public string JobOriginSitePOC2 { get; set; }
+		/// <summary>
+		/// Gets or Sets second Job Origin Site POC Phone
+		/// </summary>
 		public string JobOriginSitePOCPhone2 { get; set; }
+		/// <summary>
+		/// Gets or Sets second Job Origin Site POC Email
+		/// </summary>
 		public string JobOriginSitePOCEmail2 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerCode
+		/// </summary>
 		public string JobSellerCode { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerSitePOC
+		/// </summary>
 		public string JobSellerSitePOC { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerSitePOCPhone
+		/// </summary>
 		public string JobSellerSitePOCPhone { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerSitePOCEmail
+		/// </summary>
 		public string JobSellerSitePOCEmail { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerSitePOC2
+		/// </summary>
 		public string JobSellerSitePOC2 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerSitePOCPhone2
+		/// </summary>
 		public string JobSellerSitePOCPhone2 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerSitePOCEmail2
+		/// </summary>
 		public string JobSellerSitePOCEmail2 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerSiteName
+		/// </summary>
 		public string JobSellerSiteName { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerStreetAddress
+		/// </summary>
 		public string JobSellerStreetAddress { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerStreetAddress2
+		/// </summary>
 		public string JobSellerStreetAddress2 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerCity
+		/// </summary>
 		public string JobSellerCity { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerState
+		/// </summary>
 		public string JobSellerState { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerPostalCode
+		/// </summary>
 		public string JobSellerPostalCode { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerCountry
+		/// </summary>
 		public string JobSellerCountry { get; set; }
+		/// <summary>
+		/// Gets or Sets JobUser01
+		/// </summary>
 		public string JobUser01 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobUser02
+		/// </summary>
 		public string JobUser02 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobUser03
+		/// </summary>
 		public string JobUser03 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobUser04
+		/// </summary>
 		public string JobUser04 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobUser05
+		/// </summary>
 		public string JobUser05 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobStatusFlags
+		/// </summary>
 		public string JobStatusFlags { get; set; }
+		/// <summary>
+		/// Gets or Sets JobScannerFlags
+		/// </summary>
 		public string JobScannerFlags { get; set; }
+		/// <summary>
+		/// Gets or Sets JobManifestNo
+		/// </summary>
 		public string JobManifestNo { get; set; }
-
+		/// <summary>
+		/// Gets or Sets PlantIDCode
+		/// </summary>
 		public string PlantIDCode { get; set; }
-
+		/// <summary>
+		/// Gets or Sets CarrierID
+		/// </summary>
 		public string CarrierID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets JobDriverId
+		/// </summary>
 		public long? JobDriverId { get; set; }
+		/// <summary>
+		/// Gets or Sets JobDriverIdName
+		/// </summary>
 		public string JobDriverIdName { get; set; }
+		/// <summary>
+		/// Gets or Sets WindowDelStartTime
+		/// </summary>
 		public DateTime? WindowDelStartTime { get; set; }
+		/// <summary>
+		/// Gets or Sets WindowDelEndTime
+		/// </summary>
 		public DateTime? WindowDelEndTime { get; set; }
+		/// <summary>
+		/// Gets or Sets WindowPckStartTime
+		/// </summary>
 		public DateTime? WindowPckStartTime { get; set; }
+		/// <summary>
+		/// Gets or Sets WindowPckEndTime
+		/// </summary>
 		public DateTime? WindowPckEndTime { get; set; }
+		/// <summary>
+		/// Gets or Sets JobRouteId
+		/// </summary>
 		public string JobRouteId { get; set; }
+		/// <summary>
+		/// Gets or Sets JobStop
+		/// </summary>
 		public string JobStop { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSignText
+		/// </summary>
 		public string JobSignText { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSignLatitude
+		/// </summary>
 		public string JobSignLatitude { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSignLongitude
+		/// </summary>
 		public string JobSignLongitude { get; set; }
+		/// <summary>
+		/// Gets or Sets JobQtyOrdered
+		/// </summary>
 		public int? JobQtyOrdered { get; set; }
+		/// <summary>
+		/// Gets or Sets JobQtyActual
+		/// </summary>
 		public int? JobQtyActual { get; set; }
+		/// <summary>
+		/// Gets or Sets JobQtyUnitTypeId
+		/// </summary>
 		public int? JobQtyUnitTypeId { get; set; }
+		/// <summary>
+		/// Gets or Sets JobQtyUnitTypeIdName
+		/// </summary>
 		public string JobQtyUnitTypeIdName { get; set; }
+		/// <summary>
+		/// Gets or Sets JobPartsOrdered
+		/// </summary>
 		public int? JobPartsOrdered { get; set; }
+		/// <summary>
+		/// Gets or Sets JobPartsActual
+		/// </summary>
 		public int? JobPartsActual { get; set; }
+		/// <summary>
+		/// Gets or Sets JobTotalCubes
+		/// </summary>
 		public decimal? JobTotalCubes { get; set; }
+		/// <summary>
+		/// Gets or Sets JobServiceMode
+		/// </summary>
 		public string JobServiceMode { get; set; }
+		/// <summary>
+		/// Gets or Sets JobChannel
+		/// </summary>
 		public string JobChannel { get; set; }
+		/// <summary>
+		/// Gets or Sets JobProductType
+		/// </summary>
 		public string JobProductType { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSONumber
+		/// </summary>
 		public string JobSONumber { get; set; }
+		/// <summary>
+		/// Gets or Sets JobPONumber
+		/// </summary>
 		public string JobPONumber { get; set; }
-
+		/// <summary>
+		/// Gets or Sets PckEarliest
+		/// </summary>
 		public decimal? PckEarliest { get; set; }
+		/// <summary>
+		/// Gets or Sets PckLatest
+		/// </summary>
 		public decimal? PckLatest { get; set; }
+		/// <summary>
+		/// Gets or Sets PckDay
+		/// </summary>
 		public bool PckDay { get; set; }
+		/// <summary>
+		/// Gets or Sets DelEarliest
+		/// </summary>
 		public decimal? DelEarliest { get; set; }
+		/// <summary>
+		/// Gets or Sets DelLatest
+		/// </summary>
 		public decimal? DelLatest { get; set; }
+		/// <summary>
+		/// Gets or Sets DelDay
+		/// </summary>
 		public bool DelDay { get; set; }
+		/// <summary>
+		/// Gets or Sets ProgramPickupDefault
+		/// </summary>
 		public DateTime? ProgramPickupDefault { get; set; }
+		/// <summary>
+		/// Gets or Sets ProgramDeliveryDefault
+		/// </summary>
 		public DateTime? ProgramDeliveryDefault { get; set; }
+		/// <summary>
+		/// Gets or Sets JobOrderedDate
+		/// </summary>
 		public DateTime? JobOrderedDate { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipmentDate
+		/// </summary>
 		public DateTime? JobShipmentDate { get; set; }
+		/// <summary>
+		/// Gets or Sets JobInvoicedDate
+		/// </summary>
 		public DateTime? JobInvoicedDate { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromSiteName
+		/// </summary>
 		public string JobShipFromSiteName { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromStreetAddress
+		/// </summary>
 		public string JobShipFromStreetAddress { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromStreetAddress2
+		/// </summary>
 		public string JobShipFromStreetAddress2 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromCity
+		/// </summary>
 		public string JobShipFromCity { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromState
+		/// </summary>
 		public string JobShipFromState { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromPostalCode
+		/// </summary>
 		public string JobShipFromPostalCode { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromCountry
+		/// </summary>
 		public string JobShipFromCountry { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromSitePOC
+		/// </summary>
 		public string JobShipFromSitePOC { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromSitePOCPhone
+		/// </summary>
 		public string JobShipFromSitePOCPhone { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromSitePOCEmail
+		/// </summary>
 		public string JobShipFromSitePOCEmail { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromSitePOC2
+		/// </summary>
 		public string JobShipFromSitePOC2 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromSitePOCPhone2
+		/// </summary>
 		public string JobShipFromSitePOCPhone2 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromSitePOCEmail2
+		/// </summary>
 		public string JobShipFromSitePOCEmail2 { get; set; }
-
+		/// <summary>
+		/// Gets or Sets CustomerERPId
+		/// </summary>
 		public string CustomerERPId { get; set; }
+		/// <summary>
+		/// Gets or Sets VendorERPId
+		/// </summary>
 		public string VendorERPId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets JobElectronicInvoice
+		/// </summary>
 		public bool JobElectronicInvoice { get; set; }
+		/// <summary>
+		/// Gets or Sets JobOriginStreetAddress3
+		/// </summary>
 		public string JobOriginStreetAddress3 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobOriginStreetAddress4
+		/// </summary>
 		public string JobOriginStreetAddress4 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobDeliveryStreetAddress3
+		/// </summary>
 		public string JobDeliveryStreetAddress3 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobDeliveryStreetAddress4
+		/// </summary>
 		public string JobDeliveryStreetAddress4 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerStreetAddress3
+		/// </summary>
 		public string JobSellerStreetAddress3 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobSellerStreetAddress4
+		/// </summary>
 		public string JobSellerStreetAddress4 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromStreetAddress3
+		/// </summary>
 		public string JobShipFromStreetAddress3 { get; set; }
+		/// <summary>
+		/// Gets or Sets JobShipFromStreetAddress4
+		/// </summary>
 		public string JobShipFromStreetAddress4 { get; set; }
-
+		/// <summary>
+		/// Gets or Sets JobCubesUnitTypeId
+		/// </summary>
 		public int? JobCubesUnitTypeId { get; set; }
+		/// <summary>
+		/// Gets or Sets JobCubesUnitTypeIdName
+		/// </summary>
 		public string JobCubesUnitTypeIdName { get; set; }
+		/// <summary>
+		/// Gets or Sets JobWeightUnitTypeId
+		/// </summary>
 		public int? JobWeightUnitTypeId { get; set; }
+		/// <summary>
+		/// Gets or Sets JobWeightUnitTypeIdName
+		/// </summary>
 		public string JobWeightUnitTypeIdName { get; set; }
+		/// <summary>
+		/// Gets or Sets JobTotalWeight
+		/// </summary>
 		public decimal JobTotalWeight { get; set; }
+		/// <summary>
+		/// Gets or Sets JobElectronicInvoiceSONumber
+		/// </summary>
 		public string JobElectronicInvoiceSONumber { get; set; }
+		/// <summary>
+		/// Gets or Sets JobElectronicInvoicePONumber
+		/// </summary>
 		public string JobElectronicInvoicePONumber { get; set; }
+		/// <summary>
+		/// Gets or Sets JobPreferredMethod
+		/// </summary>
 		public int? JobPreferredMethod { get; set; }
+		/// <summary>
+		/// Gets or Sets JobPreferredMethodName
+		/// </summary>
 		public string JobPreferredMethodName { get; set; }
+		/// <summary>
+		/// Gets or Sets JobMileage
+		/// </summary>
 		public decimal JobMileage { get; set; }
+		/// <summary>
+		/// Gets or Sets JobColorCode
+		/// </summary>
 		public string JobColorCode { get; set; }
+		/// <summary>
+		/// Gets or Sets count of JobServiceOrder
+		/// </summary>
 		public int? JobServiceOrder { get; set; }
+		/// <summary>
+		/// Gets or Sets count of JobServiceActual
+		/// </summary>
 		public int? JobServiceActual { get; set; }
+		/// <summary>
+		/// Gets or Sets flag if JobIsHavingPermission
+		/// </summary>
 		public bool JobIsHavingPermission { get; set; }
+		/// <summary>
+		/// Gets or Sets flag if  IsJobVocSurvey
+		/// </summary>
 		public bool IsJobVocSurvey { get; set; }
+		/// <summary>
+		/// Gets or Sets ProFlags12
+		/// </summary>
 		public string ProFlags12 { get; set; }
+		/// <summary>
+		/// Gets or Sets CustomerId
+		/// </summary>
 		public long CustomerId { get; set; }
+		/// <summary>
+		/// Gets or Sets JobTransitionStatusId
+		/// </summary>
 		public int? JobTransitionStatusId { get; set; }
+		/// <summary>
+		/// Gets or Sets flag if IsSellerTabEdited
+		/// </summary>
 		public bool IsSellerTabEdited { get; set; }
+		/// <summary>
+		/// Gets or Sets flag if IsPODTabEdited
+		/// </summary>
 		public bool IsPODTabEdited { get; set; }
+		/// <summary>
+		/// Gets or Sets JobDriverAlert
+		/// </summary>
 		public string JobDriverAlert { get; set; }
-
+		/// <summary>
+		/// Gets or Sets JobSalesInvoiceNumber
+		/// </summary>
 		public string JobSalesInvoiceNumber { get; set; }
-
+		/// <summary>
+		/// Gets or Sets JobPurchaseInvoiceNumber
+		/// </summary>
 		public string JobPurchaseInvoiceNumber { get; set; }
+		/// <summary>
+		/// Gets or Sets flag for if JobIsSchedule
+		/// </summary>
 		public bool JobIsSchedule { get; set; }
+		/// <summary>
+		/// Gets or Sets InstallStatus
+		/// </summary>
 		public string InstallStatus { get; set; }
+		/// <summary>
+		/// Gets or Sets flag for the Job IsCancelled
+		/// </summary>
 		public bool? IsCancelled { get; set; }
+		/// <summary>
+		/// Gets or Sets StatusIdentifier's Name
+		/// </summary>
 		public string StatusIdName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Jobs SiteCode List
+		/// </summary>
 		public IList<JobsSiteCode> JobsSiteCodeList { get; set; }
-        public bool JobIsDirtyDestination { get; set; }
+		/// <summary>
+		/// Gets or Sets flag for JobIsDirtyDestination
+		/// </summary>
+		public bool JobIsDirtyDestination { get; set; }
+		/// <summary>
+		/// Gets or Sets flag for JobIsDirtyContact
+		/// </summary>
 		public bool JobIsDirtyContact { get; set; }
+		/// <summary>
+		/// Gets or Sets flag if the current order IsParentOrder
+		/// </summary>
 		public bool IsParentOrder { get; set; }
+
 	}
 }

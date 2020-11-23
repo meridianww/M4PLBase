@@ -13,12 +13,30 @@ using System;
 
 namespace M4PL.Entities
 {
+	/// <summary>
+	/// Model class for Job Change history
+	/// </summary>
 	public class ChangeHistoryData
 	{
+		/// <summary>
+		/// Gets or Sets Field Name e.g. Delivery Date Planned
+		/// </summary>
 		public string FieldName { get; set; }
+		/// <summary>
+		/// Gets or Sets Old Value
+		/// </summary>
 		public string OldValue { get; set; }
+		/// <summary>
+		/// Gets or Sets New/Updated Value
+		/// </summary>
 		public string NewValue { get; set; }
+		/// <summary>
+		/// Gets or Sets Date when the record was updated
+		/// </summary>
 		public DateTime ChangedDate { get; set; }
+		/// <summary>
+		/// Gets or Sets Username who has updated the record
+		/// </summary>
 		public string ChangedBy { get; set; }
 	}
 }

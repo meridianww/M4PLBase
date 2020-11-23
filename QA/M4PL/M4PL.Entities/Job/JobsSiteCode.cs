@@ -11,10 +11,13 @@
 
 namespace M4PL.Entities.Job
 {
+	/// <summary>
+	/// Model class for Job Site Code
+	/// </summary>
 	public class JobsSiteCode : BaseModel
 	{
 		/// <summary>
-		/// Gets or sets the type of job.
+		/// Gets or sets Location Code
 		/// </summary>
 		/// <value>
 		/// The JobSiteCode.
@@ -22,7 +25,7 @@ namespace M4PL.Entities.Job
 		public string PvlLocationCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the type of job.
+		/// Gets or sets the Vendor ID
 		/// </summary>
 		/// <value>
 		/// The JobSiteId.

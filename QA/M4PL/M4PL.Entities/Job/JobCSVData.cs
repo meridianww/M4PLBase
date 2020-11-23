@@ -18,12 +18,22 @@
 //==========================================================================================================
 namespace M4PL.Entities.Job
 {
+	/// <summary>
+	/// Model class for Multiple Job creation from CSV
+	/// </summary>
 	public class JobCSVData
 	{
+		/// <summary>
+		/// Gets or Sets Program Id
+		/// </summary>
 		public long ProgramId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets CSV content in Varbinary format
+		/// </summary>
 		public byte[] FileContent { get; set; }
-
+		/// <summary>
+		/// Gets or Sets CSV Content Base type
+		/// </summary>
 		public string FileContentBase64 { get; set; }
 	}
 }

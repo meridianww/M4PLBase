@@ -15,8 +15,14 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Job
 {
+	/// <summary>
+	/// Model class for Job Special Instruction
+	/// </summary>
 	public class JobSpecialInstruction
 	{
+		/// <summary>
+		/// Gets or Sets Special Instruction
+		/// </summary>
 		public string SpecialInstruction { get; set; }
 	}
 }
