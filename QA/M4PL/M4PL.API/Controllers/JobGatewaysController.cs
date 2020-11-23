@@ -51,12 +51,8 @@ namespace M4PL.API.Controllers
             _jobGatewayCommands = jobGatewayCommands;
         }
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"> </param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -239,10 +235,10 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// job action code by title
+        /// Get job action code by title
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="gwyTitle"></param>
+        /// <param name="jobId">Job Id</param>
+        /// <param name="gwyTitle">Gateway Title</param>
         /// <returns></returns>
         [CustomAuthorize]
         [HttpGet]
@@ -266,7 +262,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Upload POD gateway based on job id
+        /// Insert POD gateway based on job id, if POD Document exist
         /// </summary>
         /// <param name="jobId"></param>
         /// <returns>Returns true/false based on operation success</returns>
@@ -277,6 +273,10 @@ namespace M4PL.API.Controllers
             _jobGatewayCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobGatewayCommands.InsJobGatewayPODIfPODDocExistsByJobId(jobId);
         }
+        /// <summary>
+        /// Update Active User Settings
+        /// </summary>
+        /// <returns></returns>
         protected SysSetting UpdateActiveUserSettings()
         {
             _commonCommands.ActiveUser = Models.ApiContext.ActiveUser;
@@ -305,7 +305,7 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Get Actions By JobIds
+        /// Get List Actions By JobIds
         /// </summary>
         /// <param name="jobIds"></param>
         /// <returns></returns>

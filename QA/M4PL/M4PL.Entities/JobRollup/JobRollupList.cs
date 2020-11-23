@@ -13,9 +13,18 @@ using System.Collections.Generic;
 
 namespace M4PL.Entities.JobRollup
 {
+	/// <summary>
+	/// Model class for Job Roll uo List
+	/// </summary>
 	public class JobRollupList
 	{
+		/// <summary>
+		/// Gets or Sets Field value
+		/// </summary>
 		public string FieldValue { get; set; }
+		/// <summary>
+		/// Gets or Sets JobId
+		/// </summary>
 		public List<long> JobId { get; set; }
 	}
 }

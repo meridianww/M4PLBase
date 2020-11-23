@@ -18,17 +18,48 @@
 //==========================================================================================================
 namespace M4PL.Entities.Support
 {
+    /// <summary>
+    /// Model Class for Job Gateway Complete
+    /// </summary>
     public class JobGatewayComplete : SysRefModel
     {
+        /// <summary>
+        /// Gets or Sets JobID
+        /// </summary>
         public long JobID { get; set; }
+        /// <summary>
+        /// Gets or Sets ProgramID
+        /// </summary>
         public long? ProgramID { get; set; }
+        /// <summary>
+        /// Gets or Sets GwyGatewayCode
+        /// </summary>
         public string GwyGatewayCode { get; set; }
+        /// <summary>
+        /// Gets or Sets GwyGatewayTitle
+        /// </summary>
         public string GwyGatewayTitle { get; set; }
+        /// <summary>
+        /// Gets or Sets GwyShipStatusReasonCode
+        /// </summary>
         public string GwyShipStatusReasonCode { get; set; }
+        /// <summary>
+        /// Gets or Sets GwyShipApptmtReasonCode
+        /// </summary>
         public string GwyShipApptmtReasonCode { get; set; }
+        /// <summary>
+        /// Gets or Sets GatewayTypeId
+        /// </summary>
         public int GatewayTypeId { get; set; }
+        /// <summary>
+        /// Gets or Sets UpdatedValue
+        /// </summary>
         public string UpdatedValue { get; set; }
+        /// <summary>
+        /// Gets or Sets ActualValue
+        /// </summary>
         public string ActualValue { get; set; }
+
 
     }
 }

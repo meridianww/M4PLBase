@@ -40,14 +40,16 @@ namespace M4PL.Entities.Contact
 		/// </value>
 		public long ConOrgId { get; set; }
 
-		///// <summary>
-		///// Gets or sets contact name to which the contact has to be associated.
-		///// </summary>
-		///// <value>
-		///// The ConOrgIdName.
-		///// </value>
-		public string ConOrgIdName { get; set; }
-
+        /// <summary>
+        /// Gets or sets contact name to which the contact has to be associated.
+        /// </summary>
+        /// <value>
+        /// The ConOrgIdName.
+        /// </value>
+        public string ConOrgIdName { get; set; }
+		/// <summary>
+		/// Gets or Sets Job Id
+		/// </summary>
 		public long? JobId { get; set; }
 
 		/// <summary>

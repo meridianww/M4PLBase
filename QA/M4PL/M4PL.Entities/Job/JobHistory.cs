@@ -13,13 +13,34 @@ using System;
 
 namespace M4PL.Entities.Job
 {
+	/// <summary>
+	/// Model class for Job History
+	/// </summary>
 	public class JobHistory : SysRefModel
 	{
+		/// <summary>
+		/// Gets or Sets Field Name e.g. Delivery Date Planned
+		/// </summary>
 		public string FieldName { get; set; }
+		/// <summary>
+		/// Gets or Sets Old Value
+		/// </summary>
 		public string OldValue { get; set; }
+		/// <summary>
+		/// Gets or Sets updated/new value
+		/// </summary>
 		public string NewValue { get; set; }
+		/// <summary>
+		/// Gets or Sets Changed Date
+		/// </summary>
 		public DateTime ChangedDate { get; set; }
+		/// <summary>
+		/// Gets or Sets Changed By User Name
+		/// </summary>
 		public string ChangedBy { get; set; }
+		/// <summary>
+		/// Gets or Sets Job Id
+		/// </summary>
 		public long JobID { get; set; }
 	}
 }
