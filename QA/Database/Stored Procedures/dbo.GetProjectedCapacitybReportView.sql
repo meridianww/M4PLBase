@@ -60,7 +60,7 @@ Cabinets INT
 INSERT INTO #TempProjectedCapacity(JobId,ProjectedCapacity,Location,ProjectedYear,CustomerId,CapacityId)
 Select DISTINCT Job.id,PC.ProjectedCapacity,PC.Location,PC.[Year],PC.CustomerId,PC.Id
 From dbo.LocationProjectedCapacity PC
-LEFT JOIN  dbo.JOBDL000Master Job ON Job.JobSiteCode = PC.Location AND ISNULL(Job.IsCancelled,0) = 0
+INNER JOIN  dbo.JOBDL000Master Job ON Job.JobSiteCode LIKE PC.Location +'%' AND ISNULL(Job.IsCancelled,0) = 0
 Where PC.StatusId=1 AND PC.[Year] = @ProjectedYear AND PC.CustomerId = @CustomerId
 
 UPDATE TempCapacity
