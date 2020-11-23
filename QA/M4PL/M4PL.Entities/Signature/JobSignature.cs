@@ -21,8 +21,17 @@ namespace M4PL.Entities.Signature
 {
 	public class JobSignature
 	{
+		/// <summary>
+		/// Gets or Sets Job Id
+		/// </summary>
 		public string JobId { get; set; }
+		/// <summary>
+		/// Gets or Sets User Name
+		/// </summary>
 		public string UserName { get; set; }
+		/// <summary>
+		/// Gets or Sets Signature Text
+		/// </summary>
 		public string Signature { get; set; }
 	}
 }

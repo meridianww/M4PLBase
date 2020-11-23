@@ -11,10 +11,22 @@
 
 namespace M4PL.Entities
 {
+	/// <summary>
+	/// Model class for API Response
+	/// </summary>
 	public class StatusModel
 	{
+		/// <summary>
+		/// Gets or Sets Status Code e.g. 200
+		/// </summary>
 		public int StatusCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Status e.g. Success
+		/// </summary>
 		public string Status { get; set; }
+		/// <summary>
+		/// Gets or Sets Additional Details
+		/// </summary>
 		public string AdditionalDetail { get; set; }
 	}
 }

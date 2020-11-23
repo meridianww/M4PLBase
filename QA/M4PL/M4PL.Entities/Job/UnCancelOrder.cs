@@ -15,12 +15,22 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Job
 {
+	/// <summary>
+	/// Model class for revoking cancellation
+	/// </summary>
 	public class UnCancelOrder
 	{
+		/// <summary>
+		/// Gets or Sets Order Number/ COntract #
+		/// </summary>
 		public string OrderNumber { get; set; }
-
+		/// <summary>
+		/// Gets or Sets reason for un cancellation
+		/// </summary>
 		public string UnCancelReason { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Comments for Uncancellation
+		/// </summary>
 		public string UnCancelComment { get; set; }
 	}
 }

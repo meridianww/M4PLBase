@@ -34,7 +34,9 @@ namespace M4PL.Entities.Job
 		/// IsAccepted
 		/// </summary>
 		public bool IsAccepted { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Job Gateway ID
+		/// </summary>
 		public long JobGatewayId { get; set; }
 	}
 

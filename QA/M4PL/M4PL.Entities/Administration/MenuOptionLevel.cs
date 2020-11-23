@@ -47,7 +47,9 @@ namespace M4PL.Entities.Administration
 		/// The MolMenuAccessDefault.
 		/// </value>
 		public int MolMenuAccessDefault { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Menu Access Default Name
+		/// </summary>
 		public string MolMenuAccessDefaultName { get; set; }
 
 		/// <summary>

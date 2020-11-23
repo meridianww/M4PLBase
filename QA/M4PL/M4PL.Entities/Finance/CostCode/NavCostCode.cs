@@ -18,19 +18,59 @@
 //==========================================================================================================
 namespace M4PL.Entities.Finance.CostCode
 {
+	/// <summary>
+	/// Model Class for NAV Cost Code
+	/// </summary>
 	public class NavCostCode : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Item No
+		/// </summary>
 		public string Item_No { get; set; }
+		/// <summary>
+		/// Gets or Sets Vendor No
+		/// </summary>
 		public string Vendor_No { get; set; }
+		/// <summary>
+		/// Gets or Sets Starting Date
+		/// </summary>
 		public string Starting_Date { get; set; }
+		/// <summary>
+		/// Gets or Sets Currency Code
+		/// </summary>
 		public string Currency_Code { get; set; }
+		/// <summary>
+		/// Gets or Sets Variant Code
+		/// </summary>
 		public string Variant_Code { get; set; }
+		/// <summary>
+		/// Gets or Sets Unit of Measure Code
+		/// </summary>
 		public string Unit_of_Measure_Code { get; set; }
+		/// <summary>
+		/// Gets or Sets Minimum Quantity
+		/// </summary>
 		public int Minimum_Quantity { get; set; }
+		/// <summary>
+		/// Gets or Sets VendNoFilterCtrl
+		/// </summary>
 		public string VendNoFilterCtrl { get; set; }
+		/// <summary>
+		/// Gets or Sets ItemNoFIlterCtrl
+		/// </summary>
 		public string ItemNoFIlterCtrl { get; set; }
+		/// <summary>
+		/// Gets or Sets StartingDateFilter
+		/// </summary>
 		public string StartingDateFilter { get; set; }
+		/// <summary>
+		/// Gets or Sets Direct Unit Cost
+		/// </summary>
 		public decimal? Direct_Unit_Cost { get; set; }
+		/// <summary>
+		/// Gets or Sets Ending Date
+		/// </summary>
 		public string Ending_Date { get; set; }
+
 	}
 }

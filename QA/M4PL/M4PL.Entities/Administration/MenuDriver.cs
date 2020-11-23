@@ -127,7 +127,9 @@ namespace M4PL.Entities.Administration
 		/// The MnuRibbonTabName.
 		/// </value>
 		public string MnuRibbonTabName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Execute Program for Menu
+		/// </summary>
 		public string MnuExecuteProgram { get; set; }
 
 		/// <summary>
@@ -161,15 +163,25 @@ namespace M4PL.Entities.Administration
 		/// The MnuAccessLevel identifier.
 		/// </value>
 		public int? MnuAccessLevelId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Help file for Menu
+		/// </summary>
 		public byte[] MnuHelpFile { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Bookmark for menu
+		/// </summary>
 		public string MnuHelpBookMark { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Help Page Number for menu
+		/// </summary>
 		public int MnuHelpPageNumber { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Ribbon breakdown structure
+		/// </summary>
 		public string RbnBreakdownStructure { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Module Name
+		/// </summary>
 		public string ModuleName { get; set; }
 	}
 }

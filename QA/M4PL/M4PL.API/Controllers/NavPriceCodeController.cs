@@ -40,12 +40,8 @@ namespace M4PL.API.Controllers
             _navPriceCodeCommands = navPriceCodeCommands;
         }
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -132,6 +128,10 @@ namespace M4PL.API.Controllers
             _navPriceCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navPriceCodeCommands.Patch(navPriceCode);
         }
+        /// <summary>
+        /// Get All Price Code from NAV
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetAllPriceCode")]
         public virtual IList<NavPriceCode> GetAllPriceCode()
@@ -139,6 +139,11 @@ namespace M4PL.API.Controllers
             _navPriceCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navPriceCodeCommands.GetAllPriceCode();
         }
+        /// <summary>
+        /// Gets Report for Price Code for supplied Job ID
+        /// </summary>
+        /// <param name="jobId">Job ID</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetPriceCodeReportByJobId")]
         public virtual Entities.Document.DocumentData GetPriceCodeReportByJobId(string jobId)
@@ -146,6 +151,11 @@ namespace M4PL.API.Controllers
             _navPriceCodeCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _navPriceCodeCommands.GetPriceCodeReportByJobId(jobId);
         }
+        /// <summary>
+        /// Checks for Price Code Data if available in NAV for supplied Job Id
+        /// </summary>
+        /// <param name="jobId">Job ID</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("IsPriceCodeDataPresentForJobInNAV")]
         public virtual Entities.Document.DocumentStatus IsPriceCodeDataPresentForJobInNAV(string jobId)

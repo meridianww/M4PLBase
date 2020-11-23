@@ -47,12 +47,8 @@ namespace M4PL.API.Controllers
             _jobXcblInfoCommands = jobXcblInfoCommands;
         }
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"></param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -172,7 +168,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// It will reject the xcbl changes for supplied gateway id. It will NOT update any changes the Job. 
         /// </summary>
-        /// <param name="gatewayId"></param>
+        /// <param name="gatewayId"><Gateway Id/param>
         /// <returns></returns>
 		[CustomAuthorize]
         [HttpGet]

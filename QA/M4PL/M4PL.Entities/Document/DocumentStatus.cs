@@ -11,12 +11,22 @@
 
 namespace M4PL.Entities.Document
 {
+	/// <summary>
+	/// Model class for Document Status
+	/// </summary>
 	public class DocumentStatus
 	{
+		/// <summary>
+		/// Gets or Sets Flag for if an Attachment is Present
+		/// </summary>
 		public bool IsAttachmentPresent { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Flag if POD present
+		/// </summary>
 		public bool IsPODPresent { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Flag if the Histiry Present
+		/// </summary>
 		public bool IsHistoryPresent { get; set; }
 	}
 }
