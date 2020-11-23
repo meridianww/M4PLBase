@@ -20,22 +20,24 @@
 namespace M4PL.Entities.Job
 {
 	/// <summary>
-	///
+	/// Model class for Job Ref Status
 	/// </summary>
 	public class JobRefStatus : BaseModel
 	{
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Job identifier.
 		/// </summary>
 		/// <value>
 		/// The identifier.
 		/// </value>
 		public long? JobID { get; set; }
-
+		/// <summary>
+		/// Gets or sets the Job identifier's Name
+		/// </summary>
 		public string JobIDName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Job Outline Code.
 		/// </summary>
 		/// <value>
 		/// The identifier.

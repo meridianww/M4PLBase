@@ -11,10 +11,22 @@
 
 namespace M4PL.Entities.Job
 {
+	/// <summary>
+	/// Model class for Job Action Code
+	/// </summary>
 	public class JobActionCode
 	{
+		/// <summary>
+		/// Gets or Sets Shipment Status Reason Code
+		/// </summary>
 		public string PgdShipStatusReasonCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Shipment Appointment Reason Code
+		/// </summary>
 		public string PgdShipApptmtReasonCode { get; set; }
+		/// <summary>
+		/// Gets or Sets UTC Value
+		/// </summary>
 		public int UTCValue { get; set; }
 	}
 }

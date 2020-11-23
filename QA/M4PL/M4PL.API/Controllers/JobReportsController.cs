@@ -28,7 +28,9 @@ using System.Web.Http;
 using System.Web.Http.Description;
 namespace M4PL.API.Controllers
 {
-	
+	/// <summary>
+    /// Controller for Job Reports
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/JobReports")]
     public class JobReportsController : ApiController
@@ -45,12 +47,8 @@ namespace M4PL.API.Controllers
 			_JobReportCommands = jobReportCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"> </param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -153,14 +151,14 @@ namespace M4PL.API.Controllers
 		{
 			return _JobReportCommands.GetVocReportData(Models.ApiContext.ActiveUser, companyId, locationCode, startDate, endDate, IsPBSReport);
 		}
-        
+
         /// <summary>
         /// Returns the Site codes by customer Id
         /// </summary>
-        /// <param name="customerId">Customer Id</param>
-        /// <param name="jobReport">jobReport will be location</param>
-        /// <returns>Site codes list</returns>
-		[CustomAuthorize]
+        /// <param name="customerId"> Customer Id</param>
+        /// <param name="entity"> Entity</param>
+        /// <returns></returns>
+        [CustomAuthorize]
 		[HttpGet]
 		[Route("VocReportByCustomer"), ResponseType(typeof(IList<JobReport>))]
 		public IList<JobReport> GetDropDownDataForLocation(long customerId, string entity)
