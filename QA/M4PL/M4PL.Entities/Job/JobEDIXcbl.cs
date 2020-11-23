@@ -21,6 +21,9 @@ using System;
 
 namespace M4PL.Entities.Job
 {
+	/// <summary>
+	/// Model class for Job EDI Xcbl
+	/// </summary>
 	public class JobEDIXcbl : BaseModel
 	{
 		/// <summary>

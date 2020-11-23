@@ -19,10 +19,13 @@
 
 namespace M4PL.Entities.Job
 {
+	/// <summary>
+	/// Model for Job Cost Sheet
+	/// </summary>
 	public class JobCostSheet : BaseModel
 	{
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Job Id.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -32,7 +35,7 @@ namespace M4PL.Entities.Job
 		////public string JobIDName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Line Item.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -40,7 +43,7 @@ namespace M4PL.Entities.Job
 		public string CstLineItem { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Charge  identifier.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -48,7 +51,7 @@ namespace M4PL.Entities.Job
 		public long CstChargeID { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Charge Code.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -56,7 +59,7 @@ namespace M4PL.Entities.Job
 		public string CstChargeCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Title.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -64,7 +67,7 @@ namespace M4PL.Entities.Job
 		public string CstTitle { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Surcharge Order.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -72,7 +75,7 @@ namespace M4PL.Entities.Job
 		public long CstSurchargeOrder { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Surcharge Percent.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -80,7 +83,7 @@ namespace M4PL.Entities.Job
 		public double? CstSurchargePercent { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Charge Type Id.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -88,7 +91,7 @@ namespace M4PL.Entities.Job
 		public int? ChargeTypeId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Number Used.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -96,7 +99,7 @@ namespace M4PL.Entities.Job
 		public int? CstNumberUsed { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost duration.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -104,7 +107,7 @@ namespace M4PL.Entities.Job
 		public decimal CstDuration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Quantity.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -112,7 +115,7 @@ namespace M4PL.Entities.Job
 		public decimal CstQuantity { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Unit Id.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -120,7 +123,7 @@ namespace M4PL.Entities.Job
 		public int? CstUnitId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Rate.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -128,7 +131,7 @@ namespace M4PL.Entities.Job
 		public decimal CstRate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Amount.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -136,7 +139,7 @@ namespace M4PL.Entities.Job
 		public decimal CstAmount { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Cost Markup Percent.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -144,15 +147,19 @@ namespace M4PL.Entities.Job
 		public double? CstMarkupPercent { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Comments.
 		/// </summary>
 		/// <value>
 		/// The identifier.
 		/// </value>
 		public byte[] CstComments { get; set; }
-
+		/// <summary>
+		/// Gets or Sets flag if Cost Electronic Billing
+		/// </summary>
 		public bool CstElectronicBilling { get; set; }
-
+		/// <summary>
+		/// Gets or Sets flag if Is Problem
+		/// </summary>
 		public bool IsProblem { get; set; }
 	}
 }

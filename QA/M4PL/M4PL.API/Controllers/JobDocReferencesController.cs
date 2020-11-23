@@ -30,6 +30,9 @@ using System.Web.Http.Description;
 using _commonCommands = M4PL.Business.Common.CommonCommands;
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for Job Document Reference
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/JobDocReferences")]
 	public class JobDocReferencesController : ApiController
@@ -46,12 +49,8 @@ namespace M4PL.API.Controllers
 			_jobDocReferenceCommands = jobDocReferenceCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"> </param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -204,6 +203,10 @@ namespace M4PL.API.Controllers
 			_jobDocReferenceCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobDocReferenceCommands.GetNextSequence();
 		}
+        /// <summary>
+        /// Updates Current Active User Setting
+        /// </summary>
+        /// <returns></returns>
         protected SysSetting UpdateActiveUserSettings()
         {
             _commonCommands.ActiveUser = Models.ApiContext.ActiveUser;

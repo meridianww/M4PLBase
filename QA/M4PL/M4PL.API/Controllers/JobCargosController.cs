@@ -28,7 +28,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-   
+   /// <summary>
+   /// Job Cargo Controller
+   /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/JobCargos")]
     public class JobCargosController : ApiController
@@ -45,12 +47,8 @@ namespace M4PL.API.Controllers
             _jobCargoCommands = jobCargoCommands;
         }
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"> </param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -140,9 +138,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// CreateCargoException method creates a new cargo exception code, exception reason and install status for a particular Order/Job cargo.
         /// </summary>
-        /// <param name="jobCargoException">
-        /// This parameter require field values ExceptionCode(type string),ExceptionReason(type string), InstallStatus(type string), CargoQuantity(type integer), Optional parameter CgoReasonCodeOSD(type string) and Optional parameter CgoDateLastScan(type DateTime).
-        /// </param>
+        /// <param name="jobCargoException"></param>
         /// <param name="cargoId">Order/Job cargoId(type numeric).</param>
         /// <returns>
         /// Returns response as StatusModel object for newly created Cargo Exception.
