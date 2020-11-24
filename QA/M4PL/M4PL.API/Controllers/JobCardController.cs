@@ -27,6 +27,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for Job Card/Dashboard
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/JobCard")]
     public class JobCardController : ApiController
@@ -43,12 +46,8 @@ namespace M4PL.API.Controllers
 			_jobCardCommands = jobCardCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"> </param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>
@@ -143,9 +142,7 @@ namespace M4PL.API.Controllers
         /// 3.On-Truck  -- Gateway
         /// 4.Returns   -- Order type e.g. Return,Original etc.
         /// </summary>
-        /// <param name="jobCondition">
-        /// This parameter require fields Customer Id(type numeric) and Where (type string) condition to filter data
-        /// </param>
+        /// <param name="jobCondition"></param>
         /// <returns>
         /// Returns response as queryable list of JobCardTileDetail object based on Customer Id(numeric)  and where(string) filter applied.
         /// </returns>

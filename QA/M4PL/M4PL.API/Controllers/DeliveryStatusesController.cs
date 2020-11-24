@@ -27,7 +27,10 @@ using M4PL.API.Filters;
 using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
-{
+
+    /// <summary>
+    /// Controller for Delivery Status
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/DeliveryStatuses")]
 	public class DeliveryStatusesController : ApiController
@@ -44,16 +47,12 @@ namespace M4PL.API.Controllers
 			_deliveryStatusCommands = deliveryStatusCommands;
 		}
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
-        /// <returns>
-        /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
-        /// </returns>
-        [CustomQueryable]
+    /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+    /// <param name="pagedDataInfo"> </param>
+    /// <returns>
+    /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
+    /// </returns>
+    [CustomQueryable]
         [HttpPost]
         [Route("PagedData")]
         public virtual IQueryable<DeliveryStatus> PagedData(PagedDataInfo pagedDataInfo)

@@ -16,11 +16,19 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.XCBL.FarEye
 {
+	/// <summary>
+	/// Model class for FarEye Order Event Info
+	/// </summary>
 	public class Info
 	{
+		/// <summary>
+		/// Gets or Sets Reschedule Date
+		/// </summary>
 		[JsonProperty("reschedule_date")]
 		public string RescheduleDate { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Reschedule Reason
+		/// </summary>
 		[JsonProperty("reschedule_reason")]
 		public string RescheduleReason { get; set; }
 	}

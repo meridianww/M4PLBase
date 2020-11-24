@@ -24,6 +24,9 @@ namespace M4PL.Entities.Job
 	/// </summary>
 	public class JobCard : Job
 	{
+		/// <summary>
+		/// Gets or Sets Job Destination
+		/// </summary>
 		public string Destination { get; set; }
 	}
 }

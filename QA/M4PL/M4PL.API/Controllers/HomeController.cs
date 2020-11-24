@@ -21,6 +21,9 @@ using System.Web.Mvc;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// Default Home Controller
+	/// </summary>
 	public class HomeController : Controller
 	{
 		/// <summary>

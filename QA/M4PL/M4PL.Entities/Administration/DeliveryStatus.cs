@@ -24,14 +24,26 @@ namespace M4PL.Entities.Administration
 	/// </summary>
 	public class DeliveryStatus : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets DeliveryStatusCode
+		/// </summary>
 		public string DeliveryStatusCode { get; set; }
-
+		/// <summary>
+		/// Gets or Sets DeliveryStatusTitle
+		/// </summary>
 		public string DeliveryStatusTitle { get; set; }
-
+		/// <summary>
+		/// Gets or Sets SeverityId
+		/// </summary>
 		public int? SeverityId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets DeliveryStatusDescription
+		/// </summary>
 		public byte[] DeliveryStatusDescription { get; set; }
-
+		/// <summary>
+		/// Gets or Sets OrganizationId's Name
+		/// </summary>
 		public string OrganizationIdName { get; set; }
+
 	}
 }

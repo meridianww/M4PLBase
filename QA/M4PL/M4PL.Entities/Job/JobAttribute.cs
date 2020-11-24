@@ -20,7 +20,7 @@
 namespace M4PL.Entities.Job
 {
 	/// <summary>
-	///
+	/// Model class for Job Attributes
 	/// </summary>
 	public class JobAttribute : BaseModel
 	{
@@ -31,7 +31,9 @@ namespace M4PL.Entities.Job
 		/// The job identifier.
 		/// </value>
 		public long? JobID { get; set; }
-
+		/// <summary>
+		/// Gets or sets the Job identifier's Name
+		/// </summary>
 		public string JobIDName { get; set; }
 
 		/// <summary>
@@ -44,7 +46,7 @@ namespace M4PL.Entities.Job
 		public int? AjbLineOrder { get; set; }
 
 		/// <summary>
-		/// Gets or sets the type of attribute.
+		/// Gets or sets the type code of attribute.
 		/// </summary>
 		/// <value>
 		/// The AjbAttributeCode.
@@ -105,7 +107,9 @@ namespace M4PL.Entities.Job
 		/// </value>
 
 		public bool AjbDefault { get; set; }
-
+		/// <summary>
+		/// Gets or Sets flag if Job Completed
+		/// </summary>
 		public bool JobCompleted { get; set; }
 	}
 }
