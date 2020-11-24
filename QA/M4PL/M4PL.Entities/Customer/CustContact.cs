@@ -31,7 +31,9 @@ namespace M4PL.Entities.Customer
 		/// The CustCustomerID.
 		/// </value>
 		public long? ConPrimaryRecordId { get; set; }
-
+		/// <summary>
+		/// Gets or sets the cusotmer's contact identifier's Name
+		/// </summary>
 		public string ConPrimaryRecordIdName { get; set; }
 
 		/// <summary>
@@ -49,7 +51,9 @@ namespace M4PL.Entities.Customer
 		/// The CustContactCode.
 		/// </value>
 		public long? ConCodeId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Contact Code Identifier's Name
+		/// </summary>
 		public string ConCodeIdName { get; set; }
 
 		/// <summary>
@@ -68,28 +72,54 @@ namespace M4PL.Entities.Customer
 		/// </value>
 		public long? ContactMSTRID { get; set; }
 
+		/// <summary>
+		/// Gets or Sets Contact MSTRID Name
+		/// </summary>
 		public string ContactMSTRIDName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConJob Title
+		/// </summary>
 		public string ConJobTitle { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConEmail Address
+		/// </summary>
 		public string ConEmailAddress { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConMobile Phone
+		/// </summary>
 		public string ConMobilePhone { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness Phone
+		/// </summary>
 		public string ConBusinessPhone { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness Address1
+		/// </summary>
 		public string ConBusinessAddress1 { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness Address2
+		/// </summary>
 		public string ConBusinessAddress2 { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness City
+		/// </summary>
 		public string ConBusinessCity { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness StateId Name
+		/// </summary>
 		public string ConBusinessStateIdName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness Zip/Postal
+		/// </summary>
 		public string ConBusinessZipPostal { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness CountryId Name
+		/// </summary>
 		public string ConBusinessCountryIdName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness Full Address
+		/// </summary>
 		public string ConBusinessFullAddress { get; set; }
+
 	}
 }

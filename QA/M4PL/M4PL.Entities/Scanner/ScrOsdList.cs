@@ -19,14 +19,38 @@
 
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner OSD List
+	/// </summary>
 	public class ScrOsdList : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Program Id
+		/// </summary>
 		public long? ProgramID { get; set; }
+		/// <summary>
+		/// Gets or Sets Prorgam Id's Name
+		/// </summary>
 		public string ProgramIDName { get; set; }
+		/// <summary>
+		/// Gets or Sets Sorting Order
+		/// </summary>
 		public int? OSDItemNumber { get; set; }
+		/// <summary>
+		/// Gets or Sets OSD Code
+		/// </summary>
 		public string OSDCode { get; set; }
+		/// <summary>
+		/// Gets or Sets OSD Title
+		/// </summary>
 		public string OSDTitle { get; set; }
+		/// <summary>
+		/// Gets or Sets OSD Title
+		/// </summary>
 		public string OSDType { get; set; }
+		/// <summary>
+		/// Gets or sets OSD Note
+		/// </summary>
 		public string OSDNote { get; set; }
 	}
 }

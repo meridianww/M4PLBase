@@ -27,6 +27,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// Controller for Customer Document Reference
+    /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/CustDocReferences")]
     public class CustDocReferencesController : ApiController
@@ -43,12 +46,8 @@ namespace M4PL.API.Controllers
             _custDocReferenceCommands = custDocReferenceCommands;
         }
 
-        /// <summary>
-        /// PagedData method is used to get limited recordset with Total count based on pagedDataInfo values.
-        /// </summary>
-        /// <param name="pagedDataInfo">
-        /// This parameter require field values like PageNumber,PageSize,OrderBy,GroupBy,GroupByWhereCondition,WhereCondition,IsNext,IsEnd etc.
-        /// </param>
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"> </param>
         /// <returns>
         /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
         /// </returns>

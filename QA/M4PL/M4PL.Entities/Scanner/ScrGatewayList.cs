@@ -19,10 +19,22 @@
 
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner Gateway List
+	/// </summary>
 	public class ScrGatewayList : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Gateway Status Id
+		/// </summary>
 		public long GatewayStatusID { get; set; }
+		/// <summary>
+		/// Gets or Sets Program ID
+		/// </summary>
 		public long? ProgramID { get; set; }
+		/// <summary>
+		/// Gets or sets Gateway Code
+		/// </summary>
 		public string GatewayCode { get; set; }
 	}
 }

@@ -19,12 +19,30 @@
 
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner Driver List
+	/// </summary>
 	public class ScnDriverList : BaseModel
 	{
+		/// <summary>
+		/// Gets or sets Driver Id
+		/// </summary>
 		public long DriverID { get; set; }
+		/// <summary>
+		/// Gets or Sets First Name
+		/// </summary>
 		public string FirstName { get; set; }
+		/// <summary>
+		/// Gets or Sets Last Name
+		/// </summary>
 		public string LastName { get; set; }
+		/// <summary>
+		/// Gets or Sets Program Id
+		/// </summary>
 		public long? ProgramID { get; set; }
+		/// <summary>
+		/// Gets or Sets Location Number
+		/// </summary>
 		public string LocationNumber { get; set; }
 	}
 }

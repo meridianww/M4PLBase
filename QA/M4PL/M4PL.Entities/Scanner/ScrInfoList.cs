@@ -19,11 +19,26 @@
 
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner Info List
+	/// </summary>
 	public class ScrInfoList : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Infor List Id
+		/// </summary>
 		public long InfoListID { get; set; }
+		/// <summary>
+		/// Gets or Sets Info List Description
+		/// </summary>
 		public string InfoListDesc { get; set; }
+		/// <summary>
+		/// Gets or Sets Info List image
+		/// </summary>
 		public byte InfoListPhoto { get; set; }
+		/// <summary>
+		/// Gets or Sets Catalog Title
+		/// </summary>
 		public object CatalogTitle { get; set; }
 	}
 }

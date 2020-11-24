@@ -34,7 +34,9 @@ namespace M4PL.Entities.Customer
 		/// The CdrOrgID.
 		/// </value>
 		public long? CdrOrgID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Org Identifier's Name
+		/// </summary>
 		public string CdrOrgIDName { get; set; }
 
 		/// <summary>
@@ -45,7 +47,9 @@ namespace M4PL.Entities.Customer
 		/// The CdrCustomerID.
 		/// </value>
 		public long? CdrCustomerID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Customer Identifier's Name
+		/// </summary>
 		public string CdrCustomerIDName { get; set; }
 
 		/// <summary>

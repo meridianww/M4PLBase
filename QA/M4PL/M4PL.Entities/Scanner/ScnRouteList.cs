@@ -19,10 +19,22 @@
 
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner Route List
+	/// </summary>
 	public class ScnRouteList : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Route Id
+		/// </summary>
 		public long RouteID { get; set; }
+		/// <summary>
+		/// Gets or Sets Route Name
+		/// </summary>
 		public string RouteName { get; set; }
+		/// <summary>
+		/// Gets or Sets Program Id
+		/// </summary>
 		public long? ProgramID { get; set; }
 	}
 }
