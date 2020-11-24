@@ -55,7 +55,7 @@
             }).BindList(Model.ColumnSettings.Where(c => !c.ColIsVisible)).GetHtml().ToHtmlString();
             ViewContext.Writer.Write("</div>");
 
-            ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 add-remove-btn-div'>");
+            ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 add-remove-btn-div'>");
 
             Html.DevExpress().Button(settings =>
             {
@@ -81,13 +81,13 @@
 
             ViewContext.Writer.Write("</div>");
 
-            ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 chooseclm-available padding-5'>");
+            ViewContext.Writer.Write("<div class='col-lg-4 col-md-4 col-sm-4 chooseclm-available padding-5'>");
             Html.DevExpress().ListBox(settings =>
             {
                 settings.Name = "lblShowColumns";
                 settings.Width = Unit.Percentage(100);
                 settings.Height = 220;
-                settings.Width = 125;
+                settings.Width = 150;
                 settings.Properties.ClientSideEvents.Init = "function(s, e){ M4PLWindow.ChooseColumns.ShowColumnInit(s, e,'" + Convert.ToString(ViewData[MvcConstants.SelectedColumns]) + "', '" + allStringifiedFreezedColumn + "', '" + allStringifiedGroupByColumns + "', '" + allStringifiedRequiredFieldColumns + "', '" + Model.Records.FirstOrDefault().ShowGrouping + "', '" + allStringifiedDefaultGroupByCols + "' ); }";
                 settings.Properties.Caption = Model.Records.FirstOrDefault().Show;
                 settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
