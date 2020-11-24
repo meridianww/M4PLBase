@@ -24,12 +24,18 @@ using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// Controller for FarEye
+	/// </summary>
 	[CustomAuthorize]
 	[RoutePrefix("api/FarEye")]
 	public class FarEyeController : ApiController
 	{
 		private readonly IFarEyeCommands _farEyeCommands;
-
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="farEyeCommands"></param>
 		public FarEyeController(IFarEyeCommands farEyeCommands)
 		{
 			_farEyeCommands = farEyeCommands;

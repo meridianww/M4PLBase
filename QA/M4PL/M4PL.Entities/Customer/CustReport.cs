@@ -18,12 +18,21 @@
 //==========================================================================================================
 namespace M4PL.Entities.Customer
 {
+	/// <summary>
+	/// Model class for Customer Report
+	/// </summary>
 	public class CustReport : BaseReportModel
 	{
+		/// <summary>
+		/// Default constructor
+		/// </summary>
 		public CustReport()
 		{
 		}
-
+		/// <summary>
+		/// Parameterised constructor by supplying Base Report Model
+		/// </summary>
+		/// <param name="baseReportModel"></param>
 		public CustReport(BaseReportModel baseReportModel) : base(baseReportModel)
 		{
 		}

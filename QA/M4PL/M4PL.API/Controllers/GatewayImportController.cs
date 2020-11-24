@@ -17,6 +17,9 @@ using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
 {
+	/// <summary>
+	/// Controller for Gateway Import
+	/// </summary>
 	[CustomAuthorize]
 	[RoutePrefix("api/GatewayImport")]
 	public class GatewayImportController : ApiController
@@ -31,7 +34,11 @@ namespace M4PL.API.Controllers
 		{
 			_gatewayCommands = gatewayCommands;
 		}
-
+		/// <summary>
+		/// Generates/Imports Program default Gateways by supplied Gateway List
+		/// </summary>
+		/// <param name="gatewayList"></param>
+		/// <returns>Status Model containing Status Result</returns>
 		[HttpPost]
 		[Route("GenerateProgramGateway"), ResponseType(typeof(StatusModel))]
 		public StatusModel GenerateProgramGateway(List<Entities.Finance.Customer.Gateway> gatewayList)

@@ -40,6 +40,9 @@ namespace M4PL.Entities.Customer
 		/// </value>
 
 		public long? CustOrgId { get; set; }
+		/// <summary>
+		/// Gets or sets the customer's identifier's Name associted to the organization.
+		/// </summary>
 		public string CustOrgIdName { get; set; }
 
 		/// <summary>
@@ -86,6 +89,9 @@ namespace M4PL.Entities.Customer
 		/// </value>
 
 		public long? CustWorkAddressId { get; set; }
+		/// <summary>
+		/// Gets or sets the Customer's work address identifier's name
+		/// </summary>
 		public string CustWorkAddressIdName { get; set; }
 
 		/// <summary>
@@ -96,6 +102,9 @@ namespace M4PL.Entities.Customer
 		/// </value>
 
 		public long? CustBusinessAddressId { get; set; }
+		/// <summary>
+		/// Gets or sets the Customer's business address identifier's name
+		/// </summary>
 		public string CustBusinessAddressIdName { get; set; }
 
 		/// <summary>
@@ -106,6 +115,9 @@ namespace M4PL.Entities.Customer
 		/// </value>
 
 		public long? CustCorporateAddressId { get; set; }
+		/// <summary>
+		/// Gets or sets the Cusotmer's corporate address identifier's name
+		/// </summary>
 		public string CustCorporateAddressIdName { get; set; }
 
 		/// <summary>
@@ -143,6 +155,9 @@ namespace M4PL.Entities.Customer
 		/// </value>
 
 		public int? CustTypeId { get; set; }
+		/// <summary>
+		/// Gets or sets the customer type identifier's Name
+		/// </summary>
 		public string CustTypeCode { get; set; }
 
 		/// <summary>
@@ -184,7 +199,9 @@ namespace M4PL.Entities.Customer
 		/// Gets Or Sets BusinessCountryId
 		/// </summary>
 		public int? BusinessCountryId { get; set; }
-
+		/// <summary>
+		/// Gets Or Sets BusinessCountryId's name
+		/// </summary>
 		public string BusinessCountryIdName { get; set; }
 
 		/// <summary>
@@ -261,7 +278,9 @@ namespace M4PL.Entities.Customer
 		/// Gets Or Sets WorkCountryId
 		/// </summary>
 		public int WorkCountryId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets WorkCountryId's Name
+		/// </summary>
 		public string WorkCountryIdName { get; set; }
 	}
 }
