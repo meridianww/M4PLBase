@@ -168,7 +168,7 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// It will reject the xcbl changes for supplied gateway id. It will NOT update any changes the Job. 
         /// </summary>
-        /// <param name="gatewayId"><Gateway Id/param>
+        /// <param name="gatewayId">Gateway Id</param>
         /// <returns></returns>
 		[CustomAuthorize]
         [HttpGet]
