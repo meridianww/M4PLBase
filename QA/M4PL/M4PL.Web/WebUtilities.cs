@@ -603,6 +603,8 @@ namespace M4PL.Web
                     switch (columnSetting.DataType)
                     {
                         case "decimal":
+                            if (columnSetting.ColColumnName == "GwyGatewayDuration" || columnSetting.ColAliasName == "Quantity")
+                                return columnSetting.MaxLength * 7;
                             return columnSetting.MaxLength * 5;
 
                         case "int":
