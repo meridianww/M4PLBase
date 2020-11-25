@@ -181,33 +181,41 @@ namespace M4PL.Business.XCBL
 		{
 			DateTime processingStartDateTime = DateTime.Now;
 			FarEyeOrderCancelResponse response = new FarEyeOrderCancelResponse();
-			if (farEyeOrderCancelRequest.tracking_number == null || (farEyeOrderCancelRequest.tracking_number != null && farEyeOrderCancelRequest.tracking_number.Count == 0))
+			////if (farEyeOrderCancelRequest.tracking_number == null || (farEyeOrderCancelRequest.tracking_number != null && farEyeOrderCancelRequest.tracking_number.Count == 0))
+			////{
+			////	response.errors = new List<string>();
+			////	response.errors.Add("There is no Tracking number present.");
+			////	response.status = 400;
+			////	response.reference_id = farEyeOrderCancelRequest.reference_id;
+			////	response.order_number = farEyeOrderCancelRequest.order_number;
+			////	response.timestamp = TimeUtility.UnixTimeNow();
+			////	response.execution_time = (DateTime.Now - processingStartDateTime).TotalMilliseconds.ToInt();
+			////}
+			////else
+			////{
+			Job.JobCommands jobCommands = new Job.JobCommands();
+			jobCommands.ActiveUser = this.ActiveUser;
+			response.items_track_details = new List<ItemsTrackDetail>();
+			if (farEyeOrderCancelRequest.tracking_number != null && farEyeOrderCancelRequest.tracking_number.Count > 0)
 			{
-				response.errors = new List<string>();
-				response.errors.Add("There is no Tracking number present.");
-				response.status = 400;
-				response.reference_id = farEyeOrderCancelRequest.reference_id;
-				response.order_number = farEyeOrderCancelRequest.order_number;
-				response.timestamp = TimeUtility.UnixTimeNow();
-				response.execution_time = (DateTime.Now - processingStartDateTime).TotalMilliseconds.ToInt();
-			}
-			else
-			{
-				Job.JobCommands jobCommands = new Job.JobCommands();
-				jobCommands.ActiveUser = this.ActiveUser;
-				response.items_track_details = new List<ItemsTrackDetail>();
 				foreach (var trackingNumber in farEyeOrderCancelRequest.tracking_number)
 				{
 					var statusModel = jobCommands.CancelJobByOrderNumber(trackingNumber, farEyeOrderCancelRequest.carrier_code, farEyeOrderCancelRequest.reason);
 					response.items_track_details.Add(new ItemsTrackDetail() { status = statusModel.Status, message = statusModel.AdditionalDetail, tracking_number = trackingNumber });
 				}
-
-				response.status = response.items_track_details.Where(x => x.status.Equals("Failure", StringComparison.OrdinalIgnoreCase)).Any() ? 400 : 200;
-				response.reference_id = farEyeOrderCancelRequest.reference_id;
-				response.order_number = farEyeOrderCancelRequest.order_number;
-				response.timestamp = TimeUtility.UnixTimeNow();
-				response.execution_time = (DateTime.Now - processingStartDateTime).TotalMilliseconds.ToInt();
 			}
+			else
+			{
+				var statusModel = jobCommands.CancelJobByOrderNumber(string.Format("O-{0}", farEyeOrderCancelRequest.order_number), farEyeOrderCancelRequest.carrier_code, farEyeOrderCancelRequest.reason);
+				response.items_track_details.Add(new ItemsTrackDetail() { status = statusModel.Status, message = statusModel.AdditionalDetail, tracking_number = null });
+			}
+
+			response.status = response.items_track_details.Where(x => x.status.Equals("Failure", StringComparison.OrdinalIgnoreCase)).Any() ? 400 : 200;
+			response.reference_id = farEyeOrderCancelRequest.reference_id;
+			response.order_number = farEyeOrderCancelRequest.order_number;
+			response.timestamp = TimeUtility.UnixTimeNow();
+			response.execution_time = (DateTime.Now - processingStartDateTime).TotalMilliseconds.ToInt();
+			////}
 
 			return response;
 		}
