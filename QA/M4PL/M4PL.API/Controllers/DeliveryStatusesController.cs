@@ -27,32 +27,32 @@ using M4PL.API.Filters;
 using System.Web.Http.Description;
 
 namespace M4PL.API.Controllers
-
+{
     /// <summary>
     /// Controller for Delivery Status
     /// </summary>
     [CustomAuthorize]
     [RoutePrefix("api/DeliveryStatuses")]
-	public class DeliveryStatusesController : ApiController
-	{
-		private readonly IDeliveryStatusCommands _deliveryStatusCommands;
+    public class DeliveryStatusesController : ApiController
+    {
+        private readonly IDeliveryStatusCommands _deliveryStatusCommands;
 
-		/// <summary>
-		/// Function to get tables and reference name details
-		/// </summary>
-		/// <param name="deliveryStatusCommands"></param>
-		public DeliveryStatusesController(IDeliveryStatusCommands deliveryStatusCommands)
-			
-		{
-			_deliveryStatusCommands = deliveryStatusCommands;
-		}
+        /// <summary>
+        /// Function to get tables and reference name details
+        /// </summary>
+        /// <param name="deliveryStatusCommands"></param>
+        public DeliveryStatusesController(IDeliveryStatusCommands deliveryStatusCommands)
 
-    /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
-    /// <param name="pagedDataInfo"> </param>
-    /// <returns>
-    /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
-    /// </returns>
-    [CustomQueryable]
+        {
+            _deliveryStatusCommands = deliveryStatusCommands;
+        }
+
+        /// <summary>Gets the Page Data(RecordSet) to feed the DataGrid</summary>
+        /// <param name="pagedDataInfo"> </param>
+        /// <returns>
+        /// Returns response as queryable records list based on pagedDataInfo filter values with fields status ,result.
+        /// </returns>
+        [CustomQueryable]
         [HttpPost]
         [Route("PagedData")]
         public virtual IQueryable<DeliveryStatus> PagedData(PagedDataInfo pagedDataInfo)
