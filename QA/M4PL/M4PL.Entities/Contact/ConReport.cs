@@ -18,12 +18,21 @@
 //==========================================================================================================
 namespace M4PL.Entities.Contact
 {
+	/// <summary>
+	/// Model class for Contact Reports
+	/// </summary>
 	public class ConReport : BaseReportModel
 	{
+		/// <summary>
+		/// Gefault Constructor
+		/// </summary>
 		public ConReport()
 		{
 		}
-
+		/// <summary>
+		/// Parameterised Constructor by supplying Base Report Model
+		/// </summary>
+		/// <param name="baseReportModel"></param>
 		public ConReport(BaseReportModel baseReportModel) : base(baseReportModel)
 		{
 		}

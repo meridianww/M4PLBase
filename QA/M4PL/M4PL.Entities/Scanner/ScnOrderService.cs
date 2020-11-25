@@ -19,12 +19,30 @@
 
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner Order Service
+	/// </summary>
 	public class ScnOrderService : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Service Id
+		/// </summary>
 		public long? ServicesID { get; set; }
+		/// <summary>
+		/// Gets or Sets Service Code
+		/// </summary>
 		public string ServicesCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Job Id
+		/// </summary>
 		public long? JobID { get; set; }
+		/// <summary>
+		/// Gets or Sets Notes
+		/// </summary>
 		public string Notes { get; set; }
+		/// <summary>
+		/// Gets or Sets Complete
+		/// </summary>
 		public string Complete { get; set; }
 	}
 }

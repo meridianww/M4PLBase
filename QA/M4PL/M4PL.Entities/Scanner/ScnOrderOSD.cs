@@ -21,19 +21,59 @@ using System;
 
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner Order OSD
+	/// </summary>
 	public class ScnOrderOSD : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Cargo OSDID
+		/// </summary>
 		public long CargoOSDID { get; set; }
+		/// <summary>
+		/// Gets or Sets OSDID
+		/// </summary>
 		public long? OSDID { get; set; }
+		/// <summary>
+		/// Gets or Sets DateTime
+		/// </summary>
 		public DateTime? DateTime { get; set; }
+		/// <summary>
+		/// Gets or Sets Cargo DetailID
+		/// </summary>
 		public long? CargoDetailID { get; set; }
+		/// <summary>
+		/// Gets or Sets Cargo ID
+		/// </summary>
 		public long? CargoID { get; set; }
+		/// <summary>
+		/// Gets or Sets CgoSerial Number
+		/// </summary>
 		public string CgoSerialNumber { get; set; }
+		/// <summary>
+		/// Gets or Sets OSD ReasonID
+		/// </summary>
 		public long? OSDReasonID { get; set; }
+		/// <summary>
+		/// Gets or Sets OSD Qty
+		/// </summary>
 		public decimal OSDQty { get; set; }
+		/// <summary>
+		/// Gets or Sets Notes
+		/// </summary>
 		public string Notes { get; set; }
+		/// <summary>
+		/// Gets or Sets EditCD
+		/// </summary>
 		public string EditCD { get; set; }
+		/// <summary>
+		/// Gets or Sets StatusID
+		/// </summary>
 		public string StatusID { get; set; }
+		/// <summary>
+		/// Gets or Sets Cgo Severity Code
+		/// </summary>
 		public string CgoSeverityCode { get; set; }
+
 	}
 }

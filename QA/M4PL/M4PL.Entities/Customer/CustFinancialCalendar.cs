@@ -33,7 +33,9 @@ namespace M4PL.Entities.Customer
 		/// The OrgID.
 		/// </value>
 		public long? OrgID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Ord Identifier's Name
+		/// </summary>
 		public string OrgIDName { get; set; }
 
 		/// <summary>
@@ -43,7 +45,9 @@ namespace M4PL.Entities.Customer
 		/// The Cust identifier.
 		/// </value>
 		public long? CustID { get; set; }
-
+		/// <summary>
+		/// Gets or sets the Customer identifier's Name
+		/// </summary>
 		public string CustIDName { get; set; }
 
 		/// <summary>

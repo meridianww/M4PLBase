@@ -69,11 +69,13 @@ namespace M4PL.Entities.Support
 		/// </value>
 
 		public int ColLookupId { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Column Lookup Code e.g. GatewayType
+		/// </summary>
 		public string ColLookupCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the identifier.
+		/// Gets or sets the Column Caption.
 		/// </summary>
 		/// <value>
 		/// The identifier.
@@ -224,11 +226,17 @@ namespace M4PL.Entities.Support
 		/// Display format for the specific column
 		/// </summary>
 		public string ColDisplayFormat { get; set; }
-
+		/// <summary>
+		/// Gets or Sets If the column Globally Is Visible
+		/// </summary>
 		public bool GlobalIsVisible { get; set; }
-
+		/// <summary>
+		/// Gets or Sets flag if Column Allows Negative values
+		/// </summary>
 		public bool ColAllowNegativeValue { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Column Mast
+		/// </summary>
 		public string ColMask { get; set; }
 	}
 }

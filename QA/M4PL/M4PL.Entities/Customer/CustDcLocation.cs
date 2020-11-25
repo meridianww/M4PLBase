@@ -32,7 +32,9 @@ namespace M4PL.Entities.Customer
 		/// The CdcCustomerID.
 		/// </value>
 		public long? CdcCustomerID { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Customer Identifier's Name
+		/// </summary>
 		public string CdcCustomerIDName { get; set; }
 
 		/// <summary>
@@ -75,28 +77,54 @@ namespace M4PL.Entities.Customer
 		/// </value>
 		public long? CdcContactMSTRID { get; set; }
 
+		/// <summary>
+		/// Gets or Sets CdcContact MSTRID Name
+		/// </summary>
 		public string CdcContactMSTRIDName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConJob Title
+		/// </summary>
 		public string ConJobTitle { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConEmail Address
+		/// </summary>
 		public string ConEmailAddress { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConMobile Phone
+		/// </summary>
 		public string ConMobilePhone { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness Phone
+		/// </summary>
 		public string ConBusinessPhone { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness Address1
+		/// </summary>
 		public string ConBusinessAddress1 { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness Address2
+		/// </summary>
 		public string ConBusinessAddress2 { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness City
+		/// </summary>
 		public string ConBusinessCity { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness StateId Name
+		/// </summary>
 		public string ConBusinessStateIdName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness Zip Postal
+		/// </summary>
 		public string ConBusinessZipPostal { get; set; }
-
+		/// <summary>
+		/// Gets or Sets ConBusiness CountryIdName
+		/// </summary>
 		public string ConBusinessCountryIdName { get; set; }
-
+		/// <summary>
+		/// Gets or Sets Business FullAddress
+		/// </summary>
 		public string ConBusinessFullAddress { get; set; }
+
 	}
 }

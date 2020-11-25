@@ -18,13 +18,34 @@
 //==========================================================================================================
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner OSD Reason List 
+	/// </summary>
 	public class ScrOsdReasonList : BaseModel
 	{
+		/// <summary>
+		/// Gets or Sets Program Id
+		/// </summary>
 		public long? ProgramID { get; set; }
+		/// <summary>
+		/// Gets or Sets Program Id's Name
+		/// </summary>
 		public string ProgramIDName { get; set; }
+		/// <summary>
+		/// Gets or Sets Sorting order
+		/// </summary>
 		public int? ReasonItemNumber { get; set; }
+		/// <summary>
+		/// Gets or Sets Reason Id Code
+		/// </summary>
 		public string ReasonIDCode { get; set; }
+		/// <summary>
+		/// Gets or Sets Reason Title
+		/// </summary>
 		public string ReasonTitle { get; set; }
+		/// <summary>
+		/// Gets or Sets Reason Description
+		/// </summary>
 		public byte[] ReasonDesc { get; set; }
 	}
 }

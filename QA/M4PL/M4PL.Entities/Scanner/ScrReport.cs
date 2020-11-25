@@ -19,12 +19,21 @@
 
 namespace M4PL.Entities.Scanner
 {
+	/// <summary>
+	/// Model class for Scanner Reports
+	/// </summary>
 	public class ScrReport : BaseReportModel
 	{
+		/// <summary>
+		/// Default Constructor
+		/// </summary>
 		public ScrReport()
 		{
 		}
-
+		/// <summary>
+		/// Parameterised Constructor by supplying Base Report Model
+		/// </summary>
+		/// <param name="baseReportModel"></param>
 		public ScrReport(BaseReportModel baseReportModel) : base(baseReportModel)
 		{
 		}

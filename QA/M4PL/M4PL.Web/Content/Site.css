@@ -1054,7 +1054,7 @@ label {
 
 .choose-col-btns {
     float: left;
-    width: 152px;
+    width: 145px;
     margin-bottom: 10px;
     position: relative;
     top: 19px;
@@ -1063,7 +1063,7 @@ label {
 }
 
     .choose-col-btns.add-remove-btn {
-        width: 120px;
+        width: 100px;
         text-align: center !important;
     }
 
@@ -1071,7 +1071,7 @@ label {
     position: relative;
     top: 0px;
     padding: 70px 5px;
-    width: 145px !important;
+    width: 120px !important;
 }
 
 #lblAvailableColumns_CapC label, #lblShowColumns_CapC label {
@@ -1528,6 +1528,7 @@ label {
 
 .chooseclm-available {
     width: 150px !important;
+    margin-left: 12px;
 }
 
 .prg-gateway-date {
