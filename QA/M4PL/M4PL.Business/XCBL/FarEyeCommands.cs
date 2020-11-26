@@ -108,7 +108,8 @@ namespace M4PL.Business.XCBL
 				return new OrderEventResponse() { Status = (int)HttpStatusCode.ExpectationFailed, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { "OrderNumber can not be null or empty." } };
 			}
 
-			var orderData = M4PL.DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderEvent.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			string orderNumber = string.IsNullOrEmpty(orderEvent.TrackingNumber) ? string.Format("O-{0}", orderEvent.OrderNumber) : orderEvent.TrackingNumber;
+			var orderData = M4PL.DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 			if (orderData != null && orderData.Id > 0)
 			{
 				DataAccess.Job.JobEDIXcblCommands.Post(ActiveUser, new JobEDIXcbl()
@@ -161,15 +162,15 @@ namespace M4PL.Business.XCBL
 							rescheduleActionData.GwyTitle = "Electrolux Request";
 							rescheduleActionData.GwyCompleted = true;
 							var gatewayInsertResult = DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, null, rescheduleActionData, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), orderData.Id);
-							if (gatewayInsertResult != null && gatewayInsertResult.IsFarEyePushRequired)
-							{
-								FarEyeHelper.PushStatusUpdateToFarEye((long)orderData.Id, ActiveUser);
-							}
+							////if (gatewayInsertResult != null && gatewayInsertResult.IsFarEyePushRequired)
+							////{
+							////	FarEyeHelper.PushStatusUpdateToFarEye((long)orderData.Id, ActiveUser);
+							////}
 						}
 					}
 				}
 
-				return new OrderEventResponse() { Status = (int)HttpStatusCode.OK, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { string.Format("Order {0} is successfully updated.", orderData.JobCustomerSalesOrder) } };
+				return new OrderEventResponse() { OrderNumber = orderEvent.OrderNumber, TrackingNumber = orderEvent.TrackingNumber, Status = (int)HttpStatusCode.OK, Timestamp = TimeUtility.UnixTimeNow(), Errors = new List<string>() { string.Format("Order {0} is successfully updated.", orderEvent.OrderNumber) } };
 			}
 			else
 			{
@@ -181,18 +182,6 @@ namespace M4PL.Business.XCBL
 		{
 			DateTime processingStartDateTime = DateTime.Now;
 			FarEyeOrderCancelResponse response = new FarEyeOrderCancelResponse();
-			////if (farEyeOrderCancelRequest.tracking_number == null || (farEyeOrderCancelRequest.tracking_number != null && farEyeOrderCancelRequest.tracking_number.Count == 0))
-			////{
-			////	response.errors = new List<string>();
-			////	response.errors.Add("There is no Tracking number present.");
-			////	response.status = 400;
-			////	response.reference_id = farEyeOrderCancelRequest.reference_id;
-			////	response.order_number = farEyeOrderCancelRequest.order_number;
-			////	response.timestamp = TimeUtility.UnixTimeNow();
-			////	response.execution_time = (DateTime.Now - processingStartDateTime).TotalMilliseconds.ToInt();
-			////}
-			////else
-			////{
 			Job.JobCommands jobCommands = new Job.JobCommands();
 			jobCommands.ActiveUser = this.ActiveUser;
 			response.items_track_details = new List<ItemsTrackDetail>();

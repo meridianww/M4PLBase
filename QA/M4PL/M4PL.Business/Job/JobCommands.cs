@@ -414,11 +414,11 @@ namespace M4PL.Business.Job
 						}
 					}
 
-					bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobDetail.Id, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-					if (isFarEyePushRequired)
-					{
-						FarEyeHelper.PushStatusUpdateToFarEye(jobDetail.Id, ActiveUser);
-					}
+					////bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobDetail.Id, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					////if (isFarEyePushRequired)
+					////{
+					////	FarEyeHelper.PushStatusUpdateToFarEye(jobDetail.Id, ActiveUser);
+					////}
 
 					return new StatusModel()
 					{

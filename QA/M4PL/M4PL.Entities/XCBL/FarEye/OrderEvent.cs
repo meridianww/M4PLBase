@@ -19,7 +19,7 @@ namespace M4PL.Entities.XCBL.FarEye
 		/// <summary>
 		/// Gets or Sets Order Number
 		/// </summary>
-		[JsonProperty("order_no")]
+		[JsonProperty("order_number")]
 		public string OrderNumber { get; set; }
 		/// <summary>
 		/// Gets or Sets Order Type
