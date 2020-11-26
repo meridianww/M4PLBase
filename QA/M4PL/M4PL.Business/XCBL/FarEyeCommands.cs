@@ -109,7 +109,12 @@ namespace M4PL.Business.XCBL
 			}
 
 			string orderNumber = string.IsNullOrEmpty(orderEvent.TrackingNumber) ? string.Format("O-{0}", orderEvent.OrderNumber) : orderEvent.TrackingNumber;
-			var orderData = M4PL.DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			var orderData = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			if (orderData == null || (orderData != null && orderData.Id == 0))
+			{
+				orderData = DataAccess.Job.JobCommands.GetJobByServiceMode(ActiveUser, orderEvent.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			}
+
 			if (orderData != null && orderData.Id > 0)
 			{
 				DataAccess.Job.JobEDIXcblCommands.Post(ActiveUser, new JobEDIXcbl()
