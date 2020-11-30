@@ -112,7 +112,7 @@ END
 		END
 		ELSE IF (@entity = 'GatewayStatus')
 		BEGIN
-		 	SET @sqlCommand = 'SELECT DISTINCT PgdGatewayCode AS GatewayStatus FROM PRGRM010Ref_GatewayDefaults 
+		 	SET @sqlCommand = 'SELECT DISTINCT CASE WHEN GatewayTypeId = 85 THEN PgdGatewayCode ELSE PgdGatewayTitle END AS GatewayStatus FROM PRGRM010Ref_GatewayDefaults 
 			WHERE GatewayTypeId  IN (select Id  from SYSTM000Ref_Options  WHERE SysLookupCode = ''GatewayType''
 			AND (SysOptionName = ''Gateway'' OR  SysOptionName = ''Action'')) AND 
 			PgdProgramID IN (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID = ' + CONVERT(NVARCHAR(50), @CustomerId) + ')
@@ -311,7 +311,7 @@ END
 		END
 		ELSE IF (@entity = 'GatewayStatus')
 		BEGIN
-			SET @sqlCommand = 'SELECT DISTINCT PgdGatewayCode AS GatewayStatus FROM PRGRM010Ref_GatewayDefaults WHERE PgdProgramID IN
+			SET @sqlCommand = 'SELECT DISTINCT CASE WHEN GatewayTypeId = 85 THEN PgdGatewayCode ELSE PgdGatewayTitle END AS GatewayStatus FROM PRGRM010Ref_GatewayDefaults WHERE PgdProgramID IN
 			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) )
 			 AND StatusId IN (1,2) AND PgdGatewayCode IS NOT NULL AND PgdGatewayCode <> '''''
 		END

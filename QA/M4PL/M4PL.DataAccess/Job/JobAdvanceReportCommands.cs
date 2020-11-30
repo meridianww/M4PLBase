@@ -392,7 +392,7 @@ namespace M4PL.DataAccess.Job
                     parameters.Add(new Parameter("@SearchText", jobAdvanceReportRequest.Search));
                 if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
                 {
-                    string gatewayTitles = string.Format(" AND  JobAdvanceReport.JobGatewayStatus IN ('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
+                    string gatewayTitles = string.Format("('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
                     parameters.Add(new Parameter("@gatewayTitles", gatewayTitles));
                 }
             }
