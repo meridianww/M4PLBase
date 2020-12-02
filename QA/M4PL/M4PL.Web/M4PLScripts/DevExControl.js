@@ -1492,7 +1492,7 @@ DevExCtrl.DateEdit = function () {
     var _onChangeCheckIsPreviousDate = function (s, e) {
         $.ajax({
             type: "GET",
-            url: "/Common/CheckDate?date=" + (new Date(s.GetValue()).toDateString()),
+            url: "/Common/CheckDate?date=" + (new Date(s.GetValue()).toLocaleString()),
             success: function (response) {
                 if (!response.IsValid)
                     DisplayMessageControl.PerformCallback({ strDisplayMessage: response.DisplayMessage });
