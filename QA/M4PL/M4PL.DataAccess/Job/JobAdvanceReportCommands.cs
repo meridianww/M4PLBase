@@ -544,6 +544,7 @@ namespace M4PL.DataAccess.Job
                 uttProjectedCapacityReport.Locale = CultureInfo.InvariantCulture;
                 uttProjectedCapacityReport.Columns.Add("ProjectedCapacity");
                 uttProjectedCapacityReport.Columns.Add("Location");
+                uttProjectedCapacityReport.Columns.Add("Size");
                 if (projectedCapacityRawDataList != null && projectedCapacityRawDataList.Count() > 0)
                 {
                     foreach (var currentReportData in projectedCapacityRawDataList)
@@ -551,6 +552,7 @@ namespace M4PL.DataAccess.Job
                         var row = uttProjectedCapacityReport.NewRow();
                         row["ProjectedCapacity"] = string.IsNullOrEmpty(currentReportData.ProjectedCapacity) ? 0 : currentReportData.ProjectedCapacity.ToInt();
                         row["Location"] = currentReportData.Location;
+                        row["Size"] = currentReportData.Size;
                         uttProjectedCapacityReport.Rows.Add(row);
                         uttProjectedCapacityReport.AcceptChanges();
                     }

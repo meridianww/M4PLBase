@@ -2,8 +2,7 @@ ALTER VIEW dbo.vwJobCapacityReport
 AS
 SELECT Job.Id Id
 	,CASE 
-		WHEN DATEADD(day, (DATEDIFF(day, '19800104', CURRENT_TIMESTAMP) / 7) * 7, '19800104') > OnHandGateway.GwyGatewayACD
-			AND DATEADD(day, (DATEDIFF(day, '19800104', CURRENT_TIMESTAMP) / 7) * 7, '19800104') < ISNULL(OnTruckGateway.GwyGatewayACD,GETUTCDATE())
+		WHEN (Job.JobGatewayStatus = 'On Hand' OR JOB.JobGatewayStatus ='Onhand')
 			THEN CASE 
 					WHEN Prg.PrgCustId = 20047
 						THEN CASE 
@@ -20,12 +19,8 @@ SELECT Job.Id Id
 		ELSE 0
 		END Cabinets
 FROM dbo.Prgrm000Master Prg 
-INNER JOIN JobDL000Master Job ON Job.ProgramId = Prg.Id 
-LEFT JOIN dbo.JobDL010Cargo Cargo ON Cargo.JobID = Job.Id
-	AND Cargo.StatusId = 1
+INNER JOIN JobDL000Master Job ON Job.ProgramId = Prg.Id AND Prg.StatusId=1
+INNER JOIN dbo.JobDL010Cargo Cargo ON Cargo.JobID = Job.Id AND JOB.StatusId = 1 AND Cargo.StatusId = 1 AND 
+(Job.JobGatewayStatus = 'On Hand' OR JOB.JobGatewayStatus ='Onhand')
 LEFT JOIN dbo.SYSTM000Ref_Options Options ON Options.Id = Cargo.CgoQtyUnitsId
 LEFT JOIN dbo.SYSTM000Ref_Options Package ON Package.Id = Cargo.CgoPackagingTypeId
-LEFT JOIN dbo.JOBDL020Gateways OnHandGateway ON OnHandGateway.JobId = Job.Id
-	AND OnHandGateway.GwyGatewayCode IN ('On Hand', 'Onhand')
-LEFT JOIN dbo.JOBDL020Gateways OnTruckGateway ON OnTruckGateway.JobId = Job.Id
-	AND OnTruckGateway.GwyGatewayCode IN ('Loaded on Truck', 'On Truck')

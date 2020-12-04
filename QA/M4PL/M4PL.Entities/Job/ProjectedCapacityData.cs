@@ -19,6 +19,7 @@ namespace M4PL.Entities.Job
         /// Gets or Sets Year
         /// </summary>
         public int Year { get; set; }
+        
         /// <summary>
         /// Gets or Sets List of Projected Capacity Raw Data
         /// </summary>

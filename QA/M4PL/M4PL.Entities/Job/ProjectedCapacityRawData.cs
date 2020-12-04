@@ -23,5 +23,9 @@ namespace M4PL.Entities.Job
         /// Gets or Sets Year
         /// </summary>
 		public int Year { get; set; }
-	}
+        /// <summary>
+        /// Gets or Sets Size
+        /// </summary>
+        public long Size { get; set; }
+    }
 }

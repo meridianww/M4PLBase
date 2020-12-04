@@ -557,6 +557,7 @@
                                   <th scope="col"> Part Code </th>
                                   <th scope="col"> Serial Number </th>
                                   <th scope="col"> Title </th>
+                                  <th scope="col"> Qty Ord </th>
                                   <th scope="col"> Pkg Type </th>
                                   <th scope="col"> Qty Unit </th>
                                   <th scope="col"> Weight </th>
@@ -575,6 +576,9 @@
                                     </td>
                                     <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="24%" align="center">
                                       <xsl:value-of select="Title" />
+                                    </td>
+                                    <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="14%">
+                                      <xsl:value-of select="QtyOrdered" />
                                     </td>
                                     <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="14%">
                                       <xsl:value-of select="PackagingType" />

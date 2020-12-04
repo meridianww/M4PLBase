@@ -3729,7 +3729,7 @@ namespace M4PL.Web
                     rawData = new List<ProjectedCapacityRawData>();
                     for (int i = 0; i < datatable.Rows.Count; i++)
                     {
-                        rawData.Add(new ProjectedCapacityRawData() { Year = projectedYear, Location = datatable.Rows[i][0].ToString(), ProjectedCapacity = datatable.Rows[i][1].ToString() });
+                        rawData.Add(new ProjectedCapacityRawData() { Year = projectedYear, Location = datatable.Rows[i][0].ToString(), ProjectedCapacity = datatable.Rows[i][1].ToString(), Size = Convert.ToInt64(datatable.Rows[i][2]) });
                     }
                 }
             }

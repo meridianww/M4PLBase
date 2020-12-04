@@ -380,6 +380,11 @@ namespace M4PL.Entities.Job
 		/// Gets or Sets Location
 		/// </summary>
 		public string Location { get; set; }
+
+		/// <summary>
+		/// Gets or Sets Location
+		/// </summary>
+		public long? DockSize { get; set; }
 		/// <summary>
 		/// Gets Foot Print Percent text
 		/// </summary>
@@ -399,7 +404,7 @@ namespace M4PL.Entities.Job
 			get
 			{
 				return Cabinets.HasValue && Cabinets.Value > 0 ?
-				  Convert.ToString(((double)Cabinets.Value / 205) * 2050) : string.Empty;
+				  Convert.ToString(((double)Cabinets.Value / 205) * DockSize.Value) : string.Empty;
 			}
 		}
 		/// <summary>

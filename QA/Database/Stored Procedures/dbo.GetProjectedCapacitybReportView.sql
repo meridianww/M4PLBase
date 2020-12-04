@@ -53,12 +53,13 @@ ProjectedYear INT,
 Location Varchar(150),
 ProjectedCapacity INT,
 CustomerId BIGINT,
-Cabinets INT
+Cabinets INT,
+DockSize BIGINT
 )
 
 
-INSERT INTO #TempProjectedCapacity(JobId,ProjectedCapacity,Location,ProjectedYear,CustomerId,CapacityId)
-Select DISTINCT Job.id,PC.ProjectedCapacity,PC.Location,PC.[Year],PC.CustomerId,PC.Id
+INSERT INTO #TempProjectedCapacity(JobId,ProjectedCapacity,Location,ProjectedYear,CustomerId,CapacityId,DockSize)
+Select DISTINCT Job.id,PC.ProjectedCapacity,PC.Location,PC.[Year],PC.CustomerId,PC.Id,PC.DockSize
 From dbo.LocationProjectedCapacity PC
 INNER JOIN  dbo.JOBDL000Master Job ON Job.JobSiteCode LIKE PC.Location +'%' AND ISNULL(Job.IsCancelled,0) = 0
 Where PC.StatusId=1 AND PC.[Year] = @ProjectedYear AND PC.CustomerId = @CustomerId
@@ -78,11 +79,11 @@ EXEC sp_executesql @TCountQuery
 		,N'@TotalCount INT OUTPUT'
 		,@TotalCount OUTPUT;
 
-SET @sqlCommand = 'SELECT Max(Job.CapacityId) Id, Job.Location
+SET @sqlCommand = 'SELECT Max(Job.CapacityId) Id, Job.Location ,Job.DockSize
 ,Job.ProjectedCapacity ProjectedCount
 ,SUM(ISNULL(Cabinets,0)) Cabinets
 FROM #TempProjectedCapacity Job
-GROUP BY Job.Location,Job.ProjectedCapacity '
+GROUP BY Job.Location,Job.ProjectedCapacity ,Job.DockSize'
 SET @sqlCommand = @sqlCommand + ' ORDER BY Max(Job.CapacityId)'
 		IF (
 				@recordId = 0
@@ -98,6 +99,7 @@ SET @sqlCommand = @sqlCommand + ' ORDER BY Max(Job.CapacityId)'
 				SET @sqlCommand = @sqlCommand + ' OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
 			END
 		END
+		print @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT'
 		,@pageNo = @pageNo

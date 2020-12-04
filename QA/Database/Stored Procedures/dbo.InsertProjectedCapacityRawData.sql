@@ -5,12 +5,12 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 -- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
+-- Author:		Kamal
+-- Create date: 04-10-2020
+-- Description:	Insert record into [LocationProjectedCapacity]
 -- =============================================
 CREATE PROCEDURE [dbo].[InsertProjectedCapacityRawData] (
-	@CustomerId BIGINT
+	 @CustomerId BIGINT
 	,@Year INT
 	,@EnteredBy NVARCHAR(150)
 	,@EnteredDate DATETIME2(7)
@@ -32,6 +32,7 @@ BEGIN
 		,[EnteredBy]
 		,[EnteredDate]
 		,[StatusId]
+		,[DockSize]
 		)
 	SELECT @CustomerId
 		,@Year
@@ -40,6 +41,7 @@ BEGIN
 		,@EnteredBy
 		,@EnteredDate
 		,1
+		,Size
 	FROM @uttProjectedCapacityReport
 END
 GO
