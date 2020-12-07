@@ -92,11 +92,7 @@ BEGIN TRY
 	IF ((ISNULL(@orderType, '') <> '' AND ISNULL(@orderType, '') <> 'ALL'))
 	BEGIN
 	   SET @TablesQuery += ' AND JobAdvanceReport.JobType = ''' + @orderType +''''
-	END	
-	IF(ISNULL(@gatewayTitles, '') <> '' AND ISNULL(@gatewayTitles, '') <> 'ALL')
-	BEGIN 
-	  SET @TablesQuery += @gatewayTitles
-	END 
+	END		
 	IF (ISNULL(@scheduled, '') = 'Not Scheduled')
 	BEGIN
 		SET @TablesQuery += ' AND JobAdvanceReport.JobIsSchedule = 0'  
@@ -105,6 +101,34 @@ BEGIN TRY
 	BEGIN
 		SET @TablesQuery += ' AND JobAdvanceReport.JobIsSchedule = 1'  
 	END
+	IF(ISNULL(@gatewayTitles, '') <> '' AND ISNULL(@gatewayTitles, '') <> 'ALL')
+	BEGIN 
+	  DECLARE @Titles NVARCHAR(500) = '';
+	  CREATE TABLE #TEMP (TypeId INT);
+	  SET @Titles += 'INSERT INTO #TEMP(TypeId) SELECT DISTINCT GatewayTypeId FROM JOBDL020Gateways
+	  WHERE StatusId IN (194,195) AND GwyGatewayCode IN '
+	  + @gatewayTitles + ' OR GwyGatewayTitle IN ' + @gatewayTitles +'';
+	  EXEC sp_executesql @Titles;  
+	  IF (((SELECT COUNT(TypeId) FROM #TEMP) = 1) AND ((SELECT COUNT(TypeId) FROM #TEMP WHERE TypeId =85) = 1))
+	  BEGIN
+	     SET @TablesQuery += 'AND  JobAdvanceReport.JobGatewayStatus IN ' + @gatewayTitles +''
+	  END
+	  ELSE IF (((SELECT COUNT(TypeId) FROM #TEMP) = 1) AND ((SELECT COUNT(TypeId) FROM #TEMP WHERE TypeId =86) = 1))
+	  BEGIN
+		    SET @TablesQuery = @TablesQuery + ' INNER JOIN [vwJobGateways] gateway ON  gateway.JobId = ' + @entity +
+			'.[Id] AND gateway.StatusId IN (194,195) AND gateway.GatewayTypeId = 86 AND gateway.GwyGatewayTitle IN ' 
+			+ @gatewayTitles +''	     
+	  END
+	  ELSE
+	  BEGIN
+	       SET @TablesQuery = @TablesQuery + ' INNER JOIN vwJobGateways gateway ON  gateway.JobId = '+ @entity + '.[Id] 
+		   AND gateway.StatusId IN (194,195) AND (gateway.GwyGatewayTitle IN ' + @gatewayTitles +' OR gateway.GwyGatewayCode 
+		   IN '+ @gatewayTitles +') AND ' + @entity + '.JobGatewayStatus =''
+		   (SELECT TOP 1 GwyGatewayCode FROM JOBDL020Gateways WHERE GatewayTypeId=85 ORDER BY ID DESC) '''
+	  END	   
+	  DROP TABLE #TEMP
+	END
+	
 	--------------------- Security Start----------------------------------------------------------
 	DECLARE @JobCount BIGINT
 		,@IsJobAdmin BIT = 0
