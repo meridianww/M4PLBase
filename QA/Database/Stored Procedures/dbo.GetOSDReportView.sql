@@ -194,10 +194,13 @@ SELECT
 
 	IF OBJECT_ID('tempdb..#EntityIdTemp') IS NOT NULL
 	BEGIN
+	    DROP INDEX [IDX_#EntityIdTemp_EntityId] ON #EntityIdTemp
 		DROP TABLE #EntityIdTemp
 	END
 
 	CREATE TABLE #EntityIdTemp (EntityId BIGINT)
+	CREATE NONCLUSTERED INDEX [IDX_#EntityIdTemp_EntityId]
+	ON #EntityIdTemp (EntityId)
 
 	INSERT INTO #EntityIdTemp
 	EXEC [dbo].[GetCustomEntityIdByEntityName] @userId
