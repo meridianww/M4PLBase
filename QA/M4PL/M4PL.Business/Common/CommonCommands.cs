@@ -448,7 +448,10 @@ namespace M4PL.Business.Common
         {
             return _commands.GetCustPPPTree(activeUser, orgId, custId, parentId);
         }
-
+        public static IList<TreeListModel> GetCustomerPPPTree(ActiveUser activeUser)
+        {
+            return _commands.GetCustomerPPPTree(activeUser);
+        }
         public static ErrorLog GetOrInsErrorLog(ErrorLog errorLog)
         {
             return _commands.GetOrInsErrorLog(ActiveUser, errorLog);

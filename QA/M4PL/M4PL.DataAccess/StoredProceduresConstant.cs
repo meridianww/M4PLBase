@@ -73,6 +73,7 @@ namespace M4PL.DataAccess
 		public const string GetLookupDropDown = "dbo.GetLookupDropDown";
 		public const string GetDeletedRecordLookUpIds = "dbo.GetDeletedRecordLookUpIds";
 		public const string GetCustPPPTree = "dbo.GetCustPPPTree";
+		public const string GetCustomerPPPTree = "dbo.GetCustomerPPPTree";
 		public const string GetStatesDropDown = "dbo.GetStatesDropDown";
 		public const string GetProgramContacts = "dbo.GetProgramContactsByProgramId";
 		public const string GetVendorLocations = "dbo.GetVendorLocations";

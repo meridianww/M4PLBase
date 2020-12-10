@@ -636,6 +636,19 @@ namespace M4PL.API.Controllers
             return _command.GetCustPPPTree(ActiveUser, ActiveUser.OrganizationId, custId, parentId).AsQueryable(); ;
         }
         /// <summary>
+        /// Get Customer,program,project,phase tree by customer id and their parent id
+        /// </summary>
+        /// <param name="custId">pass valid customer id</param>
+        /// <param name="parentId">pass valid parent id</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("CustomerPPPTree")]
+        public virtual IQueryable<TreeListModel> GetCustomerPPPTree()
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetCustomerPPPTree(ActiveUser).AsQueryable(); ;
+        }
+        /// <summary>
         /// Update the line number for job cost sheet by valid job id
         /// </summary>
         /// <param name="jobId">passing a valid job id</param>

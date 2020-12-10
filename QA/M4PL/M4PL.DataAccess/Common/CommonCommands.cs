@@ -761,6 +761,18 @@ namespace M4PL.DataAccess.Common
             return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.ResetItemNumber, parameters.ToArray(), storedProcedure: true);
         }
 
+        public static IList<TreeListModel> GetCustomerPPPTree(ActiveUser activeUser)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@orgId", activeUser.OrganizationId),
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId)
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<TreeListModel>(StoredProceduresConstant.GetCustomerPPPTree, parameters, storedProcedure: true);
+            return result;
+        }
+
         public static IList<TreeListModel> GetCustPPPTree(ActiveUser activeUser, long orgId, long? custId, long? parentId)
         {
             var parameters = new[]
