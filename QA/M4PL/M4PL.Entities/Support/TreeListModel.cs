@@ -37,8 +37,9 @@ namespace M4PL.Entities.Support
         public string IconCss { get; set; }
     }
 
-    public class TreeListBase : TreeViewSettings
+    public class TreeListBase : TreeViewBase
     {
         public IList<TreeListModel> Nodes { get; set; }
+        public MvcRoute ContentRouteCallBack { get; set; }
     }
 }

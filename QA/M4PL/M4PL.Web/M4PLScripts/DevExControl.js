@@ -1280,6 +1280,42 @@ DevExCtrl.TreeList = function () {
             M4PLCommon.CheckHasChanges.ShowConfirmation();
         }
     }
+    var _onTreeViewNodeClick = function (s, e, contentCbPanel, contentCbPanelRoute) {
+        //var id = parseInt(e.node.name);
+        var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
+        if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
+            var route = JSON.parse(contentCbPanelRoute);
+            route.IsJobParentEntityUpdated = false;
+            if (contentCbPanel && !contentCbPanel.InCallback()) {
+                if (e.node.name.indexOf("_") == -1) {
+                    route.ParentRecordId = parseInt(e.node.name.replace('_', ''));
+                }
+                if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && e.node.name.indexOf("_") >= 0) {
+                    route.ParentRecordId = e.node.name.split('_')[1];
+                    isJobParentEntity = true;
+                    route.IsJobParentEntityUpdated = true;
+                    IsDataView = route.Action === "DataView" ? true : false
+                }
+                route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
+                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack: true });
+                DevExCtrl.Ribbon.DoCallBack(route);
+            }
+            else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
+                if (e.node.name.indexOf("_") >= 0) {
+                    route.ParentRecordId = e.node.name.split('_')[1];
+                    isJobParentEntity = true;
+                    route.IsJobParentEntityUpdated = true;
+                    IsDataView = route.Action === "DataView" ? true : false
+                }
+
+                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
+                DevExCtrl.Ribbon.DoCallBack(route);
+            }
+        } else {
+            M4PLCommon.CallerNameAndParameters = { "Caller": _onNodeClick, "Parameters": [s, e, contentCbPanel, contentCbPanelRoute] };
+            M4PLCommon.CheckHasChanges.ShowConfirmation();
+        }
+    }
 
     var _onNodeDisable = function (s, e) {
     }
@@ -1309,6 +1345,7 @@ DevExCtrl.TreeList = function () {
     }
     return {
         OnNodeClick: _onNodeClick,
+        OnTreeViewNodeClick: _onTreeViewNodeClick,
         OnNodeDisable: _onNodeDisable,
         Init: _init
     };

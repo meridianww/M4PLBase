@@ -1,18 +1,31 @@
 ﻿@model M4PL.Entities.Support.TreeListBase
+
 @{
-//var options = Model;
+    //var options = Model;
+    var contentCbPanel = "JobDataViewCbPanel";
+    Model.ContentRouteCallBack.OwnerCbPanel = contentCbPanel;
+    Model.ContentRouteCallBack.Action = MvcConstants.ActionDataView;
+    //string.Concat(Model.ContentRouteCallBack.Entity, Model.ContentRouteCallBack.Action, "CbPanel");
 }
 @Html.DevExpress().TreeView(
     settings =>
     {
-        settings.Name = "tvFeatures";
-        //settings.AllowCheckNodes = options.AllowCheckNodes;
-        //settings.AllowSelectNode = options.AllowSelectNode;
-        //settings.CheckNodesRecursive = options.CheckNodesRecursive;
-        //settings.EnableAnimation = options.EnableAnimation;
-        ////settings.EnableHotTrack = options.EnableHotTrack;
-        //settings.ShowTreeLines = options.ShowTreeLines;
-        //settings.ShowExpandButtons = options.ShowExpandButtons;
+        settings.Name = "cplTreeView";
+        settings.AllowCheckNodes = Model.AllowCheckNodes;
+        settings.AllowSelectNode = Model.AllowSelectNode;
+        settings.CheckNodesRecursive = Model.CheckNodesRecursive;
+        settings.EnableAnimation = Model.EnableAnimation;
+        settings.EnableHotTrack = Model.EnableHottrack;
+        settings.ShowTreeLines = Model.ShowTreeLines;
+        settings.ShowExpandButtons = Model.ShowExpandButtons;
+        if (!string.IsNullOrEmpty(Model.EventInit))
+            settings.ClientSideEvents.Init = Model.EventInit;
+        if (!string.IsNullOrEmpty(Model.EventExpandedChanged))
+            settings.ClientSideEvents.ExpandedChanged = Model.EventExpandedChanged;
+        if (Model.EnableCallback)
+            settings.CallbackRouteValues = new { Controller = Model.Controller, Action = Model.Action, Area = Model.Area, ParentId = Model.ParentId, RecordId = Model.RecordId };
+        if (Model.EnableNodeClick)
+            settings.ClientSideEvents.NodeClick = "function(s,e,contentCbPanel,contentCbPanelRoute){DevExCtrl.TreeList.OnTreeViewNodeClick(s,e," + contentCbPanel + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.ContentRouteCallBack) + "');}";
 
         settings.ShowExpandButtons = true;
         settings.Width = 300;
@@ -23,6 +36,8 @@
                 settings.Nodes.Add(node =>
                 {
                     node.Text = item.Text;
+                    node.Image.IconID = item.IconCss;
+                    node.Name = "_"+ item.Id.ToString();                    
                     if (item.Children != null && item.Children.Count() > 0)
                     {
                         foreach (var itemChild1 in item.Children)
@@ -30,6 +45,8 @@
                             node.Nodes.Add(subNode =>
                             {
                                 subNode.Text = itemChild1.Text;
+                                subNode.Image.IconID = itemChild1.IconCss;
+                                subNode.Name = itemChild1.Id.ToString();
                                 if (itemChild1.Children != null && itemChild1.Children.Count() > 0)
                                 {
                                     foreach (var itemChild2 in itemChild1.Children)
@@ -37,6 +54,8 @@
                                         subNode.Nodes.Add(subNodeChild =>
                                         {
                                             subNodeChild.Text = itemChild2.Text;
+                                            subNodeChild.Image.IconID = itemChild2.IconCss;
+                                            subNodeChild.Name = itemChild2.Id.ToString();
                                         });
                                     }
                                 }

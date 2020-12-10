@@ -444,67 +444,76 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
         }
 
-        public ActionResult TreeListCallBack(string strRoute)
-        {
-            if (SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ActionTreeView && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
-            {
-                if (SessionProvider.ActiveUser.CurrentRoute != null)
-                {
-                    if ((SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionDataView || SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm) && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
-                    {
-                        Session["CurrentRoute"] = SessionProvider.ActiveUser.CurrentRoute;
-                        Session["IsJobParent"] = Session["IsJobParent"] != null ? Session["IsJobParent"] : null;
-                    }
-                }
-            }
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            //SessionProvider.ActiveUser.LastRoute = route;
-            //SessionProvider.ActiveUser.CurrentRoute = null;
-
-            var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
-            if (Session["JobNode"] != null)
-                treeListResult.SelectedNode = (string)Session["JobNode"];
-            return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
-        }
-        
         //public ActionResult TreeListCallBack(string strRoute)
         //{
-            //var treeListBase = new TreeListBase();
-            //var entity = _commonCommands.GetCustomerPPPTree();
-            //var treeListModel = new List<TreeListModel>();
+        //    if (SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ActionTreeView && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
+        //    {
+        //        if (SessionProvider.ActiveUser.CurrentRoute != null)
+        //        {
+        //            if ((SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionDataView || SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm) && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
+        //            {
+        //                Session["CurrentRoute"] = SessionProvider.ActiveUser.CurrentRoute;
+        //                Session["IsJobParent"] = Session["IsJobParent"] != null ? Session["IsJobParent"] : null;
+        //            }
+        //        }
+        //    }
+        //    var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+        //    //SessionProvider.ActiveUser.LastRoute = route;
+        //    //SessionProvider.ActiveUser.CurrentRoute = null;
 
-            //var treeNodes = new TreeListModel();
-            //foreach (var item in entity.Where(t => t.HierarchyLevel == 0).ToList())
-            //{
-            //    treeNodes = item;
-            //    foreach (var program in entity.Where(t => t.HierarchyLevel == 1 && t.CustomerId == item.CustomerId))
-            //    {
-            //        var programNode = program;
-            //        foreach (var project in entity.Where(t => t.HierarchyLevel == 2 
-            //        && t.CustomerId == program.CustomerId && t.HierarchyText.Contains(programNode.HierarchyText)))
-            //        {
-            //            var projectNode = project;
-            //            foreach (var phase in entity.Where(t => t.HierarchyLevel == 3 && t.CustomerId == program.CustomerId
-            //            && t.HierarchyText.Contains(projectNode.HierarchyText)))
-            //            {
-            //                if (projectNode.Children == null)
-            //                    projectNode.Children = new List<TreeListModel>();
-            //                projectNode.Children.Add(phase);
-            //            }
-            //            if (programNode.Children == null)
-            //                programNode.Children = new List<TreeListModel>();
-            //            programNode.Children.Add(projectNode);
-            //        }
-            //        if (treeNodes.Children == null)
-            //            treeNodes.Children = new List<TreeListModel>();
-            //        treeNodes.Children.Add(programNode);
-            //    }
-            //    treeListModel.Add(treeNodes);
-            //}
-            //treeListBase.Nodes = treeListModel;
-
-            //return PartialView("_TreePartialView", treeListBase);
+        //    var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
+        //    if (Session["JobNode"] != null)
+        //        treeListResult.SelectedNode = (string)Session["JobNode"];
+        //    return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
         //}
+
+        public ActionResult TreeListCallBack(string strRoute)
+        {
+            var treeListBase = new TreeListBase();
+            var entity = _commonCommands.GetCustomerPPPTree();
+            var treeListModel = new List<TreeListModel>();
+
+            var treeNodes = new TreeListModel();
+            foreach (var item in entity.Where(t => t.HierarchyLevel == 0).ToList())
+            {
+                treeNodes = item;
+                foreach (var program in entity.Where(t => t.HierarchyLevel == 1 && t.CustomerId == item.CustomerId))
+                {
+                    var programNode = program;
+                    foreach (var project in entity.Where(t => t.HierarchyLevel == 2
+                    && t.CustomerId == program.CustomerId && t.HierarchyText.Contains(programNode.HierarchyText)))
+                    {
+                        var projectNode = project;
+                        foreach (var phase in entity.Where(t => t.HierarchyLevel == 3 && t.CustomerId == program.CustomerId
+                        && t.HierarchyText.Contains(projectNode.HierarchyText)))
+                        {
+                            if (projectNode.Children == null)
+                                projectNode.Children = new List<TreeListModel>();
+                            projectNode.Children.Add(phase);
+                        }
+                        if (programNode.Children == null)
+                            programNode.Children = new List<TreeListModel>();
+                        programNode.Children.Add(projectNode);
+                    }
+                    if (treeNodes.Children == null)
+                        treeNodes.Children = new List<TreeListModel>();
+                    treeNodes.Children.Add(programNode);
+                }
+                treeListModel.Add(treeNodes);
+            }
+            treeListBase.Nodes = treeListModel;
+            treeListBase.EnableNodeClick = true;
+            treeListBase.AllowCheckNodes = false;
+            treeListBase.AllowSelectNode = false;
+            treeListBase.EnableAnimation = true;
+            treeListBase.EnableHottrack = true;
+            treeListBase.ShowTreeLines = true;
+            treeListBase.ShowExpandButtons = true;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            treeListBase.ContentRouteCallBack = route;
+            //treeListBase = WebUtilities.SetupTreeResult(_commonCommands, route);
+            return PartialView("_TreePartialView", treeListBase);
+        }
 
         #endregion TreeList
 

@@ -23,12 +23,12 @@ using System.Collections.Generic;
 
 namespace M4PL.Web.Models
 {
-	public class TreeListResult
+	public class TreeListResult 
 	{
 		public string KeyFieldName { get; set; }
 		public string ParentFieldName { get; set; }
-		public string SelectedNode { get; set; }
-		public MvcRoute CallBackRoute { get; set; }
+        public string SelectedNode { get; set; }
+        public MvcRoute CallBackRoute { get; set; }
 		public MvcRoute DragAndDropRoute { get; set; }
 		public MvcRoute MenuRouteCallBack { get; set; }
 		public MvcRoute ContentRouteCallBack { get; set; }
