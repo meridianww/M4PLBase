@@ -237,6 +237,7 @@ M4PLJob.FormView = function () {
 
     var _doJobCallback = function (route) {
         var keyValue = TreeList.GetFocusedNodeKey();
+        var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
         if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && keyValue.indexOf("_") >= 0) {
             keyValue = keyValue.split('_')[1];
             route.IsJobParentEntity = true;
@@ -253,7 +254,10 @@ M4PLJob.FormView = function () {
                 route.OwnerCbPanel = "JobDataViewCbPanel";
 
                 if (JobDataViewCbPanel && !JobDataViewCbPanel.InCallback()) {
-                    JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+                    isJobParentEntity = true;
+                    route.IsJobParentEntityUpdated = true;
+                    IsDataView = route.Action === "DataView" ? true : false;
+                    JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 }
             }
             else if (route.EntityName == 'Program EDI Header') {
