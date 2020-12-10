@@ -122,9 +122,9 @@ BEGIN TRY
 	  ELSE
 	  BEGIN
 	       SET @TablesQuery = @TablesQuery + ' INNER JOIN vwJobGateways gateway ON  gateway.JobId = '+ @entity + '.[Id] 
-		   AND gateway.StatusId IN (194,195) AND (gateway.GwyGatewayTitle IN ' + @gatewayTitles +' OR gateway.GwyGatewayCode 
-		   IN '+ @gatewayTitles +') AND ' + @entity + '.JobGatewayStatus =''
-		   (SELECT TOP 1 GwyGatewayCode FROM JOBDL020Gateways WHERE GatewayTypeId=85 ORDER BY ID DESC) '''
+		   AND gateway.StatusId IN (194,195) AND (gateway.GwyGatewayTitle IN ' + @gatewayTitles +' AND gateway.GwyGatewayCode 
+		   IN '+ @gatewayTitles +') AND ' + @entity + '.JobGatewayStatus =
+		   (SELECT TOP 1 GwyGatewayCode FROM JOBDL020Gateways WHERE GatewayTypeId=85 ORDER BY ID DESC) '
 	  END	   
 	  DROP TABLE #TEMP
 	END
@@ -135,7 +135,6 @@ BEGIN TRY
 
 	IF OBJECT_ID('tempdb..#EntityIdTemp') IS NOT NULL
 	BEGIN
-	    DROP INDEX [IDX_#EntityIdTemp_EntityId] ON #EntityIdTemp
 		DROP TABLE #EntityIdTemp
 	END
 

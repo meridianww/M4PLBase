@@ -637,9 +637,7 @@ namespace M4PL.API.Controllers
         }
         /// <summary>
         /// Get Customer,program,project,phase tree by customer id and their parent id
-        /// </summary>
-        /// <param name="custId">pass valid customer id</param>
-        /// <param name="parentId">pass valid parent id</param>
+        /// </summary> 
         /// <returns></returns>
         [HttpGet]
         [Route("CustomerPPPTree")]

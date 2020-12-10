@@ -13,7 +13,7 @@ GO
 -- Execution:                 Exec dbo.GetCustomerPPPTree @orgId=1,@userId=20084,@roleId=20033
 -- Modified on:  
 -- Modified Desc:  
-CREATE PROCEDURE GetCustomerPPPTree 
+ALTER PROCEDURE GetCustomerPPPTree 
 	 @orgId BIGINT = 0
 	,@userId BIGINT
 	,@roleId BIGINT
@@ -49,32 +49,40 @@ BEGIN
 		SELECT PRG.Id,PrgCustID CustomerId,
 		CASE WHEN ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') = '' AND ISNULL(PrgPhaseCode,'') = '' THEN PrgProgramCode
 			 WHEN ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') = '' THEN PrgProjectCode
-			 WHEN ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') <> '' THEN PrgPhaseCode END [TEXT],
+			 WHEN ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') <> '' THEN PrgPhaseCode END [Text],
 		CASE WHEN ISNULL(PrgProgramTitle,'') <> '' THEN PrgProgramTitle
 		     WHEN ISNULL(PrgProgramTitle,'') = '' AND ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') = '' AND ISNULL(PrgPhaseCode,'') = '' THEN PrgProgramCode
 			 WHEN ISNULL(PrgProgramTitle,'') = '' AND ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') = '' THEN PrgProjectCode
 			 WHEN ISNULL(PrgProgramTitle,'') = '' AND ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') <> '' THEN PrgPhaseCode END ToolTip,			 
-			 PrgHierarchyLevel,
-			 PrgHierarchyID.ToString(),
+			 PrgHierarchyLevel HierarchyLevel,
+			 PrgHierarchyID.ToString() HierarchyText,
 		CASE WHEN PrgHierarchyLevel = 1	THEN 'functionlibrary_statistical_16x16'ELSE 'functionlibrary_recentlyuse_16x16' END
-		[IconCss] FROM PRGRM000Master PRG 
+		[IconCss] FROM PRGRM000Master PRG
 		INNER JOIN #EntityProgramIdTemp TEMP ON TEMP.EntityId = PRG.Id
-		WHERE PRG.StatusId=1 ORDER BY PrgCustID,PrgHierarchyLevel ASC
+		WHERE PRG.StatusId=1 
+		UNION
+		SELECT Id, Id CustomerId,CustCode [Text], CustTitle ToolTip,0 AS HierarchyLevel,'' AS HierarchyLevel,
+		'mail_contact_16x16' AS [IconCss] FROM CUST000Master WHERE StatusId = 1
+		ORDER BY CustomerId,HierarchyText,HierarchyLevel ASC
 	END
 	ELSE
 	BEGIN
 	   SELECT PRG.Id,PrgCustID CustomerId,
 		CASE WHEN ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') = '' AND ISNULL(PrgPhaseCode,'') = '' THEN PrgProgramCode
 			 WHEN ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') = '' THEN PrgProjectCode
-			 WHEN ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') <> '' THEN PrgPhaseCode END [TEXT],
+			 WHEN ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') <> '' THEN PrgPhaseCode END [Text],
 		CASE WHEN ISNULL(PrgProgramTitle,'') <> '' THEN PrgProgramTitle
 		     WHEN ISNULL(PrgProgramTitle,'') = '' AND ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') = '' AND ISNULL(PrgPhaseCode,'') = '' THEN PrgProgramCode
 			 WHEN ISNULL(PrgProgramTitle,'') = '' AND ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') = '' THEN PrgProjectCode
 			 WHEN ISNULL(PrgProgramTitle,'') = '' AND ISNULL(PrgProgramCode,'') <> '' AND ISNULL(PrgProjectCode,'') <> '' AND ISNULL(PrgPhaseCode,'') <> '' THEN PrgPhaseCode END ToolTip,			 
-			 PrgHierarchyLevel,
-			 PrgHierarchyID.ToString(),
+			 PrgHierarchyLevel HierarchyLevel,
+			 PrgHierarchyID.ToString() HierarchyText,
 		CASE WHEN PrgHierarchyLevel = 1	THEN 'functionlibrary_statistical_16x16'ELSE 'functionlibrary_recentlyuse_16x16' END
-		[IconCss] FROM PRGRM000Master PRG 
-		WHERE PRG.StatusId=1 ORDER BY PrgCustID,PrgHierarchyLevel ASC
+		[IconCss] FROM PRGRM000Master PRG
+		WHERE PRG.StatusId=1 
+		UNION
+		SELECT Id, Id CustomerId,CustCode [Text], CustTitle ToolTip,0 AS HierarchyLevel,'' AS HierarchyLevel,
+		'mail_contact_16x16' AS [IconCss] FROM CUST000Master WHERE StatusId = 1
+		ORDER BY CustomerId,HierarchyText,HierarchyLevel ASC
 	END
 END
