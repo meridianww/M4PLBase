@@ -1,0 +1,56 @@
+﻿@model M4PL.Entities.Support.TreeListBase
+@{
+//var options = Model;
+}
+@Html.DevExpress().TreeView(
+    settings =>
+    {
+        settings.Name = "tvFeatures";
+        //settings.AllowCheckNodes = options.AllowCheckNodes;
+        //settings.AllowSelectNode = options.AllowSelectNode;
+        //settings.CheckNodesRecursive = options.CheckNodesRecursive;
+        //settings.EnableAnimation = options.EnableAnimation;
+        ////settings.EnableHotTrack = options.EnableHotTrack;
+        //settings.ShowTreeLines = options.ShowTreeLines;
+        //settings.ShowExpandButtons = options.ShowExpandButtons;
+
+        settings.ShowExpandButtons = true;
+        settings.Width = 300;
+        if (Model != null && Model.Nodes != null)
+        {
+            foreach (var item in Model.Nodes)
+            {
+                settings.Nodes.Add(node =>
+                {
+                    node.Text = item.Text;
+                    if (item.Children != null && item.Children.Count() > 0)
+                    {
+                        foreach (var itemChild1 in item.Children)
+                        {
+                            node.Nodes.Add(subNode =>
+                            {
+                                subNode.Text = itemChild1.Text;
+                                if (itemChild1.Children != null && itemChild1.Children.Count() > 0)
+                                {
+                                    foreach (var itemChild2 in itemChild1.Children)
+                                    {
+                                        subNode.Nodes.Add(subNodeChild =>
+                                        {
+                                            subNodeChild.Text = itemChild2.Text;
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                });
+            }
+        }
+
+        //settings.PreRender = (source, e) =>
+        //{
+        //    ASPxTreeView treeView = (ASPxTreeView)source;
+        //    treeView.ExpandToDepth(0);
+        //};
+    }).GetHtml()

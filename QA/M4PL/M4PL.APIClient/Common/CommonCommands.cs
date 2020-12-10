@@ -733,7 +733,7 @@ namespace M4PL.APIClient.Common
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("custId", custId).AddParameter("parentId", parentId)).Content;
             return JsonConvert.DeserializeObject<ApiResult<TreeListModel>>(content).Results;
         }
-        public IList<TreeListModel> CustomerPPPTree()
+        public IList<TreeListModel> GetCustomerPPPTree()
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "CustomerPPPTree");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)).Content;
