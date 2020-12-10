@@ -162,7 +162,10 @@ namespace M4PL.APIClient.Common
 
 		IList<TreeListModel> GetCustPPPTree(long? custId, long? parentId);
 
-		ErrorLog GetOrInsErrorLog(ErrorLog errorLog);
+        IList<TreeListModel> GetCustomerPPPTree();
+
+
+        ErrorLog GetOrInsErrorLog(ErrorLog errorLog);
 
 		IList<AppDashboard> GetUserDashboards(int mainModuleId);
 

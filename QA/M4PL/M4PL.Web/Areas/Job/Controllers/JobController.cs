@@ -466,6 +466,45 @@ namespace M4PL.Web.Areas.Job.Controllers
                 treeListResult.SelectedNode = (string)Session["JobNode"];
             return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
         }
+        
+        //public ActionResult TreeListCallBack(string strRoute)
+        //{
+            //var treeListBase = new TreeListBase();
+            //var entity = _commonCommands.GetCustomerPPPTree();
+            //var treeListModel = new List<TreeListModel>();
+
+            //var treeNodes = new TreeListModel();
+            //foreach (var item in entity.Where(t => t.HierarchyLevel == 0).ToList())
+            //{
+            //    treeNodes = item;
+            //    foreach (var program in entity.Where(t => t.HierarchyLevel == 1 && t.CustomerId == item.CustomerId))
+            //    {
+            //        var programNode = program;
+            //        foreach (var project in entity.Where(t => t.HierarchyLevel == 2 
+            //        && t.CustomerId == program.CustomerId && t.HierarchyText.Contains(programNode.HierarchyText)))
+            //        {
+            //            var projectNode = project;
+            //            foreach (var phase in entity.Where(t => t.HierarchyLevel == 3 && t.CustomerId == program.CustomerId
+            //            && t.HierarchyText.Contains(projectNode.HierarchyText)))
+            //            {
+            //                if (projectNode.Children == null)
+            //                    projectNode.Children = new List<TreeListModel>();
+            //                projectNode.Children.Add(phase);
+            //            }
+            //            if (programNode.Children == null)
+            //                programNode.Children = new List<TreeListModel>();
+            //            programNode.Children.Add(projectNode);
+            //        }
+            //        if (treeNodes.Children == null)
+            //            treeNodes.Children = new List<TreeListModel>();
+            //        treeNodes.Children.Add(programNode);
+            //    }
+            //    treeListModel.Add(treeNodes);
+            //}
+            //treeListBase.Nodes = treeListModel;
+
+            //return PartialView("_TreePartialView", treeListBase);
+        //}
 
         #endregion TreeList
 

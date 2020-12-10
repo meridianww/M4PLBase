@@ -31,8 +31,14 @@ namespace M4PL.Entities.Support
         public string Route { get; set; }
         public bool IsLeaf { get; set; }
         public int HierarchyLevel { get; set; }
+        public string HierarchyText { get; set; }
         public List<TreeListModel> Children { get; set; }
         public string NodeClick { get; set; }
         public string IconCss { get; set; }
+    }
+
+    public class TreeListBase : TreeViewSettings
+    {
+        public IList<TreeListModel> Nodes { get; set; }
     }
 }

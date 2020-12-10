@@ -957,6 +957,7 @@
     <Content Include="Views\Shared\SubscriberType.cshtml" />
     <Content Include="Views\Shared\EmailCCAddressSubscriber.cshtml" />
     <Content Include="Views\Shared\EmailToAddressSubscriber.cshtml" />
+    <Content Include="Views\Shared\_TreePartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\UploadTemp\" />
