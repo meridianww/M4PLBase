@@ -46,7 +46,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(route.RecordId, "Destination");
-
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             _reportResult.SetupJobCardResult(_commonCommands, route, SessionProvider);
             var jobcardView = new JobCardViewView();
@@ -57,6 +56,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Area = "Job";
             _reportResult.ReportRoute.RecordId = _reportResult.Record.CompanyId = route.CompanyId.HasValue && route.CompanyId.Value > 0 ? route.CompanyId.Value : 0;
             _reportResult.ReportRoute.Location = route.Location;
+            _reportResult.ReportRoute.IsEdit = route.IsEdit;
 
             List<string> prefLocation = new List<string>();
             var result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
@@ -75,13 +75,26 @@ namespace M4PL.Web.Areas.Job.Controllers
                         _reportResult.ReportRoute.Location.Add(item);
                 }
             }
-            SessionProvider.CardTileData = null;
-            TempData["Destinations"] = null;
+            if (!route.IsEdit)
+            {
+                SessionProvider.CardTileData = null;
+                TempData["Destinations"] = null;
+            }
+
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
         public PartialViewResult JobCardTileByCustomer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (route.IsEdit && SessionProvider.CardTileData != null)
+            {
+                var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
+                if (recordData != null)
+                {
+                    _reportResult.Records = recordData;
+                    return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
+                }
+            }
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
             var record = _jobCardCommands.GetCardTileData(route.RecordId, destinationSiteWhereCondition);
             TempData["JobCardCustomerId"] = route.RecordId;
@@ -94,7 +107,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                     SessionProvider.CardTileData = record.GetCardViewViews(route.RecordId);
                 }
             }
-
             return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
         }
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
@@ -188,6 +200,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             cancelRoute.CompanyId = TempData["JobCardCustomerId"] != null ? (long)TempData["JobCardCustomerId"] : route.CompanyId;
             TempData.Keep("JobCardCustomerId");
             cancelRoute.Location = route.Location;
+            cancelRoute.IsEdit = true;
             //cancelRoute.Filters.Value = null;
             TempData["BackUrl"] = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
             SessionProvider.IsCardEditMode = false;
@@ -371,7 +384,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                             }
                             else
                             {
-                                ch.StatusId = 3;                                
+                                ch.StatusId = 3;
                                 if (ch.MnuTitle == "Remittance")
                                 {
                                     ch.StatusId = 1;

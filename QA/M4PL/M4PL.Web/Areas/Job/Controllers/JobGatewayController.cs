@@ -107,7 +107,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     resultRoute.ParentEntity = EntitiesAlias.Program;
                     resultRoute.Action = "DataView";
                     resultRoute.RecordId = 0;
-                    resultRoute.ParentRecordId = result.ProgramID ?? 0;                   
+                    resultRoute.ParentRecordId = result.ProgramID ?? 0;
                     resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
                     resultRoute.Filters.Value = "Gateway";
                     resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionDataView);
@@ -132,6 +132,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     route.RecordId = result.Id;
                 }
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+                SessionProvider.CardTileData = null;
                 return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.JobGatewayStatus, resRoute, result.GatewayIds);
             }
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
@@ -295,7 +296,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 var resultRoute = SessionProvider.ActiveUser.LastRoute;
                 resultRoute.Filters = new Entities.Support.Filter();
                 if (jobGatewayView.IsGatewayCalled)
-                {                
+                {
                     resultRoute.Entity = EntitiesAlias.Job;
                     resultRoute.ParentEntity = EntitiesAlias.Program;
                     resultRoute.Action = "DataView";
@@ -319,7 +320,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                                                    ? "AppCbPanel"
                                                    : "JobDataViewCbPanel";
                         resRoute.Filters.Value = "Action";
-                        resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);         
+                        resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
                         resRoute.Url = resRoute.ParentRecordId.ToString();
                     }
                     route.RecordId = result.Id;
