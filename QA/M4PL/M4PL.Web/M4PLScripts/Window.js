@@ -79,7 +79,7 @@ M4PLWindow.DataView = function () {
     var _allowBatchEdit = {};
 
     var _onBeginCallback = function (s, e, gridName) {
-        if (s && s.name) 
+        if (s && s.name)
             M4PLCommon.Control.UpdateDataViewHasChanges(s.name, false);
         e.customArgs["RowKey"] = s.GetRowKey(s.GetFocusedRowIndex());
     }
@@ -1190,7 +1190,8 @@ M4PLWindow.FormView = function () {
                                                                 var route = JSON.parse(urlParams.getAll('strRoute'));
                                                                 route.RecordId = 0;
                                                                 route.JobIds = s.GetSelectedKeysOnPage();
-                                                                M4PLWindow.MultiSelectedJobIds = [];
+                                                                if (resultRoute.Filters["Value"] == "Gateway")
+                                                                    M4PLWindow.MultiSelectedJobIds = [];
                                                                 s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                                                                 s.Refresh();
                                                             }

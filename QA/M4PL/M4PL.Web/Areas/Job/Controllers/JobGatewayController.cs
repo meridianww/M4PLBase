@@ -99,15 +99,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 MvcRoute resRoute = null;
                 var uriQueryString = Request.UrlReferrer.PathAndQuery;
+                var resultRoute = SessionProvider.ActiveUser.LastRoute;
+                resultRoute.Filters = new Entities.Support.Filter();
                 if (jobGatewayView.IsGatewayCalled)
                 {
-                    var resultRoute = SessionProvider.ActiveUser.LastRoute;
                     resultRoute.Entity = EntitiesAlias.Job;
                     resultRoute.ParentEntity = EntitiesAlias.Program;
                     resultRoute.Action = "DataView";
                     resultRoute.RecordId = 0;
-                    resultRoute.ParentRecordId = result.ProgramID ?? 0;
+                    resultRoute.ParentRecordId = result.ProgramID ?? 0;                   
                     resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
+                    resultRoute.Filters.Value = "Gateway";
                     resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionDataView);
                     resRoute.Url = resRoute.ParentRecordId.ToString();
                 }
@@ -115,7 +117,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     if (jobGatewayView.JobID > 0)
                     {
-                        var resultRoute = SessionProvider.ActiveUser.LastRoute;
                         resultRoute.Entity = EntitiesAlias.Job;
                         resultRoute.ParentEntity = EntitiesAlias.Program;
                         resultRoute.Action = "FormView";
@@ -124,7 +125,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId")
                                                      ? "AppCbPanel"
                                                      : "JobDataViewCbPanel";
-
+                        resRoute.Filters.Value = "Gateway";
                         resRoute = new MvcRoute(resultRoute, MvcConstants.ActionForm);
                         resRoute.Url = resRoute.ParentRecordId.ToString();
                     }
@@ -291,15 +292,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 MvcRoute resRoute = null;
                 var uriQueryString = Request.UrlReferrer.PathAndQuery;
+                var resultRoute = SessionProvider.ActiveUser.LastRoute;
+                resultRoute.Filters = new Entities.Support.Filter();
                 if (jobGatewayView.IsGatewayCalled)
-                {
-                    var resultRoute = SessionProvider.ActiveUser.LastRoute;
+                {                
                     resultRoute.Entity = EntitiesAlias.Job;
                     resultRoute.ParentEntity = EntitiesAlias.Program;
                     resultRoute.Action = "DataView";
                     resultRoute.RecordId = 0;
                     resultRoute.ParentRecordId = result.ProgramID ?? 0;
                     resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
+                    resultRoute.Filters.Value = "Action";
                     resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionDataView);
                     resRoute.Url = resRoute.ParentRecordId.ToString();
                 }
@@ -307,7 +310,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     if (jobGatewayView.JobID > 0)
                     {
-                        var resultRoute = SessionProvider.ActiveUser.LastRoute;
                         resultRoute.Entity = EntitiesAlias.Job;
                         resultRoute.ParentEntity = EntitiesAlias.Program;
                         resultRoute.Action = "FormView";
@@ -316,8 +318,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId")
                                                    ? "AppCbPanel"
                                                    : "JobDataViewCbPanel";
-
-                        resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
+                        resRoute.Filters.Value = "Action";
+                        resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);         
                         resRoute.Url = resRoute.ParentRecordId.ToString();
                     }
                     route.RecordId = result.Id;
