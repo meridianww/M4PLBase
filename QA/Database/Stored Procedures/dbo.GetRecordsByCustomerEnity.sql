@@ -345,7 +345,6 @@ END
 		END
 	END
 
-	PRINT @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT, @CustomerId BIGINT, @entity NVARCHAR(40)'
 		,@pageNo = @pageNo
