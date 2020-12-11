@@ -40,6 +40,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             _jobCardCommands = JobCardCommands;
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
         }
+
+        [OutputCache(Duration = 120, VaryByParam = "strRoute")]
         public ActionResult CardView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -83,6 +85,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
+
         public PartialViewResult JobCardTileByCustomer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -109,6 +112,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
         }
+        [OutputCache(Duration = 120, VaryByParam = "*")]
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
