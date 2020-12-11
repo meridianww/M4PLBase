@@ -163,7 +163,7 @@ SELECT
 	IF(ISNULL(@gatewayTitles, '') <> '' AND ISNULL(@gatewayTitles, '') <> 'ALL')
 	BEGIN 
 	  DECLARE @Titles NVARCHAR(500) = '';
-	  CREATE TABLE #TEMP (TypeId INT);
+	  CREATE TABLE #TEMP (TypeId INT PRIMARY KEY);
 	  SET @Titles += 'INSERT INTO #TEMP(TypeId) SELECT DISTINCT GatewayTypeId FROM JOBDL020Gateways
 	  WHERE StatusId IN (194,195) AND GwyGatewayCode IN '
 	  + @gatewayTitles + ' OR GwyGatewayTitle IN ' + @gatewayTitles +'';
@@ -182,12 +182,10 @@ SELECT
 	  BEGIN
 	       SET @TablesQuery = @TablesQuery + ' INNER JOIN vwJobGateways gateway ON  gateway.JobId = '+ @entity + '.[Id] 
 		   AND gateway.StatusId IN (194,195) AND (gateway.GwyGatewayTitle IN ' + @gatewayTitles +' AND gateway.GwyGatewayCode 
-		   IN '+ @gatewayTitles +') AND ' + @entity + '.JobGatewayStatus =
-		   (SELECT TOP 1 GwyGatewayCode FROM JOBDL020Gateways WHERE GatewayTypeId=85 ORDER BY ID DESC) '
+		   IN '+ @gatewayTitles +') AND (' + @entity + '.JobGatewayStatus IN ' + @gatewayTitles +')'
 	  END	   
 	  DROP TABLE #TEMP
 	END
-	
 	--------------------- Security Start----------------------------------------------------------
 	DECLARE @JobCount BIGINT
 		,@IsJobAdmin BIT = 0

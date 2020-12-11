@@ -13,7 +13,7 @@ GO
 -- Execution:                 Exec dbo.GetCustomerPPPTree @orgId=1,@userId=20084,@roleId=20033
 -- Modified on:  
 -- Modified Desc:  
-CREATE PROCEDURE GetCustomerPPPTree 
+ALTER PROCEDURE GetCustomerPPPTree 
 	 @orgId BIGINT = 0
 	,@userId BIGINT
 	,@roleId BIGINT
