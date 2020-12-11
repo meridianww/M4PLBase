@@ -236,27 +236,26 @@ M4PLJob.FormView = function () {
     }
 
     var _doJobCallback = function (route) {
-        var keyValue = TreeList.GetFocusedNodeKey();
+        var keyValue = route.RecordId != null && route.RecordId > 0 ? route.RecordId : TreeList.GetFocusedNodeKey();
         var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
-        if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && keyValue.indexOf("_") >= 0) {
+        if ((route.EntityName == 'Program EDI Header' && keyValue.indexOf("_") >= 0))
             keyValue = keyValue.split('_')[1];
-            route.IsJobParentEntity = true;
-        }
 
         if (!$.isNumeric(keyValue)) {
             return;
         }
 
         try {
-            route.ParentRecordId = parseInt(keyValue);
+            route.ParentRecordId = route.ParentRecordId > 0 ? route.ParentRecordId : parseInt(keyValue);
             route.ParentEntity = "Program";
             if (route.EntityName == 'Job') {
                 route.OwnerCbPanel = "JobDataViewCbPanel";
 
                 if (JobDataViewCbPanel && !JobDataViewCbPanel.InCallback()) {
-                    isJobParentEntity = true;
-                    route.IsJobParentEntityUpdated = true;
-                    IsDataView = route.Action === "DataView" ? true : false;
+                    isJobParentEntity = route.IsJobParentEntity = route.IsJobParentEntityUpdated;
+                    //route.IsJobParentEntityUpdated = true;
+                    isDataView = route.Action === "DataView" ? true : false;
+                    route.RecordId = isDataView ? 0 : route.RecordId;
                     JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 }
             }

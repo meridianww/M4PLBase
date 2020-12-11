@@ -129,7 +129,7 @@ DevExCtrl.Ribbon = function () {
                     return;
                 case "ChooseColumns":
                     appCbPanelName = "JobDataViewCbPanel";
-                    route.ParentRecordId = parseInt(TreeList.GetFocusedNodeKey());
+                    route.ParentRecordId = route.ParentRecordId > 0 ? route.ParentRecordId : parseInt(TreeList.GetFocusedNodeKey());
                     route.ParentEntity = "Program";
                     break;
             }
