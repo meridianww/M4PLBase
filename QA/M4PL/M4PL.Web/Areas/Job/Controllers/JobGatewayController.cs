@@ -330,7 +330,11 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
                 commentByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(result.Id, route, byteArray, false, 0, null, resRoute, result.GatewayIds);
+                if (jobGatewayView.CurrentAction == "Schedule" || (jobGatewayView.CurrentAction == "XCBL" && jobGatewayView.StatusCode.Contains("Schedule")))
+                {
+                    SessionProvider.CardTileData = null;
+                }
+                    return SuccessMessageForInsertOrUpdate(result.Id, route, byteArray, false, 0, null, resRoute, result.GatewayIds);
             }
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }
