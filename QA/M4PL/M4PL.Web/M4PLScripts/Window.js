@@ -1192,6 +1192,8 @@ M4PLWindow.FormView = function () {
                                                                 route.JobIds = s.GetSelectedKeysOnPage();
                                                                 if (resultRoute.Filters["Value"] == "Gateway")
                                                                     M4PLWindow.MultiSelectedJobIds = [];
+                                                                if (resultRoute.Filters["Value"] == "Action")
+                                                                    M4PLWindow.MultiSelectedJobIds = route.JobIds;
                                                                 s.callbackUrl = callbackUrl.split('?')[0] + "?strRoute=" + JSON.stringify(route);
                                                                 s.Refresh();
                                                             }
