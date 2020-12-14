@@ -71,7 +71,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
-        [OutputCache(Duration = 120, VaryByParam = "*")]
+        //[OutputCache(Duration = 120, VaryByParam = "*")]
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
