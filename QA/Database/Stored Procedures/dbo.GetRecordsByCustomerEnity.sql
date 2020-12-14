@@ -13,7 +13,7 @@ GO
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
-Create PROCEDURE [dbo].[GetRecordsByCustomerEnity] 
+ALTER PROCEDURE [dbo].[GetRecordsByCustomerEnity] 
 	 @orgId BIGINT = 1
 	,@userId BIGINT = 0
 	,@roleId BIGINT = 0

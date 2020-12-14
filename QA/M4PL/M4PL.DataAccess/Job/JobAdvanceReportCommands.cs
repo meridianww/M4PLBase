@@ -213,27 +213,27 @@ namespace M4PL.DataAccess.Job
                 var dateTypeRecord = new List<JobAdvanceReportFilter>();
                 dateTypeRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
                 {
-                    JobStatusIdName = "Order Date",
+                    DateTypeName = "Order Date",
                     Id = 0,
                 });
                 dateTypeRecord.Insert(1, new Entities.Job.JobAdvanceReportFilter
                 {
-                    JobStatusIdName = "Shipment Date",
+                    DateTypeName = "Shipment Date",
                     Id = 1,
                 });
                 dateTypeRecord.Insert(2, new Entities.Job.JobAdvanceReportFilter
                 {
-                    JobStatusIdName = "Receive Date",
+                    DateTypeName = "Receive Date",
                     Id = 2,
                 });
                 dateTypeRecord.Insert(3, new Entities.Job.JobAdvanceReportFilter
                 {
-                    JobStatusIdName = "Schedule Date",
+                    DateTypeName = "Schedule Date",
                     Id = 3,
                 });
                 dateTypeRecord.Insert(4, new Entities.Job.JobAdvanceReportFilter
                 {
-                    JobStatusIdName = "Delivered Date",
+                    DateTypeName = "Delivered Date",
                     Id = 4,
                 });
                 return dateTypeRecord;
