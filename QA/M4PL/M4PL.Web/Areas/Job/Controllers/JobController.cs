@@ -482,32 +482,36 @@ namespace M4PL.Web.Areas.Job.Controllers
             var treeListModel = new List<TreeListModel>();
 
             var treeNodes = new TreeListModel();
-            foreach (var item in entity.Where(t => t.HierarchyLevel == 0).ToList())
+            foreach (var item in entity.Where(t => t.HierarchyLevel == 0).Distinct().ToList())
             {
                 treeNodes = item;
-                foreach (var program in entity.Where(t => t.HierarchyLevel == 1 && t.CustomerId == item.CustomerId))
+                foreach (var program in entity.Where(t => t.HierarchyLevel == 1 && t.CustomerId == item.CustomerId).Distinct())
                 {
                     var programNode = program;
                     foreach (var project in entity.Where(t => t.HierarchyLevel == 2
-                    && t.CustomerId == program.CustomerId && t.HierarchyText.Contains(programNode.HierarchyText)))
+                    && t.CustomerId == program.CustomerId && t.HierarchyText.Contains(programNode.HierarchyText)).Distinct())
                     {
                         var projectNode = project;
                         foreach (var phase in entity.Where(t => t.HierarchyLevel == 3 && t.CustomerId == program.CustomerId
-                        && t.HierarchyText.Contains(projectNode.HierarchyText)))
+                        && t.HierarchyText.Contains(projectNode.HierarchyText)).Distinct())
                         {
                             if (projectNode.Children == null)
                                 projectNode.Children = new List<TreeListModel>();
-                            projectNode.Children.Add(phase);
+                            if (!projectNode.Children.Contains(phase))
+                                projectNode.Children.Add(phase);
                         }
                         if (programNode.Children == null)
                             programNode.Children = new List<TreeListModel>();
-                        programNode.Children.Add(projectNode);
+                        if (!programNode.Children.Contains(projectNode))
+                            programNode.Children.Add(projectNode);
                     }
                     if (treeNodes.Children == null)
                         treeNodes.Children = new List<TreeListModel>();
-                    treeNodes.Children.Add(programNode);
+                    if (!treeNodes.Children.Contains(programNode))
+                        treeNodes.Children.Add(programNode);
                 }
-                treeListModel.Add(treeNodes);
+                if (!treeListModel.Contains(treeNodes))
+                    treeListModel.Add(treeNodes);
             }
             treeListBase.Nodes = treeListModel;
             treeListBase.EnableNodeClick = true;
