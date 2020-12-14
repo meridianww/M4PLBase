@@ -41,7 +41,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
         }
 
-        [OutputCache(Duration = 120, VaryByParam = "strRoute")]
+        //[OutputCache(Duration = 120, VaryByParam = "strRoute")]
         public ActionResult CardView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
