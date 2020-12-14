@@ -503,7 +503,7 @@ namespace M4PL.DataAccess
 		public const string GetCardTileDataCount = "dbo.GetCardTileDataCount";
 		public const string GetBOLDocumentDataByJobId = "dbo.GetBOLDocumentDataByJobId";
 		public const string GetTrackingDocumentDataByJobId = "dbo.GetTrackingDocumentDataByJobId";
-
+		public const string GetDestinationRecordsByCustomer = "dbo.GetDestinationRecordsByCustomer";
 		/* Job Cargo */
 		public const string GetJobCargoView = "dbo.GetJobCargoView";
 		public const string GetJobCargo = "dbo.GetJobCargo";

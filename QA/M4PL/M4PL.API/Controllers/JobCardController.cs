@@ -170,10 +170,10 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("GetDropDownDataForJobCard")]
-		public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)
+		public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId)
 		{
 			_jobCardCommands.ActiveUser = Models.ApiContext.ActiveUser; 
-			return _jobCardCommands.GetDropDownDataForJobCard(customerId, entity);
+			return _jobCardCommands.GetDropDownDataForJobCard(customerId);
 		}
 	}
 }

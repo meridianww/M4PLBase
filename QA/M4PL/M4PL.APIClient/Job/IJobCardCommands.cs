@@ -22,6 +22,6 @@ namespace M4PL.APIClient.Job
 	{
 		IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition);
 
-		IList<JobCard> GetDropDownDataForJobCard(long customerId, string entity);
+		IList<JobCard> GetDropDownDataForJobCard(long customerId);
 	}
 }

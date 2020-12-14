@@ -145,10 +145,10 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
 		[HttpGet]
         [Route("AdvanceReport"), ResponseType(typeof(IList<JobAdvanceReportFilter>))]
-        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
+        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(string entity)
 		{
 			_jobAdvanceReportCommands.ActiveUser = Models.ApiContext.ActiveUser; 
-			return _jobAdvanceReportCommands.GetDropDownDataForProgram(Models.ApiContext.ActiveUser, customerId, entity);
+			return _jobAdvanceReportCommands.GetDropDownDataForProgram(Models.ApiContext.ActiveUser, entity);
 		}
 
         /// <summary>

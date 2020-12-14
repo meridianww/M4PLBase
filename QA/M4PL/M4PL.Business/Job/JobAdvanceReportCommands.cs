@@ -138,9 +138,9 @@ namespace M4PL.Business.Job
 			throw new NotImplementedException();
 		}
 
-		public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, long customerId, string entity)
+		public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, string entity)
 		{
-			return _commands.GetDropDownDataForProgram(activeUser, customerId, entity);
+			return _commands.GetDropDownDataForProgram(activeUser, entity);
 		}
 
 		public StatusModel GenerateScrubDriverDetails(ActiveUser activeUser, JobDriverScrubReportData scriberDriverView)

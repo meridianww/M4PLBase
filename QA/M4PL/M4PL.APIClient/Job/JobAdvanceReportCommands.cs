@@ -39,9 +39,9 @@ namespace M4PL.APIClient.Job
             get { return "JobAdvanceReport"; }
         }
 
-        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
+        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(string entity)
         {
-            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "AdvanceReport"), ActiveUser).AddParameter("customerId", customerId).AddParameter("entity", entity);
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "AdvanceReport"), ActiveUser).AddParameter("entity", entity);
             var result = RestClient.Execute(request);
             return JsonConvert.DeserializeObject<ApiResult<List<JobAdvanceReportFilter>>>(result.Content).Results?.FirstOrDefault();
         }

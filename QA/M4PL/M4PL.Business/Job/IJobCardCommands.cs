@@ -21,6 +21,6 @@ namespace M4PL.Business.Job
 	{
 		IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition);
 
-		IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity);
+		IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId);
 	}
 }

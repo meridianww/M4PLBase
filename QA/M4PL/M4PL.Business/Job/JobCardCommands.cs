@@ -90,9 +90,9 @@ namespace M4PL.Business.Job
             throw new NotImplementedException();
         }
 
-        public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)
+        public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId)
         {
-            return _commands.GetDropDownDataForJobCard(ActiveUser, customerId, entity);
+            return _commands.GetDropDownDataForJobCard(ActiveUser, customerId);
         }
     }
 }

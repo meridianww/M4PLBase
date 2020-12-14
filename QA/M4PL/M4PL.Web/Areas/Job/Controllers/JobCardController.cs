@@ -47,7 +47,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(route.RecordId, "Destination");
+            ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(route.RecordId);
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             _reportResult.SetupJobCardResult(_commonCommands, route, SessionProvider);
             var jobcardView = new JobCardViewView();
@@ -237,7 +237,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Area = "Job";
             _reportResult.ReportRoute.RecordId = 0;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
-            ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(id, "Destination");
+            ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(id);
             return PartialView("DestinationPartialView", _reportResult);
         }
         public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<JobCardView, long> JobCardView, string strRoute, string gridName)

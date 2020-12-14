@@ -119,7 +119,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Programs"] = ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Program");
+                        Session["Programs"] = ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Program");
                     }));
                 }
 
@@ -127,7 +127,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Origins"] = ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Origin");
+                        Session["Origins"] = ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Origin");
                     }));
                 }
 
@@ -135,7 +135,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Destinations"] = ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Destination");
+                        Session["Destinations"] = ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Destination");
                     }));
                 }
 
@@ -143,7 +143,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Brands"] = ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Brand");
+                        Session["Brands"] = ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Brand");
                     }));
                 }
 
@@ -151,7 +151,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["ServiceModes"] = ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ServiceMode");
+                        Session["ServiceModes"] = ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "ServiceMode");
                     }));
                 }
 
@@ -159,7 +159,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["GatewayTitles"] = ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "GatewayStatus");
+                        Session["GatewayTitles"] = ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "GatewayStatus");
                     }));
                 }
 
@@ -167,7 +167,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["ProductTypes"] = ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ProductType");
+                        Session["ProductTypes"] = ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "ProductType");
                     }));
                 }
 
@@ -175,7 +175,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["OrderTypes"] = ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "OrderType");
+                        Session["OrderTypes"] = ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "OrderType");
                     }));
                 }
 
@@ -183,7 +183,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["JobChannels"] = ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobChannel");
+                        Session["JobChannels"] = ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "JobChannel");
                     }));
                 }
 
@@ -191,7 +191,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["JobStatusIds"] = ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobStatus");
+                        Session["JobStatusIds"] = ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "JobStatus");
                     }));
                 }
 
@@ -199,7 +199,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["DateTypes"] = ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
+                        Session["DateTypes"] = ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "DateType");
                     }));
                 }
 
@@ -207,7 +207,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Schedules"] = ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
+                        Session["Schedules"] = ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Scheduled");
                     }));
                 }
 
@@ -215,7 +215,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["PackagingTypes"] = ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "PackagingCode");
+                        Session["PackagingTypes"] = ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "PackagingCode");
                     }));
                 }
 
@@ -258,7 +258,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.ProgramCode = "ALL";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["Programs"] == null)
-                Session["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Program");
+                Session["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Program");
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["Programs"] = Session["Programs"] as IList<JobAdvanceReportFilter>;
             else
@@ -284,7 +284,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.Origin = "ALL";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["Origins"] == null)
-                Session["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Origin");
+                Session["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Origin");
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["Origins"] = Session["Origins"] as IList<JobAdvanceReportFilter>;
             else
@@ -309,7 +309,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.Destination = "ALL";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["Destinations"] == null)
-                Session["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Destination");
+                Session["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Destination");
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["Destinations"] = Session["Destinations"] as IList<JobAdvanceReportFilter>;
             else
@@ -333,7 +333,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record = record;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["Brands"] == null)
-                Session["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Brand");
+                Session["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Brand");
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["Brands"] = Session["Brands"] as IList<JobAdvanceReportFilter>;
             else
@@ -357,7 +357,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record = record;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["GatewayTitles"] == null)
-                Session["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "GatewayStatus");
+                Session["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "GatewayStatus");
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["GatewayTitles"] = Session["GatewayTitles"] as IList<JobAdvanceReportFilter>;
             else
@@ -382,7 +382,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record = record;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["ServiceModes"] == null)
-                Session["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "GatewayStatus");
+                Session["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "GatewayStatus");
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["ServiceModes"] = Session["ServiceModes"] as IList<JobAdvanceReportFilter>;
             else
@@ -406,7 +406,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record = record;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["ProductTypes"] == null)
-                Session["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "ProductType");
+                Session["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "ProductType");
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["ProductTypes"] = Session["ProductTypes"] as IList<JobAdvanceReportFilter>;
             else
@@ -428,7 +428,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.ScheduledName = "ALL";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["Schedules"] == null)
-                Session["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Scheduled");
+                Session["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "Scheduled");
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["Schedules"] = Session["Schedules"] as IList<JobAdvanceReportFilter>;
             else
@@ -450,7 +450,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.OrderTypeName = "ALL";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["OrderType"] == null)
-                Session["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "OrderType");
+                Session["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "OrderType");
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["OrderTypes"] = Session["OrderTypes"] as IList<JobAdvanceReportFilter>;
             else
@@ -472,7 +472,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //_reportResult.Record.JobStatusIdName = "Active";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["JobStatusIds"] == null)
-                Session["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobStatus");
+                Session["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "JobStatus");
 
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["JobStatusIds"] = Session["JobStatusIds"] as IList<JobAdvanceReportFilter>;
@@ -497,7 +497,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record = record;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["JobChannels"] == null)
-                Session["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobChannel");
+                Session["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "JobChannel");
 
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["JobChannels"] = Session["JobChannels"] as IList<JobAdvanceReportFilter>;
@@ -519,7 +519,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record = record;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["DateTypes"] == null)
-                Session["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "DateType");
+                Session["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "DateType");
 
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["DateTypes"] = Session["DateTypes"] as IList<JobAdvanceReportFilter>;
@@ -542,7 +542,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record = record;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["PackagingTypes"] == null)
-                Session["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "PackagingCode");
+                Session["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "PackagingCode");
 
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["PackagingTypes"] = Session["PackagingTypes"] as IList<JobAdvanceReportFilter>;
@@ -568,7 +568,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.Origin = "ALL";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["CargoTitles"] == null)
-                Session["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "CargoTitle");
+                Session["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram( "CargoTitle");
 
             if (_reportResult.Record.CustomerId == 0)
                 ViewData["CargoTitles"] = Session["CargoTitles"] as IList<JobAdvanceReportFilter>;

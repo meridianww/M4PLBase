@@ -29,7 +29,7 @@ namespace M4PL.Business.Job
 	/// </summary>
 	public interface IJobAdvanceReportCommands : IBaseCommands<JobAdvanceReport>
 	{
-		IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, long customerID, string entity);
+		IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, string entity);
 
 		StatusModel GenerateScrubDriverDetails(ActiveUser activeUser, JobDriverScrubReportData scriberDriverView);
 
