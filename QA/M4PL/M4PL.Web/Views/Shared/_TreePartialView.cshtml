@@ -18,6 +18,7 @@
         settings.EnableHotTrack = Model.EnableHottrack;
         settings.ShowTreeLines = Model.ShowTreeLines;
         settings.ShowExpandButtons = Model.ShowExpandButtons;
+
         if (!string.IsNullOrEmpty(Model.EventInit))
             settings.ClientSideEvents.Init = Model.EventInit;
         if (!string.IsNullOrEmpty(Model.EventExpandedChanged))
@@ -37,7 +38,7 @@
                 {
                     node.Text = item.Text;
                     node.Image.IconID = item.IconCss;
-                    node.Name = "_"+ item.Id.ToString();                    
+                    node.Name = "_"+ item.Id.ToString();
                     if (item.Children != null && item.Children.Count() > 0)
                     {
                         foreach (var itemChild1 in item.Children)
@@ -66,10 +67,11 @@
                 });
             }
         }
-
-        //settings.PreRender = (source, e) =>
-        //{
-        //    ASPxTreeView treeView = (ASPxTreeView)source;
-        //    treeView.ExpandToDepth(0);
-        //};
+        settings.PreRender = (s, e) =>
+        {
+            ASPxTreeView treeView = (ASPxTreeView)s;
+            treeView.ExpandToDepth(-1);
+            treeView.AllowSelectNode = true;
+            treeView.CollapseAll();
+        };
     }).GetHtml()

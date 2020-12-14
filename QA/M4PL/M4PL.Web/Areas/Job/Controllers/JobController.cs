@@ -511,8 +511,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             treeListBase.ShowTreeLines = true;
             treeListBase.ShowExpandButtons = true;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            treeListBase.ContentRouteCallBack = route;
-            //treeListBase = WebUtilities.SetupTreeResult(_commonCommands, route);
+            treeListBase.ContentRouteCallBack = route;            
             return PartialView("_TreePartialView", treeListBase);
         }
 

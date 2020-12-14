@@ -105,6 +105,9 @@ BEGIN
 					ELSE IF( @dashboardCategory = 'xCBL')
 					BEGIN
 					  SET @CountQuery = @CountQuery + 'INNER JOIN JOBDL020Gateways ON JOBDL000Master.Id = JOBDL020Gateways.JobId 
+													   AND ISNULL(JOBDL020Gateways.ProgramId,0) = JOBDL000Master.ProgramId
+													   AND JOBDL000Master.StatusId=1 AND JOBDL020Gateways.GatewayTypeId = 86
+													   AND JOBDL020Gateways.GwyGatewayCode like ''XCBL%''
 													   INNER JOIN  SYSTM000Ref_Options ON SYSTM000Ref_Options.Id = JOBDL020Gateways.StatusId 
 													   AND SYSTM000Ref_Options.SysOptionName in (''Active'',''Completed'')'
 					  SET @CountQuery = @CountQuery + ' Where 1 = 1 '
