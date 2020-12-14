@@ -471,7 +471,14 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult TreeListCallBack(string strRoute)
         {
             var treeListBase = new TreeListBase();
-            var entity = _commonCommands.GetCustomerPPPTree();
+            var entity = new List<TreeListModel>();
+            if (Session["CustomerPPPTree"] == null)
+            {
+                Session["CustomerPPPTree"] = _commonCommands.GetCustomerPPPTree() as List<TreeListModel>;
+            }
+
+            entity = Session["CustomerPPPTree"] as List<TreeListModel>;
+
             var treeListModel = new List<TreeListModel>();
 
             var treeNodes = new TreeListModel();
@@ -511,7 +518,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             treeListBase.ShowTreeLines = true;
             treeListBase.ShowExpandButtons = true;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            treeListBase.ContentRouteCallBack = route;            
+            treeListBase.ContentRouteCallBack = route;
             return PartialView("_TreePartialView", treeListBase);
         }
 
