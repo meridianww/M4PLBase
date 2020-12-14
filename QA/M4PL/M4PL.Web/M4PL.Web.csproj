@@ -402,6 +402,7 @@
     </Compile>
     <Compile Include="Providers\DataViewComboBoxProvider.cs" />
     <Compile Include="Providers\FormViewProvider.cs" />
+    <Compile Include="Providers\LogAttribute.cs" />
     <Compile Include="Providers\SessionProvider.cs" />
     <Compile Include="Providers\TreeListProvider.cs" />
     <Compile Include="Providers\UploadControlDemosHelper.cs" />
