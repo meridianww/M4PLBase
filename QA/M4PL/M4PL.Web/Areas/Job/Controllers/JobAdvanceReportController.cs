@@ -112,7 +112,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["isFirstBrand"] = true;
                 ViewData["isFirstLoadGatewayStatus"] = true;
                 ViewData["isFirstLoadChannel"] = true;
-                ViewData["isFirstLoadWeightUnitType"] = true;
+                //ViewData["isFirstLoadWeightUnitType"] = true;
                 ViewData["isFirstLoadPackagingCode"] = true;
                 ViewData["isFirstLoadCargoTitle"] = true;
                 if (Session["Programs"] == null)
@@ -484,13 +484,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (Session["JobStatusIds"] == null)
                 Session["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("JobStatus");
 
-            if (_reportResult.Record.CustomerId == 0)
                 ViewData["JobStatusIds"] = Session["JobStatusIds"] as IList<JobAdvanceReportFilter>;
-            else
-            {
-                var entity = Session["JobStatusIds"] as IList<JobAdvanceReportFilter>;
-                ViewData["JobStatusIds"] = entity.Where(x => x.CustomerId == _reportResult.Record.CustomerId).ToList();
-            }
             return PartialView("JobStatusIdByCustomer", _reportResult);
         }
         public PartialViewResult ChannelByCustomer(string model, long id = 0)
@@ -553,14 +547,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["PackagingTypes"] == null)
                 Session["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("PackagingCode");
+                
+            ViewData["PackagingTypes"] = Session["PackagingTypes"] as IList<JobAdvanceReportFilter>;
 
-            if (_reportResult.Record.CustomerId == 0)
-                ViewData["PackagingTypes"] = Session["PackagingTypes"] as IList<JobAdvanceReportFilter>;
-            else
-            {
-                var entity = Session["PackagingTypes"] as IList<JobAdvanceReportFilter>;
-                ViewData["PackagingTypes"] = entity.Where(x => x.CustomerId == _reportResult.Record.CustomerId).ToList();
-            }
             return PartialView("PackagingTypeByJob", _reportResult);
         }
         public PartialViewResult CargoTitleByJob(string model, long id = 0)

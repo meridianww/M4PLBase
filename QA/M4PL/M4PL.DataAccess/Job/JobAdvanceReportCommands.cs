@@ -251,19 +251,19 @@ namespace M4PL.DataAccess.Job
                 }
                 return packagingCodeRecord;
             }
-            else if (entity == "WeightUnit")
-            {
-                var weightUnitRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (weightUnitRecord.Any())
-                {
-                    weightUnitRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        WeightUnit = "ALL",
-                        Id = 0,
-                    });
-                }
-                return weightUnitRecord;
-            }
+            //else if (entity == "WeightUnit")
+            //{
+            //    var weightUnitRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+            //    if (weightUnitRecord.Any())
+            //    {
+            //        weightUnitRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+            //        {
+            //            WeightUnit = "ALL",
+            //            Id = 0,
+            //        });
+            //    }
+            //    return weightUnitRecord;
+            //}
             else if (entity == "CargoTitle")
             {
                 var cargoTitleRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
