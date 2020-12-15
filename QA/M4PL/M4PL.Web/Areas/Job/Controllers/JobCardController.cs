@@ -45,11 +45,11 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult CardView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            if (Session["Destinations"] == null)
+            if (Session["DestinationsJobCard"] == null)
             {
-                Session["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(route.RecordId);
+                Session["DestinationsJobCard"] = _jobCardCommands.GetDropDownDataForJobCard(route.RecordId);
             }
-            ViewData["Destinations"] = Session["Destinations"] as List<JobCard>;
+            ViewData["Destinations"] = Session["DestinationsJobCard"] as List<JobCard>;
             if (Session["ReportResult"] == null)
             {
                 route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);

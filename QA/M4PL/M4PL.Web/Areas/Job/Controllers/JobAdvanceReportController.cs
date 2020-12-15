@@ -324,7 +324,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["Destinations"] = Session["Destinations"] as IList<JobAdvanceReportFilter>;
             else
             {
-                var entity = Session["Destinations"] as IList<JobAdvanceReportFilter>;
+                var entity = (IList<JobAdvanceReportFilter>)Session["Destinations"];
                 ViewData["Destinations"] = entity.Where(x => x.CustomerId == _reportResult.Record.CustomerId).ToList();
             }
             return PartialView("DestinationByProgramCustomer", _reportResult);
