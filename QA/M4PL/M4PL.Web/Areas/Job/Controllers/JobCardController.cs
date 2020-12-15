@@ -45,44 +45,54 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult CardView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
-            route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(route.RecordId);
-            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-            _reportResult.SetupJobCardResult(_commonCommands, route, SessionProvider);
-            var jobcardView = new JobCardViewView();
-            jobcardView.Id = 10;
-            _reportResult.Record = new JobCardViewView(jobcardView);
-            _reportResult.ReportRoute.Action = "JobCardTileByCustomer";
-            _reportResult.ReportRoute.Entity = EntitiesAlias.JobCard;
-            _reportResult.ReportRoute.Area = "Job";
-            _reportResult.ReportRoute.RecordId = _reportResult.Record.CompanyId = route.CompanyId.HasValue && route.CompanyId.Value > 0 ? route.CompanyId.Value : 0;
-            _reportResult.ReportRoute.Location = route.Location;
-            _reportResult.ReportRoute.IsEdit = route.IsEdit;
-
-            List<string> prefLocation = new List<string>();
-            var result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
-                && SessionProvider.ActiveUser.PreferredLocation != null
-                ? SessionProvider.ActiveUser.PreferredLocation : null;
-            // _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
-            if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/ && TempData["Destinations"] == null && route.Location == null)
+            if (Session["Destinations"] == null)
             {
-                _reportResult.ReportRoute.Location = new List<string>();
-                prefLocation = result.Select(t => t.PPPVendorLocationCode).ToList();
-
-                var ExistingDestination = (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"];
-                foreach (string item in prefLocation)
-                {
-                    if (ExistingDestination.Where(x => x.Destination == item).FirstOrDefault() != null)
-                        _reportResult.ReportRoute.Location.Add(item);
-                }
+                Session["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(route.RecordId);
             }
+            ViewData["Destinations"] = Session["Destinations"] as List<JobCard>;
+            if (Session["ReportResult"] == null)
+            {
+                route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
+                route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+                ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+                _reportResult.SetupJobCardResult(_commonCommands, route, SessionProvider);
+                var jobcardView = new JobCardViewView();
+                jobcardView.Id = 10;
+                _reportResult.Record = new JobCardViewView(jobcardView);
+                _reportResult.ReportRoute.Action = "JobCardTileByCustomer";
+                _reportResult.ReportRoute.Entity = EntitiesAlias.JobCard;
+                _reportResult.ReportRoute.Area = "Job";
+                _reportResult.ReportRoute.RecordId = _reportResult.Record.CompanyId = route.CompanyId.HasValue && route.CompanyId.Value > 0 ? route.CompanyId.Value : 0;
+                _reportResult.ReportRoute.Location = route.Location;
+                _reportResult.ReportRoute.IsEdit = route.IsEdit;
+
+                List<string> prefLocation = new List<string>();
+                var result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
+                    && SessionProvider.ActiveUser.PreferredLocation != null
+                    ? SessionProvider.ActiveUser.PreferredLocation : null;
+                // _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
+                if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/ && TempData["Destinations"] == null && route.Location == null)
+                {
+                    _reportResult.ReportRoute.Location = new List<string>();
+                    prefLocation = result.Select(t => t.PPPVendorLocationCode).ToList();
+
+                    var ExistingDestination = (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"];
+                    foreach (string item in prefLocation)
+                    {
+                        if (ExistingDestination.Where(x => x.Destination == item).FirstOrDefault() != null)
+                            _reportResult.ReportRoute.Location.Add(item);
+                    }
+                }
+                
+                Session["ReportResult"] = _reportResult;
+            }
+
+            _reportResult=Session["ReportResult"] as CardViewResult<JobCardViewView>;
             if (!route.IsEdit)
             {
                 SessionProvider.CardTileData = null;
                 TempData["Destinations"] = null;
             }
-
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
 
