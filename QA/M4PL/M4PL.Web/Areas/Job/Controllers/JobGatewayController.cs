@@ -125,7 +125,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId")
                                                      ? "AppCbPanel"
                                                      : "JobDataViewCbPanel";
-                        resRoute.Filters.Value = "Gateway";
+                        resultRoute.Filters.Value = "Gateway";
                         resRoute = new MvcRoute(resultRoute, MvcConstants.ActionForm);
                         resRoute.Url = resRoute.ParentRecordId.ToString();
                     }
@@ -319,7 +319,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                         resultRoute.OwnerCbPanel = !string.IsNullOrEmpty(uriQueryString) && uriQueryString.Contains("jobId")
                                                    ? "AppCbPanel"
                                                    : "JobDataViewCbPanel";
-                        resRoute.Filters.Value = "Action";
+                        resultRoute.Filters.Value = "Action";
                         resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
                         resRoute.Url = resRoute.ParentRecordId.ToString();
                     }
