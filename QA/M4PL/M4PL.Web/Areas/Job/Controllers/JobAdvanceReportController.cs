@@ -119,156 +119,118 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Programs"] = ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("Program");
+                        Session["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("Program");
                     }));
-                }
-                else
-                {
-                    ViewData["Programs"] = Session["Programs"];
                 }
 
                 if (Session["Origins"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Origins"] = ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("Origin");
+                        Session["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("Origin");
                     }));
-                }
-                else
-                {
-                    ViewData["Origins"] = Session["Origins"];
                 }
 
                 if (Session["Destinations"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Destinations"] = ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("Destination");
+                        Session["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("Destination");
                     }));
-                }
-                else
-                {
-                    ViewData["Destinations"] = Session["Destinations"];
                 }
 
                 if (Session["Brands"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Brands"] = ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("Brand");
+                        Session["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("Brand");
                     }));
-                }
-                else
-                {
-                    ViewData["Brands"] = Session["Brands"];
                 }
 
                 if (Session["ServiceModes"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["ServiceModes"] = ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("ServiceMode");
+                        Session["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("ServiceMode");
                     }));
-                }
-                else
-                {
-                    ViewData["ServiceModes"] = Session["ServiceModes"];
                 }
 
                 if (Session["GatewayTitles"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["GatewayTitles"] = ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("GatewayStatus");
+                        Session["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("GatewayStatus");
                     }));
-                }
-                else
-                {
-                    ViewData["GatewayTitles"] = Session["GatewayTitles"];
                 }
 
                 if (Session["ProductTypes"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["ProductTypes"] = ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("ProductType");
+                        Session["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("ProductType");
                     }));
-                }
-                else
-                {
-                    ViewData["ProductTypes"] = Session["ProductTypes"];
                 }
                 if (Session["OrderTypes"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["OrderTypes"] = ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("OrderType");
+                        Session["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("OrderType");
                     }));
-                }
-                else
-                {
-                    ViewData["OrderTypes"] = Session["OrderTypes"];
                 }
 
                 if (Session["JobChannels"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["JobChannels"] = ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("JobChannel");
+                        Session["JobChannels"]  = _jobAdvanceReportCommands.GetDropDownDataForProgram("JobChannel");
                     }));
-                }
-                else
-                {
-                    ViewData["JobChannels"] = Session["JobChannels"];
                 }
 
                 if (Session["JobStatusIds"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["JobStatusIds"] = ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("JobStatus");
+                        Session["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("JobStatus");
                     }));
-                }
-                else
-                {
-                    ViewData["JobStatusIds"] = Session["JobStatusIds"];
                 }
 
                 if (Session["DateTypes"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["DateTypes"] = ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("DateType");
+                        Session["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("DateType");
                     }));
-                }
-                else
-                {
-                    ViewData["DateTypes"] = Session["DateTypes"];
                 }
                 if (Session["Schedules"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["Schedules"] = ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("Scheduled");
+                        Session["Schedules"]  = _jobAdvanceReportCommands.GetDropDownDataForProgram("Scheduled");
                     }));
-                }
-                else
-                {
-                    ViewData["Schedules"] = Session["Schedules"];
                 }
                 if (Session["PackagingTypes"] == null)
                 {
                     tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        Session["PackagingTypes"] = ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("PackagingCode");
+                        Session["PackagingTypes"]  = _jobAdvanceReportCommands.GetDropDownDataForProgram("PackagingCode");
                     }));
-                }
-                else
-                {
-                    ViewData["PackagingTypes"] = Session["PackagingTypes"];
                 }
 
                 if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+                ViewData["Programs"] = Session["Programs"] as IList<JobAdvanceReportFilter>;
+                ViewData["Origins"] = Session["Origins"] as IList<JobAdvanceReportFilter>;
+                ViewData["Destinations"] = Session["Destinations"] as IList<JobAdvanceReportFilter>;
+                ViewData["Brands"] = Session["Brands"] as IList<JobAdvanceReportFilter>;
+                ViewData["GatewayTitles"] = Session["GatewayTitles"] as IList<JobAdvanceReportFilter>;
+                ViewData["OrderTypes"] = Session["OrderTypes"] as IList<JobAdvanceReportFilter>;
+                ViewData["JobChannels"] = Session["JobChannels"] as IList<JobAdvanceReportFilter>;
+                ViewData["JobStatusIds"] = Session["JobStatusIds"] as IList<JobAdvanceReportFilter>;
+                ViewData["DateTypes"] = Session["DateTypes"] as IList<JobAdvanceReportFilter>;
+                ViewData["Schedules"] = Session["Schedules"] as IList<JobAdvanceReportFilter>;
+                ViewData["PackagingTypes"] = Session["PackagingTypes"] as IList<JobAdvanceReportFilter>;
+                ViewData["ServiceModes"] = Session["ServiceModes"] as IList<JobAdvanceReportFilter>;
+                ViewData["ProductTypes"] = Session["ProductTypes"] as IList<JobAdvanceReportFilter>;
+
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
                 //_reportResult.Record.StartDate = DateTime.Now.AddDays(-1);
