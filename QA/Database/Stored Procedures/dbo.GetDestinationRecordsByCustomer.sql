@@ -48,7 +48,7 @@ IF(@userId <> 0 AND @roleId <> 0)
 		END 
 	-----------------------------------------------End-----------------------------------------------------------
 	END
-IF(@IsJobAdmin < 0)
+IF(@IsJobAdmin = 0)
 	BEGIN
 	   	   IF(@CustomerId > 0)
 	   BEGIN
