@@ -14,7 +14,7 @@ GO
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
-CREATE PROCEDURE [dbo].[GetDestinationRecordsByCustomer] 
+ALTER PROCEDURE [dbo].[GetDestinationRecordsByCustomer] 
      @CustomerId BIGINT =0
 	,@orgId BIGINT = 1
 	,@userId BIGINT = 0
@@ -47,7 +47,10 @@ IF(@userId <> 0 AND @roleId <> 0)
 			SET @IsJobAdmin = 1
 		END 
 	-----------------------------------------------End-----------------------------------------------------------
-	   IF(@CustomerId > 0)
+	END
+IF(@IsJobAdmin < 0)
+	BEGIN
+	   	   IF(@CustomerId > 0)
 	   BEGIN
 		   SELECT DISTINCT job.JobSiteCode AS Destination FROM PRGRM000Master prg 
 		   INNER JOIN JOBDL000Master job ON job.ProgramID = prg.Id AND prg.PrgOrgID = 1 AND prg.StatusId =1 AND PRG.PRGCUSTID=@CustomerId

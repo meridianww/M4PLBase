@@ -49,7 +49,7 @@ namespace M4PL.Web.Controllers
             }
             base.OnActionExecuting(filterContext);
         }
-
+        [Log]
         public PartialViewResult RecordPopupControl(string strRoute)
         {
             MvcRoute route = null;

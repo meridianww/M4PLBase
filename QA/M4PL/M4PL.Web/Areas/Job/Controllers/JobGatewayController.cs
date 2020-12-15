@@ -795,7 +795,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId)?.ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
-
+       
         private void PopulateForm(MvcRoute route)
         {
             Session["isEdit"] = route.IsEdit;
@@ -910,6 +910,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
         }
+        [Log]
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -1025,6 +1026,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //return Json(new { isScheduled = _jobGatewayCommands.GetGatewayWithParent(id, parentId).isScheduled, actionSchedule = GatewayActionType.Schedule.ToString() }, JsonRequestBehavior.AllowGet);
             return Json(new { isScheduled = false, actionSchedule = WebUtilities.JobGatewayActions.Schedule.ToString() }, JsonRequestBehavior.AllowGet);
         }
+        [Log]
         public ActionResult GatewayActionFormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
