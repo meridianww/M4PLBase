@@ -11,7 +11,7 @@ GO
 -- Description:               Get user securities 
 -- Execution:                 EXEC [dbo].[GetCustomEntityIdByEntityName_Bak] 20046, 20035,1,'job',0,1
 -- =============================================   
-CREATE PROCEDURE [dbo].[GetCustomEntityIdByEntityName] (@userId BIGINT, @roleId BIGINT, @orgId BIGINT, @entity NVARCHAR(100), @parentId BIGINT = 0, @isProgramEntity BIT = 0)
+ALTER PROCEDURE [dbo].[GetCustomEntityIdByEntityName] (@userId BIGINT, @roleId BIGINT, @orgId BIGINT, @entity NVARCHAR(100), @parentId BIGINT = 0, @isProgramEntity BIT = 0)
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
@@ -236,17 +236,17 @@ BEGIN TRY
 						AND PVL.StatusId = 1
 					INNER JOIN PRGRM000Master P ON p.id = pvl.pvlprogramid
 					
-					UNION
+					--UNION
 					
-					SELECT P.Id, P.PrgCustId, P.PrgProgramCode, P.PrgProjectCode, P.PrgPhaseCode
-					FROM PRGRM000Master P
-					INNER JOIN JOBDL000Master Job ON Job.ProgramID = P.ID
-					WHERE ISNULL(job.JobSiteCode, '') <> ''
-						OR (
-							Job.JobDeliveryAnalystContactID = @UserContactId
-							OR Job.JobDeliveryResponsibleContactID = @UserContactId
-							OR JOB.JobDriverId = @UserContactId
-							)
+					--SELECT P.Id, P.PrgCustId, P.PrgProgramCode, P.PrgProjectCode, P.PrgPhaseCode
+					--FROM PRGRM000Master P
+					--INNER JOIN JOBDL000Master Job ON Job.ProgramID = P.ID
+					--WHERE ISNULL(job.JobSiteCode, '') <> ''
+					--	OR (
+					--		Job.JobDeliveryAnalystContactID = @UserContactId
+					--		OR Job.JobDeliveryResponsibleContactID = @UserContactId
+					--		OR JOB.JobDriverId = @UserContactId
+					--		)
 
 					SELECT Id EntityId
 					FROM @PROGRAMTREE
@@ -308,17 +308,17 @@ BEGIN TRY
 						AND PVL.StatusId = 1
 					INNER JOIN PRGRM000Master P ON p.id = pvl.pvlprogramid
 					
-					UNION
+					--UNION
 					
-					SELECT P.Id, P.PrgCustId, P.PrgProgramCode, P.PrgProjectCode, P.PrgPhaseCode
-					FROM PRGRM000Master P
-					INNER JOIN JOBDL000Master Job ON Job.ProgramID = P.ID
-					WHERE ISNULL(job.JobSiteCode, '') <> ''
-						OR (
-							Job.JobDeliveryAnalystContactID = @UserContactId
-							OR Job.JobDeliveryResponsibleContactID = @UserContactId
-							)
-						AND Job.StatusId = 1
+					--SELECT P.Id, P.PrgCustId, P.PrgProgramCode, P.PrgProjectCode, P.PrgPhaseCode
+					--FROM PRGRM000Master P
+					--INNER JOIN JOBDL000Master Job ON Job.ProgramID = P.ID
+					--WHERE ISNULL(job.JobSiteCode, '') <> ''
+					--	OR (
+					--		Job.JobDeliveryAnalystContactID = @UserContactId
+					--		OR Job.JobDeliveryResponsibleContactID = @UserContactId
+					--		)
+					--	AND Job.StatusId = 1
 
 					SELECT Id EntityId
 					FROM @PROGRAMENTITY
