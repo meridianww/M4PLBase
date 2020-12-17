@@ -41,6 +41,10 @@ M4PLWindow.CallBackPanel = function () {
                 if (event.keyCode == 8 || event.keyCode == 32 || (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 65 && event.keyCode <= 90))
                     hasChanges = true;
             });
+        if (route.IsPageLoad) {
+            route.IsPageLoad = false;
+            ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route) });
+        }
     };
 
     var _onBeginCallback = function (s, e) {

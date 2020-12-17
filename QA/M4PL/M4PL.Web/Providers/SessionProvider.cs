@@ -121,5 +121,7 @@ namespace M4PL.Web.Providers
 
 		public bool IsSpecialJobId { get; set; }
 		public object NavRemittanceData { get; set; }
-	}
+
+        public bool IsPageLoad { get; set; }
+    }
 }
