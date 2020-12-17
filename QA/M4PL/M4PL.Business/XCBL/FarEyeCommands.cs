@@ -21,6 +21,7 @@ using M4PL.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 
@@ -245,7 +246,8 @@ namespace M4PL.Business.XCBL
 					farEyeDeliveryStatusResponse.extra_info = new DeliveryExtraInfo()
 					{
 						comments = deliveryUpdate.AdditionalComments,
-						epod = JsonConvert.SerializeObject(deliveryUpdate.POD),
+						epod = !string.IsNullOrEmpty(jobDetail.JobGatewayStatus) && (jobDetail.JobGatewayStatus.Equals("Delivered", StringComparison.OrdinalIgnoreCase)
+						|| (jobDetail.JobGatewayStatus.Equals("POD Completion", StringComparison.OrdinalIgnoreCase))) ? string.Format("{0}?jobId={1}&tabName=POD", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdate.ServiceProviderID) : string.Empty,
 						promised_delivery_date = jobDetail.JobOriginDateTimeBaseline.HasValue ? jobDetail.JobOriginDateTimeBaseline.ToString() : string.Empty,
 						expected_delivery_date = jobDetail.JobOriginDateTimePlanned.HasValue ? jobDetail.JobOriginDateTimePlanned.ToString() : string.Empty
 					};
