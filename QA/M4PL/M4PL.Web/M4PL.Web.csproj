@@ -796,6 +796,7 @@
     <Content Include="Areas\Job\Views\JobGateway\MultiActionComboBoxPartial.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\AddMultiGateway.cshtml" />
     <Content Include="Areas\Administration\Views\UserGuideUpload\FormView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustNAVConfiguration\DataView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -971,7 +972,6 @@
     <Folder Include="Areas\Contact\Models\" />
     <Folder Include="Areas\Contact\Views\Shared\" />
     <Folder Include="Areas\Customer\Models\" />
-    <Folder Include="Areas\Customer\Views\CustNAVConfiguration\" />
     <Folder Include="Areas\Customer\Views\Dashboard\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Areas\Finance\Models\" />

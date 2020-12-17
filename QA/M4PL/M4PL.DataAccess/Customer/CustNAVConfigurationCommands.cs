@@ -110,6 +110,7 @@ namespace M4PL.DataAccess.Customer
            {
                new Parameter("@ServiceUrl", custNAVConfiguration.ServiceUrl),
                new Parameter("@ServiceUserName", custNAVConfiguration.ServiceUserName),
+               new Parameter("@CustomerId",custNAVConfiguration.CustomerId),
                new Parameter("@ServicePassword", custNAVConfiguration.ServicePassword),
                new Parameter("@statusId", custNAVConfiguration.StatusId),
            };

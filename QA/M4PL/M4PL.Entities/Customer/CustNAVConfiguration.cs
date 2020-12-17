@@ -20,6 +20,10 @@ namespace M4PL.Entities.Customer
         /// </summary>
         public string ServiceUrl { get; set; }
         /// <summary>
+        /// Gets or sets CustomerId
+        /// </summary>
+        public long CustomerId { get; set; }
+        /// <summary>
         /// Gets or sets ServiceUserName
         /// </summary>
         public string ServiceUserName { get; set; }
