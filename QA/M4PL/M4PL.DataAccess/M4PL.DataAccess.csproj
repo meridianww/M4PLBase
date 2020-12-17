@@ -80,6 +80,7 @@
     <Compile Include="Customer\CustDcLocationContactCommands.cs" />
     <Compile Include="Customer\CustDocReferenceCommands.cs" />
     <Compile Include="Customer\CustFinancialCalendarCommands.cs" />
+    <Compile Include="Customer\CustNAVConfigurationCommands.cs" />
     <Compile Include="Customer\CustomerCommands.cs" />
     <Compile Include="Customer\CustContactCommands.cs" />
     <Compile Include="Customer\CustReportCommands.cs" />

@@ -251,6 +251,7 @@
     <Compile Include="Areas\Customer\Controllers\CustDcLocationController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustDocReferenceController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustFinancialCalendarController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustNAVConfigurationController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustomerController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustReportController.cs" />
     <Compile Include="Areas\Customer\Controllers\DashboardController.cs" />
@@ -970,6 +971,7 @@
     <Folder Include="Areas\Contact\Models\" />
     <Folder Include="Areas\Contact\Views\Shared\" />
     <Folder Include="Areas\Customer\Models\" />
+    <Folder Include="Areas\Customer\Views\CustNAVConfiguration\" />
     <Folder Include="Areas\Customer\Views\Dashboard\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Areas\Finance\Models\" />

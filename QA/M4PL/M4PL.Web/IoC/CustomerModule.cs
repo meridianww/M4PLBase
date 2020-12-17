@@ -34,6 +34,7 @@ namespace M4PL.Web.IoC
 			builder.RegisterType<CustFinancialCalendarCommands>().As<ICustFinancialCalendarCommands>().InstancePerRequest();
 			builder.RegisterType<CustomerCommands>().As<ICustomerCommands>().InstancePerRequest();
 			builder.RegisterType<CustReportCommands>().As<ICustReportCommands>().InstancePerRequest();
+			builder.RegisterType<CustNAVConfigurationCommands>().As<ICustNAVConfigurationCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}

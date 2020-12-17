@@ -103,6 +103,7 @@
     <Compile Include="Customer\CustDcLocationContactCommands.cs" />
     <Compile Include="Customer\CustDocReferenceCommands.cs" />
     <Compile Include="Customer\CustFinancialCalendarCommands.cs" />
+    <Compile Include="Customer\CustNAVConfigurationCommands.cs" />
     <Compile Include="Customer\CustomerCommands.cs" />
     <Compile Include="Customer\CustReportCommands.cs" />
     <Compile Include="Customer\ICustBusinessTermCommands.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Customer\ICustDcLocationContactCommands.cs" />
     <Compile Include="Customer\ICustDocReferenceCommands.cs" />
     <Compile Include="Customer\ICustFinancialCalendarCommands.cs" />
+    <Compile Include="Customer\ICustNAVConfigurationCommands.cs" />
     <Compile Include="Customer\ICustomerCommands.cs" />
     <Compile Include="Customer\ICustReportCommands.cs" />
     <Compile Include="Finance\INavCostCodeCommands.cs" />
@@ -285,6 +287,7 @@
     <Compile Include="ViewModels\Administration\ValidationView.cs" />
     <Compile Include="ViewModels\CompanyAddress\CompanyAddressView.cs" />
     <Compile Include="ViewModels\Customer\CustDcLocationContactView.cs" />
+    <Compile Include="ViewModels\Customer\CustNAVConfigurationView.cs" />
     <Compile Include="ViewModels\Document\DocumentStatusView.cs" />
     <Compile Include="ViewModels\Document\DocumentView.cs" />
     <Compile Include="ViewModels\DropDownEditViewModel.cs" />
