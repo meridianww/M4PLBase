@@ -12,7 +12,7 @@ GO
 -- Description:               Get Customer Nav Configuration View 
 -- Execution:                
 -- =============================================  
-CREATE PROCEDURE [dbo].[GetCustNAVConfigurationView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetCustNAVConfigurationView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -34,10 +34,9 @@ BEGIN TRY
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
 
-	SET @TCountQuery = 'SELECT @TotalCount = COUNT(' + @entity + '.' + 'Id) FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity
+	SET @TCountQuery = 'SELECT @TotalCount = COUNT(' + @entity + '.' + 'NAVConfigurationId) FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity
 	SET @TCountQuery = @TCountQuery + ' LEFT JOIN [dbo].[CUST000Master] (NOLOCK) cust ON ' + @entity + '.[CustomerId]=cust.[Id] '
-	SET @TCountQuery = @TCountQuery + ' WHERE [CustOrgId] = @orgId ' + ISNULL(@where, '')
-
+	SET @TCountQuery = @TCountQuery + ' WHERE 1=1 ' + ISNULL(@where, '')
 	EXEC sp_executesql @TCountQuery
 		,N'@orgId BIGINT, @userId BIGINT, @TotalCount INT OUTPUT'
 		,@orgId
@@ -62,24 +61,23 @@ BEGIN TRY
 					AND (@isEnd = 0)
 					)
 			BEGIN
-				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LAG(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, @entity + '.Id') + '), 0) AS Id '
+				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LAG(' + @entity + '.NAVConfigurationId) OVER (ORDER BY ' + ISNULL(@orderBy, @entity + '.NAVConfigurationId') + '), 0) AS Id '
 			END
 			ELSE IF (
 					(@isNext = 1)
 					AND (@isEnd = 0)
 					)
 			BEGIN
-				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LEAD(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, @entity + '.Id') + '), 0) AS Id '
+				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LEAD(' + @entity + '.NAVConfigurationId) OVER (ORDER BY ' + ISNULL(@orderBy, @entity + '.NAVConfigurationId') + '), 0) AS Id '
 			END
 			ELSE
 			BEGIN
-				SET @sqlCommand = 'SELECT TOP 1 ' + @entity + '.Id '
+				SET @sqlCommand = 'SELECT TOP 1 ' + @entity + '.NAVConfigurationId '
 			END
 		END
 
 		SET @sqlCommand = @sqlCommand + ' FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' LEFT JOIN [dbo].[CUST000Master] (NOLOCK) cust ON ' + @entity + '.[CustomerId]=cust.[Id] '
-
 		--Below to update order by clause if related to Ref_Options
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
@@ -95,7 +93,7 @@ BEGIN TRY
 			END
 		END
 
-		SET @sqlCommand = ISNULL(@where, '') + ISNULL(@groupByWhere, '')
+		SET @sqlCommand += ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 
 		IF (
 				(@recordId > 0)
@@ -121,11 +119,11 @@ BEGIN TRY
 						AND (CHARINDEX(',', @orderBy) = 0)
 						)
 				BEGIN
-					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' <= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity + ' WHERE ' + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
+					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' <= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity + ' WHERE ' + @entity + '.NAVConfigurationId=' + CAST(@recordId AS NVARCHAR(50)) + ') '
 				END
 				ELSE
 				BEGIN
-					SET @sqlCommand = @sqlCommand + ' AND ' + @entity + '.Id <= ' + CAST(@recordId AS NVARCHAR(50))
+					SET @sqlCommand = @sqlCommand + ' AND ' + @entity + '.NAVConfigurationId <= ' + CAST(@recordId AS NVARCHAR(50))
 				END
 			END
 			ELSE IF (
@@ -138,16 +136,16 @@ BEGIN TRY
 						AND (CHARINDEX(',', @orderBy) = 0)
 						)
 				BEGIN
-					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' >= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity + ' WHERE ' + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
+					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' >= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity + ' WHERE ' + @entity + '.NAVConfigurationId=' + CAST(@recordId AS NVARCHAR(50)) + ') '
 				END
 				ELSE
 				BEGIN
-					SET @sqlCommand = @sqlCommand + ' AND ' + @entity + '.Id >= ' + CAST(@recordId AS NVARCHAR(50))
+					SET @sqlCommand = @sqlCommand + ' AND ' + @entity + '.NAVConfigurationId >= ' + CAST(@recordId AS NVARCHAR(50))
 				END
 			END
 		END
 
-		SET @sqlCommand = @sqlCommand + ' ORDER BY ' + ISNULL(@orderBy, @entity + '.Id')
+		SET @sqlCommand = @sqlCommand + ' ORDER BY ' + ISNULL(@orderBy, @entity + '.NAVConfigurationId')
 
 		IF (@recordId = 0)
 		BEGIN
@@ -198,7 +196,7 @@ BEGIN TRY
 	END
 	ELSE
 	BEGIN
-		SET @sqlCommand = 'SELECT ' + @groupBy + ' AS KeyValue, Count(' + @entity + '.Id) AS DataCount FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity
+		SET @sqlCommand = 'SELECT ' + @groupBy + ' AS KeyValue, Count(' + @entity + '.NAVConfigurationId) AS DataCount FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' LEFT JOIN [dbo].[CUST000Master] (NOLOCK) cust ON ' + @entity + '.[CustomerId]=cust.[Id] '
 		SET @sqlCommand = @sqlCommand + ' WHERE ' + @entity + '.[CustOrgId] = @orgId ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		SET @sqlCommand = @sqlCommand + ' GROUP BY ' + @groupBy

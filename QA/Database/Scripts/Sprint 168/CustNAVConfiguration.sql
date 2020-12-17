@@ -11,6 +11,7 @@ CREATE TABLE SYSTM000CustNAVConfiguration
   EnteredBy NVARCHAR(50) NULL,
   DateChanged DATETIME2 NULL,
   ChangedBy NVARCHAR(50) NULL,
+  StatusId INT 
 )
 
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='NAVConfigurationId')
@@ -58,6 +59,11 @@ IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConf
 BEGIN
 	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
 	VALUES ('EN', 'CustNAVConfiguration', NULL, 'ChangedBy', 'Changed By', 'Changed By', NULL, NULL, '', 9, 1, 0, 1, 1, NULL, 0, 0, NULL, 0, 'Changed By')
+END 
+IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='StatusId')
+BEGIN
+	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
+	VALUES ('EN', 'CustNAVConfiguration', NULL, 'StatusId', 'Status', 'Status', NULL, NULL, '', 10, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Status')
 END
 
 IF NOT EXISTS(SELECT 1 FROM SYSTM000Ref_Table WHERE SysRefName='CustNAVConfiguration')
@@ -70,4 +76,4 @@ IF NOT EXISTS(SELECT 1 FROM SYSTM030Ref_TabPageName WHERE RefTableName='CustNAVC
 BEGIN
 	INSERT INTO dbo.SYSTM030Ref_TabPageName (LangCode, RefTableName, TabSortOrder, TabTableName, TabPageTitle, TabExecuteProgram, TabPageIcon, StatusId, DateEntered, EnteredBy, DateChanged, ChangedBy)
 	VALUES ('EN', 'Customer', 9, 'CustNAVConfiguration', 'NAV Configuration', 'DataView', NULL, 1, GETUTCDATE(), 'SimonDekker', NULL, NULL)
-END
+END 

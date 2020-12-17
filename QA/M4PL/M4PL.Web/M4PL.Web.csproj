@@ -797,6 +797,7 @@
     <Content Include="Areas\Job\Views\JobGateway\AddMultiGateway.cshtml" />
     <Content Include="Areas\Administration\Views\UserGuideUpload\FormView.cshtml" />
     <Content Include="Areas\Customer\Views\CustNAVConfiguration\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustNAVConfiguration\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
