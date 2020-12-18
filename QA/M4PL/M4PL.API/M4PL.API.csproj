@@ -275,6 +275,7 @@
     <Compile Include="Controllers\BizMoblController.cs" />
     <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
+    <Compile Include="Controllers\CustNAVConfigurationController.cs" />
     <Compile Include="Controllers\EmailServiceController.cs" />
     <Compile Include="Controllers\FarEyeController.cs" />
     <Compile Include="Controllers\GatewayImportController.cs" />

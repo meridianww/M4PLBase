@@ -332,7 +332,9 @@ namespace M4PL.Entities
         Action,
         SubAction,
         NextGatway,
-		UserGuideUpload
+		UserGuideUpload,
+
+		CustNAVConfiguration
 	}
 
 	public enum ErrorMessages
@@ -822,6 +824,10 @@ namespace M4PL.Entities
 		RequirementID,
 		ServiceID,
 		ReturnReasonID
+	}
+	public enum CustNAVConfigurationPrimaryColumnName
+	{
+		NAVConfigurationId
 	}
 
 	public enum CustColumnNames

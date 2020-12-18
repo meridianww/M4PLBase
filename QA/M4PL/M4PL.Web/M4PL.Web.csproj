@@ -251,6 +251,7 @@
     <Compile Include="Areas\Customer\Controllers\CustDcLocationController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustDocReferenceController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustFinancialCalendarController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustNAVConfigurationController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustomerController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustReportController.cs" />
     <Compile Include="Areas\Customer\Controllers\DashboardController.cs" />
@@ -795,6 +796,8 @@
     <Content Include="Areas\Job\Views\JobGateway\MultiActionComboBoxPartial.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\AddMultiGateway.cshtml" />
     <Content Include="Areas\Administration\Views\UserGuideUpload\FormView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustNAVConfiguration\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustNAVConfiguration\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
