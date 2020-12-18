@@ -35,8 +35,8 @@ BEGIN TRY
 	DECLARE @TCountQuery NVARCHAR(MAX);
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(' + @entity + '.' + 'NAVConfigurationId) FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity
-	SET @TCountQuery = @TCountQuery + ' LEFT JOIN [dbo].[CUST000Master] (NOLOCK) cust ON ' + @entity + '.[CustomerId]=cust.[Id] '
-	SET @TCountQuery = @TCountQuery + ' WHERE 1=1 ' + ISNULL(@where, '')
+	SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON ' + @entity + '.[CustomerId]=cust.[Id] '
+	SET @TCountQuery = @TCountQuery + ' WHERE '+ @entity + '.[CustomerId] =' + CONVERT(NVARCHAR(10), @parentId) + ISNULL(@where, '')
 	EXEC sp_executesql @TCountQuery
 		,N'@orgId BIGINT, @userId BIGINT, @TotalCount INT OUTPUT'
 		,@orgId
@@ -77,7 +77,9 @@ BEGIN TRY
 		END
 
 		SET @sqlCommand = @sqlCommand + ' FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity
-		SET @sqlCommand = @sqlCommand + ' LEFT JOIN [dbo].[CUST000Master] (NOLOCK) cust ON ' + @entity + '.[CustomerId]=cust.[Id] '
+		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON ' + @entity + '.[CustomerId]=cust.[Id] '
+		SET @sqlCommand = @sqlCommand + ' WHERE '+ @entity + '.[CustomerId] =' + CONVERT(NVARCHAR(10), @parentId) 
+		
 		--Below to update order by clause if related to Ref_Options
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
@@ -197,8 +199,8 @@ BEGIN TRY
 	ELSE
 	BEGIN
 		SET @sqlCommand = 'SELECT ' + @groupBy + ' AS KeyValue, Count(' + @entity + '.NAVConfigurationId) AS DataCount FROM [dbo].[SYSTM000CustNAVConfiguration] (NOLOCK) ' + @entity
-		SET @sqlCommand = @sqlCommand + ' LEFT JOIN [dbo].[CUST000Master] (NOLOCK) cust ON ' + @entity + '.[CustomerId]=cust.[Id] '
-		SET @sqlCommand = @sqlCommand + ' WHERE ' + @entity + '.[CustOrgId] = @orgId ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
+		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON ' + @entity + '.[CustomerId]=cust.[Id] '
+		SET @sqlCommand = @sqlCommand + ' WHERE '+ @entity + '.[CustomerId] =' + CONVERT(NVARCHAR(10), @parentId) + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		SET @sqlCommand = @sqlCommand + ' GROUP BY ' + @groupBy
 
 		IF (ISNULL(@orderBy, '') <> '')
@@ -206,7 +208,7 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END
-
+	PRINT @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

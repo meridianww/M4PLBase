@@ -63,7 +63,7 @@ END
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='StatusId')
 BEGIN
 	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
-	VALUES ('EN', 'CustNAVConfiguration', NULL, 'StatusId', 'Status', 'Status', NULL, NULL, '', 10, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Status')
+	VALUES ('EN', 'CustNAVConfiguration', NULL, 'StatusId', 'Status', 'Status', 39, 'Status', '', 10, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Status')
 END
 
 IF NOT EXISTS(SELECT 1 FROM SYSTM000Ref_Table WHERE SysRefName='CustNAVConfiguration')

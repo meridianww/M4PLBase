@@ -683,6 +683,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
 				ScannerTablesPrimaryColumnName.RequirementID.ToString(),
 				ScannerTablesPrimaryColumnName.ServiceID.ToString(),
 				ScannerTablesPrimaryColumnName.ReturnReasonID.ToString(),
+				CustNAVConfigurationPrimaryColumnName.NAVConfigurationId.ToString(),
 			};
 		}
 

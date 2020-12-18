@@ -17,6 +17,7 @@ CREATE PROCEDURE [dbo].[InsertCustNAVConfiguration]
 	@roleId BIGINT = 0,
 	@orgId BIGINT = 0,
 	@entity NVARCHAR(50) = NULL,
+	@NAVConfigurationId BIGINT = 0,
 	@ServiceUrl NVARCHAR(200) = NULL,
 	@ServiceUserName NVARCHAR(200) = NULL,
 	@ServicePassword NVARCHAR(200) = NULL,

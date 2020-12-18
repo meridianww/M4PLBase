@@ -60,7 +60,6 @@ namespace M4PL.DataAccess.Customer
         public static CustNAVConfiguration Get(ActiveUser activeUser, long id, long? parentId)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
-            parameters.Add(new Parameter("@parentId", parentId));
             var result = SqlSerializer.Default.DeserializeSingleRecord<CustNAVConfiguration>(StoredProceduresConstant.GetCustNAVConfiguration, parameters.ToArray(), storedProcedure: true);
             return result ?? new CustNAVConfiguration();
         }
@@ -104,8 +103,8 @@ namespace M4PL.DataAccess.Customer
         /// <returns></returns>
         public static int Delete(ActiveUser activeUser, long id)
         {
-            //return Delete(activeUser, id, StoredProceduresConstant.DeleteCustomerDcLocationContact);
-            return 0;
+            return Delete(activeUser, id, StoredProceduresConstant.UpdateCustNAVConfiguration);
+            //return 0;
         }
 
         /// <summary>
@@ -127,6 +126,7 @@ namespace M4PL.DataAccess.Customer
         {
             var parameters = new List<Parameter>
            {
+               new Parameter("@NAVConfigurationId", custNAVConfiguration.NAVConfigurationId),
                new Parameter("@ServiceUrl", custNAVConfiguration.ServiceUrl),
                new Parameter("@ServiceUserName", custNAVConfiguration.ServiceUserName),
                new Parameter("@CustomerId",custNAVConfiguration.CustomerId),

@@ -825,6 +825,10 @@ namespace M4PL.Entities
 		ServiceID,
 		ReturnReasonID
 	}
+	public enum CustNAVConfigurationPrimaryColumnName
+	{
+		NAVConfigurationId
+	}
 
 	public enum CustColumnNames
 	{
