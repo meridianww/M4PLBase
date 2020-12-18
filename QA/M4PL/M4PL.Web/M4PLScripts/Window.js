@@ -43,7 +43,7 @@ M4PLWindow.CallBackPanel = function () {
             });
         if (route.IsPageLoad) {
             route.IsPageLoad = false;
-            ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route) });
+            ASPxClientControl.GetControlCollection().GetByName("AppCbPanel").PerformCallback({ strRoute: JSON.stringify(route) });
         }
     };
 
