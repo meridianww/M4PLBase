@@ -69,7 +69,26 @@
     var isReboonRequired = uriQueryString != null && !string.IsNullOrEmpty(uriQueryString) ? false : true;
   
 }
+<h2>Say Hello</h2>
+<div id="messages"></div>
+<hr />
+<input type="text" id="myMessage" value="" />
+<button type="button" id="submit">Send!</button>
 
+<script>
+    $(function () {
+
+        var hub = signalR$.connection.m4PLJobHub;
+        hub.client.hello = function (message) {
+            $("myMessage").append("<p>"+message+"</p>");
+        };
+        signalR$.connection.hub.start().done(function () {
+            var msg = $("myMessage").val;
+            hub.server.sayHello(message);
+            $("myMessage").val("");
+        });
+    });
+</script>
 @if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity) && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
 {
     <div class='col-lg-12 col-md-12 col-sm-12 form-group' style='padding-bottom: 0px;height:45px;background-color:#808080;color:#ffffff;line-height:45px;font-weight:bold;font-size:18px;'>
