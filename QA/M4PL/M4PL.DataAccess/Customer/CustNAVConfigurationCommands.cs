@@ -103,7 +103,7 @@ namespace M4PL.DataAccess.Customer
         /// <returns></returns>
         public static int Delete(ActiveUser activeUser, long id)
         {
-            return Delete(activeUser, id, StoredProceduresConstant.UpdateCustNAVConfiguration);
+            return Delete(activeUser, id, StoredProceduresConstant.DeleteCustNAVConfiguration);
             //return 0;
         }
 
