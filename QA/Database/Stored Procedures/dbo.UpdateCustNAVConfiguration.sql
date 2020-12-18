@@ -12,7 +12,7 @@ GO
 -- Description:               Update/delete Customer Nav Configuration  
 -- Execution:                
 -- =============================================  
-ALTER PROCEDURE UpdateCustNAVConfiguration
+CREATE PROCEDURE UpdateCustNAVConfiguration
     @id BIGINT =0,
     @userId BIGINT = 0,
 	@roleId BIGINT = 0,

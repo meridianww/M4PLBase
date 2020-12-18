@@ -69,7 +69,7 @@ END
 IF NOT EXISTS(SELECT 1 FROM SYSTM000Ref_Table WHERE SysRefName='CustNAVConfiguration')
 BEGIN
 	INSERT INTO dbo.SYSTM000Ref_Table (SysRefName, LangCode, TblLangName, TblTableName, TblMainModuleId, TblIcon, TblTypeId, TblPrimaryKeyName, TblParentIdFieldName, TblItemNumberFieldName, DateEntered, EnteredBy, DateChanged, ChangedBy)
-	VALUES ('CustNAVConfiguration', 'EN', 'Customer NAV Configuration', 'SYSTM000CustNAVConfiguration', 10, NULL, NULL, 'Id', NULL, NULL, NULL, NULL, NULL, NULL)
+	VALUES ('CustNAVConfiguration', 'EN', 'Customer NAV Configuration', 'SYSTM000CustNAVConfiguration', 10, NULL, NULL, 'NAVConfigurationId', NULL, NULL, NULL, NULL, NULL, NULL)
 END
 
 IF NOT EXISTS(SELECT 1 FROM SYSTM030Ref_TabPageName WHERE RefTableName='CustNAVConfiguration' AND TabTableName='CustNAVConfiguration')

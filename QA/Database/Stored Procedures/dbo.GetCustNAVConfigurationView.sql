@@ -12,7 +12,7 @@ GO
 -- Description:               Get Customer Nav Configuration View 
 -- Execution:                
 -- =============================================  
-ALTER PROCEDURE [dbo].[GetCustNAVConfigurationView] @userId BIGINT
+CREATE PROCEDURE [dbo].[GetCustNAVConfigurationView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
