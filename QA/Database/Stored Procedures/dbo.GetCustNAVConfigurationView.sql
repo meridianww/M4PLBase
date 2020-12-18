@@ -52,7 +52,7 @@ BEGIN TRY
 		BEGIN
 			SET @sqlCommand = 'SELECT ' + @entity + '.NAVConfigurationId,' + @entity + '.ServiceUrl,
 	  ' + @entity + '.ServiceUserName,' + @entity + '.ServicePassword,' + @entity + '.CustomerId,' + @entity + '.DateEntered,
-	  ' + @entity + '.EnteredBy,' + @entity + '.DateChanged,' + @entity + '.ChangedBy '
+	  ' + @entity + '.EnteredBy,' + @entity + '.DateChanged,' + @entity + '.ChangedBy, ' + @entity + '.StatusId '
 		END
 		ELSE
 		BEGIN

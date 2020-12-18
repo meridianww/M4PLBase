@@ -17,6 +17,7 @@
 //Purpose:                                      Contains Actions to render view on Customer's NAV Configuration page
 //====================================================================================================================================================*/
 
+using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Customer;
 using M4PL.APIClient.ViewModels.Customer;
@@ -39,6 +40,25 @@ namespace M4PL.Web.Areas.Customer.Controllers
         {
             _commonCommands = commonCommands;
             _custNAVConfigurationCommands = custNAVConfigurationCommands;
+        }
+        [HttpPost, ValidateInput(false)]
+        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<CustNAVConfigurationView, long> custNAVConfigView, string strRoute, string gridName)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            route.SetParent(EntitiesAlias.Organization, SessionProvider.ActiveUser.OrganizationId);
+            custNAVConfigView.Insert.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            custNAVConfigView.Update.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            var batchError = BatchUpdate(custNAVConfigView, route, gridName);
+            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+            {
+                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+            }
+            route.ParentEntity = EntitiesAlias.Common;
+            route.ParentRecordId = 0;
+            SetGridResult(route);
+            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
         }
 
         public override ActionResult FormView(string strRoute)
@@ -67,7 +87,7 @@ namespace M4PL.Web.Areas.Customer.Controllers
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);           
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _gridResult.FocusedRowId = route.RecordId;
             route.RecordId = 0;
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))

@@ -38,7 +38,8 @@ BEGIN
 			   ServiceUserName = @ServiceUserName,
 			   ServicePassword = @ServicePassword,
 			   ChangedBy = @changedBy,
-			   DateChanged = @dateChanged
+			   DateChanged = @dateChanged,
+			   StatusId= CASE WHEN ISNULL(@statusId,0) = 0 THEN StatusId ELSE @statusId END
 			   WHERE NAVConfigurationId = @NAVConfigurationId
 			   SELECT * FROM SYSTM000CustNAVConfiguration WHERE NAVConfigurationId = @NAVConfigurationId
 		END
