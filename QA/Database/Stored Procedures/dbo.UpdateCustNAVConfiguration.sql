@@ -34,9 +34,9 @@ BEGIN
        IF(@statusId = 1)
 	   BEGIN
 		   UPDATE SYSTM000CustNAVConfiguration 
-		   SET ServiceUrl = @ServiceUrl,
-			   ServiceUserName = @ServiceUserName,
-			   ServicePassword = @ServicePassword,
+		   SET ServiceUrl = CASE WHEN ISNULL(@ServiceUrl,'') = '' THEN ServiceUrl ELSE @ServiceUrl END ,
+			   ServiceUserName = CASE WHEN ISNULL(@ServiceUserName,'') = '' THEN ServiceUserName ELSE @ServiceUserName END ,
+			   ServicePassword = CASE WHEN ISNULL(@ServicePassword,'') = '' THEN ServicePassword ELSE @ServicePassword END,
 			   ChangedBy = @changedBy,
 			   DateChanged = @dateChanged,
 			   StatusId= CASE WHEN ISNULL(@statusId,0) = 0 THEN StatusId ELSE @statusId END
@@ -46,8 +46,7 @@ BEGIN
 		ELSE
 		BEGIN
 		   UPDATE SYSTM000CustNAVConfiguration 
-		   SET StatusId =3
-			   WHERE NAVConfigurationId = @NAVConfigurationId
+		   SET StatusId =3 WHERE NAVConfigurationId = @NAVConfigurationId
 			SELECT 1
 		END
    END
