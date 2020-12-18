@@ -16,7 +16,7 @@
     settings.Name = "AppCbPanel";
     settings.CallbackRouteValues = new { Controller = Model.Controller, Action = "CallbackPanelPartial", Area = Model.Area, strRoute = strRoute };
     settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
-    if (!string.IsNullOrWhiteSpace(Model.Action))
+    if (!string.IsNullOrWhiteSpace(Model.Action) && !Model.IsPageLoad)
     {
         settings.SetContent(() =>
         {

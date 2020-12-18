@@ -177,14 +177,17 @@ namespace M4PL.Web.Controllers
             {
                 UpdateAccessToken(SessionProvider.ActiveUser, true);
             }
+            SessionProvider.IsPageLoad = true;
             if (SessionProvider.MvcPageAction != null && SessionProvider.MvcPageAction.Count > 0 && SessionProvider.MvcPageAction.FirstOrDefault().Key > 0)
             {
                 var route = new MvcRoute(EntitiesAlias.Common, SessionProvider.MvcPageAction.FirstOrDefault().Value, string.Empty);
                 route.RecordId = SessionProvider.MvcPageAction.FirstOrDefault().Key;
                 SessionProvider.MvcPageAction.Clear();
+                route.IsPageLoad = true;
                 return View(route);
             }
             var defaultRoute = GetDefaultRoute(jobId, tabName);
+            defaultRoute.IsPageLoad = true;
             if (string.IsNullOrWhiteSpace(defaultRoute.Area))
             {
                 var errorMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description;
@@ -250,7 +253,7 @@ namespace M4PL.Web.Controllers
                 isreadonly.SetValue(System.Web.HttpContext.Current.Request.Form, false, null);
                 System.Web.HttpContext.Current.Request.Form.Add(WebUtilities.GetGridName(route), SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout);
             }
-
+            SessionProvider.IsPageLoad = route.IsPageLoad;
             return PartialView(MvcConstants.CallBackPanelPartial, route);
         }
 

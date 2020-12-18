@@ -332,7 +332,9 @@ namespace M4PL.Entities
         Action,
         SubAction,
         NextGatway,
-		UserGuideUpload
+		UserGuideUpload,
+
+		CustNAVConfiguration
 	}
 
 	public enum ErrorMessages

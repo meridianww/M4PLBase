@@ -135,5 +135,6 @@ namespace M4PL.Entities.Support
         public bool IsEdit { get; set; }
         public bool IsJobParentEntityUpdated { get; set; }
         public bool IsJGWYOpen { get; set; }
+        public bool IsPageLoad { get; set; }
     }
 }

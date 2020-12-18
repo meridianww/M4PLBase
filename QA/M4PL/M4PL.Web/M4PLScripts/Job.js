@@ -236,7 +236,7 @@ M4PLJob.FormView = function () {
     }
 
     var _doJobCallback = function (route) {
-        var keyValue = route.RecordId != null && route.RecordId > 0 ? route.RecordId : TreeList.GetFocusedNodeKey();
+        var keyValue = route.RecordId != null && route.RecordId > 0 ? route.RecordId : route.EntityName == 'Job' ? 0 : TreeList.GetFocusedNodeKey();
         var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
         if ((route.EntityName == 'Program EDI Header' && keyValue.indexOf("_") >= 0))
             keyValue = keyValue.split('_')[1];
