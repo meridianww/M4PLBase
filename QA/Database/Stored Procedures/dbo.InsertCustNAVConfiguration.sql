@@ -12,7 +12,7 @@ GO
 -- Description:               INSERT Customer Nav Configuration  
 -- Execution:                
 -- =============================================  
-CREATE PROCEDURE [dbo].[InsertCustNAVConfiguration] 
+ALTER PROCEDURE [dbo].[InsertCustNAVConfiguration] 
 	@userId BIGINT = 0,
 	@roleId BIGINT = 0,
 	@orgId BIGINT = 0,
@@ -30,8 +30,8 @@ BEGIN
 IF NOT EXISTS( SELECT 1 FROM SYSTM000CustNAVConfiguration WHERE ServiceUrl=@ServiceUrl 
 AND ServiceUserName=@ServiceUserName AND ServicePassword =@ServicePassword AND CustomerId= @CustomerId)
 	BEGIN
-	   INSERT INTO SYSTM000CustNAVConfiguration(ServiceUrl,ServiceUserName,ServicePassword,CustomerId,EnteredBy,DateEntered)
-	   VALUES (@ServiceUrl,@ServiceUserName,@ServicePassword,@CustomerId,@enteredBy,@dateEntered)
+	   INSERT INTO SYSTM000CustNAVConfiguration(ServiceUrl,ServiceUserName,ServicePassword,CustomerId,EnteredBy,DateEntered,StatusId)
+	   VALUES (@ServiceUrl,@ServiceUserName,@ServicePassword,@CustomerId,@enteredBy,@dateEntered,@statusId)
 	   SELECT 1
 	END
 	ELSE
