@@ -15,6 +15,7 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Customer.CustNAVConfigurationView>
 @{
     ViewBag.Title = Model.PageName;
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "NAVConfigurationId").ColIsReadOnly = true;
 }
 
 @*@if (!Model.IsPopUp && (Model.Record.Id > 0))

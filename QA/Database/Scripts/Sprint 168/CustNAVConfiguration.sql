@@ -17,7 +17,7 @@ CREATE TABLE SYSTM000CustNAVConfiguration
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='NAVConfigurationId')
 BEGIN
 	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
-	VALUES ('EN', 'CustNAVConfiguration', NULL, 'NAVConfigurationId', 'NAV Configuration Id', 'NAV Configuration Id', NULL, NULL, NULL, 1, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'NAV Configuration Id')
+	VALUES ('EN', 'CustNAVConfiguration', NULL, 'NAVConfigurationId', 'NAV Configuration Id', 'NAV Configuration Id', NULL, NULL, NULL, 1, 1, 1, 1, 1, NULL, 0, 0, NULL, 0, 'NAV Configuration Id')
 END
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='ServiceUrl')
 BEGIN

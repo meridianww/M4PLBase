@@ -45,6 +45,7 @@ namespace M4PL.Web.Areas.Customer.Controllers
         public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<CustNAVConfigurationView, long> custNAVConfigView, string strRoute, string gridName)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            Session["CustomerId"] = route.ParentRecordId;
             route.SetParent(EntitiesAlias.Organization, SessionProvider.ActiveUser.OrganizationId);
             custNAVConfigView.Insert.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             custNAVConfigView.Update.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
@@ -56,7 +57,7 @@ namespace M4PL.Web.Areas.Customer.Controllers
                 ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
             }
             route.ParentEntity = EntitiesAlias.Common;
-            route.ParentRecordId = 0;
+            route.ParentRecordId = Session["CustomerId"] != null ? (long)Session["CustomerId"] : 0;
             SetGridResult(route);
             return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
         }
