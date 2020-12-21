@@ -14,7 +14,7 @@ GO
 -- Modified Desc:          
 -- Description:               Get Job not completed job gateway from program
 -- ============================================================================
-CREATE PROCEDURE [dbo].[GetJobGatewayContextMenu] @jobId BIGINT
+ALTER PROCEDURE [dbo].[GetJobGatewayContextMenu] @jobId BIGINT
 AS
 BEGIN
 	DECLARE @GtyGatewayId INT
@@ -31,7 +31,7 @@ BEGIN
 		,@GatewayShipmentType = ShipmentType
 		,@ProgramId = ProgramId
 	FROM [dbo].[JOBDL000Master]
-	WHERE Id = @JobId
+	WHERE Id = @JobId AND JobCompleted = 0
 
 	Select TOP 1 @GatewayCompleted = GwyCompleted, @CurrentGatewayCode = GwyGatewayCode 
 	From dbo.JOBDL020Gateways
