@@ -27,28 +27,31 @@
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
 {
     @Html.DevExpress().RoundPanel(settings =>
-      {
-            settings.Name = "pnlCustNavCOnfiguration";
-            settings.Width = Unit.Percentage(100);
-            settings.AllowCollapsingByHeaderClick = true;
-            settings.ShowCollapseButton = true;
-            settings.HeaderText = "Detail";
-            settings.Collapsed = false;
-            settings.ControlStyle.CssClass = "form-layout";
-            settings.SetContent(() =>
-            {
-                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "CustomerId" }).ToHtmlString());
-                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.Id, new { Name = "Id" }).ToHtmlString());
-                ViewContext.Writer.Write("<div class='cust-dcgrouping col-md-12 col-lg-10 no-padding'>");
-                ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.NAVConfigurationId).ToHtmlString() + "</div>");        
-                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServiceUrl).ToHtmlString() + "</div>");
-                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServiceUserName).ToHtmlString() + "</div>");
-                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServicePassword).ToHtmlString() + "</div>");
-                ViewContext.Writer.Write("</div>");
-                ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-                ViewContext.Writer.Write("</div>");
-            });
-        }).GetHtml()
+{
+    settings.Name = "pnlCustNavCOnfiguration";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "CustomerId" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.Id, new { Name = "Id" }).ToHtmlString());
+        ViewContext.Writer.Write("<div class='cust-dcgrouping col-md-12 col-lg-10 no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.NAVConfigurationId).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServiceUrl).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServiceUserName).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServicePassword).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.IsProductionEnvironment).ToHtmlString() + "</div>");
+
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
 
         @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel>{ Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
         if (!Model.IsPopUp)

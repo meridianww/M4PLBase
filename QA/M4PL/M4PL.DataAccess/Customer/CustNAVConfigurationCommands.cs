@@ -132,6 +132,7 @@ namespace M4PL.DataAccess.Customer
                new Parameter("@CustomerId",custNAVConfiguration.CustomerId),
                new Parameter("@ServicePassword", custNAVConfiguration.ServicePassword),
                new Parameter("@statusId", custNAVConfiguration.StatusId),
+               new Parameter("@isProductionEnvironment", custNAVConfiguration.IsProductionEnvironment),
            };
 
             return parameters;

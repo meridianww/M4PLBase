@@ -21,6 +21,7 @@ ALTER PROCEDURE [dbo].[InsertCustNAVConfiguration]
 	@ServiceUrl NVARCHAR(200) = NULL,
 	@ServiceUserName NVARCHAR(200) = NULL,
 	@ServicePassword NVARCHAR(200) = NULL,
+	@isProductionEnvironment BIT = 0,
 	@CustomerId BIGINT =0,
 	@statusId INT =1,
 	@enteredBy NVARCHAR(50) = NULL,
@@ -30,8 +31,8 @@ BEGIN
 IF NOT EXISTS( SELECT 1 FROM SYSTM000CustNAVConfiguration WHERE ServiceUrl=@ServiceUrl 
 AND ServiceUserName=@ServiceUserName AND ServicePassword =@ServicePassword AND CustomerId= @CustomerId)
 	BEGIN
-	   INSERT INTO SYSTM000CustNAVConfiguration(ServiceUrl,ServiceUserName,ServicePassword,CustomerId,EnteredBy,DateEntered,StatusId)
-	   VALUES (@ServiceUrl,@ServiceUserName,@ServicePassword,@CustomerId,@enteredBy,@dateEntered,@statusId)
+	   INSERT INTO SYSTM000CustNAVConfiguration(ServiceUrl,ServiceUserName,ServicePassword,IsProductionEnvironment,CustomerId,EnteredBy,DateEntered,StatusId)
+	   VALUES (@ServiceUrl,@ServiceUserName,@ServicePassword,@isProductionEnvironment,@CustomerId,@enteredBy,@dateEntered,@statusId)
 	   SELECT 1
 	END
 	ELSE
