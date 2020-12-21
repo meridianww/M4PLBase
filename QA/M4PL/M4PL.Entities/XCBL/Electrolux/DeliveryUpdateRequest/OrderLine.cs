@@ -49,6 +49,25 @@ namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest
         /// </summary>
         [XmlElement(ElementName = "ItemInstallComments")]
         public string ItemInstallComments { get; set; }
+
+        /// <summary>
+        /// Gets Or Sets CgoSerialBarcode
+        /// </summary>
+        [XmlElement(ElementName = "CgoSerialBarcode")]
+        public string CgoSerialBarcode { get; set; }
+
+        /// <summary>
+        /// Gets Or Sets CgoSerialBarcode
+        /// </summary>
+        [XmlElement(ElementName = "CgoSerialNumber")]
+        public string CgoSerialNumber { get; set; }
+
+        /// <summary>
+        /// Gets Or Sets CgoLineNumber
+        /// </summary>
+        [XmlElement(ElementName = "CgoLineNumber")]
+        public string CgoLineNumber { get; set; }
+
         /// <summary>
         /// Gets or Sets Exception if any
         /// </summary>

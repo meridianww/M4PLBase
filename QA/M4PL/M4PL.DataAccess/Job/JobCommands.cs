@@ -2040,6 +2040,8 @@ namespace M4PL.DataAccess.Job
 				jobCargoUTT.Columns.Add("CgoQtyUnitsId");
 				jobCargoUTT.Columns.Add("CgoWeightUnitsId");
 				jobCargoUTT.Columns.Add("CgoVolumeUnitsId");
+				jobCargoUTT.Columns.Add("CgoSerialBarcode");
+				jobCargoUTT.Columns.Add("CgoLineNumber");
 				jobCargoUTT.Columns.Add("StatusId");
 				jobCargoUTT.Columns.Add("EnteredBy");
 				jobCargoUTT.Columns.Add("DateEntered");
@@ -2064,6 +2066,8 @@ namespace M4PL.DataAccess.Job
 					row["CgoQtyUnitsId"] = jobCargo.CgoQtyUnitsId;
 					row["CgoWeightUnitsId"] = jobCargo.CgoWeightUnitsId;
 					row["CgoVolumeUnitsId"] = jobCargo.CgoVolumeUnitsId;
+					row["CgoSerialBarcode"] = jobCargo.CgoSerialBarcode;
+					row["CgoLineNumber"] = jobCargo.CgoLineNumber;
 					row["StatusId"] = jobCargo.StatusId;
 					row["EnteredBy"] = activeUser.UserName;
 					row["DateEntered"] = Utilities.TimeUtility.GetPacificDateTime();
