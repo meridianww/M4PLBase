@@ -67,6 +67,7 @@
     <Compile Include="ChangeHistoryData.cs" />
     <Compile Include="CommonIds.cs" />
     <Compile Include="CompanyAddress\CompanyAddress.cs" />
+    <Compile Include="Customer\CustNAVConfiguration.cs" />
     <Compile Include="Document\Document.cs" />
     <Compile Include="Document\BOLHeader.cs" />
     <Compile Include="Document\CargoItem.cs" />

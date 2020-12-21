@@ -667,20 +667,22 @@ namespace M4PL.Web.Controllers
         public PartialViewResult GetPopupNavigationTemplate(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            CommonIds maxMinFormData = null;
-            if ((route.Entity != EntitiesAlias.NavRate || route.Entity != EntitiesAlias.Gateway) && route.Action != MvcConstants.ActionForm)
-                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            if (route.Entity != EntitiesAlias.CustNAVConfiguration)
             {
-                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-                if (maxMinFormData != null)
+                CommonIds maxMinFormData = null;
+                if ((route.Entity != EntitiesAlias.NavRate || route.Entity != EntitiesAlias.Gateway) && route.Action != MvcConstants.ActionForm)
+                    maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+
+                if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 {
-                    SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
-                    SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
+                    SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+                    if (maxMinFormData != null)
+                    {
+                        SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
+                        SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
+                    }
                 }
             }
-
             if (route.Area == EntitiesAlias.Job.ToString()
                 && route.Controller == EntitiesAlias.JobGateway.ToString())
             {

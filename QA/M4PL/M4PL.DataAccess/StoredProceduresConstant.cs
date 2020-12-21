@@ -313,6 +313,13 @@ namespace M4PL.DataAccess
 		public const string InsertCustFinancialCalender = "dbo.InsCustFinacialCalender";
 		public const string UpdateCustFinancialCalender = "dbo.UpdCustFinacialCalender";
 
+		/* Customer NAV Configuration */
+		public const string GetCustNAVConfigurationView = "dbo.GetCustNAVConfigurationView";
+		public const string GetCustNAVConfiguration = "dbo.GetCustNAVConfiguration";
+		public const string InsertCustNAVConfiguration = "dbo.InsertCustNAVConfiguration";
+		public const string UpdateCustNAVConfiguration = "dbo.UpdateCustNAVConfiguration";
+		public const string DeleteCustNAVConfiguration = "dbo.DeleteCustNAVConfiguration";
+
 		#endregion Customer
 
 		#region Company Address
