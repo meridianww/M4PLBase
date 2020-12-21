@@ -78,9 +78,11 @@ namespace M4PL.DataAccess
 
 			if (result != null && result.Count > 0)
 			{
-				businessConfiguration = new BusinessConfiguration();
-				businessConfiguration.ConfigurationKeyValuePair = result;
-			}
+                businessConfiguration = new BusinessConfiguration
+                {
+                    ConfigurationKeyValuePair = result
+                };
+            }
 
 			return businessConfiguration;
 		}
