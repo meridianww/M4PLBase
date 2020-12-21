@@ -65,6 +65,11 @@ BEGIN
 	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
 	VALUES ('EN', 'CustNAVConfiguration', NULL, 'StatusId', 'Status', 'Status', 39, 'Status', '', 10, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Status')
 END
+IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='IsProductionEnvironment')
+BEGIN
+	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
+	VALUES ('EN', 'CustNAVConfiguration', NULL, 'IsProductionEnvironment', 'Is Production Environment', 'Is Production Environment', NULL, NULL, '', 11, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Is Production Environment')
+END 
 
 IF NOT EXISTS(SELECT 1 FROM SYSTM000Ref_Table WHERE SysRefName='CustNAVConfiguration')
 BEGIN

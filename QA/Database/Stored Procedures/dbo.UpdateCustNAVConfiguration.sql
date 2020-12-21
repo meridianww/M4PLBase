@@ -12,7 +12,7 @@ GO
 -- Description:               Update/delete Customer Nav Configuration  
 -- Execution:                
 -- =============================================  
-CREATE PROCEDURE UpdateCustNAVConfiguration
+ALTER PROCEDURE UpdateCustNAVConfiguration
     @id BIGINT =0,
     @userId BIGINT = 0,
 	@roleId BIGINT = 0,
@@ -22,6 +22,7 @@ CREATE PROCEDURE UpdateCustNAVConfiguration
 	@ServiceUrl NVARCHAR(200) = NULL,
 	@ServiceUserName NVARCHAR(200) = NULL,
 	@ServicePassword NVARCHAR(200) = NULL,
+	@isProductionEnvironment BIT = 0,
 	@CustomerId BIGINT =0,
 	@statusId INT =1,
 	@changedBy NVARCHAR(50) = NULL,
@@ -37,6 +38,7 @@ BEGIN
 		   SET ServiceUrl = CASE WHEN ISNULL(@ServiceUrl,'') = '' THEN ServiceUrl ELSE @ServiceUrl END ,
 			   ServiceUserName = CASE WHEN ISNULL(@ServiceUserName,'') = '' THEN ServiceUserName ELSE @ServiceUserName END ,
 			   ServicePassword = CASE WHEN ISNULL(@ServicePassword,'') = '' THEN ServicePassword ELSE @ServicePassword END,
+			   IsProductionEnvironment = @isProductionEnvironment,
 			   ChangedBy = @changedBy,
 			   DateChanged = @dateChanged,
 			   StatusId= CASE WHEN ISNULL(@statusId,0) = 0 THEN StatusId ELSE @statusId END

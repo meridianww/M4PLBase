@@ -12,7 +12,7 @@ GO
 -- Description:               Get Customer Nav Configuration View 
 -- Execution:                
 -- =============================================  
-CREATE PROCEDURE [dbo].[GetCustNAVConfigurationView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetCustNAVConfigurationView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -52,7 +52,7 @@ BEGIN TRY
 		BEGIN
 			SET @sqlCommand = 'SELECT ' + @entity + '.NAVConfigurationId,' + @entity + '.ServiceUrl,
 	  ' + @entity + '.ServiceUserName,' + @entity + '.ServicePassword,' + @entity + '.CustomerId,' + @entity + '.DateEntered,
-	  ' + @entity + '.EnteredBy,' + @entity + '.DateChanged,' + @entity + '.ChangedBy, ' + @entity + '.StatusId '
+	  ' + @entity + '.EnteredBy,' + @entity + '.DateChanged,' + @entity + '.ChangedBy, ' + @entity + '.StatusId, ' + @entity + '.IsProductionEnvironment '
 		END
 		ELSE
 		BEGIN
