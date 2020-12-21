@@ -33,7 +33,7 @@
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "WindowDelEndTime").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "StatusId").ColIsReadOnly = false;
     }
-    else if(Model.Permission == Permission.EditActuals)
+    else if (Model.Permission == Permission.EditActuals)
     {
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobOriginDateTimeActual").ColIsReadOnly = false;
         Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryDateTimeActual").ColIsReadOnly = false;
@@ -65,9 +65,6 @@
     {
         programDropdown.IsReadOnly = true;
     }
-    var uriQueryString = HttpContext.Current.Request.QueryString["jobId"];
-    var isReboonRequired = uriQueryString != null && !string.IsNullOrEmpty(uriQueryString) ? false : true;
-  
 }
 
 @if (Model.SessionProvider.ViewPagedDataSession.ContainsKey(Model.CallBackRoute.Entity) && Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
@@ -92,9 +89,9 @@
 else
 {
     @*if (!isRequiredNavPanel)
-    {
-        @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
-    }*@
+        {
+            @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+        }*@
 }
 
 @if (Model != null && Model.Record != null && Model.Record.ProgramID > 0)
@@ -143,7 +140,7 @@ else
                        }
 
                        tokensettings.Properties.Caption = columnSetting.ColAliasName;
-                       tokensettings.Properties.ClientSideEvents.ValueChanged = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.ValueChanged(s, e, '{0}')}}", string.Format("CallbackPanelAnalystResponsibleDriver"));                  
+                       tokensettings.Properties.ClientSideEvents.ValueChanged = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.ValueChanged(s, e, '{0}')}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
                        tokensettings.Name = "JobSiteCode";
                    }).BindList(ViewData["jobSiteCode"]).GetHtml() + "</div>");
                    ViewContext.Writer.Write("</div>");
@@ -230,7 +227,7 @@ else
         </div>
 
         <div class="col-sm-12 col-md-12 col-lg-12  no-padding">
-          @Html.Partial("JobContact", Model.CallBackRoute)
+            @Html.Partial("JobContact", Model.CallBackRoute)
         </div>
 
         @Html.Partial("Destination", tabRoute)
@@ -467,20 +464,7 @@ else
                }).GetHtml()
                 </div>
                 <div class="col-md-2">
-                    @if (!Model.CallBackRoute.IsPBSReport && isReboonRequired)
-                    {
-                        @Html.DevExpress().Button(settings =>
-                              {
-                                  settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
-                                  settings.EnableTheming = true;
-                                  settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
-                                  settings.AllowFocus = false;
-                                  settings.ControlStyle.CssClass = "form-btn";
-                                  settings.ClientSideEvents.Click = Model.CancelClick;
-                                  settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-                              }).GetHtml()
-                    }
-                    else
+                    @if (Model.CallBackRoute.OwnerCbPanel == "pnlJobDetail")
                     {
                         @Html.DevExpress().Button(settings =>
                               {
@@ -490,6 +474,19 @@ else
                                   settings.AllowFocus = false;
                                   settings.ControlStyle.CssClass = "form-btn";
                                   settings.ClientSideEvents.Click = "M4PLCommon.Common.BrowserIndexClosed";
+                                  settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+                              }).GetHtml()
+                    }
+                    else
+                    {
+                        @Html.DevExpress().Button(settings =>
+                              {
+                                  settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+                                  settings.EnableTheming = true;
+                                  settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+                                  settings.AllowFocus = false;
+                                  settings.ControlStyle.CssClass = "form-btn";
+                                  settings.ClientSideEvents.Click = Model.CancelClick;
                                   settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
                               }).GetHtml()
                     }
