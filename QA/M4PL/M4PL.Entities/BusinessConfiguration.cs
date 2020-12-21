@@ -36,12 +36,23 @@ namespace M4PL.Entities
 		public string ServiceProvider { get { return ConfigurationKeyValuePair?.FirstOrDefault(x => x.KeyName.Equals("ServiceProvider", StringComparison.OrdinalIgnoreCase))?.Value; } }
 		public string VOCJobWebServiceURL { get { return ConfigurationKeyValuePair?.FirstOrDefault(x => x.KeyName.Equals("VOCJobWebServiceURL", StringComparison.OrdinalIgnoreCase))?.Value; } }
 		public string XCBLEDTType { get { return ConfigurationKeyValuePair?.FirstOrDefault(x => x.KeyName.Equals("XCBLEDTType", StringComparison.OrdinalIgnoreCase))?.Value; } }
-	}
+        public List<CustomerNavConfiguration> CustomerNavConfiguration => ConfigurationKeyValuePair?.FirstOrDefault().CustomerNavConfiguration;
+    }
 
 	public class ConfigurationKeyValuePair
 	{
 		public string KeyName { get; set; }
 		public string Value { get; set; }
 		public string Environment { get; set; }
+        public List<CustomerNavConfiguration> CustomerNavConfiguration { get; set; }
+    }
+
+	public class CustomerNavConfiguration
+    {
+        public long CustomerId { get; set; }
+        public string ServiceUrl { get; set; }
+		public string ServiceUserName { get; set; }
+		public string ServicePassword { get; set; }
+
 	}
 }

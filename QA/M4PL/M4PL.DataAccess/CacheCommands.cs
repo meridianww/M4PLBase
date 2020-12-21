@@ -52,17 +52,34 @@ namespace M4PL.DataAccess
 		public static BusinessConfiguration GetBusinessConfiguration(string langCode)
 		{
 			BusinessConfiguration businessConfiguration = null;
+			List<ConfigurationKeyValuePair> result = null;
 			bool isProductionEnvironment = ConfigurationManager.AppSettings["IsProductionEnvironment"].ToBoolean();
 			var parameters = new[]
 			{
 				new Parameter("@environment", isProductionEnvironment ? 1 : 2),
 			};
 
-			var configurationKeyValuePair = SqlSerializer.Default.DeserializeMultiRecords<ConfigurationKeyValuePair>(StoredProceduresConstant.GetBusinessConfiguration, parameters, false, true);
+			SetCollection sets = new SetCollection();
+			sets.AddSet<CustomerNavConfiguration>("CustomerNavConfiguration");
+			sets.AddSet<ConfigurationKeyValuePair>("ConfigurationKeyValuePair");
+			SqlSerializer.Default.DeserializeMultiSets(sets, StoredProceduresConstant.GetBusinessConfiguration, parameters.ToArray(), storedProcedure: true);
+			var customerNavConfiguration = sets.GetSet<CustomerNavConfiguration>("CustomerNavConfiguration");
+			var configurationKeyValuePair = sets.GetSet<ConfigurationKeyValuePair>("ConfigurationKeyValuePair");
+
 			if (configurationKeyValuePair != null && configurationKeyValuePair.Count > 0)
 			{
+				result = configurationKeyValuePair.ToList();
+			}
+
+			if (result != null && customerNavConfiguration != null && customerNavConfiguration.Count > 0)
+			{
+				result.FirstOrDefault().CustomerNavConfiguration = customerNavConfiguration.ToList();
+			}
+
+			if (result != null && result.Count > 0)
+			{
 				businessConfiguration = new BusinessConfiguration();
-				businessConfiguration.ConfigurationKeyValuePair = configurationKeyValuePair;
+				businessConfiguration.ConfigurationKeyValuePair = result;
 			}
 
 			return businessConfiguration;
