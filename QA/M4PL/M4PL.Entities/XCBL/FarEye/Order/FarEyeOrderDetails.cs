@@ -635,7 +635,12 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// </summary>
 		public string cosignee_po { get; set; }
 
-	}
+		/// <summary>
+		/// Gets or Sets serial_barcode
+		/// </summary>
+		public string serial_barcode { get; set; }
+
+    }
 	/// <summary>
 	/// Model class for sku List of FarEye Order Detail
 	/// </summary>

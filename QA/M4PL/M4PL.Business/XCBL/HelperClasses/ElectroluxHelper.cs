@@ -148,6 +148,9 @@ namespace M4PL.Business.XCBL.HelperClasses
 			XDocument doc = XDocument.Parse(xmlString);
 			doc.Descendants("Latitude").Remove();
 			doc.Descendants("Longitude").Remove();
+			doc.Descendants("CgoSerialBarcode").Remove();
+			doc.Descendants("CgoSerialNumber").Remove();
+			doc.Descendants("CgoLineNumber").Remove();
 			using (StringWriter writer = new StringWriter())
 			{
 				doc.Document.Save(writer);

@@ -81,7 +81,9 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				CgoPackagingTypeId = cargoitem.MaterialType.Equals("ACCESSORY", StringComparison.OrdinalIgnoreCase) ? accessoryId
 				: (cargoitem.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || cargoitem.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))
 				? serviceId : applienceId,
-				StatusId = (int)Entities.StatusType.Active
+				StatusId = (int)Entities.StatusType.Active,
+				CgoSerialBarcode = cargoitem?.LineDescriptionDetails?.LineDescription?.BillOfLadingIndicator,
+				CgoLineNumber = cargoitem.LineNumber
 			}));
 
 			return jobCargos;

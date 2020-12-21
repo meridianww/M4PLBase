@@ -87,7 +87,7 @@ BEGIN
 
 					IF (@dashboardCategory = 'NotScheduled' AND (@dashboardSubCategory = 'InTransit' OR @dashboardSubCategory = 'OnHand' OR @dashboardSubCategory = 'LoadOnTruck'))
 					BEGIN 
-						 SET @CountQuery = @CountQuery + ' Where 1 = 1 AND JOBDL000Master.JobIsSchedule = 0 '
+						 SET @CountQuery = @CountQuery + ' Where 1 = 1 AND (JOBDL000Master.JobIsSchedule = 0 OR JOBDL000Master.JobIsSchedule IS NULL) '
 					END
 					ELSE IF ((@dashboardCategory = 'SchedulePastDue' OR @dashboardCategory = 'ScheduledForToday')
 					AND (@dashboardSubCategory = 'InTransit' OR @dashboardSubCategory = 'OnHand' OR @dashboardSubCategory = 'LoadOnTruck'))
