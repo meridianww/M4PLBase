@@ -18,11 +18,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=11" />
     <title>@ViewBag.Title</title>
 
-    <script type="text/javascript" src="~/bundles/jquery"></script>
-    <script type="text/javascript" src="~/bundles/modernizr"></script>
-    <script type="text/javascript" src="~/bundles/unobtrusive"></script>
-    <script type="text/javascript" src="~/bundles/bootstrap"></script>
-    <script type="text/javascript" src="~/bundles/M4PLWindow"></script>
+    @Scripts.Render("~/bundles/jquery")
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/unobtrusive")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/M4PLWindow" + WebUtilities.GetBundlingVersion())
     @Html.DevExpress().GetStyleSheets(
             new StyleSheet { ExtensionSuite = ExtensionSuite.Icons },
             new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
@@ -50,11 +51,15 @@
             new Script { ExtensionSuite = ExtensionSuite.Dashboard },
             new Script { ExtensionSuite = ExtensionSuite.Report }
     )
-
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="../signalr/hubs"></script>
+    <script src="~/SignalR.Hubs/JobNotification.js"></script>
     <link href="~/Content/css" rel="stylesheet" />
     <link href="~/Content/font-awesome-4.6.1/css/font-awesome.css" rel="stylesheet" />
     <script type="text/javascript">
         $(document).ready(function (e) {
+            $.connection.hub.start().done(function () {
+            });
             var d = new Date()
             var n = d.getTimezoneOffset();
             $('@WebApplicationConstants.TimeOffset').val(-1 * n);
@@ -116,6 +121,7 @@
             });
         });
     </script>
+
 </head>
 @Html.DevExpress().LoadingPanel(
     settings =>
