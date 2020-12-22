@@ -24,14 +24,13 @@ BEGIN
 		SELECT DISTINCT @JobType = JobType, @ShipmentType= ShipmentType FROM JOBDL000Master JOB 
 		INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
 
-		SELECT @IsScheduleCount=COUNT(ISNULL(JobIsSchedule,0)) FROM JOBDL000Master JOB
-		INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id AND ISNULL(JobIsSchedule,0) <> 0
+		SELECT @IsScheduleCount=COUNT(DISTINCT ISNULL(JobIsSchedule,0)) FROM JOBDL000Master JOB
+		INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id 
 		IF(@IsScheduleCount =1)
 		BEGIN
 		   SELECT TOP 1 @IsSchedule = ISNULL(JobIsSchedule,0) FROM JOBDL000Master JOB
 		   INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id 
 		END
-		PRINT @IsSchedule
 		IF(@IsSchedule IS NOT NULL AND @IsSchedule =1 )
 		BEGIN
 			SELECT DISTINCT GATEWAY.PgdGatewayCode Code,GATEWAY.PgdGatewayTitle Title FROM PRGRM010Ref_GatewayDefaults GATEWAY
