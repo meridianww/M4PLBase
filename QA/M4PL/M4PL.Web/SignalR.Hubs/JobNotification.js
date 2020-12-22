@@ -4,7 +4,6 @@ $(function () {
 
     $.extend(jobNotifier.client, {
         notifyJobForm: function (jobId, client) {
-            window.alert(jobId);
             var clientId = $.connection.hub.id;
             if (jobId === $('#Id').val() && clientId != client) {
                 if (ASPxClientControl.GetControlCollection().GetByName('JobDataViewCbPanel') === null) {
