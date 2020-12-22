@@ -693,9 +693,9 @@ namespace M4PL.Business.Finance.SalesOrder
 					? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
 					: string.Empty;
 
-				dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
-					? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
-					: string.Empty;
+				//dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
+				//	? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
+				//	: string.Empty;
 
 				//if (!string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_County))
 				//{
@@ -708,7 +708,7 @@ namespace M4PL.Business.Finance.SalesOrder
 				//}
 			}
 
-			navSalesOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
+			navSalesOrderRequest.Shortcut_Dimension_2_Code = navSalesOrderRequest.Ship_from_Code;
 			navSalesOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
 			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword);
@@ -737,9 +737,9 @@ namespace M4PL.Business.Finance.SalesOrder
 					? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
 					: string.Empty;
 
-				dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
-					? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
-					: string.Empty;
+				//dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
+				//	? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
+				//	: string.Empty;
 
 				//if (!string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_County))
 				//{
@@ -752,7 +752,7 @@ namespace M4PL.Business.Finance.SalesOrder
 				//}
 			}
 
-			navSalesOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
+			navSalesOrderRequest.Shortcut_Dimension_2_Code = navSalesOrderRequest.Ship_from_Code;
 			navSalesOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
 			NavSalesOrder navSalesOrderResponse = UpdateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
