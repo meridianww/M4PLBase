@@ -19,9 +19,6 @@
     <title>@ViewBag.Title</title>
 
     @Scripts.Render("~/bundles/jquery")
-    @*<script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>*@
-    <script src="~/Scripts/jquery.signalR-2.2.2.js"></script>
-    <script scr="~/signalr/hubs"></script>
 
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/unobtrusive")
@@ -54,11 +51,15 @@
             new Script { ExtensionSuite = ExtensionSuite.Dashboard },
             new Script { ExtensionSuite = ExtensionSuite.Report }
     )
-
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="../signalr/hubs"></script>
+    <script src="~/SignalR.Hubs/JobNotification.js"></script>
     <link href="~/Content/css" rel="stylesheet" />
     <link href="~/Content/font-awesome-4.6.1/css/font-awesome.css" rel="stylesheet" />
     <script type="text/javascript">
         $(document).ready(function (e) {
+            $.connection.hub.start().done(function () {
+            });
             var d = new Date()
             var n = d.getTimezoneOffset();
             $('@WebApplicationConstants.TimeOffset').val(-1 * n);
@@ -120,6 +121,7 @@
             });
         });
     </script>
+
 </head>
 @Html.DevExpress().LoadingPanel(
     settings =>
