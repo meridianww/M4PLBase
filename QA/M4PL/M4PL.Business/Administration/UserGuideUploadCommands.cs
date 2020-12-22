@@ -56,7 +56,7 @@ namespace M4PL.Business.Administration
                     return false;
                 }
             }
-            catch (Exception exp)
+            catch
             {
                 return false;
             }

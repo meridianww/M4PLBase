@@ -77,13 +77,37 @@ namespace M4PL.Business.Finance.SalesOrder
 		public M4PLOrderCreationResponse GenerateOrderInNav(long jobId)
 		{
 			Order.NavOrderCommands navOrderRepo = new Order.NavOrderCommands();
-			string navAPIURL = M4PLBusinessConfiguration.NavAPIUrl;
-			string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
-			string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+			M4PL.Entities.Job.Job jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(ActiveUser, jobId, 0);
+			string navAPIURL = string.Empty;
+			string navAPIUserName = string.Empty;
+			string navAPIPassword = string.Empty;
 			long customerId = M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong();
 			ActiveUser activeUser = ActiveUser;
 			M4PLOrderCreationResponse m4PLOrderCreationResponse = new M4PLOrderCreationResponse();
 			List<Task> tasks = new List<Task>();
+			CustomerNavConfiguration currentCustomerNavConfiguration = null;
+			if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+			{
+				if (M4PLBusinessConfiguration.CustomerNavConfiguration.Any(x => x.CustomerId == jobDetails.CustomerId))
+				{
+					currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.Where(x => x.CustomerId == jobDetails.CustomerId).FirstOrDefault();
+					navAPIURL = currentCustomerNavConfiguration.ServiceUrl;
+					navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+					navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+				}
+				else
+				{
+					navAPIURL = M4PLBusinessConfiguration.NavAPIUrl;
+					navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+					navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+				}
+			}
+			else
+			{
+				navAPIURL = M4PLBusinessConfiguration.NavAPIUrl;
+				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+			}
 			tasks.Add(Task.Factory.StartNew(() =>
 			{
 				try
@@ -159,6 +183,23 @@ namespace M4PL.Business.Finance.SalesOrder
 			List<SalesOrderItem> manualSalesOrderItemRequest = null;
 			List<SalesOrderItem> electronicSalesOrderItemRequest = null;
 			NavSalesOrderCreationResponse navSalesOrderCreationResponse = new NavSalesOrderCreationResponse();
+			CustomerNavConfiguration currentCustomerNavConfiguration = null;
+			string navAPIPassword;
+			string navAPIUserName;
+			string navAPIUrl;
+			if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+			{
+				currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+				navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
+				navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+				navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+			}
+			else
+			{
+				navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+			}
 			List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(ActiveUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
 			if (salesOrderItemRequest == null || (salesOrderItemRequest != null && salesOrderItemRequest.Count == 0))
 			{
@@ -176,14 +217,14 @@ namespace M4PL.Business.Finance.SalesOrder
 			if ((!jobResult.JobElectronicInvoice || (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0 && !salesOrderItemRequest.Where(x => x.Electronic_Invoice).Any())) && !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 			{
 				bool isDeleted = false;
-				NavSalesOrderHelper.DeleteSalesOrderForNAV(ActiveUser, jobResult.Id, true, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.JobElectronicInvoiceSONumber, out isDeleted);
+				NavSalesOrderHelper.DeleteSalesOrderForNAV(ActiveUser, jobResult.Id, true, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoiceSONumber, out isDeleted);
 				jobResult.JobElectronicInvoiceSONumber = isDeleted ? string.Empty : jobResult.JobElectronicInvoiceSONumber;
 			}
 
 			if (!string.IsNullOrEmpty(jobResult.JobSONumber) && ((salesOrderItemRequest == null || (salesOrderItemRequest != null && salesOrderItemRequest.Count == 0)) || (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0 && !salesOrderItemRequest.Where(x => !x.Electronic_Invoice).Any())))
 			{
 				bool isDeleted = false;
-				NavSalesOrderHelper.DeleteSalesOrderForNAV(ActiveUser, jobResult.Id, false, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.JobSONumber, out isDeleted);
+				NavSalesOrderHelper.DeleteSalesOrderForNAV(ActiveUser, jobResult.Id, false, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobSONumber, out isDeleted);
 				jobResult.JobSONumber = isDeleted ? string.Empty : jobResult.JobSONumber;
 			}
 
@@ -193,22 +234,28 @@ namespace M4PL.Business.Finance.SalesOrder
 				{
 					if (string.IsNullOrEmpty(jobResult.JobSONumber))
 					{
-						navSalesOrderCreationResponse.ManualNavSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
+						{
+							navSalesOrderCreationResponse.ManualNavSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						}
 					}
 					else
 					{
-						navSalesOrderCreationResponse.ManualNavSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobResult.JobSONumber, string.IsNullOrEmpty(jobResult.JobCustomerPurchaseOrder) ? jobResult.JobElectronicInvoicePONumber : jobResult.JobCustomerPurchaseOrder, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						navSalesOrderCreationResponse.ManualNavSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobResult.JobSONumber, string.IsNullOrEmpty(jobResult.JobCustomerPurchaseOrder) ? jobResult.JobElectronicInvoicePONumber : jobResult.JobCustomerPurchaseOrder, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
 					}
 				}
 				else
 				{
 					if (string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 					{
-						navSalesOrderCreationResponse.ElectronicNavSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
+						{
+							navSalesOrderCreationResponse.ElectronicNavSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						}
 					}
 					else
 					{
-						navSalesOrderCreationResponse.ElectronicNavSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobResult.JobElectronicInvoiceSONumber, string.IsNullOrEmpty(jobResult.JobElectronicInvoicePONumber) ? jobResult.JobCustomerPurchaseOrder : jobResult.JobElectronicInvoicePONumber, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						navSalesOrderCreationResponse.ElectronicNavSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobResult.JobElectronicInvoiceSONumber, string.IsNullOrEmpty(jobResult.JobElectronicInvoicePONumber) ? jobResult.JobCustomerPurchaseOrder : jobResult.JobElectronicInvoicePONumber, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
 					}
 				}
 			}
@@ -218,11 +265,14 @@ namespace M4PL.Business.Finance.SalesOrder
 				{
 					if (string.IsNullOrEmpty(jobResult.JobSONumber))
 					{
-						navSalesOrderCreationResponse.ManualNavSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest);
+						if (manualSalesOrderItemRequest != null && manualSalesOrderItemRequest.Count > 0)
+						{
+							navSalesOrderCreationResponse.ManualNavSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest);
+						}
 					}
 					else
 					{
-						navSalesOrderCreationResponse.ManualNavSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobResult.JobSONumber, jobResult.JobCustomerPurchaseOrder, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest);
+						navSalesOrderCreationResponse.ManualNavSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobResult.JobSONumber, jobResult.JobCustomerPurchaseOrder, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest);
 					}
 				}
 
@@ -230,11 +280,14 @@ namespace M4PL.Business.Finance.SalesOrder
 				{
 					if (string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 					{
-						navSalesOrderCreationResponse.ElectronicNavSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest);
+						if (electronicSalesOrderItemRequest != null && electronicSalesOrderItemRequest.Count > 0)
+						{
+							navSalesOrderCreationResponse.ElectronicNavSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest);
+						}
 					}
 					else
 					{
-						navSalesOrderCreationResponse.ElectronicNavSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobResult.JobElectronicInvoiceSONumber, jobResult.JobElectronicInvoicePONumber, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest);
+						navSalesOrderCreationResponse.ElectronicNavSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobResult.JobElectronicInvoiceSONumber, jobResult.JobElectronicInvoicePONumber, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest);
 					}
 				}
 			}
@@ -243,7 +296,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			{
 				//Task.Run(() =>
 				//{
-				NavPurchaseOrderHelper.PurchaseOrderCreationProcessForNAV(ActiveUser, jobIdList, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, jobResult.JobElectronicInvoice);
+				NavPurchaseOrderHelper.PurchaseOrderCreationProcessForNAV(ActiveUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice);
 				//});
 			}
 

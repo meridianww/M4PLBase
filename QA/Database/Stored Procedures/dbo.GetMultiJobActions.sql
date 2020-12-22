@@ -24,12 +24,12 @@ BEGIN
 		SELECT DISTINCT @JobType = JobType, @ShipmentType= ShipmentType FROM JOBDL000Master JOB 
 		INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
 
-		SELECT @IsScheduleCount=COUNT(DISTINCT JobIsSchedule) FROM JOBDL000Master JOB
-		INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
+		SELECT @IsScheduleCount=COUNT(DISTINCT ISNULL(JobIsSchedule,0)) FROM JOBDL000Master JOB
+		INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id 
 		IF(@IsScheduleCount =1)
 		BEGIN
-		   SELECT TOP 1 @IsSchedule = JobIsSchedule FROM JOBDL000Master JOB
-		   INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id
+		   SELECT TOP 1 @IsSchedule = ISNULL(JobIsSchedule,0) FROM JOBDL000Master JOB
+		   INNER JOIN @TempJobIds TMP ON TMP.JobId = JOB.Id 
 		END
 		IF(@IsSchedule IS NOT NULL AND @IsSchedule =1 )
 		BEGIN

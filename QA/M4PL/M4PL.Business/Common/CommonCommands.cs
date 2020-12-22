@@ -83,9 +83,23 @@ namespace M4PL.Business.Common
         /// <returns></returns>
         public static NavSalesOrderPostedInvoiceResponse GetCachedNavSalesOrderValues(bool forceUpdate = false)
         {
-            string username = M4PLBusinessConfiguration.NavAPIUserName;
-            string password = M4PLBusinessConfiguration.NavAPIPassword;
-            string serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            string username = string.Empty;
+            string password = string.Empty;
+            string serviceURL = string.Empty;
+            CustomerNavConfiguration currentCustomerNavConfiguration = null;
+            if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+            {
+                currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+                serviceURL = currentCustomerNavConfiguration.ServiceUrl;
+                username = currentCustomerNavConfiguration.ServiceUserName;
+                password = currentCustomerNavConfiguration.ServicePassword;
+            }
+            else
+            {
+                serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+                username = M4PLBusinessConfiguration.NavAPIUserName;
+                password = M4PLBusinessConfiguration.NavAPIPassword;
+            }
 
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderResponse(username, password, serviceURL);
         }
@@ -96,9 +110,24 @@ namespace M4PL.Business.Common
         /// <returns></returns>
         public static NavPurchaseOrderPostedInvoiceResponse GetCachedNavPurchaseOrderValues(bool forceUpdate = false)
         {
-            string username = M4PLBusinessConfiguration.NavAPIUserName;
-            string password = M4PLBusinessConfiguration.NavAPIPassword;
-            string serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            string username = string.Empty;
+            string password = string.Empty;
+            string serviceURL = string.Empty;
+            CustomerNavConfiguration currentCustomerNavConfiguration = null;
+            if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+            {
+                currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+                serviceURL = currentCustomerNavConfiguration.ServiceUrl;
+                username = currentCustomerNavConfiguration.ServiceUserName;
+                password = currentCustomerNavConfiguration.ServicePassword;
+            }
+            else
+            {
+                serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+                username = M4PLBusinessConfiguration.NavAPIUserName;
+                password = M4PLBusinessConfiguration.NavAPIPassword;
+            }
+
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderResponse(username, password, serviceURL);
         }
 
@@ -108,9 +137,24 @@ namespace M4PL.Business.Common
         /// <returns></returns>
         public static NavSalesOrderItemResponse GetCachedNavSalesOrderItemValues(bool forceUpdate = false)
         {
-            string username = M4PLBusinessConfiguration.NavAPIUserName;
-            string password = M4PLBusinessConfiguration.NavAPIPassword;
-            string serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            string username = string.Empty;
+            string password = string.Empty;
+            string serviceURL = string.Empty;
+            CustomerNavConfiguration currentCustomerNavConfiguration = null;
+            if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+            {
+                currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+                serviceURL = currentCustomerNavConfiguration.ServiceUrl;
+                username = currentCustomerNavConfiguration.ServiceUserName;
+                password = currentCustomerNavConfiguration.ServicePassword;
+            }
+            else
+            {
+                serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+                username = M4PLBusinessConfiguration.NavAPIUserName;
+                password = M4PLBusinessConfiguration.NavAPIPassword;
+            }
+
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderItemResponse(username, password, serviceURL);
         }
 
@@ -120,9 +164,24 @@ namespace M4PL.Business.Common
         /// <returns></returns>
         public static NavPurchaseOrderItemResponse GetCachedNavPurchaseOrderItemValues(bool forceUpdate = false)
         {
-            string username = M4PLBusinessConfiguration.NavAPIUserName;
-            string password = M4PLBusinessConfiguration.NavAPIPassword;
-            string serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            CustomerNavConfiguration currentCustomerNavConfiguration = null;
+            string username;
+            string password;
+            string serviceURL;
+            if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+            {
+                currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+                serviceURL = currentCustomerNavConfiguration.ServiceUrl;
+                username = currentCustomerNavConfiguration.ServiceUserName;
+                password = currentCustomerNavConfiguration.ServicePassword;
+            }
+            else
+            {
+                serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+                username = M4PLBusinessConfiguration.NavAPIUserName;
+                password = M4PLBusinessConfiguration.NavAPIPassword;
+            }
+
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderItemResponse(username, password, serviceURL);
         }
 

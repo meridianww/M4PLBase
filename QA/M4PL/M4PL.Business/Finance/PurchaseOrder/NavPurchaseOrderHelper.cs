@@ -131,9 +131,9 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
 						: string.Empty;
 
-					dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
-					? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
-					: string.Empty;
+					//dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
+					//? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
+					//: string.Empty;
 
 					//if (!string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_County))
 					//{
@@ -146,7 +146,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 					//}
 				}
 
-				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
+				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = navPurchaseOrderRequest.Ship_from_Code;
 				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -222,9 +222,9 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
 						: string.Empty;
 
-					dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
-				? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
-				: string.Empty;
+				//	dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
+				//? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
+				//: string.Empty;
 
 					//if (!string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_County))
 					//{
@@ -237,7 +237,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 					//}
 				}
 
-				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
+				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = navPurchaseOrderRequest.Ship_from_Code;
 				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -620,8 +620,11 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						{
 							if (string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber))
 							{
-								manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
+								if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
+								{
+									manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
 									jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+								}
 							}
 							else
 							{
@@ -634,7 +637,10 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						{
 							if (string.IsNullOrEmpty(jobData.JobPONumber))
 							{
-								manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+								if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
+								{
+									manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+								}
 							}
 							else
 							{
@@ -650,8 +656,11 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						{
 							if (string.IsNullOrEmpty(jobData.JobPONumber))
 							{
-								manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
+								if (manualPurchaseOrderItemRequest != null && manualPurchaseOrderItemRequest.Count > 0)
+								{
+									manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
 									false, manualPurchaseOrderItemRequest);
+								}
 							}
 							else
 							{
@@ -664,8 +673,11 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						{
 							if (string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber))
 							{
-								electronicPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
+								if (electronicPurchaseOrderItemRequest != null && electronicPurchaseOrderItemRequest.Count > 0)
+								{
+									electronicPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
 								true, electronicPurchaseOrderItemRequest);
+								}
 							}
 							else
 							{

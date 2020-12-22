@@ -26,21 +26,6 @@ namespace M4PL.Business.Job
             get { return CoreCache.GetBusinessConfiguration("EN"); }
         }
 
-        public string NavAPIUrl
-        {
-            get { return M4PLBusinessConfiguration.NavAPIUrl; }
-        }
-
-        public string NavAPIUserName
-        {
-            get { return M4PLBusinessConfiguration.NavAPIUserName; }
-        }
-
-        public string NavAPIPassword
-        {
-            get { return M4PLBusinessConfiguration.NavAPIPassword; }
-        }
-
         public IList<Entities.Job.JobCard> GetPagedData(PagedDataInfo pagedDataInfo)
         {
             return _commands.GetPagedData(ActiveUser, pagedDataInfo);

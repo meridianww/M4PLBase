@@ -107,7 +107,25 @@ namespace M4PL.Business.Job
 
 					try
 					{
-						JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword);
+						CustomerNavConfiguration currentCustomerNavConfiguration = null;
+						string navAPIPassword;
+						string navAPIUserName;
+						string navAPIUrl;
+						if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+						{
+							currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+							navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
+							navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+							navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+						}
+						else
+						{
+							navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+							navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+							navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+						}
+
+						JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, navAPIUrl, navAPIUserName, navAPIPassword);
 					}
 					catch (Exception exp)
 					{

@@ -287,9 +287,11 @@ BEGIN
 	INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		AND gateway.Id = @currentId
 
-	SELECT *
-	FROM [dbo].[JOBDL020Gateways] job
-	WHERE [Id] = @currentId
+	SELECT JGW.*,Prg.PrgCustId CustomerId
+	FROM [dbo].[JOBDL020Gateways] JGW
+	INNER JOIN JOBDL000Master Job ON Job.Id = JGW.JobId
+	INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = Job.ProgramId
+	WHERE JGW.[Id] = @currentId
 END
 GO
 

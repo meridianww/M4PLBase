@@ -162,11 +162,26 @@ namespace M4PL.Business.Finance.PriceCode
 
 		private List<NavPriceCode> GetNavPriceCodeData()
 		{
-			string navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
-			string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
-			string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
-			NavPriceCodeResponse navPriceCodeResponse = null;
-			try
+            NavPriceCodeResponse navPriceCodeResponse = null;
+            CustomerNavConfiguration currentCustomerNavConfiguration = null;
+            string navAPIUserName;
+            string navAPIUrl;
+            string navAPIPassword;
+            if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+            {
+                currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+                navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
+                navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+                navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+            }
+            else
+            {
+                navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+                navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+                navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+            }
+
+            try
 			{
 				string serviceCall = string.Format("{0}/SalesPrices", navAPIUrl);
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);

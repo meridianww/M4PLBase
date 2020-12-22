@@ -58,14 +58,28 @@ namespace M4PL.Business.Finance.Vendor
 			IList<NavVendor> navOneToManyVendorList = new List<NavVendor>();
 			List<NavVendor> navOneToOneVendorList = new List<NavVendor>(); ;
 			IList<NavVendorData> navVendorData = null;
-			string navVendorUrl = M4PLBusinessConfiguration.NavAPIUrl;
-			string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
-			string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
 			IList<Entities.Vendor.Vendor> m4PLVendorData = null;
 			Task[] tasks = new Task[2];
-
 			NavVendor navVendor = null;
 			char[] splitchar = { ' ' };
+			CustomerNavConfiguration currentCustomerNavConfiguration = null;
+			string navAPIPassword;
+			string navAPIUserName;
+			string navAPIUrl;
+			if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+			{
+				currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+				navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
+				navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+				navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+			}
+			else
+			{
+				navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+			}
+
 			tasks[0] = Task.Factory.StartNew(() =>
 			{
 				try
@@ -81,7 +95,7 @@ namespace M4PL.Business.Finance.Vendor
 			{
 				try
 				{
-					navVendorData = GetNavVendorData(navVendorUrl, navAPIUserName, navAPIPassword);
+					navVendorData = GetNavVendorData(navAPIUrl, navAPIUserName, navAPIPassword);
 				}
 				catch (Exception exp)
 				{

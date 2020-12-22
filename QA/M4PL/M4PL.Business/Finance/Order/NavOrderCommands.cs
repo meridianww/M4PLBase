@@ -110,7 +110,10 @@ namespace M4PL.Business.Finance.Order
 				{
 					if (string.IsNullOrEmpty(jobResult.JobSONumber))
 					{
-						m4PLSalesOrderCreationResponse.ManualSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
+						{
+							m4PLSalesOrderCreationResponse.ManualSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						}
 					}
 					else
 					{
@@ -121,7 +124,10 @@ namespace M4PL.Business.Finance.Order
 				{
 					if (string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 					{
-						m4PLSalesOrderCreationResponse.ManualSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest, jobResult.IsParentOrder);
+						if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
+						{
+							m4PLSalesOrderCreationResponse.ManualSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest, jobResult.IsParentOrder);
+						}
 					}
 					else
 					{
@@ -134,7 +140,10 @@ namespace M4PL.Business.Finance.Order
 					{
 						if (string.IsNullOrEmpty(jobResult.JobSONumber))
 						{
-							m4PLSalesOrderCreationResponse.ManualSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest, jobResult.IsParentOrder);
+							if (manualSalesOrderItemRequest != null && manualSalesOrderItemRequest.Count > 0)
+							{
+								m4PLSalesOrderCreationResponse.ManualSalesOrder = NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest, jobResult.IsParentOrder);
+							}
 						}
 						else
 						{
@@ -146,7 +155,10 @@ namespace M4PL.Business.Finance.Order
 					{
 						if (string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 						{
-							m4PLSalesOrderCreationResponse.ElectronicSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest, jobResult.IsParentOrder);
+							if (electronicSalesOrderItemRequest != null && electronicSalesOrderItemRequest.Count > 0)
+							{
+								m4PLSalesOrderCreationResponse.ElectronicSalesOrder = SalesOrder.NavSalesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest, jobResult.IsParentOrder);
+							}
 						}
 						else
 						{
@@ -236,7 +248,10 @@ namespace M4PL.Business.Finance.Order
 				{
 					if (string.IsNullOrEmpty(jobResult.JobPONumber))
 					{
-						m4PLPurchaseOrderCreationResponse.ManualPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice, purchaseOrderItemRequest);
+						if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
+						{
+							m4PLPurchaseOrderCreationResponse.ManualPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice, purchaseOrderItemRequest);
+						}
 					}
 					else
 					{
@@ -248,7 +263,10 @@ namespace M4PL.Business.Finance.Order
 				{
 					if (string.IsNullOrEmpty(jobResult.JobElectronicInvoicePONumber))
 					{
-						m4PLPurchaseOrderCreationResponse.ManualPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice, purchaseOrderItemRequest);
+						if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
+						{
+                            m4PLPurchaseOrderCreationResponse.ManualPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice, purchaseOrderItemRequest);
+						}
 					}
 					else
 					{
@@ -263,7 +281,10 @@ namespace M4PL.Business.Finance.Order
 					{
 						if (string.IsNullOrEmpty(jobResult.JobPONumber))
 						{
-							m4PLPurchaseOrderCreationResponse.ManualPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, false, manualPurchaseOrderItemRequest);
+							if (manualPurchaseOrderItemRequest != null && manualPurchaseOrderItemRequest.Count > 0)
+							{
+								m4PLPurchaseOrderCreationResponse.ManualPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, false, manualPurchaseOrderItemRequest);
+							}
 						}
 						else
 						{
@@ -275,7 +296,10 @@ namespace M4PL.Business.Finance.Order
 					{
 						if (string.IsNullOrEmpty(jobResult.JobElectronicInvoicePONumber))
 						{
-							m4PLPurchaseOrderCreationResponse.ElectronicPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, true, electronicPurchaseOrderItemRequest);
+							if (electronicPurchaseOrderItemRequest != null && electronicPurchaseOrderItemRequest.Count > 0)
+							{
+								m4PLPurchaseOrderCreationResponse.ElectronicPurchaseOrder = NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, true, electronicPurchaseOrderItemRequest);
+							}
 						}
 						else
 						{

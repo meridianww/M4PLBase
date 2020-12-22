@@ -71,7 +71,10 @@ namespace M4PL.Business.Job
 				{
 					if (string.IsNullOrEmpty(jobResult.JobSONumber))
 					{
-						_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
+						{
+							_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						}
 					}
 					else
 					{
@@ -82,7 +85,10 @@ namespace M4PL.Business.Job
 				{
 					if (string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 					{
-						_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
+						{
+							_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, jobResult.JobElectronicInvoice, salesOrderItemRequest);
+						}
 					}
 					else
 					{
@@ -96,7 +102,10 @@ namespace M4PL.Business.Job
 				{
 					if (string.IsNullOrEmpty(jobResult.JobSONumber))
 					{
-						_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest);
+						if (manualSalesOrderItemRequest != null && manualSalesOrderItemRequest.Count > 0)
+						{
+							_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, false, manualSalesOrderItemRequest);
+						}
 					}
 					else
 					{
@@ -108,7 +117,10 @@ namespace M4PL.Business.Job
 				{
 					if (string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
 					{
-						_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest);
+						if (electronicSalesOrderItemRequest != null && electronicSalesOrderItemRequest.Count > 0)
+						{
+							_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.VendorERPId, true, electronicSalesOrderItemRequest);
+						}
 					}
 					else
 					{
