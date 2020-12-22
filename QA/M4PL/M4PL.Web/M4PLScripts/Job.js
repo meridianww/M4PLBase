@@ -15,7 +15,7 @@ M4PLJob.FormView = function () {
     };
     _onAddOrEdit = function (s, form, strRoute, loadingPanelControl) {
         //To save opened Tab GridData
-        $.connection.jobNotifier.server.notify($('#Id').val());
+        $.connection.jobNotifier.server.notify($('#Id').val(), $.connection.hub.id);
         var isSaveRequired = false;
         for (var gridName in M4PLWindow.SubDataViewsHaveChanges) {
             if (M4PLWindow.SubDataViewsHaveChanges.hasOwnProperty(gridName) && M4PLWindow.SubDataViewsHaveChanges[gridName])

@@ -28,9 +28,9 @@ namespace M4PL.Web.SignalR.Hubs
                 return _instance.Value;
             }
         }
-        public void BroadCastJobNotification(string jobId)
+        public void BroadCastJobNotification(string jobId,string client)
         {
-            Clients.All.notifyJobForm(jobId);
+            Clients.All.notifyJobForm(jobId, client);
         }
     }
 }

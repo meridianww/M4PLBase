@@ -23,9 +23,9 @@ namespace M4PL.Web.SignalR.Hubs
         {
             Clients.All.hello();
         }
-        public void notify(string jobId)
+        public void notify(string jobId, string client)
         {
-            _jobNotifier.BroadCastJobNotification(jobId);
+            _jobNotifier.BroadCastJobNotification(jobId, client);
         }
     }
 }
