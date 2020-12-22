@@ -517,3 +517,13 @@ else
         })
     </script>
 }
+<input type="hidden" value="@Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute)" id="hdnRoute" />
+<script>
+    $(function () {
+
+        var hub = $.connection.m4PLJobHub;
+        hub.client.hello = function (message) {
+            $("myMessage").append("<p>" + message + "</p>");
+        };
+    });
+</script>
