@@ -36,6 +36,7 @@ SELECT Job.ID
 	,Job.JobType
 	,Job.JobIsSchedule
 	,Job.IsCancelled
+	,Job.JobCompleted
 FROM dbo.PRGRM000Master Prg
 INNER JOIN dbo.JOBDL000Master Job ON Prg.Id = Job.ProgramID
 	AND ISNULL(job.JobSiteCode, '') <> ''

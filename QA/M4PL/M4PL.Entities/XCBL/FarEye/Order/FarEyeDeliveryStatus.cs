@@ -194,10 +194,13 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// Gets or Sets material id
 		/// </summary>
 		public string material_id { get; set; }
-		/// <summary>
-		/// Gets or Sets quantity
-		/// </summary>
-		public string quantity { get; set; }
+
+        public string serial_barcode { get; set; }
+        public string serial_number { get; set; }
+        /// <summary>
+        /// Gets or Sets quantity
+        /// </summary>
+        public string quantity { get; set; }
 		/// <summary>
 		/// Gets or Sets unit of measure
 		/// </summary>

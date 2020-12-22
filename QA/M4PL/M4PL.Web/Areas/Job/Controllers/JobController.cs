@@ -197,7 +197,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             Session["ParentId"] = _formResult.Record?.ProgramID ?? 0;
             ViewData["jobSiteCode"] = _formResult.Record?.JobsSiteCodeList;
 
-            if (Session["SpecialJobId"] != null)
+            if (route.OwnerCbPanel == "pnlJobDetail")
             {
                 var cancelRoute = new MvcRoute(route, route.ParentRecordId);
                 cancelRoute.Action = MvcConstants.ViewJobCardViewDashboard;
@@ -207,7 +207,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 cancelRoute.EntityName = "JobCard";
                 cancelRoute.RecordId = cancelRoute.ParentRecordId = 0;
                 _formResult.CancelClick = string.Format(JsConstants.FormCancelClick, _formResult.FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
-                _formResult.SessionProvider.IsSpecialJobId = (bool)Session["SpecialJobId"];
+                _formResult.SessionProvider.IsSpecialJobId = true;
             }
             else
                 _formResult.SessionProvider.IsSpecialJobId = false;

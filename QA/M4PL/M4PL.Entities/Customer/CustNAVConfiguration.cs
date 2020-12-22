@@ -31,5 +31,9 @@ namespace M4PL.Entities.Customer
         /// Gets or sets ServicePassword
         /// </summary>
         public string ServicePassword { get; set; }
+        /// <summary>
+        /// Gets or sets IsProductionEnvironment
+        /// </summary>
+        public bool IsProductionEnvironment { get; set; }        
     }
 }

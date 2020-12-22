@@ -285,7 +285,7 @@ namespace M4PL.Business.Job
                 {
                     navOrderRepo.GenerateSalesOrderInNav((long)jobId, NavAPIUrl, NavAPIUserName, NavAPIPassword, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), activeUser);
                 }
-                else if (string.Equals(gatewayCode, "POD Completion", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(gatewayCode, "POD Completion", StringComparison.OrdinalIgnoreCase) || gatewayCode.StartsWith("Return to", StringComparison.OrdinalIgnoreCase))
                 {
                     navOrderRepo.GenerateSalesOrderInNav((long)jobId, NavAPIUrl, NavAPIUserName, NavAPIPassword, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), activeUser);
                     navOrderRepo.GeneratePurchaseOrderInNav((long)jobId, NavAPIUrl, NavAPIUserName, NavAPIPassword, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), activeUser);

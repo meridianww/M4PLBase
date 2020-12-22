@@ -21,6 +21,7 @@ using M4PL.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 
@@ -82,9 +83,11 @@ namespace M4PL.Business.XCBL
 			farEyeOrderResponse.timestamp = TimeUtility.UnixTimeNow();
 			if (orderResult != null && orderResult.StatusCode == "Failure" && !string.IsNullOrEmpty(orderResult.Subject))
 			{
-				farEyeOrderResponse.errors = new List<string>();
-				farEyeOrderResponse.errors.Add(orderResult.Subject);
-			}
+                farEyeOrderResponse.errors = new List<string>
+                {
+                    orderResult.Subject
+                };
+            }
 			else if(orderResult != null && orderResult.StatusCode == "Success")
 			{
 				long jobId = orderResult.ClientMessageID.ToLong();
@@ -245,7 +248,8 @@ namespace M4PL.Business.XCBL
 					farEyeDeliveryStatusResponse.extra_info = new DeliveryExtraInfo()
 					{
 						comments = deliveryUpdate.AdditionalComments,
-						epod = JsonConvert.SerializeObject(deliveryUpdate.POD),
+						epod = !string.IsNullOrEmpty(jobDetail.JobGatewayStatus) && (jobDetail.JobGatewayStatus.Equals("Delivered", StringComparison.OrdinalIgnoreCase)
+						|| (jobDetail.JobGatewayStatus.Equals("POD Completion", StringComparison.OrdinalIgnoreCase))) ? string.Format("{0}?jobId={1}&tabName=POD", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdate.ServiceProviderID) : string.Empty,
 						promised_delivery_date = jobDetail.JobOriginDateTimeBaseline.HasValue ? jobDetail.JobOriginDateTimeBaseline.ToString() : string.Empty,
 						expected_delivery_date = jobDetail.JobOriginDateTimePlanned.HasValue ? jobDetail.JobOriginDateTimePlanned.ToString() : string.Empty
 					};
@@ -259,12 +263,14 @@ namespace M4PL.Business.XCBL
 						deliveryUpdate.OrderLineDetail.OrderLine.ForEach(
 							x => farEyeDeliveryStatusResponse.info.LineItems.Add(new DeliveryLineItem()
 							{
-								item_number = x.LineNumber,
+								item_number = x.CgoLineNumber,
 								comments = x.ItemInstallComments,
 								exception_code = x.Exceptions?.ExceptionInfo?.ExceptionCode,
 								exception_detail = x.Exceptions?.ExceptionInfo?.ExceptionDetail,
 								item_install_status = x.ItemInstallStatus,
-								material_id = x.ItemNumber
+								material_id = x.ItemNumber,
+								serial_barcode = x.CgoSerialBarcode,
+								serial_number = x.CgoSerialNumber
 							}));
 					}
 
@@ -333,7 +339,7 @@ namespace M4PL.Business.XCBL
 				MaterialTypeDescription = x.item_material_descritpion,
 				LineNumberReference = x.item_number_of_reference_item,
 				SerialNumber = x.item_serial_number,
-				LineDescriptionDetails = new LineDescriptionDetails() { LineDescription = new LineDescription() }
+				LineDescriptionDetails = new LineDescriptionDetails() { LineDescription = new LineDescription() { BillOfLadingIndicator = x.serial_barcode } }
 			}));
 
 			electroluxOrderDetail.Body.Order.OrderHeader = new OrderHeader()

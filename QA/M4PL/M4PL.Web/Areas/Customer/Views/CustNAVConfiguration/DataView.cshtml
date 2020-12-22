@@ -104,7 +104,6 @@
             {
                 Model.GridSetting.CallBackRoute.Url = DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName).ToString();
                 childRoute.ParentRecordId = Convert.ToInt64(DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName));
-                childRoute.Filters = new M4PL.Entities.Support.Filter { Value = DataBinder.Eval(c.DataItem, "CdcLocationCode").ToString(), FieldName = "CdcLocationCode" };
                 childRoute.Url = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute);
                 var msg = WebUtilities.ShouldRenderDetailGrid(c.DataItem, ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands, ref childRoute);
                 if (string.IsNullOrEmpty(msg))
@@ -134,18 +133,7 @@
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
     bool isGroupingApplied = false;
-    bool isLocationCodeAvailable = false;
 
-    //adding one more hidden column for contact-- for batch edit validation
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = CustColumnNames.CdcContactMSTRID.ToString();
-        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
-        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.CellStyle.CssClass = CssConstants.HiddenColumn;
-        column.Visible = false;
-    });
 
     foreach (var colSetting in Model.ColumnSettings)
     {
@@ -157,8 +145,6 @@
             settings.Columns.Add(column =>
             {
                 column.FieldName = colSetting.ColColumnName;
-                if (colSetting.ColColumnName.EqualsOrdIgnoreCase(CustColumnNames.CdcLocationCode.ToString()))
-                    isLocationCodeAvailable = true;
                 column.Caption = colSetting.ColAliasName;
                 column.ToolTip = colSetting.ColCaption;
                 column.ReadOnly = colSetting.ColIsReadOnly;
@@ -245,15 +231,15 @@
                     column.SetFilterTemplateContent(lookup =>
                     {
                         var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
-                        //if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
-                        //{
-                        //    var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
-                        //    if (!string.IsNullOrWhiteSpace(allStatuses))
-                        //    {
-                        //        var allStatus = allStatuses.SplitComma().ToList();
-                        //        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-                        //    }
-                        //}
+                        if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
+                        {
+                            var allStatuses = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysStatusesIn);
+                            if (!string.IsNullOrWhiteSpace(allStatuses))
+                            {
+                                var allStatus = allStatuses.SplitComma().ToList();
+                                allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
+                            }
+                        }
                         var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                         string relatedValue = null;
                         allFilters.TryGetValue(column.FieldName, out relatedValue);
@@ -354,20 +340,6 @@
                 }
             });
         }
-    }
-
-    //adding one more hidden column for location code if column not available
-    if (!isLocationCodeAvailable)
-    {
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = CustColumnNames.CdcLocationCode.ToString();
-            column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
-            column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
-            column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
-            column.CellStyle.CssClass = CssConstants.HiddenColumn;
-            column.Visible = false;
-        });
     }
 
     //Saving Layout
@@ -479,8 +451,7 @@
 
                     if (!col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
-                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase)
-                     || col.ColColumnName == CustColumnNames.CdcContactMSTRID.ToString())
+                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         rowHashes[grid.GetRowValues(i, grid.KeyFieldName).ToString()].Add(col.ColColumnName, grid.GetRowValues(i, col.ColColumnName));
                     }

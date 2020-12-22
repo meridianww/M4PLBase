@@ -17,7 +17,7 @@ CREATE TABLE SYSTM000CustNAVConfiguration
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='NAVConfigurationId')
 BEGIN
 	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
-	VALUES ('EN', 'CustNAVConfiguration', NULL, 'NAVConfigurationId', 'NAV Configuration Id', 'NAV Configuration Id', NULL, NULL, NULL, 1, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'NAV Configuration Id')
+	VALUES ('EN', 'CustNAVConfiguration', NULL, 'NAVConfigurationId', 'NAV Configuration Id', 'NAV Configuration Id', NULL, NULL, NULL, 1, 1, 1, 1, 1, NULL, 0, 0, NULL, 0, 'NAV Configuration Id')
 END
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='ServiceUrl')
 BEGIN
@@ -63,13 +63,18 @@ END
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='StatusId')
 BEGIN
 	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
-	VALUES ('EN', 'CustNAVConfiguration', NULL, 'StatusId', 'Status', 'Status', NULL, NULL, '', 10, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Status')
+	VALUES ('EN', 'CustNAVConfiguration', NULL, 'StatusId', 'Status', 'Status', 39, 'Status', '', 10, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Status')
 END
+IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='IsProductionEnvironment')
+BEGIN
+	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
+	VALUES ('EN', 'CustNAVConfiguration', NULL, 'IsProductionEnvironment', 'Is Production Environment', 'Is Production Environment', NULL, NULL, '', 11, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Is Production Environment')
+END 
 
 IF NOT EXISTS(SELECT 1 FROM SYSTM000Ref_Table WHERE SysRefName='CustNAVConfiguration')
 BEGIN
 	INSERT INTO dbo.SYSTM000Ref_Table (SysRefName, LangCode, TblLangName, TblTableName, TblMainModuleId, TblIcon, TblTypeId, TblPrimaryKeyName, TblParentIdFieldName, TblItemNumberFieldName, DateEntered, EnteredBy, DateChanged, ChangedBy)
-	VALUES ('CustNAVConfiguration', 'EN', 'Customer NAV Configuration', 'SYSTM000CustNAVConfiguration', 10, NULL, NULL, 'Id', NULL, NULL, NULL, NULL, NULL, NULL)
+	VALUES ('CustNAVConfiguration', 'EN', 'Customer NAV Configuration', 'SYSTM000CustNAVConfiguration', 10, NULL, NULL, 'NAVConfigurationId', NULL, NULL, NULL, NULL, NULL, NULL)
 END
 
 IF NOT EXISTS(SELECT 1 FROM SYSTM030Ref_TabPageName WHERE RefTableName='CustNAVConfiguration' AND TabTableName='CustNAVConfiguration')

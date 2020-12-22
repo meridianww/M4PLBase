@@ -210,6 +210,14 @@ namespace M4PL.Entities.Job
 		/// Gets or Sets CustomerId
 		/// </summary>
 		public long CustomerId { get; set; }
+		/// <summary>
+		/// Gets or Sets CgoSerialBarcode
+		/// </summary>
+		public string CgoSerialBarcode { get; set; }
+		/// <summary>
+		/// Gets or Sets CgoLineNumber
+		/// </summary>
+		public string CgoLineNumber { get; set; }
 
 	}
 }

@@ -1165,6 +1165,9 @@ namespace M4PL.Web
                 case EntitiesAlias.ScrReturnReasonList:
                     keyFieldName = ScannerTablesPrimaryColumnName.ReturnReasonID.ToString();
                     break;
+                case EntitiesAlias.CustNAVConfiguration:
+                    keyFieldName = CustNAVConfigurationPrimaryColumnName.NAVConfigurationId.ToString();
+                    break;
             }
             return keyFieldName;
         }
