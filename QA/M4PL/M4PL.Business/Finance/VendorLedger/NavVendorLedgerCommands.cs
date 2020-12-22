@@ -43,7 +43,25 @@ namespace M4PL.Business.Finance.VendorLedger
 		{
 			List<CheckPostedInvoice> resultPostedInvoices = null;
 			activeUser = activeUser == null ? ActiveUser : activeUser;
-			var vendorLedgerData = GetNavVendorLedgerDataByCheckNumber(M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, checkNumber);
+			string navAPIPassword;
+			string navAPIUserName;
+			string navAPIUrl;
+			CustomerNavConfiguration currentCustomerNavConfiguration = null;
+			if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+			{
+				currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+				navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
+				navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+				navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+			}
+			else
+			{
+				navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+			}
+
+			var vendorLedgerData = GetNavVendorLedgerDataByCheckNumber(navAPIUrl, navAPIUserName, navAPIPassword, checkNumber);
 			if (vendorLedgerData?.VendorLedger != null)
 			{
 				var vendorPaymentRecord = vendorLedgerData.VendorLedger.FirstOrDefault(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Payment", StringComparison.OrdinalIgnoreCase));
@@ -51,7 +69,7 @@ namespace M4PL.Business.Finance.VendorLedger
 				string entryNumber = vendorPaymentRecord?.Entry_No;
 				if (isPermissionPresent && !string.IsNullOrEmpty(entryNumber))
 				{
-					var result = GetNavVendorLedgerDataByClosedByEntryNumber(M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, entryNumber);
+					var result = GetNavVendorLedgerDataByClosedByEntryNumber(navAPIUrl, navAPIUserName, navAPIPassword, entryNumber);
 					if (result?.VendorLedger?.Count > 0 && result.VendorLedger.Where(x => !string.IsNullOrEmpty(x.Document_Type) && x.Document_Type.Equals("Invoice", StringComparison.OrdinalIgnoreCase)).Any())
 					{
 						List<Task> tasks = new List<Task>();
@@ -61,7 +79,7 @@ namespace M4PL.Business.Finance.VendorLedger
 						{
 							tasks.Add(Task.Factory.StartNew(() =>
 							{
-								var postedInvoice = NavSalesOrderHelper.GetNavPostedPurchaseInvoiceResponse(M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, M4PLBusinessConfiguration.NavAPIUrl, currentVendorLedger.Document_No);
+								var postedInvoice = NavSalesOrderHelper.GetNavPostedPurchaseInvoiceResponse(navAPIUserName, navAPIPassword, navAPIUrl, currentVendorLedger.Document_No);
 								if (postedInvoice != null && postedInvoice.NavPurchaseOrder != null && postedInvoice.NavPurchaseOrder.Count > 0)
 								{
 									postedInvoice.NavPurchaseOrder.ForEach(x => resultPostedInvoices.Add(new CheckPostedInvoice()

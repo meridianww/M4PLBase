@@ -640,10 +640,25 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		public static NAVOrderItemResponse GetNavNAVOrderItemResponse()
 		{
-			string navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
-			string navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
-			string navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
 			NAVOrderItemResponse navOrderItemResponse = null;
+			CustomerNavConfiguration currentCustomerNavConfiguration = null;
+			string navAPIPassword;
+			string navAPIUserName;
+			string navAPIUrl;
+			if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+			{
+				currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+				navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
+				navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+				navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+			}
+			else
+			{
+				navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+			}
+
 			try
 			{
 				string serviceCall = string.Format("{0}/Items", navAPIUrl);

@@ -620,8 +620,11 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						{
 							if (string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber))
 							{
-								manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
+								if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
+								{
+									manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
 									jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+								}
 							}
 							else
 							{
@@ -634,7 +637,10 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						{
 							if (string.IsNullOrEmpty(jobData.JobPONumber))
 							{
-								manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+								if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
+								{
+									manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+								}
 							}
 							else
 							{
@@ -650,8 +656,11 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						{
 							if (string.IsNullOrEmpty(jobData.JobPONumber))
 							{
-								manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
+								if (manualPurchaseOrderItemRequest != null && manualPurchaseOrderItemRequest.Count > 0)
+								{
+									manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
 									false, manualPurchaseOrderItemRequest);
+								}
 							}
 							else
 							{
@@ -664,8 +673,11 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						{
 							if (string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber))
 							{
-								electronicPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
+								if (electronicPurchaseOrderItemRequest != null && electronicPurchaseOrderItemRequest.Count > 0)
+								{
+									electronicPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword,
 								true, electronicPurchaseOrderItemRequest);
+								}
 							}
 							else
 							{
