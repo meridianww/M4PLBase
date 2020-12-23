@@ -51,7 +51,7 @@ BEGIN TRY
 		IF (@recordId = 0)
 		BEGIN
 			SET @sqlCommand = 'SELECT ' + @entity + '.NAVConfigurationId,' + @entity + '.ServiceUrl,
-	  ' + @entity + '.ServiceUserName,' + @entity + '.ServicePassword,' + @entity + '.CustomerId,' + @entity + '.DateEntered,
+	  ' + @entity + '.ServiceUserName,' + @entity + '.ServicePassword,' + @entity + '.DateEntered,
 	  ' + @entity + '.EnteredBy,' + @entity + '.DateChanged,' + @entity + '.ChangedBy, ' + @entity + '.StatusId, ' + @entity + '.IsProductionEnvironment '
 		END
 		ELSE

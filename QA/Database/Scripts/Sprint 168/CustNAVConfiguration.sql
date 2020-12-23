@@ -37,7 +37,7 @@ END
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='CustomerId')
 BEGIN
 	INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
-	VALUES ('EN', 'CustNAVConfiguration', NULL, 'CustomerId', 'Customer ID', 'Customer ID', NULL, NULL, NULL, 5, 1, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Customer ID')
+	VALUES ('EN', 'CustNAVConfiguration', NULL, 'CustomerId', 'Customer ID', 'Customer ID', NULL, NULL, NULL, 5, 1, 0, 1, 1, NULL, 0, 0, NULL, 0, 'Customer ID')
 END
 
 IF NOT EXISTS(SELECT 1 FROM SYSTM000ColumnsAlias WHERE ColTableName='CustNAVConfiguration' AND ColColumnName='EnteredBy')
