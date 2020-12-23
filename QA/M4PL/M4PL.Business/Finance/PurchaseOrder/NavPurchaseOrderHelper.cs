@@ -146,6 +146,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
                     //}
                 }
 
+				dimensionCode = navPurchaseOrderRequest.Ship_from_Code;
 				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
 				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
@@ -237,6 +238,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
                     //}
                 }
 
+				dimensionCode = navPurchaseOrderRequest.Ship_from_Code;
 				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
 				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
