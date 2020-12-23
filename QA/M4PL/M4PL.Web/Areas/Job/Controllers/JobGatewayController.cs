@@ -278,6 +278,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 jobGatewayViewAction.isScheduleReschedule = true;
             }
+            var isSchedule = "IsNotSchedule";
+            if((jobGatewayView.CurrentAction == "Schedule Pick Up") ||
+                (jobGatewayView.CurrentAction == "Schedule")  ||
+                (jobGatewayView.CurrentAction == "Sched Pick Up"))
+            {
+                isSchedule = "IsSchedule";
+            }
             jobGatewayViewAction.CargoQuantity = jobGatewayView.CargoQuantity;
             jobGatewayViewAction.CargoField = jobGatewayView.CargoField;
 
@@ -304,6 +311,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     resultRoute.ParentRecordId = result.ProgramID ?? 0;
                     resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
                     resultRoute.Filters.Value = "Action";
+                    resultRoute.Filters.FieldName = isSchedule;
                     resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionDataView);
                     resRoute.Url = resRoute.ParentRecordId.ToString();
                 }
@@ -320,6 +328,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                                                    ? "AppCbPanel"
                                                    : "JobDataViewCbPanel";
                         resultRoute.Filters.Value = "Action";
+                        resultRoute.Filters.FieldName = isSchedule;
                         resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
                         resRoute.Url = resRoute.ParentRecordId.ToString();
                     }
