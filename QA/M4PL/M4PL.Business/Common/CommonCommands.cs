@@ -86,20 +86,20 @@ namespace M4PL.Business.Common
             string username = string.Empty;
             string password = string.Empty;
             string serviceURL = string.Empty;
-            CustomerNavConfiguration currentCustomerNavConfiguration = null;
-            if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-            {
-                currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-                serviceURL = currentCustomerNavConfiguration.ServiceUrl;
-                username = currentCustomerNavConfiguration.ServiceUserName;
-                password = currentCustomerNavConfiguration.ServicePassword;
-            }
-            else
-            {
+            ////CustomerNavConfiguration currentCustomerNavConfiguration = null;
+            ////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+            ////{
+            ////    currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+            ////    serviceURL = currentCustomerNavConfiguration.ServiceUrl;
+            ////    username = currentCustomerNavConfiguration.ServiceUserName;
+            ////    password = currentCustomerNavConfiguration.ServicePassword;
+            ////}
+            ////else
+            ////{
                 serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
                 username = M4PLBusinessConfiguration.NavAPIUserName;
                 password = M4PLBusinessConfiguration.NavAPIPassword;
-            }
+            ////}
 
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderResponse(username, password, serviceURL);
         }
@@ -113,20 +113,20 @@ namespace M4PL.Business.Common
             string username = string.Empty;
             string password = string.Empty;
             string serviceURL = string.Empty;
-            CustomerNavConfiguration currentCustomerNavConfiguration = null;
-            if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-            {
-                currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-                serviceURL = currentCustomerNavConfiguration.ServiceUrl;
-                username = currentCustomerNavConfiguration.ServiceUserName;
-                password = currentCustomerNavConfiguration.ServicePassword;
-            }
-            else
-            {
+            ////CustomerNavConfiguration currentCustomerNavConfiguration = null;
+            ////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+            ////{
+            ////    currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+            ////    serviceURL = currentCustomerNavConfiguration.ServiceUrl;
+            ////    username = currentCustomerNavConfiguration.ServiceUserName;
+            ////    password = currentCustomerNavConfiguration.ServicePassword;
+            ////}
+            ////else
+            ////{
                 serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
                 username = M4PLBusinessConfiguration.NavAPIUserName;
                 password = M4PLBusinessConfiguration.NavAPIPassword;
-            }
+            ////}
 
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderResponse(username, password, serviceURL);
         }
@@ -140,20 +140,20 @@ namespace M4PL.Business.Common
             string username = string.Empty;
             string password = string.Empty;
             string serviceURL = string.Empty;
-            CustomerNavConfiguration currentCustomerNavConfiguration = null;
-            if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-            {
-                currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-                serviceURL = currentCustomerNavConfiguration.ServiceUrl;
-                username = currentCustomerNavConfiguration.ServiceUserName;
-                password = currentCustomerNavConfiguration.ServicePassword;
-            }
-            else
-            {
+            ////CustomerNavConfiguration currentCustomerNavConfiguration = null;
+            ////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+            ////{
+            ////    currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+            ////    serviceURL = currentCustomerNavConfiguration.ServiceUrl;
+            ////    username = currentCustomerNavConfiguration.ServiceUserName;
+            ////    password = currentCustomerNavConfiguration.ServicePassword;
+            ////}
+            ////else
+            ////{
                 serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
                 username = M4PLBusinessConfiguration.NavAPIUserName;
                 password = M4PLBusinessConfiguration.NavAPIPassword;
-            }
+            ////}
 
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderItemResponse(username, password, serviceURL);
         }
@@ -168,19 +168,19 @@ namespace M4PL.Business.Common
             string username;
             string password;
             string serviceURL;
-            if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-            {
-                currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-                serviceURL = currentCustomerNavConfiguration.ServiceUrl;
-                username = currentCustomerNavConfiguration.ServiceUserName;
-                password = currentCustomerNavConfiguration.ServicePassword;
-            }
-            else
-            {
+            ////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+            ////{
+            ////    currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+            ////    serviceURL = currentCustomerNavConfiguration.ServiceUrl;
+            ////    username = currentCustomerNavConfiguration.ServiceUserName;
+            ////    password = currentCustomerNavConfiguration.ServicePassword;
+            ////}
+            ////else
+            ////{
                 serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
                 username = M4PLBusinessConfiguration.NavAPIUserName;
                 password = M4PLBusinessConfiguration.NavAPIPassword;
-            }
+           //// }
 
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderItemResponse(username, password, serviceURL);
         }
