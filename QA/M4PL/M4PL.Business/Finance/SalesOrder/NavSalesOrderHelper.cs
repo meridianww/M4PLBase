@@ -645,19 +645,19 @@ namespace M4PL.Business.Finance.SalesOrder
 			string navAPIPassword;
 			string navAPIUserName;
 			string navAPIUrl;
-			if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-			{
-				currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-				navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
-				navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
-				navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
-			}
-			else
-			{
+			////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+			////{
+			////	currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+			////	navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
+			////	navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+			////	navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+			////}
+			////else
+			////{
 				navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
 				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
 				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
-			}
+			////}
 
 			try
 			{

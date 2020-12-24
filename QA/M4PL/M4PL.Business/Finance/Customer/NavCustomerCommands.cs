@@ -56,20 +56,20 @@ namespace M4PL.Business.Finance.Customer
 			string navCustomerUrl = string.Empty;
 			string navAPIUserName = string.Empty;
 			string navAPIPassword = string.Empty;
-			CustomerNavConfiguration currentCustomerNavConfiguration = null;
-			if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-			{
-				currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-				navCustomerUrl = currentCustomerNavConfiguration.ServiceUrl;
-				navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
-				navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
-			}
-			else
-			{
+			////CustomerNavConfiguration currentCustomerNavConfiguration = null;
+			////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+			////{
+			////	currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+			////	navCustomerUrl = currentCustomerNavConfiguration.ServiceUrl;
+			////	navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+			////	navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+			////}
+			////else
+			////{
 				navCustomerUrl = M4PLBusinessConfiguration.NavAPIUrl;
 				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
 				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
-			}
+			////}
 
 			IList<Entities.Customer.Customer> m4PLCustomerData = null;
 			Task[] tasks = new Task[2];

@@ -113,10 +113,19 @@ namespace M4PL.Business.Job
 						string navAPIUrl;
 						if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
 						{
-							currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-							navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
-							navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
-							navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+							if (M4PLBusinessConfiguration.CustomerNavConfiguration.Any(x => x.CustomerId == jobResult.CustomerId))
+							{
+								currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.Where(x => x.CustomerId == jobResult.CustomerId).FirstOrDefault();
+								navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
+								navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+								navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+							}
+							else
+							{
+								navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+								navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+								navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
+							}
 						}
 						else
 						{
@@ -254,6 +263,10 @@ namespace M4PL.Business.Job
 			bool result = _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode);
 			if (result)
 			{
+				var jobDetails = _commands.GetJobByProgram(ActiveUser, jobId, 0);
+				JobGatewayCommands jobGatewayCommands = new JobGatewayCommands();
+				jobGatewayCommands.ActiveUser = ActiveUser;
+				jobGatewayCommands.PushDataToNav(jobId, jobDetails.JobGatewayStatus, jobDetails.JobCompleted, jobDetails.JobTransitionStatusId, ActiveUser, jobDetails.CustomerId);
 				bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 				if (isFarEyePushRequired)
 				{

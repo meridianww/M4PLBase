@@ -21,6 +21,8 @@ using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +34,11 @@ namespace M4PL.Business.Job
 {
 	public class JobDocReferenceCommands : BaseCommands<JobDocReference>, IJobDocReferenceCommands
 	{
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN"); }
+		}
+
 		/// <summary>
 		/// Get list of job reference data
 		/// </summary>
@@ -71,7 +78,28 @@ namespace M4PL.Business.Job
 		/// <returns></returns>
 		public JobDocReference PostWithSettings(SysSetting userSysSetting, JobDocReference jobDocReference)
 		{
-			return _commands.PostWithSettings(ActiveUser, userSysSetting, jobDocReference);
+			JobDocReference docReference = _commands.PostWithSettings(ActiveUser, userSysSetting, jobDocReference);
+			if (docReference != null && docReference.Id > 0)
+			{
+				List<SystemReference> systemOptionList = DataAccess.Administration.SystemReferenceCommands.GetSystemRefrenceList();
+				SystemReference documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("POD", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
+				if (jobDocReference.DocTypeId == documentOption.Id)
+				{
+					var jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(ActiveUser, jobDocReference.JobID.ToLong(), 0);
+					if (jobDetails != null && jobDetails.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() && !string.IsNullOrEmpty(jobDetails.JobGatewayStatus) && jobDetails.JobGatewayStatus.Equals("Delivered", StringComparison.OrdinalIgnoreCase))
+					{
+						JobGatewayCommands jobGatewayCommands = new JobGatewayCommands();
+						jobGatewayCommands.ActiveUser = ActiveUser;
+						var jobGatewayInfo = jobGatewayCommands.GetGatewayWithParent(0, jobDocReference.JobID.ToLong(), "Gateway", false, "POD Completion");
+						if (jobGatewayInfo != null)
+						{
+							var updatedGateway = jobGatewayCommands.PostWithSettings(UpdateActiveUserSettings(), jobGatewayInfo);
+						}
+					}
+				}
+			}
+
+			return docReference;
 		}
 
 		public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType)
@@ -80,6 +108,7 @@ namespace M4PL.Business.Job
 			string docType = string.Empty;
 			List<SystemReference> systemOptionList = DataAccess.Administration.SystemReferenceCommands.GetSystemRefrenceList();
 			SystemReference documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals(documentType, StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
+			SystemReference documentPODOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("POD", StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
 			if (documentOption == null)
 			{
 				return new StatusModel()
@@ -142,6 +171,28 @@ namespace M4PL.Business.Job
 			}
 			else if (docReferenceResult?.Id > 0 && jobDocumentAttachment.AttchmentData?.Count == 0)
 			{
+				try
+				{
+					if (documentPODOption.Id == documentOption.Id)
+					{
+						var jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(ActiveUser, jobId, 0);
+						if (jobDetails != null && jobDetails.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() && !string.IsNullOrEmpty(jobDetails.JobGatewayStatus) && jobDetails.JobGatewayStatus.Equals("Delivered", StringComparison.OrdinalIgnoreCase))
+						{
+							JobGatewayCommands jobGatewayCommands = new JobGatewayCommands();
+							jobGatewayCommands.ActiveUser = ActiveUser;
+							var jobGatewayInfo = jobGatewayCommands.GetGatewayWithParent(0, jobId, "Gateway", false, "POD Completion");
+							if (jobGatewayInfo != null)
+							{
+								var updatedGateway = jobGatewayCommands.PostWithSettings(UpdateActiveUserSettings(), jobGatewayInfo);
+							}
+						}
+					}
+				}
+				catch (Exception exp)
+				{
+					DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while Adding a document for Job.", "Cancel  Order", Utilities.Logger.LogType.Error);
+				}
+
 				result.StatusCode = (int)System.Net.HttpStatusCode.Created;
 				result.Status = "Success";
 				result.AdditionalDetail = "Document has been created but there are no attachment found in the request.";
@@ -213,6 +264,33 @@ namespace M4PL.Business.Job
 		public long GetNextSequence()
 		{
 			return _commands.GetNextSequence();
+		}
+
+		protected SysSetting UpdateActiveUserSettings()
+		{
+			SysSetting userSysSetting = M4PL.Business.Common.CommonCommands.GetUserSysSettings();
+			IList<RefSetting> refSettings = JsonConvert.DeserializeObject<IList<RefSetting>>(M4PL.Business.Common.CommonCommands.GetSystemSettings().SysJsonSetting);
+			if (!string.IsNullOrEmpty(userSysSetting.SysJsonSetting) && (userSysSetting.Settings == null || !userSysSetting.Settings.Any()))
+				userSysSetting.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSysSetting.SysJsonSetting);
+			else
+				userSysSetting.Settings = new List<RefSetting>();
+			userSysSetting.SysJsonSetting = string.Empty; // To save storage in cache as going to use only Model not json.
+			foreach (var setting in refSettings)
+			{
+				if (!setting.IsSysAdmin)
+				{
+					var userSetting = userSysSetting.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.Value.Equals(setting.Value));
+					if (userSetting == null)
+					{
+						userSysSetting.Settings.Add(new RefSetting { Entity = setting.Entity, Name = setting.Name, Value = setting.Value });
+						continue;
+					}
+					if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable)
+						userSetting.Value = setting.Value;
+				}
+			}
+
+			return userSysSetting;
 		}
 	}
 }

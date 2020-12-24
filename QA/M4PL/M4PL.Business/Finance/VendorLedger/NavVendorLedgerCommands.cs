@@ -46,20 +46,20 @@ namespace M4PL.Business.Finance.VendorLedger
 			string navAPIPassword;
 			string navAPIUserName;
 			string navAPIUrl;
-			CustomerNavConfiguration currentCustomerNavConfiguration = null;
-			if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-			{
-				currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-				navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
-				navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
-				navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
-			}
-			else
-			{
+			////CustomerNavConfiguration currentCustomerNavConfiguration = null;
+			////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
+			////{
+			////	currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
+			////	navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
+			////	navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
+			////	navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
+			////}
+			////else
+			////{
 				navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
 				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
 				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
-			}
+			////}
 
 			var vendorLedgerData = GetNavVendorLedgerDataByCheckNumber(navAPIUrl, navAPIUserName, navAPIPassword, checkNumber);
 			if (vendorLedgerData?.VendorLedger != null)
