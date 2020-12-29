@@ -70,7 +70,13 @@ BEGIN
 		AND GatewayTypeId = 86
 		AND StatusId = 1
 		AND PgdGatewayCode like ('%-' + @StatusCode)
-	SET @gwyGatewayCode = SUBSTRING(@gwyGatewayCode,0,CHARINDEX('-',@gwyGatewayCode))
+		--AND (PgdGatewayCode like ('%-' + @StatusCode) OR PgdGatewayCode LIKE 'Schedule%' OR PgdGatewayCode LIKE 'XCBL-Schedule%')
+
+	IF(CHARINDEX('-',@gwyGatewayCode) > 0)
+	BEGIN
+		SET @gwyGatewayCode = SUBSTRING(@gwyGatewayCode,0,CHARINDEX('-',@gwyGatewayCode))
+	END
+
 	SELECT TOP 1 @updatedItemNumber = GwyGatewaySortOrder
 	FROM JOBDL020Gateways
 	WHERE JobID = @JobId
