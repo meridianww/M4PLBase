@@ -2144,9 +2144,9 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
-        public static int AddJobIsSchedule(long jobId, DateTime scheduleDate, string statusCode, ActiveUser activeUser)
+        public static long AddJobIsSchedule(long jobId, DateTime scheduleDate, string statusCode, ActiveUser activeUser)
         {
-            int gatewayId = 0;
+            long gatewayId = 0;
             var parameters = new[]
             {
                new Parameter("@JobId",jobId),
@@ -2158,10 +2158,10 @@ namespace M4PL.DataAccess.Job
             };
             try
             {
-                gatewayId = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsertJobIsSchedule, parameters, storedProcedure: true);
+                gatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsertJobIsSchedule, parameters, storedProcedure: true);
                 return gatewayId;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return gatewayId;
             }

@@ -13,15 +13,15 @@ GO
 -- =============================================
 CREATE PROCEDURE InsJobIsSchedule @JobId BIGINT
 	,@StatusCode NVARCHAR(6) = NULL
-	,@GwyDDPNew DATETIME2 = NULL
+	,@GwyDDPNew DATETIME2(7) = NULL
 	,@IsDayLightSavingEnable BIT = 0
-	,@DateEntered DATETIME2 = NULL
+	,@DateEntered DATETIME2(7) = NULL
 	,@EnteredBy NVARCHAR(30) = NULL
 AS
 BEGIN
 	DECLARE @jobIsSchedule BIT = NULL
 		,@orderType NVARCHAR(15) = NULL
-		,@shipmentType NVARCHAR(15) = NULL
+		,@shipmentType NVARCHAR(50) = NULL
 		,@programId BIGINT = 0
 		,@gwyGatewayCode NVARCHAR(50) = NULL
 		,@gwyGatewayTitle NVARCHAR(50) = NULL
@@ -70,7 +70,7 @@ BEGIN
 		AND GatewayTypeId = 86
 		AND StatusId = 1
 		AND PgdGatewayCode like ('%-' + @StatusCode)
-
+	SET @gwyGatewayCode = SUBSTRING(@gwyGatewayCode,0,CHARINDEX('-',@gwyGatewayCode))
 	SELECT TOP 1 @updatedItemNumber = GwyGatewaySortOrder
 	FROM JOBDL020Gateways
 	WHERE JobID = @JobId
@@ -79,7 +79,6 @@ BEGIN
 			,195
 			)
 	ORDER BY Id DESC
-
 	SELECT TOP 1 @delDay = DelDay
 	FROM PRGRM000Master
 	WHERE ID = (
@@ -183,15 +182,13 @@ BEGIN
 			END
 		END
 	END
-
-	IF (ISNULL(@gwyGatewayCode, '') <> NULL)
+	IF (ISNULL(@gwyGatewayCode, '') <> '')
 	BEGIN
 		SELECT TOP 1 @JobDeliveryTimeZone = JobDeliveryTimeZone
 			,@programId = ProgramID
 			,@OrderType = JobType
 		FROM [dbo].[JOBDL000Master]
 		WHERE Id = @JobId
-
 		IF (ISNULL(@JobDeliveryTimeZone, 'Unknown') = 'Unknown')
 		BEGIN
 			SELECT TOP 1 @DeliveryUTCValue = UTC
@@ -213,7 +210,6 @@ BEGIN
 					THEN @DeliveryUTCValue + 1
 				ELSE @DeliveryUTCValue
 				END
-
 		INSERT INTO [dbo].[JOBDL020Gateways] (
 			[JobID]
 			,[ProgramID]
@@ -330,6 +326,6 @@ BEGIN
 					)
 		END
 
-		SELECT @currentId
+		SELECT 1
 	END
 END

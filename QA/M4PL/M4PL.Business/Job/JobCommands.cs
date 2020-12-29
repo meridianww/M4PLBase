@@ -890,7 +890,7 @@ namespace M4PL.Business.Job
 
             try
             {
-                int gatewayId = _commands.AddJobIsSchedule(jobId, scheduleDate, statusCode, ActiveUser);
+                long gatewayId = _commands.AddJobIsSchedule(jobId, scheduleDate, statusCode, ActiveUser);
                 if (gatewayId > 0)
                 {
                     return new StatusModel()
