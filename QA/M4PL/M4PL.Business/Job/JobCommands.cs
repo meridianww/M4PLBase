@@ -36,12 +36,12 @@ using _commands = M4PL.DataAccess.Job.JobCommands;
 
 namespace M4PL.Business.Job
 {
-    public class JobCommands : BaseCommands<Entities.Job.Job>, IJobCommands
-    {
-        public BusinessConfiguration M4PLBusinessConfiguration
-        {
-            get { return CoreCache.GetBusinessConfiguration("EN"); }
-        }
+	public class JobCommands : BaseCommands<Entities.Job.Job>, IJobCommands
+	{
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN", true); }
+		}
 
         /// <summary>
         /// Get list of job data

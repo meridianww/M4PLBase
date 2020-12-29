@@ -254,7 +254,8 @@ namespace M4PL.Business
 		{
 			if (!BusinessConfiguration.ContainsKey(langCode))
 				BusinessConfiguration.GetOrAdd(langCode, new BusinessConfiguration());
-			if (BusinessConfiguration[langCode] == null || (BusinessConfiguration[langCode] != null && string.IsNullOrEmpty(BusinessConfiguration[langCode].AWCCustomerId)) || forceUpdate)
+			if (forceUpdate || BusinessConfiguration[langCode] == null || 
+				(BusinessConfiguration[langCode] != null && string.IsNullOrEmpty(BusinessConfiguration[langCode].AWCCustomerId)))
 				BusinessConfiguration.AddOrUpdate(langCode, _commands.GetBusinessConfiguration(langCode));
 			return BusinessConfiguration[langCode];
 		}
