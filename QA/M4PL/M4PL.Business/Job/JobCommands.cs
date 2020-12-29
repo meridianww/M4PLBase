@@ -40,7 +40,7 @@ namespace M4PL.Business.Job
 	{
 		public BusinessConfiguration M4PLBusinessConfiguration
 		{
-			get { return CoreCache.GetBusinessConfiguration("EN"); }
+			get { return CoreCache.GetBusinessConfiguration("EN", true); }
 		}
 
 		/// <summary>
