@@ -429,9 +429,6 @@
     <Compile Include="Providers\XtraReportProvider.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SignalR.Hubs\JobHub.cs" />
-    <Compile Include="SignalR.Hubs\JobNotifier.cs" />
-    <Compile Include="SignalR.Hubs\Startup.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="WebApplicationConstants.cs" />
     <Compile Include="WebExtension.cs" />
