@@ -622,18 +622,29 @@ namespace M4PL.API.Controllers
         }
 
         /// <summary>
-        /// Add JobIsSchedule
+        /// Update a Job to Schedule If it's not done yet and Reschedule if it's scheduled already
         /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="scheduleDate"></param>
-        /// <param name="statusCode"></param>
+        /// <param name="jobScheduleRequest">jobScheduleRequest</param>
         /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
         [HttpPost]
         [Route("AddJobIsSchedule"), ResponseType(typeof(StatusModel))]
-        public StatusModel AddJobIsSchedule(long jobId, DateTime scheduleDate, string statusCode)
+        public StatusModel AddJobIsSchedule(JobScheduleRequest jobScheduleRequest)
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.AddJobIsSchedule(jobId, scheduleDate, statusCode);
+            return _jobCommands.AddJobIsSchedule(jobScheduleRequest.JobId, jobScheduleRequest.ScheduleDate, jobScheduleRequest.StatusCode);
+        }
+
+        /// <summary>
+        /// API is use to re-activate an archived order
+        /// </summary>
+        /// <param name="jobId">jobId</param>
+        /// <returns>true if activated successfully else false.</returns>
+        [HttpGet]
+        [Route("ReactivateJob"), ResponseType(typeof(StatusModel))]
+        public StatusModel ReactivateJob(long jobId)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.ReactivateJob(jobId);
         }
     }
 }

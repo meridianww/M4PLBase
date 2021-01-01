@@ -916,6 +916,22 @@ namespace M4PL.DataAccess.Job
             return isDefaultChargeUpdate;
         }
 
+        public static bool ReactivateJob(long jobId)
+        {
+            bool result = false;
+            try
+            {
+                SqlSerializer.Default.Execute(StoredProceduresConstant.ReactivateJob, new Parameter("@jobId", jobId), true);
+                result = true;
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Error occuring in method ReactivateJob", "ReactivateJob", Utilities.Logger.LogType.Error);
+            }
+
+            return result;
+        }
+
         public static bool UpdateJobPriceCodeStatus(long jobId, int statusId, long customerId)
         {
             bool isDefaultChargeUpdate = false;

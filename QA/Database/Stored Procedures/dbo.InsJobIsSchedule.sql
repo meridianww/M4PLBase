@@ -332,6 +332,6 @@ BEGIN
 					)
 		END
 
-		SELECT 1
+		SELECT @currentId
 	END
 END

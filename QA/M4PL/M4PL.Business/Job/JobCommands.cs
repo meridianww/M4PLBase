@@ -922,5 +922,51 @@ namespace M4PL.Business.Job
             }
         }
 
+        public StatusModel ReactivateJob(long jobId)
+        {
+            if (jobId <= 0)
+            {
+                return new StatusModel()
+                {
+                    Status = "Failure",
+                    StatusCode = (int)HttpStatusCode.PreconditionFailed,
+                    AdditionalDetail = "Please provide a valid jobId."
+                };
+            }
+
+            try
+            {
+                bool result = _commands.ReactivateJob(jobId);
+                if (result)
+                {
+                    return new StatusModel()
+                    {
+                        Status = "Success",
+                        StatusCode = (int)HttpStatusCode.OK,
+                        AdditionalDetail = "Job Activated successfully."
+                    };
+                }
+                else
+                {
+                    return new StatusModel()
+                    {
+                        Status = "Success",
+                        StatusCode = (int)HttpStatusCode.OK,
+                        AdditionalDetail = "There is some issue while activating the job."
+                    };
+                }
+            }
+            catch (Exception exp)
+            {
+                DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while activating job from API.", "Job activating", Utilities.Logger.LogType.Error);
+                return new StatusModel()
+                {
+                    Status = "Failure",
+                    StatusCode = (int)HttpStatusCode.InternalServerError,
+                    AdditionalDetail = "There is some error occuring while adding job activating, please try after sometime."
+                };
+            }
+        }
+
     }
 }

@@ -87,5 +87,6 @@ namespace M4PL.Business.Job
 
         JobContact GetJobContact(long id, long parentId);
         StatusModel AddJobIsSchedule(long jobId, DateTime scheduleDate, string statusCode);
+        StatusModel ReactivateJob(long jobId);
     }
 }
