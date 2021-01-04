@@ -26,7 +26,7 @@
        settings.Images.Image.Url = Model.Operations[OperationTypeEnum.New].Icon.ConvertByteToString(); //IconID.ActionsAdd16x16;
        settings.AllowFocus = false;
        settings.ControlStyle.CssClass = "form-btn pull-right";
-       settings.ClientSideEvents.Click = "function(s,e){ DevExCtrl.TreeView.AddProgram(s,e,ProgramTree);}";
+       settings.ClientSideEvents.Click = "function(s,e){ DevExCtrl.TreeView.AddProgram(s,e,cplTreeViewProgram);}";
    }).GetHtml()
     </div>
 </div>

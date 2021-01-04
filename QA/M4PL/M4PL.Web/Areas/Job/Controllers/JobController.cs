@@ -523,6 +523,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             treeListBase.ShowExpandButtons = true;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             treeListBase.ContentRouteCallBack = route;
+            treeListBase.ContentRouteCallBack.OwnerCbPanel = "JobDataViewCbPanel";
+            treeListBase.ContentRouteCallBack.Action = MvcConstants.ActionDataView;
             return PartialView("_TreePartialView", treeListBase);
         }
 

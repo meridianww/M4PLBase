@@ -1281,7 +1281,6 @@ DevExCtrl.TreeList = function () {
         }
     }
     var _onTreeViewNodeClick = function (s, e, contentCbPanel, contentCbPanelRoute) {
-        //var id = parseInt(e.node.name);
         var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             var route = JSON.parse(contentCbPanelRoute);
@@ -1290,14 +1289,47 @@ DevExCtrl.TreeList = function () {
                 if (e.node.name.indexOf("_") == -1) {
                     route.ParentRecordId = parseInt(e.node.name.replace('_', ''));
                 }
-                if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && e.node.name.indexOf("_") >= 0) {
-                    route.ParentRecordId = e.node.name.split('_')[1];
-                    isJobParentEntity = true;
-                    route.IsJobParentEntityUpdated = true;
-                    IsDataView = route.Action === "DataView" ? true : false
-                }
                 route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
-                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack: true });
+
+                if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header')) { //&& e.node.name.indexOf("_") >= 0
+                    if (e.node.parent == null)
+                        route.ParentRecordId = e.node.name.split('_')[1];
+                    if (e.node.parent == null) {
+                        isJobParentEntity = true;
+                        route.IsJobParentEntityUpdated = true;
+                    }
+                    IsDataView = route.Action === "DataView" ? true : false;
+                    contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack: true });
+                }
+
+                if (route.Controller == 'Program' && e.node.parent != null) {
+                    IsDataView = route.Action === "DataView" ? true : false;
+                    //route.OwnerCbPanel = "pnlProgramDetail";
+                    //route.Filters.FieldName = e.node.text;
+                    route.RecordId = parseInt(e.node.name.replace('_', ''));
+                    if (e.node.parent.nodes.length > 0) {
+                        var childResult1 = e.node.parent.nodes.find(x => x.name = e.node.name).parent;
+                        if (childResult1.parent != null) {
+                            var childResult2 = childResult1.parent.nodes.find(x => x.name = childResult1.name).parent;
+                            if (childResult2.parent != null) {
+                                var childResult3 = childResult2.parent.nodes.find(x => x.name = childResult2.name).parent;
+                                if (childResult3.parent != null) {
+
+                                } else {
+                                    route.Filters.Value = childResult3.name.split('_')[1];
+                                    route.Filters.FieldName = childResult3.text;
+                                }
+                            } else {
+                                route.Filters.Value = childResult2.name.split('_')[1];
+                                route.Filters.FieldName = childResult2.text;
+                            }
+                        } else {
+                            route.Filters.Value = childResult1.name.split('_')[1];
+                            route.Filters.FieldName = childResult1.text;
+                        }
+                    }
+                    contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+                }
                 DevExCtrl.Ribbon.DoCallBack(route);
             }
             else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
@@ -1980,7 +2012,7 @@ DevExCtrl.ListBox = function () {
 DevExCtrl.PopupMenu = function () {
     var _onItemClick = function (s, e) {
         var route = JSON.parse(e.item.name);
-        route.RecordId = ProgramTree.GetSelectedNode().name.split('_')[1];
+        route.RecordId = cplTreeViewProgram.GetSelectedNode().name.split('_')[1];
 
         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
     };
