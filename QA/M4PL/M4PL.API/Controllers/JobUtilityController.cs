@@ -102,7 +102,7 @@ namespace M4PL.API.Controllers
         /// <param name="gatewayStatusCode">Gateway Status code used to identify gateway from Job</param>
         /// <returns>Returns true if it is inserted scussessfully else false</returns>
 		[CustomAuthorize]
-        [HttpGet]
+        [HttpPost]
         [Route("Gateway/InsertJobGateway"), ResponseType(typeof(bool))]
         public bool InsertJobGateway(JobTrackingUpdateRequest jobTrackingUpdateRequest)
         {

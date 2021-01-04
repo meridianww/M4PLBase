@@ -907,6 +907,8 @@ namespace M4PL.Business.Job
                                 jobActionData.GwyGatewayACD = jobScheduleRequest.GatewayACD.HasValue ? (DateTime)jobScheduleRequest.GatewayACD : DateTime.UtcNow.AddHours(jobActionData.DeliveryUTCValue);
                                 jobActionData.GwyGatewayTitle = prgRefGatewayDefault.PgdGatewayTitle;
                                 jobActionData.GwyTitle = prgRefGatewayDefault.PgdGatewayTitle;
+                                jobActionData.GwyDDPNew = jobScheduleRequest.ScheduleDate;
+                                jobActionData.isScheduleReschedule = true;
                                 jobActionData.GwyCompleted = true;
                                 DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, null, jobActionData, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), jobScheduleRequest.JobId);
                             }
