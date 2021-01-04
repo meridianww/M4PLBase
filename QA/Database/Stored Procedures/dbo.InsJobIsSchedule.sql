@@ -65,8 +65,8 @@ BEGIN
 		,@gwyShipStatusReasonCode = PgdShipStatusReasonCode
 	FROM PRGRM010Ref_GatewayDefaults
 	WHERE PgdProgramID = @programId
-		AND PgdOrderType = @orderType
-		AND PgdShipmentType = @shipmentType
+		--AND PgdOrderType = @orderType
+		--AND PgdShipmentType = @shipmentType
 		AND GatewayTypeId = 86
 		AND StatusId = 1
 		AND PgdGatewayCode like ('%-' + @StatusCode)
