@@ -57,7 +57,7 @@ namespace M4PL.Business.Job
 
         bool InsertJobComment(JobComment comment);
 
-        bool InsertJobGateway(long jobId, string gatewayStatusCode);
+        bool InsertJobGateway(long jobId, string gatewayStatusCode, DateTime? gatewayACD = null);
 
         long CreateJobFromEDI204(long eshHeaderID);
 
@@ -86,7 +86,7 @@ namespace M4PL.Business.Job
         StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber);
 
         JobContact GetJobContact(long id, long parentId);
-        StatusModel AddJobIsSchedule(JobScheduleRequest jobScheduleRequest);
+        StatusModel AddJobIsSchedule(JobTrackingUpdateRequest jobScheduleRequest);
         StatusModel ReactivateJob(long jobId);
     }
 }

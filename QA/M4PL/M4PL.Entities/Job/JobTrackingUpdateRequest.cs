@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Job
 {
-    public class JobScheduleRequest
+    public class JobTrackingUpdateRequest
     {
         public long JobId { get; set; }
         public DateTime? ScheduleDate { get; set; }

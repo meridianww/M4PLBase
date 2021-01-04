@@ -48,13 +48,13 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Update a Job to Schedule If it's not done yet and Reschedule if it's scheduled already
         /// </summary>
-        /// <param name="jobScheduleRequest">jobScheduleRequest</param>
+        /// <param name="jobTrackingUpdateRequest">jobScheduleRequest</param>
         /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
         [HttpPost]
         [Route("AddJobIsSchedule"), ResponseType(typeof(StatusModel))]
-        public StatusModel AddJobIsSchedule(JobScheduleRequest jobScheduleRequest)
+        public StatusModel AddJobIsSchedule(JobTrackingUpdateRequest jobTrackingUpdateRequest)
         {
-            if (jobScheduleRequest == null)
+            if (jobTrackingUpdateRequest == null)
             {
                 return new StatusModel()
                 {
@@ -65,7 +65,7 @@ namespace M4PL.API.Controllers
             }
 
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.AddJobIsSchedule(jobScheduleRequest);
+            return _jobCommands.AddJobIsSchedule(jobTrackingUpdateRequest);
         }
 
         /// <summary>
@@ -79,6 +79,40 @@ namespace M4PL.API.Controllers
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.ReactivateJob(jobId);
+        }
+
+        /// <summary>
+        /// A job comment(Job Tracking tab => comment) will be created for the supplied job Id with the title mentioned and once its saved successfully rich text editor also saved for the comment with mentioned gateway comment.
+        /// </summary>
+        /// <param name="comment">Gateway comment input, Gateway Title is used as comment title and Gateway comment is used in Rich text editor</param>
+        /// <returns>Returns true if its saved successfully else false.</returns>
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("Gateway/Comment"), ResponseType(typeof(bool))]
+        public bool InsertJobComment(JobComment comment)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.InsertJobComment(comment);
+        }
+
+        /// <summary>
+        /// A gateway will be created for a job and it will be copied from program by GatewayStatusCode. Job Status code and Job Cargo details will be updated.
+        /// </summary>
+        /// <param name="jobId">Job Id for which gateway will be added</param>
+        /// <param name="gatewayStatusCode">Gateway Status code used to identify gateway from Job</param>
+        /// <returns>Returns true if it is inserted scussessfully else false</returns>
+		[CustomAuthorize]
+        [HttpGet]
+        [Route("Gateway/InsertJobGateway"), ResponseType(typeof(bool))]
+        public bool InsertJobGateway(JobTrackingUpdateRequest jobTrackingUpdateRequest)
+        {
+            if (jobTrackingUpdateRequest == null)
+            {
+                return false;
+            }
+
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.InsertJobGateway(jobTrackingUpdateRequest.JobId, jobTrackingUpdateRequest.StatusCode, jobTrackingUpdateRequest.GatewayACD);
         }
     }
 }

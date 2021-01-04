@@ -259,9 +259,9 @@ namespace M4PL.Business.Job
             return _commands.InsertJobComment(ActiveUser, comment);
         }
 
-        public bool InsertJobGateway(long jobId, string gatewayStatusCode)
+        public bool InsertJobGateway(long jobId, string gatewayStatusCode, DateTime? gatewayACD = null)
         {
-            bool result = _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode);
+            bool result = _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode, gatewayACD);
             if (result)
             {
                 var jobDetails = _commands.GetJobByProgram(ActiveUser, jobId, 0);
@@ -877,7 +877,7 @@ namespace M4PL.Business.Job
             return statusModel;
         }
 
-        public StatusModel AddJobIsSchedule(JobScheduleRequest jobScheduleRequest)
+        public StatusModel AddJobIsSchedule(JobTrackingUpdateRequest jobScheduleRequest)
         {
             string errorMessage = string.Empty;
             string gatewayCode = string.Empty;
@@ -939,7 +939,7 @@ namespace M4PL.Business.Job
                 {
                     Status = "Success",
                     StatusCode = (int)HttpStatusCode.OK,
-                    AdditionalDetail = "JobId or Status Code with respect to Job not found."
+                    AdditionalDetail = "Action is successfully added for the job."
                 };
             }
         }

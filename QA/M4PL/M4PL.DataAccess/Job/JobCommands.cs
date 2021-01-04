@@ -724,7 +724,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@enteredBy", activeUser.UserName),
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
-               new Parameter("@GwyCompleted", gwyCompleted)
+               new Parameter("@GwyCompleted", gwyCompleted),
+               new Parameter("@gatewayACD", comment.GatewayACD)
             };
 
             try
@@ -814,7 +815,7 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string gatewayStatusCode)
+        public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string gatewayStatusCode, DateTime? gatewayACD)
         {
             long insertedGatewayId = 0;
             var parameters = new List<Parameter>
@@ -824,7 +825,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+               new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
+               new Parameter("@gatewayACD", gatewayACD)
         };
 
             try

@@ -173,7 +173,7 @@
     <Compile Include="Job\JobInvoiceDetail.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />
     <Compile Include="Job\JobRescheduleDetail.cs" />
-    <Compile Include="Job\JobScheduleRequest.cs" />
+    <Compile Include="Job\JobTrackingUpdateRequest.cs" />
     <Compile Include="Job\JobSpecialInstruction.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
     <Compile Include="Job\JobUpdateDecisionMaker.cs" />

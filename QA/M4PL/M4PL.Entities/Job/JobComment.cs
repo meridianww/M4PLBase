@@ -9,6 +9,8 @@
 
 #endregion Copyright
 
+using System;
+
 namespace M4PL.Entities.Job
 {
 	public class JobComment
@@ -16,5 +18,6 @@ namespace M4PL.Entities.Job
 		public long JobId { get; set; }
 		public string JobGatewayTitle { get; set; }
 		public string JobGatewayComment { get; set; }
-	}
+        public DateTime? GatewayACD { get; set; }
+    }
 }
