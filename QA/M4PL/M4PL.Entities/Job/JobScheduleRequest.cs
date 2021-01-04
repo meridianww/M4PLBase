@@ -9,7 +9,8 @@ namespace M4PL.Entities.Job
     public class JobScheduleRequest
     {
         public long JobId { get; set; }
-        public DateTime ScheduleDate { get; set; }
+        public DateTime? ScheduleDate { get; set; }
         public string StatusCode { get; set; }
+        public DateTime? GatewayACD { get; set; }
     }
 }

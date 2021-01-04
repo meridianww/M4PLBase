@@ -86,7 +86,7 @@ namespace M4PL.Business.Job
         StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber);
 
         JobContact GetJobContact(long id, long parentId);
-        StatusModel AddJobIsSchedule(long jobId, DateTime scheduleDate, string statusCode);
+        StatusModel AddJobIsSchedule(JobScheduleRequest jobScheduleRequest);
         StatusModel ReactivateJob(long jobId);
     }
 }

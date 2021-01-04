@@ -7,12 +7,12 @@ GO
 /* Copyright (2018) Meridian Worldwide Transportation Group
    All Rights Reserved Worldwide */
 -- =============================================        
--- Author:                    Kamal          
--- Create date:               12/29/2020      
--- Description:               InsJobIsSchedule 
+-- Author:                    Prashant Aggarwal          
+-- Create date:               01/04/2021      
+-- Description:               ReactivateJob 
 -- =============================================
 CREATE PROCEDURE dbo.ReactivateJob @jobId BIGINT
 AS
 BEGIN
-UPDATE dbo.JobDL000Master SET StatusId = 1 Where Id = @jobId
+UPDATE dbo.JobDL000Master SET StatusId = 1, JobCompleted = 0 Where Id = @jobId
 END

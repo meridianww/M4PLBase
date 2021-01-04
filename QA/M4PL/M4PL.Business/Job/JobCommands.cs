@@ -21,6 +21,7 @@ using M4PL.Business.Event;
 using M4PL.Business.XCBL.HelperClasses;
 using M4PL.Entities;
 using M4PL.Entities.Job;
+using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Entities.XCBL.FarEye;
 using M4PL.Utilities;
@@ -876,48 +877,69 @@ namespace M4PL.Business.Job
             return statusModel;
         }
 
-        public StatusModel AddJobIsSchedule(long jobId, DateTime scheduleDate, string statusCode)
+        public StatusModel AddJobIsSchedule(JobScheduleRequest jobScheduleRequest)
         {
-            if (!(jobId > 0 && scheduleDate != null && !string.IsNullOrEmpty(statusCode)))
+            string errorMessage = string.Empty;
+            string gatewayCode = string.Empty;
+            errorMessage = jobScheduleRequest.JobId <= 0 ? errorMessage + "Please pass a valid jobId as input." : errorMessage;
+            errorMessage = !jobScheduleRequest.ScheduleDate.HasValue ? errorMessage + " Please pass a valid schedule date as input." : errorMessage;
+            errorMessage = string.IsNullOrEmpty(jobScheduleRequest.StatusCode) ? errorMessage + " Please pass a valid Status Code as input." : errorMessage;
+            if (string.IsNullOrEmpty(errorMessage) && jobScheduleRequest.JobId > 0)
+            {
+                var jobResult = _commands.GetJobByProgram(ActiveUser, jobScheduleRequest.JobId, 0);
+                if (jobResult == null || (jobResult != null && jobResult.Id == 0))
+                {
+                    errorMessage = string.Format("There is no data present for the JobId: {0} in the database.", jobScheduleRequest.JobId);
+                }
+                else
+                {
+                    try
+                    {
+                        PrgRefGatewayDefault prgRefGatewayDefault = M4PL.DataAccess.Program.PrgRefGatewayDefaultCommands.GetProgramGateway(jobResult.JobType, jobResult.ShipmentType, (long)jobResult.ProgramID, jobScheduleRequest.StatusCode, jobResult.JobIsSchedule);
+                        if (prgRefGatewayDefault != null)
+                        {
+                            gatewayCode = prgRefGatewayDefault.PgdGatewayCode;
+                            var jobActionData = DataAccess.Job.JobGatewayCommands.GetGatewayWithParent(ActiveUser, 0, jobScheduleRequest.JobId, "Action", false, prgRefGatewayDefault.PgdGatewayCode);
+                            if (jobActionData != null)
+                            {
+                                jobActionData.GatewayTypeId = 86;
+                                jobActionData.GwyGatewayCode = prgRefGatewayDefault.PgdGatewayCode;
+                                jobActionData.GwyGatewayACD = jobScheduleRequest.GatewayACD.HasValue ? (DateTime)jobScheduleRequest.GatewayACD : DateTime.UtcNow.AddHours(jobActionData.DeliveryUTCValue);
+                                jobActionData.GwyGatewayTitle = prgRefGatewayDefault.PgdGatewayTitle;
+                                jobActionData.GwyTitle = prgRefGatewayDefault.PgdGatewayTitle;
+                                jobActionData.GwyCompleted = true;
+                                DataAccess.Job.JobGatewayCommands.PostWithSettings(ActiveUser, null, jobActionData, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), jobScheduleRequest.JobId);
+                            }
+                        }
+                        else
+                        {
+                            errorMessage = string.Format("There is no reschedule action Data present for Status Code: {0}", jobScheduleRequest.StatusCode);
+                        }
+                    }
+                    catch (Exception exp)
+                    {
+                        DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while adding action for a Job from API.", "AddJobIsSchedule", Utilities.Logger.LogType.Error);
+                        errorMessage = "There is some error occured while processing the request.";
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(errorMessage))
             {
                 return new StatusModel()
                 {
                     Status = "Failure",
                     StatusCode = (int)HttpStatusCode.PreconditionFailed,
-                    AdditionalDetail = "Please Provide Valid Input."
+                    AdditionalDetail = errorMessage
                 };
             }
-
-            try
+            else
             {
-                long gatewayId = _commands.AddJobIsSchedule(jobId, scheduleDate, statusCode, ActiveUser);
-                if (gatewayId > 0)
-                {
-                    return new StatusModel()
-                    {
-                        Status = "Success",
-                        StatusCode = (int)HttpStatusCode.OK,
-                        AdditionalDetail = "JobIsSchedule Information is Added Successfully ."
-                    };
-                }
-                else
-                {
-                    return new StatusModel()
-                    {
-                        Status = "Success",
-                        StatusCode = (int)HttpStatusCode.OK,
-                        AdditionalDetail = "JobId or Status Code with respect to Job not found."
-                    };
-                }
-            }
-            catch (Exception exp)
-            {
-                DataAccess.Logger.ErrorLogger.Log(exp, "Error is occurring while adding job isSchedule from API.", "Job IsSchedule", Utilities.Logger.LogType.Error);
                 return new StatusModel()
                 {
-                    Status = "Failure",
-                    StatusCode = (int)HttpStatusCode.InternalServerError,
-                    AdditionalDetail = "There is some error occuring while adding job isSchedule, please try after sometime."
+                    Status = "Success",
+                    StatusCode = (int)HttpStatusCode.OK,
+                    AdditionalDetail = "JobId or Status Code with respect to Job not found."
                 };
             }
         }
