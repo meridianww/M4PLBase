@@ -83,15 +83,15 @@ namespace M4PL.Business.XCBL
 			farEyeOrderResponse.timestamp = TimeUtility.UnixTimeNow();
 			if (orderResult != null && orderResult.StatusCode == "Failure" && !string.IsNullOrEmpty(orderResult.Subject))
 			{
-                farEyeOrderResponse.errors = new List<string>
-                {
-                    orderResult.Subject
-                };
-            }
-			else if(orderResult != null && orderResult.StatusCode == "Success")
+				farEyeOrderResponse.errors = new List<string>
+				{
+					orderResult.Subject
+				};
+			}
+			else if (orderResult != null && orderResult.StatusCode == "Success")
 			{
 				long jobId = orderResult.ClientMessageID.ToLong();
-				if (jobId > 0)
+				if (jobId > 0 && string.IsNullOrEmpty(orderDetail.tracking_number))
 				{
 					FarEyeHelper.PushStatusUpdateToFarEye(jobId, ActiveUser, true);
 				}

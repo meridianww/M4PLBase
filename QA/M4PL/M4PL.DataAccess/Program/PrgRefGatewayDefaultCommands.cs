@@ -97,6 +97,20 @@ namespace M4PL.DataAccess.Program
 			return Put(activeUser, parameters, StoredProceduresConstant.UpdatePrgRefGatewayDefault);
 		}
 
+		public static PrgRefGatewayDefault GetProgramGateway(string orderType, string shipmentType, long programId, string statusCode, bool isScheduled)
+		{
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@orderType", orderType),
+               new Parameter("@shipmentType", shipmentType),
+               new Parameter("@programId", programId),
+               new Parameter("@StatusCode", statusCode),
+               new Parameter("@IsScheduled", isScheduled)
+			};
+
+			return SqlSerializer.Default.DeserializeSingleRecord<PrgRefGatewayDefault>(StoredProceduresConstant.GetProgramGatewayByStatusCode, parameters.ToArray(), storedProcedure: true);
+		}
+
 		/// <summary>
 		/// Deletes a specific PrgRefGatewayDefault record
 		/// </summary>
@@ -104,7 +118,7 @@ namespace M4PL.DataAccess.Program
 		/// <param name="id"></param>
 		/// <returns></returns>
 
-		public static int Delete(ActiveUser activeUser, long id)
+			public static int Delete(ActiveUser activeUser, long id)
 		{
 			//return Delete(activeUser, id, StoredProceduresConstant.DeleteOrganizationActRole);
 			return 0;

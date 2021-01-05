@@ -458,6 +458,7 @@ namespace M4PL.DataAccess
 		public const string CompleteJobById = "dbo.CompleteJobById";
 		public const string GetActiveJobByProgram = "dbo.GetActiveJobByProgram";
 		public const string UpdateJobInvoiceDetail = "dbo.UpdateJobInvoiceDetail";
+		public const string InsertJobIsSchedule = "dbo.InsJobIsSchedule";
 
 		public const string InsertJob = "dbo.InsJob";
 		public const string UpdateJob = "dbo.UpdJob";
@@ -604,6 +605,7 @@ namespace M4PL.DataAccess
 		public const string UpdateJobPriceOrCostCodeStatus = "dbo.UpdateJobPriceOrCostCodeStatus";
 		public const string UpdateJobPriceCodeStatus = "dbo.UpdateJobPriceCodeStatus";
 		public const string UpdateJobCostCodeStatus = "dbo.UpdateJobCostCodeStatus";
+		public const string ReactivateJob = "dbo.ReactivateJob";
 
 		/* Job Roll up */
 		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";
@@ -643,6 +645,7 @@ namespace M4PL.DataAccess
 		public const string InsertPrgRefGatewayDefault = "dbo.InsPrgRefGatewayDefault";
 		public const string UpdatePrgRefGatewayDefault = "dbo.UpdPrgRefGatewayDefault";
 		public const string IsDefaultCheckforProgramGatewayCombination = "dbo.IsDefaultCheckforProgramGatewayCombination";
+		public const string GetProgramGatewayByStatusCode = "dbo.GetProgramGatewayByStatusCode";
 
 		/* Program Ship Appointment Reason Code */
 		public const string GetPrgShipApptmtReasonCodeView = "dbo.GetPrgShipApptmtReasonCodeView";

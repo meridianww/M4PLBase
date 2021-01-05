@@ -171,12 +171,71 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
         }
 
-        public ActionResult TreeListCallBack(string strRoute, string guid)
+        //public ActionResult TreeListCallBack(string strRoute, string guid)
+        //{
+        //    //string guid = (Request.Params["guid"] != null) ? Request.Params["guid"].ToString() : "";
+        //    var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+        //    var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
+        //    return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
+        //}
+        public ActionResult TreeListCallBack(string strRoute)
         {
-            //string guid = (Request.Params["guid"] != null) ? Request.Params["guid"].ToString() : "";
+            var treeListBase = new TreeListBase();
+            var entity = new List<TreeListModel>();
+            if (Session["CustomerPPPTree"] == null)
+            {
+                Session["CustomerPPPTree"] = _commonCommands.GetCustomerPPPTree() as List<TreeListModel>;
+            }
+
+            entity = Session["CustomerPPPTree"] as List<TreeListModel>;
+
+            var treeListModel = new List<TreeListModel>();
+
+            var treeNodes = new TreeListModel();
+            foreach (var item in entity.Where(t => t.HierarchyLevel == 0).Distinct().ToList())
+            {
+                treeNodes = item;
+                foreach (var program in entity.Where(t => t.HierarchyLevel == 1 && t.CustomerId == item.CustomerId).Distinct())
+                {
+                    var programNode = program;
+                    foreach (var project in entity.Where(t => t.HierarchyLevel == 2
+                    && t.CustomerId == program.CustomerId && t.HierarchyText.Contains(programNode.HierarchyText)).Distinct())
+                    {
+                        var projectNode = project;
+                        foreach (var phase in entity.Where(t => t.HierarchyLevel == 3 && t.CustomerId == program.CustomerId
+                        && t.HierarchyText.Contains(projectNode.HierarchyText)).Distinct())
+                        {
+                            if (projectNode.Children == null)
+                                projectNode.Children = new List<TreeListModel>();
+                            if (!projectNode.Children.Contains(phase))
+                                projectNode.Children.Add(phase);
+                        }
+                        if (programNode.Children == null)
+                            programNode.Children = new List<TreeListModel>();
+                        if (!programNode.Children.Contains(projectNode))
+                            programNode.Children.Add(projectNode);
+                    }
+                    if (treeNodes.Children == null)
+                        treeNodes.Children = new List<TreeListModel>();
+                    if (!treeNodes.Children.Contains(programNode))
+                        treeNodes.Children.Add(programNode);
+                }
+                if (!treeListModel.Contains(treeNodes))
+                    treeListModel.Add(treeNodes);
+            }
+            treeListBase.Nodes = treeListModel;
+            treeListBase.EnableNodeClick = true;
+            treeListBase.AllowCheckNodes = false;
+            treeListBase.AllowSelectNode = false;
+            treeListBase.EnableAnimation = true;
+            treeListBase.EnableHottrack = true;
+            treeListBase.ShowTreeLines = true;
+            treeListBase.ShowExpandButtons = true;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
-            return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
+            treeListBase.ContentRouteCallBack = route;
+            treeListBase.ContentRouteCallBack.OwnerCbPanel = string.Concat(route.Entity, MvcConstants.ActionDataView, "CbPanel");
+            treeListBase.ContentRouteCallBack.Action = MvcConstants.ActionDataView;
+            return PartialView("_TreePartialView", treeListBase);
         }
     }
 }

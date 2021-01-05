@@ -147,14 +147,14 @@ namespace M4PL.API.Controllers
         /// <param name="id">Identifier of Job</param>
         /// <param name="parentId">Identifier of Program</param>
         /// <returns>Job details</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("JobByProgram"), ResponseType(typeof(Job))]
         public Job GetJobByProgram(long id, long parentId)
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.GetJobByProgram(id, parentId);
-		}
+        }
 
         /// <summary>
         /// Get the Destination detials by Job Id, if Job id is zero Pickup and delivery information from program
@@ -162,7 +162,7 @@ namespace M4PL.API.Controllers
         /// <param name="id">Job Id</param>
         /// <param name="parentId">Program Id</param>
         /// <returns>Job Destination details</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("Destination"), ResponseType(typeof(JobDestination))]
         public JobDestination GetJobDestination(long id, long parentId)
@@ -171,28 +171,28 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJobDestination(id, parentId);
         }
 
-		/// <summary>
-		/// Get the Destination detials by Job Id, if Job id is zero Pickup and delivery information from program
-		/// </summary>
-		/// <param name="id">Job Id</param>
-		/// <param name="parentId">Program Id</param>
-		/// <returns>Job Destination details</returns>
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("Contact"), ResponseType(typeof(JobDestination))]
-		public JobContact GetJobContact(long id, long parentId)
-		{
-			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-			return _jobCommands.GetJobContact(id, parentId);
-		}
+        /// <summary>
+        /// Get the Destination detials by Job Id, if Job id is zero Pickup and delivery information from program
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <param name="parentId">Program Id</param>
+        /// <returns>Job Destination details</returns>
+        
+        [HttpGet]
+        [Route("Contact"), ResponseType(typeof(JobDestination))]
+        public JobContact GetJobContact(long id, long parentId)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.GetJobContact(id, parentId);
+        }
 
-		/// <summary>
-		/// Get the Origin , Delivery Site POC2 details , Origin and Delivery Address by Job Id and if job id is zero Pickup and Delivery Time Information from Parent will be returned
-		/// </summary>
-		/// <param name="id">Job Id</param>
-		/// <param name="parentId">Program Id</param>
-		/// <returns>Site POC 2 and Origin and Delivery Address</returns>
-		[CustomAuthorize]
+        /// <summary>
+        /// Get the Origin , Delivery Site POC2 details , Origin and Delivery Address by Job Id and if job id is zero Pickup and Delivery Time Information from Parent will be returned
+        /// </summary>
+        /// <param name="id">Job Id</param>
+        /// <param name="parentId">Program Id</param>
+        /// <returns>Site POC 2 and Origin and Delivery Address</returns>
+        
         [HttpGet]
         [Route("Poc")]
         public Job2ndPoc GetJob2ndPoc(long id, long parentId)
@@ -207,7 +207,7 @@ namespace M4PL.API.Controllers
         /// <param name="id">Job Id</param>
         /// <param name="parentId">Program Id</param>
         /// <returns>Returns Job Seller and ShipFrom details</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("Seller"), ResponseType(typeof(JobSeller))]
         public JobSeller GetJobSeller(long id, long parentId)
@@ -222,7 +222,7 @@ namespace M4PL.API.Controllers
         /// <param name="id">Job Id</param>
         /// <returns>Origin and Destination details</returns>
         ///
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("MapRoute"), ResponseType(typeof(JobMapRoute))]
         public JobMapRoute GetJobMapRoute(long id)
@@ -236,7 +236,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="id">Job Id</param>
         /// <returns>POD data</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("Pod")]
         public JobPod GetJobPod(long id)
@@ -263,7 +263,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="job2ndPoc"></param>
         /// <returns>Updated record of Job 2nd POC details</returns>
-        [CustomAuthorize]
+        
         [HttpPut]
         [Route("Job2ndPoc")]
         public Job2ndPoc PutJob2ndPoc(Job2ndPoc job2ndPoc)
@@ -276,7 +276,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobSeller"></param>
         /// <returns></returns>
-        [CustomAuthorize]
+        
         [HttpPut]
         [Route("JobSeller")]
         public JobSeller PutJobSeller(JobSeller jobSeller)
@@ -289,7 +289,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobMapRoute"></param>
         /// <returns></returns>
-        [CustomAuthorize]
         [HttpPut]
         [Route("JobMapRoute")]
         public JobMapRoute PutJobMapRoute(JobMapRoute jobMapRoute)
@@ -325,7 +324,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobId">Job Id</param>
         /// <returns>Returns true if its copied else false.</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("UpdateJobAttribute"), ResponseType(typeof(bool))]
         public bool UpdateJobAttributes(long jobId)
@@ -339,7 +337,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="comment">Gateway comment input, Gateway Title is used as comment title and Gateway comment is used in Rich text editor</param>
         /// <returns>Returns true if its saved successfully else false.</returns>
-		[CustomAuthorize]
         [HttpPost]
         [Route("Gateway/Comment"), ResponseType(typeof(bool))]
         public bool InsertJobComment(JobComment comment)
@@ -354,7 +351,6 @@ namespace M4PL.API.Controllers
         /// <param name="jobId">Job Id for which gateway will be added</param>
         /// <param name="gatewayStatusCode">Gateway Status code used to identify gateway from Job</param>
         /// <returns>Returns true if it is inserted scussessfully else false</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("Gateway/InsertJobGateway"), ResponseType(typeof(bool))]
         public bool InsertJobGateway(long jobId, string gatewayStatusCode)
@@ -374,7 +370,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="job">The new job will contains these values.</param>
         /// <returns>new job id</returns>
-		[CustomAuthorize]
         [HttpPost]
         [Route("CreateJob"), ResponseType(typeof(long))]
         public long CreateJob(Job job)
@@ -389,7 +384,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="job">The job will be updated with the values supplied.</param>
         /// <returns>Returns true if it is udated successfully.</returns>
-		[CustomAuthorize]
         [HttpPost]
         [Route("UpdateJob"), ResponseType(typeof(bool))]
         public bool UpdateJob(Job job)
@@ -404,7 +398,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobId">Job Id</param>
         /// <returns>Returns Job data</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("GetJob"), ResponseType(typeof(Job))]
         public Job GetJob(long jobId)
@@ -418,7 +411,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="eshHeaderID">Identifier to get the EDI record</param>
         /// <returns>Returns created Job Id if job is created created else 0.</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("CreateJobFromEDI204"), ResponseType(typeof(long))]
         public long CreateJobFromEDI204(long eshHeaderID)
@@ -446,7 +438,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobCSVData">CSV data used to creted multiple orders</param>
         /// <returns>Returns true if the task completed successfully else false.</returns>
-		[CustomAuthorize]
         [HttpPost]
         [Route("CreateJobFromCSVImport")]
         public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
@@ -461,7 +452,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobId">Job Id for which History is fetched.</param>
         /// <returns>List of changes for the Job</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("ChangeHistory")]
         public List<ChangeHistoryData> GetChangeHistory(long jobId)
@@ -481,7 +471,6 @@ namespace M4PL.API.Controllers
         /// <param name="deliveryDate">Delivery Date of the job less than this date</param>
         /// <param name="includeNullableDeliveryDate">If true the consider the jobs with NULL delivery date</param>
         /// <returns>Returns the count of the jobs marked as completed.</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("CompleteJob")]
         public int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate)
@@ -495,7 +484,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="programId">program id</param>
         /// <returns>List of non completed jobs</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("ActiveJobsByProramId")]
         public List<Entities.Job.Job> GetActiveJobByProgramId(long programId)
@@ -509,14 +497,13 @@ namespace M4PL.API.Controllers
         /// <param name="jobInvoiceDetail">jobInvoiceDetail(This contains the JobSalesInvoiceNumber and JobPurchaseInvoiceNumber)</param>
         /// <param name="jobId">jobId</param>
         /// <returns>true if job updated successfully else false.</returns>
-        [CustomAuthorize]
         [HttpPost]
         [Route("UpdateJobInvoiceDetail")]
         public bool UpdateJobInvoiceDetail(JobInvoiceDetail jobInvoiceDetail, long jobId)
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.UpdateJobInvoiceDetail(jobId, jobInvoiceDetail);
-		}
+        }
 
         /// <summary>
         /// Cancel a Existing Order From Meridian System
@@ -524,12 +511,12 @@ namespace M4PL.API.Controllers
         /// <param name="cancelJob"></param>
         /// <returns>Status Model which contsins Status result of current operation</returns>
         [HttpPost]
-		[Route("CancelOrder"), ResponseType(typeof(StatusModel))]
-		public StatusModel CancelOrder(CancelOrder cancelJob)
-		{
+        [Route("CancelOrder"), ResponseType(typeof(StatusModel))]
+        public StatusModel CancelOrder(CancelOrder cancelJob)
+        {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.CancelJobByOrderNumber(cancelJob.OrderNumber, cancelJob.CancelComment, cancelJob.CancelReason);
-		}
+        }
 
         /// <summary>
         /// Revokes cancellation of current cancelled order
@@ -551,13 +538,13 @@ namespace M4PL.API.Controllers
         /// <param name="orderNumber">Contract #</param>
         /// <returns>API returns a Status Model object which contains the details about success or failure, in case of failure AdditionalDetail property contains the reson of failure.</returns>
         [HttpPost]
-		[Route("RescheduleOrder"), ResponseType(typeof(StatusModel))]
-		public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber)
-		{
-			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-			SysSetting sysSetting = UpdateActiveUserSettings();
-			return _jobCommands.RescheduleJobByOrderNumber(jobRescheduleDetail, orderNumber, sysSetting);
-		}
+        [Route("RescheduleOrder"), ResponseType(typeof(StatusModel))]
+        public StatusModel RescheduleJobByOrderNumber(JobRescheduleDetail jobRescheduleDetail, string orderNumber)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            SysSetting sysSetting = UpdateActiveUserSettings();
+            return _jobCommands.RescheduleJobByOrderNumber(jobRescheduleDetail, orderNumber, sysSetting);
+        }
 
         /// <summary>
 		/// Adds a Driver Contact 
@@ -578,55 +565,55 @@ namespace M4PL.API.Controllers
         /// <param name="orderNumber">Contract #</param>
         /// <returns>API returns a Model object which contains the details about success or failure with Latitude and Longitude, in case of failure AdditionalDetail property contains the reson of failure.</returns>
         [HttpGet]
-		[Route("LocationCoordinate"), ResponseType(typeof(OrderLocationCoordinate))]
-		public OrderLocationCoordinate LocationCoordinate(string orderNumber)
-		{
-			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-			return _jobCommands.GetOrderLocationCoordinate(orderNumber);
-		}
+        [Route("LocationCoordinate"), ResponseType(typeof(OrderLocationCoordinate))]
+        public OrderLocationCoordinate LocationCoordinate(string orderNumber)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.GetOrderLocationCoordinate(orderNumber);
+        }
 
-		/// <summary>
-		/// Update the special instructions for a Order in Meridian System
-		/// </summary>
-		/// <param name="jobSpecialInstruction">jobSpecialInstruction contains a string where instructions needs to pass.</param>
-		/// <param name="orderNumber">Contract #</param>
-		/// <returns>API returns a Model object which contains the details about success or failure with Order Status, in case of failure AdditionalDetail property contains the reson of failure.</returns>
-		[HttpPost]
-		[Route("specialInstruction"), ResponseType(typeof(StatusModel))]
-		public StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber)
-		{
-			_jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-			return _jobCommands.InsertOrderSpecialInstruction(jobSpecialInstruction, orderNumber);
-		}
+        /// <summary>
+        /// Update the special instructions for a Order in Meridian System
+        /// </summary>
+        /// <param name="jobSpecialInstruction">jobSpecialInstruction contains a string where instructions needs to pass.</param>
+        /// <param name="orderNumber">Contract #</param>
+        /// <returns>API returns a Model object which contains the details about success or failure with Order Status, in case of failure AdditionalDetail property contains the reson of failure.</returns>
+        [HttpPost]
+        [Route("specialInstruction"), ResponseType(typeof(StatusModel))]
+        public StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.InsertOrderSpecialInstruction(jobSpecialInstruction, orderNumber);
+        }
         /// <summary>
         /// Updates Currently Active User Settings
         /// </summary>
         /// <returns></returns>
 		protected SysSetting UpdateActiveUserSettings()
-		{
-			M4PL.Business.Common.CommonCommands.ActiveUser = Models.ApiContext.ActiveUser;
-			SysSetting userSysSetting = M4PL.Business.Common.CommonCommands.GetUserSysSettings();
-			IList<RefSetting> refSettings = JsonConvert.DeserializeObject<IList<RefSetting>>(M4PL.Business.Common.CommonCommands.GetSystemSettings().SysJsonSetting);
-			if (!string.IsNullOrEmpty(userSysSetting.SysJsonSetting) && (userSysSetting.Settings == null || !userSysSetting.Settings.Any()))
-				userSysSetting.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSysSetting.SysJsonSetting);
-			else
-				userSysSetting.Settings = new List<RefSetting>();
-			userSysSetting.SysJsonSetting = string.Empty; // To save storage in cache as going to use only Model not json.
-			foreach (var setting in refSettings)
-			{
-				if (!setting.IsSysAdmin)
-				{
-					var userSetting = userSysSetting.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.Value.Equals(setting.Value));
-					if (userSetting == null)
-					{
-						userSysSetting.Settings.Add(new RefSetting { Entity = setting.Entity, Name = setting.Name, Value = setting.Value });
-						continue;
-					}
-					if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable)
-						userSetting.Value = setting.Value;
-				}
-			}
-			return userSysSetting;
-		}
-	}
+        {
+            M4PL.Business.Common.CommonCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            SysSetting userSysSetting = M4PL.Business.Common.CommonCommands.GetUserSysSettings();
+            IList<RefSetting> refSettings = JsonConvert.DeserializeObject<IList<RefSetting>>(M4PL.Business.Common.CommonCommands.GetSystemSettings().SysJsonSetting);
+            if (!string.IsNullOrEmpty(userSysSetting.SysJsonSetting) && (userSysSetting.Settings == null || !userSysSetting.Settings.Any()))
+                userSysSetting.Settings = JsonConvert.DeserializeObject<IList<RefSetting>>(userSysSetting.SysJsonSetting);
+            else
+                userSysSetting.Settings = new List<RefSetting>();
+            userSysSetting.SysJsonSetting = string.Empty; // To save storage in cache as going to use only Model not json.
+            foreach (var setting in refSettings)
+            {
+                if (!setting.IsSysAdmin)
+                {
+                    var userSetting = userSysSetting.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.Value.Equals(setting.Value));
+                    if (userSetting == null)
+                    {
+                        userSysSetting.Settings.Add(new RefSetting { Entity = setting.Entity, Name = setting.Name, Value = setting.Value });
+                        continue;
+                    }
+                    if (string.IsNullOrEmpty(userSetting.Value) || !setting.IsOverWritable)
+                        userSetting.Value = setting.Value;
+                }
+            }
+            return userSysSetting;
+        }
+    }
 }

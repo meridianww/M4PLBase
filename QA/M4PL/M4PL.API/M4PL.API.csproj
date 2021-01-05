@@ -235,6 +235,7 @@
     <Folder Include="Views\GatewayImport\" />
     <Folder Include="Views\JobAttachment\" />
     <Folder Include="Views\JobRollup\" />
+    <Folder Include="Views\JobUtility\" />
     <Folder Include="Views\NavRate\" />
     <Folder Include="Views\NavRemittance\" />
     <Folder Include="Views\NavSalesOrder\" />
@@ -286,6 +287,7 @@
     <Compile Include="Controllers\EmailServiceController.cs" />
     <Compile Include="Controllers\FarEyeController.cs" />
     <Compile Include="Controllers\GatewayImportController.cs" />
+    <Compile Include="Controllers\JobUtilityController.cs" />
     <Compile Include="Controllers\NavRateController.cs" />
     <Compile Include="Controllers\JobServicesController.cs" />
     <Compile Include="Controllers\NavRemittanceController.cs" />
