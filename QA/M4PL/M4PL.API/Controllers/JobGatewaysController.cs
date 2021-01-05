@@ -18,11 +18,14 @@
 //====================================================================================================================================================*/
 
 using M4PL.API.Filters;
+using M4PL.API.SignalR.Hubs;
 using M4PL.Business.Job;
 using M4PL.Entities.Contact;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -41,12 +44,13 @@ namespace M4PL.API.Controllers
     {
         private readonly IJobGatewayCommands _jobGatewayCommands;
 
+        //private readonly IHubContext<JobHub>=GlobalHost.
+
         /// <summary>
         /// Constructor of Job gateway details
         /// </summary>
         /// <param name="jobGatewayCommands"></param>
         public JobGatewaysController(IJobGatewayCommands jobGatewayCommands)
-
         {
             _jobGatewayCommands = jobGatewayCommands;
         }
@@ -218,7 +222,10 @@ namespace M4PL.API.Controllers
         public JobGateway SettingPost(JobGateway jobGateway)
         {
             _jobGatewayCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobGatewayCommands.PostWithSettings(UpdateActiveUserSettings(), jobGateway);
+            var gateway= _jobGatewayCommands.PostWithSettings(UpdateActiveUserSettings(), jobGateway);
+            var context = GlobalHost.ConnectionManager.GetHubContext<JobHub>();
+            context.Clients.All.notifyJobForm(Convert.ToString(gateway.JobID), jobGateway.SignalRClient);
+            return gateway;
         }
 
         /// <summary>

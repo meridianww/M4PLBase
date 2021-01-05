@@ -247,6 +247,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyExceptionStatusId = jobGatewayView.GwyExceptionStatusId;
             jobGatewayViewAction.GwyAddtionalComment = jobGatewayView.GwyAddtionalComment;
             jobGatewayViewAction.JobIds = jobGatewayView.JobIds;
+            jobGatewayViewAction.SignalRClient = jobGatewayView.SignalRClient;
             if (jobGatewayView.GwyGatewayCode.Contains("XCBL"))
                 jobGatewayViewAction.GwyCompleted = false;
             else

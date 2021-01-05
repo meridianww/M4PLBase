@@ -970,7 +970,7 @@ M4PLWindow.FormView = function () {
                         putOrPostData[ctrlIdx].value = putOrPostData[ctrlIdx].value.replace(new RegExp(controlSuffix, 'g'), "");
                 }
             }
-
+            putOrPostData.push({ name: "SignalRClient", value: $.connection.hub.id});
             $.ajax({
                 type: "POST",
                 url: $(form).attr("action"),
