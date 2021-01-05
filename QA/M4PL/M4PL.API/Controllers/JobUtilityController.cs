@@ -10,11 +10,13 @@
 #endregion Copyright
 
 using M4PL.API.Filters;
+using M4PL.API.SignalR.Hubs;
 using M4PL.Business.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Entities.XCBL.FarEye;
+using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -65,7 +67,10 @@ namespace M4PL.API.Controllers
             }
 
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.AddJobIsSchedule(jobTrackingUpdateRequest);
+            var result= _jobCommands.AddJobIsSchedule(jobTrackingUpdateRequest);
+            var context = GlobalHost.ConnectionManager.GetHubContext<JobHub>();
+            context.Clients.All.notifyJobForm(Convert.ToString(jobTrackingUpdateRequest.JobId), string.Empty);
+            return result;
         }
 
         /// <summary>
@@ -92,7 +97,10 @@ namespace M4PL.API.Controllers
         public bool InsertJobComment(JobComment comment)
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.InsertJobComment(comment);
+            var result= _jobCommands.InsertJobComment(comment);
+            var context = GlobalHost.ConnectionManager.GetHubContext<JobHub>();
+            context.Clients.All.notifyJobForm(Convert.ToString(comment.JobId), string.Empty);
+            return result;
         }
 
         /// <summary>
@@ -112,7 +120,10 @@ namespace M4PL.API.Controllers
             }
 
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.InsertJobGateway(jobTrackingUpdateRequest.JobId, jobTrackingUpdateRequest.StatusCode, jobTrackingUpdateRequest.GatewayACD);
+            var gatewayResult= _jobCommands.InsertJobGateway(jobTrackingUpdateRequest.JobId, jobTrackingUpdateRequest.StatusCode, jobTrackingUpdateRequest.GatewayACD);
+            var context = GlobalHost.ConnectionManager.GetHubContext<JobHub>();
+            context.Clients.All.notifyJobForm(Convert.ToString(jobTrackingUpdateRequest.JobId), string.Empty);
+            return gatewayResult;
         }
     }
 }
