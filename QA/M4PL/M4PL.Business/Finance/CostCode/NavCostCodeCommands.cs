@@ -355,7 +355,7 @@ namespace M4PL.Business.Finance.CostCode
 					row["Site Code"] = jobDetails.JobSiteCode;
 					row["Contract #"] = jobDetails.JobCustomerSalesOrder;
 					row["Plant Code"] = jobDetails.PlantIDCode;
-					row["Quantity Actual"] = jobDetails.JobQtyActual;
+					row["Quantity Actual"] = purchaseOrderItem.Quantity;
 					row["Parts Actual"] = jobDetails.JobPartsActual;
 					row["Cubes Unit"] = jobDetails.JobTotalCubes;
 					row["Charge Code"] = string.IsNullOrEmpty(purchaseOrderItem.Cross_Reference_No) ? purchaseOrderItem.No : purchaseOrderItem.Cross_Reference_No;
