@@ -145,7 +145,7 @@ namespace M4PL.API.Controllers
         /// <param name="id">Identifier of Job</param>
         /// <param name="parentId">Identifier of Program</param>
         /// <returns>Job details</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("JobByProgram"), ResponseType(typeof(Job))]
         public Job GetJobByProgram(long id, long parentId)
@@ -160,7 +160,7 @@ namespace M4PL.API.Controllers
         /// <param name="id">Job Id</param>
         /// <param name="parentId">Program Id</param>
         /// <returns>Job Destination details</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("Destination"), ResponseType(typeof(JobDestination))]
         public JobDestination GetJobDestination(long id, long parentId)
@@ -175,7 +175,7 @@ namespace M4PL.API.Controllers
         /// <param name="id">Job Id</param>
         /// <param name="parentId">Program Id</param>
         /// <returns>Job Destination details</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("Contact"), ResponseType(typeof(JobDestination))]
         public JobContact GetJobContact(long id, long parentId)
@@ -190,7 +190,7 @@ namespace M4PL.API.Controllers
         /// <param name="id">Job Id</param>
         /// <param name="parentId">Program Id</param>
         /// <returns>Site POC 2 and Origin and Delivery Address</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("Poc")]
         public Job2ndPoc GetJob2ndPoc(long id, long parentId)
@@ -205,7 +205,7 @@ namespace M4PL.API.Controllers
         /// <param name="id">Job Id</param>
         /// <param name="parentId">Program Id</param>
         /// <returns>Returns Job Seller and ShipFrom details</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("Seller"), ResponseType(typeof(JobSeller))]
         public JobSeller GetJobSeller(long id, long parentId)
@@ -220,7 +220,7 @@ namespace M4PL.API.Controllers
         /// <param name="id">Job Id</param>
         /// <returns>Origin and Destination details</returns>
         ///
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("MapRoute"), ResponseType(typeof(JobMapRoute))]
         public JobMapRoute GetJobMapRoute(long id)
@@ -234,7 +234,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="id">Job Id</param>
         /// <returns>POD data</returns>
-        [CustomAuthorize]
+        
         [HttpGet]
         [Route("Pod")]
         public JobPod GetJobPod(long id)
@@ -261,7 +261,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="job2ndPoc"></param>
         /// <returns>Updated record of Job 2nd POC details</returns>
-        [CustomAuthorize]
+        
         [HttpPut]
         [Route("Job2ndPoc")]
         public Job2ndPoc PutJob2ndPoc(Job2ndPoc job2ndPoc)
@@ -274,7 +274,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobSeller"></param>
         /// <returns></returns>
-        [CustomAuthorize]
+        
         [HttpPut]
         [Route("JobSeller")]
         public JobSeller PutJobSeller(JobSeller jobSeller)
@@ -287,7 +287,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobMapRoute"></param>
         /// <returns></returns>
-        [CustomAuthorize]
         [HttpPut]
         [Route("JobMapRoute")]
         public JobMapRoute PutJobMapRoute(JobMapRoute jobMapRoute)
@@ -323,7 +322,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobId">Job Id</param>
         /// <returns>Returns true if its copied else false.</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("UpdateJobAttribute"), ResponseType(typeof(bool))]
         public bool UpdateJobAttributes(long jobId)
@@ -337,7 +335,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="comment">Gateway comment input, Gateway Title is used as comment title and Gateway comment is used in Rich text editor</param>
         /// <returns>Returns true if its saved successfully else false.</returns>
-		[CustomAuthorize]
         [HttpPost]
         [Route("Gateway/Comment"), ResponseType(typeof(bool))]
         public bool InsertJobComment(JobComment comment)
@@ -352,7 +349,6 @@ namespace M4PL.API.Controllers
         /// <param name="jobId">Job Id for which gateway will be added</param>
         /// <param name="gatewayStatusCode">Gateway Status code used to identify gateway from Job</param>
         /// <returns>Returns true if it is inserted scussessfully else false</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("Gateway/InsertJobGateway"), ResponseType(typeof(bool))]
         public bool InsertJobGateway(long jobId, string gatewayStatusCode)
@@ -366,7 +362,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="job">The new job will contains these values.</param>
         /// <returns>new job id</returns>
-		[CustomAuthorize]
         [HttpPost]
         [Route("CreateJob"), ResponseType(typeof(long))]
         public long CreateJob(Job job)
@@ -381,7 +376,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="job">The job will be updated with the values supplied.</param>
         /// <returns>Returns true if it is udated successfully.</returns>
-		[CustomAuthorize]
         [HttpPost]
         [Route("UpdateJob"), ResponseType(typeof(bool))]
         public bool UpdateJob(Job job)
@@ -396,7 +390,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobId">Job Id</param>
         /// <returns>Returns Job data</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("GetJob"), ResponseType(typeof(Job))]
         public Job GetJob(long jobId)
@@ -410,7 +403,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="eshHeaderID">Identifier to get the EDI record</param>
         /// <returns>Returns created Job Id if job is created created else 0.</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("CreateJobFromEDI204"), ResponseType(typeof(long))]
         public long CreateJobFromEDI204(long eshHeaderID)
@@ -438,7 +430,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobCSVData">CSV data used to creted multiple orders</param>
         /// <returns>Returns true if the task completed successfully else false.</returns>
-		[CustomAuthorize]
         [HttpPost]
         [Route("CreateJobFromCSVImport")]
         public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
@@ -453,7 +444,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobId">Job Id for which History is fetched.</param>
         /// <returns>List of changes for the Job</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("ChangeHistory")]
         public List<ChangeHistoryData> GetChangeHistory(long jobId)
@@ -473,7 +463,6 @@ namespace M4PL.API.Controllers
         /// <param name="deliveryDate">Delivery Date of the job less than this date</param>
         /// <param name="includeNullableDeliveryDate">If true the consider the jobs with NULL delivery date</param>
         /// <returns>Returns the count of the jobs marked as completed.</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("CompleteJob")]
         public int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate)
@@ -487,7 +476,6 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="programId">program id</param>
         /// <returns>List of non completed jobs</returns>
-		[CustomAuthorize]
         [HttpGet]
         [Route("ActiveJobsByProramId")]
         public List<Entities.Job.Job> GetActiveJobByProgramId(long programId)
@@ -501,7 +489,6 @@ namespace M4PL.API.Controllers
         /// <param name="jobInvoiceDetail">jobInvoiceDetail(This contains the JobSalesInvoiceNumber and JobPurchaseInvoiceNumber)</param>
         /// <param name="jobId">jobId</param>
         /// <returns>true if job updated successfully else false.</returns>
-        [CustomAuthorize]
         [HttpPost]
         [Route("UpdateJobInvoiceDetail")]
         public bool UpdateJobInvoiceDetail(JobInvoiceDetail jobInvoiceDetail, long jobId)
