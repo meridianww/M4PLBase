@@ -379,6 +379,10 @@ namespace M4PL.Entities.Job
         /// Gets or Sets flag if  IsFarEyePushRequired
         /// </summary>
         public bool IsFarEyePushRequired { get; set; }
+        /// <summary>
+        /// SignalR Client Id
+        /// </summary>
+        public string SignalRClient { get; set; }
 
     }
 }

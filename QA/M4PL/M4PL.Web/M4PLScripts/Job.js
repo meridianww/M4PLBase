@@ -46,7 +46,6 @@ M4PLJob.FormView = function () {
                 url: $(form).attr("action"),
                 data: putOrPostData,
                 success: function (response) {
-                    $.connection.jobNotifier.server.notify($('#Id').val(), $.connection.hub.id);
                     var isFromConfirmSave = M4PLWindow.IsFromConfirmSaveClick;
                     M4PLWindow.IsFromConfirmSaveClick = false;
                     if (response && response.status && response.status === true) {

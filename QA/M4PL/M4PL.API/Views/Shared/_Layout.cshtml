@@ -16,12 +16,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
+                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new {area = ""}, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new {area = ""}, null)</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
                 </ul>
             </div>
         </div>
@@ -36,6 +36,15 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="../signalr/hubs"></script>
+    <script src="~/SignalR.Hubs/JobNotification.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.connection.hub.start().done(function () {
+            });
+        });
+            </script>
     @RenderSection("scripts", false)
 </body>
 </html>

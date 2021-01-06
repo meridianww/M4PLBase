@@ -36,5 +36,7 @@ namespace M4PL.Entities.Finance.PurchaseOrderItem
 		public string Description { get; set; }
 
 		public decimal Unit_Cost_LCY { get; set; }
+
+		public int Quantity { get; set; }
 	}
 }

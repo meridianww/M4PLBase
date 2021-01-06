@@ -36,5 +36,6 @@ namespace M4PL.Entities.Finance.ShippingItem
 		public string Description { get; set; }
 
 		public decimal Unit_Price { get; set; }
-	}
+        public int Quantity { get; set; }
+    }
 }

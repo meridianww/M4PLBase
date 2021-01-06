@@ -52,12 +52,13 @@
             new Script { ExtensionSuite = ExtensionSuite.Report }
     )
     <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
-    <script src="../signalr/hubs"></script>
+    <script src="@System.Configuration.ConfigurationManager.AppSettings["WebAPIURL"].Replace(@"api/",@"signalr/hubs")"></script>
     <script src="~/SignalR.Hubs/JobNotification.js"></script>
     <link href="~/Content/css" rel="stylesheet" />
     <link href="~/Content/font-awesome-4.6.1/css/font-awesome.css" rel="stylesheet" />
     <script type="text/javascript">
         $(document).ready(function (e) {
+            $.connection.hub.url = "@System.Configuration.ConfigurationManager.AppSettings["WebAPIURL"].Replace(@"api/","signalr")";
             $.connection.hub.start().done(function () {
             });
             var d = new Date()

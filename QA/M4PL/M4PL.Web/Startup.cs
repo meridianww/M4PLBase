@@ -12,7 +12,7 @@ namespace M4PL.Web
         public void Configuration(IAppBuilder app)
         {
             // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=316888
-            SignalR.Hubs.Startup.ConfigureSignalR(app);
+            //SignalR.Hubs.Startup.ConfigureSignalR(app);
         }
     }
 }
