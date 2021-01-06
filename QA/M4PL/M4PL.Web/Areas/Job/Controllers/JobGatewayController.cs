@@ -919,7 +919,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
         }
-        [Log]
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
