@@ -1791,10 +1791,13 @@ namespace M4PL.Web
                     {
                         //mnu.Route.IsDataView = route.IsDataView;
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
-                        if (!sessionProvider.ActiveUser.IsSysAdmin && currentSecurity == null || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.ReadOnly
-                        || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals)
+                        if (!sessionProvider.ActiveUser.IsSysAdmin && (currentSecurity == null || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.ReadOnly
+                        || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals))
                         {
-                            if (mnu.MnuTitle == "Save" && route.Action == "FormView")
+                           
+                            if (mnu.MnuTitle == "Save" && route.Action == "FormView" && route.Entity == EntitiesAlias.Job)
+                                mnu.StatusId = 3;
+                            else if (mnu.MnuTitle == "Save" && route.Action == "FormView")
                                 mnu.StatusId = 1;
                             else if (mnu.MnuTitle == "Save" && route.Action == "TreeView" && route.Entity == EntitiesAlias.Program)
                                 mnu.StatusId = 1;

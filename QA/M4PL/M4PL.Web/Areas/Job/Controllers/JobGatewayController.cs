@@ -869,7 +869,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
 
-            if (route.RecordId == 0)
+            if (route.RecordId == 0 && entityFor == JobGatewayType.Gateway.ToString())
             {
                 var dateRefLookupId = 0;
                 var dateReferenceId = 0;
@@ -1035,7 +1035,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             //return Json(new { isScheduled = _jobGatewayCommands.GetGatewayWithParent(id, parentId).isScheduled, actionSchedule = GatewayActionType.Schedule.ToString() }, JsonRequestBehavior.AllowGet);
             return Json(new { isScheduled = false, actionSchedule = WebUtilities.JobGatewayActions.Schedule.ToString() }, JsonRequestBehavior.AllowGet);
         }
-        [Log]
         public ActionResult GatewayActionFormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
