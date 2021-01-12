@@ -96,9 +96,9 @@ namespace M4PL.Business.Common
             ////}
             ////else
             ////{
-                serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
-                username = M4PLBusinessConfiguration.NavAPIUserName;
-                password = M4PLBusinessConfiguration.NavAPIPassword;
+            serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            username = M4PLBusinessConfiguration.NavAPIUserName;
+            password = M4PLBusinessConfiguration.NavAPIPassword;
             ////}
 
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderResponse(username, password, serviceURL);
@@ -123,9 +123,9 @@ namespace M4PL.Business.Common
             ////}
             ////else
             ////{
-                serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
-                username = M4PLBusinessConfiguration.NavAPIUserName;
-                password = M4PLBusinessConfiguration.NavAPIPassword;
+            serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            username = M4PLBusinessConfiguration.NavAPIUserName;
+            password = M4PLBusinessConfiguration.NavAPIPassword;
             ////}
 
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderResponse(username, password, serviceURL);
@@ -150,9 +150,9 @@ namespace M4PL.Business.Common
             ////}
             ////else
             ////{
-                serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
-                username = M4PLBusinessConfiguration.NavAPIUserName;
-                password = M4PLBusinessConfiguration.NavAPIPassword;
+            serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            username = M4PLBusinessConfiguration.NavAPIUserName;
+            password = M4PLBusinessConfiguration.NavAPIPassword;
             ////}
 
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderItemResponse(username, password, serviceURL);
@@ -177,10 +177,10 @@ namespace M4PL.Business.Common
             ////}
             ////else
             ////{
-                serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
-                username = M4PLBusinessConfiguration.NavAPIUserName;
-                password = M4PLBusinessConfiguration.NavAPIPassword;
-           //// }
+            serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            username = M4PLBusinessConfiguration.NavAPIUserName;
+            password = M4PLBusinessConfiguration.NavAPIPassword;
+            //// }
 
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderItemResponse(username, password, serviceURL);
         }
@@ -358,7 +358,10 @@ namespace M4PL.Business.Common
                 {
                     Job = Permission.All,
                     Document = Permission.All,
-                    Tracking = Permission.All
+                    Tracking = Permission.All,
+                    Cargo = Permission.All,
+                    Price = Permission.All,
+                    Cost = Permission.All
                 };
             }
             IList<UserSecurity> userSecurity = _commands.GetUserSecurities(activeUser);
@@ -373,19 +376,27 @@ namespace M4PL.Business.Common
                     if (jobSercurity != null)
                     {
                         jobPermission.Job = (Permission)jobSercurity.SecMenuAccessLevelId;
-                        jobPermission.Document = jobPermission.Tracking = jobPermission.Job;
+                        jobPermission.Document = jobPermission.Tracking = jobPermission.Price = jobPermission.Cost = jobPermission.Cargo = jobPermission.Job;
 
                         if (jobSercurity.UserSubSecurities != null && jobSercurity.UserSubSecurities.Count > 0)
                         {
                             var gatewayTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobGateway.ToString());
                             var documentTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobDocReference.ToString());
-
+                            var cargoTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobCargo.ToString());
+                            var priceTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobBillableSheet.ToString());
+                            var costTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobCostSheet.ToString());
                             foreach (var item in jobSercurity.UserSubSecurities)
                             {
                                 if (item.RefTableName == gatewayTableDetails.SysRefName)
                                     jobPermission.Tracking = (Permission)item.SubsMenuAccessLevelId;
                                 else if (item.RefTableName == documentTableDetails.SysRefName)
                                     jobPermission.Document = (Permission)item.SubsMenuAccessLevelId;
+                                else if (item.RefTableName == cargoTableDetails.SysRefName)
+                                    jobPermission.Cargo = (Permission)item.SubsMenuAccessLevelId;
+                                else if (item.RefTableName == priceTableDetails.SysRefName)
+                                    jobPermission.Price = (Permission)item.SubsMenuAccessLevelId;
+                                else if (item.RefTableName == costTableDetails.SysRefName)
+                                    jobPermission.Cost = (Permission)item.SubsMenuAccessLevelId;
                             }
                         }
                     }
