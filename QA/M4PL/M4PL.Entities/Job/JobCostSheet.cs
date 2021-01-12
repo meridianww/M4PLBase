@@ -136,7 +136,7 @@ namespace M4PL.Entities.Job
 		/// <value>
 		/// The identifier.
 		/// </value>
-		public int? CstUnitIdName { get; set; }
+		public string CstUnitIdName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Cost Rate.
