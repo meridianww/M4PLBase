@@ -91,6 +91,14 @@ namespace M4PL.Entities.Job
 		public int? ChargeTypeId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the Charge Type Id Name.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public string ChargeTypeIdName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the Cost Number Used.
 		/// </summary>
 		/// <value>
@@ -121,6 +129,14 @@ namespace M4PL.Entities.Job
 		/// The identifier.
 		/// </value>
 		public int? CstUnitId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Cost Unit Id Name.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public string CstUnitIdName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Cost Rate.

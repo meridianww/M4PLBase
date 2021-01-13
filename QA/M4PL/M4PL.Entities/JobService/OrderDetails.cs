@@ -40,6 +40,10 @@ namespace M4PL.Entities.JobService
         /// </summary>
         public DateTime? ArrivalDatePlanned { get; set; }
         /// <summary>
+        /// Gets or Sets Job Delivery DateTime Actual
+        /// </summary>
+        public DateTime? JobDeliveryDateTimeActual { get; set; }
+        /// <summary>
         /// Gets or Sets BOL Number
         /// </summary>
         public string BOL { get; set; }
@@ -55,6 +59,10 @@ namespace M4PL.Entities.JobService
         /// Gets or Sets Shipment Date
         /// </summary>
         public DateTime? ShipmentDate { get; set; }
+        /// <summary>
+        /// Gets or Sets Job Delivery Date Time Base line Date
+        /// </summary>
+        public DateTime? JobDeliveryDateTimeBaseline { get; set; }
         /// <summary>
         /// Gets or Sets Customer Id
         /// </summary>

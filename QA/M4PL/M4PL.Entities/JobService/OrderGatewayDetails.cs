@@ -20,9 +20,13 @@ namespace M4PL.Entities.JobService
         /// </summary>
         public long JobID { get; set; }
         /// <summary>
-        /// Gets or Sets Gateway COde
+        /// Gets or Sets Gateway Code
         /// </summary>
         public string GatewayCode { get; set; }
+        /// <summary>
+        /// Gets or Sets Gateway Title
+        /// </summary>
+        public string GatewayTitle { get; set; }
         /// <summary>
         /// Gets or Sets ACD
         /// </summary>
