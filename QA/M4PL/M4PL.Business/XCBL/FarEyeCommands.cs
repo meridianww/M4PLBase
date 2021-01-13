@@ -233,7 +233,7 @@ namespace M4PL.Business.XCBL
 					farEyeDeliveryStatusResponse = new FarEyeDeliveryStatus();
 					farEyeDeliveryStatusResponse.order_number = jobDetail.JobServiceMode;
 					farEyeDeliveryStatusResponse.type = "DeliveryNumber";
-					farEyeDeliveryStatusResponse.value = orderNumber;
+					farEyeDeliveryStatusResponse.value = !string.IsNullOrEmpty(orderNumber) && orderNumber.StartsWith("O-") ? null : orderNumber;
 					farEyeDeliveryStatusResponse.carrier_code = "Meridian";
 					farEyeDeliveryStatusResponse.carrier_status = deliveryUpdate.InstallStatus;
 					farEyeDeliveryStatusResponse.carrier_status_code = deliveryUpdate.InstallStatus;
