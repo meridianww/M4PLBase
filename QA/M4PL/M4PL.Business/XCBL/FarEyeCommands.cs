@@ -267,7 +267,12 @@ namespace M4PL.Business.XCBL
 								comments = x.ItemInstallComments,
 								exception_code = x.Exceptions?.ExceptionInfo?.ExceptionCode,
 								exception_detail = x.Exceptions?.ExceptionInfo?.ExceptionDetail,
-								item_install_status = x.ItemInstallStatus,
+								item_install_status = !string.IsNullOrEmpty(x.ItemInstallStatus) ? x.ItemInstallStatus : 
+								(deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
+								? "Reschedule" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
+								                 !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && 
+												 !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+							    ? "Canceled" : x.ItemInstallStatus,
 								material_id = x.ItemNumber,
 								serial_barcode = x.CgoSerialBarcode,
 								serial_number = x.CgoSerialNumber
