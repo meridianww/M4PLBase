@@ -279,5 +279,94 @@ namespace M4PL.Entities.JobService
         /// </summary>
         public List<OrderGatewayDetails> OrderGatewayDetails { get; set; }
         //public List<OrderDocumentDetails> OrderDocumentDetails { get; set; }
+
+        /// <summary>
+        /// Gets or Sets List of job seller poc
+        /// </summary>
+        public string JobSellerSitePOC { get; set; }
+        /// <summary>
+        /// Gets or Sets List of job seller poc email
+        /// </summary>
+        public string JobSellerSitePOCEmail { get; set; }
+        /// <summary>
+        /// Gets or Sets List of job seller poc phone
+        /// </summary>
+        public string JobSellerSitePOCPhone { get; set; }
+        /// <summary>
+        /// Gets or Sets List of job seller poc address
+        /// </summary>
+        public string JobSellerStreetAddress { get; set; }
+        /// <summary>
+        /// Gets or Sets List of job seller poc address2
+        /// </summary>
+        public string JobSellerStreetAddress2 { get; set; }
+        /// <summary>
+        /// Gets or Sets List of job seller poc address3
+        /// </summary>
+        public string JobSellerStreetAddress3 { get; set; }
+        /// <summary>
+        /// Gets or Sets List of job seller poc address4
+        /// </summary>
+        public string JobSellerStreetAddress4 { get; set; }
+        /// <summary>
+        /// Gets or Sets List of job seller city
+        /// </summary>
+        public string JobSellerCity { get; set; }
+        /// <summary>
+        /// Gets or Sets List of job seller state
+        /// </summary>
+        public string JobSellerState { get; set; }
+        /// <summary>
+        /// Gets or Sets List of job seller postal code
+        /// </summary>
+        public string JobSellerPostalCode { get; set; }
+        /// <summary>
+        /// Gets or Sets JobCubesUnitTypeIdName
+        /// </summary>
+        public string JobCubesUnitTypeIdName { get; set; }
+        /// <summary>
+        /// Gets or Sets JobWeightUnitTypeIdName
+        /// </summary>
+        public string JobWeightUnitTypeIdName { get; set; }
+        /// <summary>
+        /// Gets or Sets JobTotalWeight
+        /// </summary>
+        public decimal JobTotalWeight { get; set; }
+        /// <summary>
+		/// Gets or Sets count of JobServiceActual
+		/// </summary>
+		public int? JobServiceActual { get; set; }
+        /// <summary>
+        /// Gets or Sets JobDriverAlert
+        /// </summary>
+        public string JobDriverAlert { get; set; }
+        /// <summary>
+		/// Gets or Sets JobQtyOrdered
+		/// </summary>
+		public int? JobQtyOrdered { get; set; }
+        /// <summary>
+        /// Gets or Sets JobQtyActual
+        /// </summary>
+        public int? JobQtyActual { get; set; }
+        /// <summary>
+        /// Gets or Sets JobQtyUnitTypeIdName
+        /// </summary>
+        public string JobQtyUnitTypeIdName { get; set; }
+        /// <summary>
+        /// Gets or Sets JobPartsOrdered
+        /// </summary>
+        public int? JobPartsOrdered { get; set; }
+        /// <summary>
+        /// Gets or Sets JobPartsActual
+        /// </summary>
+        public int? JobPartsActual { get; set; }
+        /// <summary>
+        /// Gets or Sets JobTotalCubes
+        /// </summary>
+        public decimal? JobTotalCubes { get; set; }
+        /// <summary>
+		/// Gets or Sets count of JobServiceOrder
+		/// </summary>
+		public int? JobServiceOrder { get; set; }
     }
 }
