@@ -595,7 +595,14 @@ namespace M4PL.Web.Areas.Job.Controllers
                 isExport = true;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            if ((strJobAdvanceReportRequestRoute.FileName != "Job Advance Report" && strJobAdvanceReportRequestRoute.FileName != "Manifest Report" && strJobAdvanceReportRequestRoute.FileName != "OSD Report" && strJobAdvanceReportRequestRoute.FileName != "Price Charge" && strJobAdvanceReportRequestRoute.FileName != "Cost Charge")
+            if ((strJobAdvanceReportRequestRoute.FileName != "Job Advance Report" 
+                && strJobAdvanceReportRequestRoute.FileName != "Manifest Report" 
+                && strJobAdvanceReportRequestRoute.FileName != "OSD Report" 
+                && strJobAdvanceReportRequestRoute.FileName != "Price Charge" 
+                && strJobAdvanceReportRequestRoute.FileName != "Cost Charge"
+                && strJobAdvanceReportRequestRoute.FileName != "Transaction Summary"
+                && strJobAdvanceReportRequestRoute.FileName != "Transaction Locations"
+                && strJobAdvanceReportRequestRoute.FileName != "Transaction Jobs")
            || (strJobAdvanceReportRequestRoute.FileName == null))
             {
                 if (!strJobAdvanceReportRequestRoute.StartDate.HasValue)
