@@ -1794,7 +1794,7 @@ namespace M4PL.Web
                         if (!sessionProvider.ActiveUser.IsSysAdmin && (currentSecurity == null || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.ReadOnly
                         || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals))
                         {
-                           
+
                             if (mnu.MnuTitle == "Save" && route.Action == "FormView" && route.Entity == EntitiesAlias.Job)
                                 mnu.StatusId = 3;
                             else if (mnu.MnuTitle == "Save" && route.Action == "FormView")
@@ -3139,7 +3139,8 @@ namespace M4PL.Web
                   : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimeActual  IS NOT NULL  AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) >= '{0}' AND CAST(JobAdvanceReport.JobDeliveryDateTimeActual AS DATE) <= '{1}' ",
                   Convert.ToDateTime(starteDate).Date.ToShortDateString(), Convert.ToDateTime(endDate).Date.ToShortDateString());
                 }
-                else if ((jobAdvanceReportRequest.FileName != "Job Advance Report" && jobAdvanceReportRequest.FileName != "Manifest Report" && jobAdvanceReportRequest.FileName != "OSD Report" && jobAdvanceReportRequest.FileName != "Price Charge" && jobAdvanceReportRequest.FileName != "Cost Charge")
+                else if ((jobAdvanceReportRequest.FileName != "Job Advance Report" && jobAdvanceReportRequest.FileName != "Manifest Report" && jobAdvanceReportRequest.FileName != "OSD Report" && jobAdvanceReportRequest.FileName != "Price Charge"
+                && jobAdvanceReportRequest.FileName != "Cost Charge" && jobAdvanceReportRequest.FileName != "Transaction Summary" && jobAdvanceReportRequest.FileName != "Transaction Locations" && jobAdvanceReportRequest.FileName != "Transaction Jobs")
                 || (jobAdvanceReportRequest.FileName == null))
                 {
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
