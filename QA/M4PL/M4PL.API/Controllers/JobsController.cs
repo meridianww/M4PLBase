@@ -585,11 +585,19 @@ namespace M4PL.API.Controllers
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _jobCommands.InsertOrderSpecialInstruction(jobSpecialInstruction, orderNumber);
         }
+
+        [HttpGet]
+        [Route("UpdateDriverAlert"), ResponseType(typeof(StatusModel))]
+        public StatusModel UpdateDriverAlert(long jobId,string jobDriverAlert)
+        {
+            _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
+            return _jobCommands.UpdateJobDriverAlert(jobId, jobDriverAlert);
+        }
         /// <summary>
         /// Updates Currently Active User Settings
         /// </summary>
         /// <returns></returns>
-		protected SysSetting UpdateActiveUserSettings()
+        protected SysSetting UpdateActiveUserSettings()
         {
             M4PL.Business.Common.CommonCommands.ActiveUser = Models.ApiContext.ActiveUser;
             SysSetting userSysSetting = M4PL.Business.Common.CommonCommands.GetUserSysSettings();

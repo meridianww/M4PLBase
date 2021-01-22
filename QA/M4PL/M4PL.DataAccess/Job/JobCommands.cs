@@ -758,6 +758,28 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
+        public static bool UpdatedDriverAlert(ActiveUser activeUser,long jobId, string jobDriverAlert)
+        {
+            bool result = true;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@jobId", jobId),
+               new Parameter("@driverAlert", jobDriverAlert),
+               new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()),
+               new Parameter("@changedBy", activeUser.UserName)
+            };
+            try
+            {
+                SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.UpdateJobDriverAlert, parameters.ToArray(), false, true);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorLogger.Log(ex, string.Format("Error occured while updating the driveralert for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
+                result = false;
+            }
+            return result;
+        }
 
         public static void CreateJobInDatabase(List<BatchJobDetail> batchJobDetail, long jobProgramId, ActiveUser activeUser)
         {

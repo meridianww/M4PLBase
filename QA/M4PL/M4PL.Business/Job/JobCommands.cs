@@ -760,6 +760,12 @@ namespace M4PL.Business.Job
             if (result) { return new StatusModel() { AdditionalDetail = "", Status = "Success", StatusCode = 200 }; }
             else { return new StatusModel() { AdditionalDetail = "There is some issue while updating special instructions, please try after sometime.", Status = "Failure", StatusCode = 500 }; }
         }
+        public StatusModel UpdateJobDriverAlert(long jobId, string jobDriverAlert)
+        {
+            bool result = _commands.UpdatedDriverAlert(ActiveUser, jobId, jobDriverAlert);
+            if (result) { return new StatusModel() { AdditionalDetail = "", Status = "Success", StatusCode = 200 }; }
+            else { return new StatusModel() { AdditionalDetail = "There is some issue while updating job driver alert, please try after sometime.", Status = "Failure", StatusCode = 500 }; }
+        }
 
         private JobGateway RescheduleOrderGateway(Entities.Job.Job jobDetail, JobExceptionInfo jobExceptionInfo, DateTime rescheduleData, JobInstallStatus installStatus, SysSetting sysSetting)
         {

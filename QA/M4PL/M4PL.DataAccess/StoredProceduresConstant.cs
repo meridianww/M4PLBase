@@ -606,6 +606,7 @@ namespace M4PL.DataAccess
 		public const string UpdateJobPriceCodeStatus = "dbo.UpdateJobPriceCodeStatus";
 		public const string UpdateJobCostCodeStatus = "dbo.UpdateJobCostCodeStatus";
 		public const string ReactivateJob = "dbo.ReactivateJob";
+		public const string UpdateJobDriverAlert = "dbo.UpdateJobDriverAlert";
 
 		/* Job Roll up */
 		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";
