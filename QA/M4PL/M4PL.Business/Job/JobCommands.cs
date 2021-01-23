@@ -767,6 +767,11 @@ namespace M4PL.Business.Job
             else { return new StatusModel() { AdditionalDetail = "There is some issue while updating job driver alert, please try after sometime.", Status = "Failure", StatusCode = 500 }; }
         }
 
+        public string GetJobNotes(long jobId)
+        {
+            return _commands.GetJobNotes(jobId);
+
+        }
         private JobGateway RescheduleOrderGateway(Entities.Job.Job jobDetail, JobExceptionInfo jobExceptionInfo, DateTime rescheduleData, JobInstallStatus installStatus, SysSetting sysSetting)
         {
             JobGateway result = null;

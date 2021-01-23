@@ -28,6 +28,7 @@ using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using Newtonsoft.Json;
+using Spire.Doc;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -779,6 +780,35 @@ namespace M4PL.DataAccess.Job
                 result = false;
             }
             return result;
+        }
+        public static string GetJobNotes(long jobId)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@recordId", jobId),
+                new Parameter("@entity", "Job"),
+                new Parameter("@fields", "JobDeliveryComment"),
+            };
+            try
+            {
+                var jobNotes = SqlSerializer.Default.ExecuteScalar<byte[]>(StoredProceduresConstant.GetByteArrayByIdAndEntity, parameters,
+                    storedProcedure: true);
+                string tempPath = Path.Combine(Path.GetTempPath(), string.Concat(jobId.ToString(), ".docx"));
+                File.WriteAllBytes(tempPath, jobNotes);
+                Document doc = new Document(tempPath);
+
+                string notes = doc.GetText();
+                Task.Run(()=> {
+                    File.Delete(tempPath);
+                });
+                return notes;
+            }
+            catch(Exception ex)
+            {
+                Logger.ErrorLogger.Log(ex, string.Format("Error occured while fetching the JobNotes, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
+               
+            }
+            return string.Empty;
         }
 
         public static void CreateJobInDatabase(List<BatchJobDetail> batchJobDetail, long jobProgramId, ActiveUser activeUser)

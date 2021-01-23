@@ -86,6 +86,7 @@ namespace M4PL.Business.Job
         StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber);
 
         StatusModel UpdateJobDriverAlert(long jobId, string jobDriverAlert);
+        string GetJobNotes(long jobId);
 
         JobContact GetJobContact(long id, long parentId);
         StatusModel AddJobIsSchedule(JobTrackingUpdateRequest jobScheduleRequest);
