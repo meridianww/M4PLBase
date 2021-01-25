@@ -361,7 +361,8 @@ namespace M4PL.Business.Common
                     Tracking = Permission.All,
                     Cargo = Permission.All,
                     Price = Permission.All,
-                    Cost = Permission.All
+                    Cost = Permission.All,
+                    Note=Permission.All
                 };
             }
             IList<UserSecurity> userSecurity = _commands.GetUserSecurities(activeUser);
@@ -385,6 +386,7 @@ namespace M4PL.Business.Common
                             var cargoTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobCargo.ToString());
                             var priceTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobBillableSheet.ToString());
                             var costTableDetails = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobCostSheet.ToString());
+                            var jobNotes = tableReferences.FirstOrDefault(x => x.SysRefName == EntitiesAlias.JobNote.ToString());
                             foreach (var item in jobSercurity.UserSubSecurities)
                             {
                                 if (item.RefTableName == gatewayTableDetails.SysRefName)
@@ -397,6 +399,8 @@ namespace M4PL.Business.Common
                                     jobPermission.Price = (Permission)item.SubsMenuAccessLevelId;
                                 else if (item.RefTableName == costTableDetails.SysRefName)
                                     jobPermission.Cost = (Permission)item.SubsMenuAccessLevelId;
+                                else if (item.RefTableName == jobNotes.SysRefName)
+                                    jobPermission.Note = (Permission)item.SubsMenuAccessLevelId;
                             }
                         }
                     }

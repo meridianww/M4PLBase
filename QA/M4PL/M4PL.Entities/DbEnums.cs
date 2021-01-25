@@ -334,7 +334,8 @@ namespace M4PL.Entities
         NextGatway,
 		UserGuideUpload,
 
-		CustNAVConfiguration
+		CustNAVConfiguration,
+		JobNote
 	}
 
 	public enum ErrorMessages

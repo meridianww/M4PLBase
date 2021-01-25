@@ -187,6 +187,7 @@
     <Compile Include="Job\SelectedJobList.cs" />
     <Compile Include="Job\UnCancelJobResponse.cs" />
     <Compile Include="Job\UnCancelOrder.cs" />
+    <Compile Include="Job\UpdateDriverRequest.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
     <Compile Include="Program\EventType.cs" />

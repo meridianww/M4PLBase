@@ -14,5 +14,6 @@ namespace M4PL.Entities.JobService
         public Permission Cargo { get; set; }
         public Permission Price { get; set; }
         public Permission Cost { get; set; }
+        public Permission Note { get; set; }
     }
 }

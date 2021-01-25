@@ -586,17 +586,16 @@ namespace M4PL.API.Controllers
             return _jobCommands.InsertOrderSpecialInstruction(jobSpecialInstruction, orderNumber);
         }
         /// <summary>
-        /// UpdateDriverAlert
+        /// Update Driver Alert
         /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="jobDriverAlert"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateDriverAlert"), ResponseType(typeof(StatusModel))]
-        public StatusModel UpdateDriverAlert(long jobId,string jobDriverAlert)
+        public StatusModel UpdateDriverAlert(UpdateDriverRequest request)
         {
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            return _jobCommands.UpdateJobDriverAlert(jobId, jobDriverAlert);
+            return _jobCommands.UpdateJobDriverAlert(request.jobId, request.jobDriverAlert);
         }
 
         [HttpGet]
