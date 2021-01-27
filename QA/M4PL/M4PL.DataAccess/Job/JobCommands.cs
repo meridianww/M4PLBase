@@ -685,6 +685,9 @@ namespace M4PL.DataAccess.Job
         public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
         {
             bool result = true;
+            Entities.Job.Job job = Get(activeUser, jobId);
+            var mapRoute = GetJobMapRoute(activeUser, job.Id);
+            CalculateJobMileage(ref job, mapRoute);
             var parameters = new List<Parameter>
             {
                new Parameter("@userId", activeUser.UserId),
@@ -759,7 +762,7 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
-        public static bool UpdatedDriverAlert(ActiveUser activeUser,long jobId, string jobDriverAlert)
+        public static bool UpdatedDriverAlert(ActiveUser activeUser, long jobId, string jobDriverAlert)
         {
             bool result = true;
             var parameters = new List<Parameter>
@@ -798,15 +801,16 @@ namespace M4PL.DataAccess.Job
                 Document doc = new Document(tempPath);
 
                 string notes = doc.GetText();
-                Task.Run(()=> {
+                Task.Run(() =>
+                {
                     File.Delete(tempPath);
                 });
                 return notes;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.ErrorLogger.Log(ex, string.Format("Error occured while fetching the JobNotes, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
-               
+
             }
             return string.Empty;
         }
