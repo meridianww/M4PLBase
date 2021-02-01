@@ -288,6 +288,13 @@
                 else if (colSetting.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)
     || colSetting.DataType.Equals(SQLDataTypes.varchar.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
+                    if(colSetting.ColAliasName.Contains("Password"))
+                    {
+                        column.SetFilterTemplateContent(lookup =>
+                        {
+
+                        });
+                    }
                     column.EditorProperties().TextBox(txtBox =>
                     {
                         txtBox.MaxLength = colSetting.MaxLength;
@@ -466,7 +473,15 @@
         MVCxGridView g = (MVCxGridView)s;
 
     };
-
+    settings.CustomColumnDisplayText = (s, e) =>
+    {
+        if (e.Column.FieldName == "ServicePassword")
+        {
+            e.DisplayText = "**********";
+            e.Column.ReadOnly = true;
+            e.Column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
+        }
+    };
     settings.PreRender = (s, e) =>
     {
         var grid = (MVCxGridView)s;

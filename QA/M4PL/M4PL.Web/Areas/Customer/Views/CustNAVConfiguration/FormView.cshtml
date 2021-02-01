@@ -43,7 +43,22 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.NAVConfigurationId).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServiceUrl).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServiceUserName).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServicePassword).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ServicePassword).ToHtmlString().Replace("type=\"text\"","type=\"password\"") + "</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-1 col-md-1 col-sm-1 no-padding system-pwd-icon'>" +
+        Html.DevExpress().Button(btnSettings =>
+        {
+            btnSettings.Name = "btnPassword";
+            btnSettings.EnableTheming = true;
+            btnSettings.Text = "";
+            btnSettings.AllowFocus = true;
+            btnSettings.ImagePosition = ImagePosition.Right;
+            btnSettings.Images.Image.IconID = IconID.DashboardsLocknavigation16x16;
+            btnSettings.Style.Add("float","left");
+            btnSettings.ClientSideEvents.Click = "function(pwdCtrl){DevExCtrl.TextBox.ShowHidePasswordOpnSezme('ServicePassword_popup_I');}";
+        }).GetHtml().ToHtmlString()
+    + "</div>");
+
         ViewContext.Writer.Write("</div>");
 
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
