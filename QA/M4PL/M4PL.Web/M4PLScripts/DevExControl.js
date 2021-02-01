@@ -966,10 +966,10 @@ DevExCtrl.TreeView = function () {
     }
 
     var _programTreeViewInit = function (s, e) {
-        _processNodes(s, s.GetRootNode());
-        if (s.GetSelectedNode() !== null && s.GetSelectedNode() != undefined) {
-            s.NodeClick.FireEvent(s, s.CreateNodeClickEventArgs(true, s.GetSelectedNode(), s.GetSelectedNode().GetHtmlElement(), MouseEvent));
-        }
+        //_processNodes(s, s.GetRootNode());
+        //if (s.GetSelectedNode() !== null && s.GetSelectedNode() != undefined) {
+        //    s.NodeClick.FireEvent(s, s.CreateNodeClickEventArgs(true, s.GetSelectedNode(), s.GetSelectedNode().GetHtmlElement(), MouseEvent));
+        //}
     }
 
     var _processNodes = function (tree, node) {
@@ -1287,7 +1287,12 @@ DevExCtrl.TreeList = function () {
             route.IsJobParentEntityUpdated = false;
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 if (e.node.name.indexOf("_") == -1) {
-                    route.ParentRecordId = parseInt(e.node.name.replace('_', ''));
+                    if (e.node.text == "Builder") {
+                        route.ParentRecordId = 10014;
+                    }
+                    else {
+                        route.ParentRecordId = parseInt(e.node.name.replace('_', ''));
+                    }
                 }
                 route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
 
@@ -1306,7 +1311,12 @@ DevExCtrl.TreeList = function () {
                     IsDataView = route.Action === "DataView" ? true : false;
                     //route.OwnerCbPanel = "pnlProgramDetail";
                     //route.Filters.FieldName = e.node.text;
-                    route.RecordId = parseInt(e.node.name.replace('_', ''));
+                    if (e.node.text == "Builder") {
+                        route.RecordId = 10014;
+                    }
+                    else {
+                        route.RecordId = parseInt(e.node.name.replace('_', ''));
+                    }
                     if (e.node.parent.nodes.length > 0) {
                         var childResult1 = e.node.parent.nodes.find(x => x.name = e.node.name).parent;
                         if (childResult1.parent != null) {
@@ -1967,7 +1977,7 @@ DevExCtrl.PageControl = function () {
                 e.reloadContentOnCallback = true;
             }
             else if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Program") {
-                if (e.tab.index == 3 || e.tab.index == 5) {
+                if (e.tab.index == 3 || e.tab.index == 5 || e.tab.index == 4) {
                     e.reloadContentOnCallback = true;
                 }
             }
