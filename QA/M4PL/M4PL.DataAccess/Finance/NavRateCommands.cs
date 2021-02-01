@@ -17,6 +17,7 @@
 // Purpose:                                      Contains commands to perform CRUD on NavVendor
 //=============================================================================================================
 
+using M4PL.APIClient.Common;
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
@@ -63,6 +64,8 @@ namespace M4PL.DataAccess.Finance
                 throw new ArgumentNullException("navRateList", "NavRateCommands.GetNavRateListDT() - Argument null Exception");
             }
 
+            var sysReferenceList = DataAccess.Administration.SystemReferenceCommands.GetSystemRefrenceList();
+            var categoryValue = sysReferenceList == null ? null : sysReferenceList.Where(x => x.SysLookupCode.Equals("RateCategoryType", StringComparison.OrdinalIgnoreCase));
             var distinctNavRates = navRateList.GroupBy(p => p.Code).Select(g => g.First()).Where(x => !string.IsNullOrEmpty(x.Code)).ToList();
             using (var navRateUTT = new DataTable("uttNavRate"))
             {
@@ -77,6 +80,7 @@ namespace M4PL.DataAccess.Finance
                 navRateUTT.Columns.Add("CostRate");
                 navRateUTT.Columns.Add("BillableElectronicInvoice");
                 navRateUTT.Columns.Add("CostElectronicInvoice");
+                navRateUTT.Columns.Add("Category");
 
                 if (distinctNavRates?.Count > 0)
                 {
@@ -93,6 +97,8 @@ namespace M4PL.DataAccess.Finance
                         row["CostRate"] = decimal.Zero;
                         row["BillableElectronicInvoice"] = navRate.BillableElectronicInvoice.ToBoolean();
                         row["CostElectronicInvoice"] = navRate.CostElectronicInvoice.ToBoolean();
+                        row["Category"] = categoryValue != null && categoryValue.Where(x => x.SysOptionName.Equals(navRate.Category, StringComparison.OrdinalIgnoreCase)).Any() ?
+                                          categoryValue.Where(x => x.SysOptionName.Equals(navRate.Category, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Id : 101;
                         navRateUTT.Rows.Add(row);
                         navRateUTT.AcceptChanges();
                     }

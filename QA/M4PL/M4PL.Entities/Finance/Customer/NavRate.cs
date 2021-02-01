@@ -54,5 +54,10 @@ namespace M4PL.Entities.Finance.Customer
 		/// </summary>
 		public string CostElectronicInvoice { get; set; }
 
-	}
+		/// <summary>
+		/// Gets Or Sets Category
+		/// </summary>
+		public string Category { get; set; }
+
+    }
 }
