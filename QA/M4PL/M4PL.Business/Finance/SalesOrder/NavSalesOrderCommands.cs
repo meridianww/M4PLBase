@@ -141,7 +141,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			NavSalesOrderCreationResponse result = null;
 			Entities.Job.Job jobResult = _jobCommands.GetJobByProgram(ActiveUser, jobIdList.FirstOrDefault(), 0);
-			if (jobResult != null && jobResult.JobCompleted && jobResult.JobDeliveryDateTimeActual.HasValue && jobResult.JobOriginDateTimeActual.HasValue)
+			if (jobResult != null && jobResult.JobDeliveryDateTimeActual.HasValue && jobResult.JobOriginDateTimeActual.HasValue)
 			{
 				bool isDeliveryChargeRemovalRequired = false;
 				if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))

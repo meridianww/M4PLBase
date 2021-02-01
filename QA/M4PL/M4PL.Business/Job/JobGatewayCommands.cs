@@ -317,10 +317,6 @@ namespace M4PL.Business.Job
                 if (string.Equals(gatewayCode, "Delivered", StringComparison.OrdinalIgnoreCase))
                 {
                     navOrderRepo.GenerateSalesOrderInNav((long)jobId, NavAPIUserName, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
-                    if (customerId == 10007)
-                    {
-                        navOrderRepo.GeneratePurchaseOrderInNav((long)jobId, NavAPIUserName, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
-                    }
                 }
                 else if (string.Equals(gatewayCode, "POD Completion", StringComparison.OrdinalIgnoreCase) || gatewayCode.StartsWith("Return to", StringComparison.OrdinalIgnoreCase))
                 {

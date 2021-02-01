@@ -40,7 +40,7 @@ namespace M4PL.Business.Finance.Order
 			var jobResult = DataAccess.Job.JobCommands.Get(activeUser, Convert.ToInt64(jobId));
 			M4PLSalesOrderCreationResponse m4PLSalesOrderCreationResponse = null;
 			// Start Sales Order Creation Process Only When JobOriginDateTimeActual and JobDeliveryDateTimeActual are not null.
-			if (jobResult != null && jobResult.JobCompleted && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
+			if (jobResult != null && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
 			{
 				bool isDeliveryChargeRemovalRequired = false;
 				bool isElectronicInvoice = false;
