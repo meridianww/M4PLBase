@@ -251,7 +251,8 @@ namespace M4PL.Business.Job
 
         public bool UpdateJobAttributes(long jobId)
         {
-            return _commands.UpdateJobAttributes(ActiveUser, jobId);
+            long customerId = M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong();
+            return _commands.UpdateJobAttributes(ActiveUser, jobId, customerId);
         }
 
         public bool InsertJobComment(JobComment comment)

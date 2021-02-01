@@ -682,18 +682,26 @@ namespace M4PL.DataAccess.Job
             return result ?? new JobDestination();
         }
 
-        public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
+        public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId, long customerId)
         {
             bool result = true;
-            Entities.Job.Job job = Get(activeUser, jobId);
+            Entities.Job.Job job = GetJobByProgram(activeUser, jobId, 0);
             var mapRoute = GetJobMapRoute(activeUser, job.Id);
             CalculateJobMileage(ref job, mapRoute);
+            List<SystemReference> systemOptionList = Administration.SystemReferenceCommands.GetSystemRefrenceList();
+            int serviceId = systemOptionList != null ? (int)systemOptionList.
+               Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+               Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+               FirstOrDefault().Id : 0;
+            InsertCostPriceCodesForOrder(job.Id, (long)job.ProgramID, job.JobSiteCode, serviceId, activeUser, customerId == job.CustomerId ? true : false, job.JobQtyActual);
             var parameters = new List<Parameter>
             {
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@id", jobId),
+               new Parameter("@JobMileage", job.JobMileage),
+               new Parameter("@programId", job.ProgramID),
                new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime())
+               new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
             };
 
             try
