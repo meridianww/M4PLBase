@@ -48,7 +48,7 @@ namespace M4PL.Entities.JobService
         /// </summary>
         public string GateWayName { get; set; }
         public bool Completed { get; set; }
-        public string Comment { get; set; }
+        public byte[] Comment { get; set; }
         public string StatusCode { get; set; }
         public string AppointmentCode { get; set; }
     }
