@@ -22,30 +22,34 @@ namespace M4PL.Entities.JobService
         /// <summary>
         /// Gets or Sets Gateway Code
         /// </summary>
-        public string GatewayCode { get; set; }
+        public string Code { get; set; }
         /// <summary>
         /// Gets or Sets Gateway Title
         /// </summary>
-        public string GatewayTitle { get; set; }
+        public string Title { get; set; }
         /// <summary>
         /// Gets or Sets ACD
         /// </summary>
-        public DateTime? ACD { get; set; }
+        public DateTime? Date { get; set; }
         /// <summary>
         /// Gets or Sets Sets Current DDP
         /// </summary>
-        public DateTime? GwyDDPCurrent { get; set; }
+        public DateTime? ScheduleDate { get; set; }
         /// <summary>
         /// Gets or Sets updated DDP
         /// </summary>
-        public DateTime? GwyDDPNew { get; set; }
+        public DateTime? RescheduleDate { get; set; }
         /// <summary>
         /// Gets or Sets Type Id if the current Gateway is Action or Gateway Type
         /// </summary>
-        public int? TypeId { get; set; }
+        public int? Type { get; set; }
         /// <summary>
         /// Gets or Sets Gateway Name
         /// </summary>
         public string GateWayName { get; set; }
+        public bool Completed { get; set; }
+        public string Comment { get; set; }
+        public string StatusCode { get; set; }
+        public string AppointmentCode { get; set; }
     }
 }
