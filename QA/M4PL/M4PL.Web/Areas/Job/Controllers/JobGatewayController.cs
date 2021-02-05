@@ -924,6 +924,11 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             PopulateForm(route);
+            if (_formResult.Record.GwyGatewayCode == "Exception")
+            {
+                _formResult.Record.CurrentAction = "Exception";
+                return PartialView("_JobGatewayAction", _formResult);
+            }
             return PartialView(_formResult);
         }
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
