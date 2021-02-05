@@ -2,53 +2,44 @@
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 -- =============================================
 -- Copyright (2018) Meridian Worldwide Transportation Group
 -- All Rights Reserved Worldwide
 -- Author:		Nathan Fujimoto
 -- Create date: 4/3/2018
--- Description:	The stored procedure inserts the EDI orders from the flat file into the EDI856Manifest Header table.
+-- Description:	The stored procedure inserts the EDI orders from the flat file into the EDI204Summary Header table.
 -- =============================================
-ALTER Procedure [dbo].[ediInsertEDI856Header]
+ALTER Procedure [dbo].[ediInsertEDI204Header]
 	@TradingPartner varchar(20),
-	@GroupControlNo bigint,	
-	@MasterBOLNo varchar(30),	
-	@OrderTotal varchar(10),
-	@CustomerReferenceNo varchar(30),
+	@GroupControlNo bigint,
 	@BOLNo nvarchar(30),
-	@LMSLocationID varchar(30),
-	@ShipmentDestCode varchar(30),
+	@MasterBOLNo varchar(30),
+	@MethodOfPayment varchar(10),
+	@SetPurpose varchar(10),
+	@CustomerReferenceNo varchar(30),
+	@LocationId varchar(30),
+	@ShipDescription varchar(30),
 	@OrderType varchar(30),
 	@PurchaseOrderNo varchar(30),
 	@LocationNumber varchar(30),
-	@OriginalShipFromLocation varchar(30),
+	@ShipDate datetime2(7),
+	@ArrivalDate3PL datetime2(7),
+	@ProductType varchar(30),
 	@Latitude varchar(30),
 	@Longitude varchar(30),
-	@ShipDescription varchar(80),
-	@PromisedDeliveryDate datetime2(7),
-	@ScheduledDeliveryDate datetime2(7),	
-	@OrderATGroup varchar(50),
+	@ReasonCodeCancellation varchar(30),
 	@ManifestNo varchar(30),
-	@DateSent datetime2(7),
-	@TimeSent datetime2(7),
-	@ShippedDate datetime2(7),
-	@EstimatedDeliveryDate datetime2(7),	
-	@PackType varchar(10),
-	@TotalQuantity bigint,
-	@CommodityCode varchar(50),
-	@LadingDescription varchar(50),	
 	@TotalWeight decimal(18,2),
-	@ItemWeight decimal(18,2),	
-	@WeightQualifier varchar(10),
-	@TotalVolume decimal(18,2),	
-	@VolumeQualifier varchar(10),
-	@VolumeUnitOfMeasure varchar(10),
-	@OriginCarrier varchar(10),
-	@CarrierSCAC varchar(80),	
-	@TransportationMethod varchar(80),	
-	@EquipmentInitials varchar(10),
-	@EquipmentNumber varchar(10),
-	@ConsigneeName varchar(60),	
+	@TotalCubicFeet decimal(18,2),
+	@TotalPieces bigint,
+	@ServiceMode varchar(30),
+	@DeliveryCommitmentType varchar(30),
+	@ScheduledPickupDate datetime2(7),
+	@ScheduledDeliveryDate datetime2(7),
+	@SpecialNotes varchar(30),
+	@ConsigneeName varchar(60),
+	@ConsigneeNameID bigint,
 	@ConsigneeAddress1 varchar(75),
 	@ConsigneeAddress2 varchar(75),
 	@ConsigneeCity varchar(75),
@@ -61,7 +52,8 @@ ALTER Procedure [dbo].[ediInsertEDI856Header]
 	@ConsigneeAltContName varchar(75),
 	@ConsigneeAltContNumber varchar(80),
 	@ConsigneeAltContEmail varchar(80),
-	@InterConsigneeName varchar(60),	
+	@InterConsigneeName varchar(60),
+	@InterConsigneeNameID bigint,
 	@InterConsigneeAddress1 varchar(75),
 	@InterConsigneeAddress2 varchar(75),
 	@InterConsigneeCity varchar(75),
@@ -74,7 +66,8 @@ ALTER Procedure [dbo].[ediInsertEDI856Header]
 	@InterConsigneeAltContName varchar(75),
 	@InterConsigneeAltContNumber varchar(80),
 	@InterConsigneeAltContEmail varchar(80),
-	@ShipFromName varchar(60),	
+	@ShipFromName varchar(60),
+	@ShipFromNameID bigint,
 	@ShipFromAddress1 varchar(75),
 	@ShipFromAddress2 varchar(75),
 	@ShipFromCity varchar(75),
@@ -87,7 +80,8 @@ ALTER Procedure [dbo].[ediInsertEDI856Header]
 	@ShipFromAltContName varchar(75),
 	@ShipFromAltContNumber varchar(80),
 	@ShipFromAltContEmail varchar(80),
-	@BillToName varchar(60),	
+	@BillToName varchar(60),
+	@BillToNameID bigint,
 	@BillToAddress1 varchar(75),
 	@BillToAddress2 varchar(75),
 	@BillToCity varchar(75),
@@ -98,8 +92,8 @@ ALTER Procedure [dbo].[ediInsertEDI856Header]
 	@BillToContactNumber varchar(80),
 	@BillToContactEmail varchar(80),
 	@BillToAltContName varchar(75),
-	@BillToAltContNumber varchar(80),
-	@BillToAltContEmail varchar(80),
+	@BillToAltContNumber varchar(80),	
+	@BillToAltContEmail varchar(80),	
 	@TextData varchar(Max),
 	@UDF01 varchar(30),
 	@UDF02 varchar(30),
@@ -112,200 +106,186 @@ ALTER Procedure [dbo].[ediInsertEDI856Header]
 	@UDF09 varchar(30),
 	@UDF10 varchar(30),
 	@EnteredBy varchar(50)
+
 As BEGIN
 
-INSERT INTO dbo.EDI856ManifestHeader(
-	emhTradingPartner, 
-	emhGroupControlNo, 
-	emhMasterBOLNo, 
-	emhOrderTotal, 
-	emhCustomerReferenceNo,
-	emhBOLNo,
-	emhLMSLocationID, 
-	emhShipmentDestCode, 
-	emhOrderType, 
-	emhPurchaseOrderNo,
-	emhLocationNumber, 
-	emhOriginalShipFromLocation, 
-	emhLatitude, 
-	emhLongitude, 
-	emhShipDescription,
-	emhPromisedDeliveryDate, 
-	emhScheduledDeliveryDate, 
-	emhOrderATGroup, 
-	emhManifestNo, 
-	emhDateSent, 
-	emhTimeSent, 
-	emhShippedDate, 
-	emhEstimatedDeliveryDate, 
-	emhPackType, 
-	emhTotalQuantity, 
-	emhCommodityCode, 
-	emhLadingDescription, 
-	emhTotalWeight, 
-	emhItemWeight, 
-	emhWeightQualifier, 
-	emhTotalVolume, 
-	emhVolumeQualifier, 
-	emhVolumeUnitOfMeasure, 
-	emhOriginCarrier, 
-	emhCarrierSCAC, 
-	emhTransportationMethod, 
-	emhEquipmentInitials, 
-	emhEquipmentNumber,
-	emhConsigneeName, 
-	emhConsigneeAddress1, 
-	emhConsigneeAddress2, 
-	emhConsigneeCity, 
-	emhConsigneeState, 
-	emhConsigneePostalCode, 
-	emhConsigneeCountryCode, 
-	emhConsigneeContactName, 
-	emhConsigneeContactNumber, 
-	emhConsigneeContactEmail,
-	emhConsigneeAltContName, 
-	emhConsigneeAltContNumber, 
-	emhConsigneeAltContEmail,
-	emhInterConsigneeName, 
-	emhInterConsigneeAddress1, 
-	emhInterConsigneeAddress2, 
-	emhInterConsigneeCity, 
-	emhInterConsigneeState, 
-	emhInterConsigneePostalCode, 
-	emhInterConsigneeCountryCode, 
-	emhInterConsigneeContactName, 
-	emhInterConsigneeContactNumber,
-	emhInterConsigneeContactEmail,
-	emhInterConsigneeAltContName, 
-	emhInterConsigneeAltContNumber,
-	emhInterConsigneeAltContEmail,
-	emhShipFromName, 
-	emhShipFromAddress1, 
-	emhShipFromAddress2, 
-	emhShipFromCity, 
-	emhShipFromState, 
-	emhShipFromPostalCode, 
-	emhShipFromCountryCode, 
-	emhShipFromContactName, 
-	emhShipFromContactNumber, 
-	emhShipFromContactEmail,
-	emhShipFromAltContName, 
-	emhShipFromAltContNumber,
-	emhShipFromAltContEmail,
-	emhBillToName, 
-	emhBillToAddress1, 
-	emhBillToAddress2, 
-	emhBillToCity, 
-	emhBillToState, 
-	emhBillToPostalCode, 
-	emhBillToCountryCode, 
-	emhBillToContactName, 
-	emhBillToContactNumber,
-	emhBillToContactEmail,
-	emhBillToAltContName, 
-	emhBillToAltContNumber,
-	emhBillToAltContEmail,
-	emhTextData,
-	emhUDF01,
-	emhUDF02,
-	emhUDF03,
-	emhUDF04,
-	emhUDF05,
-	emhUDF06,
-	emhUDF07,
-	emhUDF08,
-	emhUDF09,
-	emhUDF10,
-	EnteredBy 
- ) VALUES (
-	@TradingPartner, 
-	@GroupControlNo, 
-	@MasterBOLNo, 
-	@OrderTotal, 
-	@CustomerReferenceNo, 
+INSERT INTO dbo.EDI204SummaryHeader(
+eshTradingPartner
+,eshGroupControlNo
+,eshBOLNo
+,eshMasterBOLNo
+,eshMethodOfPayment
+,eshSetPurpose
+,eshCustomerReferenceNo
+,eshLocationId
+,eshShipDescription
+,eshOrderType
+,eshPurchaseOrderNo
+,eshLocationNumber
+,eshShipDate
+,eshArrivalDate3PL
+,eshProductType
+,eshLatitude
+,eshLongitude
+,eshReasonCodeCancellation
+,eshManifestNo
+,eshTotalWeight
+,eshTotalCubicFeet
+,eshTotalPieces
+,eshServiceMode
+,eshDeliveryCommitmentType
+,eshScheduledPickupDate
+,eshScheduledDeliveryDate
+,eshSpecialNotes
+,eshConsigneeName
+,eshConsigneeNameID
+,eshConsigneeAddress1
+,eshConsigneeAddress2
+,eshConsigneeCity
+,eshConsigneeState
+,eshConsigneePostalCode
+,eshConsigneeCountryCode
+,eshConsigneeContactName
+,eshConsigneeContactNumber
+,eshConsigneeContactEmail
+,eshConsigneeAltContName
+,eshConsigneeAltContNumber
+,eshConsigneeAltContEmail
+,eshInterConsigneeName
+,eshInterConsigneeNameID
+,eshInterConsigneeAddress1
+,eshInterConsigneeAddress2
+,eshInterConsigneeCity
+,eshInterConsigneeState
+,eshInterConsigneePostalCode
+,eshInterConsigneeCountryCode
+,eshInterConsigneeContactName
+,eshInterConsigneeContactNumber
+,eshInterConsigneeContactEmail
+,eshInterConsigneeAltContName
+,eshInterConsigneeAltContNumber
+,eshInterConsigneeAltContEmail
+,eshShipFromName
+,eshShipFromNameID
+,eshShipFromAddress1
+,eshShipFromAddress2
+,eshShipFromCity
+,eshShipFromState
+,eshShipFromPostalCode
+,eshShipFromCountryCode
+,eshShipFromContactName
+,eshShipFromContactNumber
+,eshShipFromContactEmail
+,eshShipFromAltContName
+,eshShipFromAltContNumber
+,eshShipFromAltContEmail
+,eshBillToName
+,eshBillToNameID
+,eshBillToAddress1
+,eshBillToAddress2
+,eshBillToCity
+,eshBillToState
+,eshBillToPostalCode
+,eshBillToCountryCode
+,eshBillToContactName
+,eshBillToContactNumber
+,eshBillToContactEmail
+,eshBillToAltContName
+,eshBillToAltContNumber
+,eshBillToAltContEmail
+,eshTextData
+,eshUDF01
+,eshUDF02
+,eshUDF03
+,eshUDF04
+,eshUDF05
+,eshUDF06
+,eshUDF07
+,eshUDF08
+,eshUDF09
+,eshUDF10
+,EnteredBy
+ ) VALUES (@TradingPartner,
+	@GroupControlNo,
 	@BOLNo,
-	@LMSLocationID, 
-	@ShipmentDestCode, 
-	@OrderType, 
-	@PurchaseOrderNo,
-	@LocationNumber, 
-	@OriginalShipFromLocation, 
-	@Latitude, 
-	@Longitude, 
+	@MasterBOLNo,
+	@MethodOfPayment,
+	@SetPurpose,
+	@CustomerReferenceNo,
+	@LocationId,
 	@ShipDescription,
-	@PromisedDeliveryDate, 
-	@ScheduledDeliveryDate, 
-	@OrderATGroup, 
-	@ManifestNo, 
-	@DateSent, 
-	@TimeSent, 
-	@ShippedDate, 
-	@EstimatedDeliveryDate, 
-	@PackType, 
-	@TotalQuantity, 
-	@CommodityCode, 
-	@LadingDescription, 
-	@TotalWeight, 
-	@ItemWeight, 
-	@WeightQualifier, 
-	@TotalVolume, 
-	@VolumeQualifier, 
-	@VolumeUnitOfMeasure, 
-	@OriginCarrier, 
-	@CarrierSCAC, 
-	@TransportationMethod, 
-	@EquipmentInitials, 
-	@EquipmentNumber,
-	@ConsigneeName, 
-	@ConsigneeAddress1, 
-	@ConsigneeAddress2, 
-	@ConsigneeCity, 
-	@ConsigneeState, 
-	@ConsigneePostalCode, 
-	@ConsigneeCountryCode, 
-	@ConsigneeContactName, 
-	@ConsigneeContactNumber, 
+	@OrderType,
+	@PurchaseOrderNo,
+	@LocationNumber,
+	@ShipDate,
+	@ArrivalDate3PL,
+	@ProductType,
+	@Latitude,
+	@Longitude,
+	@ReasonCodeCancellation,
+	@ManifestNo,
+	@TotalWeight,
+	@TotalCubicFeet,
+	@TotalPieces,
+	@ServiceMode,
+	@DeliveryCommitmentType,
+	@ScheduledPickupDate,
+	@ScheduledDeliveryDate,
+	@SpecialNotes,
+	@ConsigneeName,
+	@ConsigneeNameID,
+	@ConsigneeAddress1,
+	@ConsigneeAddress2,
+	@ConsigneeCity,
+	@ConsigneeState,
+	@ConsigneePostalCode,
+	@ConsigneeCountryCode,
+	@ConsigneeContactName,
+	@ConsigneeContactNumber,
 	@ConsigneeContactEmail,
-	@ConsigneeAltContName, 
-	@ConsigneeAltContNumber, 
+	@ConsigneeAltContName,
+	@ConsigneeAltContNumber,
 	@ConsigneeAltContEmail,
-	@InterConsigneeName, 
-	@InterConsigneeAddress1, 
-	@InterConsigneeAddress2, 
-	@InterConsigneeCity, 
-	@InterConsigneeState, 
-	@InterConsigneePostalCode, 
-	@InterConsigneeCountryCode, 
-	@InterConsigneeContactName, 
-	@InterConsigneeContactNumber, 
+	@InterConsigneeName,
+	@InterConsigneeNameID,
+	@InterConsigneeAddress1,
+	@InterConsigneeAddress2,
+	@InterConsigneeCity,
+	@InterConsigneeState,
+	@InterConsigneePostalCode,
+	@InterConsigneeCountryCode,
+	@InterConsigneeContactName,
+	@InterConsigneeContactNumber,
 	@InterConsigneeContactEmail,
-	@InterConsigneeAltContName, 
-	@InterConsigneeAltContNumber, 
+	@InterConsigneeAltContName,
+	@InterConsigneeAltContNumber,
 	@InterConsigneeAltContEmail,
-	@ShipFromName, 
-	@ShipFromAddress1, 
-	@ShipFromAddress2, 
-	@ShipFromCity, 
-	@ShipFromState, 
-	@ShipFromPostalCode, 
-	@ShipFromCountryCode, 
-	@ShipFromContactName, 
-	@ShipFromContactNumber, 
+	@ShipFromName,
+	@ShipFromNameID,
+	@ShipFromAddress1,
+	@ShipFromAddress2,
+	@ShipFromCity,
+	@ShipFromState,
+	@ShipFromPostalCode,
+	@ShipFromCountryCode,
+	@ShipFromContactName,
+	@ShipFromContactNumber,
 	@ShipFromContactEmail,
-	@ShipFromAltContName, 
-	@ShipFromAltContNumber, 
+	@ShipFromAltContName,
+	@ShipFromAltContNumber,
 	@ShipFromAltContEmail,
-	@BillToName, 
-	@BillToAddress1, 
-	@BillToAddress2, 
-	@BillToCity, 
-	@BillToState, 
-	@BillToPostalCode, 
-	@BillToCountryCode, 
-	@BillToContactName, 
+	@BillToName,
+	@BillToNameID,
+	@BillToAddress1,
+	@BillToAddress2,
+	@BillToCity,
+	@BillToState,
+	@BillToPostalCode,
+	@BillToCountryCode,
+	@BillToContactName,
 	@BillToContactNumber,
 	@BillToContactEmail,
-	@BillToAltContName, 
+	@BillToAltContName,
 	@BillToAltContNumber,
 	@BillToAltContEmail,
 	@TextData,
@@ -319,8 +299,7 @@ INSERT INTO dbo.EDI856ManifestHeader(
 	@UDF08,
 	@UDF09,
 	@UDF10,
-	@EnteredBy
-	 ); Select SCOPE_IDENTITY();
+	@EnteredBy); Select SCOPE_IDENTITY();
 
 END
 GO
