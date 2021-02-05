@@ -157,7 +157,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 			catch (Exception exp)
 			{
 				responseData = exp.Message;
-				DataAccess.Logger.ErrorLogger.Log(exp, "Exception occured while pushing data to Far Eye.", "SentOrderStatusUpdateToFarEye", Utilities.Logger.LogType.Error);
+				DataAccess.Logger.ErrorLogger.Log(exp, string.Format("Exception occured while pushing data to Far Eye.Request json was:{0}", farEyeOrderStatusUpdateJson), "SentOrderStatusUpdateToFarEye", Utilities.Logger.LogType.Error);
 			}
 
 			return responseData;
