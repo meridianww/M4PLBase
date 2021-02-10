@@ -36,7 +36,7 @@ namespace M4PL.Business.Job
     {
         public BusinessConfiguration M4PLBusinessConfiguration
         {
-            get { return CoreCache.GetBusinessConfiguration("EN"); }
+            get { return CoreCache.GetBusinessConfiguration("EN", true); }
         }
 
         ////public string NavAPIUrl
@@ -337,7 +337,7 @@ namespace M4PL.Business.Job
             {
                 Task.Run(() =>
                 {
-                    navOrderRepo.GenerateSalesOrderInNav((long)jobId, NavAPIUserName, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
+                    navOrderRepo.GenerateSalesOrderInNav((long)jobId, NavAPIUrl, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
                 });
             }
 
@@ -345,7 +345,7 @@ namespace M4PL.Business.Job
             {
                 Task.Run(() =>
                 {
-                    navOrderRepo.GeneratePurchaseOrderInNav((long)jobId, NavAPIUserName, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
+                    navOrderRepo.GeneratePurchaseOrderInNav((long)jobId, NavAPIUrl, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
                 });
             }
         }
