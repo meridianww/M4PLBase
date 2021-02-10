@@ -610,6 +610,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (!strJobAdvanceReportRequestRoute.EndDate.HasValue)
                     strJobAdvanceReportRequestRoute.EndDate = DateTime.Now;
             }
+            else if (strJobAdvanceReportRequestRoute.StartDate.HasValue || strJobAdvanceReportRequestRoute.EndDate.HasValue)
+            {
+                if (!strJobAdvanceReportRequestRoute.StartDate.HasValue)
+                    strJobAdvanceReportRequestRoute.StartDate = DateTime.Now.AddDays(-1);
+                if (!strJobAdvanceReportRequestRoute.EndDate.HasValue)
+                    strJobAdvanceReportRequestRoute.EndDate = DateTime.Now;
+            }
             else
             {
                 strJobAdvanceReportRequestRoute.StartDate = null;
