@@ -140,22 +140,23 @@ namespace M4PL.Business.Common
             string username = string.Empty;
             string password = string.Empty;
             string serviceURL = string.Empty;
-            ////CustomerNavConfiguration currentCustomerNavConfiguration = null;
-            ////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-            ////{
-            ////    currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-            ////    serviceURL = currentCustomerNavConfiguration.ServiceUrl;
-            ////    username = currentCustomerNavConfiguration.ServiceUserName;
-            ////    password = currentCustomerNavConfiguration.ServicePassword;
-            ////}
-            ////else
-            ////{
             serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
             username = M4PLBusinessConfiguration.NavAPIUserName;
             password = M4PLBusinessConfiguration.NavAPIPassword;
-            ////}
-
+            
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderItemResponse(username, password, serviceURL);
+        }
+
+        public static NavSalesOrderItemResponse GetCachedNavSalesOrderItemValues(string documentNumber)
+        {
+            string username = string.Empty;
+            string password = string.Empty;
+            string serviceURL = string.Empty;
+            serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            username = M4PLBusinessConfiguration.NavAPIUserName;
+            password = M4PLBusinessConfiguration.NavAPIPassword;
+
+            return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedSalesOrderItemResponse(username, password, serviceURL, documentNumber);
         }
 
         /// <summary>
@@ -168,21 +169,27 @@ namespace M4PL.Business.Common
             string username;
             string password;
             string serviceURL;
-            ////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-            ////{
-            ////    currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-            ////    serviceURL = currentCustomerNavConfiguration.ServiceUrl;
-            ////    username = currentCustomerNavConfiguration.ServiceUserName;
-            ////    password = currentCustomerNavConfiguration.ServicePassword;
-            ////}
-            ////else
-            ////{
             serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
             username = M4PLBusinessConfiguration.NavAPIUserName;
             password = M4PLBusinessConfiguration.NavAPIPassword;
-            //// }
-
+           
             return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderItemResponse(username, password, serviceURL);
+        }
+
+        /// <summary>
+        /// Gets the list of app menu data
+        /// </summary>
+        /// <returns></returns>
+        public static NavPurchaseOrderItemResponse GetCachedNavPurchaseOrderItemValues(string documentNumber)
+        {
+            string username;
+            string password;
+            string serviceURL;
+            serviceURL = M4PLBusinessConfiguration.NavAPIUrl;
+            username = M4PLBusinessConfiguration.NavAPIUserName;
+            password = M4PLBusinessConfiguration.NavAPIPassword;
+
+            return Finance.SalesOrder.NavSalesOrderHelper.GetNavPostedPurchaseOrderItemResponse(username, password, serviceURL, documentNumber);
         }
 
         public static IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId)

@@ -163,7 +163,7 @@ namespace M4PL.Business.Finance.CostCode
 			List<long> selectedJobId = jobId.Split(',').Select(Int64.Parse).ToList();
 			List<Task> tasks = new List<Task>();
 			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderPostedInvoiceResponse = CommonCommands.GetCachedNavPurchaseOrderValues();
-			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = CommonCommands.GetCachedNavPurchaseOrderItemValues();
+			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = null;
 			DocumentData documentData = null;
 			List<DocumentData> documentDataList = new List<DocumentData>();
 			foreach (var currentJobId in selectedJobId)
@@ -173,8 +173,9 @@ namespace M4PL.Business.Finance.CostCode
 					var currentNavSalesOrder = navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder.FirstOrDefault(x => x.M4PL_Job_ID.ToLong() == currentJobId);
 					if (currentNavSalesOrder != null && !string.IsNullOrEmpty(currentNavSalesOrder.No))
 					{
-						var currentPurchaseLineItem = navPurchaseOrderItemResponse.NavPurchaseOrderItem.Where(x => x.Document_No.Equals(currentNavSalesOrder.No, StringComparison.OrdinalIgnoreCase));
-						if (currentPurchaseLineItem.Any() && currentPurchaseLineItem.Count() > 0)
+						navPurchaseOrderItemResponse = CommonCommands.GetCachedNavPurchaseOrderItemValues(currentNavSalesOrder.No);
+						var currentPurchaseLineItem = navPurchaseOrderItemResponse != null ? navPurchaseOrderItemResponse.NavPurchaseOrderItem : null;
+						if (currentPurchaseLineItem != null && currentPurchaseLineItem.Count() > 0)
 						{
 							documentDataList.Add(GetCostCodeReportDataByJobId(currentJobId, currentPurchaseLineItem.ToList()));
 						}
@@ -276,16 +277,12 @@ namespace M4PL.Business.Finance.CostCode
 			List<Task> tasks = new List<Task>();
 			DocumentStatus documentStatus = new DocumentStatus() { IsAttachmentPresent = false, IsPODPresent = false };
 			NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderPostedInvoiceResponse = CommonCommands.GetCachedNavPurchaseOrderValues();
-			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = CommonCommands.GetCachedNavPurchaseOrderItemValues();
+			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = null;
 			if (navPurchaseOrderPostedInvoiceResponse == null || (navPurchaseOrderPostedInvoiceResponse != null && navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder == null) || (navPurchaseOrderPostedInvoiceResponse != null && navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder != null && navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder.Count == 0))
 			{
 				return documentStatus;
 			}
-			else if (navPurchaseOrderItemResponse == null || (navPurchaseOrderItemResponse != null && navPurchaseOrderItemResponse.NavPurchaseOrderItem == null) || (navPurchaseOrderItemResponse != null && navPurchaseOrderItemResponse.NavPurchaseOrderItem != null && navPurchaseOrderItemResponse.NavPurchaseOrderItem.Count == 0))
-			{
-				return documentStatus;
-			}
-
+			
 			foreach (var currentJob in selectedJobId)
 			{
 				tasks.Add(Task.Factory.StartNew(() =>
@@ -293,8 +290,9 @@ namespace M4PL.Business.Finance.CostCode
 					var currentNavSalesOrder = navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder.FirstOrDefault(x => x.M4PL_Job_ID.ToLong() == currentJob);
 					if (currentNavSalesOrder != null && !string.IsNullOrEmpty(currentNavSalesOrder.No))
 					{
-						var currentSalesLineItem = navPurchaseOrderItemResponse.NavPurchaseOrderItem.Where(x => x.Document_No.Equals(currentNavSalesOrder.No, StringComparison.OrdinalIgnoreCase));
-						if (currentSalesLineItem.Any() && currentSalesLineItem.Count() > 0)
+						navPurchaseOrderItemResponse = CommonCommands.GetCachedNavPurchaseOrderItemValues(currentNavSalesOrder.No);
+						var currentSalesLineItem = navPurchaseOrderItemResponse != null ? navPurchaseOrderItemResponse.NavPurchaseOrderItem : null;
+						if (currentSalesLineItem != null && currentSalesLineItem.Count() > 0)
 						{
 							documentStatus.IsAttachmentPresent = true;
 						}
