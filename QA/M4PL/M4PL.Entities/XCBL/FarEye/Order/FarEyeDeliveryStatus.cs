@@ -108,10 +108,11 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// Gets or Sets previous status
 		/// </summary>
 		public string previous_status { get; set; }
-		/// <summary>
-		/// Gets or Sets previous status time
-		/// </summary>
-		public string previous_status_time { get; set; }
+
+        /// <summary>
+        /// Gets or Sets previous status time
+        /// </summary>
+        public string previous_status_time { get; set; }
 		/// <summary>
 		/// Gets or Sets last updated at
 		/// </summary>
@@ -137,6 +138,11 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// </summary>
 		public DeliveryInfo info { get; set; }
 
+		public FarEyeDeliveryStatus DeepCopy()
+		{
+			FarEyeDeliveryStatus farEyeDeliveryStatus = (FarEyeDeliveryStatus)this.MemberwiseClone();
+			return farEyeDeliveryStatus;
+		}
 	}
 	/// <summary>
 	/// Model class for Delivery Additional Info
@@ -179,8 +185,8 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// Gets or Sets customer name
 		/// </summary>
 		public string customer_name { get; set; }
-
 	}
+
 	/// <summary>
 	/// Model class for Delivery Line Item
 	/// </summary>
