@@ -100,7 +100,7 @@ namespace M4PL.Business.Job
         public JobGateway Post(JobGateway jobGateway)
         {
             var gateway = _commands.Post(ActiveUser, jobGateway, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-            PushDataToNav(gateway.JobID, jobGateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId);
+            PushDataToNav(gateway.JobID, jobGateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId, gateway.PgdGatewayNavOrderOption);
             int scenarioId = gateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : gateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
             if (scenarioId > 0)
             {
@@ -150,12 +150,12 @@ namespace M4PL.Business.Job
                     }
                 }
                 gateway.GatewayIds = gatewaysIds.Remove(gatewaysIds.Length - 1);
-                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId);
+                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId, gateway.PgdGatewayNavOrderOption);
             }
             else
             {
                 gateway = _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, gateway.GwyCompleted, gateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId);
+                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, gateway.GwyCompleted, gateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId, gateway.PgdGatewayNavOrderOption);
             }
 
             int scenarioId = gateway.CustomerId == M4PLBusinessConfiguration.AWCCustomerId.ToLong() ? 1 : gateway.CustomerId == M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong() ? 2 : 0;
@@ -191,7 +191,7 @@ namespace M4PL.Business.Job
         public JobGateway Put(JobGateway jobGateway)
         {
             var gateway = _commands.Put(ActiveUser, jobGateway);
-            PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId);
+           //// PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId);
             return gateway;
         }
 
@@ -203,7 +203,7 @@ namespace M4PL.Business.Job
         public JobGateway PutWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
             var gateway = _commands.PutWithSettings(ActiveUser, userSysSetting, jobGateway);
-            PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId);
+            ////PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, jobGateway.GwyCompleted, jobGateway.JobTransitionStatusId, ActiveUser, gateway.CustomerId);
             return gateway;
         }
 
@@ -212,7 +212,7 @@ namespace M4PL.Business.Job
             var gateway = _commands.InsJobGatewayPODIfPODDocExistsByJobId(ActiveUser, jobId);
             if (gateway != null)
             {
-                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, gateway.GwyCompleted, 0, ActiveUser, gateway.CustomerId);
+                PushDataToNav(gateway.JobID, gateway.GwyGatewayCode, gateway.GwyCompleted, 0, ActiveUser, gateway.CustomerId, gateway.PgdGatewayNavOrderOption);
                 return true;
             }
             return false;
@@ -281,8 +281,29 @@ namespace M4PL.Business.Job
             return _commands.PostContactCard(ActiveUser, contact);
         }
 
-        public void PushDataToNav(long? jobId, string gatewayCode, bool gatewayStatus, int? JobTransitionStatusId, ActiveUser activeUser, long customerId)
+        public void PushDataToNav(long? jobId, string gatewayCode, bool gatewayStatus, int? JobTransitionStatusId, ActiveUser activeUser, long customerId, int? gatewayNavOrderOption)
         {
+            bool isSalesOrderPushRequired = false;
+            bool isPurchaseOrderPushRequired = false;
+            if (gatewayNavOrderOption.HasValue)
+            {
+                var systemOptions = DataAccess.Administration.SystemReferenceCommands.GetSystemRefrenceList();
+                var pushRequiredStatus = systemOptions != null ? systemOptions.FirstOrDefault(x => x.Id == (int)gatewayNavOrderOption) : null;
+                if (pushRequiredStatus != null && pushRequiredStatus.SysOptionName.Equals("Both", StringComparison.OrdinalIgnoreCase))
+                {
+                    isSalesOrderPushRequired = true;
+                    isPurchaseOrderPushRequired = true;
+                }
+                else if(pushRequiredStatus != null && pushRequiredStatus.SysOptionName.Equals("Sales Order", StringComparison.OrdinalIgnoreCase))
+                {
+                    isSalesOrderPushRequired = true;
+                }
+                else if (pushRequiredStatus != null && pushRequiredStatus.SysOptionName.Equals("Purchase Order", StringComparison.OrdinalIgnoreCase))
+                {
+                    isPurchaseOrderPushRequired = true;
+                }
+            }
+
             Finance.Order.NavOrderCommands navOrderRepo = new Finance.Order.NavOrderCommands();
             string NavAPIUrl = string.Empty;
             string NavAPIUserName = string.Empty; 
@@ -312,18 +333,21 @@ namespace M4PL.Business.Job
                 NavAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
             }
 
-            Task.Run(() =>
+            if (isSalesOrderPushRequired)
             {
-                if (string.Equals(gatewayCode, "Delivered", StringComparison.OrdinalIgnoreCase))
+                Task.Run(() =>
                 {
                     navOrderRepo.GenerateSalesOrderInNav((long)jobId, NavAPIUserName, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
-                }
-                else if (string.Equals(gatewayCode, "POD Completion", StringComparison.OrdinalIgnoreCase) || gatewayCode.StartsWith("Return to", StringComparison.OrdinalIgnoreCase))
+                });
+            }
+
+            if (isPurchaseOrderPushRequired)
+            {
+                Task.Run(() =>
                 {
-                    navOrderRepo.GenerateSalesOrderInNav((long)jobId, NavAPIUserName, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
                     navOrderRepo.GeneratePurchaseOrderInNav((long)jobId, NavAPIUserName, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
-                }
-            });
+                });
+            }
         }
 
         public List<JobActionGateway> GetActionsByJobIds(string jobIds)

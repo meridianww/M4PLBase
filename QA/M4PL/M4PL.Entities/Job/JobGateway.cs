@@ -384,5 +384,7 @@ namespace M4PL.Entities.Job
         /// </summary>
         public string SignalRClient { get; set; }
 
+        public int? PgdGatewayNavOrderOption { get; set; }
+
     }
 }

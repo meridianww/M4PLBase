@@ -879,9 +879,9 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string gatewayStatusCode, DateTime? gatewayACD)
+        public static JobGateway InsertJobGateway(ActiveUser activeUser, long jobId, string gatewayStatusCode, DateTime? gatewayACD)
         {
-            long insertedGatewayId = 0;
+            JobGateway jobGatewayResult = null;
             var parameters = new List<Parameter>
             {
                new Parameter("@JobId", jobId),
@@ -895,14 +895,14 @@ namespace M4PL.DataAccess.Job
 
             try
             {
-                insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsertNextAvaliableJobGateway, parameters.ToArray(), false, true);
+                jobGatewayResult = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.InsertNextAvaliableJobGateway, parameters.ToArray(), false, true);
             }
             catch (Exception exp)
             {
                 Logger.ErrorLogger.Log(exp, string.Format("Error occured while inserting the next avaliable gateway, JobId was: {0}", jobId), "Error occured while inserting the next avaliable gateway.", Utilities.Logger.LogType.Error);
             }
 
-            return insertedGatewayId > 0 ? true : false;
+            return jobGatewayResult;
         }
 
         public static void UpdateJobPartialDataByShippingSchedule(string finalSQLUpdateQuery)
