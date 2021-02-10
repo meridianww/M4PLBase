@@ -12,6 +12,7 @@
 using M4PL.Entities;
 using M4PL.Entities.BizMobl;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.Business.BizMobl
 {
@@ -68,11 +70,27 @@ namespace M4PL.Business.BizMobl
 
 		public StatusModel UploadBizMoblCSVData(BizMoblCSVData bizMoblCSVData)
 		{
-			try
+			string inputString = bizMoblCSVData == null ? "null" : JsonConvert.SerializeObject(bizMoblCSVData);
+			_logger.Log(new Exception(), string.Format("Input Request recieved from bizMoblCSVData is: {0}", inputString), "UploadBizMoblCSVData", Utilities.Logger.LogType.Informational);
+			if (bizMoblCSVData == null)
+            {
+                return new StatusModel() { AdditionalDetail = "Request model can not be null.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
+            }
+            else if (bizMoblCSVData?.FileContent == null)
+            {
+                return new StatusModel() { AdditionalDetail = "File content can not be null.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
+            }
+            else if (string.IsNullOrEmpty(bizMoblCSVData?.DeviceId))
+            {
+                return new StatusModel() { AdditionalDetail = "DeviceId can not be null or empty.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
+            }
+            
+            try
 			{
 				string directoryPath = ConfigurationManager.AppSettings["BizMoblFileDirectory"];
 				if (string.IsNullOrEmpty(directoryPath))
 				{
+					_logger.Log(new Exception(), "BizMoblFileDirectory key is missing in config", "UploadBizMoblCSVData", Utilities.Logger.LogType.Informational);
 					return new StatusModel() { AdditionalDetail = "BizMoblFileDirectory key is missing in config.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
 				}
 
@@ -97,6 +115,7 @@ namespace M4PL.Business.BizMobl
 			}
 			catch (Exception exp)
 			{
+				_logger.Log(exp, "There is some issue while uploading CSV file for BizMobl.", "UploadBizMoblCSVData", Utilities.Logger.LogType.Error);
 				return new StatusModel() { StatusCode = 500, Status = "Failure", AdditionalDetail = exp.Message };
 			}
 		}

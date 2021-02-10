@@ -65,19 +65,6 @@ namespace M4PL.API.Controllers
         [Route("UploadBizMoblCSVData"), ResponseType(typeof(StatusModel))]
         public StatusModel UploadBizMoblCSVData(BizMoblCSVData bizMoblCSVData)
         {
-            if (bizMoblCSVData == null)
-            {
-                return new StatusModel() { AdditionalDetail = "Request model can not be null.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
-            }
-            else if (bizMoblCSVData?.FileContent == null)
-            {
-                return new StatusModel() { AdditionalDetail = "File content can not be null.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
-            }
-            else if (string.IsNullOrEmpty(bizMoblCSVData?.DeviceId))
-            {
-                return new StatusModel() { AdditionalDetail = "DeviceId can not be null or empty.", Status = "Failure", StatusCode = (int)HttpStatusCode.ExpectationFailed };
-            }
-
             _bizMoblCommands.ActiveUser = Models.ApiContext.ActiveUser;
             return _bizMoblCommands.UploadBizMoblCSVData(bizMoblCSVData);
         }
