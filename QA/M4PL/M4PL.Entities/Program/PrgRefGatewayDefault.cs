@@ -197,5 +197,9 @@ namespace M4PL.Entities.Program
 		/// Gets or sets the PgdGatewayDefaultForJob identifier.
 		/// </summary>
 		public bool? PgdGatewayDefaultForJob { get; set; }
+
+        public int? PgdGatewayNavOrderOption { get; set; }
+
+		public string PgdGatewayNavOrderOptionName { get; set; }
 	}
 }
