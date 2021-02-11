@@ -131,7 +131,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 return PartialView(MvcConstants.ViewNoAccess);
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
             ViewBag.IsTrackingCollapsed = route.IsJGWYOpen;
-
             if (SessionProvider.ViewPagedDataSession.Count > 0
                 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
@@ -221,6 +220,19 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             TempData["CustomerSalesOrderNumber"] = _formResult.Record.JobCustomerSalesOrder;
+
+            var JobSecurity = SessionProvider.UserSecurities.FirstOrDefault(t => t.SecMainModuleId == MainModule.Job.ToInt());
+            if(!SessionProvider.ActiveUser.IsSysAdmin)
+            {
+                string NotesAccess = JobSecurity.UserSubSecurities.FirstOrDefault(t => t.RefTableName == EntitiesAlias.JobCostSheet.ToString()).SubsMenuAccessLevelId.ToEnum<Permission>().ToString();
+                if(NotesAccess == Permission.ReadOnly.ToString() )
+                _formResult.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryCommentText").ColIsReadOnly = true;
+                else if(NotesAccess == Permission.NoAccess.ToString())
+                {
+                    _formResult.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryCommentText").ColIsVisible = false;
+
+                }
+            }
             return PartialView(MvcConstants.ActionForm, _formResult);
         }
 
