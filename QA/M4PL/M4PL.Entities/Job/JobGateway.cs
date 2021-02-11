@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace M4PL.Entities.Job
 {
@@ -385,6 +386,9 @@ namespace M4PL.Entities.Job
         public string SignalRClient { get; set; }
 
         public int? PgdGatewayNavOrderOption { get; set; }
+        [Display(Name = "Comment")]
+        [DataType(DataType.MultilineText)]
+        public string GwyGatewayText { get; set; }
 
     }
 }

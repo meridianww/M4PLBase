@@ -5109,3 +5109,12 @@ div#btnCardRefresh {
     width:7% !important;
     border:none;
 }
+#GwyGatewayText_popup_I {
+    resize: both;
+    height: 75px;
+    min-width: 800px;
+}
+#JobDeliveryCommentText_I {
+    height: 80px;
+    resize: both;
+}

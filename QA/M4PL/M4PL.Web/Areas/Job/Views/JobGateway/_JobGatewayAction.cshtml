@@ -134,6 +134,8 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.CargoQuantity, new { Name = "CargoQuantity" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsCargoRequired, new { Name = "IsCargoRequired" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.CargoField, new { Name = "CargoField" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyGatewayText, new { Name = "GwyGatewayText" }).ToHtmlString());
+
         #endregion
 
         if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Canceled)
@@ -536,10 +538,12 @@
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
         }
+        ViewContext.Writer.Write("<div class='form-row-group' style='height:100px;width: 100%;min-width:700px !important;'>" + Html.EditorFor(m => m.Record.GwyGatewayText).ToHtmlString() + "</div>");
+
     });
 }).GetHtml()
 
-    @Html.DevExpress().RoundPanel(settings =>
+    @*@Html.DevExpress().RoundPanel(settings =>
 {
     settings.Name = "pnlJgaNotes";
     settings.Width = Unit.Percentage(100);
@@ -552,7 +556,7 @@
     {
         Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) });
     });
-}).GetHtml()
+}).GetHtml()*@
 
     if (actionEnumToCompare == WebUtilities.JobGatewayActions.EMail)
     {

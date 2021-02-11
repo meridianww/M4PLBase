@@ -540,6 +540,7 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
                 parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
                 parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
+                parameters.Add(new Parameter("@JobDeliveryCommentText", job.JobDeliveryCommentText));
                 parameters.AddRange(activeUser.PostDefaultParams(job));
                 createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
 
@@ -1768,6 +1769,7 @@ namespace M4PL.DataAccess.Job
             parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
             parameters.Add(new Parameter("@OldOrderType", existingJob.JobType));
             parameters.Add(new Parameter("@OldShipmentType", existingJob.ShipmentType));
+            parameters.Add(new Parameter("@JobDeliveryCommentText", updatedJob.JobDeliveryCommentText));
             if (updatedJob.IsCancelled.HasValue && !updatedJob.IsCancelled.Value && updatedJob.StatusId == (int)StatusType.Active && existingJob.IsCancelled.HasValue && existingJob.IsCancelled.Value)
             {
                 updatedJob.JobGatewayStatus = isRelatedAttributeUpdate ? "In Transit" : "In Production";

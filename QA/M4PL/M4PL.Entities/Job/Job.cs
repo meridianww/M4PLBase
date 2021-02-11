@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace M4PL.Entities.Job
 {
@@ -935,6 +936,11 @@ namespace M4PL.Entities.Job
 		/// Gets or Sets flag if the current order IsParentOrder
 		/// </summary>
 		public bool IsParentOrder { get; set; }
+		/// <summary>
+		/// JobDeliveryCommentText
+		/// </summary>
+		[DataType(DataType.MultilineText)]
+		public string JobDeliveryCommentText { get; set; }
 
-	}
+    }
 }
