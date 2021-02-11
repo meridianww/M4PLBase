@@ -66,14 +66,15 @@ namespace M4PL.Business.Job
 				if (isPriceChargeReport)
 				{
 					NavSalesOrderPostedInvoiceResponse navSalesOrderPostedInvoiceResponse = CommonCommands.GetCachedNavSalesOrderValues();
-					NavSalesOrderItemResponse navSalesOrderItemResponse = CommonCommands.GetCachedNavSalesOrderItemValues();
+					NavSalesOrderItemResponse navSalesOrderItemResponse = null;
 					foreach (var currentJob in result)
 					{
 						var currentNavSalesOrder = navSalesOrderPostedInvoiceResponse.NavSalesOrder.FirstOrDefault(x => x.M4PL_Job_ID.ToLong() == currentJob.JobId);
 						if (currentNavSalesOrder != null && !string.IsNullOrEmpty(currentNavSalesOrder.No))
 						{
-							var currentSalesLineItem = navSalesOrderItemResponse.NavSalesOrderItem.Where(x => x.Document_No.Equals(currentNavSalesOrder.No, StringComparison.OrdinalIgnoreCase));
-							if (currentSalesLineItem.Any() && currentSalesLineItem.Count() > 0)
+							navSalesOrderItemResponse = CommonCommands.GetCachedNavSalesOrderItemValues(currentNavSalesOrder.No);
+							var currentSalesLineItem = navSalesOrderItemResponse != null ? navSalesOrderItemResponse.NavSalesOrderItem : null;
+							if (currentSalesLineItem != null && currentSalesLineItem.Count() > 0)
 							{
 								foreach (var salesLineItem in currentSalesLineItem)
 								{
@@ -92,14 +93,15 @@ namespace M4PL.Business.Job
 				else
 				{
 					NavPurchaseOrderPostedInvoiceResponse navPurchaseOrderPostedInvoiceResponse = CommonCommands.GetCachedNavPurchaseOrderValues();
-					NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = CommonCommands.GetCachedNavPurchaseOrderItemValues();
+					NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = null;
 					foreach (var currentJob in result)
 					{
 						var currentNavPurchaseOrder = navPurchaseOrderPostedInvoiceResponse.NavPurchaseOrder.FirstOrDefault(x => x.M4PL_Job_ID.ToLong() == currentJob.JobId);
 						if (currentNavPurchaseOrder != null && !string.IsNullOrEmpty(currentNavPurchaseOrder.No))
 						{
-							var currentPurchaseLineItem = navPurchaseOrderItemResponse.NavPurchaseOrderItem.Where(x => x.Document_No.Equals(currentNavPurchaseOrder.No, StringComparison.OrdinalIgnoreCase));
-							if (currentPurchaseLineItem.Any() && currentPurchaseLineItem.Count() > 0)
+							navPurchaseOrderItemResponse = CommonCommands.GetCachedNavPurchaseOrderItemValues(currentNavPurchaseOrder.No);
+							var currentPurchaseLineItem = navPurchaseOrderItemResponse != null ? navPurchaseOrderItemResponse.NavPurchaseOrderItem : null;
+							if (currentPurchaseLineItem != null && currentPurchaseLineItem.Count() > 0)
 							{
 								foreach (var purchaseLineItem in currentPurchaseLineItem)
 								{

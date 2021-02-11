@@ -564,10 +564,19 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navPurchaseOrderResponse;
 		}
 
-		public static NavSalesOrderItemResponse GetNavPostedSalesOrderItemResponse(string username, string password, string serviceUrl)
+		public static NavSalesOrderItemResponse GetNavPostedSalesOrderItemResponse(string username, string password, string serviceUrl, string documentNumber = null)
 		{
 			NavSalesOrderItemResponse navSalesOrderItemResponse = null;
-			string serviceCall = string.Format("{0}/PostedSalesInvoiceLines", serviceUrl);
+			string serviceCall = string.Empty;
+			if (string.IsNullOrEmpty(documentNumber))
+			{
+				serviceCall = string.Format("{0}/PostedSalesInvoiceLines", serviceUrl);
+			}
+			else
+            {
+				serviceCall = string.Format("{0}/PostedSalesInvoiceLines?$filter=Document_No eq '{1}'", serviceUrl, documentNumber);
+			}
+
 			try
 			{
 				navSalesOrderItemResponse = new NavSalesOrderItemResponse();
@@ -599,10 +608,19 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderItemResponse;
 		}
 
-		public static NavPurchaseOrderItemResponse GetNavPostedPurchaseOrderItemResponse(string username, string password, string serviceUrl)
+		public static NavPurchaseOrderItemResponse GetNavPostedPurchaseOrderItemResponse(string username, string password, string serviceUrl, string documentNumber = null)
 		{
 			NavPurchaseOrderItemResponse navPurchaseOrderItemResponse = null;
-			string serviceCall = string.Format("{0}/PostedPurchaseInvoiceLines", serviceUrl);
+			string serviceCall = string.Empty;
+			if (string.IsNullOrEmpty(documentNumber))
+			{
+				serviceCall = string.Format("{0}/PostedPurchaseInvoiceLines", serviceUrl);
+			}
+			else
+			{
+				serviceCall = string.Format("{0}/PostedPurchaseInvoiceLines?$filter=Document_No eq '{1}'", serviceUrl, documentNumber);
+			}
+
 			try
 			{
 				navPurchaseOrderItemResponse = new NavPurchaseOrderItemResponse();
