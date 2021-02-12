@@ -120,13 +120,14 @@
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyLwrDate, new { Name = "GwyLwrDate" }).ToHtmlString());
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.DefaultTime, new { Name = "DefaultTime" }).ToHtmlString());
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsGatewayCalled, new { Name = "IsGatewayCalled" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyGatewayText, new { Name = "GwyGatewayText" }).ToHtmlString());
 
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ClosedByContactExist, new { Name = "ClosedByContactExist" }).ToHtmlString());
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobID).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='col-md-11 col-lg-12 job-gateway-grp no-padding'>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.GwyGatewaySortOrder).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId}).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId }).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayCode).ToHtmlString() + "</div>");
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyGatewayTitle).ToHtmlString() + "</div>");
@@ -135,7 +136,9 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(gwyResponsiblecontactDropDownViewModel) }) + "</div>");
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GwyGatewayDuration, new { AllowNegative = true }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayUnitId, new { GatewayUnitId = Model.Record.GatewayUnitId}).ToHtmlString() + "</div>"); // OnChange = gatewayUnitChangeEvent
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayUnitId, new { GatewayUnitId = Model.Record.GatewayUnitId }).ToHtmlString() + "</div>"); // OnChange = gatewayUnitChangeEvent
+               ViewContext.Writer.Write("<div class='form-row-group' style='height:100px;width: 100%;'>" + Html.EditorFor(m => m.Record.GwyGatewayText).ToHtmlString() + "</div>");
+
 
            });
        }).GetHtml()
@@ -212,7 +215,7 @@
         </div>
     </div>
 
-    @Html.DevExpress().RoundPanel(settings =>
+    @*@Html.DevExpress().RoundPanel(settings =>
 {
     settings.Name = "pnlJobGatewayDescription";
     settings.Width = Unit.Percentage(100);
@@ -253,7 +256,7 @@
 
         }).GetHtml();
     });
-}).GetHtml()
+}).GetHtml()*@
         if (!Model.Record.IsGatewayCalled)
         {
             @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })

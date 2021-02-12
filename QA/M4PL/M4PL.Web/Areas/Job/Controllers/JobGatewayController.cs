@@ -248,6 +248,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyAddtionalComment = jobGatewayView.GwyAddtionalComment;
             jobGatewayViewAction.JobIds = jobGatewayView.JobIds;
             jobGatewayViewAction.SignalRClient = jobGatewayView.SignalRClient;
+            jobGatewayViewAction.GwyGatewayText = jobGatewayView.GwyGatewayText;
+
             if (jobGatewayView.GwyGatewayCode.Contains("XCBL"))
                 jobGatewayViewAction.GwyCompleted = false;
             else

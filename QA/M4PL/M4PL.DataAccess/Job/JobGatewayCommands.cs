@@ -133,6 +133,7 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@isMultiOperation", jobGateway.IsMultiOperation));
                 parameters.Add(new Parameter("@cargoQuantity", jobGateway.CargoQuantity));
                 parameters.Add(new Parameter("@cargoField", jobGateway.CargoField));
+                parameters.Add(new Parameter("@GwyGatewayText", jobGateway.GwyGatewayText));
                 parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
                 result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
                 result.IsFarEyePushRequired = XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
@@ -165,6 +166,7 @@ namespace M4PL.DataAccess.Job
             var parameters = GetParameters(jobGateway, userSysSetting);
             parameters.AddRange(activeUser.PutDefaultParams(jobGateway.Id, jobGateway));
             parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+            parameters.Add(new Parameter("@gwyGatewayText", jobGateway.GwyGatewayText));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGateway);
         }
 
