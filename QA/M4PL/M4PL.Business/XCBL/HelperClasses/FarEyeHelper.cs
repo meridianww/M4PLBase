@@ -12,6 +12,7 @@
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
+using M4PL.Entities.XCBL.FarEye.Order;
 using M4PL.Utilities;
 using System;
 using System.IO;
@@ -34,6 +35,8 @@ namespace M4PL.Business.XCBL.HelperClasses
 			{
 				string farEyeAPIUrl = M4PLBusinessConfiguration.FarEyeAPIUrl;
 				string farEyeAuthKey = M4PLBusinessConfiguration.FarEyeAuthKey;
+				FarEyeCommands farEyeCommand = new FarEyeCommands();
+				FarEyeDeliveryStatus farEyeOrderStatusRequest = null;
 				Task.Factory.StartNew(() =>
 				{
 					try
@@ -68,7 +71,32 @@ namespace M4PL.Business.XCBL.HelperClasses
 								isCanceled = true;
 							}
 
-							SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
+							farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
+							if (farEyeOrderStatusRequest != null && !string.IsNullOrEmpty(farEyeOrderStatusRequest.carrier_status)
+							 && farEyeOrderStatusRequest.carrier_status.Equals("Out For Delivery", StringComparison.OrdinalIgnoreCase))
+							{
+								var farEyeDisPatchedStatusRequest = farEyeOrderStatusRequest.DeepCopy();
+								if (farEyeDisPatchedStatusRequest != null)
+								{
+									farEyeDisPatchedStatusRequest.carrier_status = "Dispatched";
+									farEyeDisPatchedStatusRequest.carrier_status_code = "Dispatched";
+									farEyeDisPatchedStatusRequest.carrier_status_description = "Dispatched";
+									farEyeDisPatchedStatusRequest.carrier_sub_status = "Dispatched";
+									farEyeDisPatchedStatusRequest.carrier_sub_status_description = "Dispatched";
+									if (farEyeDisPatchedStatusRequest.info != null && farEyeDisPatchedStatusRequest.info.LineItems != null && farEyeDisPatchedStatusRequest.info.LineItems.Count > 0)
+									{
+										foreach (var dispatchLine in farEyeDisPatchedStatusRequest.info.LineItems)
+										{
+											dispatchLine.item_install_status = !string.IsNullOrEmpty(dispatchLine.item_install_status) && dispatchLine.item_install_status.Equals("Out For Delivery", StringComparison.OrdinalIgnoreCase)
+												? "Dispatched" : dispatchLine.item_install_status;
+										}
+									}
+
+									SentOrderStatusUpdateToFarEye(farEyeDisPatchedStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
+								}
+							}
+
+							SentOrderStatusUpdateToFarEye(farEyeOrderStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
 
 							Task.Factory.StartNew(() =>
 							{
@@ -77,14 +105,16 @@ namespace M4PL.Business.XCBL.HelperClasses
 									deliveryUpdateModel.RescheduledInstallDate = rescheduleDate;
 									deliveryUpdateModel.RescheduleReason = rescheduleReason;
 									deliveryUpdateModel.InstallStatus = "Reschedule";
-									SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId);
+									farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
+									SentOrderStatusUpdateToFarEye(farEyeOrderStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId);
 								}
 								else if (isCanceled)
 								{
 									deliveryUpdateModel.InstallStatus = "Canceled";
 									deliveryUpdateModel.CancelDate = canceledDate;
 									deliveryUpdateModel.CancelReason = cancelReason;
-									SentOrderStatusUpdateToFarEye(deliveryUpdateModel, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId);
+									farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
+									SentOrderStatusUpdateToFarEye(farEyeOrderStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId);
 								}
 							});
 						}
@@ -97,20 +127,13 @@ namespace M4PL.Business.XCBL.HelperClasses
 			}
 		}
 
-		private static string SentOrderStatusUpdateToFarEye(DeliveryUpdate deliveryUpdate, string farEyeAPIURL, string farEyeAPIKey, ActiveUser activeUser, long jobId, bool isNewOrder = false)
+		private static string SentOrderStatusUpdateToFarEye(FarEyeDeliveryStatus farEyeOrderStatusRequest, string farEyeAPIURL, string farEyeAPIKey, ActiveUser activeUser, long jobId, bool isNewOrder = false)
 		{
-			FarEyeCommands farEyeCommand = new FarEyeCommands();
-			var farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdate, activeUser);
+			
 			if (farEyeOrderStatusRequest != null && isNewOrder)
 			{
 				farEyeOrderStatusRequest.order_number = farEyeOrderStatusRequest.value;
 				farEyeOrderStatusRequest.value = string.Empty;
-				farEyeOrderStatusRequest.fareye_status = "Order Confirmation";
-				farEyeOrderStatusRequest.fareye_status_code = "order_confirmation";
-				farEyeOrderStatusRequest.fareye_status_description = "Order Confirmation";
-				farEyeOrderStatusRequest.fareye_sub_status = "Order Confirmation";
-				farEyeOrderStatusRequest.fareye_sub_status_code = "order_confirmation";
-				farEyeOrderStatusRequest.fareye_sub_status_description = "Order Confirmation";
 				farEyeOrderStatusRequest.carrier_status = "Order Confirmation";
 				farEyeOrderStatusRequest.carrier_status_code = "order_confirmation";
 				farEyeOrderStatusRequest.carrier_status_description = "Order Confirmation";
