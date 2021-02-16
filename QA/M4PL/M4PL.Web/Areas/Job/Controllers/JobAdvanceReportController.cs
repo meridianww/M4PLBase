@@ -621,9 +621,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 strJobAdvanceReportRequestRoute.StartDate = null;
                 strJobAdvanceReportRequestRoute.EndDate = null;
-                route.RecordId = 0;
             }
-
+            route.RecordId = 0;
             route.ParentRecordId = 0;
 
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
