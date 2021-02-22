@@ -9,12 +9,15 @@
 
 #endregion Copyright
 
+using M4PL.Business.XCBL.ElectroluxOrderMapping;
 using M4PL.Business.XCBL.HelperClasses;
 using M4PL.Entities;
+using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
 using M4PL.Entities.XCBL.Electrolux.OrderRequest;
+using M4PL.Entities.XCBL.Electrolux.OrderResponse;
 using M4PL.Entities.XCBL.FarEye;
 using M4PL.Entities.XCBL.FarEye.Order;
 using M4PL.Utilities;
@@ -24,6 +27,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace M4PL.Business.XCBL
 {
@@ -71,15 +75,12 @@ namespace M4PL.Business.XCBL
 
 		public FarEyeOrderResponse OrderProcessingFromFarEye(FarEyeOrderDetails orderDetail)
 		{
-			ElectroluxOrderDetails electroluxOrderRequestModel = GetElectroluxOrderDetails(orderDetail);
-			XCBLCommands xcBLCommands = new XCBLCommands();
-			xcBLCommands.ActiveUser = this.ActiveUser;
-			var orderResult = xcBLCommands.ProcessElectroluxOrderRequest(electroluxOrderRequestModel, true);
+			var orderResult = ProcessElectroluxOrderRequest(orderDetail);
 
 			FarEyeOrderResponse farEyeOrderResponse = new FarEyeOrderResponse();
 			farEyeOrderResponse.status = (orderResult == null || (orderResult != null && orderResult.StatusCode == "Failure")) ? 500 : 200;
 			farEyeOrderResponse.orderNumber = orderDetail.order_number;
-			farEyeOrderResponse.trackingNumber = orderDetail.tracking_number;
+			farEyeOrderResponse.trackingNumber = !string.IsNullOrEmpty(orderDetail.tracking_number) ? orderDetail.tracking_number.Replace("O-", string.Empty) : string.Empty;
 			farEyeOrderResponse.timestamp = TimeUtility.UnixTimeNow();
 			if (orderResult != null && orderResult.StatusCode == "Failure" && !string.IsNullOrEmpty(orderResult.Subject))
 			{
@@ -98,6 +99,210 @@ namespace M4PL.Business.XCBL
 			}
 
 			return farEyeOrderResponse;
+		}
+
+		public OrderResponse ProcessElectroluxOrderRequest(FarEyeOrderDetails farEyeOrderDetails)
+		{
+			string inputString = farEyeOrderDetails == null ? "null" : JsonConvert.SerializeObject(farEyeOrderDetails);
+			M4PL.DataAccess.Logger.ErrorLogger.Log(new Exception(), string.Format("Input Request recieved from FarEye is: {0}", inputString), "ProcessElectroluxOrderRequest", Utilities.Logger.LogType.Informational);
+			if (farEyeOrderDetails == null)
+			{
+				new OrderResponse()
+				{
+					ClientMessageID = string.Empty,
+					SenderMessageID = string.Empty,
+					StatusCode = "Failure",
+					Subject = "Input request for order creation is not parsed properly, please sent a valid input."
+				};
+			}
+
+			Entities.Job.Job processingJobDetail = null;
+			Entities.Job.Job jobDetails = null;
+			Entities.Job.Job existingJobDataInDB = null;
+			OrderResponse response = null;
+			JobCargoMapper cargoMapper = new JobCargoMapper();
+			if (response != null) { return response; }
+			List<SystemReference> systemOptionList = DataAccess.Administration.SystemReferenceCommands.GetSystemRefrenceList();
+			int serviceId = (int)systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id;
+			string locationCode = !string.IsNullOrEmpty(farEyeOrderDetails.destination_name) && farEyeOrderDetails.destination_name.Length >= 4 ? farEyeOrderDetails.destination_name.Substring(farEyeOrderDetails.destination_name.Length - 4) : null;
+			if (string.IsNullOrEmpty(farEyeOrderDetails.tracking_number))
+			{
+				farEyeOrderDetails.tracking_number = string.Format("O-{0}", farEyeOrderDetails.order_number);
+				existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+			}
+			else
+			{
+				string tempOrderNumber = string.Format("O-{0}", farEyeOrderDetails.order_number);
+				existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, tempOrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+				if (existingJobDataInDB != null && existingJobDataInDB.Id > 0)
+				{
+					existingJobDataInDB.JobCustomerSalesOrder = farEyeOrderDetails.tracking_number;
+				}
+				else
+				{
+					existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+				}
+			}
+
+			try
+			{
+				if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_service) && string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase))
+				{
+					if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_action) && string.Equals(farEyeOrderDetails.type_of_action, "Create", StringComparison.OrdinalIgnoreCase) && existingJobDataInDB?.Id > 0)
+					{
+						response = new OrderResponse()
+						{
+							ClientMessageID = string.Empty,
+							SenderMessageID = farEyeOrderDetails.order_number,
+							StatusCode = "Failure",
+							Subject = "There is already a Order present in the Meridian system with the same Order Number."
+						};
+					}
+					else
+					{
+						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
+						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
+						if (processingJobDetail?.Id > 0)
+						{
+							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, "FarEyeOrderRequest");
+							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
+							if (jobCargos != null && jobCargos.Count > 0)
+							{
+								DataAccess.Job.JobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+							}
+
+							if (processingJobDetail.ProgramID.HasValue)
+							{
+								DataAccess.Job.JobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
+							}
+						}
+						else
+						{
+							response = new OrderResponse()
+							{
+								ClientMessageID = string.Empty,
+								SenderMessageID = farEyeOrderDetails.order_number,
+								StatusCode = "Failure",
+								Subject = "Request has been recieved and logged, there is some issue while creating order in the system, please try again."
+							};
+						}
+					}
+				}
+				else if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_service) && (string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.DeliveryNumber.ToString(), StringComparison.OrdinalIgnoreCase) || string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase)))
+				{
+						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, true);
+						bool isJobCancelled = jobDetails?.Id > 0 ? DataAccess.Job.JobCommands.IsJobCancelled(jobDetails.Id) : true;
+					if (jobDetails?.Id <= 0)
+					{
+						response = new OrderResponse()
+						{
+							ClientMessageID = string.Empty,
+							SenderMessageID = farEyeOrderDetails.order_number,
+							StatusCode = "Failure",
+							Subject = "Can not proceed the ASN request to the system as requesed order is not present in the meridian system, please try again."
+						};
+					}
+					else if (jobDetails?.Id > 0 && !isJobCancelled)
+					{
+						jobDetails.JobIsDirtyDestination = true;
+						jobDetails.JobIsDirtyContact = true;
+						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
+						if (processingJobDetail?.Id > 0)
+						{
+							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, "FarEyeOrderUpdateRequest");
+							if (!M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean())
+							{
+								bool isFarEyePushRequired = false;
+								DataAccess.Job.JobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+								if (isFarEyePushRequired)
+								{
+									FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
+								}
+							}
+
+							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
+							if (jobCargos != null && jobCargos.Count > 0)
+							{
+								DataAccess.Job.JobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+							}
+
+							if (processingJobDetail.ProgramID.HasValue)
+							{
+								DataAccess.Job.JobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
+							}
+						}
+					}
+					else if (jobDetails?.Id > 0 && isJobCancelled)
+					{
+						response = new OrderResponse()
+						{
+							ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
+							SenderMessageID = farEyeOrderDetails.order_number,
+							StatusCode = "Failure",
+							Subject = "Can not proceed the ASN request to the system as requesed order is already canceled in the meridian system, please try again."
+						};
+					}
+					else
+					{
+						response = new OrderResponse()
+						{
+							ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
+							SenderMessageID = farEyeOrderDetails.order_number,
+							StatusCode = "Failure",
+							Subject = "Please correct the action type for the request as only action Add is allowed to pass with ASN, please try again."
+						};
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				DataAccess.Logger.ErrorLogger.Log(exp, "Error is happening while processing the electrolux data.", "ProcessElectroluxOrderRequest", Utilities.Logger.LogType.Error);
+				response = new OrderResponse()
+				{
+					ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
+					SenderMessageID = farEyeOrderDetails.order_number,
+					StatusCode = "Failure",
+					Subject = exp.Message
+				};
+			}
+			
+			response = response != null ? response : new OrderResponse()
+			{
+				ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
+				SenderMessageID = farEyeOrderDetails.order_number,
+				StatusCode = "Success",
+				Subject = farEyeOrderDetails.type_of_service
+			};
+
+			return response;
+		}
+
+		private void InsertFarEyeDetailsInTable(long jobId, object orderDetails, string subject)
+		{
+			M4PL.DataAccess.Job.JobEDIXcblCommands.Post(ActiveUser, new JobEDIXcbl()
+			{
+				JobId = jobId,
+				EdtCode = subject,
+				EdtTypeId = M4PLBusinessConfiguration.XCBLEDTType.ToInt(),
+				EdtData = JsonConvert.SerializeObject(orderDetails),
+				TransactionDate = Utilities.TimeUtility.GetPacificDateTime(),
+				EdtTitle = subject
+			});
+		}
+
+		private Entities.Job.Job GetJobModelForElectroluxOrderCreation(FarEyeOrderDetails farEyeOrderDetails, List<SystemReference> systemOptionList, bool isUpdateRequired)
+		{
+			Entities.Job.Job jobCreationData = null;
+			JobAddressMapper addressMapper = new JobAddressMapper();
+			JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
+			long programId = M4PLBusinessConfiguration.ElectroluxProgramId.ToLong();
+			basicDetailMapper.ToJobBasicDetailModelFromFarEyeData(farEyeOrderDetails, ref jobCreationData, programId, isUpdateRequired, systemOptionList);
+			addressMapper.ToJobAddressModelFromDataByFarEyeModel(farEyeOrderDetails, ref jobCreationData);
+
+			return jobCreationData;
 		}
 
 		public OrderEventResponse UpdateOrderEvent(OrderEvent orderEvent)
