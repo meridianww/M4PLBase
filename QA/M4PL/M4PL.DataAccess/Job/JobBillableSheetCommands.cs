@@ -21,6 +21,7 @@ using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -178,6 +179,7 @@ namespace M4PL.DataAccess.Job
 		{
 			List<JobBillableSheet> jobBillableSheetList = null;
 			PrgBillableRate currentPrgBillableRate = null;
+			int? orderedCount = 1;
 			jobBillableSheetList = new List<JobBillableSheet>();
 			if (programBillableRate?.Count > 0)
 			{
@@ -205,9 +207,11 @@ namespace M4PL.DataAccess.Job
 
 				if (cargoDetails?.Count > 0)
 				{
-					foreach (var cargoLineItem in cargoDetails)
+					var distinctPartCode = cargoDetails.Where(y => y.CgoPackagingTypeId == serviceId).Select(x => x.CgoPartNumCode).Distinct();
+					foreach (var currentPartCode in distinctPartCode)
 					{
-						currentPrgBillableRate = cargoLineItem.CgoPackagingTypeId == serviceId ? programBillableRate.Where(x => x.PbrCustomerCode == cargoLineItem.CgoPartNumCode)?.FirstOrDefault() : null;
+						currentPrgBillableRate = programBillableRate.Where(x => x.PbrCustomerCode == currentPartCode)?.FirstOrDefault();
+						orderedCount = cargoDetails.Where(x => x.CgoPartNumCode == currentPartCode)?.Sum(y => y.CgoQtyOrdered);
 						if (currentPrgBillableRate != null)
 						{
 							jobBillableSheetList.Add(new JobBillableSheet()
@@ -223,7 +227,7 @@ namespace M4PL.DataAccess.Job
 								ChargeTypeId = currentPrgBillableRate.RateTypeId,
 								StatusId = currentPrgBillableRate.StatusId,
 								PrcElectronicBilling = currentPrgBillableRate.PbrElectronicBilling,
-								PrcQuantity = cargoLineItem.CgoQtyOrdered,
+								PrcQuantity = orderedCount.ToDecimal(),
 								DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 								EnteredBy = activeUser.UserName
 							});
