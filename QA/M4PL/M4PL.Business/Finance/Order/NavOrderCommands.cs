@@ -180,7 +180,7 @@ namespace M4PL.Business.Finance.Order
 		{
 			var jobResult = DataAccess.Job.JobCommands.Get(activeUser, Convert.ToInt64(jobId));
 			M4PLPurchaseOrderCreationResponse m4PLPurchaseOrderCreationResponse = null;
-			if (jobResult != null && jobResult.JobCompleted && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
+			if (jobResult != null && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
 			{
 				List<long> jobIdList = new List<long>();
 				bool isElectronicInvoice = false;
