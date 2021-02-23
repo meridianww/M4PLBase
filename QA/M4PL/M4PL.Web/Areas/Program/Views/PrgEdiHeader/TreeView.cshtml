@@ -1,0 +1,21 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Kirty Anurag
+    //Date Programmed:                              23/02/2021
+    //Program Name:                                 EDIView
+    //Purpose:                                      Provides tree view for EDI
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using M4PL.Utilities;
+
+@model  M4PL.Web.Models.TreeResult<M4PL.APIClient.ViewModels.Program.PrgEdiHeaderView>
+
+@if ((Model.CurrentSecurity != null) && (Model.CurrentSecurity.SecMenuOptionLevelId.ToEnum<MenuOptionLevelEnum>() >= MenuOptionLevelEnum.Processes) && (Model.CurrentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() >= Permission.EditActuals))
+{
+    @Html.Action(MvcConstants.ActionPopupMenu, Model.TreeRoute.Controller, new { Area = Model.TreeRoute.Area })
+}
+
+@Html.Partial(MvcConstants.ViewTreeViewSplitter, new ViewDataDictionary { { "tvRoute", Model.TreeRoute }, { "tvContentRoute", Model.ContentRoute } })

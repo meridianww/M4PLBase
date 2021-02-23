@@ -141,10 +141,10 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
 		[HttpGet]
 		[Route("EdiTree")]
-		public virtual IQueryable<TreeModel> EdiTree(long? parentId, bool model)
-		{
-			return _prgEdiHeaderCommands.EdiTree(Models.ApiContext.ActiveUser.OrganizationId, parentId, model).AsQueryable();
-		}
+        public virtual IQueryable<TreeModel> EdiTree(long? parentId, bool model)
+        {
+            return _prgEdiHeaderCommands.EdiTree(Models.ApiContext.ActiveUser, parentId, model).AsQueryable();
+        }
         /// <summary>
         /// Fetch Tree level by ProgramId e.g. return 1 for Program, 2 For Project and 3 for Phase
         /// </summary>

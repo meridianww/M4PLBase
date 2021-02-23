@@ -156,15 +156,18 @@ namespace M4PL.DataAccess.Program
 			return parameters;
 		}
 
-		public static IList<TreeModel> GetEdiTree(long id, long? parentId, bool model)
-		{
-			var parameters = new[]
-			{
-				new Parameter("@orgId", id)
-				,new Parameter("@parentId", parentId)
-				,new Parameter("@isCustNode", model)
-			};
-			var result = SqlSerializer.Default.DeserializeMultiRecords<TreeModel>(StoredProceduresConstant.GetProgramTreeViewData, parameters, storedProcedure: true);
+        public static IList<TreeModel> GetEdiTree(ActiveUser activeUser, long? parentId, bool model)
+        {
+            var parameters = new[]
+            {
+               new Parameter("@orgId", activeUser.OrganizationId)
+               ,new Parameter("@parentId", parentId)
+               ,new Parameter("@isCustNode", model)
+               ,new Parameter("@entity", EntitiesAlias.Program.ToString())
+               ,new Parameter("@userId", activeUser.UserId)
+               ,new Parameter("@roleId", activeUser.RoleId)
+           };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<TreeModel>(StoredProceduresConstant.GetProgramTreeViewData, parameters, storedProcedure: true);
 			return result;
 		}
 

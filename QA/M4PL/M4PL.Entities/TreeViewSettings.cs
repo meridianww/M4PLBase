@@ -41,6 +41,7 @@ namespace M4PL.Entities
         {
             ExpandNodes = new List<string>();
         }
+        public ActiveUser ActiveUser { get; set; }
 
         public string Name { get; set; }
         public string Text { get; set; }

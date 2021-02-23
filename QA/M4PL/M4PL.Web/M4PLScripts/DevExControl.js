@@ -220,11 +220,11 @@ DevExCtrl.Ribbon = function () {
                         //window.open("http://localhost:4200" + "/orderdetails;id=" + newRoute.RecordId);
                         window.open(window.location.origin + "/tracking/orderdetails;id=" + newRoute.RecordId);
                     }
-                    //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
-                    //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
-                    //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
-                    //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
-                    //}
+                        //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
+                        //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
+                        //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
+                        //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
+                        //}
                     else
                         //window.open("http://localhost:4200" + "/order");
                         window.open(window.location.origin + "/tracking/order");
@@ -1100,7 +1100,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount(); i++) {
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -2022,11 +2022,15 @@ DevExCtrl.ListBox = function () {
 DevExCtrl.PopupMenu = function () {
     var _onItemClick = function (s, e) {
         var route = JSON.parse(e.item.name);
-        //route.RecordId = cplTreeViewProgram.GetSelectedNode().name.split('_')[1];
-        if (cplTreeViewProgram != null && cplTreeViewProgram != undefined && cplTreeViewProgram.GetSelectedNode() != null && cplTreeViewProgram.GetSelectedNode() != undefined) {
-            route.RecordId = parseInt(cplTreeViewProgram.GetSelectedNode()["name"]);
+        if (route.Controller == "PrgEdiHeader") {
+            if (cplTreeViewPrgEdiHeader != null && cplTreeViewPrgEdiHeader != undefined && cplTreeViewPrgEdiHeader.GetSelectedNode() != null && cplTreeViewPrgEdiHeader.GetSelectedNode() != undefined) {
+                route.RecordId = parseInt(cplTreeViewPrgEdiHeader.GetSelectedNode()["name"]);
+            }
+        } else if (route.Controller == "Program") {
+            if (cplTreeViewProgram != null && cplTreeViewProgram != undefined && cplTreeViewProgram.GetSelectedNode() != null && cplTreeViewProgram.GetSelectedNode() != undefined) {
+                route.RecordId = parseInt(cplTreeViewProgram.GetSelectedNode()["name"]);
+            }
         }
-
         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
     };
 
@@ -2057,7 +2061,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

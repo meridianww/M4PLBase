@@ -22,7 +22,9 @@ using M4PL.APIClient.Common;
 using M4PL.APIClient.Program;
 using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
+using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,19 +34,22 @@ namespace M4PL.Web.Areas.Program.Controllers
 {
     public class PrgEdiHeaderController : BaseController<PrgEdiHeaderView>
     {
+        private TreeResult<PrgEdiHeaderView> _treeResult = new TreeResult<PrgEdiHeaderView>();
         protected IPrgEdiHeaderCommands _prgEdiHeaderCommands;
-
+        protected IProgramCommands _programCommands;
         /// <summary>
         /// Interacts with the interfaces to get the Program's edi header details and renders to the page
         /// Gets the page related information on the cache basis
         /// </summary>
         /// <param name="prgEdiHeaderCommands"></param>
         /// <param name="commonCommands"></param>
-        public PrgEdiHeaderController(IPrgEdiHeaderCommands prgEdiHeaderCommands, ICommonCommands commonCommands)
+        public PrgEdiHeaderController(IPrgEdiHeaderCommands prgEdiHeaderCommands, ICommonCommands commonCommands, IProgramCommands ProgramCommands)
             : base(prgEdiHeaderCommands)
         {
             _commonCommands = commonCommands;
             _prgEdiHeaderCommands = prgEdiHeaderCommands;
+            _programCommands = ProgramCommands;
+            _programCommands.ActiveUser = _commonCommands.ActiveUser;
         }
 
         public override ActionResult AddOrEdit(PrgEdiHeaderView prgEdiHeaderView)
@@ -115,30 +120,30 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #endregion RichEdit
 
-        public PartialViewResult TreeCallback(string nodes = null, string selectedNode = null)
-        {
-            var treeViewBase = new TreeViewBase();
-            treeViewBase.Name = "ProgramTree";
-            treeViewBase.Text = "Program Tree";
-            treeViewBase.EnableCallback = true;
-            treeViewBase.Area = BaseRoute.Area;
-            treeViewBase.Controller = BaseRoute.Controller;
-            treeViewBase.Action = MvcConstants.ActionTreeViewCallback;
+        //public PartialViewResult TreeCallback(string nodes = null, string selectedNode = null)
+        //{
+        //    var treeViewBase = new TreeViewBase();
+        //    treeViewBase.Name = "ProgramTree";
+        //    treeViewBase.Text = "Program Tree";
+        //    treeViewBase.EnableCallback = true;
+        //    treeViewBase.Area = BaseRoute.Area;
+        //    treeViewBase.Controller = BaseRoute.Controller;
+        //    treeViewBase.Action = MvcConstants.ActionTreeViewCallback;
 
-            treeViewBase.AllowSelectNode = true;
-            treeViewBase.EnableAnimation = true;
-            treeViewBase.EnableHottrack = true;
-            treeViewBase.ShowTreeLines = true;
-            treeViewBase.ShowExpandButtons = true;
-            treeViewBase.AllowCheckNodes = true;
-            treeViewBase.CheckNodesRecursive = true;
+        //    treeViewBase.AllowSelectNode = true;
+        //    treeViewBase.EnableAnimation = true;
+        //    treeViewBase.EnableHottrack = true;
+        //    treeViewBase.ShowTreeLines = true;
+        //    treeViewBase.ShowExpandButtons = true;
+        //    treeViewBase.AllowCheckNodes = true;
+        //    treeViewBase.CheckNodesRecursive = true;
 
-            treeViewBase.ContentUrl = new Entities.Support.MvcRoute { Action = MvcConstants.ActionGridView + "?recordId=", Entity = EntitiesAlias.PrgEdiHeader, Area = BaseRoute.Area };
+        //    treeViewBase.ContentUrl = new Entities.Support.MvcRoute { Action = MvcConstants.ActionGridView + "?recordId=", Entity = EntitiesAlias.PrgEdiHeader, Area = BaseRoute.Area };
 
-            treeViewBase.Command = _prgEdiHeaderCommands;
+        //    treeViewBase.Command = _prgEdiHeaderCommands;
 
-            return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
-        }
+        //    return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
+        //}
 
         public override ActionResult FormView(string strRoute)
         {
@@ -163,14 +168,30 @@ namespace M4PL.Web.Areas.Program.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Program;
             var treeSplitterControl = new Models.TreeSplitterControl();
-            treeSplitterControl.TreeRoute = new MvcRoute(route, MvcConstants.ActionTreeListCallBack);
-            treeSplitterControl.ContentRoute = new MvcRoute(route, MvcConstants.ActionDataView);
-            treeSplitterControl.ContentRoute.OwnerCbPanel = string.Concat(treeSplitterControl.ContentRoute.Entity, treeSplitterControl.ContentRoute.Action, "CbPanel");
-            treeSplitterControl.ContentRoute = WebUtilities.EmptyResult(treeSplitterControl.ContentRoute);
-            treeSplitterControl.SecondPaneControlName = string.Concat(route.Entity, WebApplicationConstants.Form);
-            return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
+            //treeSplitterControl.TreeRoute = new MvcRoute(route, MvcConstants.ActionTreeListCallBack);
+            //treeSplitterControl.ContentRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+            //treeSplitterControl.ContentRoute.OwnerCbPanel = string.Concat(treeSplitterControl.ContentRoute.Entity, treeSplitterControl.ContentRoute.Action, "CbPanel");
+            //treeSplitterControl.ContentRoute = WebUtilities.EmptyResult(treeSplitterControl.ContentRoute);
+            //treeSplitterControl.SecondPaneControlName = string.Concat(route.Entity, WebApplicationConstants.Form);
+            //return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
+
+            _treeResult.Operations = _commonCommands.TreeOperations(BaseRoute);
+            _treeResult.ContentRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+            //_treeResult.TreeRoute = new MvcRoute(route, MvcConstants.ActionTreeListCallBack);
+            _treeResult.TreeRoute = new MvcRoute() { Action = "TreePanelCallback", Entity = EntitiesAlias.PrgEdiHeader, Area = EntitiesAlias.Program.ToString() };
+
+            _treeResult.CurrentSecurity = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == _commonCommands.Tables[EntitiesAlias.Program].TblMainModuleId);
+            if (SessionProvider.ActiveUser.IsSysAdmin)
+                _treeResult.CurrentSecurity = new UserSecurity() { SecMenuOptionLevelId = (int)MenuOptionLevelEnum.Systems, SecMenuAccessLevelId = (int)Permission.All };
+            return PartialView(_treeResult);
         }
 
+        public ActionResult TreePanelCallback(string strRoute)
+        {
+            ViewData[MvcConstants.tvRoute] = new MvcRoute() { Action = MvcConstants.ActionTreeViewCallback, Entity = EntitiesAlias.PrgEdiHeader, Area = EntitiesAlias.Program.ToString() };
+
+            return PartialView(MvcConstants.ViewTreeViewPanelCallbackPartial);
+        }
         //public ActionResult TreeListCallBack(string strRoute, string guid)
         //{
         //    //string guid = (Request.Params["guid"] != null) ? Request.Params["guid"].ToString() : "";
@@ -178,7 +199,7 @@ namespace M4PL.Web.Areas.Program.Controllers
         //    var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
         //    return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
         //}
-        public ActionResult TreeListCallBack(string strRoute)
+        public ActionResult TreeCallback(string strRoute)
         {
             var treeListBase = new TreeListBase();
             var entity = new List<TreeListModel>();
@@ -231,11 +252,101 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeListBase.EnableHottrack = true;
             treeListBase.ShowTreeLines = true;
             treeListBase.ShowExpandButtons = true;
+            treeListBase.Name = "cplTreeViewProgram";
+            treeListBase.Text = "Program Tree";
+            treeListBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             treeListBase.ContentRouteCallBack = route;
+            //treeListBase.ContentRouteCallBack.OwnerCbPanel = "cplTreeView";
             treeListBase.ContentRouteCallBack.OwnerCbPanel = string.Concat(route.Entity, MvcConstants.ActionDataView, "CbPanel");
             treeListBase.ContentRouteCallBack.Action = MvcConstants.ActionDataView;
             return PartialView("_TreePartialView", treeListBase);
+        }
+        public JsonResult CopyPPPModel(CopyPPPModel copyPPPModel, bool hasCheckboxesChecked)
+        {
+            if (hasCheckboxesChecked)
+            {
+                var result = _programCommands.CopyPPPModel(copyPPPModel);
+                return Json(new { status = result, isNotValid = false }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.WarningCopyProgram);
+                return Json(new { isNotValid = true, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult PopupMenu()
+        {
+            List<PopupMenuContext> popupMenuItems = new List<PopupMenuContext>();
+            var copyRoute = new MvcRoute(EntitiesAlias.PrgEdiHeader, MvcConstants.ActionCopy, EntitiesAlias.PrgEdiHeader.ToString());
+            copyRoute.IsPopup = true;
+            copyRoute.Area = EntitiesAlias.Program.ToString();
+            popupMenuItems.Add(new PopupMenuContext()
+            {
+                Name = JsonConvert.SerializeObject(copyRoute),
+                Text = "Copy",
+            });
+
+            return PartialView("_PopupMenuPartial", popupMenuItems);
+        }
+        public override ActionResult Copy(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            route.IsPopup = true;
+            CopyPasteModel copyPaste = new CopyPasteModel();
+            copyPaste.SourceRoute = new MvcRoute(route, "ProgramCopySource");
+            copyPaste.DestinationRoute = new MvcRoute(route, "ProgramCopyDestination");
+            return PartialView("_CopyPastePartial", copyPaste);
+        }
+        public ActionResult ProgramCopySource(long parentId, long recordId)
+        {
+            var treeViewBase = new TreeViewBase();
+            treeViewBase.Text = "Program Default Gateways";
+            treeViewBase.EnableCallback = true;
+            treeViewBase.Area = EntitiesAlias.Program.ToString();
+            treeViewBase.Controller = BaseRoute.Controller;
+            treeViewBase.Action = "ProgramCopySource";
+            treeViewBase.ParentId = parentId;
+            treeViewBase.RecordId = recordId;
+            treeViewBase.AllowSelectNode = true;
+            treeViewBase.EnableAnimation = true;
+            treeViewBase.EnableHottrack = true;
+            treeViewBase.ShowTreeLines = true;
+            treeViewBase.ShowExpandButtons = true;
+            treeViewBase.AllowCheckNodes = true;
+            treeViewBase.CheckNodesRecursive = true;
+            treeViewBase.EnableNodeClick = false;
+            treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopySource, Area = EntitiesAlias.Program.ToString() };
+            treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
+            _programCommands.ActiveUser = _prgEdiHeaderCommands.ActiveUser;
+            treeViewBase.Command = _programCommands;
+            return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
+        }
+
+        public ActionResult ProgramCopyDestination(long parentId, long recordId)
+        {
+            var treeViewBase = new TreeViewBase();
+            treeViewBase.Text = "Destination Programs";
+            treeViewBase.EnableCallback = true;
+            treeViewBase.Area = EntitiesAlias.Program.ToString();
+            treeViewBase.Controller = BaseRoute.Controller;
+            treeViewBase.Action = "ProgramCopyDestination";
+            treeViewBase.ParentId = parentId;
+            treeViewBase.RecordId = recordId;
+            treeViewBase.AllowSelectNode = true;
+            treeViewBase.EnableAnimation = true;
+            treeViewBase.EnableHottrack = true;
+            treeViewBase.ShowTreeLines = true;
+            treeViewBase.ShowExpandButtons = true;
+            treeViewBase.AllowCheckNodes = true;
+            treeViewBase.CheckNodesRecursive = true;
+            treeViewBase.EnableNodeClick = false;
+            treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopyDestination, Area = EntitiesAlias.Program.ToString() };
+            treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
+            _programCommands.ActiveUser = _prgEdiHeaderCommands.ActiveUser;
+            treeViewBase.Command = _programCommands;
+            return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
         }
     }
 }
