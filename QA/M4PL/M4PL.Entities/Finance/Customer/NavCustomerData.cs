@@ -26,8 +26,8 @@ namespace M4PL.Entities.Finance.Customer
 	{
 		[JsonProperty("No")]
 		public string Id { get; set; }
-
-		public string PBS_Customer_Code { get; set; }
+        public string Global_Dimension_1_Code { get; set; }
+        public string PBS_Customer_Code { get; set; }
 		public string Name { get; set; }
 		public string Responsibility_Center { get; set; }
 		public string Location_Code { get; set; }

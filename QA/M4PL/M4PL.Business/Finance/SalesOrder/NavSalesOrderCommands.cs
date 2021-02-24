@@ -36,7 +36,7 @@ namespace M4PL.Business.Finance.SalesOrder
 	{
 		public BusinessConfiguration M4PLBusinessConfiguration
 		{
-			get { return CoreCache.GetBusinessConfiguration("EN"); }
+			get { return CoreCache.GetBusinessConfiguration("EN", true); }
 		}
 
 		public int Delete(long id)
