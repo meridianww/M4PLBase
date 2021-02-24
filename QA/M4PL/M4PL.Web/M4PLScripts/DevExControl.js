@@ -966,10 +966,10 @@ DevExCtrl.TreeView = function () {
     }
 
     var _programTreeViewInit = function (s, e) {
-        //_processNodes(s, s.GetRootNode());
-        //if (s.GetSelectedNode() !== null && s.GetSelectedNode() != undefined) {
-        //    s.NodeClick.FireEvent(s, s.CreateNodeClickEventArgs(true, s.GetSelectedNode(), s.GetSelectedNode().GetHtmlElement(), MouseEvent));
-        //}
+        _processNodes(s, s.GetRootNode());
+        if (s.GetSelectedNode() !== null && s.GetSelectedNode() != undefined) {
+            s.NodeClick.FireEvent(s, s.CreateNodeClickEventArgs(true, s.GetSelectedNode(), s.GetSelectedNode().GetHtmlElement(), MouseEvent));
+        }
     }
 
     var _processNodes = function (tree, node) {
@@ -2022,7 +2022,10 @@ DevExCtrl.ListBox = function () {
 DevExCtrl.PopupMenu = function () {
     var _onItemClick = function (s, e) {
         var route = JSON.parse(e.item.name);
-        route.RecordId = cplTreeViewProgram.GetSelectedNode().name.split('_')[1];
+        //route.RecordId = cplTreeViewProgram.GetSelectedNode().name.split('_')[1];
+        if (cplTreeViewProgram != null && cplTreeViewProgram != undefined && cplTreeViewProgram.GetSelectedNode() != null && cplTreeViewProgram.GetSelectedNode() != undefined) {
+            route.RecordId = parseInt(cplTreeViewProgram.GetSelectedNode()["name"]);
+        }
 
         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
     };

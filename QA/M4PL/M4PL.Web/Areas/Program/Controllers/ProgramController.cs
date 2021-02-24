@@ -173,7 +173,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeListBase.ShowExpandButtons = true;
             treeListBase.Name = "cplTreeViewProgram";
             treeListBase.Text = "Program Tree";
-            //treeListBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
+            treeListBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
             //treeListBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
             var route = new MvcRoute { Action = MvcConstants.ActionForm, Entity = EntitiesAlias.Program, Area = BaseRoute.Area };
             route.OwnerCbPanel = "cplTreeView";// + EntitiesAlias.Program;
