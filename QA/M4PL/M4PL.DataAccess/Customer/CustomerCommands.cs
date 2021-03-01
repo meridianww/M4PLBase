@@ -20,6 +20,7 @@
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Customer
@@ -78,10 +79,17 @@ namespace M4PL.DataAccess.Customer
 
 		public static Entities.Customer.Customer Put(ActiveUser activeUser, Entities.Customer.Customer customer)
 		{
-			var parameters = GetParameters(customer);
-			// parameters.Add(new Parameter("@langCode", activeUser.LangCode));
-			parameters.AddRange(activeUser.PutDefaultParams(customer.Id, customer));
-			return Put(activeUser, parameters, StoredProceduresConstant.UpdateCustomer);
+			try
+			{
+				var parameters = GetParameters(customer);
+				// parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+				parameters.AddRange(activeUser.PutDefaultParams(customer.Id, customer));
+				return Put(activeUser, parameters, StoredProceduresConstant.UpdateCustomer);
+			}
+			catch(Exception exp)
+            {
+				return null;
+            }
 		}
 
 		/// <summary>
@@ -163,6 +171,7 @@ namespace M4PL.DataAccess.Customer
 			   new Parameter("@WorkZipPostal", customer.WorkZipPostal),
 			   new Parameter("@WorkStateId", customer.WorkStateId),
 			   new Parameter("@WorkCountryId", customer.WorkCountryId),
+			   new Parameter("@CustDivisonCode", customer.CustDivisonCode)
 			};
 			return parameters;
 		}

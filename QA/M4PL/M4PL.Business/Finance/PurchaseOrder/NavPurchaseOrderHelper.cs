@@ -116,39 +116,12 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			NavPurchaseOrder navPurchaseOrderResponse = null;
 			string navPurchaseOrderJson = string.Empty;
 			string proFlag = null;
-			string dimensionCode = string.Empty;
-			string divisionCode = string.Empty;
 			Newtonsoft.Json.Linq.JObject jsonObject = null;
 			string serviceCall = string.Format("{0}/PurchaseOrder", navAPIUrl);
 			try
 			{
 				NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
 				if (navPurchaseOrderRequest == null) { return null; }
-				var dimensions = CommonCommands.GetSalesOrderDimensionValues(navAPIUserName, navAPIPassword, navAPIUrl);
-				if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
-				{
-					divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()
-						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
-						: string.Empty;
-
-                    dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
-                    ? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
-                    : string.Empty;
-
-                    //if (!string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_County))
-                    //{
-                    //	string dimensionMatchCode = navPurchaseOrderRequest.Ship_from_City.Length >= 3 ? string.Format("{0}{1}", navPurchaseOrderRequest.Ship_from_City.Substring(0, 3), navPurchaseOrderRequest.Ship_from_County) : string.Empty;
-                    //	if (!string.IsNullOrEmpty(dimensionMatchCode))
-                    //	{
-                    //		dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).Any() ?
-                    //		dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).FirstOrDefault().Code : dimensionCode;
-                    //	}
-                    //}
-                }
-
-				dimensionCode = navPurchaseOrderRequest.Ship_from_Code;
-				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
-				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
@@ -189,7 +162,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						purchaseOrderItemRequest.ForEach(x => x.Document_No = navPurchaseOrderResponse.No);
 					}
 
-					UpdateLineItemInformationForPurchaseOrder(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navPurchaseOrderResponse.No, out proFlag, electronicInvoice, purchaseOrderItemRequest);
+					UpdateLineItemInformationForPurchaseOrder(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, navPurchaseOrderRequest.Shortcut_Dimension_2_Code, navPurchaseOrderRequest.Shortcut_Dimension_1_Code, navPurchaseOrderResponse.No, out proFlag, electronicInvoice, purchaseOrderItemRequest);
 				}
 			}
 			catch (Exception exp)
@@ -205,8 +178,6 @@ namespace M4PL.Business.Finance.PurchaseOrder
 		public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
 		{
 			string navPurchaseOrderJson = string.Empty;
-			string dimensionCode = string.Empty;
-			string divisionCode = string.Empty;
 			NavPurchaseOrder navPurchaseOrderResponse = null;
 			string proFlag = null;
 			Newtonsoft.Json.Linq.JObject jsonObject = null;
@@ -216,31 +187,6 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				NavPurchaseOrder existingSalesOrderData = GetPurchaseOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, poNumer);
 				NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
 				if (navPurchaseOrderRequest == null) { return null; }
-				var dimensions = CommonCommands.GetSalesOrderDimensionValues(navAPIUserName, navAPIPassword, navAPIUrl);
-				if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
-				{
-					divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()
-						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
-						: string.Empty;
-
-                    dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
-                ? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navPurchaseOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
-                : string.Empty;
-
-                    //if (!string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_County))
-                    //{
-                    //	string dimensionMatchCode = navPurchaseOrderRequest.Ship_from_City.Length >= 3 ? string.Format("{0}{1}", navPurchaseOrderRequest.Ship_from_City.Substring(0, 3), navPurchaseOrderRequest.Ship_from_County) : string.Empty;
-                    //	if (!string.IsNullOrEmpty(dimensionMatchCode))
-                    //	{
-                    //		dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).Any() ?
-                    //		dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).FirstOrDefault().Code : dimensionCode;
-                    //	}
-                    //}
-                }
-
-				dimensionCode = navPurchaseOrderRequest.Ship_from_Code;
-				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
-				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
@@ -281,7 +227,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						purchaseOrderItemRequest.ForEach(x => x.Document_No = navPurchaseOrderResponse.No);
 					}
 
-					UpdateLineItemInformationForPurchaseOrder(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navPurchaseOrderResponse.No, out proFlag, electronicInvoice, purchaseOrderItemRequest);
+					UpdateLineItemInformationForPurchaseOrder(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, navPurchaseOrderRequest.Shortcut_Dimension_2_Code, navPurchaseOrderRequest.Shortcut_Dimension_1_Code, navPurchaseOrderResponse.No, out proFlag, electronicInvoice, purchaseOrderItemRequest);
 				}
 			}
 			catch (Exception exp)

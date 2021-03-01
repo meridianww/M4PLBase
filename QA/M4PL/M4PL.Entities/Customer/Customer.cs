@@ -282,5 +282,7 @@ namespace M4PL.Entities.Customer
 		/// Gets or Sets WorkCountryId's Name
 		/// </summary>
 		public string WorkCountryIdName { get; set; }
-	}
+
+        public string CustDivisonCode { get; set; }
+    }
 }

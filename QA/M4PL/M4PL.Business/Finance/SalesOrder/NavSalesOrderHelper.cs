@@ -713,30 +713,17 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest, bool isParentOrder = true)
 		{
-			string dimensionCode = string.Empty;
-			string divisionCode = string.Empty;
 			bool allLineItemsUpdated = true;
 			string proFlag = null;
 			NavSalesOrderRequest navSalesOrderRequest = _commands.GetSalesOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.SalesOrder);
 			if (navSalesOrderRequest == null) { return null; }
-			var dimensions = CommonCommands.GetSalesOrderDimensionValues(navAPIUserName, navAPIPassword, navAPIUrl);
-			if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
-			{
-				divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).Any()
-					? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
-					: string.Empty;
-            }
-
-			dimensionCode = navSalesOrderRequest.Ship_from_Code;
-			navSalesOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
-			navSalesOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
 			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
 				_commands.UpdateJobOrderMapping(activeUser, jobIdList, navSalesOrderResponse.No, electronicInvoice, isParentOrder);
 				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
-				UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
+				UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderRequest.Shortcut_Dimension_2_Code, navSalesOrderRequest.Shortcut_Dimension_1_Code, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
 			}
 
 			return navSalesOrderResponse;
@@ -744,37 +731,10 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		public static NavSalesOrder StartOrderUpdationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword, string vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
 		{
-			string dimensionCode = string.Empty;
-			string divisionCode = string.Empty;
 			bool allLineItemsUpdated = true;
 			string proFlag = null;
 			NavSalesOrderRequest navSalesOrderRequest = _commands.GetSalesOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.SalesOrder);
 			if (navSalesOrderRequest == null) { return null; }
-			var dimensions = CommonCommands.GetSalesOrderDimensionValues(navAPIUserName, navAPIPassword, navAPIUrl);
-			if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
-			{
-				//divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).Any()
-				//	? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISION" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
-				//	: string.Empty;
-
-                dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).Any()
-                    ? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Code) && x.Code.Equals(navSalesOrderRequest.Ship_from_Code, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Dimension_Code
-                    : string.Empty;
-
-                //if (!string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_County))
-                //{
-                //string dimensionMatchCode = navSalesOrderRequest.Ship_from_City.Length >= 3 ? string.Format("{0}{1}", navSalesOrderRequest.Ship_from_City.Substring(0, 3), navSalesOrderRequest.Ship_from_County) : string.Empty;
-                //if (!string.IsNullOrEmpty(dimensionMatchCode))
-                //{
-                //	dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).Any() ?
-                //	dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).FirstOrDefault().Code : dimensionCode;
-                //}
-                //}
-            }
-
-			dimensionCode = navSalesOrderRequest.Ship_from_Code;
-			navSalesOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
-			navSalesOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
 			NavSalesOrder navSalesOrderResponse = UpdateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
@@ -782,7 +742,7 @@ namespace M4PL.Business.Finance.SalesOrder
 				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
 				//Task.Run(() =>
 				//{
-				UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
+				UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderRequest.Shortcut_Dimension_2_Code, navSalesOrderRequest.Shortcut_Dimension_1_Code, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
 				//});
 			}
 
