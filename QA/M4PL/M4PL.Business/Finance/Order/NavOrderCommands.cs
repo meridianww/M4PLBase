@@ -40,7 +40,7 @@ namespace M4PL.Business.Finance.Order
 			var jobResult = DataAccess.Job.JobCommands.Get(activeUser, Convert.ToInt64(jobId));
 			M4PLSalesOrderCreationResponse m4PLSalesOrderCreationResponse = null;
 			// Start Sales Order Creation Process Only When JobOriginDateTimeActual and JobDeliveryDateTimeActual are not null.
-			if (jobResult != null && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
+			if (jobResult != null && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue && jobResult.JobQtyActual.HasValue && jobResult.JobQtyActual > 0)
 			{
 				bool isDeliveryChargeRemovalRequired = false;
 				bool isElectronicInvoice = false;
@@ -69,7 +69,7 @@ namespace M4PL.Business.Finance.Order
 				isSalesOrderItemPresent = salesOrderItemRequest?.Any() ?? false;
 				isManualInvoice = !isSalesOrderItemPresent || (isSalesOrderItemPresent && salesOrderItemRequest.Any(x => !x.Electronic_Invoice)) ? true : false;
 				manualSalesOrderItemRequest = isSalesOrderItemPresent && isManualInvoice ? salesOrderItemRequest.Where(x => !x.Electronic_Invoice).ToList() : null;
-				isElectronicInvoice = isSalesOrderItemPresent && salesOrderItemRequest.Any(x => x.Electronic_Invoice) ? true : false;
+				isElectronicInvoice = isSalesOrderItemPresent && salesOrderItemRequest.Any(x => x.Electronic_Invoice);
 				electronicSalesOrderItemRequest = isElectronicInvoice ? salesOrderItemRequest.Where(x => x.Electronic_Invoice).ToList() : null;
 
 				if (!string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber) && (!jobResult.JobElectronicInvoice || !isElectronicInvoice))
@@ -172,6 +172,10 @@ namespace M4PL.Business.Finance.Order
 					DataAccess.Job.JobCommands.UpdateJobPriceCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Active, customerId);
 				}
 			}
+			else
+            {
+				M4PL.DataAccess.Logger.ErrorLogger.Log(new Exception(), string.Format("Generating the Sales Order Failed for JobId:{0}. JobOriginDateTimeActual and JobDeliveryDateTimeActual should be present and JobQtyActual will be greater then 0.", jobId), "GenerateSalesOrderInNav", Utilities.Logger.LogType.Informational);
+			}
 
 			return m4PLSalesOrderCreationResponse;
 		}
@@ -180,7 +184,7 @@ namespace M4PL.Business.Finance.Order
 		{
 			var jobResult = DataAccess.Job.JobCommands.Get(activeUser, Convert.ToInt64(jobId));
 			M4PLPurchaseOrderCreationResponse m4PLPurchaseOrderCreationResponse = null;
-			if (jobResult != null && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue)
+			if (jobResult != null && jobResult.JobOriginDateTimeActual.HasValue && jobResult.JobDeliveryDateTimeActual.HasValue && jobResult.JobQtyActual.HasValue && jobResult.JobQtyActual > 0)
 			{
 				List<long> jobIdList = new List<long>();
 				bool isElectronicInvoice = false;
@@ -312,6 +316,11 @@ namespace M4PL.Business.Finance.Order
 				{
 					DataAccess.Job.JobCommands.UpdateJobCostCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Active, customerId);
 				}
+			}
+			else
+            {
+				M4PL.DataAccess.Logger.ErrorLogger.Log(new Exception(), string.Format("Generating the Purchase Order Failed for JobId:{0}. JobOriginDateTimeActual and JobDeliveryDateTimeActual should be present and JobQtyActual will be greater then 0.", jobId), "GeneratePurchaseOrderInNav", Utilities.Logger.LogType.Informational);
+
 			}
 
 			return m4PLPurchaseOrderCreationResponse;
