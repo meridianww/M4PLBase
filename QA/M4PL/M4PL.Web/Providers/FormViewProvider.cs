@@ -100,7 +100,9 @@ namespace M4PL.Web.Providers
                             "eshShipDescription",
                             "eshShipFromAltContEmail",
                             "eshShipFromCity ",
-                            "eshShipFromContactEmail"
+                            "eshShipFromContactEmail",
+                            "eshServiceMode",
+                            "eshShipFromName"
                         } 
                     },
                 };
