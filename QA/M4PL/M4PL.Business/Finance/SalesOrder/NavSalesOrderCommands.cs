@@ -141,7 +141,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			NavSalesOrderCreationResponse result = null;
 			Entities.Job.Job jobResult = _jobCommands.GetJobByProgram(ActiveUser, jobIdList.FirstOrDefault(), 0);
-			if (jobResult != null && jobResult.JobDeliveryDateTimeActual.HasValue && jobResult.JobOriginDateTimeActual.HasValue)
+			if (jobResult != null && jobResult.JobQtyActual.HasValue && jobResult.JobQtyActual > 0 && jobResult.JobDeliveryDateTimeActual.HasValue && jobResult.JobOriginDateTimeActual.HasValue)
 			{
 				bool isDeliveryChargeRemovalRequired = false;
 				if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
@@ -171,6 +171,10 @@ namespace M4PL.Business.Finance.SalesOrder
 				{
 					_jobCommands.UpdateJobPriceOrCostCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Active, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 				}
+			}
+			else
+			{
+				M4PL.DataAccess.Logger.ErrorLogger.Log(new Exception(), string.Format("Generating the Order Failed for JobId:{0}. JobOriginDateTimeActual and JobDeliveryDateTimeActual should be present and JobQtyActual will be greater then 0.", jobIdList.FirstOrDefault()), "CreateOrderInNAVFromM4PLJob", Utilities.Logger.LogType.Informational);
 			}
 
 			return result;

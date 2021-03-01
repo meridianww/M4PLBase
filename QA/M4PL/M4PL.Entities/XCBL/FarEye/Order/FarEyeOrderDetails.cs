@@ -20,10 +20,10 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 	/// </summary>
 	public class FarEyeOrderDetails
 	{
-		/// <summary>
-		/// Gets or Sets reference id
-		/// </summary>
-		public string reference_id { get; set; }
+        /// <summary>
+        /// Gets or Sets reference id
+        /// </summary>
+        public string reference_id { get; set; }
 		/// <summary>
 		/// Gets or Sets order number
 		/// </summary>
@@ -424,8 +424,8 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// Gets or Sets info
 		/// </summary>
 		public FarEyeOrderDetailsInfo info { get; set; }
-
-	}
+        public bool non_executable { get; set; }
+    }
 	/// <summary>
 	/// Models class for FarEye Order Details Info
 	/// </summary>
@@ -499,10 +499,10 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// Gets or Sets outbound delivery date
 		/// </summary>
 		public string outbound_delivery_date { get; set; }
-		/// <summary>
-		/// Gets or Sets picking date
-		/// </summary>
-		public string picking_date { get; set; }
+        /// <summary>
+        /// Gets or Sets picking date
+        /// </summary>
+        public string picking_date { get; set; }
 		/// <summary>
 		/// Gets or Sets requested delivery date
 		/// </summary>
