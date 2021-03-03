@@ -257,8 +257,9 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeListBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             treeListBase.ContentRouteCallBack = route;
-            //treeListBase.ContentRouteCallBack.OwnerCbPanel = "cplTreeView";
-            treeListBase.ContentRouteCallBack.OwnerCbPanel = string.Concat(route.Entity, MvcConstants.ActionDataView, "CbPanel");
+            treeListBase.ContentRouteCallBack.OwnerCbPanel = "cplTreeView";
+            treeListBase.ContentRouteCallBack.ParentEntity = EntitiesAlias.Program;
+            //treeListBase.ContentRouteCallBack.OwnerCbPanel = string.Concat(route.Entity, MvcConstants.ActionDataView, "CbPanel");
             treeListBase.ContentRouteCallBack.Action = MvcConstants.ActionDataView;
             return PartialView("_TreePartialView", treeListBase);
         }
@@ -317,6 +318,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeViewBase.AllowCheckNodes = true;
             treeViewBase.CheckNodesRecursive = true;
             treeViewBase.EnableNodeClick = false;
+            treeViewBase.IsEDI = true;
             treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopySource, Area = EntitiesAlias.Program.ToString() };
             treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
             _programCommands.ActiveUser = _prgEdiHeaderCommands.ActiveUser;
@@ -341,6 +343,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeViewBase.ShowExpandButtons = true;
             treeViewBase.AllowCheckNodes = true;
             treeViewBase.CheckNodesRecursive = true;
+            treeViewBase.IsEDI = true;
             treeViewBase.EnableNodeClick = false;
             treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopyDestination, Area = EntitiesAlias.Program.ToString() };
             treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;

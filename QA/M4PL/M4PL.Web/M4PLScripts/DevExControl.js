@@ -220,11 +220,11 @@ DevExCtrl.Ribbon = function () {
                         //window.open("http://localhost:4200" + "/orderdetails;id=" + newRoute.RecordId);
                         window.open(window.location.origin + "/tracking/orderdetails;id=" + newRoute.RecordId);
                     }
-                        //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
-                        //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
-                        //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
-                        //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
-                        //}
+                    //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
+                    //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
+                    //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
+                    //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
+                    //}
                     else
                         //window.open("http://localhost:4200" + "/order");
                         window.open(window.location.origin + "/tracking/order");
@@ -1100,7 +1100,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1304,6 +1304,9 @@ DevExCtrl.TreeList = function () {
                         route.IsJobParentEntityUpdated = true;
                     }
                     IsDataView = route.Action === "DataView" ? true : false;
+
+                    if (route.EntityName == 'Program EDI Header')
+                        route.OwnerCbPanel = "PrgEdiHeaderDataViewCbPanel";
                     contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack: true });
                 }
 
@@ -1894,7 +1897,7 @@ DevExCtrl.EdiHeader = function () {
             return;
         }
         try {
-            route.OwnerCbPanel = "PrgEdiHeaderDataViewCbPanel"
+            route.OwnerCbPanel = "PrgEdiHeaderDataViewCbPanel";
             route.ParentRecordId = parseInt(TreeList.GetFocusedNodeKey());
             route.ParentEntity = "Program";
 
@@ -2061,7 +2064,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
+        for (var i = 0; i < xportContol.GetItemCount(); i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

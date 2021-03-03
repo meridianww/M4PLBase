@@ -60,5 +60,16 @@
         };
     }).BindToVirtualData((TreeViewVirtualModeCreateChildrenEventArgs args) =>
     {
-        TreeViewVirtualModeHelper.CreateChildren(args, Model.ContentUrl.Entity, Model.Command, Model.ParentId, Model.RecordId);
+        if (!string.IsNullOrWhiteSpace(args.NodeName))
+        {
+            Model.ParentId = Convert.ToInt64(args.NodeName.Split('_')[1]);
+        }
+        if (Model.IsEDI && Model.RecordId == Model.ParentId && Model.Action == "ProgramCopySource")
+        {
+            //
+        }
+        else
+        {
+            TreeViewVirtualModeHelper.CreateChildren(args, Model.ContentUrl.Entity, Model.Command, Model.ParentId, Model.RecordId);
+        }
     }).GetHtml()
