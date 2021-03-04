@@ -73,7 +73,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				CgoVolumeUnitsId = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? volumeUnitMeters : volumeUnitFeet,
 				CgoWeightUnitsIdName = cargoitem.WeightUnitOfMeasure?.ToUpper() == "KGM" ? "KGs" : "Lbs",
 				CgoVolumeUnitsIdName = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? "Meters" : "Cubic Feet",
-				CgoQtyOrdered = cargoitem.ShipQuantity,
+				CgoQtyOrdered = cargoitem.ShipQuantity <= 0 ? 1 : cargoitem.ShipQuantity,
 				CgoQtyUnitsIdName = "EA",
 				CgoQtyUnitsId = systemOptionList?.
 				Where(x => x.SysLookupCode.Equals("CargoUnit", StringComparison.OrdinalIgnoreCase))?.
@@ -141,7 +141,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				CgoVolumeUnitsId = cargoitem.item_volumn_uom?.ToUpper() == "MTQ" ? volumeUnitMeters : volumeUnitFeet,
 				CgoWeightUnitsIdName = cargoitem.item_weight_uom?.ToUpper() == "KGM" ? "KGs" : "Lbs",
 				CgoVolumeUnitsIdName = cargoitem.item_volumn_uom?.ToUpper() == "MTQ" ? "Meters" : "Cubic Feet",
-				CgoQtyOrdered = cargoitem.item_quantity,
+				CgoQtyOrdered = cargoitem.item_quantity <= 0 ? 1 : cargoitem.item_quantity,
 				CgoQtyUnitsIdName = "EA",
 				CgoQtyUnitsId = systemOptionList?.
 				Where(x => x.SysLookupCode.Equals("CargoUnit", StringComparison.OrdinalIgnoreCase))?.
