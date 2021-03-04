@@ -3,6 +3,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 -- DROP VIEW [dbo].[vwJobMasterData]
 CREATE VIEW [dbo].[vwJobMasterData]
 	WITH SCHEMABINDING
@@ -28,6 +29,7 @@ SELECT Job.ID
 	,Job.JobGatewayStatus
 	,Job.JobMITJobID
 	,Job.JobOrderedDate
+	,Job.JobOriginSiteName
 	,Job.JobOriginDateTimeActual
 	,Job.JobOriginDateTimePlanned
 	,Job.JobDeliverySiteName
@@ -78,13 +80,12 @@ SELECT Job.ID
 	,Job.JobDeliveryResponsibleContactID
 	,Job.JobDeliveryAnalystContactID
 	,Job.JobDriverId
+	,Job.JobSalesInvoiceNumber 
 FROM dbo.JOBDL000Master Job 
 INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = Job.ProgramID AND Prg.StatusId=1
 INNER JOIN dbo.CUST000Master Cust On Cust.Id = Prg.PrgCustID
 Where ISNULL(job.JobSiteCode, '') <> ''
-
 GO
-
 
 SET ARITHABORT ON
 SET CONCAT_NULL_YIELDS_NULL ON
@@ -110,25 +111,92 @@ SET ANSI_WARNINGS ON
 SET NUMERIC_ROUNDABORT OFF
 GO
 
-CREATE NONCLUSTERED INDEX [IX_vwJobMasterData_StatusId_JobGatewayStatus] ON [dbo].[vwJobMasterData]
-(
-	[StatusId] ASC,
-	[JobGatewayStatus] ASC,
-	[JobType] ASC,
-	[JobIsSchedule] ASC
-)
-INCLUDE([JobDeliveryCity],[JobDeliveryDateTimeActual],
-[JobDeliveryDateTimePlanned],[JobDeliveryPostalCode],
-[JobDeliverySitePOCPhone2],[JobDeliveryState],
-[JobDeliveryStreetAddress],[JobDeliveryStreetAddress2],
-[JobMITJobID],[JobOrderedDate],
-[JobOriginDateTimeActual],[JobOriginDateTimePlanned],
-[JobDeliverySiteName],[JobDeliverySitePOC],
-[JobDeliverySitePOCEmail],[JobDeliverySitePOCPhone],
-[JobPartsActual],[JobQtyActual],[JobSellerSiteName],
-[JobServiceMode],[JobTotalCubes],
-[PlantIDCode],[ShipmentType]) 
-WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+CREATE NONCLUSTERED INDEX [IX_vwJobMasterData_StatusId_JobGatewayStatus] ON [dbo].[vwJobMasterData] (
+	[StatusId] ASC
+	,[JobGatewayStatus] ASC
+	,[JobType] ASC
+	,[JobIsSchedule] ASC
+	) INCLUDE (
+	ProgramId
+	,JobSiteCode
+	,JobCarrierContract
+	,JobCustomerPurchaseOrder
+	,JobCustomerSalesOrder
+	,JobDeliveryCity
+	,JobDeliveryDateTimeActual
+	,JobDeliveryDateTimePlanned
+	,JobDeliveryPostalCode
+	,JobDeliverySitePOCPhone2
+	,JobDeliveryState
+	,JobDeliveryStreetAddress
+	,JobDeliveryStreetAddress2
+	,JobMITJobID
+	,JobOrderedDate
+	,JobOriginSiteName
+	,JobOriginDateTimeActual
+	,JobOriginDateTimePlanned
+	,JobDeliverySiteName
+	,JobDeliverySitePOC
+	,JobDeliverySitePOCEmail
+	,JobDeliverySitePOCPhone
+	,JobPartsActual
+	,JobQtyActual
+	,JobSellerSiteName
+	,JobServiceMode
+	,JobTotalCubes
+	,PlantIDCode
+	,ShipmentType
+	,IsCancelled
+	,JobCompleted
+	,JobBOL
+	,JobMileage
+	,JobProductType
+	,JobChannel
+	,DateEntered
+	,JobBOLMaster
+	,JobManifestNo
+	,JobDeliveryStreetAddress3
+	,JobDeliveryStreetAddress4
+	,JobDeliveryDateTimeBaseline
+	,JobSellerSitePOC
+	,JobSellerSitePOCEmail
+	,JobSellerSitePOCPhone
+	,JobSellerStreetAddress
+	,JobSellerStreetAddress2
+	,JobSellerStreetAddress3
+	,JobSellerStreetAddress4
+	,JobSellerCity
+	,JobSellerState
+	,JobSellerPostalCode
+	,JobCubesUnitTypeId
+	,JobTotalWeight
+	,JobWeightUnitTypeId
+	,JobServiceOrder
+	,JobServiceActual
+	,JobDriverAlert
+	,JobQtyOrdered
+	,JobQtyUnitTypeId
+	,JobPartsOrdered
+	,JobShipmentDate
+	,JobDeliveryResponsibleContactID
+	,JobDeliveryAnalystContactID
+	,JobDriverId
+	,JobSalesInvoiceNumber
+	)
+	WITH (
+			PAD_INDEX = OFF
+			,STATISTICS_NORECOMPUTE = OFF
+			,SORT_IN_TEMPDB = OFF
+			,DROP_EXISTING = OFF
+			,ONLINE = OFF
+			,ALLOW_ROW_LOCKS = ON
+			,ALLOW_PAGE_LOCKS = ON
+			,OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF
+			) ON [PRIMARY]
 GO
+
+
+
+
 
 
