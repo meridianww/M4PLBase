@@ -72,12 +72,14 @@ namespace M4PL.DataAccess.Finance
 				uttNavCustomerUTT.Locale = CultureInfo.InvariantCulture;
 				uttNavCustomerUTT.Columns.Add("CustomerId");
 				uttNavCustomerUTT.Columns.Add("ERPId");
+				uttNavCustomerUTT.Columns.Add("DivisonCode");
 
 				foreach (var customer in customerList)
 				{
 					var row = uttNavCustomerUTT.NewRow();
 					row["CustomerId"] = customer.M4PLCustomerId;
 					row["ERPId"] = string.IsNullOrEmpty(customer.ERPId) ? null : customer.ERPId;
+					row["DivisonCode"] = string.IsNullOrEmpty(customer.DivisonCode) ? null : customer.DivisonCode;
 					uttNavCustomerUTT.Rows.Add(row);
 					uttNavCustomerUTT.AcceptChanges();
 				}

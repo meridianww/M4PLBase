@@ -55,6 +55,9 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.CustCode).ToHtmlString());
         ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.CustDivisonCode).ToHtmlString());
+        ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>");
         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.CustTitle).ToHtmlString());
         ViewContext.Writer.Write("</div>");

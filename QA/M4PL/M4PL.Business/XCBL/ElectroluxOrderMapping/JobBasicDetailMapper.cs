@@ -88,6 +88,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
         public Entities.Job.Job ToJobBasicDetailModelFromFarEyeData(FarEyeOrderDetails orderDetails, ref Entities.Job.Job jobDatatoUpdate, long programId, bool isASNRequest, List<SystemReference> systemOptionList)
         {
             if (orderDetails == null) return jobDatatoUpdate;
+            var holdStatus = systemOptionList.FirstOrDefault(x => x.SysLookupCode.Equals("Status", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals("Hold", StringComparison.OrdinalIgnoreCase));
             jobDatatoUpdate = jobDatatoUpdate != null ? jobDatatoUpdate : new Entities.Job.Job();
             DateTime? asnShipDate = null;
             if (orderDetails.info != null)
@@ -111,7 +112,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             jobDatatoUpdate.JobServiceMode = orderDetails.order_number;
             jobDatatoUpdate.JobCustomerSalesOrder = orderDetails.tracking_number;
             jobDatatoUpdate.PlantIDCode = !string.IsNullOrEmpty(orderDetails.origin_code) ? orderDetails.origin_code : jobDatatoUpdate.PlantIDCode;
-            jobDatatoUpdate.StatusId = (int)StatusType.Active;
+            jobDatatoUpdate.StatusId = holdStatus != null && orderDetails.non_executable ?  holdStatus.Id : (int)StatusType.Active;
             jobDatatoUpdate.ProgramID = programId;
             jobDatatoUpdate.JobType = orderDetails.type_of_order.Equals("Reverse", StringComparison.OrdinalIgnoreCase) ? "Return" : "Original";
             jobDatatoUpdate.ShipmentType = "Cross-Dock Shipment";

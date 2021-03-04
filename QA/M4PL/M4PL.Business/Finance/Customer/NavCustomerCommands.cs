@@ -56,20 +56,9 @@ namespace M4PL.Business.Finance.Customer
 			string navCustomerUrl = string.Empty;
 			string navAPIUserName = string.Empty;
 			string navAPIPassword = string.Empty;
-			////CustomerNavConfiguration currentCustomerNavConfiguration = null;
-			////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-			////{
-			////	currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-			////	navCustomerUrl = currentCustomerNavConfiguration.ServiceUrl;
-			////	navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
-			////	navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
-			////}
-			////else
-			////{
-				navCustomerUrl = M4PLBusinessConfiguration.NavAPIUrl;
-				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
-				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
-			////}
+			navCustomerUrl = M4PLBusinessConfiguration.NavAPIUrl;
+			navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+			navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
 
 			IList<Entities.Customer.Customer> m4PLCustomerData = null;
 			Task[] tasks = new Task[2];
@@ -133,7 +122,8 @@ namespace M4PL.Business.Finance.Customer
 							{
 								CustomerCode = navCustomerMatch.PBS_Customer_Code,
 								ERPId = navCustomerMatch.Id,
-								CustomerName = navCustomerMatch.Name
+								CustomerName = navCustomerMatch.Name,
+								DivisonCode = navCustomerMatch.Global_Dimension_1_Code
 							});
 						}
 
@@ -146,7 +136,8 @@ namespace M4PL.Business.Finance.Customer
 							PBS_Customer_Code = customer.CustCode,
 							Name = customer.SysRefName,
 							M4PLCustomerId = customer.Id,
-							ERPId = (navCustomerMatchList != null && navCustomerMatchList.Count() > 0) ? navCustomerMatchList.FirstOrDefault().Id : string.Empty
+							ERPId = (navCustomerMatchList != null && navCustomerMatchList.Count() > 0) ? navCustomerMatchList.FirstOrDefault().Id : string.Empty,
+				        	DivisonCode = (navCustomerMatchList != null && navCustomerMatchList.Count() > 0) ? navCustomerMatchList.FirstOrDefault().Global_Dimension_1_Code : string.Empty
 						});
 					}
 				}

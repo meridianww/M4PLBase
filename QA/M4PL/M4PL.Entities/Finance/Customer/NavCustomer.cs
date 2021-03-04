@@ -60,6 +60,8 @@ namespace M4PL.Entities.Finance.Customer
 		/// Gets or Sets StrRoute
 		/// </summary>
 		public string StrRoute { get; set; }
+
+		public string DivisonCode { get; set; }
 	}
 
 	public class MatchedCustomer
@@ -78,5 +80,7 @@ namespace M4PL.Entities.Finance.Customer
 		/// Gets Or Sets CustomerCode
 		/// </summary>
 		public string CustomerCode { get; set; }
-	}
+
+        public string DivisonCode { get; set; }
+    }
 }

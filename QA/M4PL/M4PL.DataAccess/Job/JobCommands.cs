@@ -1799,6 +1799,8 @@ namespace M4PL.DataAccess.Job
             string googleAPIUrl = string.Empty;
             string originFullAddress = string.Empty;
             string deliveryfullAddress = string.Empty;
+            job.JobOriginCountry = string.IsNullOrEmpty(job.JobOriginCountry) ? "USA" : job.JobOriginCountry;
+            job.JobDeliveryCountry = string.IsNullOrEmpty(job.JobDeliveryCountry) ? "USA" : job.JobDeliveryCountry;
             if (job != null &&
                     !string.IsNullOrEmpty(job.JobOriginStreetAddress) && !string.IsNullOrEmpty(job.JobOriginCity) &&
                     !string.IsNullOrEmpty(job.JobOriginState) && !string.IsNullOrEmpty(job.JobOriginCountry) && !string.IsNullOrEmpty(job.JobOriginPostalCode))
