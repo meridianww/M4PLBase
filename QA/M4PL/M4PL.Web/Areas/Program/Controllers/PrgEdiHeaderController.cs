@@ -168,18 +168,18 @@ namespace M4PL.Web.Areas.Program.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Program;
             var treeSplitterControl = new Models.TreeSplitterControl();
-            //treeSplitterControl.TreeRoute = new MvcRoute(route, MvcConstants.ActionTreeListCallBack);
-            //treeSplitterControl.ContentRoute = new MvcRoute(route, MvcConstants.ActionDataView);
-            //treeSplitterControl.ContentRoute.OwnerCbPanel = string.Concat(treeSplitterControl.ContentRoute.Entity, treeSplitterControl.ContentRoute.Action, "CbPanel");
-            //treeSplitterControl.ContentRoute = WebUtilities.EmptyResult(treeSplitterControl.ContentRoute);
-            //treeSplitterControl.SecondPaneControlName = string.Concat(route.Entity, WebApplicationConstants.Form);
+            treeSplitterControl.TreeRoute = new MvcRoute(route, MvcConstants.ActionTreeListCallBack);
+            treeSplitterControl.ContentRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+            treeSplitterControl.ContentRoute.OwnerCbPanel = string.Concat(treeSplitterControl.ContentRoute.Entity, treeSplitterControl.ContentRoute.Action, "CbPanel");
+            treeSplitterControl.ContentRoute = WebUtilities.EmptyResult(treeSplitterControl.ContentRoute);
+            treeSplitterControl.SecondPaneControlName = string.Concat(route.Entity, WebApplicationConstants.Form);
             //return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
-
+            _treeResult.treeSplitterControl = treeSplitterControl;
             _treeResult.Operations = _commonCommands.TreeOperations(BaseRoute);
             _treeResult.ContentRoute = new MvcRoute(route, MvcConstants.ActionDataView);
             //_treeResult.TreeRoute = new MvcRoute(route, MvcConstants.ActionTreeListCallBack);
             _treeResult.TreeRoute = new MvcRoute() { Action = "TreePanelCallback", Entity = EntitiesAlias.PrgEdiHeader, Area = EntitiesAlias.Program.ToString() };
-
+            _treeResult.TreeRoute.OwnerCbPanel = "AppCbPanel";
             _treeResult.CurrentSecurity = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == _commonCommands.Tables[EntitiesAlias.Program].TblMainModuleId);
             if (SessionProvider.ActiveUser.IsSysAdmin)
                 _treeResult.CurrentSecurity = new UserSecurity() { SecMenuOptionLevelId = (int)MenuOptionLevelEnum.Systems, SecMenuAccessLevelId = (int)Permission.All };
@@ -199,7 +199,7 @@ namespace M4PL.Web.Areas.Program.Controllers
         //    var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
         //    return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
         //}
-        public ActionResult TreeCallback(string strRoute)
+        public ActionResult TreeListCallBack(string strRoute)
         {
             var treeListBase = new TreeListBase();
             var entity = new List<TreeListModel>();
@@ -257,9 +257,9 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeListBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             treeListBase.ContentRouteCallBack = route;
-            treeListBase.ContentRouteCallBack.OwnerCbPanel = "cplTreeView";
+            //treeListBase.ContentRouteCallBack.OwnerCbPanel = "cplTreeView";
             treeListBase.ContentRouteCallBack.ParentEntity = EntitiesAlias.Program;
-            //treeListBase.ContentRouteCallBack.OwnerCbPanel = string.Concat(route.Entity, MvcConstants.ActionDataView, "CbPanel");
+            treeListBase.ContentRouteCallBack.OwnerCbPanel = string.Concat(route.Entity, MvcConstants.ActionDataView, "CbPanel");
             treeListBase.ContentRouteCallBack.Action = MvcConstants.ActionDataView;
             return PartialView("_TreePartialView", treeListBase);
         }

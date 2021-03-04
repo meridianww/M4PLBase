@@ -17,5 +17,11 @@
 {
     @Html.Action(MvcConstants.ActionPopupMenu, Model.TreeRoute.Controller, new { Area = Model.TreeRoute.Area })
 }
-
-@Html.Partial(MvcConstants.ViewTreeViewSplitter, new ViewDataDictionary { { "tvRoute", Model.TreeRoute }, { "tvContentRoute", Model.ContentRoute } })
+@if (Model.ContentRoute != null && Model.ContentRoute.Controller == "PrgEdiHeader")
+{
+    @Html.Partial(MvcConstants.ViewTreeListSplitter, Model.treeSplitterControl)
+}
+else
+{
+    @Html.Partial(MvcConstants.ViewTreeViewSplitter, new ViewDataDictionary { { "tvRoute", Model.TreeRoute }, { "tvContentRoute", Model.ContentRoute } })
+}
