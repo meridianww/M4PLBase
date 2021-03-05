@@ -371,6 +371,18 @@ namespace M4PL.DataAccess.Job
             }
         }
 
+        public static void UpdatePriceCostDeliveryChargeQuantity(long jobId)
+        {
+            try
+            {
+                SqlSerializer.Default.Execute(StoredProceduresConstant.UpdatePriceCostDeliveryChargeQuantity, new Parameter("@jobId", jobId), true);
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Exception is occuring while Update Price Cost Delivery Charge Quantity.", "UpdatePriceCostDeliveryChargeQuantity", Utilities.Logger.LogType.Error);
+            }
+        }
+
         public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job, long customerId, string cancelComment, string cancelReason)
         {
             long insertedGatewayId = 0;

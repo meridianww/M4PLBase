@@ -310,6 +310,11 @@ namespace M4PL.Business.Job
             string NavAPIPassword = string.Empty;
             CustomerNavConfiguration currentCustomerNavConfiguration = null;
             long electroluxCustomerId = M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong();
+            if (jobId.HasValue && customerId != electroluxCustomerId && !string.IsNullOrEmpty(gatewayCode) && (gatewayCode.Equals("Delivered", StringComparison.OrdinalIgnoreCase) || gatewayCode.Equals("DS Delivered", StringComparison.OrdinalIgnoreCase)))
+            {
+                UpdatePriceCostDeliveryChargeQuantity((long)jobId);
+            }
+
             if (CustomerNavConfiguration != null && CustomerNavConfiguration.Count > 0)
             {
                 if (CustomerNavConfiguration.Any(x => x.CustomerId == customerId))
@@ -348,6 +353,11 @@ namespace M4PL.Business.Job
                     navOrderRepo.GeneratePurchaseOrderInNav((long)jobId, NavAPIUrl, NavAPIUserName, NavAPIPassword, electroluxCustomerId, activeUser);
                 });
             }
+        }
+
+        private void UpdatePriceCostDeliveryChargeQuantity(long jobId)
+        {
+            DataAccess.Job.JobCommands.UpdatePriceCostDeliveryChargeQuantity(jobId);
         }
 
         public List<JobActionGateway> GetActionsByJobIds(string jobIds)
