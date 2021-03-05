@@ -516,7 +516,8 @@ namespace M4PL.Web.Areas.Program.Controllers
         {
             if (hasCheckboxesChecked)
             {
-                var result = _programCommands.CopyPPPModel(copyPPPModel, true);
+                copyPPPModel.IsEDI = false;
+                var result = _programCommands.CopyPPPModel(copyPPPModel);
                 return Json(new { status = result, isNotValid = false }, JsonRequestBehavior.AllowGet);
             }
             else
