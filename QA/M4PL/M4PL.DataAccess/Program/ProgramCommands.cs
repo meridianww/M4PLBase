@@ -215,17 +215,16 @@ namespace M4PL.DataAccess.Program
                 ,new Parameter("@PacificDateTime", TimeUtility.GetPacificDateTime())
             };
             var result = false;
+            string procName = string.Empty;
             if (copyPPPModel.IsEDI)
-            {
-                // do for EDI
-            }
+                procName = StoredProceduresConstant.UdtCopyEDIModel;
             else
+                procName = StoredProceduresConstant.UdtCopyPPPModel;
+
+            await Task.Run(() =>
             {
-                await Task.Run(() =>
-                {
-                    result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UdtCopyPPPModel, parameters, storedProcedure: true);
-                });
-            }
+                result = SqlSerializer.Default.ExecuteScalar<bool>(procName, parameters, storedProcedure: true);
+            });
             return result;
         }
 

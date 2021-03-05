@@ -633,7 +633,7 @@ namespace M4PL.DataAccess
 		public const string GetProgramCopyTreeViewData = "dbo.GetProgramCopyTreeViewData";
 		public const string CopyPPPModel = "dbo.CopyPPPModel";
 		public const string UdtCopyPPPModel = "dbo.UdtCopyPPPModel";
-
+		public const string UdtCopyEDIModel = "dbo.UdtCopyEDIModel";
 		/* Program Ref Attribute Default */
 		public const string GetPrgRefAttributeDefaultView = "dbo.GetPrgRefAttributeDefaultView";
 		public const string GetPrgRefAttributeDefault = "dbo.GetPrgRefAttributeDefault";
