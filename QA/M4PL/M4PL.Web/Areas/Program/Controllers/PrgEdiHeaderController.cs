@@ -267,6 +267,7 @@ namespace M4PL.Web.Areas.Program.Controllers
         {
             if (hasCheckboxesChecked)
             {
+                _programCommands.ActiveUser = _prgEdiHeaderCommands.ActiveUser;
                 var result = _programCommands.CopyPPPModel(copyPPPModel);
                 return Json(new { status = result, isNotValid = false }, JsonRequestBehavior.AllowGet);
             }

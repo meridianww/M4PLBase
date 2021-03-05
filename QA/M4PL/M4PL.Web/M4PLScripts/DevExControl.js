@@ -1099,6 +1099,9 @@ DevExCtrl.Button = function () {
         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
+        var isEDI = false;
+        if (sourceTree.globalName == "PrgEdiHeaderProgramCopySource")
+            isEDI = true;
         var destinationCheckedNodes = [];
         for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
@@ -1148,10 +1151,15 @@ DevExCtrl.Button = function () {
                 sourceTreeHasAnyCheckedNode = true;
         }
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        var url = '';
+        if (isEDI)
+            url = "Program/PrgEdiHeader/CopyPPPModel";
+        else
+            url = "Program/Program/CopyPPPModel";
         var hasCheckBoxesChecked = (destinationCheckedNodes.length > 0) && sourceTreeHasAnyCheckedNode === true;
         $.ajax({
             type: "POST",
-            url: "Program/Program/CopyPPPModel",
+            url: url,
             data: { "copyPPPModel": copyPPPModel, "hasCheckboxesChecked": hasCheckBoxesChecked },
             success: function (response) {
                 if (response.isNotValid) {
@@ -1161,27 +1169,38 @@ DevExCtrl.Button = function () {
                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                     DevExCtrl.PopupControl.Close();//Close the Popup
                     //Refresh the Program Tree
-                    if (cplTreeViewPanel !== 'undefined') {
-                        if (cplTreeViewPanel && !cplTreeViewPanel.InCallback()) {
-                            var nodeNames = [];
-                            if (ProgramTree !== "undefined") {
-                                var node = ProgramTree.GetSelectedNode();
-                                if (node !== null) {
-                                    nodeNames.push(node.name);
-                                    if (node.parent !== null) {
-                                        nodeNames.push(node.parent.name);
-                                        if (node.parent.parent !== null) {
-                                            nodeNames.push(node.parent.parent.name);
-                                            if (node.parent.parent.parent !== null) {
-                                                nodeNames.push(node.parent.parent.parent.name);
-                                            }
-                                        }
-                                    }
-                                    cplTreeViewPanel.PerformCallback({ nodes: JSON.stringify(nodeNames), selectedNode: node.name });
-                                }
-                            }
-                        }
-                    }
+                    //var panel = null;
+                    //var tree = null;
+
+                    //if (!isEDI) {
+                    //    panel = cplTreeViewPanel;
+                    //    tree = ProgramTree;
+                    //}
+                    //else {
+                    //    panel = cplTreeViewPrgEdiHeader;
+                    //    tree = cplTreeViewPrgEdiHeader;
+                    //}
+                    //if (panel !== 'undefined') {
+                    //    if (panel && !panel.InCallback()) {
+                    //        var nodeNames = [];
+                    //        if (tree !== "undefined") {
+                    //            var node = tree.GetSelectedNode();
+                    //            if (node !== null) {
+                    //                nodeNames.push(node.name);
+                    //                if (node.parent !== null) {
+                    //                    nodeNames.push(node.parent.name);
+                    //                    if (node.parent.parent !== null) {
+                    //                        nodeNames.push(node.parent.parent.name);
+                    //                        if (node.parent.parent.parent !== null) {
+                    //                            nodeNames.push(node.parent.parent.parent.name);
+                    //                        }
+                    //                    }
+                    //                }
+                    //                panel.PerformCallback({ nodes: JSON.stringify(nodeNames), selectedNode: node.name });
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
             },
             error: function () {
