@@ -16,15 +16,7 @@ BEGIN
 
 	DECLARE @QuantityCount INT
 
-	SELECT @QuantityCount = SUM(CASE 
-	            WHEN ISNULL(CgoQtyOnHold,0) > 0
-				     THEN ISNULL(CgoQtyOnHold,0)
-				WHEN ISNULL(CgoQtyExpected, 0) > 0
-					THEN ISNULL(CgoQtyExpected, 0)
-				WHEN ISNULL(CgoQtyOnHand, 0) > 0
-					THEN ISNULL(CgoQtyOnHand, 0)
-				ELSE ISNULL(CgoQTYOrdered, 0)
-				END)
+	SELECT @QuantityCount = SUM(ISNULL(CgoQtyOnHold,0))
 	FROM dbo.JobDL010Cargo
 	WHERE JobId = @JobId
 		AND StatusId = 1
