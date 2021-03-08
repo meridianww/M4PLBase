@@ -141,6 +141,7 @@
     <Compile Include="JobService\SearchOrder.cs" />
     <Compile Include="Job\AWCDriverScrubReportRawData.cs" />
     <Compile Include="Job\BatchJobDetail.cs" />
+    <Compile Include="Job\BizMoblGatewayRequest.cs" />
     <Compile Include="Job\CancelOrder.cs" />
     <Compile Include="Job\CommonDriverScrubReportRawData.cs" />
     <Compile Include="Job\JobActionGateway.cs" />

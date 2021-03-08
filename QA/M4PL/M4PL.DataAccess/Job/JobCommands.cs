@@ -892,18 +892,19 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static JobGateway InsertJobGateway(ActiveUser activeUser, long jobId, string gatewayStatusCode, DateTime? gatewayACD)
+        public static JobGateway InsertJobGateway(ActiveUser activeUser, BizMoblGatewayRequest bizMoblGatewayRequest, DateTime? gatewayACD)
         {
             JobGateway jobGatewayResult = null;
             var parameters = new List<Parameter>
             {
-               new Parameter("@JobId", jobId),
-               new Parameter("@gatewayStatusCode", gatewayStatusCode),
+               new Parameter("@JobId", bizMoblGatewayRequest.JobId),
+               new Parameter("@gatewayStatusCode", bizMoblGatewayRequest.GatewayStatusCode),
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                new Parameter("@enteredBy", activeUser.UserName),
                new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
-               new Parameter("@gatewayACD", gatewayACD)
+               new Parameter("@gatewayACD", gatewayACD),
+               new Parameter("@deliveredDate", bizMoblGatewayRequest.DeliveredDate)
         };
 
             try
@@ -912,7 +913,7 @@ namespace M4PL.DataAccess.Job
             }
             catch (Exception exp)
             {
-                Logger.ErrorLogger.Log(exp, string.Format("Error occured while inserting the next avaliable gateway, JobId was: {0}", jobId), "Error occured while inserting the next avaliable gateway.", Utilities.Logger.LogType.Error);
+                Logger.ErrorLogger.Log(exp, string.Format("Error occured while inserting the next avaliable gateway, JobId was: {0}", bizMoblGatewayRequest.JobId), "Error occured while inserting the next avaliable gateway.", Utilities.Logger.LogType.Error);
             }
 
             return jobGatewayResult;

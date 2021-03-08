@@ -260,20 +260,20 @@ namespace M4PL.Business.Job
             return _commands.InsertJobComment(ActiveUser, comment);
         }
 
-        public bool InsertJobGateway(long jobId, string gatewayStatusCode, DateTime? gatewayACD = null)
+        public bool InsertJobGateway(BizMoblGatewayRequest bizMoblGatewayRequest, DateTime? gatewayACD = null)
         {
-            var jobGatewayResult = _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode, gatewayACD);
+            var jobGatewayResult = _commands.InsertJobGateway(ActiveUser, bizMoblGatewayRequest, gatewayACD);
             bool result = jobGatewayResult != null && jobGatewayResult.Id > 0;
             if (result)
             {
-                var jobDetails = _commands.GetJobByProgram(ActiveUser, jobId, 0);
+                var jobDetails = _commands.GetJobByProgram(ActiveUser, bizMoblGatewayRequest.JobId, 0);
                 JobGatewayCommands jobGatewayCommands = new JobGatewayCommands();
                 jobGatewayCommands.ActiveUser = ActiveUser;
-                jobGatewayCommands.PushDataToNav(jobId, jobDetails.JobGatewayStatus, jobDetails.JobCompleted, jobDetails.JobTransitionStatusId, ActiveUser, jobDetails.CustomerId, jobGatewayResult.PgdGatewayNavOrderOption);
-                bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(jobId, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+                jobGatewayCommands.PushDataToNav(bizMoblGatewayRequest.JobId, jobDetails.JobGatewayStatus, jobDetails.JobCompleted, jobDetails.JobTransitionStatusId, ActiveUser, jobDetails.CustomerId, jobGatewayResult.PgdGatewayNavOrderOption);
+                bool isFarEyePushRequired = DataAccess.XCBL.XCBLCommands.InsertDeliveryUpdateProcessingLog(bizMoblGatewayRequest.JobId, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
                 if (isFarEyePushRequired)
                 {
-                    FarEyeHelper.PushStatusUpdateToFarEye(jobId, ActiveUser);
+                    FarEyeHelper.PushStatusUpdateToFarEye(bizMoblGatewayRequest.JobId, ActiveUser);
                 }
             }
 

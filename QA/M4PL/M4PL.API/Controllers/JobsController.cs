@@ -351,18 +351,31 @@ namespace M4PL.API.Controllers
         /// <param name="jobId">Job Id for which gateway will be added</param>
         /// <param name="gatewayStatusCode">Gateway Status code used to identify gateway from Job</param>
         /// <returns>Returns true if it is inserted scussessfully else false</returns>
-        [HttpGet]
+        [HttpPost]
         [Route("Gateway/InsertJobGateway"), ResponseType(typeof(bool))]
-        public bool InsertJobGateway(long jobId, string gatewayStatusCode)
+        public StatusModel InsertJobGateway(BizMoblGatewayRequest bizMoblGatewayRequest)
         {
+            if (bizMoblGatewayRequest == null)
+            {
+                return new StatusModel() { Status = "Failure", StatusCode = 412, AdditionalDetail = "Request model can not be null." };
+            }
+            else if (bizMoblGatewayRequest?.JobId <= 0)
+            {
+                return new StatusModel() { Status = "Failure", StatusCode = 412, AdditionalDetail = "Please pass a valid JobId for request." };
+            }
+
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            var gateway= _jobCommands.InsertJobGateway(jobId, gatewayStatusCode);
-            if(gateway)
+            var gateway = _jobCommands.InsertJobGateway(bizMoblGatewayRequest);
+            if (gateway)
             {
                 var context = GlobalHost.ConnectionManager.GetHubContext<JobHub>();
-                context.Clients.All.notifyJobForm(Convert.ToString(jobId), string.Empty);
+                context.Clients.All.notifyJobForm(Convert.ToString(bizMoblGatewayRequest.JobId), string.Empty);
+                return new StatusModel() { AdditionalDetail = string.Empty, StatusCode = 200, Status = "Success" };
             }
-            return gateway;
+            else
+            {
+                return new StatusModel() { Status = "Failure", StatusCode = 500, AdditionalDetail = "There is some issue while processing the request." };
+            }
         }
 
         /// <summary>
