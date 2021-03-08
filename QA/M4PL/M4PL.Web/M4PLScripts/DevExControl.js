@@ -2046,14 +2046,17 @@ DevExCtrl.PopupMenu = function () {
         var route = JSON.parse(e.item.name);
         if (route.Controller == "PrgEdiHeader") {
             if (cplTreeViewPrgEdiHeader != null && cplTreeViewPrgEdiHeader != undefined && cplTreeViewPrgEdiHeader.GetSelectedNode() != null && cplTreeViewPrgEdiHeader.GetSelectedNode() != undefined) {
-                route.RecordId = parseInt(cplTreeViewPrgEdiHeader.GetSelectedNode()["name"]);
+                var arrIds = cplTreeViewPrgEdiHeader.GetSelectedNode()["name"].split('_');
+                route.RecordId = parseInt(arrIds[0] == '' ? 0 : arrIds[0]);
             }
         } else if (route.Controller == "Program") {
             if (cplTreeViewProgram != null && cplTreeViewProgram != undefined && cplTreeViewProgram.GetSelectedNode() != null && cplTreeViewProgram.GetSelectedNode() != undefined) {
-                route.RecordId = parseInt(cplTreeViewProgram.GetSelectedNode()["name"]);
+                var arrIds = cplTreeViewProgram.GetSelectedNode()["name"].split('_');
+                route.RecordId = parseInt(arrIds[0] == '' ? 0 : arrIds[0]);
             }
         }
-        RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+        if (route.RecordId > 0)
+            RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
     };
 
     var _onPopUp = function (s, e) {
