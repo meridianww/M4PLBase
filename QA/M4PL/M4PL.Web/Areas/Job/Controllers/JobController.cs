@@ -224,7 +224,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var JobSecurity = SessionProvider.UserSecurities.FirstOrDefault(t => t.SecMainModuleId == MainModule.Job.ToInt());
             if(!SessionProvider.ActiveUser.IsSysAdmin)
             {
-                string NotesAccess = JobSecurity.UserSubSecurities.FirstOrDefault(t => t.RefTableName == EntitiesAlias.JobCostSheet.ToString()).SubsMenuAccessLevelId.ToEnum<Permission>().ToString();
+                string NotesAccess = JobSecurity.UserSubSecurities.FirstOrDefault(t => t.RefTableName == EntitiesAlias.JobNote.ToString()).SubsMenuAccessLevelId.ToEnum<Permission>().ToString();
                 if(NotesAccess == Permission.ReadOnly.ToString() )
                 _formResult.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryCommentText").ColIsReadOnly = true;
                 else if(NotesAccess == Permission.NoAccess.ToString())
