@@ -1,3 +1,4 @@
+/****** Object:  StoredProcedure [dbo].[UdtCopyEDIModel]    Script Date: 3/8/2021 11:25:22 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -7,7 +8,7 @@ GO
 /* Copyright (2019) Meridian Worldwide Transportation Group
    All Rights Reserved Worldwide */
 -- =============================================        
--- Author:                    Kamal         
+-- Author:                    Kamal        
 -- Create date:               03/05/2021      
 -- Description:               EDI copy
 -- Execution:                 EXEC [dbo].[UdtCopyEDIModel]
@@ -46,14 +47,18 @@ BEGIN
 	FROM [dbo].[fnSplitString](@toCustOrPPIds, ',');
 
 	DECLARE @pId INT = 1
+		,@Count INT
 	DECLARE @targetId BIGINT
 
-	SELECT @targetId = Id
+	SELECT @Count = Count(PrimaryId)
 	FROM @CustPPPIdTables
-	WHERE PrimaryId = @pId;
 
-	WHILE (@targetId IS NOT NULL)
+	WHILE (@Count >= @pId)
 	BEGIN
+		SELECT @targetId = Id
+		FROM @CustPPPIdTables
+		WHERE PrimaryId = @pId;
+
 		IF (ISNULL(@recordId, 0) > 0)
 		BEGIN
 			INSERT INTO [dbo].[PRGRM070EdiHeader] (
@@ -177,9 +182,9 @@ BEGIN
 			FROM PRGRM072EdiConditions
 			WHERE [PecProgramId] = @recordId
 				AND [StatusId] = 1
-
-			--IF (ISNULL(@ediHeaderIdScope, 0) > 0)
-			--BEGIN
+				
+			IF (ISNULL(@ediHeaderIdScope, 0) > 0)
+			BEGIN
 				INSERT INTO [dbo].[PRGRM071EdiMapping] (
 					[PemHeaderID]
 					,[PemEdiTableName]
@@ -198,25 +203,27 @@ BEGIN
 					,[DateChanged]
 					)
 				SELECT @ediHeaderIdScope
-					,[PemEdiTableName]
-					,[PemEdiFieldName]
-					,[PemEdiFieldDataType]
-					,[PemSysTableName]
-					,[PemSysFieldName]
-					,[PemSysFieldDataType]
-					,[StatusId]
-					,[PemInsertUpdate]
-					,[PemDateStart]
-					,[PemDateEnd]
-					,[EnteredBy]
-					,[DateEntered]
-					,[ChangedBy]
-					,[DateChanged]
-				FROM [dbo].[PRGRM071EdiMapping]
-				WHERE PemHeaderID IN(SELECT Id FROM PRGRM070EdiHeader WHERE PehProgramID=@recordId)
-			--END
+					,PDE.[PemEdiTableName]
+					,PDE.[PemEdiFieldName]
+					,PDE.[PemEdiFieldDataType]
+					,PDE.[PemSysTableName]
+					,PDE.[PemSysFieldName]
+					,PDE.[PemSysFieldDataType]
+					,PDE.[StatusId]
+					,PDE.[PemInsertUpdate]
+					,PDE.[PemDateStart]
+					,PDE.[PemDateEnd]
+					,PDE.[EnteredBy]
+					,PDE.[DateEntered]
+					,PDE.[ChangedBy]
+					,PDE.[DateChanged]
+				FROM [dbo].[PRGRM071EdiMapping] PDE
+				INNER JOIN [dbo].[PRGRM070EdiHeader] PEH ON PEH.Id = PDE.PemHeaderID
+				WHERE PEH.[PehProgramID] = @recordId
+					AND PEH.[StatusId] = 1
+			END
 		END
+
+		SET @pId = @pId + 1
 	END
 END
-GO
-
