@@ -43,6 +43,11 @@ BEGIN
 				ELSE 0
 				END = 1
 			AND JobId = @jobId
+
+    UPDATE JOBDL000Master
+	SET JobQtyActual = @QuantityCount
+	Where Id = @jobId
+
 END
 GO
 
