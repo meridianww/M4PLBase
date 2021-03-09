@@ -23,17 +23,20 @@
     foreach (M4PL.Entities.Support.PageInfo pageInfo in Model.PageInfos)
     {
 
-        MVCxTabPage page = pageControlSettings.TabPages.Add(pageInfo.TabPageTitle);
-        page.ClientEnabled = !pageInfo.DisabledTab;
-        var isAccessLevelOrOptionLevel = ((pageInfo.Route.Entity == M4PL.Entities.EntitiesAlias.MenuAccessLevel) || (pageInfo.Route.Entity == M4PL.Entities.EntitiesAlias.MenuOptionLevel));
-        if (!pageInfo.Route.Entity.Equals(Model.CallBackRoute.Entity) && !isAccessLevelOrOptionLevel && page.ClientEnabled)
-            page.ClientEnabled = Model.CallBackRoute.RecordId > 0;
-
-        page.SetContent(() =>
+        if (pageInfo.TabTableName != "JobNote")
         {
-            pageInfo.Route.OwnerCbPanel = string.Concat(pageInfo.UniqueName, "CbPanel");
-            Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(pageInfo.Route) });
-        });
+            MVCxTabPage page = pageControlSettings.TabPages.Add(pageInfo.TabPageTitle);
+            page.ClientEnabled = !pageInfo.DisabledTab;
+            var isAccessLevelOrOptionLevel = ((pageInfo.Route.Entity == M4PL.Entities.EntitiesAlias.MenuAccessLevel) || (pageInfo.Route.Entity == M4PL.Entities.EntitiesAlias.MenuOptionLevel));
+            if (!pageInfo.Route.Entity.Equals(Model.CallBackRoute.Entity) && !isAccessLevelOrOptionLevel && page.ClientEnabled)
+                page.ClientEnabled = Model.CallBackRoute.RecordId > 0;
+
+            page.SetContent(() =>
+            {
+                pageInfo.Route.OwnerCbPanel = string.Concat(pageInfo.UniqueName, "CbPanel");
+                Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(pageInfo.Route) });
+            });
+        }
     }
     pageControlSettings.ActiveTabIndex = Model.SelectedTabIndex;
 }).GetHtml()
