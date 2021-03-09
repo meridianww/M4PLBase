@@ -57,7 +57,7 @@ namespace M4PL.Business.Job
 
         bool InsertJobComment(JobComment comment);
 
-        bool InsertJobGateway(long jobId, string gatewayStatusCode, DateTime? gatewayACD = null);
+        bool InsertJobGateway(BizMoblGatewayRequest bizMoblGatewayRequest, DateTime? gatewayACD = null);
 
         long CreateJobFromEDI204(long eshHeaderID);
 

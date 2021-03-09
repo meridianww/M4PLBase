@@ -120,7 +120,8 @@ namespace M4PL.API.Controllers
             }
 
             _jobCommands.ActiveUser = Models.ApiContext.ActiveUser;
-            var gatewayResult= _jobCommands.InsertJobGateway(jobTrackingUpdateRequest.JobId, jobTrackingUpdateRequest.StatusCode, jobTrackingUpdateRequest.GatewayACD);
+            var gatewayRequest = new BizMoblGatewayRequest() { JobId = jobTrackingUpdateRequest.JobId , GatewayStatusCode = jobTrackingUpdateRequest.StatusCode };
+            var gatewayResult= _jobCommands.InsertJobGateway(gatewayRequest, jobTrackingUpdateRequest.GatewayACD);
             var context = GlobalHost.ConnectionManager.GetHubContext<JobHub>();
             context.Clients.All.notifyJobForm(Convert.ToString(jobTrackingUpdateRequest.JobId), string.Empty);
             return gatewayResult;
