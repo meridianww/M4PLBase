@@ -224,15 +224,31 @@ namespace M4PL.Web.Areas.Job.Controllers
             var JobSecurity = SessionProvider.UserSecurities.FirstOrDefault(t => t.SecMainModuleId == MainModule.Job.ToInt());
             if(!SessionProvider.ActiveUser.IsSysAdmin)
             {
-                string NotesAccess = JobSecurity.UserSubSecurities.FirstOrDefault(t => t.RefTableName == EntitiesAlias.JobNote.ToString()).SubsMenuAccessLevelId.ToEnum<Permission>().ToString();
-                if(NotesAccess == Permission.ReadOnly.ToString() )
-                _formResult.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryCommentText").ColIsReadOnly = true;
-                else if(NotesAccess == Permission.NoAccess.ToString())
+                string notesAccess = string.Empty;
+                if (JobSecurity != null && JobSecurity.UserSubSecurities != null && JobSecurity.UserSubSecurities.Count > 0)
+                {
+                    var notesSecurity = JobSecurity.UserSubSecurities.FirstOrDefault(t => !string.IsNullOrEmpty(t.RefTableName) && t.RefTableName.Equals(EntitiesAlias.JobNote.ToString(), StringComparison.OrdinalIgnoreCase));
+                    if (notesSecurity != null)
+                    {
+                        notesAccess = notesSecurity.SubsMenuAccessLevelId.ToEnum<Permission>().ToString();
+                    }
+                }
+
+                if (string.IsNullOrEmpty(notesAccess))
+                {
+                    _formResult.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryCommentText").ColIsVisible = false;
+                }
+                else if (notesAccess.Equals(Permission.ReadOnly.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    _formResult.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryCommentText").ColIsReadOnly = true;
+                }
+                else if (notesAccess.Equals(Permission.NoAccess.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     _formResult.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "JobDeliveryCommentText").ColIsVisible = false;
 
                 }
             }
+
             return PartialView(MvcConstants.ActionForm, _formResult);
         }
 

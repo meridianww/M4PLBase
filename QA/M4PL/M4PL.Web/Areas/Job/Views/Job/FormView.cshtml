@@ -195,9 +195,10 @@ else
                        ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, "MultilineText").ToHtmlString() + "</div>");
                    else
                        ViewContext.Writer.Write("<div class='form-row-group col-fixed-57'>" + Html.EditorFor(m => m.Record.JobDriverAlert, new { IsReadOnly = true }).ToHtmlString() + "</div>");
-                   if(JobNotesAccess)
-                   ViewContext.Writer.Write("<div class='form-row-group'  style='height:100px;width: 72.5%;'>" + Html.EditorFor(m => m.Record.JobDeliveryCommentText).ToHtmlString() + "</div>");
-
+                   if (JobNotesAccess)
+                   {
+                       ViewContext.Writer.Write("<div class='form-row-group'  style='height:100px;width: 72.5%;'>" + Html.EditorFor(m => m.Record.JobDeliveryCommentText).ToHtmlString() + "</div>");
+                   }
                    ViewContext.Writer.Write("</div>");
                });
            }).GetHtml()
