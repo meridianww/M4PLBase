@@ -900,7 +900,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobId", bizMoblGatewayRequest.JobId),
                new Parameter("@gatewayStatusCode", bizMoblGatewayRequest.GatewayStatusCode),
                new Parameter("@userId", activeUser.UserId),
-               new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
+               new Parameter("@dateEntered", TimeUtility.GetPacificDateTime()),
                new Parameter("@enteredBy", activeUser.UserName),
                new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable),
                new Parameter("@gatewayACD", gatewayACD),
