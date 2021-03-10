@@ -59,5 +59,7 @@ namespace M4PL.Entities.Finance.Customer
 		/// </summary>
 		public string Category { get; set; }
 
+        public int SelectedId { get; set; }
+
     }
 }

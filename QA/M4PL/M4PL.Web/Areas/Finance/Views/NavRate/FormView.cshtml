@@ -8,6 +8,15 @@
     string upControlName = "ucDragAndDrop" + Convert.ToString(Model.Record.Id);
     //uploadCallBackRoute.OwnerCbPanel = "DisplayMessageControl";
     //uploadCallBackRoute.Action = "ImportOrder";
+
+    var selectedId = 0;
+    List<string> importItems = new List<string>();
+    importItems.Add("Price/Cost Code");
+    importItems.Add("Vendor");
+    importItems.Add("Reason Code");
+    importItems.Add("Appointment Code");
+
+    ViewData["ImportItems"] = importItems.Distinct().ToList();
 }
 
 @using (Html.BeginForm())
@@ -25,40 +34,68 @@
         settings.Collapsed = false;
         settings.SetContent(() =>
         {
-            ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
-            ViewContext.Writer.Write("<div id='dragZone'>");
-            ViewContext.Writer.Write("<span class='dragZoneText'>CSV for import Price/Cost Code</span>");
-            ViewContext.Writer.Write("</div>");
-            //ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' onload='M4PLWindow.UploadFileDragDrop.OnImageLoad()' />");
-            ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
-            ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
-            ViewContext.Writer.Write("<span class='dropZoneText'>CSV to import Price/Cost Code</span>");
-            ViewContext.Writer.Write("</div>");
-            ViewContext.Writer.Write("</div>");
-
-            Html.DevExpress().UploadControl(set =>
+            if (ViewData["ImportItems"] != null)
             {
-                set.CallbackRouteValues = new { Area = "Finance", Controller = "NavRate", Action = "ImportOrderPost", RecordId = recordId };
-                set.Name = "ucDragAndDrop";
-                set.UploadMode = UploadControlUploadMode.Auto;
-                set.AutoStartUpload = true;
-                set.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-                set.DialogTriggerID = "externalDropZone";
-                set.AdvancedModeSettings.EnableDragAndDrop = false;
-                set.AdvancedModeSettings.EnableFileList = false;
-                set.AdvancedModeSettings.EnableMultiSelect = false;
-                set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
-                set.AdvancedModeSettings.DropZoneText = "CSV to import Price/Cost Code";
-                //set.ValidationSettings.MaxFileSize = 4194304;
-                set.ValidationSettings.AllowedFileExtensions = new string[] { ".csv" };
-                set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
-                set.BrowseButton.Text = "Select an CSV to import...";
-                set.Styles.DropZone.CssClass = "uploadControlDropZone";
-                //set.ClientSideEvents.DropZoneEnter = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
-                //set.ClientSideEvents.DropZoneLeave = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
-                set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(uploadCallBackRoute) + ");}}";
-                set.ShowProgressPanel = true;
-            }).GetHtml();
+                Html.DevExpress().ComboBox(ComboBoxSettings =>
+                {
+                    ComboBoxSettings.Name = "ImportItemsComboBox";
+                    ComboBoxSettings.CallbackRouteValues = new { Area = "Finance", Controller = "NavRate", Action = "FormView", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) };
+                    ComboBoxSettings.Width = 180;
+                    //settings.SelectedIndex = 0;
+                    //settings.CallbackRouteValues = new { Controller = "JobGateway", Action = "AddMultiAction", Area = "Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
+                    ComboBoxSettings.Properties.CallbackPageSize = 15;
+                    ComboBoxSettings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+                    ComboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged =
+                    string.Format("function(s, e) {{M4PLCommon.Common.ProgramImportComboBox(s, e, '{0}'); }}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute));
+                    //settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
+                }).BindList((List<string>)ViewData["ImportItems"]).GetHtml();
+            }
+            ViewContext.Writer.Write("<br />");
+            if (Model.Record.Id > 0)
+            {
+                ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
+                ViewContext.Writer.Write("<div id='dragZone'>");
+
+                //TODO: dynamic content
+                //ViewContext.Writer.Write("<span class='dragZoneText'>CSV to import Price/Cost Code</span>");
+                ViewContext.Writer.Write("<span class='dragZoneText'></span>");
+
+
+                ViewContext.Writer.Write("</div>");
+                //ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' onload='M4PLWindow.UploadFileDragDrop.OnImageLoad()' />");
+                ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
+                ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
+                ViewContext.Writer.Write("<span class='dropZoneText'>CSV to import Price/Cost Code</span>");
+
+
+                ViewContext.Writer.Write("</div>");
+                ViewContext.Writer.Write("</div>");
+
+                Html.DevExpress().UploadControl(set =>
+                {
+                    set.CallbackRouteValues = new { Area = "Finance", Controller = "NavRate", Action = "ImportOrderPost", RecordId = recordId };
+                    set.Name = "ucDragAndDrop";
+                    set.UploadMode = UploadControlUploadMode.Standard;
+                    set.AutoStartUpload = true;
+                    set.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                    set.DialogTriggerID = "externalDropZone";
+                    set.AdvancedModeSettings.EnableDragAndDrop = false;
+                    set.AdvancedModeSettings.EnableFileList = false;
+                    set.AdvancedModeSettings.EnableMultiSelect = false;
+                    set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                    set.AdvancedModeSettings.DropZoneText = "CSV to import Price/Cost Code";
+                    //set.ValidationSettings.MaxFileSize = 4194304;
+                    set.ValidationSettings.AllowedFileExtensions = new string[] { ".csv" };
+                    set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                    set.BrowseButton.Text = "Select an CSV to import...";
+                    set.Styles.DropZone.CssClass = "uploadControlDropZone";
+                    //set.ClientSideEvents.DropZoneEnter = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
+                    //set.ClientSideEvents.DropZoneLeave = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
+                    set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(uploadCallBackRoute) + ");}}";
+                    set.ShowProgressPanel = true;
+                }).GetHtml();
+            }
+
         });
     }).GetHtml();
 }

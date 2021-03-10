@@ -161,6 +161,10 @@ M4PLCommon.Common = function () {
         }
     }
 
+    var _programImportComboBox = function (s, e, strRoute) {
+        var r = 0;
+    }
+
     return {
         init: init,
         SwitchOrganization: _switchOrganization,
@@ -173,7 +177,8 @@ M4PLCommon.Common = function () {
         HideGlobalLoadingPanel: _hideGlobalLoadingPanel,
         BrowserIndexClosed: _browserIndexClosed,
         ArrayRemove: _arrayRemove,
-        EnableJobGridMultiSelection: _enableJobGridMultiSelection
+        EnableJobGridMultiSelection: _enableJobGridMultiSelection,
+        ProgramImportComboBox: _programImportComboBox
     };
 }();
 
@@ -1044,7 +1049,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1337,7 +1342,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;

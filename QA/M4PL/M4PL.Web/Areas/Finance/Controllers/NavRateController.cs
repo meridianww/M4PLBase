@@ -76,6 +76,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
             _formResult.Record = new NavRateView();
             _formResult.Record.Id = route.RecordId;
             _ProgramId = route.RecordId;
+            _formResult.CallBackRoute = route;
             return PartialView(_formResult);
         }
 
@@ -106,6 +107,8 @@ namespace M4PL.Web.Areas.Finance.Controllers
 
         public static void ucDragAndDrop_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
         {
+
+            
             var displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
             if (e.UploadedFile != null && e.UploadedFile.IsValid && e.UploadedFile.FileBytes != null)
             {
