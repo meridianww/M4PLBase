@@ -1525,7 +1525,10 @@ namespace M4PL.Web
 
             if (route.Entity == EntitiesAlias.NavRate && route.Action == "FormView")
             {
-                allNavMenus[0].Text = "Import Price/Cost Code";
+                var appendText = string.Empty;
+                if (route.Location != null && route.Location.Count == 1)
+                    appendText = route.Location[0];
+                allNavMenus[0].Text = "Import " + appendText;
             }
 
             if (route.Entity == EntitiesAlias.Gateway && route.Action == "FormView")

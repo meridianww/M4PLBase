@@ -36,6 +36,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 
         public static ICommonCommands _commonStaticCommands;
         public static long _ProgramId = 0;
+        public static string _ImportType = string.Empty;
 
         /// <summary>
         /// Interacts with the interfaces to get the Nav Customer details and renders to the page
@@ -77,6 +78,10 @@ namespace M4PL.Web.Areas.Finance.Controllers
             _formResult.Record.Id = route.RecordId;
             _ProgramId = route.RecordId;
             _formResult.CallBackRoute = route;
+            if (route.Location != null && route.Location.Count == 1)
+            {
+                _ImportType = route.Location[0];
+            }
             return PartialView(_formResult);
         }
 
@@ -107,8 +112,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 
         public static void ucDragAndDrop_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
         {
-
-            
+            string test = _ImportType;
             var displayMessage = _commonStaticCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
             if (e.UploadedFile != null && e.UploadedFile.IsValid && e.UploadedFile.FileBytes != null)
             {
@@ -127,7 +131,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
                         if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
                         {
                             List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
-							navRateList.ForEach(x => x.ProgramId = _ProgramId);
+                            navRateList.ForEach(x => x.ProgramId = _ProgramId);
                             StatusModel statusModel = _navRateStaticCommand.GenerateProgramPriceCostCode(navRateList);
                             // To Do: Selected ProgramId need to set with the record.
                             if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))

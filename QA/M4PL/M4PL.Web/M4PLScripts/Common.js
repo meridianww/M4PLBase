@@ -162,7 +162,16 @@ M4PLCommon.Common = function () {
     }
 
     var _programImportComboBox = function (s, e, strRoute) {
-        var r = 0;
+        var route = JSON.parse(strRoute);
+        route.Location = [];
+        route.Location.push(s.GetValue());
+        if (s.GetValue() != null && s.GetValue() != undefined && s.GetValue() != "") {
+            var ctrl = ASPxClientControl.GetControlCollection().GetByName("RecordPopupControl");
+            if (ctrl != null)
+                ctrl.PerformCallback({ strRoute: JSON.stringify(route) });
+        } else {
+            s.dropDownButtonIndex = -1;
+        }
     }
 
     return {
@@ -1049,7 +1058,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1342,7 +1351,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
