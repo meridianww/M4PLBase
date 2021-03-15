@@ -20,6 +20,7 @@
 using M4PL.APIClient.ViewModels.Attachment;
 using M4PL.APIClient.ViewModels.Contact;
 using M4PL.APIClient.ViewModels.Document;
+using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
@@ -28,196 +29,196 @@ using System.Collections.Generic;
 
 namespace M4PL.APIClient.Common
 {
-	public interface ICommonCommands
-	{
-		ActiveUser ActiveUser { get; set; }
+    public interface ICommonCommands
+    {
+        ActiveUser ActiveUser { get; set; }
 
-		IDictionary<EntitiesAlias, TableReference> Tables { get; }
+        IDictionary<EntitiesAlias, TableReference> Tables { get; }
 
-		#region Cached Results
+        #region Cached Results
 
-		/// <summary>
-		/// Route to call Ribbon Menus
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Route to call Ribbon Menus
+        /// </summary>
+        /// <returns></returns>
 
-		IList<RibbonMenu> GetRibbonMenus(bool forceUpdate = false);
+        IList<RibbonMenu> GetRibbonMenus(bool forceUpdate = false);
 
-		/// <summary>
-		/// Route to call RefLanguagesNames
-		/// </summary>
-		/// <param name="lookupId"></param>
-		/// <returns></returns>
-		IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false);
+        /// <summary>
+        /// Route to call RefLanguagesNames
+        /// </summary>
+        /// <param name="lookupId"></param>
+        /// <returns></returns>
+        IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false);
 
-		/// <summary>
-		/// Route to call Operation
-		/// </summary>
-		/// <param name="operationType"></param>
-		/// <returns></returns>
-		Operation GetOperation(OperationTypeEnum operationType, bool forceUpdate = false);
+        /// <summary>
+        /// Route to call Operation
+        /// </summary>
+        /// <param name="operationType"></param>
+        /// <returns></returns>
+        Operation GetOperation(OperationTypeEnum operationType, bool forceUpdate = false);
 
-		/// <summary>
-		/// Route to call Page IClass1.csnformation
-		/// </summary>
-		/// <param name="entity"></param>
-		/// <returns></returns>
-		IList<PageInfo> GetPageInfos(EntitiesAlias entity, bool forceUpdate = false);
+        /// <summary>
+        /// Route to call Page IClass1.csnformation
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        IList<PageInfo> GetPageInfos(EntitiesAlias entity, bool forceUpdate = false);
 
-		/// <summary>
-		/// Route to call Display Message based on Message Code
-		/// </summary>
-		/// <param name="messageType"></param>
-		/// <param name="messageCode"></param>
-		/// <returns></returns>
-		DisplayMessage GetDisplayMessageByCode(MessageTypeEnum messageType, string messageCode, bool forceUpdate = false);
+        /// <summary>
+        /// Route to call Display Message based on Message Code
+        /// </summary>
+        /// <param name="messageType"></param>
+        /// <param name="messageCode"></param>
+        /// <returns></returns>
+        DisplayMessage GetDisplayMessageByCode(MessageTypeEnum messageType, string messageCode, bool forceUpdate = false);
 
-		/// <summary>
-		/// Route to GetCompanyAddress
-		/// </summary>
-		/// <param name="compId"></param>
-		/// <returns>CompanyCorpAddress</returns>
-		CompanyCorpAddress GetCompCorpAddress(int compId);
+        /// <summary>
+        /// Route to GetCompanyAddress
+        /// </summary>
+        /// <param name="compId"></param>
+        /// <returns>CompanyCorpAddress</returns>
+        CompanyCorpAddress GetCompCorpAddress(int compId);
 
-		/// <summary>
-		/// Route to call Page Information
-		/// </summary>
-		/// <param name="entity"></param>
-		/// <returns></returns>
-		object GetMasterTableObject(EntitiesAlias entity, bool forceUpdate = false);
+        /// <summary>
+        /// Route to call Page Information
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        object GetMasterTableObject(EntitiesAlias entity, bool forceUpdate = false);
 
-		IList<ConditionalOperator> GetConditionalOperators(bool forceUpdate = false);
+        IList<ConditionalOperator> GetConditionalOperators(bool forceUpdate = false);
 
-		IList<ViewModels.ColumnSetting> GetColumnSettings(EntitiesAlias entity, bool forceUpdate = false);
-		IList<ViewModels.ColumnSetting> GetGridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false);
-		IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId);
-		IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false);
+        IList<ViewModels.ColumnSetting> GetColumnSettings(EntitiesAlias entity, bool forceUpdate = false);
+        IList<ViewModels.ColumnSetting> GetGridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false);
+        IList<JobReportColumnRelation> GetJobReportColumnRelation(int reportTypeId);
+        IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false);
 
-		void ReloadCacheForAllEntites();
+        void ReloadCacheForAllEntites();
 
-		SysSetting GetSystemSetting(bool forceUpdate = false, ActiveUser activeUser = null);
+        SysSetting GetSystemSetting(bool forceUpdate = false, ActiveUser activeUser = null);
 
-		#endregion Cached Results
+        #endregion Cached Results
 
-		int GetLookupIdByName(string lookupName);
+        int GetLookupIdByName(string lookupName);
 
-		List<EnumKeyValue> GetContactType(string lookupName);
+        List<EnumKeyValue> GetContactType(string lookupName);
 
-		/// <summary>
-		/// Route to call Main Modules Menus
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Route to call Main Modules Menus
+        /// </summary>
+        /// <returns></returns>
 
-		IList<LeftMenu> GetModuleMenus();
+        IList<LeftMenu> GetModuleMenus();
 
-		/// <summary>
-		/// Route to call User Securities
-		/// </summary>
-		/// <returns></returns>
-		IList<UserSecurity> GetUserSecurities(ActiveUser activeUser);
+        /// <summary>
+        /// Route to call User Securities
+        /// </summary>
+        /// <returns></returns>
+        IList<UserSecurity> GetUserSecurities(ActiveUser activeUser);
 
-		/// <summary>
-		/// Route to call Ref role  Securities
-		/// </summary>
-		/// <returns></returns>
-		IList<UserSecurity> GetRefRoleSecurities(ActiveUser activeUser);
+        /// <summary>
+        /// Route to call Ref role  Securities
+        /// </summary>
+        /// <returns></returns>
+        IList<UserSecurity> GetRefRoleSecurities(ActiveUser activeUser);
 
-		UserColumnSettings GetUserColumnSettings(EntitiesAlias entity);
+        UserColumnSettings GetUserColumnSettings(EntitiesAlias entity);
 
-		SysSetting GetUserSysSettings(ActiveUser activeUser = null);
+        SysSetting GetUserSysSettings(ActiveUser activeUser = null);
 
-		bool GetIsFieldUnique(UniqueValidation uniqueValidation);
+        bool GetIsFieldUnique(UniqueValidation uniqueValidation);
 
-		string IsValidJobSiteCode(string jobSiteCode, long programId);
+        string IsValidJobSiteCode(string jobSiteCode, long programId);
 
-		long GetVendorIdforSiteCode(string jobSiteCode, long programId);
+        long GetVendorIdforSiteCode(string jobSiteCode, long programId);
 
-		bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount);
+        bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount);
 
-		UserColumnSettings InsAndUpdChooseColumn(UserColumnSettings userColumnSettings);
+        UserColumnSettings InsAndUpdChooseColumn(UserColumnSettings userColumnSettings);
 
-		int SaveBytes(ByteArray byteArray, byte[] bytes);
+        int SaveBytes(ByteArray byteArray, byte[] bytes);
 
-		IList<LookupReference> GetRefLookup(EntitiesAlias entitiesAlias);
+        IList<LookupReference> GetRefLookup(EntitiesAlias entitiesAlias);
 
-		bool CheckRecordUsed(string allRecordIds, EntitiesAlias entity);
+        bool CheckRecordUsed(string allRecordIds, EntitiesAlias entity);
 
-		object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo, ActiveUser activeUser = null);
+        object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo, ActiveUser activeUser = null);
 
-		object GetProgramDescendants(DropDownInfo dropDownDataInfo);
+        object GetProgramDescendants(DropDownInfo dropDownDataInfo);
 
-		ByteArray GetByteArrayByIdAndEntity(ByteArray byteArray);
+        ByteArray GetByteArrayByIdAndEntity(ByteArray byteArray);
 
-		ContactView GetContactById(long recordId);
+        ContactView GetContactById(long recordId);
 
-		ContactView GetContactAddressByCompany(long companyId);
+        ContactView GetContactAddressByCompany(long companyId);
 
-		ContactView ContactCardAddOrEdit(ContactView contactView, string routeSuffix = "");
+        ContactView ContactCardAddOrEdit(ContactView contactView, string routeSuffix = "");
 
-		int GetLastItemNumber(PagedDataInfo pagedDataInfo, string fieldName);
+        int GetLastItemNumber(PagedDataInfo pagedDataInfo, string fieldName);
 
-		bool ResetItemNumber(PagedDataInfo pagedDataInfo, string fieldName, string whereCondition, List<long> ids);
+        bool ResetItemNumber(PagedDataInfo pagedDataInfo, string fieldName, string whereCondition, List<long> ids);
 
-		int GetPageNumber(EntitiesAlias entityAlias);
+        int GetPageNumber(EntitiesAlias entityAlias);
 
-		IList<TreeListModel> GetCustPPPTree(long? custId, long? parentId);
+        IList<TreeListModel> GetCustPPPTree(long? custId, long? parentId);
 
         IList<TreeListModel> GetCustomerPPPTree();
 
 
         ErrorLog GetOrInsErrorLog(ErrorLog errorLog);
 
-		IList<AppDashboard> GetUserDashboards(int mainModuleId);
+        IList<AppDashboard> GetUserDashboards(int mainModuleId);
 
-		string GetNextBreakDownStrusture(bool ribbon);
+        string GetNextBreakDownStrusture(bool ribbon);
 
-		bool GetIsJobCompleted(long jobid);
+        bool GetIsJobCompleted(long jobid);
 
-		IList<Role> GetOrganizationRoleDetails();
+        IList<Role> GetOrganizationRoleDetails();
 
-		void UpdateUserSystemSettings(SysSetting userSystemSettings, ActiveUser activeUser = null);
+        void UpdateUserSystemSettings(SysSetting userSystemSettings, ActiveUser activeUser = null);
 
-		IList<PreferredLocation> AddorEditPreferedLocations(string locations, int ContTypeId);
+        IList<PreferredLocation> AddorEditPreferedLocations(string locations, int ContTypeId);
 
-		IList<PreferredLocation> GetPreferedLocations(ActiveUser activeUser);
+        IList<PreferredLocation> GetPreferedLocations(ActiveUser activeUser);
 
-		int GetUserContactType(ActiveUser activeUser = null);
+        int GetUserContactType(ActiveUser activeUser = null);
 
-		IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo);
+        IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo);
 
-		dynamic GetDeleteInfoRecords(PagedDataInfo pagedDataInfo);
+        dynamic GetDeleteInfoRecords(PagedDataInfo pagedDataInfo);
 
-		void RemoveDeleteInfoRecords(PagedDataInfo pagedDataInfo);
+        void RemoveDeleteInfoRecords(PagedDataInfo pagedDataInfo);
 
-		UserSecurity GetDashboardAccess(string tableName, long dashboardId);
+        UserSecurity GetDashboardAccess(string tableName, long dashboardId);
 
-		CommonIds GetMaxMinRecordsByEntity(string entity, long recordID, long ID);
+        CommonIds GetMaxMinRecordsByEntity(string entity, long recordID, long ID);
 
-		bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
+        bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
 
-		bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
+        bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
 
-		JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
+        JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
 
-		DocumentDataView DownloadAll(string jobId);
+        DocumentDataView DownloadAll(string jobId);
 
-		DocumentDataView DownloadBOL(string jobId);
+        DocumentDataView DownloadBOL(string jobId);
 
-		DocumentDataView DownloadTracking(string jobId);
+        DocumentDataView DownloadTracking(string jobId);
 
-		DocumentDataView GetPriceCodeReportByJobId(string jobId);
+        DocumentDataView GetPriceCodeReportByJobId(string jobId);
 
-		DocumentDataView GetCostCodeReportByJobId(string jobId);
+        DocumentDataView GetCostCodeReportByJobId(string jobId);
 
-		DocumentDataView GetHistoryReportDocumentByJobId(string jobId);
+        DocumentDataView GetHistoryReportDocumentByJobId(string jobId);
 
-		DocumentDataView DownloadPOD(string jobId);
+        DocumentDataView DownloadPOD(string jobId);
 
-		DocumentStatusView GetDocumentStatusByJobId(string jobId);
+        DocumentStatusView GetDocumentStatusByJobId(string jobId);
 
-		DocumentStatusView IsPriceCodeDataPresentForJob(string jobId);
+        DocumentStatusView IsPriceCodeDataPresentForJob(string jobId);
 
-		DocumentStatusView IsCostCodeDataPresentForJob(string jobId);
+        DocumentStatusView IsCostCodeDataPresentForJob(string jobId);
 
         DocumentStatusView IsPriceCodeDataPresentForJobInNAV(string jobId);
 
@@ -225,7 +226,9 @@ namespace M4PL.APIClient.Common
 
         DocumentStatusView IsHistoryPresentForJob(string jobId);
 
-		IList<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null);
-		IList<JobGatewayDetails> GetJobGateway(long parentRecordId, string jobIds = null, bool IsMultiJob = false);
-	}
+        IList<JobAction> GetJobAction(long jobId, string entity = null, bool? isScheduleAciton = null);
+        IList<JobGatewayDetails> GetJobGateway(long parentRecordId, string jobIds = null, bool IsMultiJob = false);
+        StatusModel GenerateReasoneCode(List<PrgShipStatusReasonCodeView> reasonCodeList);
+        StatusModel GenerateAppointmentCode(List<PrgShipApptmtReasonCodeView> reasonCodeList);
+    }
 }

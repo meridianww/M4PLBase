@@ -26,6 +26,7 @@ using M4PL.APIClient.Finance;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Finance;
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
@@ -1525,7 +1526,10 @@ namespace M4PL.Web
 
             if (route.Entity == EntitiesAlias.NavRate && route.Action == "FormView")
             {
-                allNavMenus[0].Text = "Import Price/Cost Code";
+                var appendText = string.Empty;
+                if (route.Location != null && route.Location.Count == 1)
+                    appendText = route.Location[0];
+                allNavMenus[0].Text = "Import " + appendText;
             }
 
             if (route.Entity == EntitiesAlias.Gateway && route.Action == "FormView")
@@ -3736,6 +3740,58 @@ namespace M4PL.Web
             }
 
             return rawData;
+        }
+
+        public static DisplayMessage ImportCSVToProgram(DisplayMessage displayMessage, byte[] uploadedFileData,
+            string type, string uploadColumns, long _ProgramId, INavRateCommands _navRateStaticCommand,
+            ICommonCommands _commonStaticCommands)
+        {
+            if (string.IsNullOrEmpty(uploadColumns))
+                displayMessage.Description = "CSV column list config key is missing, please add the config key in web.config.";
+
+            string[] arrayUploadColumns = uploadColumns.Split(new string[] { "," }, StringSplitOptions.None);
+            using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArray(uploadedFileData))
+            {
+                if (csvDataTable != null && csvDataTable.Rows.Count > 0)
+                {
+                    string[] columnNames = (from dc in csvDataTable.Columns.Cast<DataColumn>()
+                                            select dc.ColumnName).ToArray();
+                    if (!arrayUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
+                    {
+                        StatusModel statusModel = new StatusModel();
+                        if (type == "Price/Cost Code")
+                        {
+                            List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
+                            navRateList.ForEach(x => x.ProgramId = _ProgramId);
+                            statusModel = _navRateStaticCommand.GenerateProgramPriceCostCode(navRateList);
+                        }
+                        else if (type == "Reason Code")
+                        {
+                            List<PrgShipStatusReasonCodeView> reasonCodeList = Extension.ConvertDataTableToModel<PrgShipStatusReasonCodeView>(csvDataTable);
+                            reasonCodeList.ForEach(x => x.PscProgramID = _ProgramId);
+                            statusModel = _commonStaticCommands.GenerateReasoneCode(reasonCodeList);
+                        }
+                        else if (type == "Appointment Code")
+                        {
+                            List<PrgShipApptmtReasonCodeView> appointmentCodeList = Extension.ConvertDataTableToModel<PrgShipApptmtReasonCodeView>(csvDataTable);
+                            appointmentCodeList.ForEach(x => x.PacProgramID = _ProgramId);
+                            statusModel = _commonStaticCommands.GenerateAppointmentCode(appointmentCodeList);
+                        }
+
+                        // To Do: Selected ProgramId need to set with the record.
+                        if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
+                            displayMessage.Description = statusModel.AdditionalDetail;
+                        else
+                            displayMessage.Description = "Records has been uploaded from the selected CSV file.";
+                        //e.IsValid = true;
+                    }
+                    else
+                        displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
+                }
+                else
+                    displayMessage.Description = "There is no record present in the selected file, please select a valid CSV.";
+            }
+            return displayMessage;
         }
     }
 }

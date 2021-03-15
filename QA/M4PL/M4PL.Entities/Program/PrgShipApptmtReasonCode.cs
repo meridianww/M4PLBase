@@ -160,5 +160,21 @@ namespace M4PL.Entities.Program
 		/// </value>
 
 		public string PacApptUser05Code { get; set; }
-	}
+
+        /// <summary>
+		/// Gets or sets the description.
+		/// </summary>
+		/// <value>
+		/// The PacApptDescription.
+		/// </value>
+        public string Description { get; set; }
+        
+        /// <summary>
+		/// Gets or sets the comment.
+		/// </summary>
+		/// <value>
+		/// The PacApptComment.
+		/// </value>
+        public string Comment { get; set; }
+    }
 }

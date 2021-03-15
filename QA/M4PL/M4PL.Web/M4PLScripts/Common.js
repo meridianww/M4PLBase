@@ -161,6 +161,19 @@ M4PLCommon.Common = function () {
         }
     }
 
+    var _programImportComboBox = function (s, e, strRoute) {
+        var route = JSON.parse(strRoute);
+        route.Location = [];
+        route.Location.push(s.GetValue());
+        if (s.GetValue() != null && s.GetValue() != undefined && s.GetValue() != "") {
+            var ctrl = ASPxClientControl.GetControlCollection().GetByName("RecordPopupControl");
+            if (ctrl != null)
+                ctrl.PerformCallback({ strRoute: JSON.stringify(route) });
+        } else {
+            s.dropDownButtonIndex = -1;
+        }
+    }
+
     return {
         init: init,
         SwitchOrganization: _switchOrganization,
@@ -173,7 +186,8 @@ M4PLCommon.Common = function () {
         HideGlobalLoadingPanel: _hideGlobalLoadingPanel,
         BrowserIndexClosed: _browserIndexClosed,
         ArrayRemove: _arrayRemove,
-        EnableJobGridMultiSelection: _enableJobGridMultiSelection
+        EnableJobGridMultiSelection: _enableJobGridMultiSelection,
+        ProgramImportComboBox: _programImportComboBox
     };
 }();
 

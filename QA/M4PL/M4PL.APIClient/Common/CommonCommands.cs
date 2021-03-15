@@ -20,6 +20,7 @@
 using M4PL.APIClient.ViewModels.Attachment;
 using M4PL.APIClient.ViewModels.Contact;
 using M4PL.APIClient.ViewModels.Document;
+using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
@@ -1137,5 +1138,31 @@ namespace M4PL.APIClient.Common
         }
 
         #endregion
+
+        public StatusModel GenerateReasoneCode(List<PrgShipStatusReasonCodeView> reasonCodeList)
+        {
+            string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
+            RestClient _restClient = new RestClient(new Uri(_baseUri));
+
+            var route = string.Format("{0}/{1}", RouteSuffix, "GenerateReasoneCode");
+
+            var result = JsonConvert.DeserializeObject<ApiResult<StatusModel>>(_restClient.Execute(
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(reasonCodeList)).Content).Results?.FirstOrDefault();
+
+            return result;
+        }
+
+        public StatusModel GenerateAppointmentCode(List<PrgShipApptmtReasonCodeView> appointmentCodeList)
+        {
+            string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
+            RestClient _restClient = new RestClient(new Uri(_baseUri));
+
+            var route = string.Format("{0}/{1}", RouteSuffix, "GenerateAppointmentCode");
+
+            var result = JsonConvert.DeserializeObject<ApiResult<StatusModel>>(_restClient.Execute(
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(appointmentCodeList)).Content).Results?.FirstOrDefault();
+
+            return result;
+        }
     }
 }
