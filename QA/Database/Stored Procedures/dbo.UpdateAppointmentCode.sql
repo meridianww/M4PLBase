@@ -8,7 +8,8 @@ GO
 -- Create date: 03/11/2021
 -- Description:	UpdateAppointmentCode
 -- =============================================
-ALTER PROCEDURE [dbo].[UpdateAppointmentCode] @programId BIGINT
+--DROP PROCEDURE [dbo].[UpdateAppointmentCode] 
+CREATE PROCEDURE [dbo].[UpdateAppointmentCode] @programId BIGINT
 	,@changedBy NVARCHAR(150)
 	,@dateChanged DATETIME2(7)
 	,@uttAppointmentCode [dbo].[uttAppointmentCode] READONLY

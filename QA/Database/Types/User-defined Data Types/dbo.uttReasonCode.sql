@@ -1,3 +1,4 @@
+--DROP TYPE [dbo].[uttReasonCode] 
 CREATE TYPE [dbo].[uttReasonCode] AS TABLE(
 [ReasonCode] [nvarchar](150) NULL,
 [InternalCode] [nvarchar](50) NULL,

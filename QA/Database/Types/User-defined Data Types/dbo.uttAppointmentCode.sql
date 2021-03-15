@@ -1,3 +1,4 @@
+--DROP TYPE [dbo].[uttAppointmentCode] 
 CREATE TYPE [dbo].[uttAppointmentCode] AS TABLE(
 [ReasonCode] [nvarchar](150) NULL,
 [InternalCode] [nvarchar](50) NULL,
