@@ -23,9 +23,12 @@ using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
@@ -1330,6 +1333,150 @@ namespace M4PL.DataAccess.Common
             }
 
             return jobExceptionDetail;
+        }
+
+        public static StatusModel GenerateReasoneCode(List<Entities.Program.PrgShipStatusReasonCode> reasonCodeList, ActiveUser activeUser)
+        {
+            StatusModel statusModel = null;
+            try
+            {
+                var parameters = new List<Parameter>
+           {
+                new Parameter("@uttReasonCode", GetReasoneCodeListDT(reasonCodeList)),
+                new Parameter("@programId", reasonCodeList.First().PscProgramID),
+                new Parameter("@changedBy", activeUser.UserName),
+                new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
+           };
+
+                SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateReasoneCode, parameters.ToArray(), true);
+                statusModel = new StatusModel() { Status = "Success", AdditionalDetail = "", StatusCode = 200 };
+            }
+            catch (Exception exp)
+            {
+                Logger.ErrorLogger.Log(exp, "Error is occuring while inserting the Reason Code.", "GenerateReasoneCode", Utilities.Logger.LogType.Error);
+                statusModel = new StatusModel() { Status = "Failure", StatusCode = 500, AdditionalDetail = exp.Message };
+            }
+
+            return statusModel;
+        }
+
+        public static StatusModel GenerateAppointmentCode(List<Entities.Program.PrgShipApptmtReasonCode> appointmentCodeList, ActiveUser activeUser)
+        {
+            StatusModel statusModel = null;
+            try
+            {
+                var parameters = new List<Parameter>
+           {
+                new Parameter("@uttAppointmentCode", GetAppointmentCodeListDT(appointmentCodeList)),
+                new Parameter("@programId", appointmentCodeList.First().PacProgramID),
+                new Parameter("@changedBy", activeUser.UserName),
+                new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
+           };
+
+                SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateAppointmentCode, parameters.ToArray(), true);
+                statusModel = new StatusModel() { Status = "Success", AdditionalDetail = "", StatusCode = 200 };
+            }
+            catch (Exception exp)
+            {
+                Logger.ErrorLogger.Log(exp, "Error is occuring while updating the Appointment Code Code Data By Location.", "GenerateAppointmentCode", Utilities.Logger.LogType.Error);
+                statusModel = new StatusModel() { Status = "Failure", StatusCode = 500, AdditionalDetail = exp.Message };
+            }
+
+            return statusModel;
+        }
+
+        private static DataTable GetReasoneCodeListDT(List<Entities.Program.PrgShipStatusReasonCode> reasonCodeList)
+        {
+            if (reasonCodeList == null || (reasonCodeList != null && reasonCodeList.Count == 0))
+            {
+                throw new ArgumentNullException("reasonCodeList", "CommonCommands.GetReasoneCodeListDT() - Argument null Exception");
+            }
+            using (var reasonCodeUTT = new DataTable("uttReasonCode"))
+            {
+                reasonCodeUTT.Locale = CultureInfo.InvariantCulture;
+                reasonCodeUTT.Columns.Add("ReasonCode");
+                reasonCodeUTT.Columns.Add("InternalCode");
+                reasonCodeUTT.Columns.Add("PriorityCode");
+                reasonCodeUTT.Columns.Add("Title");
+                reasonCodeUTT.Columns.Add("Description");
+                reasonCodeUTT.Columns.Add("Comment");
+                reasonCodeUTT.Columns.Add("CategoryCode");
+                reasonCodeUTT.Columns.Add("User01Code");
+                reasonCodeUTT.Columns.Add("User02Code");
+                reasonCodeUTT.Columns.Add("User03Code");
+                reasonCodeUTT.Columns.Add("User04Code");
+                reasonCodeUTT.Columns.Add("User05Code");
+
+                if (reasonCodeList?.Count > 0)
+                {
+                    foreach (var reasonCode in reasonCodeList)
+                    {
+                        var row = reasonCodeUTT.NewRow();
+                        row["ReasonCode"] = reasonCode.PscShipReasonCode;
+                        row["InternalCode"] = reasonCode.PscShipInternalCode;
+                        row["PriorityCode"] = reasonCode.PscShipPriorityCode;
+                        row["Title"] = reasonCode.PscShipTitle;
+                        row["Description"] = reasonCode.PscShipDescription;
+                        row["Comment"] = reasonCode.PscShipComment;
+                        row["CategoryCode"] = reasonCode.PscShipCategoryCode;
+                        row["User01Code"] = reasonCode.PscShipUser01Code;
+                        row["User02Code"] = reasonCode.PscShipUser02Code;
+                        row["User03Code"] = reasonCode.PscShipUser03Code;
+                        row["User04Code"] = reasonCode.PscShipUser04Code;
+                        row["User05Code"] = reasonCode.PscShipUser05Code;
+                        reasonCodeUTT.Rows.Add(row);
+                        reasonCodeUTT.AcceptChanges();
+                    }
+                }
+                return reasonCodeUTT;
+            }
+        }
+
+        private static DataTable GetAppointmentCodeListDT(List<Entities.Program.PrgShipApptmtReasonCode> appointmentCodeList)
+        {
+            if (appointmentCodeList == null || (appointmentCodeList != null && appointmentCodeList.Count == 0))
+            {
+                throw new ArgumentNullException("appointmentCodeList", "CommonCommands.GetAppointmentCodeListDT() - Argument null Exception");
+            }
+            using (var appointmentCodeUTT = new DataTable("uttAppointmentCode"))
+            {
+                appointmentCodeUTT.Locale = CultureInfo.InvariantCulture;
+                appointmentCodeUTT.Columns.Add("ReasonCode");
+                appointmentCodeUTT.Columns.Add("InternalCode");
+                appointmentCodeUTT.Columns.Add("PriorityCode");
+                appointmentCodeUTT.Columns.Add("Title");
+                appointmentCodeUTT.Columns.Add("Description");
+                appointmentCodeUTT.Columns.Add("Comment");
+                appointmentCodeUTT.Columns.Add("CategoryCode");
+                appointmentCodeUTT.Columns.Add("User01Code");
+                appointmentCodeUTT.Columns.Add("User02Code");
+                appointmentCodeUTT.Columns.Add("User03Code");
+                appointmentCodeUTT.Columns.Add("User04Code");
+                appointmentCodeUTT.Columns.Add("User05Code");
+
+                if (appointmentCodeList?.Count > 0)
+                {
+                    foreach (var appointmentCode in appointmentCodeList)
+                    {
+                        var row = appointmentCodeUTT.NewRow();
+                        row["ReasonCode"] = appointmentCode.PacApptReasonCode;
+                        row["InternalCode"] = appointmentCode.PacApptInternalCode;
+                        row["PriorityCode"] = appointmentCode.PacApptPriorityCode;
+                        row["Title"] = appointmentCode.PacApptTitle;
+                        row["Description"] = appointmentCode.PacApptDescription;
+                        row["Comment"] = appointmentCode.PacApptComment;
+                        row["CategoryCode"] = appointmentCode.PacApptCategoryCodeId;
+                        row["User01Code"] = appointmentCode.PacApptUser01Code;
+                        row["User02Code"] = appointmentCode.PacApptUser02Code;
+                        row["User03Code"] = appointmentCode.PacApptUser03Code;
+                        row["User04Code"] = appointmentCode.PacApptUser04Code;
+                        row["User05Code"] = appointmentCode.PacApptUser05Code;
+                        appointmentCodeUTT.Rows.Add(row);
+                        appointmentCodeUTT.AcceptChanges();
+                    }
+                }
+                return appointmentCodeUTT;
+            }
         }
     }
 }

@@ -743,6 +743,9 @@ namespace M4PL.DataAccess
 		public const string InsertPrgMvocRefQuestion = "dbo.InsPrgMvocRefQuestion";
 		public const string UpdatePrgMvocRefQuestion = "dbo.UpdPrgMvocRefQuestion";
 
+		/* Program import */
+		public const string UpdateReasoneCode = "dbo.UpdateReasoneCode";
+		public const string UpdateAppointmentCode= "dbo.UpdateAppointmentCode";
 		#endregion Program
 
 		#region Scanner

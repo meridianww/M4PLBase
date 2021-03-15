@@ -643,5 +643,13 @@ namespace M4PL.Business.Common
             M4PL.DataAccess.Logger.ErrorLogger.Log(m4plException.Exception, m4plException.AdditionalMessage, m4plException.ErrorRelatedTo, m4plException.LogType);
             return true;
         }
+        public static StatusModel GenerateReasoneCode(List<Entities.Program.PrgShipStatusReasonCode> reasonCodeList)
+        {
+            return _commands.GenerateReasoneCode(reasonCodeList, ActiveUser);
+        }
+        public static StatusModel GenerateAppointmentCode(List<Entities.Program.PrgShipApptmtReasonCode> appointmentCodeList)
+        {
+            return _commands.GenerateAppointmentCode(appointmentCodeList, ActiveUser);
+        }
     }
 }

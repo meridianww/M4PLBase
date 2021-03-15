@@ -124,22 +124,25 @@ namespace M4PL.Web.Areas.Finance.Controllers
                         string navRateUploadColumns = ConfigurationManager.AppSettings["NavRateUploadColumns"];
                         displayMessage = WebExtension.ImportCSVToProgram(displayMessage, uploadedFileData,
                             _ImportType, navRateUploadColumns,
-                            _ProgramId, _navRateStaticCommand);
+                            _ProgramId, _navRateStaticCommand, _commonStaticCommands);
                         break;
 
                     case "Reason Code":
-                        string reasonCodeUploadColumns = ConfigurationManager.AppSettings["ReasonCodeUploadColumns"];
+                        string reasonCodeUploadColumns = ConfigurationManager.AppSettings["ReasonAppointmentCodeUploadColumns"];
                         displayMessage = WebExtension.ImportCSVToProgram(displayMessage, uploadedFileData,
                            _ImportType, reasonCodeUploadColumns,
-                           _ProgramId, _navRateStaticCommand);
+                           _ProgramId, _navRateStaticCommand, _commonStaticCommands);
                         break;
 
                     case "Appointment Code":
-
+                        string appointmentCodeUploadColumns = ConfigurationManager.AppSettings["ReasonAppointmentCodeUploadColumns"];
+                        displayMessage = WebExtension.ImportCSVToProgram(displayMessage, uploadedFileData,
+                           _ImportType, appointmentCodeUploadColumns,
+                           _ProgramId, _navRateStaticCommand, _commonStaticCommands);
                         break;
 
                     case "Vendor":
-
+                        //to do
                         break;
                 }
             }

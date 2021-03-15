@@ -32,6 +32,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Description;
 using _command = M4PL.Business.Common.CommonCommands;
 
 namespace M4PL.API.Controllers
@@ -913,6 +914,31 @@ namespace M4PL.API.Controllers
         {
             _command.ActiveUser = Models.ApiContext.ActiveUser;
             return _command.InsertErrorLog(m4plException);
+        }
+
+        /// <summary>
+		/// Generates Program's reason Code
+		/// </summary>
+		/// <param name="reasonCodeList"></param>
+		/// <returns></returns>
+		[HttpPost]
+        [Route("GenerateReasoneCode"), ResponseType(typeof(StatusModel))]
+        public StatusModel GenerateReasoneCode(List<Entities.Program.PrgShipStatusReasonCode> reasonCodeList)
+        {
+            _command.ActiveUser = Models.ApiContext.ActiveUser;
+            return _command.GenerateReasoneCode(reasonCodeList);
+        }
+        /// <summary>
+        /// Generates Program's Appointment Code
+        /// </summary>
+        /// <param name="appointmentCodeList"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GenerateAppointmentCode"), ResponseType(typeof(StatusModel))]
+        public StatusModel GenerateAppointmentCode(List<Entities.Program.PrgShipApptmtReasonCode> appointmentCodeList)
+        {
+            _command.ActiveUser = Models.ApiContext.ActiveUser;
+            return _command.GenerateAppointmentCode(appointmentCodeList);
         }
     }
 }

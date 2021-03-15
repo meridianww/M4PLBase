@@ -26,6 +26,7 @@ using M4PL.APIClient.Finance;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Finance;
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
@@ -3742,12 +3743,9 @@ namespace M4PL.Web
         }
 
         public static DisplayMessage ImportCSVToProgram(DisplayMessage displayMessage, byte[] uploadedFileData,
-            string type, string uploadColumns, long _ProgramId, INavRateCommands _navRateStaticCommand)
+            string type, string uploadColumns, long _ProgramId, INavRateCommands _navRateStaticCommand,
+            ICommonCommands _commonStaticCommands)
         {
-            //Type elementType = Type.GetType("NavRateView");
-            //Type listType = typeof(List<>).MakeGenericType(new Type[] { elementType });
-            //object list = Activator.CreateInstance(listType);
-
             if (string.IsNullOrEmpty(uploadColumns))
                 displayMessage.Description = "CSV column list config key is missing, please add the config key in web.config.";
 
@@ -3769,9 +3767,15 @@ namespace M4PL.Web
                         }
                         else if (type == "Reason Code")
                         {
+                            List<PrgShipStatusReasonCodeView> reasonCodeList = Extension.ConvertDataTableToModel<PrgShipStatusReasonCodeView>(csvDataTable);
+                            reasonCodeList.ForEach(x => x.PscProgramID = _ProgramId);
+                            statusModel = _commonStaticCommands.GenerateReasoneCode(reasonCodeList);
                         }
                         else if (type == "Appointment Code")
                         {
+                            List<PrgShipApptmtReasonCodeView> appointmentCodeList = Extension.ConvertDataTableToModel<PrgShipApptmtReasonCodeView>(csvDataTable);
+                            appointmentCodeList.ForEach(x => x.PacProgramID = _ProgramId);
+                            statusModel = _commonStaticCommands.GenerateAppointmentCode(appointmentCodeList);
                         }
 
                         // To Do: Selected ProgramId need to set with the record.
