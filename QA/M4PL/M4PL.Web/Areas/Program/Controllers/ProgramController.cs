@@ -324,6 +324,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 
             if (result is SysRefModel)
             {
+                Session["CustomerPPPTree"] = null;
                 var displayMessage = entityView.Id > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
 
                 var selectedNode = string.Concat(((entityView.PrgHierarchyLevel == 1) || (result.StatusId > WebApplicationConstants.ActiveStatusId)) ? result.PrgCustID : entityView.ParentId, "_", result.Id);
