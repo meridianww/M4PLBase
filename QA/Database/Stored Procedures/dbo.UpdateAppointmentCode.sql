@@ -8,7 +8,7 @@ GO
 -- Create date: 03/11/2021
 -- Description:	UpdateAppointmentCode
 -- =============================================
-CREATE PROCEDURE [dbo].[UpdateAppointmentCode] @programId BIGINT
+ALTER PROCEDURE [dbo].[UpdateAppointmentCode] @programId BIGINT
 	,@changedBy NVARCHAR(150)
 	,@dateChanged DATETIME2(7)
 	,@uttAppointmentCode [dbo].[uttAppointmentCode] READONLY
@@ -36,13 +36,14 @@ BEGIN
 	  ,[PacProgramID]
 	  ,[EnteredBy]
 	  ,[DateEntered]
+	  ,[PacOrgID]
 	)
 	SELECT [ReasonCode],
 			[InternalCode],
 			[PriorityCode],
 			[Title],
-			[Description],
-			[Comment],
+			ISNULL(CONVERT(varbinary(max), [Description]), 0x),
+			ISNULL(CONVERT(varbinary(max), [Comment]), 0x), 
 			[CategoryCodeId],
 			[User01Code],
 			[User02Code],
@@ -52,7 +53,8 @@ BEGIN
 			1,
 			@programId,
 			@changedBy,
-			@dateChanged
+			@dateChanged,
+			1
 		FROM @uttAppointmentCode
 END
 GO

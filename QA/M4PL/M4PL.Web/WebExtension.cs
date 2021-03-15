@@ -3749,14 +3749,14 @@ namespace M4PL.Web
             if (string.IsNullOrEmpty(uploadColumns))
                 displayMessage.Description = "CSV column list config key is missing, please add the config key in web.config.";
 
-            string[] arraynavRateUploadColumns = uploadColumns.Split(new string[] { "," }, StringSplitOptions.None);
+            string[] arrayUploadColumns = uploadColumns.Split(new string[] { "," }, StringSplitOptions.None);
             using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArray(uploadedFileData))
             {
                 if (csvDataTable != null && csvDataTable.Rows.Count > 0)
                 {
                     string[] columnNames = (from dc in csvDataTable.Columns.Cast<DataColumn>()
                                             select dc.ColumnName).ToArray();
-                    if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
+                    if (!arrayUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
                     {
                         StatusModel statusModel = new StatusModel();
                         if (type == "Price/Cost Code")
