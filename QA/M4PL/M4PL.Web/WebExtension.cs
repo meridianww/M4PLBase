@@ -3740,5 +3740,54 @@ namespace M4PL.Web
 
             return rawData;
         }
+
+        public static DisplayMessage ImportCSVToProgram(DisplayMessage displayMessage, byte[] uploadedFileData,
+            string type, string uploadColumns, long _ProgramId, INavRateCommands _navRateStaticCommand)
+        {
+            //Type elementType = Type.GetType("NavRateView");
+            //Type listType = typeof(List<>).MakeGenericType(new Type[] { elementType });
+            //object list = Activator.CreateInstance(listType);
+
+            if (string.IsNullOrEmpty(uploadColumns))
+                displayMessage.Description = "CSV column list config key is missing, please add the config key in web.config.";
+
+            string[] arraynavRateUploadColumns = uploadColumns.Split(new string[] { "," }, StringSplitOptions.None);
+            using (DataTable csvDataTable = CSVParser.GetDataTableForCSVByteArray(uploadedFileData))
+            {
+                if (csvDataTable != null && csvDataTable.Rows.Count > 0)
+                {
+                    string[] columnNames = (from dc in csvDataTable.Columns.Cast<DataColumn>()
+                                            select dc.ColumnName).ToArray();
+                    if (!arraynavRateUploadColumns.Where(p => columnNames.All(p2 => !p2.Equals(p, StringComparison.OrdinalIgnoreCase))).Any())
+                    {
+                        StatusModel statusModel = new StatusModel();
+                        if (type == "Price/Cost Code")
+                        {
+                            List<NavRateView> navRateList = Extension.ConvertDataTableToModel<NavRateView>(csvDataTable);
+                            navRateList.ForEach(x => x.ProgramId = _ProgramId);
+                            statusModel = _navRateStaticCommand.GenerateProgramPriceCostCode(navRateList);
+                        }
+                        else if (type == "Reason Code")
+                        {
+                        }
+                        else if (type == "Appointment Code")
+                        {
+                        }
+
+                        // To Do: Selected ProgramId need to set with the record.
+                        if (!statusModel.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
+                            displayMessage.Description = statusModel.AdditionalDetail;
+                        else
+                            displayMessage.Description = "Records has been uploaded from the selected CSV file.";
+                        //e.IsValid = true;
+                    }
+                    else
+                        displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
+                }
+                else
+                    displayMessage.Description = "There is no record present in the selected file, please select a valid CSV.";
+            }
+            return displayMessage;
+        }
     }
 }
