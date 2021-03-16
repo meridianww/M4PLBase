@@ -823,6 +823,7 @@
     <Content Include="Areas\Administration\Views\UserGuideUpload\FormView.cshtml" />
     <Content Include="Areas\Customer\Views\CustNAVConfiguration\DataView.cshtml" />
     <Content Include="Areas\Customer\Views\CustNAVConfiguration\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEdiHeader\TreeView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

@@ -40,7 +40,9 @@ namespace M4PL.Entities
         public TreeViewBase()
         {
             ExpandNodes = new List<string>();
+            IsEDI = false;
         }
+        public ActiveUser ActiveUser { get; set; }
 
         public string Name { get; set; }
         public string Text { get; set; }
@@ -59,6 +61,7 @@ namespace M4PL.Entities
         public List<string> ExpandNodes { get; set; }
         public string SelectedNode { get; set; }
         public long? RecordId { get; set; }
+        public bool IsEDI { get; set; }
     }
     /// <summary>
     /// Model Class for Tree Model

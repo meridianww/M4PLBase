@@ -15,6 +15,10 @@ namespace M4PL.Entities.Program
 {
 	public class CopyPPPModel
 	{
+		public CopyPPPModel()
+        {
+			IsEDI = false;
+        }
 		/// <summary>
 		/// Gets or Sets Record Id e.g. If Program is being copies then ProgramID, if Project is being copies then ProjectId
 		/// </summary>
@@ -23,6 +27,8 @@ namespace M4PL.Entities.Program
 		/// Gets or Sets Select All flag (require for on demand tree list for DB update)
 		/// </summary>
 		public bool SelectAll { get; set; } // require for on demand tree list for DB update
+
+		public bool IsEDI { get; set; }
 
 		/// <summary>
 		/// Gets or Sets Ids if selected All

@@ -25,8 +25,8 @@
             settings.ClientSideEvents.Init = Model.EventInit;
         if (!string.IsNullOrEmpty(Model.EventExpandedChanged))
             settings.ClientSideEvents.ExpandedChanged = Model.EventExpandedChanged;
-        if (Model.EnableCallback)
-            settings.CallbackRouteValues = new { Controller = Model.Controller, Action = Model.Action, Area = Model.Area, ParentId = Model.ParentId, RecordId = Model.RecordId };
+        //if (Model.EnableCallback)
+        //    settings.CallbackRouteValues = new { Controller = Model.ContentRouteCallBack.Controller, Action = Model.ContentRouteCallBack.Action, Area = Model.ContentRouteCallBack.Area, ParentId = Model.ParentId, RecordId = Model.RecordId };
         if (Model.EnableNodeClick)
             settings.ClientSideEvents.NodeClick = "function(s,e,contentCbPanel,contentCbPanelRoute){DevExCtrl.TreeList.OnTreeViewNodeClick(s,e," + contentCbPanel + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.ContentRouteCallBack) + "');}";
 

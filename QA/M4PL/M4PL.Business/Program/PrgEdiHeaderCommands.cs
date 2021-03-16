@@ -92,12 +92,12 @@ namespace M4PL.Business.Program
 			return _commands.Delete(ActiveUser, ids, statusId);
 		}
 
-		public IList<TreeModel> EdiTree(long id, long? parentId, bool model)
-		{
-			return _commands.GetEdiTree(id, parentId, model);
-		}
+        public IList<TreeModel> EdiTree(ActiveUser activeUser, long? parentId, bool model)
+        {
+            return _commands.GetEdiTree(activeUser, parentId, model);
+        }
 
-		public PrgEdiHeader Patch(PrgEdiHeader entity)
+        public PrgEdiHeader Patch(PrgEdiHeader entity)
 		{
 			throw new NotImplementedException();
 		}

@@ -29,5 +29,6 @@ namespace M4PL.Web.Models
 		public MvcRoute TreeRoute { get; set; }
 		public MvcRoute ContentRoute { get; set; }
 		public UserSecurity CurrentSecurity { get; set; }
+		public TreeSplitterControl treeSplitterControl { get; set; }
 	}
 }

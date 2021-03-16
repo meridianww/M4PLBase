@@ -478,6 +478,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeViewBase.AllowCheckNodes = true;
             treeViewBase.CheckNodesRecursive = true;
             treeViewBase.EnableNodeClick = false;
+            treeViewBase.IsEDI = false;
             treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopySource, Area = BaseRoute.Area };
 
             treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
@@ -517,6 +518,7 @@ namespace M4PL.Web.Areas.Program.Controllers
         {
             if (hasCheckboxesChecked)
             {
+                copyPPPModel.IsEDI = false;
                 var result = _programCommands.CopyPPPModel(copyPPPModel);
                 return Json(new { status = result, isNotValid = false }, JsonRequestBehavior.AllowGet);
             }

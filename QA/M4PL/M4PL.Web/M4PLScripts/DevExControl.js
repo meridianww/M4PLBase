@@ -1099,6 +1099,9 @@ DevExCtrl.Button = function () {
         RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
+        var isEDI = false;
+        if (sourceTree.globalName == "PrgEdiHeaderProgramCopySource")
+            isEDI = true;
         var destinationCheckedNodes = [];
         for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
@@ -1148,10 +1151,15 @@ DevExCtrl.Button = function () {
                 sourceTreeHasAnyCheckedNode = true;
         }
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        var url = '';
+        if (isEDI)
+            url = "Program/PrgEdiHeader/CopyPPPModel";
+        else
+            url = "Program/Program/CopyPPPModel";
         var hasCheckBoxesChecked = (destinationCheckedNodes.length > 0) && sourceTreeHasAnyCheckedNode === true;
         $.ajax({
             type: "POST",
-            url: "Program/Program/CopyPPPModel",
+            url: url,
             data: { "copyPPPModel": copyPPPModel, "hasCheckboxesChecked": hasCheckBoxesChecked },
             success: function (response) {
                 if (response.isNotValid) {
@@ -1161,27 +1169,38 @@ DevExCtrl.Button = function () {
                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                     DevExCtrl.PopupControl.Close();//Close the Popup
                     //Refresh the Program Tree
-                    if (cplTreeViewPanel !== 'undefined') {
-                        if (cplTreeViewPanel && !cplTreeViewPanel.InCallback()) {
-                            var nodeNames = [];
-                            if (ProgramTree !== "undefined") {
-                                var node = ProgramTree.GetSelectedNode();
-                                if (node !== null) {
-                                    nodeNames.push(node.name);
-                                    if (node.parent !== null) {
-                                        nodeNames.push(node.parent.name);
-                                        if (node.parent.parent !== null) {
-                                            nodeNames.push(node.parent.parent.name);
-                                            if (node.parent.parent.parent !== null) {
-                                                nodeNames.push(node.parent.parent.parent.name);
-                                            }
-                                        }
-                                    }
-                                    cplTreeViewPanel.PerformCallback({ nodes: JSON.stringify(nodeNames), selectedNode: node.name });
-                                }
-                            }
-                        }
-                    }
+                    //var panel = null;
+                    //var tree = null;
+
+                    //if (!isEDI) {
+                    //    panel = cplTreeViewPanel;
+                    //    tree = ProgramTree;
+                    //}
+                    //else {
+                    //    panel = cplTreeViewPrgEdiHeader;
+                    //    tree = cplTreeViewPrgEdiHeader;
+                    //}
+                    //if (panel !== 'undefined') {
+                    //    if (panel && !panel.InCallback()) {
+                    //        var nodeNames = [];
+                    //        if (tree !== "undefined") {
+                    //            var node = tree.GetSelectedNode();
+                    //            if (node !== null) {
+                    //                nodeNames.push(node.name);
+                    //                if (node.parent !== null) {
+                    //                    nodeNames.push(node.parent.name);
+                    //                    if (node.parent.parent !== null) {
+                    //                        nodeNames.push(node.parent.parent.name);
+                    //                        if (node.parent.parent.parent !== null) {
+                    //                            nodeNames.push(node.parent.parent.parent.name);
+                    //                        }
+                    //                    }
+                    //                }
+                    //                panel.PerformCallback({ nodes: JSON.stringify(nodeNames), selectedNode: node.name });
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
             },
             error: function () {
@@ -1304,6 +1323,9 @@ DevExCtrl.TreeList = function () {
                         route.IsJobParentEntityUpdated = true;
                     }
                     IsDataView = route.Action === "DataView" ? true : false;
+
+                    if (route.EntityName == 'Program EDI Header')
+                        route.OwnerCbPanel = "PrgEdiHeaderDataViewCbPanel";
                     contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView, isCallBack: true });
                 }
 
@@ -1894,7 +1916,7 @@ DevExCtrl.EdiHeader = function () {
             return;
         }
         try {
-            route.OwnerCbPanel = "PrgEdiHeaderDataViewCbPanel"
+            route.OwnerCbPanel = "PrgEdiHeaderDataViewCbPanel";
             route.ParentRecordId = parseInt(TreeList.GetFocusedNodeKey());
             route.ParentEntity = "Program";
 
@@ -2022,12 +2044,19 @@ DevExCtrl.ListBox = function () {
 DevExCtrl.PopupMenu = function () {
     var _onItemClick = function (s, e) {
         var route = JSON.parse(e.item.name);
-        //route.RecordId = cplTreeViewProgram.GetSelectedNode().name.split('_')[1];
-        if (cplTreeViewProgram != null && cplTreeViewProgram != undefined && cplTreeViewProgram.GetSelectedNode() != null && cplTreeViewProgram.GetSelectedNode() != undefined) {
-            route.RecordId = parseInt(cplTreeViewProgram.GetSelectedNode()["name"]);
+        if (route.Controller == "PrgEdiHeader") {
+            if (cplTreeViewPrgEdiHeader != null && cplTreeViewPrgEdiHeader != undefined && cplTreeViewPrgEdiHeader.GetSelectedNode() != null && cplTreeViewPrgEdiHeader.GetSelectedNode() != undefined) {
+                var arrIds = cplTreeViewPrgEdiHeader.GetSelectedNode()["name"].split('_');
+                route.RecordId = parseInt(arrIds[0] == '' ? 0 : arrIds[0]);
+            }
+        } else if (route.Controller == "Program") {
+            if (cplTreeViewProgram != null && cplTreeViewProgram != undefined && cplTreeViewProgram.GetSelectedNode() != null && cplTreeViewProgram.GetSelectedNode() != undefined) {
+                var arrIds = cplTreeViewProgram.GetSelectedNode()["name"].split('_');
+                route.RecordId = parseInt(arrIds[0] == '' ? 0 : arrIds[0]);
+            }
         }
-
-        RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+        if (route.RecordId > 0)
+            RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
     };
 
     var _onPopUp = function (s, e) {

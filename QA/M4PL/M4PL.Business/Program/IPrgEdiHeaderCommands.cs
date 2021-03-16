@@ -19,6 +19,7 @@
 
 using M4PL.Entities;
 using M4PL.Entities.Program;
+using M4PL.Entities.Support;
 using System.Collections.Generic;
 
 namespace M4PL.Business.Program
@@ -28,8 +29,8 @@ namespace M4PL.Business.Program
 	/// </summary>
 	public interface IPrgEdiHeaderCommands : IBaseCommands<PrgEdiHeader>
 	{
-		IList<TreeModel> EdiTree(long id, long? parentId, bool model);
+        IList<TreeModel> EdiTree(ActiveUser activeUser, long? parentId, bool model);
 
-		int GetProgramLevel(long id, long? programId);
+        int GetProgramLevel(long id, long? programId);
 	}
 }
