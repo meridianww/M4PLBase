@@ -12,7 +12,7 @@
     settings =>
     {
         settings.Name = !Model.ContentRouteCallBack.IsPageLoad ? "cplTreeView" + Model.ContentRouteCallBack.Controller
-                       : "cplTreeView1" + Model.ContentRouteCallBack.Controller;
+                       : Model.ContentRouteCallBack.Controller + "ProgramCopyDestination";
         settings.AllowCheckNodes = !Model.ContentRouteCallBack.IsPageLoad ? Model.AllowCheckNodes : true;
         settings.AllowSelectNode = !Model.ContentRouteCallBack.IsPageLoad ? Model.AllowSelectNode : true;
         settings.CheckNodesRecursive = !Model.ContentRouteCallBack.IsPageLoad ? Model.CheckNodesRecursive : true;
