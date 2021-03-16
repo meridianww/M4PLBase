@@ -11,14 +11,15 @@
 @Html.DevExpress().TreeView(
     settings =>
     {
-        settings.Name = "cplTreeView" + Model.ContentRouteCallBack.Controller;
-        settings.AllowCheckNodes = Model.AllowCheckNodes;
-        settings.AllowSelectNode = Model.AllowSelectNode;
-        settings.CheckNodesRecursive = Model.CheckNodesRecursive;
-        settings.EnableAnimation = Model.EnableAnimation;
-        settings.EnableHotTrack = Model.EnableHottrack;
-        settings.ShowTreeLines = Model.ShowTreeLines;
-        settings.ShowExpandButtons = Model.ShowExpandButtons;
+        settings.Name = !Model.ContentRouteCallBack.IsPageLoad ? "cplTreeView" + Model.ContentRouteCallBack.Controller
+                       : "cplTreeView1" + Model.ContentRouteCallBack.Controller;
+        settings.AllowCheckNodes = !Model.ContentRouteCallBack.IsPageLoad ? Model.AllowCheckNodes : true;
+        settings.AllowSelectNode = !Model.ContentRouteCallBack.IsPageLoad ? Model.AllowSelectNode : true;
+        settings.CheckNodesRecursive = !Model.ContentRouteCallBack.IsPageLoad ? Model.CheckNodesRecursive : true;
+        settings.EnableAnimation = !Model.ContentRouteCallBack.IsPageLoad ? Model.EnableAnimation : true;
+        settings.EnableHotTrack = !Model.ContentRouteCallBack.IsPageLoad ? Model.EnableHottrack : true;
+        settings.ShowTreeLines = !Model.ContentRouteCallBack.IsPageLoad ? Model.ShowTreeLines : true;
+        settings.ShowExpandButtons = !Model.ContentRouteCallBack.IsPageLoad ? Model.ShowExpandButtons : true;
 
         if (!string.IsNullOrEmpty(Model.EventInit))
             settings.ClientSideEvents.Init = Model.EventInit;
@@ -30,7 +31,7 @@
             settings.ClientSideEvents.NodeClick = "function(s,e,contentCbPanel,contentCbPanelRoute){DevExCtrl.TreeList.OnTreeViewNodeClick(s,e," + contentCbPanel + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.ContentRouteCallBack) + "');}";
 
         settings.ShowExpandButtons = true;
-        settings.Width = 300;
+        settings.Width = !Model.ContentRouteCallBack.IsPageLoad ? 300 : 200;
         if (Model != null && Model.Nodes != null)
         {
             foreach (var item in Model.Nodes)
@@ -38,7 +39,8 @@
                 settings.Nodes.Add(node =>
                 {
                     node.Text = item.Text;
-                    node.Image.IconID = item.IconCss;
+                    if (!Model.ContentRouteCallBack.IsPageLoad)
+                        node.Image.IconID = item.IconCss;
                     node.Name = "_" + item.Id.ToString();
                     if (item.Children != null && item.Children.Count() > 0)
                     {
@@ -47,7 +49,8 @@
                             node.Nodes.Add(subNode =>
                             {
                                 subNode.Text = itemChild1.Text;
-                                subNode.Image.IconID = itemChild1.IconCss;
+                                if (!Model.ContentRouteCallBack.IsPageLoad)
+                                    subNode.Image.IconID = itemChild1.IconCss;
                                 subNode.Name = itemChild1.Id.ToString();
                                 if (itemChild1.Children != null && itemChild1.Children.Count() > 0)
                                 {
@@ -56,7 +59,8 @@
                                         subNode.Nodes.Add(subNodeChild =>
                                         {
                                             subNodeChild.Text = itemChild2.Text;
-                                            subNodeChild.Image.IconID = itemChild2.IconCss;
+                                            if (!Model.ContentRouteCallBack.IsPageLoad)
+                                                subNodeChild.Image.IconID = itemChild2.IconCss;
                                             subNodeChild.Name = itemChild2.Id.ToString();
                                         });
                                     }

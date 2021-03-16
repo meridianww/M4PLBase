@@ -167,8 +167,8 @@ namespace M4PL.Web.Areas.Program.Controllers
             treeListBase.EnableNodeClick = true;
             treeListBase.AllowCheckNodes = false;
             treeListBase.AllowSelectNode = false;
-            treeListBase.EnableAnimation = true;
-            treeListBase.EnableHottrack = true;
+            treeListBase.EnableAnimation = false;
+            treeListBase.EnableHottrack = false;
             treeListBase.ShowTreeLines = true;
             treeListBase.ShowExpandButtons = true;
             treeListBase.Name = "cplTreeViewProgram";
@@ -177,6 +177,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             //treeListBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
             var route = new MvcRoute { Action = MvcConstants.ActionForm, Entity = EntitiesAlias.Program, Area = BaseRoute.Area };
             route.OwnerCbPanel = "cplTreeView";// + EntitiesAlias.Program;
+            route.IsPageLoad = !string.IsNullOrEmpty(nodes) ? true : false;
             route.Filters = new Entities.Support.Filter();
             treeListBase.ContentRouteCallBack = route;
             return PartialView("_TreePartialView", treeListBase);
@@ -487,28 +488,29 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         public ActionResult ProgramCopyDestination(long parentId, long recordId)
         {
-            var treeViewBase = new TreeViewBase();
-            // treeViewBase.Name = "DestPrograms";
-            treeViewBase.Text = "Destination Programs";
-            treeViewBase.EnableCallback = true;
-            treeViewBase.Area = BaseRoute.Area;
-            treeViewBase.Controller = BaseRoute.Controller;
-            treeViewBase.Action = "ProgramCopyDestination";
-            treeViewBase.ParentId = parentId;
-            treeViewBase.RecordId = recordId;
+            return TreeCallback("ProgramCopyDestination", null);
+            //var treeViewBase = new TreeViewBase();
+            //// treeViewBase.Name = "DestPrograms";
+            //treeViewBase.Text = "Destination Programs";
+            //treeViewBase.EnableCallback = true;
+            //treeViewBase.Area = BaseRoute.Area;
+            //treeViewBase.Controller = BaseRoute.Controller;
+            //treeViewBase.Action = "ProgramCopyDestination";
+            //treeViewBase.ParentId = parentId;
+            //treeViewBase.RecordId = recordId;
 
-            treeViewBase.AllowSelectNode = true;
-            treeViewBase.EnableAnimation = true;
-            treeViewBase.EnableHottrack = true;
-            treeViewBase.ShowTreeLines = true;
-            treeViewBase.ShowExpandButtons = true;
-            treeViewBase.AllowCheckNodes = true;
-            treeViewBase.CheckNodesRecursive = true;
-            treeViewBase.EnableNodeClick = false;
-            treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopyDestination, Area = BaseRoute.Area };
-            treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
-            treeViewBase.Command = _programCommands;
-            return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
+            //treeViewBase.AllowSelectNode = true;
+            //treeViewBase.EnableAnimation = true;
+            //treeViewBase.EnableHottrack = true;
+            //treeViewBase.ShowTreeLines = true;
+            //treeViewBase.ShowExpandButtons = true;
+            //treeViewBase.AllowCheckNodes = true;
+            //treeViewBase.CheckNodesRecursive = true;
+            //treeViewBase.EnableNodeClick = false;
+            //treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopyDestination, Area = BaseRoute.Area };
+            //treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
+            //treeViewBase.Command = _programCommands;
+            //return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
         }
 
         public JsonResult CopyPPPModel(CopyPPPModel copyPPPModel, bool hasCheckboxesChecked)
