@@ -7,11 +7,11 @@
     var recordId = Model.Record.Id;
     string upControlName = "ucDragAndDrop" + Convert.ToString(Model.Record.Id);
 
-    var selectedValue = Model.CallBackRoute.Location != null && Model.CallBackRoute.Location.Count() == 1 
+    var selectedValue = Model.CallBackRoute.Location != null && Model.CallBackRoute.Location.Count() == 1
         ? Model.CallBackRoute.Location[0] : string.Empty;
     List<string> importItems = new List<string>();
     importItems.Add("Price/Cost Code");
-    importItems.Add("Vendor");
+    //importItems.Add("Vendor");
     importItems.Add("Reason Code");
     importItems.Add("Appointment Code");
 
