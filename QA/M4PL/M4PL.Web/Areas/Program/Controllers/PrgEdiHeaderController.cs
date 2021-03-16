@@ -330,28 +330,33 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         public ActionResult ProgramCopyDestination(long parentId, long recordId)
         {
-            var treeViewBase = new TreeViewBase();
-            treeViewBase.Text = "Destination Programs";
-            treeViewBase.EnableCallback = true;
-            treeViewBase.Area = EntitiesAlias.Program.ToString();
-            treeViewBase.Controller = BaseRoute.Controller;
-            treeViewBase.Action = "ProgramCopyDestination";
-            treeViewBase.ParentId = parentId;
-            treeViewBase.RecordId = recordId;
-            treeViewBase.AllowSelectNode = true;
-            treeViewBase.EnableAnimation = true;
-            treeViewBase.EnableHottrack = true;
-            treeViewBase.ShowTreeLines = true;
-            treeViewBase.ShowExpandButtons = true;
-            treeViewBase.AllowCheckNodes = true;
-            treeViewBase.CheckNodesRecursive = true;
-            treeViewBase.IsEDI = true;
-            treeViewBase.EnableNodeClick = false;
-            treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopyDestination, Area = EntitiesAlias.Program.ToString() };
-            treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
-            _programCommands.ActiveUser = _prgEdiHeaderCommands.ActiveUser;
-            treeViewBase.Command = _programCommands;
-            return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
+            var route = new MvcRoute();
+            route.Area = EntitiesAlias.Program.ToString();
+            route.Entity = EntitiesAlias.PrgEdiHeader;
+            route.IsPageLoad = true;
+            return TreeListCallBack(JsonConvert.SerializeObject(route));
+            //var treeViewBase = new TreeViewBase();
+            //treeViewBase.Text = "Destination Programs";
+            //treeViewBase.EnableCallback = true;
+            //treeViewBase.Area = EntitiesAlias.Program.ToString();
+            //treeViewBase.Controller = BaseRoute.Controller;
+            //treeViewBase.Action = "ProgramCopyDestination";
+            //treeViewBase.ParentId = parentId;
+            //treeViewBase.RecordId = recordId;
+            //treeViewBase.AllowSelectNode = true;
+            //treeViewBase.EnableAnimation = true;
+            //treeViewBase.EnableHottrack = true;
+            //treeViewBase.ShowTreeLines = true;
+            //treeViewBase.ShowExpandButtons = true;
+            //treeViewBase.AllowCheckNodes = true;
+            //treeViewBase.CheckNodesRecursive = true;
+            //treeViewBase.IsEDI = true;
+            //treeViewBase.EnableNodeClick = false;
+            //treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopyDestination, Area = EntitiesAlias.Program.ToString() };
+            //treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
+            //_programCommands.ActiveUser = _prgEdiHeaderCommands.ActiveUser;
+            //treeViewBase.Command = _programCommands;
+            //return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
         }
     }
 }
