@@ -145,6 +145,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
                         //to do
                         break;
                 }
+                e.IsValid = true;
             }
             else
                 displayMessage.Description = "Please select a CSV file for upload.";
