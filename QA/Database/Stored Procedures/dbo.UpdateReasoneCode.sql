@@ -37,6 +37,7 @@ BEGIN
 	  ,[PscProgramID]
 	  ,[EnteredBy]
 	  ,[DateEntered]
+	  ,[PscOrgId]
 	)
 	SELECT [ReasonCode],
 			[InternalCode],
@@ -53,7 +54,8 @@ BEGIN
 			1,
 			@programId,
 			@changedBy,
-			@dateChanged
+			@dateChanged,
+			1
 		FROM @uttReasonCode
 END
 GO
