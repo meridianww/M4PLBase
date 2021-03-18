@@ -2022,7 +2022,7 @@ DevExCtrl.PageControl = function () {
                 e.reloadContentOnCallback = true;
             }
             else if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Program") {
-                if (e.tab.index == 3 || e.tab.index == 5 || e.tab.index == 4) {
+                if (e.tab.index == 1 || e.tab.index == 3 || e.tab.index == 4 || e.tab.index == 5 || e.tab.index == 6 || e.tab.index == 7) {
                     e.reloadContentOnCallback = true;
                 }
             }

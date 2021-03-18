@@ -520,6 +520,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             {
                 copyPPPModel.IsEDI = false;
                 var result = _programCommands.CopyPPPModel(copyPPPModel);
+                Session["CustomerPPPTree"] = null;
                 return Json(new { status = result, isNotValid = false }, JsonRequestBehavior.AllowGet);
             }
             else

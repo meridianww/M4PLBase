@@ -310,10 +310,10 @@ namespace M4PL.Business.Job
             string NavAPIPassword = string.Empty;
             CustomerNavConfiguration currentCustomerNavConfiguration = null;
             long electroluxCustomerId = M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong();
-            if (jobId.HasValue && customerId != electroluxCustomerId && !string.IsNullOrEmpty(gatewayCode) && (gatewayCode.Equals("Delivered", StringComparison.OrdinalIgnoreCase) || gatewayCode.Equals("DS Delivered", StringComparison.OrdinalIgnoreCase)))
-            {
-                UpdatePriceCostDeliveryChargeQuantity((long)jobId);
-            }
+            ////if (jobId.HasValue && customerId != electroluxCustomerId && !string.IsNullOrEmpty(gatewayCode) && (gatewayCode.Equals("Delivered", StringComparison.OrdinalIgnoreCase) || gatewayCode.Equals("DS Delivered", StringComparison.OrdinalIgnoreCase)))
+            ////{
+            ////    UpdatePriceCostDeliveryChargeQuantity((long)jobId);
+            ////}
 
             if (CustomerNavConfiguration != null && CustomerNavConfiguration.Count > 0)
             {
