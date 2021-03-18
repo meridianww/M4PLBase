@@ -3744,7 +3744,7 @@ namespace M4PL.Web
 
         public static DisplayMessage ImportCSVToProgram(DisplayMessage displayMessage, byte[] uploadedFileData,
             string type, string uploadColumns, long _ProgramId, INavRateCommands _navRateStaticCommand,
-            ICommonCommands _commonStaticCommands)
+            ICommonCommands _commonStaticCommands, DevExpress.Web.FileUploadCompleteEventArgs e)
         {
             if (string.IsNullOrEmpty(uploadColumns))
                 displayMessage.Description = "CSV column list config key is missing, please add the config key in web.config.";
@@ -3783,7 +3783,7 @@ namespace M4PL.Web
                             displayMessage.Description = statusModel.AdditionalDetail;
                         else
                             displayMessage.Description = "Records has been uploaded from the selected CSV file.";
-                        //e.IsValid = true;
+                        e.IsValid = true;
                     }
                     else
                         displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";
