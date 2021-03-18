@@ -179,6 +179,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             route.OwnerCbPanel = "cplTreeView";// + EntitiesAlias.Program;
             route.IsPageLoad = !string.IsNullOrEmpty(nodes) ? true : false;
             route.Filters = new Entities.Support.Filter();
+            route.Action = !string.IsNullOrEmpty(nodes) ? nodes : route.Action;
             treeListBase.ContentRouteCallBack = route;
             return PartialView("_TreePartialView", treeListBase);
         }
@@ -460,31 +461,95 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         public ActionResult ProgramCopySource(long parentId, long recordId)
         {
-            var treeViewBase = new TreeViewBase();
-            treeViewBase.Name = "SourceProgram";
-            treeViewBase.Text = "Program Default Gateways";
-            treeViewBase.EnableCallback = true;
-            treeViewBase.Area = BaseRoute.Area;
-            treeViewBase.Controller = BaseRoute.Controller;
-            treeViewBase.Action = "ProgramCopySource";
-            treeViewBase.ParentId = parentId;
-            treeViewBase.RecordId = recordId;
+            //var treeViewBase = new TreeViewBase();
+            //treeViewBase.Name = "SourceProgram";
+            //treeViewBase.Text = "Program Default Gateways";
+            //treeViewBase.EnableCallback = true;
+            //treeViewBase.Area = BaseRoute.Area;
+            //treeViewBase.Controller = BaseRoute.Controller;
+            //treeViewBase.Action = "ProgramCopySource";
+            //treeViewBase.ParentId = parentId;
+            //treeViewBase.RecordId = recordId;
 
-            treeViewBase.AllowSelectNode = true;
-            treeViewBase.EnableAnimation = true;
-            treeViewBase.EnableHottrack = true;
-            treeViewBase.ShowTreeLines = true;
-            treeViewBase.ShowExpandButtons = true;
-            treeViewBase.AllowCheckNodes = true;
-            treeViewBase.CheckNodesRecursive = true;
-            treeViewBase.EnableNodeClick = false;
-            treeViewBase.IsEDI = false;
-            treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopySource, Area = BaseRoute.Area };
+            //treeViewBase.AllowSelectNode = true;
+            //treeViewBase.EnableAnimation = true;
+            //treeViewBase.EnableHottrack = true;
+            //treeViewBase.ShowTreeLines = true;
+            //treeViewBase.ShowExpandButtons = true;
+            //treeViewBase.AllowCheckNodes = true;
+            //treeViewBase.CheckNodesRecursive = true;
+            //treeViewBase.EnableNodeClick = false;
+            //treeViewBase.IsEDI = false;
+            //treeViewBase.ContentUrl = new MvcRoute { Action = MvcConstants.ActionForm + "?id=", Entity = EntitiesAlias.ProgramCopySource, Area = BaseRoute.Area };
 
-            treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
+            //treeViewBase.Name = treeViewBase.Controller + treeViewBase.Action;
 
-            treeViewBase.Command = _programCommands;
-            return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
+            //treeViewBase.Command = _programCommands;
+            //return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
+
+
+            var treeListBase = new TreeListBase();
+            var entity = (List<TreeListModel>)Session["CustomerPPPTree"];
+            var treeListModel = new List<TreeListModel>();
+            var treeNodes = new TreeListModel();
+            treeNodes = entity.FirstOrDefault(t => t.Id == recordId);
+            treeNodes.Children = new List<TreeListModel>() {
+                new TreeListModel() { Id = 1, Text = "Gateway"},
+                new TreeListModel() { Id = 2, Text = "Appointment Code"},
+                new TreeListModel() { Id = 3, Text = "Reason Code"},
+            };
+
+            //foreach (var item in entity.Where(t => t.HierarchyLevel == 0).Distinct().ToList())
+            //{
+            //    treeNodes = item;
+            //    foreach (var program in entity.Where(t => t.HierarchyLevel == 1 && t.CustomerId == item.CustomerId).Distinct())
+            //    {
+            //        var programNode = program;
+            //        foreach (var project in entity.Where(t => t.HierarchyLevel == 2
+            //        && t.CustomerId == program.CustomerId && t.HierarchyText.Contains(programNode.HierarchyText)).Distinct())
+            //        {
+            //            var projectNode = project;
+            //            foreach (var phase in entity.Where(t => t.HierarchyLevel == 3 && t.CustomerId == program.CustomerId
+            //            && t.HierarchyText.Contains(projectNode.HierarchyText)).Distinct())
+            //            {
+            //                if (projectNode.Children == null)
+            //                    projectNode.Children = new List<TreeListModel>();
+            //                if (!projectNode.Children.Contains(phase))
+            //                    projectNode.Children.Add(phase);
+            //            }
+            //            if (programNode.Children == null)
+            //                programNode.Children = new List<TreeListModel>();
+            //            if (!programNode.Children.Contains(projectNode))
+            //                programNode.Children.Add(projectNode);
+            //        }
+            //        if (treeNodes.Children == null)
+            //            treeNodes.Children = new List<TreeListModel>();
+            //        if (!treeNodes.Children.Contains(programNode))
+            //            treeNodes.Children.Add(programNode);
+            //    }
+            //    if (!treeListModel.Contains(treeNodes))
+            //        treeListModel.Add(treeNodes);
+            //}
+            treeListModel.Add(treeNodes);
+            treeListBase.Nodes = treeListModel;
+            treeListBase.EnableNodeClick = true;
+            treeListBase.AllowCheckNodes = false;
+            treeListBase.AllowSelectNode = false;
+            treeListBase.EnableAnimation = false;
+            treeListBase.EnableHottrack = false;
+            treeListBase.ShowTreeLines = true;
+            treeListBase.ShowExpandButtons = true;
+            treeListBase.Name = "cplTreeViewProgramCopySource";
+            treeListBase.Text = "Program Tree";
+            treeListBase.EventInit = "DevExCtrl.TreeView.ProgramTreeViewInit";
+            //treeListBase.EventExpandedChanged = "DevExCtrl.TreeView.ProgramTreeViewInit";
+            var route = new MvcRoute { Action = MvcConstants.ActionForm, Entity = EntitiesAlias.Program, Area = BaseRoute.Area };
+            route.OwnerCbPanel = "cplTreeView";
+            route.IsPageLoad = true;
+            route.Filters = new Entities.Support.Filter();
+            route.Action = "ProgramCopySource";
+            treeListBase.ContentRouteCallBack = route;
+            return PartialView("_TreePartialView", treeListBase);
         }
 
         public ActionResult ProgramCopyDestination(long parentId, long recordId)
