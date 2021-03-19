@@ -13,6 +13,7 @@ using _commands = M4PL.DataAccess.Attachment;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using Spire.Doc;
 
 namespace M4PL.DataAccess.JobServices
 {
@@ -186,6 +187,39 @@ namespace M4PL.DataAccess.JobServices
                 return documentAttachmentUTT;
             }
         }
-
+        /// <summary>
+        /// GetJobGatewayNotes
+        /// </summary>
+        /// <param name="gatewayId"></param>
+        /// <param name="activeUser"></param>
+        /// <returns></returns>
+        public static string GetJobGatewayNotes(long gatewayId, ActiveUser activeUser)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@recordId", gatewayId),
+                new Parameter("@entity", "JobGateway"),
+                new Parameter("@fields", "GwyComment"),
+            };
+            try
+            {
+                var gatewayNotes = SqlSerializer.Default.ExecuteScalar<byte[]>(StoredProceduresConstant.GetByteArrayByIdAndEntity, parameters,
+                    storedProcedure: true);
+                string tempPath = Path.Combine(Path.GetTempPath(), string.Concat(gatewayId.ToString(), ".docx"));
+                File.WriteAllBytes(tempPath, gatewayNotes);
+                Document doc = new Document(tempPath);
+                string notes = doc.GetText();
+                Task.Run(() =>
+                {
+                    File.Delete(tempPath);
+                });
+                return notes;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorLogger.Log(ex, string.Format("Error occured while fetching the JobGatewayNotes, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
+            }
+            return string.Empty;
+        }
     }
 }
