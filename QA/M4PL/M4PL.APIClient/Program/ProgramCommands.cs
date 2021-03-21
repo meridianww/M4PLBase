@@ -101,5 +101,18 @@ namespace M4PL.APIClient.Program
 
 			return result.HasValue ? (bool)result : false;
 		}
-	}
+
+        public bool CopyProgramModel(CopyProgramModel copyProgramModel)
+        {
+            string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
+            RestClient _restClient = new RestClient(new Uri(_baseUri));
+
+            var route = string.Format("{0}/{1}", RouteSuffix, "CopyProgramModel");
+
+            var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(copyProgramModel)).Content).Results?.FirstOrDefault();
+
+            return result.HasValue ? (bool)result : false;
+        }
+    }
 }

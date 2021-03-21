@@ -489,7 +489,12 @@ namespace M4PL.Web.Areas.Program.Controllers
 
 
             var treeListBase = new TreeListBase();
+            if (Session["CustomerPPPTree"] == null)
+            {
+                Session["CustomerPPPTree"] = _commonCommands.GetCustomerPPPTree() as List<TreeListModel>;
+            }
             var entity = (List<TreeListModel>)Session["CustomerPPPTree"];
+
             var treeListModel = new List<TreeListModel>();
             var treeNodes = new TreeListModel();
             treeNodes = entity.FirstOrDefault(t => t.Id == recordId);
@@ -585,6 +590,21 @@ namespace M4PL.Web.Areas.Program.Controllers
             {
                 copyPPPModel.IsEDI = false;
                 var result = _programCommands.CopyPPPModel(copyPPPModel);
+                Session["CustomerPPPTree"] = null;
+                return Json(new { status = result, isNotValid = false }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.WarningCopyProgram);
+                return Json(new { isNotValid = true, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JsonResult CopyProgramModel(CopyProgramModel copyProgramModel, bool hasCheckboxesChecked)
+        {
+            if (hasCheckboxesChecked && copyProgramModel.ToPPPIds != null && copyProgramModel.ToPPPIds.Count > 0)
+            {
+                var result = _programCommands.CopyProgramModel(copyProgramModel);
                 Session["CustomerPPPTree"] = null;
                 return Json(new { status = result, isNotValid = false }, JsonRequestBehavior.AllowGet);
             }

@@ -1397,10 +1397,22 @@ namespace M4PL.Web
                     saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(route.Action, route.Controller, "Form"), ctrlSuffix, JsonConvert.SerializeObject(route), false), cssClass: WebApplicationConstants.SaveButtonCssClass);
                 }
 
-                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.PrgEdiHeader))
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && route.Entity == EntitiesAlias.PrgEdiHeader)
                 {
                     var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
-                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId, route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
+                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav,
+                        2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId, 
+                        route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), 
+                        cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
+                }
+
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && route.Entity == EntitiesAlias.Program)
+                {
+                    var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
+                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 
+                        2, secondNav: true, itemClick: string.Format(JsConstants.CopyProgramModel, route.RecordId, 
+                        route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), 
+                        cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
                 }
 
                 if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))

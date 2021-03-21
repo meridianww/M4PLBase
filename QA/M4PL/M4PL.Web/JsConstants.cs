@@ -71,9 +71,11 @@ namespace M4PL.Web
 		public const string IgnoreChangesClick = "M4PLCommon.CheckHasChanges.OnIgnoreChanges()";
 		public const string CloseConfirmationMessage = "function(s, e){ DisplayMessageControl.Hide(); M4PLCommon.IsFromSubTabCancelClick=false; }";
 
-		public const string CopyPasteProgram = "DevExCtrl.Button.CopyPaste(s, e,  {0}, {1},{2})";
+		public const string CopyPasteProgram = "DevExCtrl.Button.CopyPaste(s, e,  {0}, {1}, {2})";
 
-		public const string SaveChangesOnConfirmClick = "M4PLCommon.CheckHasChanges.OnSaveChangesAndProceed()";
+        public const string CopyProgramModel = "DevExCtrl.Button.CopyProgramModel(s, e,  {0}, {1}, {2})";
+
+        public const string SaveChangesOnConfirmClick = "M4PLCommon.CheckHasChanges.OnSaveChangesAndProceed()";
 		public const string SaveChangesOnIsAdminChange = "M4PLCommon.CheckHasChanges.OnIsAdminChanges(\'{0}\',\'{1}\')";
 		public const string SaveChangesOnIsAdminChangeDataView = "M4PLCommon.CheckHasChanges.OnIsAdminChangesDataView(\'{0}\',{1},\'{2}\')";
 

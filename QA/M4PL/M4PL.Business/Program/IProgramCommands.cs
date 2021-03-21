@@ -38,6 +38,8 @@ namespace M4PL.Business.Program
 
 		Task<bool> CopyPPPModel(CopyPPPModel copyPPPMopdel, ActiveUser activeUser);
 
-		List<Entities.Program.Program> GetProgramsByCustomer(long custId);
+        Task<bool> CopyProgramModel(CopyProgramModel copyProgramMopdel, ActiveUser activeUser);
+
+        List<Entities.Program.Program> GetProgramsByCustomer(long custId);
 	}
 }
