@@ -19,6 +19,6 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT eshHeaderID, eshCustomerReferenceNo, eshShipDate, eshArrivalDate3PL, eshScheduledPickupDate , eshScheduledDeliveryDate, eshLocationId, eshLocationNumber, eshSetPurpose, eshOrderType, eshConsigneePostalCode, eshShipFromName, eshProductType FROM EDI204SummaryHeader Where eshTradingPartner = @TradingPartner And (ProFlags01 Is Null OR ProFlags01 != 'R')  AND (eshSetPurpose Is Null OR eshSetPurpose = '' OR eshSetPurpose = @SetPurposeCode)
+	SELECT eshHeaderID, eshCustomerReferenceNo, eshShipDate, eshArrivalDate3PL, eshScheduledPickupDate , eshScheduledDeliveryDate, eshLocationId, eshLocationNumber, eshSetPurpose, eshOrderType, eshConsigneePostalCode, eshShipFromName, eshProductType, eshServiceMode FROM EDI204SummaryHeader Where eshTradingPartner = @TradingPartner And (ProFlags01 Is Null OR ProFlags01 != 'R')  AND (eshSetPurpose Is Null OR eshSetPurpose = '' OR eshSetPurpose = @SetPurposeCode)
 END
 GO
