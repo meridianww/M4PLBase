@@ -17,6 +17,7 @@
 //Purpose:                                      Contains Actions to render view on Job page
 //====================================================================================================================================================*/
 
+using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
@@ -26,12 +27,14 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using M4PL.Web.Models;
+using M4PL.Web.Providers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using System.Web.Mvc;
+using static M4PL.Web.Areas.Administration.Controllers.UserGuideUploadController;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -880,36 +883,36 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #endregion Paging
 
-        //public ActionResult ImportOrder(string strRoute)
-        //{
-        //    var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-        //    _formResult.SessionProvider = SessionProvider;
-        //    _formResult.Record = new JobView();
+        public ActionResult ImportOrder(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+            _formResult.SessionProvider = SessionProvider;
+            _formResult.Record = new JobView();
 
-        //    _formResult.IsPopUp = true;
-        //    _formResult.SetupFormResult(_commonCommands, route);
-        //    return PartialView("ImportOrder", _formResult);
-        //}
+            _formResult.IsPopUp = true;
+            _formResult.SetupFormResult(_commonCommands, route);
+            return PartialView("ImportOrder", _formResult);
+        }
 
-        //[HttpPost]
-        //public ActionResult ImportOrderPost([ModelBinder(typeof(DragAndDropSupportDemoBinder))]IEnumerable<UploadedFile> ucDragAndDrop, long ParentId = 0)
-        //{
-        //    var result = _jobCommands.CreateJobFromCSVImport(new JobCSVData()
-        //    {
-        //        ProgramId = ParentId,
-        //        FileContentBase64 = Convert.ToBase64String(ucDragAndDrop.FirstOrDefault().FileBytes)
-        //    });
+        [HttpPost]
+        public ActionResult ImportOrderPost([ModelBinder(typeof(DragAndDropSupportDemoBinder))] IEnumerable<UploadedFile> ucDragAndDrop, long ParentId = 0)
+        {
+            var result = _jobCommands.CreateJobFromCSVImport(new JobCSVData()
+            {
+                ProgramId = ParentId,
+                FileContentBase64 = Convert.ToBase64String(ucDragAndDrop.FirstOrDefault().FileBytes)
+            });
 
-        //    return View();
-        //}
+            return View();
+        }
     }
 
-    //public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
-    //{
-    //    public DragAndDropSupportDemoBinder()
-    //    {
-    //        //UploadControlBinderSettings.ValidationSettings.Assign(UploadControlDemosHelper.UploadValidationSettings);
-    //        //UploadControlBinderSettings.FileUploadCompleteHandler = UploadControlDemosHelper.ucDragAndDrop_FileUploadComplete;
-    //    }
-    //}
+    public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
+    {
+        public DragAndDropSupportDemoBinder()
+        {
+            UploadControlBinderSettings.ValidationSettings.Assign(UploadControlDemosHelper.UploadValidationSettings);
+            UploadControlBinderSettings.FileUploadCompleteHandler = UploadControlDemosHelper.ucDragAndDrop_FileUploadComplete;
+        }
+    }
 }

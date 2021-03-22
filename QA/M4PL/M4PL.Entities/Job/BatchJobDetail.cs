@@ -76,5 +76,6 @@ namespace M4PL.Entities.Job
 		public string ScheduledDeliveryDate { get; set; }
 		public string InstallDate { get; set; }
 		public string Notes { get; set; }
-	}
+        public string SellerSiteNumber { get; set; }
+    }
 }

@@ -840,7 +840,7 @@ namespace M4PL.DataAccess.Job
         {
             foreach (var currentJob in batchJobDetail)
             {
-                if (!IsJobNotDuplicate(currentJob.OrderNumber, jobProgramId))
+                if (IsJobNotDuplicate(currentJob.OrderNumber, jobProgramId))
                 {
                     Entities.Job.Job jobInfo = new Entities.Job.Job()
                     {
@@ -856,9 +856,9 @@ namespace M4PL.DataAccess.Job
                         JobDeliveryCity = currentJob.City,
                         JobDeliveryState = currentJob.State,
                         JobDeliveryPostalCode = currentJob.Zip,
-                        JobQtyOrdered = !string.IsNullOrEmpty(currentJob.Cabinets) ? Convert.ToInt32(currentJob.Cabinets) : (int?)null,
-                        JobPartsOrdered = !string.IsNullOrEmpty(currentJob.Parts) ? Convert.ToInt32(currentJob.Parts) : (int?)null,
-                        JobTotalCubes = !string.IsNullOrEmpty(currentJob.TotCubes) ? Convert.ToInt32(currentJob.TotCubes) : (int?)null,
+                        JobQtyOrdered = currentJob.Cabinets.ToInt(),
+                        JobPartsOrdered = currentJob.Parts.ToInt(),
+                        JobTotalCubes = currentJob.TotCubes.ToDecimal(),
                         JobServiceMode = currentJob.ServiceMode,
                         JobChannel = currentJob.Channel,
                         JobOriginSiteName = currentJob.Origin,
@@ -866,27 +866,18 @@ namespace M4PL.DataAccess.Job
                         JobDeliverySitePOCPhone = currentJob.ContactPhone,
                         JobDeliverySitePOCPhone2 = currentJob.ContactPhone2,
                         JobDeliverySitePOCEmail = currentJob.ContactEmail,
-                        JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
-                        JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
+                        JobDeliveryDateTimePlanned = currentJob.ScheduledDeliveryDate.ToDateTime(),
+                        JobDeliveryDateTimeBaseline = currentJob.ScheduledDeliveryDate.ToDateTime(),
                         ProgramID = jobProgramId,
-                        StatusId = 1
+                        StatusId = 1,
+                        JobSellerCode = currentJob.SellerSiteNumber,
+                        JobDeliveryCommentText = currentJob.Notes
                     };
 
                     Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo, isManualUpdate: true);
                     if (jobCreationResult == null || (jobCreationResult != null && jobCreationResult.Id <= 0))
                     {
                         _logger.Log(new Exception(), string.Format("Job creation is failed for JobCustomerSalesOrder : {0}, Requested json was: {1}", jobInfo.JobCustomerSalesOrder, JsonConvert.SerializeObject(jobInfo)), "There is some error occurred while creating the job.", Utilities.Logger.LogType.Error);
-                    }
-                    else if (jobCreationResult != null && jobCreationResult.Id > 0)
-                    {
-                        JobComment commentText = new JobComment()
-                        {
-                            JobId = jobCreationResult.Id,
-                            JobGatewayComment = currentJob.Notes,
-                            JobGatewayTitle = "Job Creation Note"
-                        };
-
-                        InsertJobComment(activeUser, commentText);
                     }
                 }
             }
