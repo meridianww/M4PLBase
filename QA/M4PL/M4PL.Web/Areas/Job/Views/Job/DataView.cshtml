@@ -104,7 +104,7 @@
                     i.Image.Url = WebExtension.ConvertByteToString(Model.Icon);
                 });
                 //Upload CSV for import order
-                if (!Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].PagedDataInfo.IsJobParentEntity)
+                if (Model.SessionProvider.ActiveUser.IsSysAdmin && !Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].PagedDataInfo.IsJobParentEntity)
                 {
                     toolbar.Items.Add(j =>
                     {
