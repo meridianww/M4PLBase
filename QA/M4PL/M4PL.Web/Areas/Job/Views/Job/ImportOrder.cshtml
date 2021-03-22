@@ -46,7 +46,7 @@
                 set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
                 set.BrowseButton.Text = "Select an CSV for upload...";
                 set.Styles.DropZone.CssClass = "uploadControlDropZone";
-                set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(jobCallBack) + ");}}";
+                set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlJobFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(jobCallBack) + ");}}";
                 set.ShowProgressPanel = true;
             }).GetHtml();
         });

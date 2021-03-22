@@ -2049,6 +2049,15 @@ M4PLWindow.UploadFileDragDrop = function () {
         }
     }
 
+    var _onUploadControlJobFileUploadComplete = function (s, e, callBackRoute) {
+        DevExCtrl.PopupControl.Close();
+        M4PLCommon.DocumentStatus.JobHistoryMissingDisplayMessage("Job Created", "Job created successfully.");
+        var jobDataviewCtrl = ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel);
+        if (jobDataviewCtrl != null && jobDataviewCtrl != undefined) {
+            jobDataviewCtrl.PerformCallback({ strRoute: JSON.stringify(callBackRoute) });
+        }
+    }
+
     var _onImageLoad = function () {
         var externalDropZone = $("#externalDropZone");
         var uploadedImage = $("#uploadedImage");
@@ -2077,6 +2086,7 @@ M4PLWindow.UploadFileDragDrop = function () {
     return {
         Init: _init,
         OnUploadControlFileUploadComplete: _onUploadControlFileUploadComplete,
+        OnUploadControlJobFileUploadComplete: _onUploadControlJobFileUploadComplete,
         OnImageLoad: _onImageLoad,
         SetElementVisible: _setElementVisible,
         OnImportOrderRequest: _onImportOrderRequest,
