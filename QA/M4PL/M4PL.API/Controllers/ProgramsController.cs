@@ -190,6 +190,21 @@ namespace M4PL.API.Controllers
 			var output = await Task.Run(() => _programCommands.CopyPPPModel(copyPPPMopdel, Models.ApiContext.ActiveUser));
 			return output;
 		}
+
+        /// <summary>
+        /// Copies Program Model (Gateway, Appointment Code and Reason Code)
+        /// </summary>
+        /// <param name="copyProgramMopdel"></param>
+        /// <returns></returns>
+		[CustomAuthorize]
+        [HttpPost]
+        [Route("CopyProgramModel")]
+        public async Task<bool> CopyProgramModel(CopyProgramModel copyProgramMopdel)
+        {
+            var output = await Task.Run(() => _programCommands.CopyProgramModel(copyProgramMopdel, Models.ApiContext.ActiveUser));
+            return output;
+        }
+
         /// <summary>
         /// Gets List of Programs based on customer Id
         /// </summary>

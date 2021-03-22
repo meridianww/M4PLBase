@@ -39,5 +39,7 @@ namespace M4PL.APIClient.Program
 		IList<TreeModel> ProgramCopyTree(long programId, long? parentId, bool isCustNode, bool isSource);
 
 		bool CopyPPPModel(CopyPPPModel copyPPPModel);
-	}
+
+        bool CopyProgramModel(CopyProgramModel copyProgramModel);
+    }
 }

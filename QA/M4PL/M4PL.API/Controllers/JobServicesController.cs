@@ -144,5 +144,17 @@ namespace M4PL.API.Controllers
             }
             return _jobServicesCommands.UploadDocument(jobDocument, Models.ApiContext.ActiveUser);
         }
+
+        /// <summary>
+        /// GetJobGatewayNotes
+        /// </summary>
+        /// <param name="gatewayId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetJobGatewayNotes")]
+        public string GetJobGatewayNotes(long gatewayId)
+        {
+            return _jobServicesCommands.GetJobGatewayNotes(gatewayId, Models.ApiContext.ActiveUser);
+        }
     }
 }

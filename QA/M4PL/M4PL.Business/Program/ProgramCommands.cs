@@ -122,7 +122,12 @@ namespace M4PL.Business.Program
 			return await _commands.CopyPPPModel(copyPPPMopdel, activeUser);
 		}
 
-		public Entities.Program.Program Patch(Entities.Program.Program entity)
+        public async System.Threading.Tasks.Task<bool> CopyProgramModel(CopyProgramModel copyProgramModel, ActiveUser activeUser)
+        {
+            return await _commands.CopyProgramModel(copyProgramModel, activeUser);
+        }
+
+        public Entities.Program.Program Patch(Entities.Program.Program entity)
 		{
 			throw new NotImplementedException();
 		}

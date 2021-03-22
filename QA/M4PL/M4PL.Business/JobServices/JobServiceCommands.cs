@@ -71,5 +71,16 @@ namespace M4PL.Business.JobServices
 		{
 			return _commands.UploadDocument(jobDocument, activeUser);
 		}
+
+		/// <summary>
+		/// GetJobGatewayNotes
+		/// </summary>
+		/// <param name="gatewayId"></param>
+		/// <param name="activeUser"></param>
+		/// <returns></returns>
+		public string GetJobGatewayNotes(long gatewayId, ActiveUser activeUser)
+		{
+			return _commands.GetJobGatewayNotes(gatewayId, activeUser);
+		}
 	}
 }

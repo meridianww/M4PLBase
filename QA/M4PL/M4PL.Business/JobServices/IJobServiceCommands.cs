@@ -54,5 +54,12 @@ namespace M4PL.Business.JobServices
 		/// <param name="activeUser"></param>
 		/// <returns></returns>
 		bool UploadDocument(JobDocument jobDocument, ActiveUser activeUser);
+		/// <summary>
+		/// GetJobGatewayNotes
+		/// </summary>
+		/// <param name="gatewayId"></param>
+		/// <param name="activeUser"></param>
+		/// <returns></returns>
+		string GetJobGatewayNotes(long gatewayId, ActiveUser activeUser);
 	}
 }

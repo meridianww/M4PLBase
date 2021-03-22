@@ -1397,10 +1397,22 @@ namespace M4PL.Web
                     saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(route.Action, route.Controller, "Form"), ctrlSuffix, JsonConvert.SerializeObject(route), false), cssClass: WebApplicationConstants.SaveButtonCssClass);
                 }
 
-                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.PrgEdiHeader))
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && route.Entity == EntitiesAlias.PrgEdiHeader)
                 {
                     var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
-                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId, route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
+                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav,
+                        2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId, 
+                        route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), 
+                        cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
+                }
+
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && route.Entity == EntitiesAlias.Program)
+                {
+                    var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
+                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 
+                        2, secondNav: true, itemClick: string.Format(JsConstants.CopyProgramModel, route.RecordId, 
+                        route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), 
+                        cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
                 }
 
                 if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
@@ -3744,7 +3756,7 @@ namespace M4PL.Web
 
         public static DisplayMessage ImportCSVToProgram(DisplayMessage displayMessage, byte[] uploadedFileData,
             string type, string uploadColumns, long _ProgramId, INavRateCommands _navRateStaticCommand,
-            ICommonCommands _commonStaticCommands)
+            ICommonCommands _commonStaticCommands, DevExpress.Web.FileUploadCompleteEventArgs e)
         {
             if (string.IsNullOrEmpty(uploadColumns))
                 displayMessage.Description = "CSV column list config key is missing, please add the config key in web.config.";
@@ -3783,7 +3795,7 @@ namespace M4PL.Web
                             displayMessage.Description = statusModel.AdditionalDetail;
                         else
                             displayMessage.Description = "Records has been uploaded from the selected CSV file.";
-                        //e.IsValid = true;
+                        e.IsValid = true;
                     }
                     else
                         displayMessage.Description = "Selected file columns does not match with the standard column list, please select a valid CSV file.";

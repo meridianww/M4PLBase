@@ -228,6 +228,37 @@ namespace M4PL.DataAccess.Program
             return result;
         }
 
+
+        public static async Task<bool> CopyProgramModel(CopyProgramModel copyProgramModel, ActiveUser activeUser)
+        {
+            var result = false;
+            if (copyProgramModel != null && copyProgramModel.RecordId > 0 && copyProgramModel.ToPPPIds != null
+                && copyProgramModel.ToPPPIds.Count > 0)
+            {
+                var parameters = new List<Parameter>
+            {
+                 new Parameter("@recordId", copyProgramModel.RecordId )
+                ,new Parameter("@isGateway", copyProgramModel.IsGateway)
+                ,new Parameter("@isAppointmentCode", copyProgramModel.IsAppointmentCode)
+                ,new Parameter("@isReasonCode", copyProgramModel.IsReasonCode)
+                ,new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime())
+                ,new Parameter("@changedBy", activeUser.UserName)
+            };
+                List<Task> tasks = new List<Task>();
+                foreach (var item in copyProgramModel.ToPPPIds)
+                {
+                    parameters.Add(new Parameter("@toPPPId", item));
+                    tasks.Add(Task.Factory.StartNew(() =>
+                    {
+                        result = SqlSerializer.Default.ExecuteScalar<bool>
+                        (StoredProceduresConstant.UdtCopyProgramModel, parameters.ToArray(), storedProcedure: true);
+                    }));
+                }
+                Task.WaitAll(tasks.ToArray());
+            }
+            return true;
+        }
+
         public static void RecursiveDbModel(List<CopyPPPModel> copyPPPModel, long? parentId, List<CopyPPPDbModel> dbModel)
         {
             if (copyPPPModel != null)

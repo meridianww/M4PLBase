@@ -220,11 +220,11 @@ DevExCtrl.Ribbon = function () {
                         //window.open("http://localhost:4200" + "/orderdetails;id=" + newRoute.RecordId);
                         window.open(window.location.origin + "/tracking/orderdetails;id=" + newRoute.RecordId);
                     }
-                    //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
-                    //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
-                    //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
-                    //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
-                    //}
+                        //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
+                        //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
+                        //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
+                        //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
+                        //}
                     else
                         //window.open("http://localhost:4200" + "/order");
                         window.open(window.location.origin + "/tracking/order");
@@ -1103,17 +1103,40 @@ DevExCtrl.Button = function () {
         if (sourceTree.globalName == "PrgEdiHeaderProgramCopySource")
             isEDI = true;
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount(); i++) {
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
                 programId = parseInt(parentNode.name.split('_')[1]);
                 destinationCheckedNodes.push(programId);
             }
-
-            if (parentNode.nodes.length > 0) {
-                _recursiveDestinationPrograms(parentNode.nodes, destinationCheckedNodes);
+            if (parentNode.nodes != undefined && parentNode.nodes != null) {
+                for (var j = 0; j < parentNode.nodes.length; j++) {
+                    var projectNode = parentNode.nodes[j];
+                    if (projectNode.GetChecked()) {
+                        programId = parseInt(projectNode.name);
+                        destinationCheckedNodes.push(programId);
+                    }
+                    if (projectNode.nodes != undefined && projectNode.nodes != null) {
+                        for (var k = 0; k < projectNode.nodes.length; k++) {
+                            var phaseNode = projectNode.nodes[k];
+                            if (phaseNode.GetChecked()) {
+                                programId = parseInt(phaseNode.name);
+                                destinationCheckedNodes.push(programId);
+                            }
+                        }
+                    }
+                }
             }
+
+            //if (parentNode.GetChecked()) {
+            //    programId = parseInt(parentNode.name.split('_')[1]);
+            //    destinationCheckedNodes.push(programId);
+            //}
+
+            //if (parentNode.nodes.length > 0 && destinationCheckedNodes.length > 0) {
+            //    _recursiveDestinationPrograms(parentNode.nodes, destinationCheckedNodes);
+            //}
         }
         var sourceTreeHasAnyCheckedNode = false;
         var copyPPPModel = {};
@@ -1209,6 +1232,69 @@ DevExCtrl.Button = function () {
         });
     }
 
+    var _onCopyProgramModel = function (s, e, recordId, sourceTree, destTree) {
+        var destinationCheckedNodes = [];
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+            var programId = 0;
+            var parentNode = destTree.GetNode(i);
+            if (parentNode.GetChecked()) {
+                programId = parseInt(parentNode.name.split('_')[1]);
+                destinationCheckedNodes.push(programId);
+            }
+            if (parentNode.nodes != undefined && parentNode.nodes != null) {
+                for (var j = 0; j < parentNode.nodes.length; j++) {
+                    var projectNode = parentNode.nodes[j];
+                    if (projectNode.GetChecked()) {
+                        programId = parseInt(projectNode.name);
+                        destinationCheckedNodes.push(programId);
+                    }
+                    if (projectNode.nodes != undefined && projectNode.nodes != null) {
+                        for (var k = 0; k < projectNode.nodes.length; k++) {
+                            var phaseNode = projectNode.nodes[k];
+                            if (phaseNode.GetChecked()) {
+                                programId = parseInt(phaseNode.name);
+                                destinationCheckedNodes.push(programId);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        var copyProgramModel = {};
+        copyProgramModel.RecordId = recordId;
+        copyProgramModel.ToPPPIds = destinationCheckedNodes;
+        var sourceTreeNodes = sourceTree.GetNode(0).nodes;
+        var sourceTreeHasAnyCheckedNode = false;
+        for (var i = 0; i < sourceTreeNodes.length; i++) {
+            if (sourceTreeNodes[i].text == "Gateway" && sourceTreeNodes[i].GetChecked())
+                copyProgramModel.IsGateway = sourceTreeHasAnyCheckedNode = true;
+            if (sourceTreeNodes[i].text == "Appointment Code" && sourceTreeNodes[i].GetChecked())
+                copyProgramModel.IsAppointmentCode = sourceTreeHasAnyCheckedNode = true;
+            if (sourceTreeNodes[i].text == "Reason Code" && sourceTreeNodes[i].GetChecked())
+                copyProgramModel.IsReasonCode = sourceTreeHasAnyCheckedNode = true;
+        }
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        var hasCheckBoxesChecked = ((destinationCheckedNodes.length > 0) && sourceTreeHasAnyCheckedNode === true);
+        $.ajax({
+            type: "POST",
+            url: "Program/Program/CopyProgramModel",
+            data: { "copyProgramModel": copyProgramModel, "hasCheckboxesChecked": hasCheckBoxesChecked },
+            success: function (response) {
+                if (response.isNotValid) {
+                    DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                } else {
+                    DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                    DevExCtrl.PopupControl.Close();//Close the Popup
+                }
+            },
+            error: function () {
+                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+            }
+        });
+    };
+
     var _recursiveDestinationPrograms = function (nodes, destinationCheckedNodes) {
         for (var i = 0; i < nodes.length; i++) {
             var programId = 0;
@@ -1258,6 +1344,7 @@ DevExCtrl.Button = function () {
         GetAssociations: _onGetAssociations,
         DeleteAll: _onDeleteAll,
         CopyPaste: _onCopyPaste,
+        CopyProgramModel: _onCopyProgramModel,
         CopyClick: _onCopyClick
     };
 }();
@@ -1999,7 +2086,7 @@ DevExCtrl.PageControl = function () {
                 e.reloadContentOnCallback = true;
             }
             else if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Program") {
-                if (e.tab.index == 3 || e.tab.index == 5 || e.tab.index == 4) {
+                if (e.tab.index == 1 || e.tab.index == 3 || e.tab.index == 4 || e.tab.index == 5 || e.tab.index == 6 || e.tab.index == 7) {
                     e.reloadContentOnCallback = true;
                 }
             }
@@ -2086,7 +2173,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);
