@@ -172,7 +172,7 @@ namespace M4PL.DataAccess.XCBL
 		}
 		public static DataTable GetEDIExceptionInfo(int scenarioTypeId)
 		{
-			return XcblSQLSerializer.Default.DeserializeDataTable(StoredProceduresConstant.GetEDIExceptionInfo, true, new Parameter("@scenarioTypeId", scenarioTypeId));
+			return SqlSerializer.Default.DeserializeDataTable(StoredProceduresConstant.GetEDIExceptionInfo, true, new Parameter("@scenarioTypeId", scenarioTypeId));
 		}
 
 		public static void InsertJobDeliveryUpdateLog(string deliveryUpdateXml, string deliveryUpdateResponseString, long jobId)
