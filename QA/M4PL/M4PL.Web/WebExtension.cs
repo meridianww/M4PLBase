@@ -1541,7 +1541,7 @@ namespace M4PL.Web
                 var appendText = string.Empty;
                 if (route.Location != null && route.Location.Count == 1)
                     appendText = route.Location[0];
-                allNavMenus[0].Text = "Import " + appendText;
+                allNavMenus[0].Text = string.IsNullOrEmpty(appendText) ? "Import Template" : "Import " + appendText;
             }
 
             if (route.Entity == EntitiesAlias.Gateway && route.Action == "FormView")
@@ -1861,7 +1861,7 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Price/Cost Code" || mnu.MnuTitle == "Gateway/Action")
+                if (mnu.MnuTitle == "Import Template" || mnu.MnuTitle == "Gateway/Action")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Program && route.RecordId > 0)

@@ -31,6 +31,17 @@
         settings.Height = 110;
         settings.SetContent(() =>
         {
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='col-sm-5 col-md-5 col-lg-5' style='color:black'>");
+            @Html.DevExpress().Label(
+                      set =>
+                      {
+                          set.Name = "lblTemplate";
+                          set.Text = "Select Template:";
+                          set.ControlStyle.CssClass = "template-custom-lbl control-label inline-element";
+                      }).GetHtml();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-7 col-md-7 col-lg-7'>");
             if (ViewData["ImportItems"] != null)
             {
                 Html.DevExpress().ComboBox(ComboBoxSettings =>
@@ -48,16 +59,18 @@
                     string.Format("function(s, e) {{M4PLCommon.Common.ProgramImportComboBox(s, e, '{0}'); }}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute));
                 }).BindList((List<string>)ViewData["ImportItems"]).GetHtml();
             }
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write("<br />");
             if (!string.IsNullOrEmpty(selectedValue))
             {
                 ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
                 ViewContext.Writer.Write("<div id='dragZone'>");
-                ViewContext.Writer.Write("<span class='dragZoneText'>CSV to import "+ selectedValue +"</span>");
+                ViewContext.Writer.Write("<span class='dragZoneText'>CSV to import " + selectedValue + "</span>");
                 ViewContext.Writer.Write("</div>");
                 ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
                 ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
-                ViewContext.Writer.Write("<span class='dropZoneText'>CSV to import "+ selectedValue +"</span>");
+                ViewContext.Writer.Write("<span class='dropZoneText'>CSV to import " + selectedValue + "</span>");
                 ViewContext.Writer.Write("</div>");
                 ViewContext.Writer.Write("</div>");
 
@@ -73,7 +86,7 @@
                     set.AdvancedModeSettings.EnableFileList = false;
                     set.AdvancedModeSettings.EnableMultiSelect = false;
                     set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
-                    set.AdvancedModeSettings.DropZoneText = "CSV to import "+ selectedValue;
+                    set.AdvancedModeSettings.DropZoneText = "CSV to import " + selectedValue;
                     set.ValidationSettings.AllowedFileExtensions = new string[] { ".csv" };
                     set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
                     set.BrowseButton.Text = "Select an CSV to import...";

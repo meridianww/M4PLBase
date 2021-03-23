@@ -4946,7 +4946,11 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     font-weight: 600;
     white-space: nowrap;
 }
-
+.template-custom-lbl {
+    font-weight: 600;
+    white-space: nowrap;
+    color: black;
+}
 .custom-cb-panel-container {
     margin-top: 3px;
 }
