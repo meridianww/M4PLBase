@@ -40,42 +40,37 @@ namespace M4PL.Entities.Job
 
 		public string Current { get; set; }
 		public string Brand { get; set; }
-		public string Manifest { get; set; }
-		public string Arrival { get; set; }
-		public string AMPM { get; set; }
-		public string CARRIER { get; set; }
-		public string Warehouse { get; set; }
-		public string IntermediateSeller { get; set; }
-		public string Customer { get; set; }
-		public string PONumber { get; set; }
+        public string ProductType { get; set; }
+        public string BOL { get; set; }
+        public string BOLParent { get; set; }
+        public string BOLChild { get; set; }
+        public string PlantCode { get; set; }
+        public string ManifestNo { get; set; }
+		public string LocationCode { get; set; }
+		public string DeliverySiteName { get; set; }
+        public string DeliveryAddress1 { get; set; }
+        public string DeliveryAddress2 { get; set; }
+		public string DeliveryCity { get; set; }
+		public string DeliveryState { get; set; }
+		public string DeliveryPostalCode { get; set; }
+		public string DeliverySitePOC { get; set; }
+		public string DeliverySitePOCPhone { get; set; }
+		public string DeliverySitePOCPhone2 { get; set; }
+		public string DeliverySitePOCEmail { get; set; }
+		public string CustomerPurchaseOrder { get; set; }
 		public string ShipmentType { get; set; }
-		public string ContractNumber { get; set; }
-		public string OrderNumber { get; set; }
-		public string Address1 { get; set; }
-		public string Lot { get; set; }
-		public string City { get; set; }
-		public string State { get; set; }
-		public string Zip { get; set; }
-		//public decimal? Cabinets { get; set; }
-		//public int? Parts { get; set; }
-		//public decimal? TotCubes { get; set; }
-
-		public string Cabinets { get; set; }
-		public string Parts { get; set; }
-		public string TotCubes { get; set; }
+        public string OrderType { get; set; }
+		public string CustomerSalesOrder { get; set; }
 		public string ServiceMode { get; set; }
 		public string Channel { get; set; }
-		public string Origin { get; set; }
-		public string ContactName { get; set; }
-		public string ContactPhone { get; set; }
-		public string ContactPhone2 { get; set; }
-		public string ContactEmail { get; set; }
-		public string MBFSR { get; set; }
-		//public DateTime? ScheduledDeliveryDate { get; set; }
-
-		public string ScheduledDeliveryDate { get; set; }
-		public string InstallDate { get; set; }
-		public string Notes { get; set; }
+		public string EstimateDeliveryDate { get; set; }
         public string SellerSiteNumber { get; set; }
-    }
+        public string ArrivalDate { get; set; }
+        public string OriginSiteName { get; set; }
+        public string SellerSiteName { get; set; }
+		public string QuantityOrdered { get; set; }
+		public string PartsOrdered { get; set; }
+		public string TotalCubes { get; set; }
+		public string DeliveryComment { get; set; }
+	}
 }

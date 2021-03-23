@@ -840,38 +840,47 @@ namespace M4PL.DataAccess.Job
         {
             foreach (var currentJob in batchJobDetail)
             {
-                if (IsJobNotDuplicate(currentJob.OrderNumber, jobProgramId))
+                if (IsJobNotDuplicate(currentJob.CustomerSalesOrder, jobProgramId))
                 {
                     Entities.Job.Job jobInfo = new Entities.Job.Job()
                     {
-                        JobSiteCode = currentJob.Warehouse,
-                        JobSellerSiteName = currentJob.IntermediateSeller,
-                        JobDeliverySiteName = currentJob.Customer,
-                        JobCustomerPurchaseOrder = currentJob.PONumber,
-                        ShipmentType = currentJob.ShipmentType,
-                        JobBOL = currentJob.ContractNumber,
-                        JobCustomerSalesOrder = currentJob.OrderNumber,
-                        JobDeliveryStreetAddress = currentJob.Address1,
-                        JobDeliveryStreetAddress2 = currentJob.Lot,
-                        JobDeliveryCity = currentJob.City,
-                        JobDeliveryState = currentJob.State,
-                        JobDeliveryPostalCode = currentJob.Zip,
-                        JobQtyOrdered = currentJob.Cabinets.ToInt(),
-                        JobPartsOrdered = currentJob.Parts.ToInt(),
-                        JobTotalCubes = currentJob.TotCubes.ToDecimal(),
+                        ShipmentType = !string.IsNullOrEmpty(currentJob.ShipmentType) ? currentJob.ShipmentType : "Cross-Dock Shipment",
+                        JobType = !string.IsNullOrEmpty(currentJob.OrderType) ? currentJob.OrderType : "Original",
+                        JobCustomerSalesOrder = currentJob.CustomerSalesOrder,
+                        JobCustomerPurchaseOrder = currentJob.CustomerPurchaseOrder,
+                        JobCarrierContract = currentJob.Brand,
+                        JobProductType = currentJob.ProductType,
+                        JobBOL = currentJob.BOL,
+                        JobBOLMaster = currentJob.BOLParent,
+                        JobBOLChild = currentJob.BOLChild,
+                        PlantIDCode = currentJob.PlantCode,
+                        JobManifestNo = currentJob.ManifestNo,
                         JobServiceMode = currentJob.ServiceMode,
                         JobChannel = currentJob.Channel,
-                        JobOriginSiteName = currentJob.Origin,
-                        JobDeliverySitePOC = currentJob.ContactName,
-                        JobDeliverySitePOCPhone = currentJob.ContactPhone,
-                        JobDeliverySitePOCPhone2 = currentJob.ContactPhone2,
-                        JobDeliverySitePOCEmail = currentJob.ContactEmail,
-                        JobDeliveryDateTimePlanned = currentJob.ScheduledDeliveryDate.ToDateTime(),
-                        JobDeliveryDateTimeBaseline = currentJob.ScheduledDeliveryDate.ToDateTime(),
-                        ProgramID = jobProgramId,
-                        StatusId = 1,
+                        JobOriginDateTimePlanned = currentJob.ArrivalDate.ToDateTime(),
+                        JobOriginDateTimeBaseline = currentJob.ArrivalDate.ToDateTime(),
+                        JobDeliveryDateTimePlanned = currentJob.EstimateDeliveryDate.ToDateTime(),
+                        JobDeliveryDateTimeBaseline = currentJob.EstimateDeliveryDate.ToDateTime(),
+                        JobSiteCode = currentJob.LocationCode,
+                        JobOriginSiteName = currentJob.OriginSiteName,
+                        JobSellerSiteName = currentJob.SellerSiteName,
                         JobSellerCode = currentJob.SellerSiteNumber,
-                        JobDeliveryCommentText = currentJob.Notes
+                        JobDeliverySiteName = currentJob.DeliverySiteName,
+                        JobDeliveryStreetAddress = currentJob.DeliveryAddress1,
+                        JobDeliveryStreetAddress2 = currentJob.DeliveryAddress2,
+                        JobDeliveryCity = currentJob.DeliveryCity,
+                        JobDeliveryPostalCode = currentJob.DeliveryPostalCode,
+                        JobDeliveryState = currentJob.DeliveryState,
+                        JobDeliverySitePOC = currentJob.DeliverySitePOC,
+                        JobDeliverySitePOCPhone = currentJob.DeliverySitePOCPhone,
+                        JobOriginSitePOCPhone2 = currentJob.DeliverySitePOCPhone2,
+                        JobDeliverySitePOCEmail = currentJob.DeliverySitePOCEmail,
+                        JobQtyOrdered =currentJob.QuantityOrdered.ToInt(),
+                        JobPartsOrdered = currentJob.PartsOrdered.ToInt(),
+                        JobTotalCubes = currentJob.TotalCubes.ToInt(),
+                        JobDeliveryCommentText = currentJob.DeliveryComment,
+                        StatusId = 1,
+                        ProgramID = jobProgramId
                     };
 
                     Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo, isManualUpdate: true);
