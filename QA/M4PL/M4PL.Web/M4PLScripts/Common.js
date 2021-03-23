@@ -2830,6 +2830,18 @@ M4PLCommon.DocumentStatus = (function () {
         DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
     };
 
+    var _batchJobCreatedDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'ImportJobData'
+        };
+
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    };
+
     return {
         IsPODAttachedForJob: _isPODAttachedForJob,
         IsAttachmentPresentForJob: _isAttachmentPresentForJob,
@@ -2841,7 +2853,7 @@ M4PLCommon.DocumentStatus = (function () {
         JobPriceCodeMissingDisplayMessage: _jobPriceCodeMissingDisplayMessage,
         JobCostCodeMissingDisplayMessage: _jobCostCodeMissingDisplayMessage,
         JobHistoryMissingDisplayMessage: _jobHistoryMissingDisplayMessage,
-
+        BatchJobCreatedDisplayMessage: _batchJobCreatedDisplayMessage,
         IsPriceCodeDataPresentForJobInNAV: _isPriceCodeDataPresentForJobInNAV,
         IsCostCodeDataPresentForJobInNAV: _isCostCodeDataPresentForJobInNAV,
     }

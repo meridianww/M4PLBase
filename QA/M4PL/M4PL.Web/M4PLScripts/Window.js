@@ -2051,7 +2051,7 @@ M4PLWindow.UploadFileDragDrop = function () {
 
     var _onUploadControlJobFileUploadComplete = function (s, e, callBackRoute) {
         DevExCtrl.PopupControl.Close();
-        M4PLCommon.DocumentStatus.JobHistoryMissingDisplayMessage("Job Created", "Job created successfully.");
+        M4PLCommon.DocumentStatus.BatchJobCreatedDisplayMessage("Job Created", "Job Uploaded from CSV.");
         var jobDataviewCtrl = ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel);
         if (jobDataviewCtrl != null && jobDataviewCtrl != undefined) {
             jobDataviewCtrl.PerformCallback({ strRoute: JSON.stringify(callBackRoute) });

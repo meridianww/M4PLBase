@@ -90,5 +90,6 @@ namespace M4PL.Entities
 		public const string NavRate = "NavRate";
 		public const string DriverScrubReport = "DriverScrubReport";
 		public const string UserGuidePDFDocument = "UserGuidePDFDocument";
+		public const string ImportJobData = "ImportJobData";
 	}
 }
