@@ -260,7 +260,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             //treeListBase.ContentRouteCallBack.OwnerCbPanel = "cplTreeView";
             treeListBase.ContentRouteCallBack.ParentEntity = EntitiesAlias.Program;
             treeListBase.ContentRouteCallBack.OwnerCbPanel = string.Concat(route.Entity, MvcConstants.ActionDataView, "CbPanel");
-            treeListBase.ContentRouteCallBack.Action = MvcConstants.ActionDataView;
+            treeListBase.ContentRouteCallBack.Action = route.IsPageLoad ? "ProgramCopyDestination" : MvcConstants.ActionDataView;
             return PartialView("_TreePartialView", treeListBase);
         }
         public JsonResult CopyPPPModel(CopyPPPModel copyPPPModel, bool hasCheckboxesChecked)
