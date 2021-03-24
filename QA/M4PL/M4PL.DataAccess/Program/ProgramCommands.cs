@@ -244,17 +244,12 @@ namespace M4PL.DataAccess.Program
                 ,new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime())
                 ,new Parameter("@changedBy", activeUser.UserName)
             };
-                List<Task> tasks = new List<Task>();
                 foreach (var item in copyProgramModel.ToPPPIds)
                 {
                     parameters.Add(new Parameter("@toPPPId", item));
-                    tasks.Add(Task.Factory.StartNew(() =>
-                    {
-                        result = SqlSerializer.Default.ExecuteScalar<bool>
-                        (StoredProceduresConstant.UdtCopyProgramModel, parameters.ToArray(), storedProcedure: true);
-                    }));
+                    result = SqlSerializer.Default.ExecuteScalar<bool>
+                    (StoredProceduresConstant.UdtCopyProgramModel, parameters.ToArray(), storedProcedure: true);
                 }
-                Task.WaitAll(tasks.ToArray());
             }
             return true;
         }
