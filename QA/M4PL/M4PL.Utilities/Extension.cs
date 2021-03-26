@@ -270,6 +270,7 @@ namespace M4PL.Utilities
 
             foreach (DataColumn column in dr.Table.Columns)
             {
+                column.ColumnName = column.ColumnName.Replace(" ","");
                 foreach (PropertyInfo pro in temp.GetProperties())
                 {
                     if (pro.Name == column.ColumnName)
