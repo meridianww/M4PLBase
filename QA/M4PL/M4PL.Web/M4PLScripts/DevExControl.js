@@ -220,11 +220,11 @@ DevExCtrl.Ribbon = function () {
                         //window.open("http://localhost:4200" + "/orderdetails;id=" + newRoute.RecordId);
                         window.open(window.location.origin + "/tracking/orderdetails;id=" + newRoute.RecordId);
                     }
-                        //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
-                        //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
-                        //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
-                        //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
-                        //}
+                    //else if ((route.EntityName == 'Job' || route.EntityName == 'JobAdvanceReport' || route.EntityName == 'JobCard')) {
+                    //    var id = ASPxClientControl.GetControlCollection().GetByName("Id");
+                    //    if (id != null && id != undefined && id.GetValue() != undefined && id.GetValue() > 0)
+                    //        window.open("http://localhost:4200" + "/orderdetails;id=" + id.GetValue());
+                    //}
                     else
                         //window.open("http://localhost:4200" + "/order");
                         window.open(window.location.origin + "/tracking/order");
@@ -1103,7 +1103,7 @@ DevExCtrl.Button = function () {
         if (sourceTree.globalName == "PrgEdiHeaderProgramCopySource")
             isEDI = true;
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1234,7 +1234,7 @@ DevExCtrl.Button = function () {
 
     var _onCopyProgramModel = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1393,12 +1393,12 @@ DevExCtrl.TreeList = function () {
             route.IsJobParentEntityUpdated = false;
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 if (e.node.name.indexOf("_") == -1) {
-                    if (e.node.text == "Builder") {
-                        route.ParentRecordId = 10014;
-                    }
-                    else {
-                        route.ParentRecordId = parseInt(e.node.name.replace('_', ''));
-                    }
+                    //if (e.node.text == "Builder") {
+                    //    route.ParentRecordId = 10014;
+                    //}
+                    //else {
+                    route.ParentRecordId = parseInt(e.node.name.replace('_', ''));
+                    //}
                 }
                 route.RecordId = M4PLWindow.OrderId == null ? 0 : M4PLWindow.OrderId;
 
@@ -1420,33 +1420,34 @@ DevExCtrl.TreeList = function () {
                     IsDataView = route.Action === "DataView" ? true : false;
                     //route.OwnerCbPanel = "pnlProgramDetail";
                     //route.Filters.FieldName = e.node.text;
-                    if (e.node.text == "Builder") {
-                        route.RecordId = 10014;
-                    }
-                    else {
-                        route.RecordId = parseInt(e.node.name.replace('_', ''));
-                    }
-                    if (e.node.parent.nodes.length > 0) {
-                        var childResult1 = e.node.parent.nodes.find(x => x.name = e.node.name).parent;
-                        if (childResult1.parent != null) {
-                            var childResult2 = childResult1.parent.nodes.find(x => x.name = childResult1.name).parent;
-                            if (childResult2.parent != null) {
-                                var childResult3 = childResult2.parent.nodes.find(x => x.name = childResult2.name).parent;
-                                if (childResult3.parent != null) {
+                    //if (e.node.text == "Builder") {
+                    //    route.RecordId = 10014;
+                    //}
+                    //else {
+                    route.RecordId = parseInt(e.node.name.replace('_', ''));
+                    //}
+                    //route.Filters.FieldName = 10007;
+                    //if (e.node.parent.nodes.length > 0) {
+                    //    var childResult1 = e.node.parent.nodes.find(x => x.name = e.node.name).parent;
+                    //    if (childResult1.parent != null) {
+                    //        var childResult2 = childResult1.parent.nodes.find(x => x.name = childResult1.name).parent;
+                    //        if (childResult2.parent != null) {
+                    //            var childResult3 = childResult2.parent.nodes.find(x => x.name = childResult2.name).parent;
+                    //            if (childResult3.parent != null) {
 
-                                } else {
-                                    route.Filters.Value = childResult3.name.split('_')[1];
-                                    route.Filters.FieldName = childResult3.text;
-                                }
-                            } else {
-                                route.Filters.Value = childResult2.name.split('_')[1];
-                                route.Filters.FieldName = childResult2.text;
-                            }
-                        } else {
-                            route.Filters.Value = childResult1.name.split('_')[1];
-                            route.Filters.FieldName = childResult1.text;
-                        }
-                    }
+                    //            } else {
+                    //                route.Filters.Value = childResult3.name.split('_')[1];
+                    //                route.Filters.FieldName = childResult3.text;
+                    //            }
+                    //        } else {
+                    //            route.Filters.Value = childResult2.name.split('_')[1];
+                    //            route.Filters.FieldName = childResult2.text;
+                    //        }
+                    //    } else {
+                    //        route.Filters.Value = childResult1.name.split('_')[1];
+                    //        route.Filters.FieldName = childResult1.text;
+                    //    }
+                    //}
                     contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                 }
                 DevExCtrl.Ribbon.DoCallBack(route);
@@ -2173,7 +2174,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
+        for (var i = 0; i < xportContol.GetItemCount(); i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

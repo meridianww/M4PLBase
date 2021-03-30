@@ -214,10 +214,10 @@ namespace M4PL.Web.Areas.Program.Controllers
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             SetFormResult(route.RecordId, false, route.ParentRecordId);
-            if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName) && SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ActionTreeView && SessionProvider.ActiveUser.LastRoute.Controller == "Program")
-            {
-                Session["CurrentNode"] = route.Filters.FieldName;
-            }
+            //if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName) && SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ActionTreeView && SessionProvider.ActiveUser.LastRoute.Controller == "Program")
+            //{
+            //    Session["CurrentNode"] = route.Filters.FieldName;
+            //}
 
             _formResult.Record.ParentId = route.ParentRecordId;
             if (_formResult.Record.PrgHierarchyLevel == 4)
@@ -225,7 +225,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             if (route.Filters != null && route.Filters.Value != null && long.Parse(route.Filters.Value) != 0)
                 _formResult.Record.PrgCustID = long.Parse(route.Filters.Value);
 
-            _formResult.Record.CustomerCode = route.Filters.FieldName;
+            _formResult.Record.CustomerCode = _formResult.Record.PrgCustomerCode;
             if (_formResult.CallBackRoute == null)
                 _formResult.CallBackRoute = route;
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
