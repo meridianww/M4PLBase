@@ -233,7 +233,7 @@ namespace M4PL.Business.Event
 					CCAddress = emailData.CcAddress,
 					EmailPriority = 1,
 					IsBodyHtml = true,
-					Subject = emailData.Subject,
+					Subject = eventId == 9 ? string.Format("EDI - No EDI Received({0})", DateTime.Now.ToShortDateString()) : emailData.Subject,
 					ToAddress = emailData.ToAddress
 				};
 
