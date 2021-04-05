@@ -19,6 +19,8 @@ SELECT JobID
 	,CgoPackagingTypeId
 	,StatusId
 	,CgoSerialNumber
+	,CgoQtyUnitsId
+	,CgoQtyOnHand
 	,CASE WHEN ISNULL(CgoQtyDamaged,0)<>0 THEN 'D'
 		WHEN  ISNULL(CgoQtyOver,0)<>0 THEN 'O'
 		WHEN  ISNULL(CgoQtyShortOver,0)<>0 THEN 'S'
