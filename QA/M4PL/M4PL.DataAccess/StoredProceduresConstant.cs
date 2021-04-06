@@ -236,6 +236,7 @@ namespace M4PL.DataAccess
 		public const string UpdateNavRateByLocation = "dbo.UpdateNavRateByLocation";
 		public const string ImportGatewayActionForProgram = "dbo.ImportGatewayActionForProgram";
 		public const string ImportVendorProfile = "dbo.ImportVendorProfile";
+		public const string GetVendorProfile = "dbo.GetVendorProfile";
 
 		/* Sync Nav PriceCode */
 		public const string UpdateNavPriceCode = "dbo.UpdateNavPriceCode";

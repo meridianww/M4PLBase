@@ -27,5 +27,6 @@ namespace M4PL.Business.Finance.VendorProfile
 	public interface IVendorProfileCommands : IBaseCommands<Entities.Finance.VendorProfile.VendorProfile>
 	{
 		StatusModel ImportVendorProfile(List<Entities.Finance.VendorProfile.VendorProfile> vendorProfiles);
-	}
+        Entities.Finance.VendorProfile.VendorProfileResponse GetVendorProfile(string locationCode, string postalCode);
+    }
 }

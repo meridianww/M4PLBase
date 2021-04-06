@@ -53,6 +53,11 @@ namespace M4PL.Business.Finance.VendorProfile
             return M4PL.DataAccess.Finance.VendorProfileCommands.ImportVendorProfile(vendorProfiles, ActiveUser);
         }
 
+        public Entities.Finance.VendorProfile.VendorProfileResponse GetVendorProfile(string locationCode, string postalCode)
+        {
+            return M4PL.DataAccess.Finance.VendorProfileCommands.GetVendorProfile(locationCode, postalCode);
+        }
+
         public Entities.Finance.VendorProfile.VendorProfile Patch(Entities.Finance.VendorProfile.VendorProfile entity)
         {
             throw new NotImplementedException();

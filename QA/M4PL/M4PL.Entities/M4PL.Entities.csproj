@@ -125,6 +125,7 @@
     <Compile Include="Finance\VendorLedger\NavVendorCheckedInvoice.cs" />
     <Compile Include="Finance\VendorLedger\NavVendorLedger.cs" />
     <Compile Include="Finance\VendorProfile\VendorProfile.cs" />
+    <Compile Include="Finance\VendorProfile\VendorProfileResponse.cs" />
     <Compile Include="Finance\Vendor\NavVendor.cs" />
     <Compile Include="Finance\Vendor\NavVendorData.cs" />
     <Compile Include="Finance\Vendor\NavVendorResponse.cs" />

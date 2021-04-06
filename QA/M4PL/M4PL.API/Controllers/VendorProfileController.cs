@@ -39,5 +39,19 @@ namespace M4PL.API.Controllers
 			_vendorProfileCommands.ActiveUser = Models.ApiContext.ActiveUser;
 			return _vendorProfileCommands.ImportVendorProfile(vendorProfiles);
 		}
+
+		/// <summary>
+		/// Get Vendor Profile Information By LocationCode and PostalCode
+		/// </summary>
+		/// <param name="locationCode">locationCode</param>
+		/// <param name="postalCode">postalCode</param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetVendorProfile"), ResponseType(typeof(Entities.Finance.VendorProfile.VendorProfileResponse))]
+		public Entities.Finance.VendorProfile.VendorProfileResponse GetVendorProfile(string locationCode, string postalCode)
+        {
+			_vendorProfileCommands.ActiveUser = Models.ApiContext.ActiveUser;
+			return _vendorProfileCommands.GetVendorProfile(locationCode, postalCode);
+		}
 	}
 }

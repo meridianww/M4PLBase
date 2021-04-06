@@ -78,7 +78,23 @@ namespace M4PL.DataAccess.Finance
 			return statusModel;
 		}
 
-		private static DataTable GetVendorProfileListDT(List<Entities.Finance.VendorProfile.VendorProfile> vendorProfiles, ActiveUser activeUser)
+		public static Entities.Finance.VendorProfile.VendorProfileResponse GetVendorProfile(string locationCode, string postalCode)
+		{
+			Entities.Finance.VendorProfile.VendorProfileResponse vendorProfileResult = null;
+			var parameters = new List<Parameter> { new Parameter("@locationCode", locationCode), new Parameter("@postalCode", postalCode) };
+			try
+			{
+				vendorProfileResult = SqlSerializer.Default.DeserializeSingleRecord<Entities.Finance.VendorProfile.VendorProfileResponse>(StoredProceduresConstant.GetVendorProfile, parameters.ToArray(), false, true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error is occuring while Getting the Vendor Profile Data.", "GetVendorProfile", Utilities.Logger.LogType.Error);
+			}
+
+			return vendorProfileResult;
+		}
+
+        private static DataTable GetVendorProfileListDT(List<Entities.Finance.VendorProfile.VendorProfile> vendorProfiles, ActiveUser activeUser)
 		{
 			if (vendorProfiles == null || (vendorProfiles != null && vendorProfiles.Count == 0))
 			{
