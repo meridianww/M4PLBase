@@ -670,7 +670,7 @@ namespace M4PL.Web.Controllers
             if (route.Entity != EntitiesAlias.CustNAVConfiguration)
             {
                 CommonIds maxMinFormData = null;
-                if ((route.Entity != EntitiesAlias.NavRate || route.Entity != EntitiesAlias.Gateway) && route.Action != MvcConstants.ActionForm)
+                if ((route.Entity != EntitiesAlias.NavRate || route.Entity != EntitiesAlias.Gateway || route.Entity != EntitiesAlias.VendorProfile) && route.Action != MvcConstants.ActionForm)
                     maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
 
                 if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))

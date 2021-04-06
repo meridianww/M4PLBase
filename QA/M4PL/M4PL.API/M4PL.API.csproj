@@ -240,6 +240,7 @@
     <Folder Include="Views\NavRemittance\" />
     <Folder Include="Views\NavSalesOrder\" />
     <Folder Include="Views\NavVendorLedger\" />
+    <Folder Include="Views\VendorProfile\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="Controllers\SurveyUserController.cs" />
     <Compile Include="Controllers\UserGuideUploadController.cs" />
     <Compile Include="Controllers\VendDcLocationContactsController.cs" />
+    <Compile Include="Controllers\VendorProfileController.cs" />
     <Compile Include="Controllers\VendReportsController.cs" />
     <Compile Include="Controllers\PrgReportsController.cs" />
     <Compile Include="Controllers\JobReportsController.cs" />

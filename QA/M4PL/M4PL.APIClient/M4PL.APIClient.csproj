@@ -115,6 +115,8 @@
     <Compile Include="Customer\ICustNAVConfigurationCommands.cs" />
     <Compile Include="Customer\ICustomerCommands.cs" />
     <Compile Include="Customer\ICustReportCommands.cs" />
+    <Compile Include="Finance\VendorProfileCommands.cs" />
+    <Compile Include="Finance\IVendorProfileCommands.cs" />
     <Compile Include="Finance\INavCostCodeCommands.cs" />
     <Compile Include="Finance\INavCustomerCommands.cs" />
     <Compile Include="Finance\INavPriceCodeCommands.cs" />
@@ -300,6 +302,7 @@
     <Compile Include="ViewModels\Finance\NavRateView.cs" />
     <Compile Include="ViewModels\Finance\NavSalesOrderView.cs" />
     <Compile Include="ViewModels\Finance\NavVendorView.cs" />
+    <Compile Include="ViewModels\Finance\VendorProfileView.cs" />
     <Compile Include="ViewModels\Job\JobAdvanceReportFilterView.cs" />
     <Compile Include="ViewModels\Job\JobAdvanceReportView.cs" />
     <Compile Include="ViewModels\Job\JobBillableSheetView.cs" />

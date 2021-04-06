@@ -1342,6 +1342,7 @@ namespace M4PL.Web
                 && (route.Entity != EntitiesAlias.PrgRefGatewayDefault)
                 && (route.Entity != EntitiesAlias.NavRate && route.Action != MvcConstants.ActionForm)
                 && (route.Entity != EntitiesAlias.Gateway && route.Action != MvcConstants.ActionForm)
+                && (route.Entity != EntitiesAlias.VendorProfile && route.Action != MvcConstants.ActionForm)
                 && (route.Entity != EntitiesAlias.JobAdvanceReport && route.Action != MvcConstants.ActionForm)
                 && (route.Entity != EntitiesAlias.NavRemittance && route.Action != MvcConstants.ActionForm))
             {
@@ -1469,6 +1470,7 @@ namespace M4PL.Web
                     || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView)
                     || (route.Entity == EntitiesAlias.NavRate && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.Gateway && route.Action == MvcConstants.ActionForm)
+                    || (route.Entity == EntitiesAlias.VendorProfile && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.JobAdvanceReport && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.NavRemittance && route.Action == MvcConstants.ActionForm)
                     || (route.Entity == EntitiesAlias.JobGateway && (route.Action == "AddMultiAction" || route.Action == "AddMultiGateway")))
@@ -1547,6 +1549,11 @@ namespace M4PL.Web
             if (route.Entity == EntitiesAlias.Gateway && route.Action == "FormView")
             {
                 allNavMenus[0].Text = "Import Gateway/Action";
+            }
+
+            if (route.Entity == EntitiesAlias.VendorProfile && route.Action == "FormView")
+            {
+                allNavMenus[0].Text = "Import Vendor Profile";
             }
 
             if (route.Entity == EntitiesAlias.JobDocReference && route.OwnerCbPanel == "JobDocReferenceJobDocReferenceDocumentDataView1AllCbPanel")

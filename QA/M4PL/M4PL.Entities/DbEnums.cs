@@ -178,6 +178,7 @@ namespace M4PL.Entities
 		NavSalesOrder,
 		NavRate,
 		Gateway,
+		VendorProfile,
 
 		Customer,
 		CustBusinessTerm,

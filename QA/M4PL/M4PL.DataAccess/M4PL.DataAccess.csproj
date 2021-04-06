@@ -94,6 +94,7 @@
     <Compile Include="Customer\CustContactCommands.cs" />
     <Compile Include="Customer\CustReportCommands.cs" />
     <Compile Include="Event\EventCommands.cs" />
+    <Compile Include="Finance\VendorProfileCommands.cs" />
     <Compile Include="Finance\GatewayCommands.cs" />
     <Compile Include="Finance\NavCostCodeCommands.cs" />
     <Compile Include="Finance\NavCustomerCommands.cs" />

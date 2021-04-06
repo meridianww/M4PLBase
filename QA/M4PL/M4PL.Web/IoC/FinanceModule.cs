@@ -37,6 +37,7 @@ namespace M4PL.Web.IoC
 			builder.RegisterType<NavRateCommands>().As<INavRateCommands>().InstancePerRequest();
 			builder.RegisterType<GatewayCommands>().As<IGatewayCommands>().InstancePerRequest();
 			builder.RegisterType<NavRemittanceCommands>().As<INavRemittanceCommands>().InstancePerRequest();
+			builder.RegisterType<VendorProfileCommands>().As<IVendorProfileCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}

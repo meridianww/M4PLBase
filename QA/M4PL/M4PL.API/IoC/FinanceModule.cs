@@ -29,6 +29,7 @@ using M4PL.Business.Finance.Remittance;
 using M4PL.Business.Finance.SalesOrder;
 using M4PL.Business.Finance.Vendor;
 using M4PL.Business.Finance.VendorLedger;
+using M4PL.Business.Finance.VendorProfile;
 
 namespace M4PL.API.IoC
 {
@@ -54,6 +55,7 @@ namespace M4PL.API.IoC
 			builder.RegisterType<GatewayCommands>().As<IGatewayCommands>().InstancePerRequest();
 			builder.RegisterType<NavVendorLedgerCommands>().As<INavVendorLedgerCommands>().InstancePerRequest();
 			builder.RegisterType<NavRemittanceCommands>().As<INavRemittanceCommands>().InstancePerRequest();
+			builder.RegisterType<VendorProfileCommands>().As<IVendorProfileCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}
