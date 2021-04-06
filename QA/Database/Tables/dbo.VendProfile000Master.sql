@@ -19,6 +19,8 @@ CREATE TABLE [dbo].[VendProfile000Master] (
 	,StatusId INT
 	,EnteredBy NVARCHAR(150)
 	,EnteredDate DATETIME2(7)
+	,UpdatedBy NVarchar(150) NULL
+	,UpdatedDate DateTime2(7) NULL
 	,CONSTRAINT [PK_VendProfile000Master] PRIMARY KEY CLUSTERED ([Id] ASC) WITH (
 		PAD_INDEX = OFF
 		,STATISTICS_NORECOMPUTE = OFF

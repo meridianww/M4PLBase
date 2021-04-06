@@ -9,13 +9,20 @@ GO
 -- Create date: 4/6/2021
 -- Description:	Import Vendor Profile
 -- =============================================
-CREATE PROCEDURE [dbo].[ImportVendorProfile] @uttVendorProfile [dbo].[uttVendorProfile] READONLY
+CREATE PROCEDURE [dbo].[ImportVendorProfile] 
+(
+@uttVendorProfile [dbo].[uttVendorProfile] READONLY,
+@isDataStatusUpdate BIT = 0
+)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
+	IF(@isDataStatusUpdate = 1)
+	BEGIN
 	UPDATE [dbo].[VendProfile000Master]
 	SET StatusId = 3
+	END
 
 	INSERT INTO [dbo].[VendProfile000Master] (
 		[PostalCode]

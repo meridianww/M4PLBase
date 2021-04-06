@@ -1879,6 +1879,17 @@ namespace M4PL.Web
                     }
                 }
 
+                if (mnu.MnuTitle == "Vendor Profile")
+                {
+                    mnu.StatusId = 3;
+                    if (sessionProvider.ActiveUser.IsSysAdmin)
+                    {
+                        mnu.Route.RecordId = route.RecordId;
+                        mnu.StatusId = 1;
+                        mnu.Route.IsPopup = true;
+                    }
+                }
+
                 if (mnu.MnuTitle == "Download All")
                 {
                     mnu.StatusId = 3;

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace M4PL.DataAccess.Finance
 {
@@ -27,9 +28,45 @@ namespace M4PL.DataAccess.Finance
 		public static StatusModel ImportVendorProfile(List<Entities.Finance.VendorProfile.VendorProfile> vendorProfiles, ActiveUser activeUser)
 		{
 			StatusModel statusModel = null;
+			int? count = vendorProfiles?.Count;
+			int startCount = 2000;
+			List<Parameter> parameters = null;
+			List<Task> tasks = new List<Task>();
 			try
 			{
-				SqlSerializer.Default.Execute(StoredProceduresConstant.ImportVendorProfile, new Parameter("@uttVendorProfile", GetVendorProfileListDT(vendorProfiles, activeUser)), true);
+				if (count.HasValue)
+				{
+					List<Entities.Finance.VendorProfile.VendorProfile> distinctVendorProfile = vendorProfiles.Distinct().ToList();
+					int totalIterations = (distinctVendorProfile.Count.ToInt() / startCount) + 1;
+					for (int i = 0; i < totalIterations; i++)
+					{
+						var currentRecords = distinctVendorProfile.Skip(i * startCount).Take(startCount).ToList();
+						if (currentRecords != null && currentRecords.Count > 0)
+						{
+							if (i > 0)
+							{
+								tasks.Add(Task.Factory.StartNew(() =>
+								{
+
+									parameters = new List<Parameter> { new Parameter("@uttVendorProfile", GetVendorProfileListDT(currentRecords, activeUser)) };
+									SqlSerializer.Default.Execute(StoredProceduresConstant.ImportVendorProfile, parameters.ToArray(), true);
+								}));
+							}
+							else
+                            {
+								parameters = new List<Parameter> { 
+									new Parameter("@uttVendorProfile", GetVendorProfileListDT(currentRecords, activeUser)), 
+								    new Parameter("@isDataStatusUpdate", true) 
+								};
+
+								SqlSerializer.Default.Execute(StoredProceduresConstant.ImportVendorProfile, parameters.ToArray(), true);
+							}
+						}
+					}
+
+					if (tasks.Count > 0) { Task.WaitAll(tasks.ToArray()); }
+				}
+
 				statusModel = new StatusModel() { Status = "Success", AdditionalDetail = "", StatusCode = 200 };
 			}
 			catch (Exception exp)
@@ -70,14 +107,14 @@ namespace M4PL.DataAccess.Finance
 					{
 						var row = vendorProfileUTT.NewRow();
 						row["PostalCode"] = vendorProfile.PostalCode;
-						row["Sunday"] = vendorProfile.Sunday;
-						row["Monday"] = vendorProfile.Monday;
-						row["Tuesday"] = vendorProfile.Tuesday;
-						row["Wednesday"] = vendorProfile.Wednesday;
-						row["Thursday"] = vendorProfile.Thursday;
-						row["Friday"] = vendorProfile.Friday;
-						row["Saturday"] = vendorProfile.Saturday;
-						row["FanRun"] = vendorProfile.FanRun;
+						row["Sunday"] = vendorProfile.Sunday.ToBoolean();
+						row["Monday"] = vendorProfile.Monday.ToBoolean();
+						row["Tuesday"] = vendorProfile.Tuesday.ToBoolean();
+						row["Wednesday"] = vendorProfile.Wednesday.ToBoolean();
+						row["Thursday"] = vendorProfile.Thursday.ToBoolean();
+						row["Friday"] = vendorProfile.Friday.ToBoolean();
+						row["Saturday"] = vendorProfile.Saturday.ToBoolean();
+						row["FanRun"] = vendorProfile.FanRun.ToBoolean();
 						row["VendorCode"] = vendorProfile.VendorCode;
 						row["StatusId"] = 1;
 						row["EnteredBy"] = activeUser.UserName;

@@ -9,14 +9,14 @@ namespace M4PL.Entities.Finance.VendorProfile
     public class VendorProfile : BaseModel
     {
         public string PostalCode { get; set; }
-        public bool Sunday { get; set; }
-        public bool Monday { get; set; }
-        public bool Tuesday { get; set; }
-        public bool Wednesday { get; set; }
-        public bool Thursday { get; set; }
-        public bool Friday { get; set; }
-        public bool Saturday { get; set; }
-        public bool FanRun { get; set; }
+        public string Sunday { get; set; }
+        public string Monday { get; set; }
+        public string Tuesday { get; set; }
+        public string Wednesday { get; set; }
+        public string Thursday { get; set; }
+        public string Friday { get; set; }
+        public string Saturday { get; set; }
+        public string FanRun { get; set; }
         public string VendorCode { get; set; }
     }
 }
