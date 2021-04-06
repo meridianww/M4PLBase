@@ -3,7 +3,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
--- DROP VIEW [dbo].[vwJobMasterData]
+-- DROP VIEW [dbo].[vwJobCargoData]
 CREATE VIEW [dbo].[vwJobCargoData]
 	WITH SCHEMABINDING
 AS
