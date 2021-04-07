@@ -1402,17 +1402,17 @@ namespace M4PL.Web
                 {
                     var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
                     saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav,
-                        2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId, 
-                        route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), 
+                        2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId,
+                        route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"),
                         cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
                 }
 
                 if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && route.Entity == EntitiesAlias.Program)
                 {
                     var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
-                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 
-                        2, secondNav: true, itemClick: string.Format(JsConstants.CopyProgramModel, route.RecordId, 
-                        route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), 
+                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav,
+                        2, secondNav: true, itemClick: string.Format(JsConstants.CopyProgramModel, route.RecordId,
+                        route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"),
                         cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
                 }
 
@@ -2100,7 +2100,18 @@ namespace M4PL.Web
                     || route.Entity == EntitiesAlias.Job) && route.Action == MvcConstants.ActionForm && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
                 if (mnu.MnuTitle == "Retrieve Invoices")
-                    mnu.StatusId = 1;
+                {
+                    mnu.StatusId = 3;
+                    if (sessionProvider != null && sessionProvider.ActiveUser != null)
+                    {
+                        if (sessionProvider.ActiveUser.IsSysAdmin
+                        || (sessionProvider.ActiveUser.ConTypeId == (int)ContactType.Vendor)
+                        || (sessionProvider.ActiveUser.ConTypeId == (int)ContactType.Employee))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+                }
                 if ((route.Entity == EntitiesAlias.JobCard
                     || route.Entity == EntitiesAlias.JobAdvanceReport
                     || route.Entity == EntitiesAlias.Job) && mnu.MnuTitle == "Tracking")
