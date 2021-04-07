@@ -85,8 +85,8 @@ namespace M4PL.Business.XCBL
         {
             Entities.Job.Job processingJobDetail = null;
             Entities.Job.Job jobDetails = null;
-			Entities.Job.Job existingJobDataInDB = null;
-			OrderResponse response = null;
+            Entities.Job.Job existingJobDataInDB = null;
+            OrderResponse response = null;
             Task[] tasks = new Task[2];
             JobCargoMapper cargoMapper = new JobCargoMapper();
             OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
@@ -99,211 +99,211 @@ namespace M4PL.Business.XCBL
                 Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
                 Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
-			if (isFarEyeRequest)
-			{
-				if (string.IsNullOrEmpty(orderHeader.OrderNumber))
-				{
-					orderHeader.OrderNumber = string.Format("O-{0}", orderHeader.OriginalOrderNumber);
-					existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-				}
-				else
-				{
-					string tempOrderNumber = string.Format("O-{0}", orderHeader.OriginalOrderNumber);
-					existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, tempOrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-					if (existingJobDataInDB != null && existingJobDataInDB.Id > 0)
-					{
-						existingJobDataInDB.JobCustomerSalesOrder = orderHeader.OrderNumber;
-					}
-					else
-					{
-						existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-					}
-				}
-			}
-			else
-			{
-				existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-			}
+            if (isFarEyeRequest)
+            {
+                if (string.IsNullOrEmpty(orderHeader.OrderNumber))
+                {
+                    orderHeader.OrderNumber = string.Format("O-{0}", orderHeader.OriginalOrderNumber);
+                    existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+                }
+                else
+                {
+                    string tempOrderNumber = string.Format("O-{0}", orderHeader.OriginalOrderNumber);
+                    existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, tempOrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+                    if (existingJobDataInDB != null && existingJobDataInDB.Id > 0)
+                    {
+                        existingJobDataInDB.JobCustomerSalesOrder = orderHeader.OrderNumber;
+                    }
+                    else
+                    {
+                        existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+                    }
+                }
+            }
+            else
+            {
+                existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+            }
 
-			try
-			{
-				// Populate the data in xCBL tables
-				tasks[0] = Task.Factory.StartNew(() =>
-				{
-					XCBLSummaryHeaderModel request = GetSummaryHeaderModel(electroluxOrderDetails);
-					if (request != null)
-					{
-						_commands.InsertxCBLDetailsInDB(request);
-					}
-				});
-			}
-			catch(Exception exp)
-			{
-				DataAccess.Logger.ErrorLogger.Log(exp, "Error is happening while saving the electrolux order request data.", "ProcessElectroluxOrderRequest", Utilities.Logger.LogType.Error);
-			}
+            try
+            {
+                // Populate the data in xCBL tables
+                tasks[0] = Task.Factory.StartNew(() =>
+                {
+                    XCBLSummaryHeaderModel request = GetSummaryHeaderModel(electroluxOrderDetails);
+                    if (request != null)
+                    {
+                        _commands.InsertxCBLDetailsInDB(request);
+                    }
+                });
+            }
+            catch (Exception exp)
+            {
+                DataAccess.Logger.ErrorLogger.Log(exp, "Error is happening while saving the electrolux order request data.", "ProcessElectroluxOrderRequest", Utilities.Logger.LogType.Error);
+            }
 
-			// Creation of a Job
-			tasks[1] = Task.Factory.StartNew(() =>
-			{
-				try
-				{
-					if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase))
-					{
-						if (!string.IsNullOrEmpty(orderHeader?.Action))
-						{
-							if (existingJobDataInDB?.Id > 0 && string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
-							{
-								response = new OrderResponse()
-								{
-									ClientMessageID = string.Empty,
-									SenderMessageID = orderHeader?.OrderNumber,
-									StatusCode = "Failure",
-									Subject = "There is already a Order present in the Meridian system with the same Order Number."
-								};
-							}
-							else if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
-							{
-								jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails, systemOptionList) : jobDetails;
-								processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
-								if (processingJobDetail?.Id > 0)
-								{
-									InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-									List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
-									if (jobCargos != null && jobCargos.Count > 0)
-									{
-										_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-									}
+            // Creation of a Job
+            tasks[1] = Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (!string.IsNullOrEmpty(orderHeader?.Action))
+                        {
+                            if (existingJobDataInDB?.Id > 0 && string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
+                            {
+                                response = new OrderResponse()
+                                {
+                                    ClientMessageID = string.Empty,
+                                    SenderMessageID = orderHeader?.OrderNumber,
+                                    StatusCode = "Failure",
+                                    Subject = "There is already a Order present in the Meridian system with the same Order Number."
+                                };
+                            }
+                            else if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
+                            {
+                                jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails, systemOptionList) : jobDetails;
+                                processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
+                                if (processingJobDetail?.Id > 0)
+                                {
+                                    InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
+                                    List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
+                                    if (jobCargos != null && jobCargos.Count > 0)
+                                    {
+                                        _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+                                    }
 
-									if (processingJobDetail.ProgramID.HasValue)
-									{
-										_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
-									}
-								}
-								else
-								{
-									response = new OrderResponse()
-									{
-										ClientMessageID = string.Empty,
-										SenderMessageID = orderHeader?.OrderNumber,
-										StatusCode = "Failure",
-										Subject = "Request has been recieved and logged, there is some issue while creating order in the system, please try again."
-									};
-								}
-							}
-							else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
-							{
-								if (existingJobDataInDB?.Id > 0 && !string.Equals(existingJobDataInDB.JobGatewayStatus, "Canceled", StringComparison.OrdinalIgnoreCase))
-								{
-									processingJobDetail = existingJobDataInDB;
-									InsertxCBLDetailsInTable(existingJobDataInDB.Id, electroluxOrderDetails);
-									ProcessElectroluxOrderCancellationRequest(existingJobDataInDB);
-								}
-								if (existingJobDataInDB?.Id > 0 && string.Equals(existingJobDataInDB.JobGatewayStatus, "Canceled", StringComparison.OrdinalIgnoreCase))
-								{
-									response = new OrderResponse()
-									{
-										ClientMessageID = string.Empty,
-										SenderMessageID = orderHeader?.OrderNumber,
-										StatusCode = "Failure",
-										Subject = "Delete action can not be proceed for the order as requested order is already canceled in the meridian system, please try again."
-									};
-								}
-								else if (existingJobDataInDB?.Id <= 0)
-								{
-									response = new OrderResponse()
-									{
-										ClientMessageID = string.Empty,
-										SenderMessageID = orderHeader?.OrderNumber,
-										StatusCode = "Failure",
-										Subject = "Delete action can not be proceed for the order as requested order is not present in the meridian system, please try again."
-									};
-								}
-							}
-						}
-					}
-					else if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
-					{
-						if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
-						{
-							jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails, systemOptionList, existingJobDataInDB) : jobDetails;
-							bool isJobCancelled = jobDetails?.Id > 0 ? _jobCommands.IsJobCancelled(jobDetails.Id) : true;
-							if (jobDetails?.Id <= 0)
-							{
-								response = new OrderResponse()
-								{
-									ClientMessageID = string.Empty,
-									SenderMessageID = orderHeader?.OrderNumber,
-									StatusCode = "Failure",
-									Subject = "Can not proceed the ASN request to the system as requesed order is not present in the meridian system, please try again."
-								};
-							}
-							else if (jobDetails?.Id > 0 && !isJobCancelled)
-							{
-								jobDetails.JobIsDirtyDestination = true;
-								jobDetails.JobIsDirtyContact = true;
-								processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
-								if (processingJobDetail?.Id > 0)
-								{
-									InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-									if (!M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean())
-									{
-										bool isFarEyePushRequired = false;
-										_jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
-										if (isFarEyePushRequired)
-										{
-											FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
-										}
-									}
+                                    if (processingJobDetail.ProgramID.HasValue)
+                                    {
+                                        _jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
+                                    }
+                                }
+                                else
+                                {
+                                    response = new OrderResponse()
+                                    {
+                                        ClientMessageID = string.Empty,
+                                        SenderMessageID = orderHeader?.OrderNumber,
+                                        StatusCode = "Failure",
+                                        Subject = "Request has been recieved and logged, there is some issue while creating order in the system, please try again."
+                                    };
+                                }
+                            }
+                            else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (existingJobDataInDB?.Id > 0 && !string.Equals(existingJobDataInDB.JobGatewayStatus, "Canceled", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    processingJobDetail = existingJobDataInDB;
+                                    InsertxCBLDetailsInTable(existingJobDataInDB.Id, electroluxOrderDetails);
+                                    ProcessElectroluxOrderCancellationRequest(existingJobDataInDB);
+                                }
+                                if (existingJobDataInDB?.Id > 0 && string.Equals(existingJobDataInDB.JobGatewayStatus, "Canceled", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    response = new OrderResponse()
+                                    {
+                                        ClientMessageID = string.Empty,
+                                        SenderMessageID = orderHeader?.OrderNumber,
+                                        StatusCode = "Failure",
+                                        Subject = "Delete action can not be proceed for the order as requested order is already canceled in the meridian system, please try again."
+                                    };
+                                }
+                                else if (existingJobDataInDB?.Id <= 0)
+                                {
+                                    response = new OrderResponse()
+                                    {
+                                        ClientMessageID = string.Empty,
+                                        SenderMessageID = orderHeader?.OrderNumber,
+                                        StatusCode = "Failure",
+                                        Subject = "Delete action can not be proceed for the order as requested order is not present in the meridian system, please try again."
+                                    };
+                                }
+                            }
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
+                        {
+                            jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails, systemOptionList, existingJobDataInDB) : jobDetails;
+                            bool isJobCancelled = jobDetails?.Id > 0 ? _jobCommands.IsJobCancelled(jobDetails.Id) : true;
+                            if (jobDetails?.Id <= 0)
+                            {
+                                response = new OrderResponse()
+                                {
+                                    ClientMessageID = string.Empty,
+                                    SenderMessageID = orderHeader?.OrderNumber,
+                                    StatusCode = "Failure",
+                                    Subject = "Can not proceed the ASN request to the system as requesed order is not present in the meridian system, please try again."
+                                };
+                            }
+                            else if (jobDetails?.Id > 0 && !isJobCancelled)
+                            {
+                                jobDetails.JobIsDirtyDestination = true;
+                                jobDetails.JobIsDirtyContact = true;
+                                processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
+                                if (processingJobDetail?.Id > 0)
+                                {
+                                    InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
+                                    if (!M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean())
+                                    {
+                                        bool isFarEyePushRequired = false;
+                                        _jobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+                                        if (isFarEyePushRequired)
+                                        {
+                                            FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
+                                        }
+                                    }
 
-									List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
-									if (jobCargos != null && jobCargos.Count > 0)
-									{
-										_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-									}
+                                    List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
+                                    if (jobCargos != null && jobCargos.Count > 0)
+                                    {
+                                        _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+                                    }
 
-									if (processingJobDetail.ProgramID.HasValue)
-									{
-										_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
-									}
-								}
-							}
-							else if (jobDetails?.Id > 0 && isJobCancelled)
-							{
-								response = new OrderResponse()
-								{
-									ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
-									SenderMessageID = orderHeader?.OrderNumber,
-									StatusCode = "Failure",
-									Subject = "Can not proceed the ASN request to the system as requesed order is already canceled in the meridian system, please try again."
-								};
-							}
-						}
-						else
-						{
-							response = new OrderResponse()
-							{
-								ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
-								SenderMessageID = orderHeader?.OrderNumber,
-								StatusCode = "Failure",
-								Subject = "Please correct the action type for the request as only action Add is allowed to pass with ASN, please try again."
-							};
-						}
-					}
-				}
-				catch (Exception exp)
-				{
-					DataAccess.Logger.ErrorLogger.Log(exp, "Error is happening while processing the electrolux data.", "ProcessElectroluxOrderRequest", Utilities.Logger.LogType.Error);
-					response = new OrderResponse()
-					{
-						ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
-						SenderMessageID = orderHeader?.OrderNumber,
-						StatusCode = "Failure",
-						Subject = exp.Message
-					};
-				}
-			});
+                                    if (processingJobDetail.ProgramID.HasValue)
+                                    {
+                                        _jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
+                                    }
+                                }
+                            }
+                            else if (jobDetails?.Id > 0 && isJobCancelled)
+                            {
+                                response = new OrderResponse()
+                                {
+                                    ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
+                                    SenderMessageID = orderHeader?.OrderNumber,
+                                    StatusCode = "Failure",
+                                    Subject = "Can not proceed the ASN request to the system as requesed order is already canceled in the meridian system, please try again."
+                                };
+                            }
+                        }
+                        else
+                        {
+                            response = new OrderResponse()
+                            {
+                                ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
+                                SenderMessageID = orderHeader?.OrderNumber,
+                                StatusCode = "Failure",
+                                Subject = "Please correct the action type for the request as only action Add is allowed to pass with ASN, please try again."
+                            };
+                        }
+                    }
+                }
+                catch (Exception exp)
+                {
+                    DataAccess.Logger.ErrorLogger.Log(exp, "Error is happening while processing the electrolux data.", "ProcessElectroluxOrderRequest", Utilities.Logger.LogType.Error);
+                    response = new OrderResponse()
+                    {
+                        ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
+                        SenderMessageID = orderHeader?.OrderNumber,
+                        StatusCode = "Failure",
+                        Subject = exp.Message
+                    };
+                }
+            });
 
-			Task.WaitAll(tasks);
+            Task.WaitAll(tasks);
 
             response = response != null ? response : new OrderResponse()
             {
@@ -493,22 +493,19 @@ namespace M4PL.Business.XCBL
             else
             {
                 request = xCBLToM4PLRequest.Request;
-                summaryHeader.SummaryHeader = new SummaryHeader()
-                {
-                    BOLNo = request.Other_BOL_RefNum,
-                    SetPurpose = request.TransitDirectionCoded,
-                    CustomerReferenceNo = request.Other_NewOrderNumber_RefNum,
-                    LocationId = request.Other_Domicile_RefNum,
-                    // ShipDescription = request.ReqNumber,
-                    PurchaseOrderNo = request.Other_OriginalOrder_RefNum,
-                    ShipDate = request.RequestedShipByDate.ToDate(),
-                    Latitude = request.EndTransportLocation_Latitude,
-                    Longitude = request.EndTransportLocation_Longitude,
-                    ManifestNo = request.Other_Manifest_RefNum,
-                    SpecialNotes = request.ShippingInstructions,
-                    OrderedDate = request.Other_WorkOrder_RefDate.ToDate(),
-                    ProcessingDate = request.RequisitionIssueDate.ToDate()
-                };
+                summaryHeader.SummaryHeader = new SummaryHeader();
+                summaryHeader.SummaryHeader.BOLNo = request.Other_BOL_RefNum;
+                summaryHeader.SummaryHeader.SetPurpose = request.TransitDirectionCoded;
+                summaryHeader.SummaryHeader.CustomerReferenceNo = request.Other_NewOrderNumber_RefNum;
+                summaryHeader.SummaryHeader.LocationId = request.Other_Domicile_RefNum;
+                summaryHeader.SummaryHeader.PurchaseOrderNo = request.Other_OriginalOrder_RefNum;
+                summaryHeader.SummaryHeader.ShipDate = Utilities.UtilityExtensions.ToDate(Convert.ToString(request.RequestedShipByDate));
+                summaryHeader.SummaryHeader.Latitude = request.EndTransportLocation_Latitude;
+                summaryHeader.SummaryHeader.Longitude = request.EndTransportLocation_Longitude;
+                summaryHeader.SummaryHeader.ManifestNo = request.Other_Manifest_RefNum;
+                summaryHeader.SummaryHeader.SpecialNotes = request.ShippingInstructions;
+                summaryHeader.SummaryHeader.OrderedDate = Utilities.UtilityExtensions.ToDate(Convert.ToString(request.Other_WorkOrder_RefDate));
+                summaryHeader.SummaryHeader.ProcessingDate = Utilities.UtilityExtensions.ToDate(Convert.ToString(request.RequisitionIssueDate));
 
                 summaryHeader.Address = new List<Address>()
                 {
@@ -519,8 +516,8 @@ namespace M4PL.Business.XCBL
                         Address1 = request.ShipToParty_Street,
                         Address2 = request.ShipToParty_StreetSupplement1,
                         City = request.ShipToParty_City,
-                        CountryCode = GetCountryCodeAndStateCode(request.ShipToParty_RegionCoded,true),
-                        State = GetCountryCodeAndStateCode(request.ShipToParty_RegionCoded,false),
+                        CountryCode = GetCountryCodeAndStateCode(Convert.ToString(request.ShipToParty_RegionCoded),true),
+                        State = GetCountryCodeAndStateCode(Convert.ToString(request.ShipToParty_RegionCoded),false),
                         PostalCode = request.ShipToParty_PostalCode
                     },
                      new Address()
@@ -530,8 +527,8 @@ namespace M4PL.Business.XCBL
                         Address1 = request.ShipFromParty_Street,
                         Address2 = request.ShipFromParty_StreetSupplement1,
                         City = request.ShipFromParty_City,
-                        CountryCode = GetCountryCodeAndStateCode(request.ShipFromParty_RegionCoded,true),
-                        State = GetCountryCodeAndStateCode(request.ShipFromParty_RegionCoded,false),
+                        CountryCode = GetCountryCodeAndStateCode(Convert.ToString(request.ShipFromParty_RegionCoded),true),
+                        State = GetCountryCodeAndStateCode(Convert.ToString(request.ShipFromParty_RegionCoded),false),
                         PostalCode = request.ShipFromParty_PostalCode
                     },
                 };
