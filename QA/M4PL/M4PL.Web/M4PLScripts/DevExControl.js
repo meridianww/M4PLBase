@@ -2076,7 +2076,7 @@ DevExCtrl.PageControl = function () {
         if (!isNotFromInnerPageControl) {
             var callbackRoute = JSON.parse(M4PLCommon.Common.GetParameterValueFromRoute('strRoute', e.tab.tabControl.callbackUrl));
             if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Job") {
-                if (e.tab.index == 4 || e.tab.index == 5) {
+                if (e.tab.index == 3 || e.tab.index == 4) {
                     e.reloadContentOnCallback = true;
                 }
             }
