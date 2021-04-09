@@ -383,6 +383,25 @@ namespace M4PL.DataAccess.Job
             }
         }
 
+        public static void UpdateOnJobPostedInvoice(long jobId, long costChargeId, long priceChargeId)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@JobId", jobId),
+                new Parameter("@CostChargeId", costChargeId),
+                new Parameter("@PriceChargeId", priceChargeId)
+            };
+
+            try
+            {
+                SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateOnJobPostedInvoice, parameters.ToArray(), true);
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Exception is occuring while Update On Job Posted Invoice.", "UpdateOnJobPostedInvoice", Utilities.Logger.LogType.Error);
+            }
+        }
+
         public static long CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job, long customerId, string cancelComment, string cancelReason)
         {
             long insertedGatewayId = 0;

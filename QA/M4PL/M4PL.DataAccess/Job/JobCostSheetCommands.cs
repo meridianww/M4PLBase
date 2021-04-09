@@ -72,27 +72,31 @@ namespace M4PL.DataAccess.Job
 			result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobCostSheet);
 			if (result?.Id > 0 && jobRefCostSheet.IsProblem.Equals(result.IsProblem))
 			{
-				Task.Run(() =>
+				var billableSheetItem = UpdateJobBillableSheet(activeUser, jobRefCostSheet);
+				if (billableSheetItem != null)
 				{
-					UpdateJobBillableSheet(activeUser, jobRefCostSheet);
-				});
+					result.BillableChargeId = billableSheetItem.Id;
+				}
 			}
 
 			return result;
 		}
 
-		public static void UpdateJobBillableSheet(ActiveUser activeUser, JobCostSheet jobRefCostSheet)
+		public static JobBillableSheet UpdateJobBillableSheet(ActiveUser activeUser, JobCostSheet jobRefCostSheet)
 		{
+			JobBillableSheet result = null;
 			try
 			{
 				var parameters = GetParameterForBillableSheet(jobRefCostSheet, activeUser);
 				parameters.AddRange(activeUser.PostDefaultParams(jobRefCostSheet));
-				SqlSerializer.Default.DeserializeSingleRecord<JobBillableSheet>(StoredProceduresConstant.InsertJobBillableSheet, parameters.ToArray(), storedProcedure: true);
+				result = SqlSerializer.Default.DeserializeSingleRecord<JobBillableSheet>(StoredProceduresConstant.InsertJobBillableSheet, parameters.ToArray(), storedProcedure: true);
 			}
 			catch (Exception exp)
 			{
 				Logger.ErrorLogger.Log(exp, "Error while Update Billable Sheet From Cost Sheet.", "UpdateJobBillableSheet", Utilities.Logger.LogType.Error);
 			}
+
+			return result;
 		}
 
 		/// <summary>

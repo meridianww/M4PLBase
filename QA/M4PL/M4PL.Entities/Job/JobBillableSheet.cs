@@ -177,5 +177,11 @@ namespace M4PL.Entities.Job
 		/// Gets or Sets flag if Is Problem
 		/// </summary>
 		public bool IsProblem { get; set; }
-	}
+
+		/// <summary>
+		/// Gets Or Sets PrcInvoiced
+		/// </summary>
+		public bool PrcInvoiced { get; set; }
+        public long CostChargeId { get; set; }
+    }
 }
