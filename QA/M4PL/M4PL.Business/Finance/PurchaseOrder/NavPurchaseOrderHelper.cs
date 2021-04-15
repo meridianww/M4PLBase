@@ -177,6 +177,8 @@ namespace M4PL.Business.Finance.PurchaseOrder
 
 		public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
 		{
+			NavPurchaseOrder existingPurchaseOrderData = GetPurchaseOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, poNumer);
+			if (existingPurchaseOrderData == null) { return null; }
 			string navPurchaseOrderJson = string.Empty;
 			NavPurchaseOrder navPurchaseOrderResponse = null;
 			string proFlag = null;
@@ -184,7 +186,6 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			string serviceCall = string.Format("{0}/PurchaseOrder('Order', '{1}')", navAPIUrl, poNumer);
 			try
 			{
-				NavPurchaseOrder existingSalesOrderData = GetPurchaseOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, poNumer);
 				NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
 				if (navPurchaseOrderRequest == null) { return null; }
 				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
@@ -194,7 +195,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				request.KeepAlive = false;
 				request.ContentType = "application/json";
 				request.Method = "PATCH";
-				request.Headers.Add(HttpRequestHeader.IfMatch, existingSalesOrderData.DataETag);
+				request.Headers.Add(HttpRequestHeader.IfMatch, existingPurchaseOrderData.DataETag);
 				using (var streamWriter = new StreamWriter(request.GetRequestStream()))
 				{
 					navPurchaseOrderJson = JsonConvert.SerializeObject(navPurchaseOrderRequest);

@@ -462,6 +462,7 @@ namespace M4PL.DataAccess
 		public const string UpdateJobInvoiceDetail = "dbo.UpdateJobInvoiceDetail";
 		public const string InsertJobIsSchedule = "dbo.InsJobIsSchedule";
 		public const string UpdatePriceCostDeliveryChargeQuantity = "UpdatePriceCostDeliveryChargeQuantity";
+		public const string UpdateOnJobPostedInvoice = "dbo.UpdateOnJobPostedInvoice";
 
 		public const string InsertJob = "dbo.InsJob";
 		public const string UpdateJob = "dbo.UpdJob";

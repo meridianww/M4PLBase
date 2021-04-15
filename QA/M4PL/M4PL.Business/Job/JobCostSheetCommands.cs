@@ -17,16 +17,24 @@
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.job.JobCostSheetCommands
 //====================================================================================================================
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.Job.JobCostSheetCommands;
 
 namespace M4PL.Business.Job
 {
 	public class JobCostSheetCommands : BaseCommands<JobCostSheet>, IJobCostSheetCommands
 	{
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN", true); }
+		}
+
 		/// <summary>
 		/// Get list of jobrefcostsheet data
 		/// </summary>
@@ -56,7 +64,13 @@ namespace M4PL.Business.Job
 
 		public JobCostSheet Post(JobCostSheet jobRefCostSheet)
 		{
-			return _commands.Post(ActiveUser, jobRefCostSheet);
+			var result = _commands.Post(ActiveUser, jobRefCostSheet);
+			if (result != null)
+			{
+				new JobCommands().GenerateOrderInNAVAfterPostedInvoice(result.JobID, ActiveUser, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), result.Id, result.BillableChargeId);
+			}
+
+			return result;
 		}
 
 		/// <summary>

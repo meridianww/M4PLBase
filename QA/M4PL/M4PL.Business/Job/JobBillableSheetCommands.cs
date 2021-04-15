@@ -16,8 +16,10 @@
 // Program Name:                                 JobBillableSheetCommands
 // Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.job.JobBillableSheetCommands
 //====================================================================================================================
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobBillableSheetCommands;
@@ -26,6 +28,11 @@ namespace M4PL.Business.Job
 {
 	public class JobBillableSheetCommands : BaseCommands<JobBillableSheet>, IJobBillableSheetCommands
 	{
+		public BusinessConfiguration M4PLBusinessConfiguration
+		{
+			get { return CoreCache.GetBusinessConfiguration("EN", true); }
+		}
+
 		/// <summary>
 		/// Get list of jobBillableSheet data
 		/// </summary>
@@ -55,7 +62,13 @@ namespace M4PL.Business.Job
 
 		public JobBillableSheet Post(JobBillableSheet _jobBillableSheet)
 		{
-			return _commands.Post(ActiveUser, _jobBillableSheet);
+			var result = _commands.Post(ActiveUser, _jobBillableSheet);
+			if (result != null)
+			{
+				new JobCommands().GenerateOrderInNAVAfterPostedInvoice(result.JobID, ActiveUser, M4PLBusinessConfiguration.NavAPIUrl, M4PLBusinessConfiguration.NavAPIUserName, M4PLBusinessConfiguration.NavAPIPassword, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), result.CostChargeId, result.Id);
+			}
+
+			return result;
 		}
 
 		/// <summary>

@@ -174,6 +174,8 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		public static NavSalesOrder UpdateSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
 		{
+			NavSalesOrder existingSalesOrderData = GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
+			if (existingSalesOrderData == null) { return null; }
 			NavSalesOrder navSalesOrderResponse = null;
 			string navSalesOrderJson = string.Empty;
 			string proFlag = null;
@@ -181,7 +183,6 @@ namespace M4PL.Business.Finance.SalesOrder
 			string serviceCall = string.Format("{0}/SalesOrder('Order', '{1}')", navAPIUrl, soNumber);
 			try
 			{
-				NavSalesOrder existingSalesOrderData = GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
@@ -663,19 +664,9 @@ namespace M4PL.Business.Finance.SalesOrder
 			string navAPIPassword;
 			string navAPIUserName;
 			string navAPIUrl;
-			////if (M4PLBusinessConfiguration.CustomerNavConfiguration != null && M4PLBusinessConfiguration.CustomerNavConfiguration.Count > 0)
-			////{
-			////	currentCustomerNavConfiguration = M4PLBusinessConfiguration.CustomerNavConfiguration.FirstOrDefault();
-			////	navAPIUrl = currentCustomerNavConfiguration.ServiceUrl;
-			////	navAPIUserName = currentCustomerNavConfiguration.ServiceUserName;
-			////	navAPIPassword = currentCustomerNavConfiguration.ServicePassword;
-			////}
-			////else
-			////{
-				navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
-				navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
-				navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
-			////}
+			navAPIUrl = M4PLBusinessConfiguration.NavAPIUrl;
+			navAPIUserName = M4PLBusinessConfiguration.NavAPIUserName;
+			navAPIPassword = M4PLBusinessConfiguration.NavAPIPassword;
 
 			try
 			{
@@ -836,6 +827,40 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static void UpdateSalesOrderInformationInDB(string manualSalesOrderId, string electronicSalesOrderId, long jobId, bool isManualUpdate, bool isElectronicUpdate, ActiveUser activeUser)
 		{
 			_commands.UpdateSalesOrderInformationInDB(jobId, manualSalesOrderId, electronicSalesOrderId, isManualUpdate, isElectronicUpdate, activeUser);
+		}
+
+		public static bool IsSalesOrderInvoicedInNav(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+        {
+			NavSalesOrderPostedInvoiceResponse navPostedSalesOrder = null;
+			string serviceCall = string.Format("{0}/PostedSalesInvoice?$filter=M4PL_Job_ID eq '{1}'", navAPIUrl, jobId);
+			try
+			{
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
+
+				using (Stream navSalesOrderResponseStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
+					{
+						string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(navSalesOrderResponseString))
+						{
+							navPostedSalesOrder = JsonConvert.DeserializeObject<NavSalesOrderPostedInvoiceResponse>(navSalesOrderResponseString);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the posted Sales order Details by JobId: Request Url is: {0}.", serviceCall), string.Format("Get the Sales Order Information for JobId: {0}", jobId), LogType.Error);
+			}
+
+			return navPostedSalesOrder?.NavSalesOrder?.Count > 0;
 		}
 	}
 }

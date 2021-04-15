@@ -28,6 +28,7 @@ using M4PL.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Net;
@@ -85,7 +86,7 @@ namespace M4PL.Business.Job
         {
             ActiveUser activeUser = ActiveUser;
             long customerId = M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong();
-            bool isUpdateRequired = customerId == job.CustomerId ? false : true;
+            bool isUpdateRequired = !(customerId == job.CustomerId);
             Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate: isUpdateRequired, isServiceCall: false, customerId: customerId, isManualUpdate: true);
             if (jobResult != null && jobResult.JobCompleted && job.JobDeliveryDateTimeActual.HasValue && job.JobOriginDateTimeActual.HasValue)
             {
@@ -1004,6 +1005,31 @@ namespace M4PL.Business.Job
                 };
             }
         }
+
+        public void GenerateOrderInNAVAfterPostedInvoice(long jobId, ActiveUser activeUser, string navAPIUrl, string navAPIUserName, string navAPIPassword, long electroluxCustomerId, long costChargeId, long priceChargeId)
+        {
+            Finance.Order.NavOrderCommands navOrderRepo = new Finance.Order.NavOrderCommands();
+            var createOrderPostInvoicing = ConfigurationManager.AppSettings["CreateOrderPostInvoicing"];
+            if (createOrderPostInvoicing != null && createOrderPostInvoicing.ToBoolean())
+            {
+                Task.Run(() =>
+                {
+                    var jobDetails = DataAccess.Job.JobCommands.GetJobByProgram(activeUser, jobId, 0);
+                    if (jobDetails != null && (!string.IsNullOrEmpty(jobDetails.JobSONumber) || !string.IsNullOrEmpty(jobDetails.JobElectronicInvoiceSONumber)))
+                    {
+                        bool isJobInvoiced = Finance.SalesOrder.NavSalesOrderHelper.IsSalesOrderInvoicedInNav(jobId, navAPIUrl, navAPIUserName, navAPIPassword);
+                        if (isJobInvoiced)
+                        {
+                            DataAccess.Job.JobCommands.UpdateOnJobPostedInvoice(jobId, costChargeId, priceChargeId);
+                        }
+
+                        navOrderRepo.GenerateSalesOrderInNav(jobId, navAPIUrl, navAPIUserName, navAPIPassword, electroluxCustomerId, activeUser);
+                        navOrderRepo.GeneratePurchaseOrderInNav(jobId, navAPIUrl, navAPIUserName, navAPIPassword, electroluxCustomerId, activeUser);
+                    }
+                });
+            }
+        }
+
 
     }
 }
