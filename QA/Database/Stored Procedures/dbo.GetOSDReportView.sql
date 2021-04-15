@@ -4,7 +4,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[GetOSDReportView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetOSDReportView] @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -39,7 +39,8 @@ BEGIN TRY
 	SELECT @where = REPLACE(@where, 'Prg.PrgCustId', 'JobAdvanceReport.CustomerId')
 
 	DECLARE @AdvanceFilter NVARCHAR(MAX) = ''
-		,@JobStatusId INT = 0;
+		,@JobStatusId INT = 0
+		,@TCountQuery NVARCHAR(MAX);
 
 	IF (@JobStatus = 'Active')
 	BEGIN
@@ -79,7 +80,7 @@ BEGIN TRY
 	END
 
 	-----------------------------------------Temporary Tables starts
-	SELECT JobID
+	SELECT DISTINCT JobID
 		,Id
 		,CgoTitle
 		,CgoPartNumCode
@@ -182,7 +183,7 @@ BEGIN TRY
 		ELSE
 		BEGIN
 			SET @TablesQuery = @TablesQuery + ' INNER JOIN vwJobGateways gateway ON  gateway.JobId = ' + @entity + '.[Id] 
-		   AND gateway.StatusId IN (194,195) AND (gateway.GwyGatewayTitle IN ' + @gatewayTitles + ' AND gateway.GwyGatewayCode 
+		   AND gateway.StatusId IN (194,195) AND (gateway.GwyGatewayTitle IN ' + @gatewayTitles + ' OR gateway.GwyGatewayCode 
 		   IN ' + @gatewayTitles + ') AND (' + @entity + '.JobGatewayStatus IN ' + @gatewayTitles + ')'
 		END
 
@@ -249,6 +250,17 @@ BEGIN TRY
 		SET @where = REPLACE(@where, 'JobAdvanceReport.CgoSerialNumber', 'JC.CgoSerialNumber')
 	END
 
+	SET @TCountQuery = 'SELECT @TotalCount = COUNT( DISTINCT JC.Id) ' + @TablesQuery
+
+	IF (ISNULL(@where, '') <> '')
+	BEGIN
+		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where
+    END
+	EXEC sp_executesql @TCountQuery
+		,N'@userId BIGINT, @TotalCount INT OUTPUT'
+		,@userId
+		,@TotalCount OUTPUT;
+
 	IF (
 			(ISNULL(@groupBy, '') = '')
 			OR (@recordId > 0)
@@ -256,10 +268,11 @@ BEGIN TRY
 	BEGIN
 		IF (@recordId = 0)
 		BEGIN
-			SET @sqlCommand = 'SELECT ' + [dbo].[fnGetJobReportBaseQuery](@entity, @userId, @reportTypeId)
+			SET @sqlCommand = 'SELECT DISTINCT ' + [dbo].[fnGetJobReportBaseQuery](@entity, @userId, @reportTypeId)
+			SET @sqlCommand = @sqlCommand + ',JobAdvanceReport.JobGatewayStatus';
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.ExceptionType', 'JC.ExceptionType');
 			SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.CgoSerialNumber', 'JC.CgoSerialNumber');
-			SET @sqlCommand = @sqlCommand + ' ,TotalRows = COUNT(*) OVER()'
+			--SET @sqlCommand = @sqlCommand + ' ,TotalRows = COUNT( DISTINCT JobAdvanceReport.Id) OVER()'
 		END
 		ELSE
 		BEGIN
@@ -398,9 +411,6 @@ BEGIN TRY
 
 	SET @sqlCommand = REPLACE(@sqlCommand, 'JobAdvanceReport.CustTitle', 'JobAdvanceReport.CustomerTitle');
 	SET @where = REPLACE(@where, 'JobAdvanceReport.CustTitle', 'JobAdvanceReport.CustomerTitle');
-
-	PRINT @sqlCommand
-
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

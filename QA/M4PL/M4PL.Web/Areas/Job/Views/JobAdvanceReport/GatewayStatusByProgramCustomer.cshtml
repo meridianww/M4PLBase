@@ -43,9 +43,9 @@
 
                     if(ViewData["GatewayTitles"] != null)
                     {
-                        foreach (var item in (IList<M4PL.Entities.Job.JobAdvanceReportFilter>)ViewData["GatewayTitles"])
+                        foreach (var item in (List<string>)ViewData["GatewayTitles"])
                         {
-                            listBoxSettings.Properties.Items.Add(item.GatewayStatus, item.GatewayStatus);
+                            listBoxSettings.Properties.Items.Add(item, item);
                         }
                     }
 

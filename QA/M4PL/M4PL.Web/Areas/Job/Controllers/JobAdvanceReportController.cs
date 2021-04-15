@@ -48,6 +48,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         public static ICommonCommands _commonStaticCommands;
         public static long _CustomerId = 0;
         public static string _ReportText = string.Empty;
+        IList<JobAdvanceReportFilter> gatewayTitles = null;
 
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
@@ -221,7 +222,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["Origins"] = Session["Origins"] as IList<JobAdvanceReportFilter>;
                 ViewData["Destinations"] = Session["Destinations"] as IList<JobAdvanceReportFilter>;
                 ViewData["Brands"] = Session["Brands"] as IList<JobAdvanceReportFilter>;
-                ViewData["GatewayTitles"] = Session["GatewayTitles"] as IList<JobAdvanceReportFilter>;
+
+                gatewayTitles = Session["GatewayTitles"] as IList<JobAdvanceReportFilter>;
+                ViewData["GatewayTitles"] = gatewayTitles?.Select(x => x.GatewayStatus).Distinct().ToList<string>();
+
                 ViewData["OrderTypes"] = Session["OrderTypes"] as IList<JobAdvanceReportFilter>;
                 ViewData["JobChannels"] = Session["JobChannels"] as IList<JobAdvanceReportFilter>;
                 ViewData["JobStatusIds"] = Session["JobStatusIds"] as IList<JobAdvanceReportFilter>;
@@ -367,13 +371,19 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record = record;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             if (Session["GatewayTitles"] == null)
-                Session["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram("GatewayStatus");
+            {
+                Session["GatewayTitles"] = gatewayTitles = _jobAdvanceReportCommands.GetDropDownDataForProgram("GatewayStatus");
+            }
+
             if (_reportResult.Record.CustomerId == 0 || _reportResult.Record.CustomerId == -1)
-                ViewData["GatewayTitles"] = Session["GatewayTitles"] as IList<JobAdvanceReportFilter>;
+            {
+                gatewayTitles = Session["GatewayTitles"] as IList<JobAdvanceReportFilter>; 
+                ViewData["GatewayTitles"] = gatewayTitles?.Select(x => x.GatewayStatus).Distinct().ToList<string>();
+            }
             else
             {
                 var entity = Session["GatewayTitles"] as IList<JobAdvanceReportFilter>;
-                ViewData["GatewayTitles"] = entity.Where(x => x.CustomerId == _reportResult.Record.CustomerId).ToList();
+                ViewData["GatewayTitles"] = entity.Where(x => x.CustomerId == _reportResult.Record.CustomerId)?.Select(x => x.GatewayStatus).Distinct().ToList<string>();
             }
             return PartialView("GatewayStatusByProgramCustomer", _reportResult);
         }
