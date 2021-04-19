@@ -2028,7 +2028,7 @@ M4PLWindow.UploadFileDragDrop = function () {
         DevExCtrl.PopupControl.Close();
         DisplayMessageControl.PerformCallback({ strDisplayMessage: e.callbackData });
         if (callBackRoute != null && callBackRoute != undefined) {
-            if (callBackRoute.Area == "Finance" && callBackRoute.Controller == "NavRate" && callBackRoute.Action == "FormView") {
+            if (callBackRoute.Area == "Finance" && (callBackRoute.Controller == "NavRate" || callBackRoute.Controller == "Gateway" )&& callBackRoute.Action == "FormView") {
                 callBackRoute.Action = "FormView";
                 callBackRoute.Area = "Program";
                 callBackRoute.Controller = "Program";
