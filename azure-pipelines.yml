@@ -28,7 +28,6 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     clean: true
-    msbuildArchitecture: 'x64'
 
 - task: PublishBuildArtifacts@1
   inputs:
