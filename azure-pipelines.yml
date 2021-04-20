@@ -19,7 +19,8 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
-    restoreSolution: '$(solution)'
+    command: 'restore'
+    restoreSolution: '$(build.SourcesDirectory)\QA\M4PL\M4PL.sln'
 
 - task: VSBuild@1
   inputs:
