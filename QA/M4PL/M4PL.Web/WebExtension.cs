@@ -3218,7 +3218,7 @@ namespace M4PL.Web
         public static string GetJobCardWhereCondition(List<string> destionations)
         {
             string where = string.Empty;
-            if (destionations != null && destionations.Count > 0 && !destionations.Contains("ALL"))
+            if (destionations != null && destionations.Count > 0 && !destionations.Contains("ALL") && !destionations.Contains(null))
                 where += string.Format(" AND PVL.VendDCLocationId IN ({0})", string.Join(",", destionations.OfType<String>()));
             return where;
         }

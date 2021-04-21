@@ -1228,9 +1228,10 @@ M4PLCommon.VocReport = (function () {
             if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
                 var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
                 cardVwrRoute.Location = [];
-                $.each(dest, function (key, value) {
-                    cardVwrRoute.Location.push(_getValueByText(value, checkListBox));
-                });
+                if (checkListBox != null && checkListBox != undefined)
+                    $.each(dest, function (key, value) {
+                        cardVwrRoute.Location.push(_getValueByText(value, checkListBox));
+                    });
                 //cardVwrRoute.Location = dest;
             }
 
@@ -1239,12 +1240,17 @@ M4PLCommon.VocReport = (function () {
 
     var _onCardDataViewClick = function (s, e, form, strRoute) {
         var route = JSON.parse(strRoute);
-
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
         var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
         if (destinationCtrl != null)
             if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
                 var dest = destinationCtrl.GetValue().split(',').map(String);
-                route.Location = dest;
+                route.Location = [];
+                if (checkListBox != null && checkListBox != undefined)
+                    $.each(dest, function (key, value) {
+                        route.Location.push(_getValueByText(value, checkListBox));
+                    });
+                //route.Location = dest;
             }
         var dashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
@@ -1265,7 +1271,13 @@ M4PLCommon.VocReport = (function () {
         if (destinationCtrl != null)
             if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
                 var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
-                rprtVwrRoute.Location = dest;
+                var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
+                rprtVwrRoute.Location = [];
+                if (checkListBox != null && checkListBox != undefined)
+                    $.each(dest, function (key, value) {
+                        rprtVwrRoute.Location.push(_getValueByText(value, checkListBox));
+                    });
+                //rprtVwrRoute.Location = dest;
             }
 
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
@@ -1285,7 +1297,13 @@ M4PLCommon.VocReport = (function () {
                         if (destinationCtrl != null)
                             if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
                                 var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
-                                rprtVwrRoute.Location = dest;
+                                var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
+                                rprtVwrRoute.Location = [];
+                                if (checkListBox != null && checkListBox != undefined)
+                                    $.each(dest, function (key, value) {
+                                        rprtVwrRoute.Location.push(_getValueByText(value, checkListBox));
+                                    });
+                                //rprtVwrRoute.Location = dest;
                             }
                         if (!ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel').InCallback()) {
                             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
