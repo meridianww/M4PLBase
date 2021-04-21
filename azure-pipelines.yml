@@ -25,7 +25,6 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(build.SourcesDirectory)\QA\M4PL\M4PL.sln'
-    vsVersion: '15.0'
     msbuildArgs: '/p:WebProjectOutputDir=$(Build.ArtifactStagingDirectory)\_PublishedWebsites /p:DeployOnBuild=true'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
