@@ -19,16 +19,20 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
-    restoreSolution: '$(solution)'
+    command: 'restore'
+    restoreSolution: '$(build.SourcesDirectory)\QA\M4PL\M4PL.sln'
 
 - task: VSBuild@1
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    solution: '$(build.SourcesDirectory)\QA\M4PL\M4PL.sln'
+    msbuildArgs: '/p:WebProjectOutputDir=$(Build.ArtifactStagingDirectory)\_PublishedWebsites /p:DeployOnBuild=true'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    clean: true
+    msbuildArchitecture: 'x64'
 
-- task: VSTest@2
+- task: PublishBuildArtifacts@1
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)\_PublishedWebsites'
+    ArtifactName: 'Websites'
+    publishLocation: 'Container'
