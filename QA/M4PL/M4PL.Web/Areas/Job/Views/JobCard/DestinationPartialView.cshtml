@@ -41,20 +41,20 @@
                     {
                         foreach (var item in (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"])
                         {
-                            listBoxSettings.Properties.Items.Add(item.Destination, item.Destination);
+                            listBoxSettings.Properties.Items.Add(item.Destination, Convert.ToString(item.Id));
                         }
                     }
 
-                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextDestination";
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateValueDestination";
                     var selectedLocation = Model.ReportRoute != null && Model.ReportRoute.Location != null ? Model.ReportRoute.Location : new List<string>();
                     listBoxSettings.Properties.ClientSideEvents.Init
-                    = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownMultiSelect.UpdateTextDestinationDefault(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(selectedLocation));
+                    = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownMultiSelect.UpdateValueDestinationDefault(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(selectedLocation));
                 }).Render();
             });
 
             settings.Properties.AnimationType = AnimationType.Fade;
-            settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestination";
-            settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestination";
+            settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestinationValue";
+            settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestinationValue";
             settings.Properties.ClientSideEvents.CloseUp = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobCardByFilter(s, e, {0}, {1}); }}", "JobCardViewTileCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
         }).Render();
 

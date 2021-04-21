@@ -1197,7 +1197,20 @@ M4PLCommon.VocReport = (function () {
             s.SetSelectedIndex(0);
         _addAutoRefresh(s, e, timeOut, cardVwrRoute);
     }
-
+    var _getValueByText = function (texts, checkListBox) {
+        var actualValues = null;
+        var items;
+        items = checkListBox.GetSelectedItems();
+        if (texts != null) {
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].text == texts) {
+                    actualValues = items[i].value;
+                    break;
+                }
+            }
+        }
+        return actualValues;
+    }
     var _getJobCardByFilter = function (s, e, cardVwrCtrl, cardVwrRoute) {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
         var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
@@ -1205,7 +1218,7 @@ M4PLCommon.VocReport = (function () {
             var selectedItems = checkListBox.GetSelectedItems();
             if (selectedItems == null || selectedItems == undefined || selectedItems.length == 0) {
                 checkListBox.SelectAll();
-                destinationCtrl.SetText(M4PLCommon.DropDownMultiSelect.GetSelectedItemsText(selectedItems, checkListBox));
+                destinationCtrl.SetText(M4PLCommon.DropDownMultiSelect.GetSelectedItemsVal(selectedItems, checkListBox));
                 destinationCtrl.DropDown.FireEvent(s, e);
             }
         }
@@ -1214,7 +1227,11 @@ M4PLCommon.VocReport = (function () {
         if (destinationCtrl != null)
             if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
                 var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
-                cardVwrRoute.Location = dest;
+                cardVwrRoute.Location = [];
+                $.each(dest, function (key, value) {
+                    cardVwrRoute.Location.push(_getValueByText(value, checkListBox));
+                });
+                //cardVwrRoute.Location = dest;
             }
 
         cardVwrCtrl.PerformCallback({ strRoute: JSON.stringify(cardVwrRoute) });
@@ -2008,7 +2025,47 @@ M4PLCommon.DropDownMultiSelect = (function () {
         _updateTextBrand();//dropDown.name); // for remove non-existing texts
     }
 
-    //-------Destination------------------
+    //-------Destination Job Card------------------
+    var _updateValueDestination = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            DestinationByCustomerCbPanelforClosed.SetText(_getSelectedItemsVal(selectedItems, checkListBox));
+        }
+    }
+
+    var _updateValueDestinationDefault = function (s, e, selectedLocation) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            if ((ASPxClientControl.GetControlCollection().GetByName('Customer') != null
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) ||
+                (ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed') != null
+                    && ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed').GetValue() == null)) {
+                if (selectedLocation !== null && selectedLocation !== undefined && selectedLocation.length > 0 && selectedLocation[0] != 'ALL') {
+                    checkListBox.SelectValues(selectedLocation);
+                }
+                else
+                    checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            if (selectedItems && selectedItems.length == 0) {
+                checkListBox.SelectAll();
+                selectedItems = checkListBox.GetSelectedItems();
+            }
+
+            DestinationByCustomerCbPanelforClosed.SetText(_getSelectedItemsVal(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesDestinationValue = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = _getValuesByTexts(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateValueDestination();//dropDown.name); // for remove non-existing texts
+    }
+
+    //-------Destination Job Advance report------------------
     var _updateTextDestination = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
         if (checkListBox != null) {
@@ -2047,7 +2104,6 @@ M4PLCommon.DropDownMultiSelect = (function () {
         checkListBox.SelectValues(values);
         _updateTextDestination();//dropDown.name); // for remove non-existing texts
     }
-
     //-------Origin------------------
     var _updateTextOrigin = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxOriginByCustomerCbPanelforClosed');
@@ -2197,6 +2253,15 @@ M4PLCommon.DropDownMultiSelect = (function () {
                 texts.push(items[i].text);
         return texts.join(textSeparator);
     }
+    var _getSelectedItemsVal = function (items, checkListBox) {
+        var texts = [];
+        if (items.length == checkListBox.GetItemCount() && checkListBox.GetItemCount() > 0)
+            texts.push("ALL");
+        else
+            for (var i = 0; i < items.length; i++)
+                texts.push(items[i].text);
+        return texts.join(textSeparator);
+    }
     var _getValuesByTexts = function (texts, checkListBox) {
         var actualValues = [];
         var item;
@@ -2256,6 +2321,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
         }
         return actualValues;
     }
+
     var _onVocLocationInit = function (s, e) {
         var element = s.GetMainElement();
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxCustomerLocationCbPanelClosed');
@@ -2277,7 +2343,11 @@ M4PLCommon.DropDownMultiSelect = (function () {
         UpdateTextDestination: _updateTextDestination,
         UpdateTextDestinationDefault: _updateTextDestinationDefault,
         SynchronizeListBoxValuesDestination: _synchronizeListBoxValuesDestination,
+        UpdateValueDestination: _updateValueDestination,
+        UpdateValueDestinationDefault: _updateValueDestinationDefault,
+        SynchronizeListBoxValuesDestinationValue: _synchronizeListBoxValuesDestinationValue,
         GetSelectedItemsText: _getSelectedItemsText,
+        GetSelectedItemsVal: _getSelectedItemsVal,
         GetValuesByTexts: _getValuesByTexts,
         UpdateTextBrand: _updateTextBrand,
         UpdateTextBrandDefault: _updateTextBrandDefault,
@@ -2300,7 +2370,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
         UpdateTextLocation: _updateTextLocation,
         UpdateTextLocationDefault: _updateTextLocationDefault,
         SynchronizeListBoxValuesLocation: _synchronizeListBoxValuesLocation,
-        OnVocLocationInit: _onVocLocationInit
+        OnVocLocationInit: _onVocLocationInit,
     }
 })();
 
