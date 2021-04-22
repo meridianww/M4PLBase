@@ -114,6 +114,14 @@
                                                   <xsl:value-of select="JobTrackingDS/Header/PlantCode" />
                                                 </td>
                                               </tr>
+                                              <tr>
+                                                <td  align="left">
+                                                  <b>Brand : </b>
+                                                </td>
+                                                <td align="left">
+                                                  <xsl:value-of select="JobTrackingDS/Header/Brand" />
+                                                </td>
+                                              </tr>
                                             </tbody>
                                           </table>
                                         </td>
@@ -143,6 +151,14 @@
                                                   </td>
                                                   <td align="left">
                                                     <xsl:value-of select="JobTrackingDS/Header/TrailerNo" />
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td width="40%" align="left">
+                                                    <b>Product Type :</b>
+                                                  </td>
+                                                  <td align="left">
+                                                    <xsl:value-of select="JobTrackingDS/Header/ProductType" />
                                                   </td>
                                                 </tr>
                                               </tbody>
@@ -209,10 +225,10 @@
                         <td style="border : 1px solid black;">
                           <table>
                             <tr>
-                              <td width="30%">
+                              <td>
                                 <b>Order Type :</b>
                               </td>
-                              <td align="left" width="70%">
+                              <td align="left">
                                 <xsl:value-of select="JobTrackingDS/Header/OrderType" />
                               </td>
                             </tr>
@@ -224,24 +240,55 @@
                                 <xsl:value-of select="JobTrackingDS/Header/ShipmentType" />
                               </td>
                             </tr>
+
+                          </table>
+                        </td>
+                        <td style="border : 1px solid black;">
+                          <table>
+                            <tr>
+                              <td>
+                                <b> Quantity : </b>
+                                <xsl:value-of select="JobTrackingDS/Header/TotalQuantity" />
+                              </td>
+                              <td>
+                                <b> Weight : </b>
+                                <xsl:value-of select="JobTrackingDS/Header/TotalWeight" />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <b>Parts : </b>
+                                <xsl:value-of select="JobTrackingDS/Header/TotalParts" />
+                              </td>
+                              <td>
+                                <b>Cubes : </b>
+                                <xsl:value-of select="JobTrackingDS/Header/TotalCube" />
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="border : 1px solid black;">
+                          <table>
+                            <tr>
+                              <td width="30%">
+                                <b>Seller Site :</b>
+                              </td>
+                              <td align="left" width="70%">
+                                <xsl:value-of select="JobTrackingDS/Header/SellerSiteName" />
+                              </td>
+                            </tr>
                           </table>
                         </td>
                         <td style="border : 1px solid black;">
                           <table>
                             <tr>
                               <td width="30%">
-                                <b> Total Weight :</b>
+                                <b> PO Number :</b>
                               </td>
                               <td align="left" width="70%">
-                                <xsl:value-of select="JobTrackingDS/Header/TotalWeight" />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <b>Total Cubes :</b>
-                              </td>
-                              <td align="left">
-                                <xsl:value-of select="JobTrackingDS/Header/TotalCube" />
+                                <xsl:value-of select="JobTrackingDS/Header/PONumber" />
                               </td>
                             </tr>
                           </table>
