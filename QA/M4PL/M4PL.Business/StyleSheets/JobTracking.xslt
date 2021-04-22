@@ -669,7 +669,7 @@
                                   <th scope="col"> Code </th>
                                   <th scope="col"> Title </th>
                                   <th scope="col"> Type </th>
-                                  <th scope="col"> ACD </th>
+                                  <th scope="col"> Date </th>
                                   <!--<th scope="col"> ScheduledDate </th>-->
                                 </tr>
                                 <xsl:for-each select="JobTrackingDS/TrackingDetails">
