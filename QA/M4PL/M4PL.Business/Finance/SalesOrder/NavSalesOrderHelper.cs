@@ -27,6 +27,7 @@ using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using M4PL.Utilities.Logger;
 using Newtonsoft.Json;
 using System;
@@ -119,7 +120,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderResponse;
 		}
 
-		public static NavSalesOrder GenerateSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		public static NavSalesOrder GenerateSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool isMilageIncluded, bool isStorageIncluded)
 		{
 			NavSalesOrder navSalesOrderResponse = null;
 			string navSalesOrderJson = string.Empty;
@@ -140,6 +141,8 @@ namespace M4PL.Business.Finance.SalesOrder
 					jsonObject = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(navSalesOrderJson);
 					jsonObject.Property("Ship_from_City").Remove();
 					jsonObject.Property("Ship_from_County").Remove();
+                    if (!isStorageIncluded) { jsonObject.Property("Storage").Remove(); }
+					if (!isMilageIncluded) { jsonObject.Property("Mileage").Remove(); }
 					navSalesOrderJson = jsonObject.ToString();
 					streamWriter.Write(navSalesOrderJson);
 				}
@@ -172,7 +175,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderResponse;
 		}
 
-		public static NavSalesOrder UpdateSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
+		public static NavSalesOrder UpdateSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, bool isMilageIncluded, bool isStorageIncluded)
 		{
 			NavSalesOrder existingSalesOrderData = GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
 			if (existingSalesOrderData == null) { return null; }
@@ -197,6 +200,8 @@ namespace M4PL.Business.Finance.SalesOrder
 					jsonObject = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(navSalesOrderJson);
 					jsonObject.Property("Ship_from_City").Remove();
 					jsonObject.Property("Ship_from_County").Remove();
+					if (!isStorageIncluded) { jsonObject.Property("Storage").Remove(); }
+					if (!isMilageIncluded) { jsonObject.Property("Mileage").Remove(); }
 					navSalesOrderJson = jsonObject.ToString();
 					streamWriter.Write(navSalesOrderJson);
 				}
@@ -706,10 +711,18 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			bool allLineItemsUpdated = true;
 			string proFlag = null;
+			bool isMilageIncluded = false;
+			bool isStorageIncluded = false;
+			if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
+			{
+				isMilageIncluded = salesOrderItemRequest.Where(x => !string.IsNullOrEmpty(x.No.GetLast(3)) && x.No.GetLast(3).Equals("MIL", StringComparison.OrdinalIgnoreCase)).Any();
+				isStorageIncluded = salesOrderItemRequest.Where(x => !string.IsNullOrEmpty(x.No.GetLast(3)) && x.No.GetLast(3).Equals("STO", StringComparison.OrdinalIgnoreCase)).Any();
+			}
+
 			NavSalesOrderRequest navSalesOrderRequest = _commands.GetSalesOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.SalesOrder);
 			if (navSalesOrderRequest == null) { return null; }
 			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
-			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword);
+			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword, isMilageIncluded, isStorageIncluded);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
 				_commands.UpdateJobOrderMapping(activeUser, jobIdList, navSalesOrderResponse.No, electronicInvoice, isParentOrder);
@@ -724,17 +737,23 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			bool allLineItemsUpdated = true;
 			string proFlag = null;
+			bool isMilageIncluded = false;
+			bool isStorageIncluded = false;
+			if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
+			{
+				isMilageIncluded = salesOrderItemRequest.Where(x => !string.IsNullOrEmpty(x.No.GetLast(3)) && x.No.GetLast(3).Equals("MIL", StringComparison.OrdinalIgnoreCase)).Any();
+				isStorageIncluded = salesOrderItemRequest.Where(x => !string.IsNullOrEmpty(x.No.GetLast(3)) && x.No.GetLast(3).Equals("STO", StringComparison.OrdinalIgnoreCase)).Any();
+			}
+
 			NavSalesOrderRequest navSalesOrderRequest = _commands.GetSalesOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.SalesOrder);
 			if (navSalesOrderRequest == null) { return null; }
 			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
-			NavSalesOrder navSalesOrderResponse = UpdateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
+
+			NavSalesOrder navSalesOrderResponse = UpdateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, isMilageIncluded, isStorageIncluded);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
-				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
-				//Task.Run(() =>
-				//{
+                salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
 				UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderRequest.Shortcut_Dimension_2_Code, navSalesOrderRequest.Shortcut_Dimension_1_Code, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
-				//});
 			}
 
 			return navSalesOrderResponse;
