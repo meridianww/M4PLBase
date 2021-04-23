@@ -46,8 +46,8 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             jobDatatoUpdate.JobSiteCode = !string.IsNullOrEmpty(orderHeader?.ShipTo.LocationName) && orderHeader?.ShipTo.LocationName.Length >= 4 ? orderHeader.ShipTo.LocationName.Substring(orderHeader.ShipTo.LocationName.Length - 4) : null;
             jobDatatoUpdate.JobElectronicInvoice = true;
             jobDatatoUpdate.JobOrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? Convert.ToDateTime(Convert.ToDateTime(orderHeader.OrderDate).ToShortDateString()) : (DateTime?)null;
-            jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderHeader.DeliveryDate)
-                    ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
+            ////jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderHeader.DeliveryDate)
+            ////        ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
             jobDatatoUpdate.JobTotalWeight = (orderLineDetailList != null && orderLineDetailList.OrderLineDetail?.Count > 0) ?
                 orderLineDetailList.OrderLineDetail.Sum(x => x.Weight) : jobDatatoUpdate.JobTotalWeight;
             jobDatatoUpdate.JobTotalCubes = (orderLineDetailList != null && orderLineDetailList.OrderLineDetail?.Count > 0) ?
@@ -56,6 +56,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             jobDatatoUpdate.JobWeightUnitTypeIdName = "L";
             jobDatatoUpdate.JobCubesUnitTypeId = systemOptionList.Where(x => x.SysLookupCode == "CubesUnitType" && x.SysOptionName == "E")?.FirstOrDefault().Id;
             jobDatatoUpdate.JobCubesUnitTypeIdName = "E";
+            jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderHeader.DeliveryDate) ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
             if (isASNRequest)
             {
                 int? qtyActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("PRODUCT", StringComparison.OrdinalIgnoreCase))?.Sum(x => x.ShipQuantity);
@@ -78,8 +79,6 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 jobDatatoUpdate.JobQtyOrdered = qtyOrderedCount == 0 ? null : qtyOrderedCount;
                 jobDatatoUpdate.JobPartsOrdered = partsOrderedCount == 0 ? null : partsOrderedCount;
                 jobDatatoUpdate.JobServiceOrder = jobServiceOrderCount == 0 ? null : jobServiceOrderCount;
-                jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderHeader.DeliveryDate)
-                        ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
             }
 
             return jobDatatoUpdate;
@@ -99,8 +98,8 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 jobDatatoUpdate.JobPONumber = orderDetails.info.customer_po;
                 jobDatatoUpdate.JobCustomerPurchaseOrder = orderDetails.info.customer_po;
                 jobDatatoUpdate.JobOrderedDate = !string.IsNullOrEmpty(orderDetails.info.install_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.install_date).ToShortDateString()) : (DateTime?)null;
-                jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date)
-                        ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;
+                ////jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date)
+                ////        ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;
             }
 
             jobDatatoUpdate = jobDatatoUpdate != null ? jobDatatoUpdate : new Entities.Job.Job();
@@ -118,6 +117,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             jobDatatoUpdate.ShipmentType = "Cross-Dock Shipment";
             jobDatatoUpdate.JobSiteCode = !string.IsNullOrEmpty(orderDetails.destination_name) && orderDetails.destination_name.Length >= 4 ? orderDetails.destination_name.Substring(orderDetails.destination_name.Length - 4) : null;
             jobDatatoUpdate.JobElectronicInvoice = true;
+            jobDatatoUpdate.JobDeliveryDateTimeBaseline = orderDetails.info != null && !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date) ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;
             if (orderDetails.item_list != null && orderDetails.item_list.Count > 0)
             {
                 jobDatatoUpdate.JobTotalWeight = orderDetails.item_list.Sum(x => x.item_weight.ToDecimal());
@@ -153,11 +153,6 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 jobDatatoUpdate.JobOriginDateTimeBaseline = asnShipDate.HasValue ? asnShipDate.ToDateTime() : jobDatatoUpdate.JobOriginDateTimeBaseline;
                 jobDatatoUpdate.JobOriginDateTimePlanned = asnShipDate.HasValue ? asnShipDate.ToDateTime() : jobDatatoUpdate.JobOriginDateTimePlanned;
                 jobDatatoUpdate.JobShipmentDate = asnShipDate.HasValue ? asnShipDate.ToDateTime() : jobDatatoUpdate.JobOriginDateTimePlanned;
-            }
-            else
-            {
-                jobDatatoUpdate.JobDeliveryDateTimeBaseline = orderDetails.info != null && !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date)
-                        ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;
             }
 
             return jobDatatoUpdate;
