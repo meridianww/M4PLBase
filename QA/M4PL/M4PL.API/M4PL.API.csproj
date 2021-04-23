@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>M4PL.API</RootNamespace>
     <AssemblyName>M4PL.API</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -552,7 +552,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
@@ -580,7 +580,7 @@
   </Target>
   <Target Name="AfterBuild">
   </Target> -->
-  <Import Project="$(MSBuildExtensionPackPath)" Condition="Exists('$(MSBuildExtensionPackPath)')" />
+  <!--<Import Project="$(MSBuildExtensionPackPath)" Condition="Exists('$(MSBuildExtensionPackPath)')" />
   <Target Name="BeforeBuild" Condition="Exists('$(MSBuildExtensionPackPath)')">
     <ItemGroup>
       <AssemblyInfoFiles Include="**\AssemblyInfo.*" />
@@ -617,5 +617,5 @@
     <MSBuild.ExtensionPack.Compression.Zip TaskAction="Extract" ZipFileName="$(CCNetArtifactDirectory)\$(CCNetLabel)\M4PL_SPA_APIApp_$(CCNetLabel).zip" ExtractPath="$(CCNetArtifactDirectory)\M4PL_SPA_APIApp_$(CCNetLabel)" />
     <MSBuild.ExtensionPack.FileSystem.RoboCopy Source="$(CCNetArtifactDirectory)\M4PL_SPA_APIApp_$(CCNetLabel)" Destination="$(DeployPath)" Files="*.*" Options="/S" />
     <RemoveDir Directories="$(CCNetArtifactDirectory)\M4PLAPIApp_$(CCNetLabel)" />
-  </Target>
+  </Target>-->
 </Project>

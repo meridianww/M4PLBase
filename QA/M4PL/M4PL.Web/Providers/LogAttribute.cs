@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http.Filters;
 using System.Web.Mvc;
 using System.Web.Routing;
-using M4PL.EF;
-using M4PL.Web.Providers;
 
 namespace M4PL.Web
 {

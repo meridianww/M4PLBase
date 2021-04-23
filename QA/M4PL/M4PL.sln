@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4PL.APIClient", "M4PL.APIClient\M4PL.APIClient.csproj", "{45432255-74AE-45E3-BEEF-BAF721678C2E}"
 EndProject
@@ -18,6 +18,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4PL.API.Tests", "M4PL.API.Tests\M4PL.API.Tests.csproj", "{63F218C4-9769-4F8A-A9E6-EEC2E97C0767}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4PL.Web", "M4PL.Web\M4PL.Web.csproj", "{84603796-0C10-4A49-9108-5C54573054A2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8289A840-B9FC-480B-85D4-1B22C2E073FF} = {8289A840-B9FC-480B-85D4-1B22C2E073FF}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4PL.Web.Tests", "M4PL.Web.Tests\M4PL.Web.Tests.csproj", "{A1359EDC-6319-4ADA-B46D-3080F8D0E00F}"
 EndProject
@@ -72,5 +75,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3CD0CC9B-2695-490E-AABD-323F0AA4CDF4}
 	EndGlobalSection
 EndGlobal

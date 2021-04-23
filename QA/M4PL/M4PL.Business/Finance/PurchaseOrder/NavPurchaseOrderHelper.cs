@@ -22,6 +22,7 @@ using M4PL.Entities.Finance.JobOrderMapping;
 using M4PL.Entities.Finance.PurchaseOrder;
 using M4PL.Entities.Finance.PurchaseOrderItem;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using M4PL.Utilities.Logger;
 using Newtonsoft.Json;
 using System;
@@ -118,6 +119,14 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			string proFlag = null;
 			Newtonsoft.Json.Linq.JObject jsonObject = null;
 			string serviceCall = string.Format("{0}/PurchaseOrder", navAPIUrl);
+			bool isMilageIncluded = false;
+			bool isStorageIncluded = false;
+			if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
+			{
+				isMilageIncluded = purchaseOrderItemRequest.Where(x => !string.IsNullOrEmpty(x.No.GetLast(3)) && x.No.GetLast(3).Equals("MIL", StringComparison.OrdinalIgnoreCase)).Any();
+				isStorageIncluded = purchaseOrderItemRequest.Where(x => !string.IsNullOrEmpty(x.No.GetLast(3)) && x.No.GetLast(3).Equals("STO", StringComparison.OrdinalIgnoreCase)).Any();
+			}
+
 			try
 			{
 				NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
@@ -135,6 +144,8 @@ namespace M4PL.Business.Finance.PurchaseOrder
 					jsonObject = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(navPurchaseOrderJson);
 					jsonObject.Property("Ship_from_City").Remove();
 					jsonObject.Property("Ship_from_County").Remove();
+					if (!isStorageIncluded) { jsonObject.Property("Storage").Remove(); }
+					if (!isMilageIncluded) { jsonObject.Property("Mileage").Remove(); }
 					navPurchaseOrderJson = jsonObject.ToString();
 					streamWriter.Write(navPurchaseOrderJson);
 				}
@@ -184,6 +195,13 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			string proFlag = null;
 			Newtonsoft.Json.Linq.JObject jsonObject = null;
 			string serviceCall = string.Format("{0}/PurchaseOrder('Order', '{1}')", navAPIUrl, poNumer);
+			bool isMilageIncluded = false;
+			bool isStorageIncluded = false;
+			if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
+			{
+				isMilageIncluded = purchaseOrderItemRequest.Where(x => !string.IsNullOrEmpty(x.No.GetLast(3)) && x.No.GetLast(3).Equals("MIL", StringComparison.OrdinalIgnoreCase)).Any();
+				isStorageIncluded = purchaseOrderItemRequest.Where(x => !string.IsNullOrEmpty(x.No.GetLast(3)) && x.No.GetLast(3).Equals("STO", StringComparison.OrdinalIgnoreCase)).Any();
+			}
 			try
 			{
 				NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
@@ -202,6 +220,8 @@ namespace M4PL.Business.Finance.PurchaseOrder
 					jsonObject = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(navPurchaseOrderJson);
 					jsonObject.Property("Ship_from_City").Remove();
 					jsonObject.Property("Ship_from_County").Remove();
+					if (!isStorageIncluded) { jsonObject.Property("Storage").Remove(); }
+					if (!isMilageIncluded) { jsonObject.Property("Mileage").Remove(); }
 					navPurchaseOrderJson = jsonObject.ToString();
 					streamWriter.Write(navPurchaseOrderJson);
 				}

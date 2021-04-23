@@ -74,5 +74,12 @@ namespace M4PL.Utilities
 
             return value;
         }
+
+        public static string GetLast(this string source, int characterCount)
+        {
+            if (characterCount >= source.Length)
+                return source;
+            return source.Substring(source.Length - characterCount);
+        }
     }
 }

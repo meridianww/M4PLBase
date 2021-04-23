@@ -1022,10 +1022,10 @@ namespace M4PL.Business.Job
                         {
                             DataAccess.Job.JobCommands.UpdateOnJobPostedInvoice(jobId, costChargeId, priceChargeId);
                         }
-
-                        navOrderRepo.GenerateSalesOrderInNav(jobId, navAPIUrl, navAPIUserName, navAPIPassword, electroluxCustomerId, activeUser);
-                        navOrderRepo.GeneratePurchaseOrderInNav(jobId, navAPIUrl, navAPIUserName, navAPIPassword, electroluxCustomerId, activeUser);
                     }
+
+                    navOrderRepo.GenerateSalesOrderInNav(jobId, navAPIUrl, navAPIUserName, navAPIPassword, electroluxCustomerId, activeUser);
+                    navOrderRepo.GeneratePurchaseOrderInNav(jobId, navAPIUrl, navAPIUserName, navAPIPassword, electroluxCustomerId, activeUser);
                 });
             }
         }
