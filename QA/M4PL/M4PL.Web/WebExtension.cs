@@ -3219,7 +3219,7 @@ namespace M4PL.Web
         {
             string where = string.Empty;
             if (destionations != null && destionations.Count > 0 && !destionations.Contains("ALL") && !destionations.Contains(null))
-                where += string.Format(" AND PVL.VendDCLocationId IN ({0})", string.Join(",", destionations.OfType<String>()));
+                where += string.Format(" AND PVL.VendDCLocationId IN ({0}) ", string.Join(",", destionations.OfType<String>()));
             return where;
         }
 
