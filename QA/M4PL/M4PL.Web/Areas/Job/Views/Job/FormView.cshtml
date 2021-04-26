@@ -48,6 +48,7 @@
         if (jobDocReferenceType == JobDocReferenceType.Document || jobDocReferenceType == JobDocReferenceType.POD || jobDocReferenceType == JobDocReferenceType.Damaged || jobDocReferenceType == JobDocReferenceType.Approval || jobDocReferenceType == JobDocReferenceType.Image || jobDocReferenceType == JobDocReferenceType.Signature)
         {
             IsJobDocReferenceTypeActive = true;
+            ViewBag.IsTrackingCollapsed = true;
             tabRoute.TabIndex = 2;
         }
     }
