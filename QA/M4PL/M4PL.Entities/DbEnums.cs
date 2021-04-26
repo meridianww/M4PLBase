@@ -59,7 +59,8 @@ namespace M4PL.Entities
 		AssignVendor,
 		NewCharge,
 		Gateways,
-		ShowHistory
+		ShowHistory,
+		RevertGateway
 	}
 
 	public enum RelationalOperator

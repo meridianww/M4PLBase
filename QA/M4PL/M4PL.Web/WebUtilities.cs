@@ -111,7 +111,7 @@ namespace M4PL.Web
             var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
             var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
             var gridRefresh = commonCommands.GetOperation(OperationTypeEnum.Refresh).SetRoute(route, MvcConstants.ActionDataView);
-
+            var revertGateway = commonCommands.GetOperation(OperationTypeEnum.RevertGateway);
             switch (route.Entity)
             {
                 //Master Detail Grid Settings
@@ -316,6 +316,7 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                         //if (route.Entity != EntitiesAlias.JobCard)
                         gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                        gridViewSetting.ContextMenu.Add(revertGateway);
                     }
                 }
                 //else if (!hasRecords && !gridViewSetting.IsJobCardEntity)
@@ -335,6 +336,7 @@ namespace M4PL.Web
                 {
                     gridViewSetting.ContextMenu.Add(actionsContextMenu);
                     gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                    gridViewSetting.ContextMenu.Add(revertGateway);
                 }
 
                 if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
