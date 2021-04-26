@@ -80,7 +80,7 @@ SELECT Job.ID
 	,Job.JobDeliveryResponsibleContactID
 	,Job.JobDeliveryAnalystContactID
 	,Job.JobDriverId
-	,Job.JobSalesInvoiceNumber 
+	,Job.JobSalesInvoiceNumber
 FROM dbo.JOBDL000Master Job 
 INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = Job.ProgramID AND Prg.StatusId=1
 INNER JOIN dbo.CUST000Master Cust On Cust.Id = Prg.PrgCustID
