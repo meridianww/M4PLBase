@@ -1193,5 +1193,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView(route);
         }
+
+        public ActionResult JobGatewayRevert(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            return null;
+        }
     }
 }

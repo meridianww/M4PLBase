@@ -1,4 +1,4 @@
-﻿/******************************************************************************
+/******************************************************************************
 * Copyright (C) 2016-2020 Meridian Worldwide Transportation Group - All Rights Reserved.
 *
 * Proprietary and confidential. Unauthorized copying of this file, via any
@@ -158,7 +158,10 @@ M4PLWindow.DataView = function () {
                 }
                 return;
             }
-
+            else if (route.Action == "JobGatewayRevert") {
+                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+                RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route) });
+            }
             else if (!M4PLCommon.CheckHasChanges.CheckDataChanges(s.name)) {
                 if ((route.IsPopup && route.IsPopup === true) || route.Action == chooseColumnActionName) {
                     if (route.Action == "ToggleFilter") {
@@ -1337,7 +1340,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1374,7 +1377,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1452,7 +1455,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1489,7 +1492,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1523,7 +1526,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1560,7 +1563,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -2028,7 +2031,7 @@ M4PLWindow.UploadFileDragDrop = function () {
         DevExCtrl.PopupControl.Close();
         DisplayMessageControl.PerformCallback({ strDisplayMessage: e.callbackData });
         if (callBackRoute != null && callBackRoute != undefined) {
-            if (callBackRoute.Area == "Finance" && (callBackRoute.Controller == "NavRate" || callBackRoute.Controller == "Gateway" )&& callBackRoute.Action == "FormView") {
+            if (callBackRoute.Area == "Finance" && (callBackRoute.Controller == "NavRate" || callBackRoute.Controller == "Gateway") && callBackRoute.Action == "FormView") {
                 callBackRoute.Action = "FormView";
                 callBackRoute.Area = "Program";
                 callBackRoute.Controller = "Program";

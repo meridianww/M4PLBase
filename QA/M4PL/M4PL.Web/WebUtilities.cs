@@ -316,6 +316,8 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                         //if (route.Entity != EntitiesAlias.JobCard)
                         gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                        revertGateway.Route = route;
+                        revertGateway.Route.Action = "JobGatewayRevert";
                         gridViewSetting.ContextMenu.Add(revertGateway);
                     }
                 }
