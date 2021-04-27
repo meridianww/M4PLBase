@@ -409,7 +409,7 @@ namespace M4PL.Business.XCBL
 			else
 			{
 				var statusModel = jobCommands.CancelJobByOrderNumber(string.Format("O-{0}", farEyeOrderCancelRequest.order_number), farEyeOrderCancelRequest.carrier_code, farEyeOrderCancelRequest.reason);
-				response.items_track_details.Add(new ItemsTrackDetail() { status = statusModel.Status, message = statusModel.AdditionalDetail, tracking_number = null });
+				response.items_track_details.Add(new ItemsTrackDetail() { status = statusModel.Status, message = statusModel.AdditionalDetail, tracking_number = farEyeOrderCancelRequest.order_number });
 			}
 
 			response.status = response.items_track_details.Where(x => x.status.Equals("Failure", StringComparison.OrdinalIgnoreCase)).Any() ? 400 : 200;
@@ -417,7 +417,6 @@ namespace M4PL.Business.XCBL
 			response.order_number = farEyeOrderCancelRequest.order_number;
 			response.timestamp = TimeUtility.UnixTimeNow();
 			response.execution_time = (DateTime.Now - processingStartDateTime).TotalMilliseconds.ToInt();
-			////}
 
 			return response;
 		}
