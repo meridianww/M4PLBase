@@ -10,7 +10,7 @@ GO
 -- Description:	Update On Job Posted Invoice
 -- =============================================
 CREATE PROCEDURE [dbo].[UpdateOnJobPostedInvoice] (
-	@JobId BIGINT
+	 @JobId BIGINT
 	,@CostChargeId BIGINT
 	,@PriceChargeId BIGINT
 	)
@@ -73,6 +73,7 @@ BEGIN
 		,M4PLItemId
 		,Document_Number
 	FROM dbo.NAV000JobOrderItemMapping
+	WHERE JobId = @JobId
 
 	DELETE
 	FROM dbo.NAV000JobOrderItemMapping
@@ -88,8 +89,7 @@ BEGIN
 
 	UPDATE dbo.JOBDL062CostSheet
 	SET CstInvoiced = 1
-	WHERE JobId = @JobId
-		AND ID <> @CostChargeId
+	WHERE JobId = @JobId AND ID <> @CostChargeId
 		AND StatusId = 1
 
 	UPDATE dbo.JOBDL061BillableSheet
