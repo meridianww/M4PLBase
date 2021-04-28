@@ -3,6 +3,7 @@
 ################################################################################
 
 /QA/M4PL/M4PL.API/bin
+/QA/M4PL/M4PL.API/web.debug.config
 /QA/M4PL/M4PL.API.Tests/bin/Debug
 /QA/M4PL/packages/WebGrease.1.6.0/lib
 /QA/M4PL/packages/WebGrease.1.6.0/tools
@@ -38,6 +39,7 @@
 /QA/M4PL/M4PL.Business/obj/Debug/M4PL.Business.dll
 /QA/M4PL/M4PL.Business/obj/Debug/M4PL.Business.csprojResolveAssemblyReference.cache
 /QA/M4PL/M4PL.Business/obj/Debug/M4PL.Business.csproj.FileListAbsolute.txt
+/QA/M4PL/M4PL.Web/web.debug.config
 /QA/M4PL/M4PL.Web/bin
 /QA/M4PL/M4PL.Web/obj/Debug
 /QA/M4PL/M4PL.API/obj/Debug
