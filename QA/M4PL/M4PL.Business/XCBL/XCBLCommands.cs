@@ -1007,7 +1007,11 @@ namespace M4PL.Business.XCBL
         {
             try
             {
-                if (request.EstimatedArrivalDate.Subtract(TimeUtility.GetPacificDateTime()).TotalHours <= 48 && !DateTime.Equals(request.EstimatedArrivalDate, existingJobData.JobDeliveryDateTimePlanned))
+                if (request.EstimatedArrivalDate.Subtract(TimeUtility.GetPacificDateTime()).TotalHours <= 48 &&
+                   (!existingJobData.JobDeliveryDateTimePlanned.HasValue || 
+                   (existingJobData.JobDeliveryDateTimePlanned.HasValue && 
+                   !request.EstimatedArrivalDate.Date.Equals(existingJobData.JobDeliveryDateTimePlanned.ToDateTime().Date)))
+                   )
                 {
                     var deliveryDateTimeActualactionCode = jobUpdateDecisionMakerList.FirstOrDefault(obj => !string.IsNullOrEmpty(obj.ActionCode) && obj.ActionCode.Equals("XCBL-Date", StringComparison.OrdinalIgnoreCase));
                     string actionCode = deliveryDateTimeActualactionCode != null ? deliveryDateTimeActualactionCode.ActionCode : string.Empty;
