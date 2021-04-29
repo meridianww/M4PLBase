@@ -514,6 +514,7 @@ namespace M4PL.Entities.Finance.SalesOrder
 		/// Gets or Sets Parent ID
 		/// </summary>
 		public string Parent_ID { get; set; }
+		public int Quantity { get; set; }
 
 	}
 }
