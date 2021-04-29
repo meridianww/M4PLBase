@@ -437,5 +437,7 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 		/// </summary>
 		public string Parent_ID { get; set; }
 
+		public int Quantity { get; set; }
+
 	}
 }

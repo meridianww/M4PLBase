@@ -48,5 +48,6 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 		public bool Electronic_Invoice { get; set; }
 		public string Parent_ID { get; set; }
 		public string Posting_Date { get; set; }
+		public int Quantity { get; set; }
 	}
 }

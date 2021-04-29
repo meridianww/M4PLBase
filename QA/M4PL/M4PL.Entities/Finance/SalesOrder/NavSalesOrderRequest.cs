@@ -50,5 +50,6 @@ namespace M4PL.Entities.Finance.SalesOrder
 		public decimal Storage { get; set; }
 		public bool Electronic_Invoice { get; set; }
 		public string Posting_Date { get; set; }
+		public int Quantity { get; set; }
 	}
 }
