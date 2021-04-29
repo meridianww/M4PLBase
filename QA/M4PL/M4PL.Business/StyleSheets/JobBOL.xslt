@@ -36,6 +36,7 @@
                           </xsl:attribute>
                         </img>
                       </td>
+
                       <td width ="60%">
                         <table width ="100%">
                           <tr>
@@ -48,6 +49,14 @@
                               <b>
                                 Contract# :
                                 <xsl:value-of select="JobBOLDS/Header/ContractNumber" />
+                              </b>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="text-align: left;">
+                              <b>
+                                Customer :
+                                <xsl:value-of select="JobBOLDS/Header/Customer" />
                               </b>
                             </td>
                           </tr>
@@ -67,26 +76,27 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td  style="width:50%;">
-                          <b>Vendor : </b>
-                        </td>
-                        <td align="left" style="width:50%;">
+                        <td>
+                          <b>Agent : </b>
                           <xsl:value-of select="JobBOLDS/Header/VendorName" />
                         </td>
                       </tr>
                       <tr>
-                        <td  style="width:50%">
-                          <b>Vendor# : </b>
+                        <td>
+                          <b>Agent# : </b>
+                          <xsl:value-of select="JobBOLDS/Header/VendorCode" />
                         </td>
-                        <td align="left" style="width:50%">
+                      </tr>
+                      <tr>
+                        <td>
+                          <b>Agent Location : </b>
                           <xsl:value-of select="JobBOLDS/Header/VendorLocation" />
                         </td>
                       </tr>
-
                     </tbody>
                   </table>
                 </td>
-                <td style="border : 1px solid black;">
+                <td style="width:56%" >
                   <table width="100%" valign="top" align="left">
                     <thead>
                       <tr>
@@ -95,22 +105,22 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td  style="width:50%;">
-                          <b>Planned Delivery Date : </b>
-                        </td>
-                        <td align="left" style="width:50%;">
+                        <td>
+                          <b>Scheduled Delivery Date : </b>
                           <xsl:value-of select="JobBOLDS/Header/DeliveryPlannedDate" />
                         </td>
                       </tr>
                       <tr>
-                        <td  style="width:50%">
+                        <td>
                           <b>Delivery Window# : </b>
-                        </td>
-                        <td align="left" style="width:50%">
                           <xsl:value-of select="JobBOLDS/Header/DestinationWindow" />
                         </td>
                       </tr>
+                      <tr>
+                        <td height="12px">
 
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </td>
@@ -152,27 +162,41 @@
                   </table>
                 </td>
                 <td style="border : 1px solid black;">
-                  <table>
-                    <tr>
-                      <td>
-                        <b> Quantity : </b>
-                        <xsl:value-of select="JobBOLDS/Header/TotalQuantity" />
-                      </td>
-                      <td>
-                        <b> Weight : </b>
-                        <xsl:value-of select="JobBOLDS/Header/TotalWeight" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <b>Parts : </b>
-                        <xsl:value-of select="JobBOLDS/Header/TotalParts" />
-                      </td>
-                      <td>
-                        <b>Cubes : </b>
-                        <xsl:value-of select="JobBOLDS/Header/TotalCube" />
-                      </td>
-                    </tr>
+                  <table width="100%" valign="top" align="left">
+                    <tbody>
+                      <tr>
+                        <td  style="width:50%;">
+                          <b>Quantity : </b>
+                        </td>
+                        <td align="left" style="width:50%;">
+                          <xsl:value-of select="JobBOLDS/Header/TotalQuantity" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td  style="width:50%;">
+                          <b>Weight : </b>
+                        </td>
+                        <td align="left" style="width:50%;">
+                          <xsl:value-of select="JobBOLDS/Header/TotalWeight" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td  style="width:50%">
+                          <b>Parts : </b>
+                        </td>
+                        <td align="left" style="width:50%">
+                          <xsl:value-of select="JobBOLDS/Header/TotalParts" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td  style="width:50%">
+                          <b>Cubes : </b>
+                        </td>
+                        <td align="left" style="width:50%">
+                          <xsl:value-of select="JobBOLDS/Header/TotalCube" />
+                        </td>
+                      </tr>
+                    </tbody>
                   </table>
                 </td>
               </tr>
@@ -376,20 +400,6 @@
                   </table>
                 </td>
               </tr>
-              <tr>
-                <td colspan="2" style="border:none;">
-                  <table  border="1" width="100%">
-                    <tr>
-                      <td>
-                        <b>
-                          Customer Initial :
-                        </b>
-                        <xsl:value-of select="JobBOLDS/Header/CustomerInitial" />
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
 
               <tr>
                 <td colspan="2" width="100%">
@@ -411,6 +421,7 @@
                       <tbody>
                         <tr align="middle" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid;">
                           <th scope="col"> Item </th>
+                          <th scope="col"> Initial </th>
                           <th scope="col"> Part Code </th>
                           <th scope="col"> Serial Number </th>
                           <th scope="col"> Description </th>
@@ -424,6 +435,8 @@
                           <tr align="middle" style="HEIGHT: 19px" valign="center">
                             <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="5%">
                               <xsl:value-of select="ItemNo" />
+                            </td>
+                            <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="5%">
                             </td>
                             <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="12%">
                               <xsl:value-of select="PartCode" />
