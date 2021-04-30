@@ -406,7 +406,7 @@
                             <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="5%">
                               <xsl:value-of select="ItemNo" />
                             </td>
-                            <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="5%">
+                            <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="15%">
                             </td>
                             <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="12%">
                               <xsl:value-of select="PartCode" />
@@ -417,13 +417,13 @@
                             <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="24%" align="center">
                               <xsl:value-of select="Title" />
                             </td>
-                            <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="14%">
+                            <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="8%">
                               <xsl:value-of select="QtyOrdered" />
                             </td>
-                            <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="14%">
+                            <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="12%">
                               <xsl:value-of select="PackagingType" />
                             </td>
-                            <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="8%">
+                            <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="12%">
                               <xsl:value-of select="QuantityUnit" />
                             </td>
                             <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="8%">
@@ -446,7 +446,7 @@
                       <td style="border:1px black !important; width:100%">
                         <b>
                           Delivery Acknowledgement :
-                        </b>    all listed services were rendered and the property and order has been recieved in apparent good condition except as notice below.
+                        </b>    all listed services were rendered and the property and order has been recieved in apparent good condition except as noted below.
                       </td>
                     </tr>
                   </table>
@@ -476,7 +476,7 @@
                               <b>Customer Name(Printed): </b>
                             </td>
                             <td>
-                              <b  style="border-bottom: 2px solid #000; padding: 0px 200px 0px 0px;"></b>
+                              <b>______________________</b>
                             </td>
                           </tr>
                           <tr>
@@ -484,7 +484,7 @@
                               <b>Customer Signature: </b>
                             </td>
                             <td>
-                              <b  style="border-bottom: 2px solid #000; padding: 0px 200px 0px 0px;"></b>
+                              <b>______________________</b>
                             </td>
                           </tr>
                           <tr>
@@ -492,7 +492,7 @@
                               <b>Date: </b>
                             </td>
                             <td>
-                              <b  style="border-bottom: 2px solid #000; padding: 0px 200px 0px 0px;"></b>
+                              <b>______________________</b>
                             </td>
                           </tr>
                           <tr>
@@ -500,7 +500,7 @@
                               <b>Delivery Time Complete: </b>
                             </td>
                             <td>
-                              <b  style="border-bottom: 2px solid #000; padding: 0px 200px 0px 0px;"></b>
+                              <b>______________________</b>
                             </td>
                           </tr>
                           <tr>
@@ -508,7 +508,7 @@
                               <b>Driver Signature: </b>
                             </td>
                             <td>
-                              <b  style="border-bottom: 2px solid #000; padding: 0px 200px 0px 0px;"></b>
+                              <b>______________________</b>
                             </td>
                           </tr>
                         </table>
