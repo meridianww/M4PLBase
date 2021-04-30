@@ -112,6 +112,11 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             jobDatatoUpdate.JobCustomerSalesOrder = orderDetails.tracking_number;
             jobDatatoUpdate.PlantIDCode = !string.IsNullOrEmpty(orderDetails.origin_code) ? orderDetails.origin_code : jobDatatoUpdate.PlantIDCode;
             jobDatatoUpdate.StatusId = holdStatus != null && orderDetails.non_executable ?  holdStatus.Id : (int)StatusType.Active;
+            jobDatatoUpdate.JobDeliveryCommentText = orderDetails.non_executable_reason;
+            jobDatatoUpdate.JobBOLMaster = orderDetails.original_order_number;
+            jobDatatoUpdate.JobBOLChild = orderDetails.rl_number;
+            jobDatatoUpdate.JobChannel = orderDetails.scac_code;
+            jobDatatoUpdate.CarrierID = orderDetails.rush_order;
             jobDatatoUpdate.ProgramID = programId;
             jobDatatoUpdate.JobType = orderDetails.type_of_order.Equals("Reverse", StringComparison.OrdinalIgnoreCase) ? "Return" : "Original";
             jobDatatoUpdate.ShipmentType = "Cross-Dock Shipment";

@@ -425,6 +425,11 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// </summary>
 		public FarEyeOrderDetailsInfo info { get; set; }
         public bool non_executable { get; set; }
+        public string non_executable_reason { get; set; }
+        public string original_order_number { get; set; }
+        public string rl_number { get; set; }
+        public string scac_code { get; set; }
+        public string rush_order { get; set; }
     }
 	/// <summary>
 	/// Models class for FarEye Order Details Info
