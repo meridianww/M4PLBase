@@ -610,7 +610,7 @@ namespace M4PL.DataAccess.Job
             bool isExistsRecord = true;
 
             //In case of UI update don't consider the customerId check
-            if ((job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder) || (!isManualUpdate ? (job.CustomerId != existingJobDetail.CustomerId) : false))
+            if (job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder)
             {
                 isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
             }

@@ -194,7 +194,14 @@ namespace M4PL.Business.XCBL
 				else if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_service) && (string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.DeliveryNumber.ToString(), StringComparison.OrdinalIgnoreCase) || string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase)))
 				{
 						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, true);
-						bool isJobCancelled = jobDetails?.Id > 0 ? DataAccess.Job.JobCommands.IsJobCancelled(jobDetails.Id) : true;
+					if (jobDetails.Id <= 0)
+					{
+						processingJobDetail = DataAccess.Job.JobCommands.GetJobByServiceMode(ActiveUser, farEyeOrderDetails.order_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+						jobDetails.Id = processingJobDetail.Id;
+					}
+					bool isJobCancelled = jobDetails?.Id > 0 ? DataAccess.Job.JobCommands.IsJobCancelled(jobDetails.Id) : true;
+					
+						
 					if (jobDetails?.Id <= 0)
 					{
 						response = new OrderResponse()
