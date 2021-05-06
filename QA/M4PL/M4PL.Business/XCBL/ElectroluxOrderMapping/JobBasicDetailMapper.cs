@@ -101,7 +101,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderDetails.info.install_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.install_date).ToShortDateString()) : (DateTime?)null;
                 jobDatatoUpdate.JobOriginDateTimeBaseline = !string.IsNullOrEmpty(orderDetails.info.requested_delivery_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.requested_delivery_date).ToShortDateString()) : (DateTime?)null;
                 jobDatatoUpdate.JobOriginDateTimePlanned = !string.IsNullOrEmpty(orderDetails.info.requested_delivery_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.requested_delivery_date).ToShortDateString()) : (DateTime?)null;
-                jobDatatoUpdate.JobDeliveryDateTimePlanned = orderDetails.non_executable ? new DateTime(2049, 12, 31, 0, 0,0) : jobDatatoUpdate.JobDeliveryDateTimePlanned != null ? jobDatatoUpdate.JobDeliveryDateTimePlanned : (DateTime?)null;
+                jobDatatoUpdate.JobDeliveryDateTimePlanned = orderDetails.non_executable ? new DateTime(2049, 12, 31) : jobDatatoUpdate.JobDeliveryDateTimePlanned != null ? jobDatatoUpdate.JobDeliveryDateTimePlanned : (DateTime?)null;
                 //!string.IsNullOrEmpty(orderDetails.info.install_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.install_date).ToShortDateString()) : (DateTime?)null;
                 ////jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date)
                 ////        ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;

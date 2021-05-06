@@ -216,6 +216,10 @@ namespace M4PL.Business.XCBL
 					{
 						jobDetails.JobIsDirtyDestination = true;
 						jobDetails.JobIsDirtyContact = true;
+						if(farEyeOrderDetails.non_executable == true)
+                        {
+							jobDetails.JobDeliveryDateTimePlanned = new DateTime(2049,12,31);
+                        }
 						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
 						if (processingJobDetail?.Id > 0)
 						{
