@@ -97,7 +97,12 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                : null;
                 jobDatatoUpdate.JobPONumber = orderDetails.info.customer_po;
                 jobDatatoUpdate.JobCustomerPurchaseOrder = orderDetails.info.customer_po;
-                jobDatatoUpdate.JobOrderedDate = !string.IsNullOrEmpty(orderDetails.info.install_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.install_date).ToShortDateString()) : (DateTime?)null;
+                jobDatatoUpdate.JobOrderedDate = DateTime.Now;
+                jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderDetails.info.install_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.install_date).ToShortDateString()) : (DateTime?)null;
+                jobDatatoUpdate.JobOriginDateTimeBaseline = !string.IsNullOrEmpty(orderDetails.info.requested_delivery_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.requested_delivery_date).ToShortDateString()) : (DateTime?)null;
+                jobDatatoUpdate.JobOriginDateTimePlanned = !string.IsNullOrEmpty(orderDetails.info.requested_delivery_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.requested_delivery_date).ToShortDateString()) : (DateTime?)null;
+                jobDatatoUpdate.JobDeliveryDateTimePlanned = orderDetails.non_executable ? new DateTime(2049, 12, 31, 0, 0,0) : jobDatatoUpdate.JobDeliveryDateTimePlanned != null ? jobDatatoUpdate.JobDeliveryDateTimePlanned : (DateTime?)null;
+                //!string.IsNullOrEmpty(orderDetails.info.install_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.install_date).ToShortDateString()) : (DateTime?)null;
                 ////jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date)
                 ////        ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;
             }
@@ -108,12 +113,12 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 Where(y => y.SysOptionName.Equals("Each", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
             
-            jobDatatoUpdate.JobServiceMode = orderDetails.order_number;
+            jobDatatoUpdate.JobBOLMaster = orderDetails.order_number;
             jobDatatoUpdate.JobCustomerSalesOrder = orderDetails.tracking_number;
             jobDatatoUpdate.PlantIDCode = !string.IsNullOrEmpty(orderDetails.origin_code) ? orderDetails.origin_code : jobDatatoUpdate.PlantIDCode;
-            jobDatatoUpdate.StatusId = holdStatus != null && orderDetails.non_executable ?  holdStatus.Id : (int)StatusType.Active;
+            //jobDatatoUpdate.StatusId = holdStatus != null && orderDetails.non_executable ?  holdStatus.Id : (int)StatusType.Active;
             jobDatatoUpdate.JobDeliveryCommentText = orderDetails.non_executable_reason;
-            jobDatatoUpdate.JobBOLMaster = orderDetails.original_order_number;
+            //jobDatatoUpdate.JobBOLMaster = orderDetails.original_order_number; // Decided to use BOL Master (Parent) for Electrolux internal order number as the original order number is not mandatory
             jobDatatoUpdate.JobBOLChild = orderDetails.rl_number;
             jobDatatoUpdate.JobChannel = orderDetails.scac_code;
             jobDatatoUpdate.CarrierID = orderDetails.rush_order;
@@ -122,7 +127,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             jobDatatoUpdate.ShipmentType = "Cross-Dock Shipment";
             jobDatatoUpdate.JobSiteCode = !string.IsNullOrEmpty(orderDetails.destination_name) && orderDetails.destination_name.Length >= 4 ? orderDetails.destination_name.Substring(orderDetails.destination_name.Length - 4) : null;
             jobDatatoUpdate.JobElectronicInvoice = true;
-            jobDatatoUpdate.JobDeliveryDateTimeBaseline = orderDetails.info != null && !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date) ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;
+            //jobDatatoUpdate.JobDeliveryDateTimeBaseline = orderDetails.info != null && !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date) ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;
             if (orderDetails.item_list != null && orderDetails.item_list.Count > 0)
             {
                 jobDatatoUpdate.JobTotalWeight = orderDetails.item_list.Sum(x => x.item_weight.ToDecimal());
