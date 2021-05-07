@@ -318,7 +318,7 @@ namespace M4PL.Business.Finance.PriceCode
 			tblJobPriceCodeReport.Columns.Add("Charge Code");
 			tblJobPriceCodeReport.Columns.Add("Title");
 			tblJobPriceCodeReport.Columns.Add("Rate");
-			tblJobPriceCodeReport.Columns.Add("Service Mode");
+			tblJobPriceCodeReport.Columns.Add("BOL Parent");
 			tblJobPriceCodeReport.Columns.Add("Customer Purchase Order");
 			tblJobPriceCodeReport.Columns.Add("Brand");
 			tblJobPriceCodeReport.Columns.Add("Status");
@@ -355,7 +355,7 @@ namespace M4PL.Business.Finance.PriceCode
 					row["Charge Code"] = string.IsNullOrEmpty(salesOrderItem.Cross_Reference_No) ? salesOrderItem.No : salesOrderItem.Cross_Reference_No;
 					row["Title"] = salesOrderItem.Description;
 					row["Rate"] = salesOrderItem.Unit_Price;
-					row["Service Mode"] = jobDetails.JobServiceMode;
+					row["BOL Parent"] = jobDetails.JobBOLMaster;
 					row["Customer Purchase Order"] = jobDetails.JobCustomerPurchaseOrder;
 					row["Brand"] = jobDetails.JobCarrierContract;
 					row["Status"] = jobDetails.StatusId == 1 ? "Active" : jobDetails.StatusId == 2 ? "InActive" : "Archive";

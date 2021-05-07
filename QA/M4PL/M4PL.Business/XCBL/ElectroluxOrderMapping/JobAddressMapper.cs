@@ -123,7 +123,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 			existingJobData.JobOriginSitePOCPhone = farEyeOrderDetails.destination_contact_number;
 			existingJobData.JobOriginSitePOCPhone2 = farEyeOrderDetails.destination_contact_number2;
 			existingJobData.JobOriginSitePOCEmail = farEyeOrderDetails.destination_email;
-			existingJobData.JobOriginSiteName = farEyeOrderDetails.destination_name;
+			existingJobData.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
 			existingJobData.JobOriginSitePOC = farEyeOrderDetails.destination_contact_name;
 		}
 

@@ -253,6 +253,21 @@ namespace M4PL.DataAccess.Job
             return result ?? new Entities.Job.Job();
         }
 
+        public static Entities.Job.Job GetJobByBOLMaster(ActiveUser activeUser, string jobServiceModeNumber, long customerId)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@JobBOLMasterNumber", jobServiceModeNumber),
+                new Parameter("@orgId", activeUser.OrganizationId),
+                new Parameter("@customerId", customerId)
+            };
+
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobByBOLMaster, parameters.ToArray(), storedProcedure: true);
+            return result ?? new Entities.Job.Job();
+        }
+
         public static DriverContact AddDriver(ActiveUser activeUser, DriverContact driverContact)
         {
             var parameters = new List<Parameter>
@@ -823,6 +838,27 @@ namespace M4PL.DataAccess.Job
                 result = false;
             }
             return result;
+        }
+        public static string GetDriverAlert(long jobId)
+        {
+            string driverAlert = string.Empty;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@recordId", jobId),
+               new Parameter("@entity", "Job"),
+               new Parameter("@driverAlert", "jobDriverAlert"),
+            };
+            try
+            {
+                SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetJobDriverAlert, parameters.ToArray(), false, true);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorLogger.Log(ex, string.Format("Error occured while retreiving the Driver Alert notes for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while retreiving the Driver Alert notes for job.", Utilities.Logger.LogType.Error);
+                
+            }
+            return driverAlert;
         }
         public static string GetJobNotes(long jobId)
         {

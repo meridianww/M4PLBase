@@ -127,7 +127,7 @@ namespace M4PL.Business.XCBL
 				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
 				Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
 				FirstOrDefault().Id;
-			string locationCode = !string.IsNullOrEmpty(farEyeOrderDetails.destination_name) && farEyeOrderDetails.destination_name.Length >= 4 ? farEyeOrderDetails.destination_name.Substring(farEyeOrderDetails.destination_name.Length - 4) : null;
+			string locationCode = !string.IsNullOrEmpty(farEyeOrderDetails.info.facility_code) && farEyeOrderDetails.info.facility_code.Length >= 4 ? farEyeOrderDetails.info.facility_code.Substring(farEyeOrderDetails.info.facility_code.Length - 4) : null;
 			if (string.IsNullOrEmpty(farEyeOrderDetails.tracking_number))
 			{
 				farEyeOrderDetails.tracking_number = string.Format("O-{0}", farEyeOrderDetails.order_number);
@@ -164,10 +164,28 @@ namespace M4PL.Business.XCBL
 					else
 					{
 						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
+
+						// Set the facility_code to the Origin Site Name since FarEye does not send the Origin address information
+						jobDetails.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
 						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
 						if (processingJobDetail?.Id > 0)
 						{
-							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, "FarEyeOrderRequest");
+							string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+							if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
+							{
+								if (jobNotes.Length > 0)
+								{
+									jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
+								}
+								else
+								{
+									jobNotes = farEyeOrderDetails.delivery_instruction;
+								}
+
+								DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
+							}
+
+							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
 							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
 							if (jobCargos != null && jobCargos.Count > 0)
 							{
@@ -193,10 +211,18 @@ namespace M4PL.Business.XCBL
 				}
 				else if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_service) && (string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.DeliveryNumber.ToString(), StringComparison.OrdinalIgnoreCase) || string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase)))
 				{
+					if(string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
 						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, true);
+					}
+					else
+                    {
+						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
+					}
+						
 					if (jobDetails.Id <= 0)
 					{
-						processingJobDetail = DataAccess.Job.JobCommands.GetJobByServiceMode(ActiveUser, farEyeOrderDetails.order_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+						processingJobDetail = DataAccess.Job.JobCommands.GetJobByBOLMaster(ActiveUser, farEyeOrderDetails.order_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 						jobDetails.Id = processingJobDetail.Id;
 					}
 					bool isJobCancelled = jobDetails?.Id > 0 ? DataAccess.Job.JobCommands.IsJobCancelled(jobDetails.Id) : true;
@@ -216,18 +242,42 @@ namespace M4PL.Business.XCBL
 					{
 						jobDetails.JobIsDirtyDestination = true;
 						jobDetails.JobIsDirtyContact = true;
-						if(farEyeOrderDetails.non_executable == true)
+						if(!String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable))
                         {
 							jobDetails.JobDeliveryDateTimePlanned = new DateTime(2049,12,31);
                         }
+
+						// Set the facility_code to the Origin Site Name since FarEye does not send the Origin address information
+						jobDetails.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
+
 						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
 						if (processingJobDetail?.Id > 0)
 						{
-							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, "FarEyeOrderUpdateRequest");
+							string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+							if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
+							{
+								if(jobNotes.Length > 0)
+                                {
+									jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
+								}
+								else
+                                {
+									jobNotes = farEyeOrderDetails.delivery_instruction;
+                                }
+									
+								DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
+							}
+							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
+							bool isFarEyePushRequired = false;
+
+							if(string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
+                            {
+								DataAccess.Job.JobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+							}
+							
+
 							if (!M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean())
 							{
-								bool isFarEyePushRequired = false;
-								DataAccess.Job.JobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
 								if (isFarEyePushRequired)
 								{
 									FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
@@ -331,7 +381,7 @@ namespace M4PL.Business.XCBL
 			var orderData = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 			if (orderData == null || (orderData != null && orderData.Id == 0))
 			{
-				orderData = DataAccess.Job.JobCommands.GetJobByServiceMode(ActiveUser, orderEvent.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+				orderData = DataAccess.Job.JobCommands.GetJobByBOLMaster(ActiveUser, orderEvent.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());//DataAccess.Job.JobCommands.GetJobByServiceMode(ActiveUser, orderEvent.OrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 			}
 
 			if (orderData != null && orderData.Id > 0)
@@ -446,7 +496,7 @@ namespace M4PL.Business.XCBL
 				if (deliveryUpdate != null)
 				{
 					farEyeDeliveryStatusResponse = new FarEyeDeliveryStatus();
-					farEyeDeliveryStatusResponse.order_number = jobDetail.JobServiceMode;
+					farEyeDeliveryStatusResponse.order_number = jobDetail.JobBOLMaster;
 					farEyeDeliveryStatusResponse.type = "DeliveryNumber";
 					farEyeDeliveryStatusResponse.value = !string.IsNullOrEmpty(orderNumber) && orderNumber.StartsWith("O-") ? null : orderNumber;
 					farEyeDeliveryStatusResponse.carrier_code = "Meridian";

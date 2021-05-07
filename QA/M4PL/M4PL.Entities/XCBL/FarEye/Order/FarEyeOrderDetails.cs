@@ -424,12 +424,7 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// Gets or Sets info
 		/// </summary>
 		public FarEyeOrderDetailsInfo info { get; set; }
-        public bool non_executable { get; set; }
-        public string non_executable_reason { get; set; }
-        public string original_order_number { get; set; }
-        public string rl_number { get; set; }
-        public string scac_code { get; set; }
-        public string rush_order { get; set; }
+        
     }
 	/// <summary>
 	/// Models class for FarEye Order Details Info
@@ -512,7 +507,13 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// Gets or Sets requested delivery date
 		/// </summary>
 		public string requested_delivery_date { get; set; }
-
+		public string non_executable { get; set; }
+		public string non_executable_reason { get; set; }
+		public string original_order_number { get; set; }
+		public string rl_number { get; set; }
+		public string scac_code { get; set; }
+		public string rush_order { get; set; }
+		public string facility_code { get; set; }
 	}
 	/// <summary>
 	/// Model class for Item List of FarEye Order Detail

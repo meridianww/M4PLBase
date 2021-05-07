@@ -445,6 +445,8 @@ namespace M4PL.DataAccess
 		public const string GetJobDataFromEDI204 = "dbo.GetJobDataFromEDI204";
 		public const string GetJobByCustomerSalesOrder = "dbo.GetJobByCustomerSalesOrder";
 		public const string GetJobByServiceMode = "dbo.GetJobByServiceMode";
+		public const string GetJobByBOLMaster = "dbo.GetJobByBOLMaster";
+		public const string GetJobDriverAlert = "dbo.GetJobDriverAlert";
 		public const string InsDriverContact = "dbo.InsDriverContact";
         public const string CopyJobGatewayFromProgramForXcBL = "dbo.CopyJobGatewayFromProgramForXcBL";
 		public const string CopyJobGatewayFromProgramForXcBLForElectrolux = "dbo.CopyJobGatewayFromProgramForXcblElectrolux";

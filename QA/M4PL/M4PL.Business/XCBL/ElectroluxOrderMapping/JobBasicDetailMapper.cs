@@ -35,7 +35,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 Where(y => y.SysOptionName.Equals("Each", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
             jobDatatoUpdate.JobPONumber = orderHeader.CustomerPO;
-            jobDatatoUpdate.JobServiceMode = orderHeader.OriginalOrderNumber;
+            jobDatatoUpdate.JobBOLMaster = orderHeader.OriginalOrderNumber;
             jobDatatoUpdate.JobCustomerPurchaseOrder = orderHeader.CustomerPO;
             jobDatatoUpdate.JobCustomerSalesOrder = orderHeader.OrderNumber;
             jobDatatoUpdate.PlantIDCode = (orderHeader.ShipFrom != null && !string.IsNullOrEmpty(orderHeader.ShipFrom.LocationID)) ? orderHeader.ShipFrom.LocationID : jobDatatoUpdate.PlantIDCode;
@@ -101,10 +101,8 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderDetails.info.install_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.install_date).ToShortDateString()) : (DateTime?)null;
                 jobDatatoUpdate.JobOriginDateTimeBaseline = !string.IsNullOrEmpty(orderDetails.info.requested_delivery_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.requested_delivery_date).ToShortDateString()) : (DateTime?)null;
                 jobDatatoUpdate.JobOriginDateTimePlanned = !string.IsNullOrEmpty(orderDetails.info.requested_delivery_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.requested_delivery_date).ToShortDateString()) : (DateTime?)null;
-                jobDatatoUpdate.JobDeliveryDateTimePlanned = orderDetails.non_executable ? new DateTime(2049, 12, 31) : jobDatatoUpdate.JobDeliveryDateTimePlanned != null ? jobDatatoUpdate.JobDeliveryDateTimePlanned : (DateTime?)null;
-                //!string.IsNullOrEmpty(orderDetails.info.install_date) ? Convert.ToDateTime(Convert.ToDateTime(orderDetails.info.install_date).ToShortDateString()) : (DateTime?)null;
-                ////jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date)
-                ////        ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;
+                jobDatatoUpdate.JobDeliveryDateTimePlanned = !String.IsNullOrEmpty(orderDetails.info.non_executable) ? new DateTime(2049, 12, 31) : jobDatatoUpdate.JobDeliveryDateTimePlanned != null ? jobDatatoUpdate.JobDeliveryDateTimePlanned : (DateTime?)null;
+                jobDatatoUpdate.StatusId = 1;
             }
 
             jobDatatoUpdate = jobDatatoUpdate != null ? jobDatatoUpdate : new Entities.Job.Job();
@@ -112,22 +110,22 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 Where(x => x.SysLookupCode.Equals("CargoUnit", StringComparison.OrdinalIgnoreCase))?.
                 Where(y => y.SysOptionName.Equals("Each", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
-            
-            jobDatatoUpdate.JobBOLMaster = orderDetails.order_number;
+
+            jobDatatoUpdate.JobManifestNo = orderDetails.info.bill_of_lading;
+            jobDatatoUpdate.JobBOL = orderDetails.info.bill_of_lading;
+            jobDatatoUpdate.JobBOLMaster = orderDetails.order_number;          
             jobDatatoUpdate.JobCustomerSalesOrder = orderDetails.tracking_number;
             jobDatatoUpdate.PlantIDCode = !string.IsNullOrEmpty(orderDetails.origin_code) ? orderDetails.origin_code : jobDatatoUpdate.PlantIDCode;
-            //jobDatatoUpdate.StatusId = holdStatus != null && orderDetails.non_executable ?  holdStatus.Id : (int)StatusType.Active;
-            jobDatatoUpdate.JobDeliveryCommentText = orderDetails.non_executable_reason;
-            //jobDatatoUpdate.JobBOLMaster = orderDetails.original_order_number; // Decided to use BOL Master (Parent) for Electrolux internal order number as the original order number is not mandatory
-            jobDatatoUpdate.JobBOLChild = orderDetails.rl_number;
-            jobDatatoUpdate.JobChannel = orderDetails.scac_code;
-            jobDatatoUpdate.CarrierID = orderDetails.rush_order;
+            jobDatatoUpdate.JobDeliveryCommentText = orderDetails.info.non_executable;
+            jobDatatoUpdate.JobBOLChild = orderDetails.info.rl_number;
+            jobDatatoUpdate.JobChannel = orderDetails.info.scac_code;
+            jobDatatoUpdate.CarrierID = orderDetails.info.rush_order;
             jobDatatoUpdate.ProgramID = programId;
             jobDatatoUpdate.JobType = orderDetails.type_of_order.Equals("Reverse", StringComparison.OrdinalIgnoreCase) ? "Return" : "Original";
             jobDatatoUpdate.ShipmentType = "Cross-Dock Shipment";
-            jobDatatoUpdate.JobSiteCode = !string.IsNullOrEmpty(orderDetails.destination_name) && orderDetails.destination_name.Length >= 4 ? orderDetails.destination_name.Substring(orderDetails.destination_name.Length - 4) : null;
+            jobDatatoUpdate.JobSiteCode = !string.IsNullOrEmpty(orderDetails.info.facility_code) && orderDetails.info.facility_code.Length >= 4 ? orderDetails.info.facility_code.Substring(orderDetails.info.facility_code.Length - 4) : null;
             jobDatatoUpdate.JobElectronicInvoice = true;
-            //jobDatatoUpdate.JobDeliveryDateTimeBaseline = orderDetails.info != null && !string.IsNullOrEmpty(orderDetails.info.outbound_delivery_date) ? Convert.ToDateTime(orderDetails.info.outbound_delivery_date) : (DateTime?)null;
+            jobDatatoUpdate.JobDriverAlert = orderDetails.delivery_instruction;
             if (orderDetails.item_list != null && orderDetails.item_list.Count > 0)
             {
                 jobDatatoUpdate.JobTotalWeight = orderDetails.item_list.Sum(x => x.item_weight.ToDecimal());
