@@ -380,7 +380,7 @@ namespace M4PL.DataAccess.Job
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }

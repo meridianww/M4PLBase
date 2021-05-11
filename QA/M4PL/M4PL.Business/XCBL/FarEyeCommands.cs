@@ -160,6 +160,9 @@ namespace M4PL.Business.XCBL
 							StatusCode = "Failure",
 							Subject = "There is already a Order present in the Meridian system with the same Order Number."
 						};
+
+						processingJobDetail = existingJobDataInDB != null ? DataAccess.Job.JobCommands.Put(ActiveUser, existingJobDataInDB, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : existingJobDataInDB;
+
 					}
 					else
 					{
@@ -168,153 +171,226 @@ namespace M4PL.Business.XCBL
 						// Set the facility_code to the Origin Site Name since FarEye does not send the Origin address information
 						jobDetails.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
 						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
-						if (processingJobDetail?.Id > 0)
-						{
-							string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
-							if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
-							{
-								if (jobNotes.Length > 0)
-								{
-									jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
-								}
-								else
-								{
-									jobNotes = farEyeOrderDetails.delivery_instruction;
-								}
 
-								DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
-							}
-
-							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
-							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
-							if (jobCargos != null && jobCargos.Count > 0)
-							{
-								DataAccess.Job.JobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-							}
-
-							if (processingJobDetail.ProgramID.HasValue)
-							{
-								DataAccess.Job.JobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
-							}
-						}
-						else
-						{
-							response = new OrderResponse()
-							{
-								ClientMessageID = string.Empty,
-								SenderMessageID = farEyeOrderDetails.order_number,
-								StatusCode = "Failure",
-								Subject = "Request has been recieved and logged, there is some issue while creating order in the system, please try again."
-							};
-						}
 					}
-				}
-				else if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_service) && (string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.DeliveryNumber.ToString(), StringComparison.OrdinalIgnoreCase) || string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase)))
-				{
-					if(string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
-                    {
-						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, true);
+
+					if (processingJobDetail?.Id > 0)
+					{
+						string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+						string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
+
+						if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
+						{
+							if (jobNotes.Length > 0)
+							{
+								jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
+							}
+							else
+							{
+								jobNotes = farEyeOrderDetails.delivery_instruction;
+							}
+							jobNotes += System.Environment.NewLine + orderNotes;
+							DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
+						}
+						else if (orderNotes.Length > 0)
+						{
+							DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, orderNotes);
+						}
+
+						InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
+						List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
+						if (jobCargos != null && jobCargos.Count > 0)
+						{
+							DataAccess.Job.JobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+						}
+
+						if (processingJobDetail.ProgramID.HasValue)
+						{
+							DataAccess.Job.JobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
+						}
 					}
 					else
-                    {
-						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
-					}
-						
-					if (jobDetails.Id <= 0)
-					{
-						processingJobDetail = DataAccess.Job.JobCommands.GetJobByBOLMaster(ActiveUser, farEyeOrderDetails.order_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
-						jobDetails.Id = processingJobDetail.Id;
-					}
-					bool isJobCancelled = jobDetails?.Id > 0 ? DataAccess.Job.JobCommands.IsJobCancelled(jobDetails.Id) : true;
-					
-						
-					if (jobDetails?.Id <= 0)
 					{
 						response = new OrderResponse()
 						{
 							ClientMessageID = string.Empty,
 							SenderMessageID = farEyeOrderDetails.order_number,
 							StatusCode = "Failure",
-							Subject = "Can not proceed the ASN request to the system as requesed order is not present in the meridian system, please try again."
+							Subject = "Request has been recieved and logged, there is some issue while creating order in the system, please try again."
 						};
 					}
-					else if (jobDetails?.Id > 0 && !isJobCancelled)
+				}
+				else if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_service) && (string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.DeliveryNumber.ToString(), StringComparison.OrdinalIgnoreCase) || string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase)))
+				{
+					if (string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
 					{
-						jobDetails.JobIsDirtyDestination = true;
-						jobDetails.JobIsDirtyContact = true;
-						if(!String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable))
-                        {
-							jobDetails.JobDeliveryDateTimePlanned = new DateTime(2049,12,31);
-                        }
-
-						// Set the facility_code to the Origin Site Name since FarEye does not send the Origin address information
-						jobDetails.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
-
-						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
-						if (processingJobDetail?.Id > 0)
-						{
-							string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
-							if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
-							{
-								if(jobNotes.Length > 0)
-                                {
-									jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
-								}
-								else
-                                {
-									jobNotes = farEyeOrderDetails.delivery_instruction;
-                                }
-									
-								DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
-							}
-							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
-							bool isFarEyePushRequired = false;
-
-							if(string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
-                            {
-								DataAccess.Job.JobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
-							}
-							
-
-							if (!M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean())
-							{
-								if (isFarEyePushRequired)
-								{
-									FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
-								}
-							}
-
-							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
-							if (jobCargos != null && jobCargos.Count > 0)
-							{
-								DataAccess.Job.JobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-							}
-
-							if (processingJobDetail.ProgramID.HasValue)
-							{
-								DataAccess.Job.JobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
-							}
-						}
-					}
-					else if (jobDetails?.Id > 0 && isJobCancelled)
-					{
-						response = new OrderResponse()
-						{
-							ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
-							SenderMessageID = farEyeOrderDetails.order_number,
-							StatusCode = "Failure",
-							Subject = "Can not proceed the ASN request to the system as requesed order is already canceled in the meridian system, please try again."
-						};
+						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, true);
 					}
 					else
 					{
-						response = new OrderResponse()
+						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
+					}					
+
+					if (jobDetails.Id <= 0)
+					{
+						existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+						processingJobDetail = DataAccess.Job.JobCommands.GetJobByBOLMaster(ActiveUser, farEyeOrderDetails.order_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+
+						if (processingJobDetail.Id > 0)
+                        {
+							jobDetails.Id = processingJobDetail.Id;
+
+							if (existingJobDataInDB.Id < 1 && !processingJobDetail.JobCustomerSalesOrder.Contains("O-"))
+							{
+								jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
+
+								processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
+
+								if (processingJobDetail?.Id > 0)
+								{
+									string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+									string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
+
+									if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
+									{
+										if (jobNotes.Length > 0)
+										{
+											jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
+										}
+										else
+										{
+											jobNotes = farEyeOrderDetails.delivery_instruction;
+										}
+										jobNotes += System.Environment.NewLine + orderNotes;
+										DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
+									}
+									else if (orderNotes.Length > 0)
+									{
+										DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, orderNotes);
+									}
+
+									InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
+									List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
+									if (jobCargos != null && jobCargos.Count > 0)
+									{
+										DataAccess.Job.JobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+									}
+
+									if (processingJobDetail.ProgramID.HasValue)
+									{
+										DataAccess.Job.JobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
+									}
+								}
+
+
+							}
+						}
+						
+						bool isJobCancelled = jobDetails?.Id > 0 ? DataAccess.Job.JobCommands.IsJobCancelled(jobDetails.Id) : true;
+
+
+						if (jobDetails?.Id <= 0 && processingJobDetail?.Id > 0)
 						{
-							ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
-							SenderMessageID = farEyeOrderDetails.order_number,
-							StatusCode = "Failure",
-							Subject = "Please correct the action type for the request as only action Add is allowed to pass with ASN, please try again."
-						};
+							response = new OrderResponse()
+							{
+								ClientMessageID = string.Empty,
+								SenderMessageID = farEyeOrderDetails.order_number,
+								StatusCode = "Failure",
+								Subject = "Can not proceed the ASN request to the system as requesed order is not present in the meridian system, please try again."
+							};
+						}
+						else if (jobDetails?.Id > 0 && !isJobCancelled)
+						{
+							jobDetails.JobIsDirtyDestination = true;
+							jobDetails.JobIsDirtyContact = true;
+							if (!String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable))
+							{
+								jobDetails.JobDeliveryDateTimeBaseline = new DateTime(2049, 12, 31);
+							}
+
+							// Set the facility_code to the Origin Site Name since FarEye does not send the Origin address information
+							jobDetails.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
+							if(jobDetails?.Id > 0)
+                            {
+								processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
+							}
+							else
+                            {
+								processingJobDetail = existingJobDataInDB != null ? DataAccess.Job.JobCommands.Put(ActiveUser, existingJobDataInDB, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : existingJobDataInDB;
+							}
+							
+							//processingJobDetail = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+							if (processingJobDetail?.Id > 0)
+							{
+								string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+								string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
+
+								if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
+								{
+									if (jobNotes.Length > 0)
+									{
+										jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
+									}
+									else
+									{
+										jobNotes = farEyeOrderDetails.delivery_instruction;
+									}
+									jobNotes += System.Environment.NewLine + orderNotes;
+									DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
+								}
+								else if (orderNotes.Length > 0)
+								{
+									DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, orderNotes);
+								}
+								InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
+								bool isFarEyePushRequired = true;
+
+								if (string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
+								{
+									DataAccess.Job.JobCommands.CopyJobGatewayFromProgramForXcBLForElectrolux(ActiveUser, processingJobDetail.Id, (long)processingJobDetail.ProgramID, "In Transit", M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong(), out isFarEyePushRequired);
+								}
+
+
+								if (M4PLBusinessConfiguration.IsFarEyePushRequired.ToBoolean())
+								{
+									if (isFarEyePushRequired)
+									{
+										FarEyeHelper.PushStatusUpdateToFarEye((long)processingJobDetail.Id, ActiveUser);
+									}
+								}
+
+								List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
+								if (jobCargos != null && jobCargos.Count > 0)
+								{
+									DataAccess.Job.JobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+								}
+
+								if (processingJobDetail.ProgramID.HasValue)
+								{
+									DataAccess.Job.JobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
+								}
+							}
+						}
+						else if (jobDetails?.Id > 0 && isJobCancelled)
+						{
+							response = new OrderResponse()
+							{
+								ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
+								SenderMessageID = farEyeOrderDetails.order_number,
+								StatusCode = "Failure",
+								Subject = "Can not proceed the ASN request to the system as requesed order is already canceled in the meridian system, please try again."
+							};
+						}
+						else
+						{
+							response = new OrderResponse()
+							{
+								ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty,
+								SenderMessageID = farEyeOrderDetails.order_number,
+								StatusCode = "Failure",
+								Subject = "Please correct the action type for the request as only action Add is allowed to pass with ASN, please try again."
+							};
+						}
 					}
 				}
 			}
@@ -362,7 +438,7 @@ namespace M4PL.Business.XCBL
 			long programId = M4PLBusinessConfiguration.ElectroluxProgramId.ToLong();
 			basicDetailMapper.ToJobBasicDetailModelFromFarEyeData(farEyeOrderDetails, ref jobCreationData, programId, isUpdateRequired, systemOptionList);
 			addressMapper.ToJobAddressModelFromDataByFarEyeModel(farEyeOrderDetails, ref jobCreationData);
-
+			
 			return jobCreationData;
 		}
 

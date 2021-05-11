@@ -30,9 +30,8 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 		{
 			if (farEyeOrderDetails == null) return existingJobData;
 			UpdateDeliveryToDataByFarEyeModel(farEyeOrderDetails, ref existingJobData);
-			UpdateShiptoDataByFarEyeModel(farEyeOrderDetails, ref existingJobData);
 			UpdateShipFromDataByFarEyeModel(farEyeOrderDetails, ref existingJobData);
-
+			UpdateShiptoDataByFarEyeModel(farEyeOrderDetails, ref existingJobData);
 			return existingJobData;
 		}
 
@@ -95,52 +94,89 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 
 		private void UpdateDeliveryToDataByFarEyeModel(FarEyeOrderDetails farEyeOrderDetails, ref Entities.Job.Job existingJobData)
 		{
-			existingJobData.JobDeliveryCity = farEyeOrderDetails.deliver_to_city;
-			existingJobData.JobDeliveryCountry = farEyeOrderDetails.deliver_to_country;
-			existingJobData.JobDeliveryPostalCode = farEyeOrderDetails.deliver_to_postal_code;
-			existingJobData.JobDeliveryState = farEyeOrderDetails.deliver_to_state_province;
-			existingJobData.JobDeliveryStreetAddress = string.IsNullOrEmpty(farEyeOrderDetails.deliver_lot_id) ? farEyeOrderDetails.deliver_to_address_line1 : 
-				string.Format("{0} Lot # {1}", farEyeOrderDetails.deliver_to_address_line1, farEyeOrderDetails.deliver_lot_id);
-			existingJobData.JobDeliveryStreetAddress2 = farEyeOrderDetails.deliver_to_address_line2;
-			existingJobData.JobDeliveryStreetAddress3 = farEyeOrderDetails.deliver_to_landmark;
-			existingJobData.JobDeliverySitePOCPhone = farEyeOrderDetails.deliver_to_contact_number;
-			existingJobData.JobDeliverySitePOCPhone2 = farEyeOrderDetails.deliver_to_contact_number2;
-			existingJobData.JobDeliverySitePOCEmail = farEyeOrderDetails.deliver_to_email;
-			existingJobData.JobDeliverySiteName = farEyeOrderDetails.deliver_to_name;
-			existingJobData.JobDeliverySitePOC = farEyeOrderDetails.deliver_to_contact_name;
+			if(farEyeOrderDetails.type_of_order == "Reverse")
+            {
+				existingJobData.JobDeliveryCity = farEyeOrderDetails.return_city;
+				existingJobData.JobDeliveryCountry = farEyeOrderDetails.return_country;
+				existingJobData.JobDeliveryPostalCode = farEyeOrderDetails.return_postal_code;
+				existingJobData.JobDeliveryState = farEyeOrderDetails.return_state_province;
+				existingJobData.JobDeliveryStreetAddress = farEyeOrderDetails.return_address_line1;
+				existingJobData.JobDeliveryStreetAddress2 = farEyeOrderDetails.return_address_line2;
+				existingJobData.JobDeliveryStreetAddress3 = farEyeOrderDetails.return_landmark;
+				existingJobData.JobDeliverySitePOCPhone = farEyeOrderDetails.return_contact_number;
+				existingJobData.JobDeliverySitePOCPhone2 = farEyeOrderDetails.return_contact_number2;
+				existingJobData.JobDeliverySitePOCEmail = farEyeOrderDetails.return_email;
+				existingJobData.JobDeliverySiteName = farEyeOrderDetails.return_name;
+			}
+			else
+            {
+				existingJobData.JobDeliveryCity = farEyeOrderDetails.deliver_to_city;
+				existingJobData.JobDeliveryCountry = farEyeOrderDetails.deliver_to_country;
+				existingJobData.JobDeliveryPostalCode = farEyeOrderDetails.deliver_to_postal_code;
+				existingJobData.JobDeliveryState = farEyeOrderDetails.deliver_to_state_province;
+				existingJobData.JobDeliveryStreetAddress = string.IsNullOrEmpty(farEyeOrderDetails.deliver_lot_id) ? farEyeOrderDetails.deliver_to_address_line1 :
+					string.Format("{0} Lot # {1}", farEyeOrderDetails.deliver_to_address_line1, farEyeOrderDetails.deliver_lot_id);
+				existingJobData.JobDeliveryStreetAddress2 = farEyeOrderDetails.deliver_to_address_line2;
+				existingJobData.JobDeliveryStreetAddress3 = farEyeOrderDetails.deliver_to_landmark;
+				existingJobData.JobDeliverySitePOCPhone = farEyeOrderDetails.deliver_to_contact_number;
+				existingJobData.JobDeliverySitePOCPhone2 = farEyeOrderDetails.deliver_to_contact_number2;
+				existingJobData.JobDeliverySitePOCEmail = farEyeOrderDetails.deliver_to_email;
+				existingJobData.JobDeliverySiteName = farEyeOrderDetails.deliver_to_name;
+				existingJobData.JobDeliverySitePOC = farEyeOrderDetails.deliver_to_contact_name;
+			}
 		}
 
 		private void UpdateShiptoDataByFarEyeModel(FarEyeOrderDetails farEyeOrderDetails, ref Entities.Job.Job existingJobData)
 		{
-			existingJobData.JobOriginCity = farEyeOrderDetails.destination_city;
-			existingJobData.JobOriginCountry = farEyeOrderDetails.destination_country;
-			existingJobData.JobOriginPostalCode = farEyeOrderDetails.destination_postal_code;
-			existingJobData.JobOriginState = farEyeOrderDetails.destination_state_province;
-			existingJobData.JobOriginStreetAddress = string.IsNullOrEmpty(farEyeOrderDetails.destination_lot_id) ? 
-				farEyeOrderDetails.destination_address_line1 : string.Format("{0} Lot # {1}", farEyeOrderDetails.destination_address_line1, farEyeOrderDetails.destination_lot_id);
-			existingJobData.JobOriginStreetAddress2 = farEyeOrderDetails.destination_address_line2;
-			existingJobData.JobOriginStreetAddress3 = farEyeOrderDetails.destination_landmark;
-			existingJobData.JobOriginSitePOCPhone = farEyeOrderDetails.destination_contact_number;
-			existingJobData.JobOriginSitePOCPhone2 = farEyeOrderDetails.destination_contact_number2;
-			existingJobData.JobOriginSitePOCEmail = farEyeOrderDetails.destination_email;
-			existingJobData.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
-			existingJobData.JobOriginSitePOC = farEyeOrderDetails.destination_contact_name;
+			if(farEyeOrderDetails.type_of_order == "Reverse")
+            {
+				existingJobData.JobOriginCity = farEyeOrderDetails.origin_city;
+				existingJobData.JobOriginCountry = farEyeOrderDetails.origin_country;
+				existingJobData.JobOriginPostalCode = farEyeOrderDetails.origin_postal_code;
+				existingJobData.JobOriginState = farEyeOrderDetails.origin_state_province;
+				existingJobData.JobOriginStreetAddress = farEyeOrderDetails.origin_address_line1;
+				existingJobData.JobOriginStreetAddress2 = farEyeOrderDetails.origin_address_line2;
+				existingJobData.JobOriginStreetAddress3 = farEyeOrderDetails.origin_landmark;
+				existingJobData.JobOriginSitePOCPhone = farEyeOrderDetails.origin_contact_number;
+				existingJobData.JobOriginSitePOCPhone2 = farEyeOrderDetails.origin_contact_number2;
+				existingJobData.JobOriginSitePOCEmail = farEyeOrderDetails.origin_email;
+				existingJobData.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
+				existingJobData.JobOriginSitePOC = farEyeOrderDetails.origin_contact_name;
+			}
 		}
 
 		private void UpdateShipFromDataByFarEyeModel(FarEyeOrderDetails farEyeOrderDetails, ref Entities.Job.Job existingJobData)
 		{
-			existingJobData.JobShipFromCity = farEyeOrderDetails.origin_city;
-			existingJobData.JobShipFromCountry = farEyeOrderDetails.origin_country;
-			existingJobData.JobShipFromPostalCode = farEyeOrderDetails.origin_postal_code;
-			existingJobData.JobShipFromState = farEyeOrderDetails.origin_state_province;
-			existingJobData.JobShipFromStreetAddress = farEyeOrderDetails.origin_address_line1;
-			existingJobData.JobShipFromStreetAddress2 = farEyeOrderDetails.origin_address_line2;
-			existingJobData.JobShipFromStreetAddress3 = farEyeOrderDetails.origin_landmark;
-			existingJobData.JobShipFromSitePOCPhone = farEyeOrderDetails.origin_contact_number;
-			existingJobData.JobShipFromSitePOCPhone2 = farEyeOrderDetails.origin_contact_number2;
-			existingJobData.JobShipFromSitePOCEmail = farEyeOrderDetails.origin_email;
-			existingJobData.JobShipFromSiteName = farEyeOrderDetails.origin_name;
-			existingJobData.JobShipFromSitePOC = farEyeOrderDetails.origin_contact_name;
+			if(farEyeOrderDetails.type_of_order == "Reverse")
+            {
+				existingJobData.JobShipFromCity = farEyeOrderDetails.deliver_to_city;
+				existingJobData.JobShipFromCountry = farEyeOrderDetails.deliver_to_country;
+				existingJobData.JobShipFromPostalCode = farEyeOrderDetails.deliver_to_postal_code;
+				existingJobData.JobShipFromState = farEyeOrderDetails.deliver_to_state_province;
+				existingJobData.JobShipFromStreetAddress = farEyeOrderDetails.deliver_to_address_line1;
+				existingJobData.JobShipFromStreetAddress2 = farEyeOrderDetails.deliver_to_address_line2;
+				existingJobData.JobShipFromStreetAddress3 = farEyeOrderDetails.deliver_to_landmark;
+				existingJobData.JobShipFromSitePOCPhone = farEyeOrderDetails.deliver_to_contact_number;
+				existingJobData.JobShipFromSitePOCPhone2 = farEyeOrderDetails.deliver_to_contact_number2;
+				existingJobData.JobShipFromSitePOCEmail = farEyeOrderDetails.deliver_to_email;
+				existingJobData.JobShipFromSiteName = farEyeOrderDetails.deliver_to_name;
+				existingJobData.JobShipFromSitePOC = farEyeOrderDetails.deliver_to_contact_name;
+			}
+			else
+            {
+				existingJobData.JobShipFromCity = farEyeOrderDetails.origin_city;
+				existingJobData.JobShipFromCountry = farEyeOrderDetails.origin_country;
+				existingJobData.JobShipFromPostalCode = farEyeOrderDetails.origin_postal_code;
+				existingJobData.JobShipFromState = farEyeOrderDetails.origin_state_province;
+				existingJobData.JobShipFromStreetAddress = farEyeOrderDetails.origin_address_line1;
+				existingJobData.JobShipFromStreetAddress2 = farEyeOrderDetails.origin_address_line2;
+				existingJobData.JobShipFromStreetAddress3 = farEyeOrderDetails.origin_landmark;
+				existingJobData.JobShipFromSitePOCPhone = farEyeOrderDetails.origin_contact_number;
+				existingJobData.JobShipFromSitePOCPhone2 = farEyeOrderDetails.origin_contact_number2;
+				existingJobData.JobShipFromSitePOCEmail = farEyeOrderDetails.origin_email;
+				existingJobData.JobShipFromSiteName = farEyeOrderDetails.origin_name;
+				existingJobData.JobShipFromSitePOC = farEyeOrderDetails.origin_contact_name;
+			}
 		}
 	}
 }
