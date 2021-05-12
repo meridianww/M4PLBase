@@ -630,8 +630,8 @@ namespace M4PL.Business.XCBL
 						comments = deliveryUpdate.AdditionalComments,
 						epod = !string.IsNullOrEmpty(jobDetail.JobGatewayStatus) && (jobDetail.JobGatewayStatus.Equals("Delivered", StringComparison.OrdinalIgnoreCase)
 						|| (jobDetail.JobGatewayStatus.Equals("POD Completion", StringComparison.OrdinalIgnoreCase))) ? string.Format("{0}?jobId={1}&tabName=POD", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdate.ServiceProviderID) : string.Empty,
-						promised_delivery_date = jobDetail.JobOriginDateTimeBaseline.HasValue ? jobDetail.JobOriginDateTimeBaseline.ToString() : string.Empty,
-						expected_delivery_date = jobDetail.JobOriginDateTimePlanned.HasValue ? jobDetail.JobOriginDateTimePlanned.ToString() : string.Empty
+						promised_delivery_date = jobDetail.JobOriginDateTimeBaseline.HasValue ? jobDetail.JobOriginDateTimeBaseline.Value.ToString("yyyyMMddHHmmss") : string.Empty,
+						expected_delivery_date = jobDetail.JobOriginDateTimePlanned.HasValue ? jobDetail.JobOriginDateTimePlanned.Value.ToString("yyyyMMddHHmmss") : string.Empty
 					};
 
 					farEyeDeliveryStatusResponse.info = new DeliveryInfo();
@@ -644,7 +644,8 @@ namespace M4PL.Business.XCBL
 							x => farEyeDeliveryStatusResponse.info.LineItems.Add(new DeliveryLineItem()
 							{
 								item_number = x.CgoLineNumber,
-								comments = x.ItemInstallComments,
+								quantity = x.CgoQtyOrdered,
+								comments = x.CgoTitle,
 								exception_code = x.Exceptions?.ExceptionInfo?.ExceptionCode,
 								exception_detail = x.Exceptions?.ExceptionInfo?.ExceptionDetail,
 								item_install_status = !string.IsNullOrEmpty(x.ItemInstallStatus) ? x.ItemInstallStatus : 
@@ -653,6 +654,12 @@ namespace M4PL.Business.XCBL
 								                 !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && 
 												 !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
 							    ? "Canceled" : x.ItemInstallStatus,
+								item_Install_status_description = !string.IsNullOrEmpty(x.ItemInstallStatus) ? x.ItemInstallStatus :
+								(deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
+								? "Reschedule" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
+												 !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) &&
+												 !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+								? "Canceled" : x.ItemInstallStatus,
 								material_id = x.ItemNumber,
 								serial_barcode = x.CgoSerialBarcode,
 								serial_number = x.CgoSerialNumber
