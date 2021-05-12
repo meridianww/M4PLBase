@@ -73,7 +73,7 @@ namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest
         /// </summary>
         [XmlElement(ElementName = "Exceptions")]
         public Exceptions Exceptions { get; set; }
-        
+
         [XmlElement(ElementName = "CgoQtyOrdered")]
         public string CgoQtyOrdered { get; set; }
 

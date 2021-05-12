@@ -507,6 +507,8 @@ namespace M4PL.DataAccess.SQLSerializer.Serializer
 						if (obj is DateTime)
 							if (dateTimeAsUtc)
 								obj = DateTime.SpecifyKind((DateTime)obj, DateTimeKind.Utc);
+						if (mappingInfo.Name == "CgoQtyOrdered")
+							obj = obj.ToString();
 						try
 						{
 							mappingInfo.SetValue(instance, obj);
