@@ -153,15 +153,54 @@ namespace M4PL.Business.XCBL
 				{
 					if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_action) && string.Equals(farEyeOrderDetails.type_of_action, "Create", StringComparison.OrdinalIgnoreCase) && existingJobDataInDB?.Id > 0)
 					{
-						response = new OrderResponse()
-						{
-							ClientMessageID = string.Empty,
-							SenderMessageID = farEyeOrderDetails.order_number,
-							StatusCode = "Failure",
-							Subject = "There is already a Order present in the Meridian system with the same Order Number."
-						};
-
+						// FarEye can send an update using the "Create" type of action so update the existing order 
 						processingJobDetail = existingJobDataInDB != null ? DataAccess.Job.JobCommands.Put(ActiveUser, existingJobDataInDB, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : existingJobDataInDB;
+
+						if (processingJobDetail?.Id > 0)
+						{
+							string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+							string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
+
+							if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
+							{
+								if (jobNotes.Length > 0)
+								{
+									jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
+								}
+								else
+								{
+									jobNotes = farEyeOrderDetails.delivery_instruction;
+								}
+								jobNotes += System.Environment.NewLine + orderNotes;
+								DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
+							}
+							else if (orderNotes.Length > 0)
+							{
+								DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, orderNotes);
+							}
+
+							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
+							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
+							if (jobCargos != null && jobCargos.Count > 0)
+							{
+								DataAccess.Job.JobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+							}
+
+							if (processingJobDetail.ProgramID.HasValue)
+							{
+								DataAccess.Job.JobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
+							}
+						}
+						else
+						{
+							response = new OrderResponse()
+							{
+								ClientMessageID = string.Empty,
+								SenderMessageID = farEyeOrderDetails.order_number,
+								StatusCode = "Failure",
+								Subject = "Request has been recieved and logged, there is some issue while updating the order in the system, please try again."
+							};
+						}
 
 					}
 					else
@@ -417,7 +456,7 @@ namespace M4PL.Business.XCBL
 			return response;
 		}
 
-		private void InsertFarEyeDetailsInTable(long jobId, object orderDetails, string subject)
+		internal void InsertFarEyeDetailsInTable(long jobId, object orderDetails, string subject)
 		{
 			M4PL.DataAccess.Job.JobEDIXcblCommands.Post(ActiveUser, new JobEDIXcbl()
 			{

@@ -155,6 +155,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 
 			try
 			{
+				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(farEyeUpdateURL);
 				request.KeepAlive = false;
 				request.ContentType = "application/json";
@@ -174,7 +175,10 @@ namespace M4PL.Business.XCBL.HelperClasses
 						responseData = electroluxDeliveryUpdateResponseReader.ReadToEnd();
 					}
 				}
-
+				FarEyeCommands farEyeCommand = new FarEyeCommands();
+				farEyeCommand.ActiveUser = activeUser;
+				
+				farEyeCommand.InsertFarEyeDetailsInTable(jobId, farEyeOrderStatusRequest, "Status Update");
 				DataAccess.XCBL.XCBLCommands.InsertFarEyeJobDeliveryUpdateLog(farEyeOrderStatusUpdateJson, responseData, jobId);
 			}
 			catch (Exception exp)
