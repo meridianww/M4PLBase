@@ -151,10 +151,13 @@ namespace M4PL.Business.XCBL
 			{
 				if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_service) && string.Equals(farEyeOrderDetails.type_of_service, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase))
 				{
+					jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
+
 					if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_action) && string.Equals(farEyeOrderDetails.type_of_action, "Create", StringComparison.OrdinalIgnoreCase) && existingJobDataInDB?.Id > 0)
 					{
+						jobDetails.Id = existingJobDataInDB.Id;
 						// FarEye can send an update using the "Create" type of action so update the existing order 
-						processingJobDetail = existingJobDataInDB != null ? DataAccess.Job.JobCommands.Put(ActiveUser, existingJobDataInDB, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : existingJobDataInDB;
+						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : existingJobDataInDB;
 
 						if (processingJobDetail?.Id > 0)
 						{
@@ -198,14 +201,14 @@ namespace M4PL.Business.XCBL
 								ClientMessageID = string.Empty,
 								SenderMessageID = farEyeOrderDetails.order_number,
 								StatusCode = "Failure",
-								Subject = "Request has been recieved and logged, there is some issue while updating the order in the system, please try again."
+								Subject = "The order was not updated due to an error."
 							};
 						}
 
 					}
 					else
 					{
-						jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
+						//jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
 
 						// Set the facility_code to the Origin Site Name since FarEye does not send the Origin address information
 						jobDetails.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
@@ -644,19 +647,19 @@ namespace M4PL.Business.XCBL
 							x => farEyeDeliveryStatusResponse.info.LineItems.Add(new DeliveryLineItem()
 							{
 								item_number = x.CgoLineNumber,
-								quantity = x.CgoQtyOrdered,
+								quantity = x.Quantity,
 								comments = x.CgoTitle,
 								exception_code = x.Exceptions?.ExceptionInfo?.ExceptionCode,
 								exception_detail = x.Exceptions?.ExceptionInfo?.ExceptionDetail,
 								item_install_status = !string.IsNullOrEmpty(x.ItemInstallStatus) ? x.ItemInstallStatus : 
 								(deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
-								? "Reschedule" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
+								? "Rescheduled" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
 								                 !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && 
 												 !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
 							    ? "Canceled" : x.ItemInstallStatus,
 								item_Install_status_description = !string.IsNullOrEmpty(x.ItemInstallStatus) ? x.ItemInstallStatus :
 								(deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
-								? "Reschedule" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
+								? "Rescheduled" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
 												 !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) &&
 												 !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
 								? "Canceled" : x.ItemInstallStatus,
@@ -668,17 +671,17 @@ namespace M4PL.Business.XCBL
 
 					if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
 					{
-						farEyeDeliveryStatusResponse.carrier_status = "Reschedule";
-						farEyeDeliveryStatusResponse.carrier_status_code = "Reschedule";
-						farEyeDeliveryStatusResponse.carrier_status_description = "Reschedule";
-						farEyeDeliveryStatusResponse.carrier_sub_status = "Reschedule";
-						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Reschedule";
-						farEyeDeliveryStatusResponse.fareye_status = "Reschedule";
-						farEyeDeliveryStatusResponse.fareye_status_code = "Reschedule";
-						farEyeDeliveryStatusResponse.fareye_status_description = "Reschedule";
-						farEyeDeliveryStatusResponse.fareye_sub_status = "Reschedule";
-						farEyeDeliveryStatusResponse.fareye_sub_status_code = "Reschedule";
-						farEyeDeliveryStatusResponse.fareye_sub_status_description = "Reschedule";
+						farEyeDeliveryStatusResponse.carrier_status = "Rescheduled";
+						farEyeDeliveryStatusResponse.carrier_status_code = "Rescheduled";
+						farEyeDeliveryStatusResponse.carrier_status_description = "Rescheduled";
+						farEyeDeliveryStatusResponse.carrier_sub_status = "Rescheduled";
+						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Rescheduled";
+						farEyeDeliveryStatusResponse.fareye_status = "Rescheduled";
+						farEyeDeliveryStatusResponse.fareye_status_code = "Rescheduled";
+						farEyeDeliveryStatusResponse.fareye_status_description = "Rescheduled";
+						farEyeDeliveryStatusResponse.fareye_sub_status = "Rescheduled";
+						farEyeDeliveryStatusResponse.fareye_sub_status_code = "Rescheduled";
+						farEyeDeliveryStatusResponse.fareye_sub_status_description = "Rescheduled";
 						farEyeDeliveryStatusResponse.status_received_at = deliveryUpdate.RescheduledInstallDate;
 					}
 

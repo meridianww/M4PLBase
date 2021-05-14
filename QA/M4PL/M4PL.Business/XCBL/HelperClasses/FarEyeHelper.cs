@@ -70,12 +70,13 @@ namespace M4PL.Business.XCBL.HelperClasses
 								deliveryUpdateModel.CancelReason = string.Empty;
 								isCanceled = true;
 							}
+							
 
 							farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
 							if (farEyeOrderStatusRequest != null && !string.IsNullOrEmpty(farEyeOrderStatusRequest.carrier_status)
 							 && farEyeOrderStatusRequest.carrier_status.Equals("Out For Delivery", StringComparison.OrdinalIgnoreCase))
 							{
-								var farEyeDisPatchedStatusRequest = farEyeOrderStatusRequest.DeepCopy();
+								var farEyeDisPatchedStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
 								if (farEyeDisPatchedStatusRequest != null)
 								{
 									farEyeDisPatchedStatusRequest.carrier_status = "Dispatched";
@@ -83,16 +84,29 @@ namespace M4PL.Business.XCBL.HelperClasses
 									farEyeDisPatchedStatusRequest.carrier_status_description = "Dispatched";
 									farEyeDisPatchedStatusRequest.carrier_sub_status = "Dispatched";
 									farEyeDisPatchedStatusRequest.carrier_sub_status_description = "Dispatched";
-									if (farEyeDisPatchedStatusRequest.info != null && farEyeDisPatchedStatusRequest.info.LineItems != null && farEyeDisPatchedStatusRequest.info.LineItems.Count > 0)
-									{
-										foreach (var dispatchLine in farEyeDisPatchedStatusRequest.info.LineItems)
-										{
-											dispatchLine.item_install_status = !string.IsNullOrEmpty(dispatchLine.item_install_status) && dispatchLine.item_install_status.Equals("Out For Delivery", StringComparison.OrdinalIgnoreCase)
-												? "Dispatched" : dispatchLine.item_install_status;
+                                    if (farEyeDisPatchedStatusRequest.info != null && farEyeDisPatchedStatusRequest.info.LineItems != null && farEyeDisPatchedStatusRequest.info.LineItems.Count > 0)
+                                    {
+                                        foreach (var dispatchLine in farEyeDisPatchedStatusRequest.info.LineItems)
+                                        {
+                                            dispatchLine.item_install_status = "Dispatched";
+											dispatchLine.item_Install_status_description = "Dispatched";
 										}
-									}
+                                    }
 
-									SentOrderStatusUpdateToFarEye(farEyeDisPatchedStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
+                                    SentOrderStatusUpdateToFarEye(farEyeDisPatchedStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
+								}
+							}
+							else if (deliveryUpdateModel.InstallStatus.Equals("Attempted", StringComparison.OrdinalIgnoreCase))
+							{
+								farEyeOrderStatusRequest.carrier_status = "Attempted";
+								farEyeOrderStatusRequest.carrier_status_code = "Attempted";
+								farEyeOrderStatusRequest.carrier_status_description = "Attempted";
+								farEyeOrderStatusRequest.carrier_sub_status = "Attempted";
+								farEyeOrderStatusRequest.carrier_sub_status_description = "Attempted";
+								foreach (var dispatchLine in farEyeOrderStatusRequest.info.LineItems)
+								{
+									dispatchLine.item_install_status = "Attempted";
+									dispatchLine.item_Install_status_description = "Attempted";
 								}
 							}
 
@@ -104,7 +118,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 								{
 									deliveryUpdateModel.RescheduledInstallDate = rescheduleDate;
 									deliveryUpdateModel.RescheduleReason = rescheduleReason;
-									deliveryUpdateModel.InstallStatus = "Reschedule";
+									deliveryUpdateModel.InstallStatus = "Rescheduled";
 									farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
 									SentOrderStatusUpdateToFarEye(farEyeOrderStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId);
 								}
