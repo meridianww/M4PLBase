@@ -655,14 +655,14 @@ namespace M4PL.Business.XCBL
 								(deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
 								? "Rescheduled" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
 								                 !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && 
-												 !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
-							    ? "Canceled" : x.ItemInstallStatus,
+												 !deliveryUpdate.InstallStatus.Equals("Cancelled", StringComparison.OrdinalIgnoreCase))
+							    ? "Cancelled" : x.ItemInstallStatus,
 								item_Install_status_description = !string.IsNullOrEmpty(x.ItemInstallStatus) ? x.ItemInstallStatus :
 								(deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
 								? "Rescheduled" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
 												 !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) &&
-												 !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
-								? "Canceled" : x.ItemInstallStatus,
+												 !deliveryUpdate.InstallStatus.Equals("Cancelled", StringComparison.OrdinalIgnoreCase))
+								? "Cancelled" : x.ItemInstallStatus,
 								material_id = x.ItemNumber,
 								serial_barcode = x.CgoSerialBarcode,
 								serial_number = x.CgoSerialNumber
@@ -687,17 +687,17 @@ namespace M4PL.Business.XCBL
 
 					if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) && !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
 					{
-						farEyeDeliveryStatusResponse.carrier_status = "Canceled";
-						farEyeDeliveryStatusResponse.carrier_status_code = "Canceled";
-						farEyeDeliveryStatusResponse.carrier_status_description = "Canceled";
-						farEyeDeliveryStatusResponse.carrier_sub_status = "Canceled";
-						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Canceled";
-						farEyeDeliveryStatusResponse.fareye_status = "Canceled";
-						farEyeDeliveryStatusResponse.fareye_status_code = "Canceled";
-						farEyeDeliveryStatusResponse.fareye_status_description = "Canceled";
-						farEyeDeliveryStatusResponse.fareye_sub_status = "Canceled";
-						farEyeDeliveryStatusResponse.fareye_sub_status_code = "Canceled";
-						farEyeDeliveryStatusResponse.fareye_sub_status_description = "Canceled";
+						farEyeDeliveryStatusResponse.carrier_status = "Cancelled";
+						farEyeDeliveryStatusResponse.carrier_status_code = "Cancelled";
+						farEyeDeliveryStatusResponse.carrier_status_description = "Cancelled";
+						farEyeDeliveryStatusResponse.carrier_sub_status = "Cancelled";
+						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Cancelled";
+						farEyeDeliveryStatusResponse.fareye_status = "Cancelled";
+						farEyeDeliveryStatusResponse.fareye_status_code = "Cancelled";
+						farEyeDeliveryStatusResponse.fareye_status_description = "Cancelled";
+						farEyeDeliveryStatusResponse.fareye_sub_status = "Cancelled";
+						farEyeDeliveryStatusResponse.fareye_sub_status_code = "Cancelled";
+						farEyeDeliveryStatusResponse.fareye_sub_status_description = "Cancelled";
 						farEyeDeliveryStatusResponse.status_received_at = deliveryUpdate.CancelDate;
 					}
 				}

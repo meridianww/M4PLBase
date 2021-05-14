@@ -124,7 +124,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 								}
 								else if (isCanceled)
 								{
-									deliveryUpdateModel.InstallStatus = "Canceled";
+									deliveryUpdateModel.InstallStatus = "Cancelled";
 									deliveryUpdateModel.CancelDate = canceledDate;
 									deliveryUpdateModel.CancelReason = cancelReason;
 									farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
