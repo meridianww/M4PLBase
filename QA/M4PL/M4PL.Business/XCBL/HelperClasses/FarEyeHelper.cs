@@ -100,13 +100,13 @@ namespace M4PL.Business.XCBL.HelperClasses
 							{
 								farEyeOrderStatusRequest.carrier_status = "ATTEMPTED";
 								farEyeOrderStatusRequest.carrier_status_code = "ATTEMPTED";
-								farEyeOrderStatusRequest.carrier_status_description = deliveryUpdateModel.AttemptReason;
+								farEyeOrderStatusRequest.carrier_status_description = "ATTEMPTED";
 								farEyeOrderStatusRequest.carrier_sub_status = "ATTEMPTED";
-								farEyeOrderStatusRequest.carrier_sub_status_description = deliveryUpdateModel.AttemptReason;
+								farEyeOrderStatusRequest.carrier_sub_status_description = "ATTEMPTED";
 								foreach (var dispatchLine in farEyeOrderStatusRequest.info.LineItems)
 								{
 									dispatchLine.item_install_status = "ATTEMPTED";
-									dispatchLine.item_Install_status_description = deliveryUpdateModel.AttemptReason;
+									dispatchLine.item_Install_status_description = "ATTEMPTED";
 								}
 							}
 

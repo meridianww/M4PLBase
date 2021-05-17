@@ -666,16 +666,16 @@ namespace M4PL.Business.XCBL
 								exception_detail = x.Exceptions?.ExceptionInfo?.ExceptionDetail,
 								item_install_status = !string.IsNullOrEmpty(x.ItemInstallStatus) ? x.ItemInstallStatus : 
 								(deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
-								? "Rescheduled" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
+								? "RESCHEDULED" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
 								                 !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && 
 												 !deliveryUpdate.InstallStatus.Equals("Cancelled", StringComparison.OrdinalIgnoreCase))
-							    ? "Cancelled" : x.ItemInstallStatus,
+							    ? "CANCELLED" : x.ItemInstallStatus,
 								item_Install_status_description = !string.IsNullOrEmpty(x.ItemInstallStatus) ? x.ItemInstallStatus :
 								(deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
-								? "Rescheduled" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
+								? "RESCHEDULED" : (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) &&
 												 !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) &&
 												 !deliveryUpdate.InstallStatus.Equals("Cancelled", StringComparison.OrdinalIgnoreCase))
-								? "Cancelled" : x.ItemInstallStatus,
+								? "CANCELLED" : x.ItemInstallStatus,
 								material_id = x.ItemNumber,
 								serial_barcode = x.CgoSerialBarcode,
 								serial_number = x.CgoSerialNumber
