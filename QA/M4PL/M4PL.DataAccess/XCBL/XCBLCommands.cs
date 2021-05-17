@@ -244,13 +244,26 @@ namespace M4PL.DataAccess.XCBL
 				if (orderLine != null && orderLine.Count > 0)
 				{
 					deliveryUpdateModel.OrderLineDetail = new OrderLineDetails() { OrderLine = orderLine?.ToList() };
-					if (cargoException?.Count > 0)
+					if (!string.IsNullOrEmpty(deliveryUpdateModel.AttemptReason))
+					{
+						foreach (var orderLineData in deliveryUpdateModel.OrderLineDetail.OrderLine)
+						{
+							orderLineData.Exceptions = new Exceptions();
+							orderLineData.Exceptions.ExceptionInfo = new ExceptionInfo()
+							{
+								ExceptionCode = "ATTEMPTED",
+							ExceptionDetail = deliveryUpdateModel.AttemptReason
+							};
+						}
+					}
+					else if (cargoException?.Count > 0)
 					{
 						foreach (var orderLineData in deliveryUpdateModel.OrderLineDetail.OrderLine)
 						{
 							PopulateCargoExceptionDetails(cargoException, cargoExceptionInfo, orderLineData);
 						}
 					}
+					
 				}
 			}
 
@@ -407,6 +420,7 @@ namespace M4PL.DataAccess.XCBL
 				RescheduleReason = deliveryUpdate[0].RescheduleReason,
 				CancelDate = deliveryUpdate[0].CancelDate,
 				CancelReason = deliveryUpdate[0].CancelReason,
+				AttemptReason = deliveryUpdate[0].AttemptReason,
 				AdditionalComments = deliveryUpdate[0].AdditionalComments,
 				Exceptions = new Exceptions() { HasExceptions = deliveryUpdate[0].HasExceptions },
 				POD = new POD() { DeliverySignature = new DeliverySignature() { SignedBy = deliveryUpdate[0].SignedBy }, DeliveryImages = new DeliveryImages() { } }

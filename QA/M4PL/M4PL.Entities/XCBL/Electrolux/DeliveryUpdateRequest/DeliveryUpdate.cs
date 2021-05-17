@@ -84,6 +84,8 @@ namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest
         /// </summary>
         [XmlElement(ElementName = "CancelReason")]
         public string CancelReason { get; set; }
+        [XmlElement(ElementName = "AttemptReason")]
+        public string AttemptReason { get; set; }
         /// <summary>
         /// Gets or Sets Exception Details if added
         /// </summary>
