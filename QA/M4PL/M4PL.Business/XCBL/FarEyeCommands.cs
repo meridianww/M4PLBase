@@ -136,14 +136,23 @@ namespace M4PL.Business.XCBL
 			else
 			{
 				string tempOrderNumber = string.Format("O-{0}", farEyeOrderDetails.order_number);
-				existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, tempOrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+				
+				existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 				if (existingJobDataInDB != null && existingJobDataInDB.Id > 0)
 				{
 					existingJobDataInDB.JobCustomerSalesOrder = farEyeOrderDetails.tracking_number;
 				}
 				else
 				{
-					existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, tempOrderNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					if (existingJobDataInDB != null && existingJobDataInDB.Id > 0)
+                    {
+						existingJobDataInDB.JobCustomerSalesOrder = farEyeOrderDetails.tracking_number;
+					}						
+					else
+                    {
+						existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+					}						
 				}
 			}
 
@@ -325,6 +334,10 @@ namespace M4PL.Business.XCBL
 								}
 
 
+							}
+							else if(existingJobDataInDB.Id > 0 && !existingJobDataInDB.JobCustomerSalesOrder.Contains("O-"))
+                            {
+								jobDetails.Id = existingJobDataInDB.Id;
 							}
 						}
 						
@@ -671,33 +684,33 @@ namespace M4PL.Business.XCBL
 
 					if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.RescheduledInstallDate))
 					{
-						farEyeDeliveryStatusResponse.carrier_status = "Rescheduled";
-						farEyeDeliveryStatusResponse.carrier_status_code = "Rescheduled";
-						farEyeDeliveryStatusResponse.carrier_status_description = "Rescheduled";
-						farEyeDeliveryStatusResponse.carrier_sub_status = "Rescheduled";
-						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Rescheduled";
-						farEyeDeliveryStatusResponse.fareye_status = "Rescheduled";
-						farEyeDeliveryStatusResponse.fareye_status_code = "Rescheduled";
-						farEyeDeliveryStatusResponse.fareye_status_description = "Rescheduled";
-						farEyeDeliveryStatusResponse.fareye_sub_status = "Rescheduled";
-						farEyeDeliveryStatusResponse.fareye_sub_status_code = "Rescheduled";
-						farEyeDeliveryStatusResponse.fareye_sub_status_description = "Rescheduled";
+						farEyeDeliveryStatusResponse.carrier_status = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.carrier_status_code = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.carrier_status_description = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.carrier_sub_status = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.carrier_sub_status_description = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.fareye_status = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.fareye_status_code = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.fareye_status_description = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.fareye_sub_status = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.fareye_sub_status_code = "RESCHEDULED";
+						farEyeDeliveryStatusResponse.fareye_sub_status_description = "RESCHEDULED";
 						farEyeDeliveryStatusResponse.status_received_at = deliveryUpdate.RescheduledInstallDate;
 					}
 
 					if (deliveryUpdate != null && !string.IsNullOrEmpty(deliveryUpdate.CancelDate) && !string.IsNullOrEmpty(deliveryUpdate.InstallStatus) && !deliveryUpdate.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
 					{
-						farEyeDeliveryStatusResponse.carrier_status = "Cancelled";
-						farEyeDeliveryStatusResponse.carrier_status_code = "Cancelled";
-						farEyeDeliveryStatusResponse.carrier_status_description = "Cancelled";
-						farEyeDeliveryStatusResponse.carrier_sub_status = "Cancelled";
-						farEyeDeliveryStatusResponse.carrier_sub_status_description = "Cancelled";
-						farEyeDeliveryStatusResponse.fareye_status = "Cancelled";
-						farEyeDeliveryStatusResponse.fareye_status_code = "Cancelled";
-						farEyeDeliveryStatusResponse.fareye_status_description = "Cancelled";
-						farEyeDeliveryStatusResponse.fareye_sub_status = "Cancelled";
-						farEyeDeliveryStatusResponse.fareye_sub_status_code = "Cancelled";
-						farEyeDeliveryStatusResponse.fareye_sub_status_description = "Cancelled";
+						farEyeDeliveryStatusResponse.carrier_status = "CANCELLED";
+						farEyeDeliveryStatusResponse.carrier_status_code = "CANCELLED";
+						farEyeDeliveryStatusResponse.carrier_status_description = "CANCELLED";
+						farEyeDeliveryStatusResponse.carrier_sub_status = "CANCELLED";
+						farEyeDeliveryStatusResponse.carrier_sub_status_description = "CANCELLED";
+						farEyeDeliveryStatusResponse.fareye_status = "CANCELLED";
+						farEyeDeliveryStatusResponse.fareye_status_code = "CANCELLED";
+						farEyeDeliveryStatusResponse.fareye_status_description = "CANCELLED";
+						farEyeDeliveryStatusResponse.fareye_sub_status = "CANCELLED";
+						farEyeDeliveryStatusResponse.fareye_sub_status_code = "CANCELLED";
+						farEyeDeliveryStatusResponse.fareye_sub_status_description = "CANCELLED";
 						farEyeDeliveryStatusResponse.status_received_at = deliveryUpdate.CancelDate;
 					}
 				}

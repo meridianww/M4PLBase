@@ -62,7 +62,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 								deliveryUpdateModel.RescheduleReason = string.Empty;
 								isRescheduled = true;
 							}
-							else if (!string.IsNullOrEmpty(deliveryUpdateModel.CancelDate) && !string.IsNullOrEmpty(deliveryUpdateModel.InstallStatus) && !deliveryUpdateModel.InstallStatus.Equals("Canceled", StringComparison.OrdinalIgnoreCase))
+							else if (!string.IsNullOrEmpty(deliveryUpdateModel.CancelDate) && !string.IsNullOrEmpty(deliveryUpdateModel.InstallStatus) && !deliveryUpdateModel.InstallStatus.Equals("CANCELED", StringComparison.OrdinalIgnoreCase))
 							{
 								canceledDate = deliveryUpdateModel.CancelDate;
 								cancelReason = deliveryUpdateModel.CancelReason;
@@ -74,39 +74,39 @@ namespace M4PL.Business.XCBL.HelperClasses
 
 							farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
 							if (farEyeOrderStatusRequest != null && !string.IsNullOrEmpty(farEyeOrderStatusRequest.carrier_status)
-							 && farEyeOrderStatusRequest.carrier_status.Equals("Out For Delivery", StringComparison.OrdinalIgnoreCase))
+							 && farEyeOrderStatusRequest.carrier_status.Equals("OUT FOR DELIVERY", StringComparison.OrdinalIgnoreCase))
 							{
 								var farEyeDisPatchedStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
 								if (farEyeDisPatchedStatusRequest != null)
 								{
-									farEyeDisPatchedStatusRequest.carrier_status = "Dispatched";
-									farEyeDisPatchedStatusRequest.carrier_status_code = "Dispatched";
-									farEyeDisPatchedStatusRequest.carrier_status_description = "Dispatched";
-									farEyeDisPatchedStatusRequest.carrier_sub_status = "Dispatched";
-									farEyeDisPatchedStatusRequest.carrier_sub_status_description = "Dispatched";
+									farEyeDisPatchedStatusRequest.carrier_status = "DISPATCHED";
+									farEyeDisPatchedStatusRequest.carrier_status_code = "DISPATCHED";
+									farEyeDisPatchedStatusRequest.carrier_status_description = "DISPATCHED";
+									farEyeDisPatchedStatusRequest.carrier_sub_status = "DISPATCHED";
+									farEyeDisPatchedStatusRequest.carrier_sub_status_description = "DISPATCHED";
                                     if (farEyeDisPatchedStatusRequest.info != null && farEyeDisPatchedStatusRequest.info.LineItems != null && farEyeDisPatchedStatusRequest.info.LineItems.Count > 0)
                                     {
                                         foreach (var dispatchLine in farEyeDisPatchedStatusRequest.info.LineItems)
                                         {
-                                            dispatchLine.item_install_status = "Dispatched";
-											dispatchLine.item_Install_status_description = "Dispatched";
+                                            dispatchLine.item_install_status = "DISPATCHED";
+											dispatchLine.item_Install_status_description = "DISPATCHED";
 										}
                                     }
 
                                     SentOrderStatusUpdateToFarEye(farEyeDisPatchedStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
 								}
 							}
-							else if (deliveryUpdateModel.InstallStatus.Equals("Attempted", StringComparison.OrdinalIgnoreCase))
+							else if (deliveryUpdateModel.InstallStatus.Equals("ATTEMPTED", StringComparison.OrdinalIgnoreCase))
 							{
-								farEyeOrderStatusRequest.carrier_status = "Attempted";
-								farEyeOrderStatusRequest.carrier_status_code = "Attempted";
-								farEyeOrderStatusRequest.carrier_status_description = "Attempted";
-								farEyeOrderStatusRequest.carrier_sub_status = "Attempted";
-								farEyeOrderStatusRequest.carrier_sub_status_description = "Attempted";
+								farEyeOrderStatusRequest.carrier_status = "ATTEMPTED";
+								farEyeOrderStatusRequest.carrier_status_code = "ATTEMPTED";
+								farEyeOrderStatusRequest.carrier_status_description = "ATTEMPTED";
+								farEyeOrderStatusRequest.carrier_sub_status = "ATTEMPTED";
+								farEyeOrderStatusRequest.carrier_sub_status_description = "ATTEMPTED";
 								foreach (var dispatchLine in farEyeOrderStatusRequest.info.LineItems)
 								{
-									dispatchLine.item_install_status = "Attempted";
-									dispatchLine.item_Install_status_description = "Attempted";
+									dispatchLine.item_install_status = "ATTEMPTED";
+									dispatchLine.item_Install_status_description = "ATTEMPTED";
 								}
 							}
 
@@ -118,13 +118,13 @@ namespace M4PL.Business.XCBL.HelperClasses
 								{
 									deliveryUpdateModel.RescheduledInstallDate = rescheduleDate;
 									deliveryUpdateModel.RescheduleReason = rescheduleReason;
-									deliveryUpdateModel.InstallStatus = "Rescheduled";
+									deliveryUpdateModel.InstallStatus = "RESCHEDULED";
 									farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
 									SentOrderStatusUpdateToFarEye(farEyeOrderStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId);
 								}
 								else if (isCanceled)
 								{
-									deliveryUpdateModel.InstallStatus = "Cancelled";
+									deliveryUpdateModel.InstallStatus = "CANCELLED";
 									deliveryUpdateModel.CancelDate = canceledDate;
 									deliveryUpdateModel.CancelReason = cancelReason;
 									farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
@@ -148,15 +148,15 @@ namespace M4PL.Business.XCBL.HelperClasses
 			{
 				farEyeOrderStatusRequest.order_number = farEyeOrderStatusRequest.value;
 				farEyeOrderStatusRequest.value = string.Empty;
-				farEyeOrderStatusRequest.carrier_status = "Order Confirmation";
-				farEyeOrderStatusRequest.carrier_status_code = "order_confirmation";
-				farEyeOrderStatusRequest.carrier_status_description = "Order Confirmation";
-				farEyeOrderStatusRequest.carrier_sub_status = "Order Confirmation";
-				farEyeOrderStatusRequest.carrier_sub_status_description = "Order Confirmation";
+				farEyeOrderStatusRequest.carrier_status = "ORDER_CONFIRMED";
+				farEyeOrderStatusRequest.carrier_status_code = "ORDER_CONFIRMED";
+				farEyeOrderStatusRequest.carrier_status_description = "ORDER_CONFIRMED";
+				farEyeOrderStatusRequest.carrier_sub_status = "ORDER_CONFIRMED";
+				farEyeOrderStatusRequest.carrier_sub_status_description = "ORDER_CONFIRMED";
 				farEyeOrderStatusRequest.type = "Order";
 				if (farEyeOrderStatusRequest.info?.LineItems != null)
 				{
-					farEyeOrderStatusRequest.info.LineItems.ForEach(x => x.item_install_status = "Order Confirmation");
+					farEyeOrderStatusRequest.info.LineItems.ForEach(x => x.item_install_status = "ORDER_CONFIRMED");
 				}
 			}
 
