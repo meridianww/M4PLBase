@@ -170,7 +170,7 @@ namespace M4PL.Business.XCBL
 
 						if (processingJobDetail?.Id > 0)
 						{
-							string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+							string jobNotes = DataAccess.Job.JobCommands.GetDriverAlert(processingJobDetail.Id);
 							string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
 
 							if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
@@ -217,17 +217,22 @@ namespace M4PL.Business.XCBL
 					}
 					else
 					{
-						//jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
-
 						// Set the facility_code to the Origin Site Name since FarEye does not send the Origin address information
 						jobDetails.JobOriginSiteName = farEyeOrderDetails.info.facility_code;
-						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
-
+						if(jobDetails.Id < 1 && existingJobDataInDB.Id > 0)
+                        {
+							jobDetails.Id = existingJobDataInDB.Id;
+							processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : existingJobDataInDB;
+						}
+						else
+                        {
+							processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
+						}
 					}
 
 					if (processingJobDetail?.Id > 0)
 					{
-						string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+						string jobNotes = DataAccess.Job.JobCommands.GetDriverAlert(processingJobDetail.Id);
 						string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
 
 						if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
@@ -299,7 +304,7 @@ namespace M4PL.Business.XCBL
 
 								if (processingJobDetail?.Id > 0)
 								{
-									string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+									string jobNotes = DataAccess.Job.JobCommands.GetDriverAlert(processingJobDetail.Id);
 									string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
 
 									if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
@@ -377,7 +382,7 @@ namespace M4PL.Business.XCBL
 							//processingJobDetail = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 							if (processingJobDetail?.Id > 0)
 							{
-								string jobNotes = DataAccess.Job.JobCommands.GetJobNotes(processingJobDetail.Id);
+								string jobNotes = DataAccess.Job.JobCommands.GetDriverAlert(processingJobDetail.Id);
 								string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
 
 								if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))

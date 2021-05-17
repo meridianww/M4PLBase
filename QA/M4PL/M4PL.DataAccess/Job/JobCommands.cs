@@ -844,13 +844,11 @@ namespace M4PL.DataAccess.Job
             string driverAlert = string.Empty;
             var parameters = new List<Parameter>
             {
-               new Parameter("@recordId", jobId),
-               new Parameter("@entity", "Job"),
-               new Parameter("@driverAlert", "jobDriverAlert"),
+               new Parameter("@JobId", jobId),
             };
             try
             {
-                SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetJobDriverAlert, parameters.ToArray(), false, true);
+                driverAlert = SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetJobDriverAlert, parameters.ToArray(), false, true);
 
             }
             catch (Exception ex)
