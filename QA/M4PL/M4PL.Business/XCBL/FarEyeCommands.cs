@@ -165,6 +165,9 @@ namespace M4PL.Business.XCBL
 					if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_action) && string.Equals(farEyeOrderDetails.type_of_action, "Create", StringComparison.OrdinalIgnoreCase) && existingJobDataInDB?.Id > 0)
 					{
 						jobDetails.Id = existingJobDataInDB.Id;
+						jobDetails.JobIsDirtyDestination = true;
+						jobDetails.JobIsDirtyContact = true;
+
 						// FarEye can send an update using the "Create" type of action so update the existing order 
 						processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : existingJobDataInDB;
 
