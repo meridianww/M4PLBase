@@ -1,10 +1,3 @@
-USE [Meridian_ControlTower]
-GO
-/****** Object:  StoredProcedure [dbo].[GetxCBLDeliveryUpdateModel]    Script Date: 5/17/2021 3:00:39 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
 -- =============================================
 -- Author:		Prashant Aggarwal
@@ -12,7 +5,7 @@ GO
 -- Description:	Get xCBL Delivery Model Data
 -- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 248599
 -- =============================================
-ALTER PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel] (@JobId BIGINT)
+CREATE PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel] (@JobId BIGINT)
 AS
 BEGIN
 	SET NOCOUNT ON;
