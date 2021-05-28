@@ -257,7 +257,11 @@ namespace M4PL.Business.XCBL
 
 					if (jobDetails.Id <= 0)
 					{
-						existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+						if(existingJobDataInDB.Id <= 0)
+                        {
+							existingJobDataInDB = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+						}
+						
 						processingJobDetail = DataAccess.Job.JobCommands.GetJobByBOLMaster(ActiveUser, farEyeOrderDetails.order_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 
 						if (processingJobDetail.Id > 0)
