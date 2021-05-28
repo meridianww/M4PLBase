@@ -447,6 +447,7 @@ namespace M4PL.DataAccess
 		public const string GetJobByServiceMode = "dbo.GetJobByServiceMode";
 		public const string GetJobByBOLMaster = "dbo.GetJobByBOLMaster";
 		public const string GetJobDriverAlert = "dbo.GetJobDriverAlert";
+		public const string GetDeliveryComment = "dbo.GetDeliveryComment";
 		public const string InsDriverContact = "dbo.InsDriverContact";
         public const string CopyJobGatewayFromProgramForXcBL = "dbo.CopyJobGatewayFromProgramForXcBL";
 		public const string CopyJobGatewayFromProgramForXcBLForElectrolux = "dbo.CopyJobGatewayFromProgramForXcblElectrolux";
@@ -612,6 +613,7 @@ namespace M4PL.DataAccess
 		public const string UpdateJobPriceCodeStatus = "dbo.UpdateJobPriceCodeStatus";
 		public const string UpdateJobCostCodeStatus = "dbo.UpdateJobCostCodeStatus";
 		public const string ReactivateJob = "dbo.ReactivateJob";
+		public const string UpdateJobDeliveryCommentText = "dbo.UpdateJobDeliveryCommentText";
 		public const string UpdateJobDriverAlert = "dbo.UpdateJobDriverAlert";
 
 		/* Job Roll up */
