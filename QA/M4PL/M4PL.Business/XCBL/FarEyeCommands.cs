@@ -165,6 +165,7 @@ namespace M4PL.Business.XCBL
 					if (!string.IsNullOrEmpty(farEyeOrderDetails.type_of_action) && string.Equals(farEyeOrderDetails.type_of_action, "Create", StringComparison.OrdinalIgnoreCase) && existingJobDataInDB?.Id > 0)
 					{
 						jobDetails.Id = existingJobDataInDB.Id;
+						jobDetails.CustomerId = existingJobDataInDB.CustomerId;
 						jobDetails.JobIsDirtyDestination = true;
 						jobDetails.JobIsDirtyContact = true;
 
@@ -173,26 +174,8 @@ namespace M4PL.Business.XCBL
 
 						if (processingJobDetail?.Id > 0)
 						{
-							string jobNotes = DataAccess.Job.JobCommands.GetDriverAlert(processingJobDetail.Id);
-							string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
-
-							if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
-							{
-								if (jobNotes.Length > 0)
-								{
-									jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
-								}
-								else
-								{
-									jobNotes = farEyeOrderDetails.delivery_instruction;
-								}
-								jobNotes += System.Environment.NewLine + orderNotes;
-								DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
-							}
-							else if (orderNotes.Length > 0)
-							{
-								DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, orderNotes);
-							}
+							UpdateFarEyeRushOrHoldInstructions(processingJobDetail.Id, farEyeOrderDetails);
+							UpdateFarEyeDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);							
 
 							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
 							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
@@ -235,26 +218,8 @@ namespace M4PL.Business.XCBL
 
 					if (processingJobDetail?.Id > 0)
 					{
-						string jobNotes = DataAccess.Job.JobCommands.GetDriverAlert(processingJobDetail.Id);
-						string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
-
-						if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
-						{
-							if (jobNotes.Length > 0)
-							{
-								jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
-							}
-							else
-							{
-								jobNotes = farEyeOrderDetails.delivery_instruction;
-							}
-							jobNotes += System.Environment.NewLine + orderNotes;
-							DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
-						}
-						else if (orderNotes.Length > 0)
-						{
-							DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, orderNotes);
-						}
+						UpdateFarEyeRushOrHoldInstructions(processingJobDetail.Id, farEyeOrderDetails);
+						UpdateFarEyeDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);						
 
 						InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
 						List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
@@ -297,36 +262,18 @@ namespace M4PL.Business.XCBL
 
 						if (processingJobDetail.Id > 0)
                         {
-							jobDetails.Id = processingJobDetail.Id;
-
 							if (existingJobDataInDB.Id < 1 && !processingJobDetail.JobCustomerSalesOrder.Contains("O-"))
 							{
 								jobDetails = GetJobModelForElectroluxOrderCreation(farEyeOrderDetails, systemOptionList, false);
 
 								processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
+								
+								jobDetails.Id = processingJobDetail.Id;
 
 								if (processingJobDetail?.Id > 0)
 								{
-									string jobNotes = DataAccess.Job.JobCommands.GetDriverAlert(processingJobDetail.Id);
-									string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
-
-									if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
-									{
-										if (jobNotes.Length > 0)
-										{
-											jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
-										}
-										else
-										{
-											jobNotes = farEyeOrderDetails.delivery_instruction;
-										}
-										jobNotes += System.Environment.NewLine + orderNotes;
-										DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
-									}
-									else if (orderNotes.Length > 0)
-									{
-										DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, orderNotes);
-									}
+									UpdateFarEyeRushOrHoldInstructions(processingJobDetail.Id, farEyeOrderDetails);
+									UpdateFarEyeDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);									
 
 									InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
 									List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapperFromFarEye(farEyeOrderDetails, processingJobDetail.Id, systemOptionList);
@@ -385,26 +332,9 @@ namespace M4PL.Business.XCBL
 							//processingJobDetail = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 							if (processingJobDetail?.Id > 0)
 							{
-								string jobNotes = DataAccess.Job.JobCommands.GetDriverAlert(processingJobDetail.Id);
-								string orderNotes = !String.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
-
-								if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
-								{
-									if (jobNotes.Length > 0)
-									{
-										jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
-									}
-									else
-									{
-										jobNotes = farEyeOrderDetails.delivery_instruction;
-									}
-									jobNotes += System.Environment.NewLine + orderNotes;
-									DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, jobNotes);
-								}
-								else if (orderNotes.Length > 0)
-								{
-									DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, processingJobDetail.Id, orderNotes);
-								}
+								UpdateFarEyeRushOrHoldInstructions(processingJobDetail.Id, farEyeOrderDetails);
+								UpdateFarEyeDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);
+								
 								InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
 								bool isFarEyePushRequired = true;
 
@@ -598,16 +528,31 @@ namespace M4PL.Business.XCBL
 			Job.JobCommands jobCommands = new Job.JobCommands();
 			jobCommands.ActiveUser = this.ActiveUser;
 			response.items_track_details = new List<ItemsTrackDetail>();
+			Entities.Job.Job jobDetails = null;
+
 			if (farEyeOrderCancelRequest.tracking_number != null && farEyeOrderCancelRequest.tracking_number.Count > 0)
 			{
 				foreach (var trackingNumber in farEyeOrderCancelRequest.tracking_number)
-				{
-					var statusModel = jobCommands.CancelJobByOrderNumber(trackingNumber, farEyeOrderCancelRequest.carrier_code, farEyeOrderCancelRequest.reason);
-					response.items_track_details.Add(new ItemsTrackDetail() { status = statusModel.Status, message = statusModel.AdditionalDetail, tracking_number = trackingNumber });
+				{					
+					if (!string.IsNullOrEmpty(trackingNumber))
+                    {
+						jobDetails = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, trackingNumber, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+						var statusModel = jobCommands.CancelJobByOrderNumber(trackingNumber, farEyeOrderCancelRequest.carrier_code, farEyeOrderCancelRequest.reason);
+						response.items_track_details.Add(new ItemsTrackDetail() { status = statusModel.Status, message = statusModel.AdditionalDetail, tracking_number = trackingNumber });
+					}
+					else
+                    {
+						jobDetails = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, string.Format("O-{0}", farEyeOrderCancelRequest.order_number), M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+						var statusModel = jobCommands.CancelJobByOrderNumber(string.Format("O-{0}", farEyeOrderCancelRequest.order_number), farEyeOrderCancelRequest.carrier_code, farEyeOrderCancelRequest.reason);
+						response.items_track_details.Add(new ItemsTrackDetail() { status = statusModel.Status, message = statusModel.AdditionalDetail, tracking_number = farEyeOrderCancelRequest.order_number });
+					}
+					InsertFarEyeDetailsInTable(jobDetails.Id, farEyeOrderCancelRequest, "Cancel");
 				}
 			}
 			else
 			{
+				jobDetails = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, string.Format("O-{0}", farEyeOrderCancelRequest.order_number), M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
+				InsertFarEyeDetailsInTable(jobDetails.Id, farEyeOrderCancelRequest, "Cancel");
 				var statusModel = jobCommands.CancelJobByOrderNumber(string.Format("O-{0}", farEyeOrderCancelRequest.order_number), farEyeOrderCancelRequest.carrier_code, farEyeOrderCancelRequest.reason);
 				response.items_track_details.Add(new ItemsTrackDetail() { status = statusModel.Status, message = statusModel.AdditionalDetail, tracking_number = farEyeOrderCancelRequest.order_number });
 			}
@@ -654,8 +599,8 @@ namespace M4PL.Business.XCBL
 						comments = deliveryUpdate.AdditionalComments,
 						epod = !string.IsNullOrEmpty(jobDetail.JobGatewayStatus) && (jobDetail.JobGatewayStatus.Equals("Delivered", StringComparison.OrdinalIgnoreCase)
 						|| (jobDetail.JobGatewayStatus.Equals("POD Completion", StringComparison.OrdinalIgnoreCase))) ? string.Format("{0}?jobId={1}&tabName=POD", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdate.ServiceProviderID) : string.Empty,
-						promised_delivery_date = jobDetail.JobOriginDateTimeBaseline.HasValue ? jobDetail.JobOriginDateTimeBaseline.Value.ToString("yyyyMMddHHmmss") : string.Empty,
-						expected_delivery_date = jobDetail.JobOriginDateTimePlanned.HasValue ? jobDetail.JobOriginDateTimePlanned.Value.ToString("yyyyMMddHHmmss") : string.Empty
+						promised_delivery_date = jobDetail.JobDeliveryDateTimeBaseline.HasValue ? jobDetail.JobDeliveryDateTimeBaseline.Value.ToString("yyyyMMddHHmmss") : string.Empty,
+						expected_delivery_date = jobDetail.JobDeliveryDateTimePlanned.HasValue ? jobDetail.JobDeliveryDateTimePlanned.Value.ToString("yyyyMMddHHmmss") : string.Empty
 					};
 
 					farEyeDeliveryStatusResponse.info = new DeliveryInfo();
@@ -835,6 +780,47 @@ namespace M4PL.Business.XCBL
 			electroluxOrderDetail.Header.Message = new Message() { Subject = orderDetail.type_of_service.Equals("DeliveryNumber", StringComparison.OrdinalIgnoreCase) ? "ASN" : orderDetail.type_of_service };
 
 			return electroluxOrderDetail;
+		}
+
+		private void UpdateFarEyeRushOrHoldInstructions(long jobId, FarEyeOrderDetails farEyeOrderDetails)
+        {
+			string holdInstructions = !string.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
+			string rushInstructions = !string.IsNullOrEmpty(farEyeOrderDetails.info.rush_order) ? farEyeOrderDetails.info.rush_order : string.Empty;
+			string rushText = !string.IsNullOrEmpty(rushInstructions) ? string.Format("Rush Order: {0}", rushInstructions) : string.Empty;
+
+			string holdText = !string.IsNullOrEmpty(holdInstructions) ? string.Format("Hold Due To: {0}", holdInstructions) : string.Empty;
+			string deliveryCommentText = string.Empty;
+			if (!string.IsNullOrEmpty(rushText) && !string.IsNullOrEmpty(holdText))
+            {
+				deliveryCommentText = rushText + System.Environment.NewLine + holdText;
+            }
+			else
+            {
+				deliveryCommentText = rushText + holdText;
+			}
+
+			DataAccess.Job.JobCommands.UpdatedDeliveryCommentText(ActiveUser, jobId, deliveryCommentText);
+		}
+
+		private void UpdateFarEyeDeliveryInstructions(long jobId, FarEyeOrderDetails farEyeOrderDetails)
+		{
+			if(!string.IsNullOrEmpty(farEyeOrderDetails.delivery_instruction))
+            {
+				string jobNotes = DataAccess.Job.JobCommands.GetDriverAlert(jobId);
+				if (!jobNotes.Contains(farEyeOrderDetails.delivery_instruction))
+				{
+					if (jobNotes.Length > 0)
+					{
+						jobNotes = jobNotes + System.Environment.NewLine + farEyeOrderDetails.delivery_instruction;
+					}
+					else
+					{
+						jobNotes = farEyeOrderDetails.delivery_instruction;
+					}
+					DataAccess.Job.JobCommands.UpdatedDriverAlert(ActiveUser, jobId, jobNotes);
+				}
+			}
+			
 		}
 	}
 }

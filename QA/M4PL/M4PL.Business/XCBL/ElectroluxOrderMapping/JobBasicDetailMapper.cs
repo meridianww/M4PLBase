@@ -119,7 +119,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             jobDatatoUpdate.JobDeliveryCommentText = orderDetails.info.non_executable;
             jobDatatoUpdate.JobBOLChild = orderDetails.info.rl_number;
             jobDatatoUpdate.JobChannel = orderDetails.info.scac_code;
-            jobDatatoUpdate.CarrierID = orderDetails.info.rush_order;
+            jobDatatoUpdate.CarrierID = orderDetails.info.transport_id;
             jobDatatoUpdate.ProgramID = programId;
             jobDatatoUpdate.JobType = orderDetails.type_of_order.Equals("Reverse", StringComparison.OrdinalIgnoreCase) ? "Return" : "Original";
             jobDatatoUpdate.ShipmentType = "Cross-Dock Shipment";

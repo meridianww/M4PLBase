@@ -13,7 +13,7 @@ BEGIN
 
 	SET NOCOUNT ON;
 		 
-   SELECT Id, 
+   SELECT  
    JobDriverAlert
    from JOBDL000Master where Id = @JobId
    

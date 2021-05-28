@@ -252,7 +252,7 @@ namespace M4PL.DataAccess.XCBL
 							orderLineData.Exceptions.ExceptionInfo = new ExceptionInfo()
 							{
 								ExceptionCode = "ATTEMPTED",
-							ExceptionDetail = deliveryUpdateModel.AttemptReason
+								ExceptionDetail = deliveryUpdateModel.AttemptReason
 							};
 						}
 					}
@@ -261,6 +261,7 @@ namespace M4PL.DataAccess.XCBL
 						foreach (var orderLineData in deliveryUpdateModel.OrderLineDetail.OrderLine)
 						{
 							PopulateCargoExceptionDetails(cargoException, cargoExceptionInfo, orderLineData);
+							orderLineData.ItemInstallStatus = deliveryUpdateModel.InstallStatus;
 						}
 					}
 					
@@ -392,8 +393,8 @@ namespace M4PL.DataAccess.XCBL
 							{
 								orderLineData.Exceptions.ExceptionInfo = new ExceptionInfo()
 								{
-									ExceptionCode = cargoExceptionInfo[currentCargoExceptionInfo].ExceptionCode,
-									ExceptionDetail = cargoExceptionInfo[currentCargoExceptionInfo].ExceptionDetail
+									ExceptionCode = cargoExceptionInfo[currentCargoExceptionInfo].ExceptionDetail,
+									ExceptionDetail = orderLineData.ItemInstallComments
 								};
 							}
 						}

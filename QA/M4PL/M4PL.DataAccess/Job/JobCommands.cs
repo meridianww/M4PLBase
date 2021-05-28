@@ -625,7 +625,7 @@ namespace M4PL.DataAccess.Job
             bool isExistsRecord = true;
 
             //In case of UI update don't consider the customerId check
-            if (job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder)
+            if ((job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder) || (!isManualUpdate ? (job.CustomerId != existingJobDetail.CustomerId) : false))
             {
                 isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
             }
@@ -817,6 +817,30 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
+
+        public static bool UpdatedDeliveryCommentText(ActiveUser activeUser, long jobId, string jobDeliveryCommentText)
+        {
+            bool result = true;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@jobId", jobId),
+               new Parameter("@deliveryCommentText", jobDeliveryCommentText),
+               new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()),
+               new Parameter("@changedBy", activeUser.UserName)
+            };
+            try
+            {
+                SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.UpdateJobDeliveryCommentText, parameters.ToArray(), false, true);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorLogger.Log(ex, string.Format("Error occured while updating the driveralert for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
+                result = false;
+            }
+            return result;
+        }
+
         public static bool UpdatedDriverAlert(ActiveUser activeUser, long jobId, string jobDriverAlert)
         {
             bool result = true;
@@ -855,6 +879,26 @@ namespace M4PL.DataAccess.Job
             {
                 Logger.ErrorLogger.Log(ex, string.Format("Error occured while retreiving the Driver Alert notes for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while retreiving the Driver Alert notes for job.", Utilities.Logger.LogType.Error);
                 
+            }
+            return driverAlert;
+        }
+        
+        public static string GetDeliveryCommentText(long jobId)
+        {
+            string driverAlert = string.Empty;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@JobId", jobId),
+            };
+            try
+            {
+                driverAlert = SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetDeliveryComment, parameters.ToArray(), false, true);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorLogger.Log(ex, string.Format("Error occured while retreiving the Job Delivery Comment for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while retreiving the Job Delivery Comment for job.", Utilities.Logger.LogType.Error);
+
             }
             return driverAlert;
         }

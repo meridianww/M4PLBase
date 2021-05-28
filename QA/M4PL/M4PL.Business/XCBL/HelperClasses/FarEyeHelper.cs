@@ -110,8 +110,11 @@ namespace M4PL.Business.XCBL.HelperClasses
 								}
 							}
 
-							SentOrderStatusUpdateToFarEye(farEyeOrderStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
-
+							if(!isRescheduled && !isCanceled && !string.IsNullOrEmpty(farEyeOrderStatusRequest.carrier_status))
+                            {
+								SentOrderStatusUpdateToFarEye(farEyeOrderStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
+							}
+							
 							Task.Factory.StartNew(() =>
 							{
 								if (isRescheduled)
@@ -120,6 +123,13 @@ namespace M4PL.Business.XCBL.HelperClasses
 									deliveryUpdateModel.RescheduleReason = rescheduleReason;
 									deliveryUpdateModel.InstallStatus = "RESCHEDULED";
 									farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
+									foreach (var orderLine in farEyeOrderStatusRequest.info.LineItems)
+									{
+										orderLine.item_install_status = "RESCHEDULED";
+										orderLine.item_Install_status_description = "RESCHEDULED";
+										orderLine.exception_code = string.Empty;
+										orderLine.exception_detail = string.Empty;
+									}
 									SentOrderStatusUpdateToFarEye(farEyeOrderStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId);
 								}
 								else if (isCanceled)
