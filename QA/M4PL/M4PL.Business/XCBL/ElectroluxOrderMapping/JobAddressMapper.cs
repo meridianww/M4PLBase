@@ -98,7 +98,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             {
 				existingJobData.JobDeliveryCity = farEyeOrderDetails.return_city;
 				existingJobData.JobDeliveryCountry = farEyeOrderDetails.return_country;
-				existingJobData.JobDeliveryPostalCode = farEyeOrderDetails.return_postal_code;
+				existingJobData.JobDeliveryPostalCode = CheckPostalCode(farEyeOrderDetails.return_postal_code);
 				existingJobData.JobDeliveryState = farEyeOrderDetails.return_state_province;
 				existingJobData.JobDeliveryStreetAddress = farEyeOrderDetails.return_address_line1;
 				existingJobData.JobDeliveryStreetAddress2 = farEyeOrderDetails.return_address_line2;
@@ -112,7 +112,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             {
 				existingJobData.JobDeliveryCity = farEyeOrderDetails.deliver_to_city;
 				existingJobData.JobDeliveryCountry = farEyeOrderDetails.deliver_to_country;
-				existingJobData.JobDeliveryPostalCode = farEyeOrderDetails.deliver_to_postal_code;
+				existingJobData.JobDeliveryPostalCode = CheckPostalCode(farEyeOrderDetails.deliver_to_postal_code);
 				existingJobData.JobDeliveryState = farEyeOrderDetails.deliver_to_state_province;
 				existingJobData.JobDeliveryStreetAddress = string.IsNullOrEmpty(farEyeOrderDetails.deliver_lot_id) ? farEyeOrderDetails.deliver_to_address_line1 :
 					string.Format("{0} Lot # {1}", farEyeOrderDetails.deliver_to_address_line1, farEyeOrderDetails.deliver_lot_id);
@@ -132,7 +132,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             {
 				existingJobData.JobOriginCity = farEyeOrderDetails.origin_city;
 				existingJobData.JobOriginCountry = farEyeOrderDetails.origin_country;
-				existingJobData.JobOriginPostalCode = farEyeOrderDetails.origin_postal_code;
+				existingJobData.JobOriginPostalCode = CheckPostalCode(farEyeOrderDetails.origin_postal_code);
 				existingJobData.JobOriginState = farEyeOrderDetails.origin_state_province;
 				existingJobData.JobOriginStreetAddress = farEyeOrderDetails.origin_address_line1;
 				existingJobData.JobOriginStreetAddress2 = farEyeOrderDetails.origin_address_line2;
@@ -151,7 +151,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             {
 				existingJobData.JobShipFromCity = farEyeOrderDetails.deliver_to_city;
 				existingJobData.JobShipFromCountry = farEyeOrderDetails.deliver_to_country;
-				existingJobData.JobShipFromPostalCode = farEyeOrderDetails.deliver_to_postal_code;
+				existingJobData.JobShipFromPostalCode = CheckPostalCode(farEyeOrderDetails.deliver_to_postal_code);
 				existingJobData.JobShipFromState = farEyeOrderDetails.deliver_to_state_province;
 				existingJobData.JobShipFromStreetAddress = farEyeOrderDetails.deliver_to_address_line1;
 				existingJobData.JobShipFromStreetAddress2 = farEyeOrderDetails.deliver_to_address_line2;
@@ -166,7 +166,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             {
 				existingJobData.JobShipFromCity = farEyeOrderDetails.origin_city;
 				existingJobData.JobShipFromCountry = farEyeOrderDetails.origin_country;
-				existingJobData.JobShipFromPostalCode = farEyeOrderDetails.origin_postal_code;
+				existingJobData.JobShipFromPostalCode = CheckPostalCode(farEyeOrderDetails.origin_postal_code);
 				existingJobData.JobShipFromState = farEyeOrderDetails.origin_state_province;
 				existingJobData.JobShipFromStreetAddress = farEyeOrderDetails.origin_address_line1;
 				existingJobData.JobShipFromStreetAddress2 = farEyeOrderDetails.origin_address_line2;
@@ -178,5 +178,21 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				existingJobData.JobShipFromSitePOC = farEyeOrderDetails.origin_contact_name;
 			}
 		}
+
+		private string CheckPostalCode(string postalCode)
+        {
+			int postalCodeUS;
+
+			if(int.TryParse(postalCode, out postalCodeUS))
+            {
+				if(postalCode.Length > 5)
+                {
+					return postalCode.Substring(0, 5);
+                }
+				
+				return postalCode;
+            }
+			return postalCode;
+        }
 	}
 }
