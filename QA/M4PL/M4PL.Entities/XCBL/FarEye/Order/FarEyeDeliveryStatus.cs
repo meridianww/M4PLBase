@@ -109,10 +109,10 @@ namespace M4PL.Entities.XCBL.FarEye.Order
 		/// </summary>
 		public string previous_status { get; set; }
 
-        /// <summary>
-        /// Gets or Sets previous status time
-        /// </summary>
-        public string previous_status_time { get; set; }
+		/// <summary>
+		/// Gets or Sets previous status time
+		/// </summary>
+		public string previous_status_time { get; set; }
 		/// <summary>
 		/// Gets or Sets last updated at
 		/// </summary>

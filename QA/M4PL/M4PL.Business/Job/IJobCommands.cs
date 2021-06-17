@@ -85,6 +85,7 @@ namespace M4PL.Business.Job
 
         StatusModel InsertOrderSpecialInstruction(JobSpecialInstruction jobSpecialInstruction, string orderNumber);
 
+        StatusModel UpdateJobDeliveryCommentText(long jobId, string jobDelieryCommentText);
         StatusModel UpdateJobDriverAlert(long jobId, string jobDriverAlert);
         string GetJobNotes(long jobId);
 

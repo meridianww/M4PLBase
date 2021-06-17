@@ -763,6 +763,14 @@ namespace M4PL.Business.Job
             if (result) { return new StatusModel() { AdditionalDetail = "", Status = "Success", StatusCode = 200 }; }
             else { return new StatusModel() { AdditionalDetail = "There is some issue while updating special instructions, please try after sometime.", Status = "Failure", StatusCode = 500 }; }
         }
+
+        public StatusModel UpdateJobDeliveryCommentText(long jobId, string jobDeliveryCommentText)
+        {
+            bool result = _commands.UpdatedDeliveryCommentText(ActiveUser, jobId, jobDeliveryCommentText);
+            if (result) { return new StatusModel() { AdditionalDetail = "", Status = "Success", StatusCode = 200 }; }
+            else { return new StatusModel() { AdditionalDetail = "There is some issue while updating job delivery comment text, please try after sometime.", Status = "Failure", StatusCode = 500 }; }
+        }
+
         public StatusModel UpdateJobDriverAlert(long jobId, string jobDriverAlert)
         {
             bool result = _commands.UpdatedDriverAlert(ActiveUser, jobId, jobDriverAlert);

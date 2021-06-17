@@ -73,30 +73,8 @@ namespace M4PL.Business.XCBL.HelperClasses
 							
 
 							farEyeOrderStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
-							if (farEyeOrderStatusRequest != null && !string.IsNullOrEmpty(farEyeOrderStatusRequest.carrier_status)
-							 && farEyeOrderStatusRequest.carrier_status.Equals("OUT FOR DELIVERY", StringComparison.OrdinalIgnoreCase))
-							{
-								var farEyeDisPatchedStatusRequest = farEyeCommand.GetOrderStatus(null, deliveryUpdateModel, activeUser);
-								if (farEyeDisPatchedStatusRequest != null)
-								{
-									farEyeDisPatchedStatusRequest.carrier_status = "DISPATCHED";
-									farEyeDisPatchedStatusRequest.carrier_status_code = "DISPATCHED";
-									farEyeDisPatchedStatusRequest.carrier_status_description = "DISPATCHED";
-									farEyeDisPatchedStatusRequest.carrier_sub_status = "DISPATCHED";
-									farEyeDisPatchedStatusRequest.carrier_sub_status_description = "DISPATCHED";
-                                    if (farEyeDisPatchedStatusRequest.info != null && farEyeDisPatchedStatusRequest.info.LineItems != null && farEyeDisPatchedStatusRequest.info.LineItems.Count > 0)
-                                    {
-                                        foreach (var dispatchLine in farEyeDisPatchedStatusRequest.info.LineItems)
-                                        {
-                                            dispatchLine.item_install_status = "DISPATCHED";
-											dispatchLine.item_Install_status_description = "DISPATCHED";
-										}
-                                    }
-
-                                    SentOrderStatusUpdateToFarEye(farEyeDisPatchedStatusRequest, farEyeAPIUrl, farEyeAuthKey, activeUser, jobId, isNewOrder);
-								}
-							}
-							else if (deliveryUpdateModel.InstallStatus.Equals("ATTEMPTED", StringComparison.OrdinalIgnoreCase))
+							
+							if (deliveryUpdateModel.InstallStatus.Equals("ATTEMPTED", StringComparison.OrdinalIgnoreCase))
 							{
 								farEyeOrderStatusRequest.carrier_status = "ATTEMPTED";
 								farEyeOrderStatusRequest.carrier_status_code = "ATTEMPTED";

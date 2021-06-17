@@ -95,7 +95,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 		private void UpdateDeliveryToDataByFarEyeModel(FarEyeOrderDetails farEyeOrderDetails, ref Entities.Job.Job existingJobData)
 		{
 			if(farEyeOrderDetails.type_of_order == "Reverse")
-            {
+			{
 				existingJobData.JobDeliveryCity = farEyeOrderDetails.return_city;
 				existingJobData.JobDeliveryCountry = farEyeOrderDetails.return_country;
 				existingJobData.JobDeliveryPostalCode = CheckPostalCode(farEyeOrderDetails.return_postal_code);
@@ -109,7 +109,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				existingJobData.JobDeliverySiteName = farEyeOrderDetails.return_name;
 			}
 			else
-            {
+			{
 				existingJobData.JobDeliveryCity = farEyeOrderDetails.deliver_to_city;
 				existingJobData.JobDeliveryCountry = farEyeOrderDetails.deliver_to_country;
 				existingJobData.JobDeliveryPostalCode = CheckPostalCode(farEyeOrderDetails.deliver_to_postal_code);
@@ -129,7 +129,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 		private void UpdateShiptoDataByFarEyeModel(FarEyeOrderDetails farEyeOrderDetails, ref Entities.Job.Job existingJobData)
 		{
 			if(farEyeOrderDetails.type_of_order == "Reverse")
-            {
+			{
 				existingJobData.JobOriginCity = farEyeOrderDetails.origin_city;
 				existingJobData.JobOriginCountry = farEyeOrderDetails.origin_country;
 				existingJobData.JobOriginPostalCode = CheckPostalCode(farEyeOrderDetails.origin_postal_code);
@@ -148,7 +148,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 		private void UpdateShipFromDataByFarEyeModel(FarEyeOrderDetails farEyeOrderDetails, ref Entities.Job.Job existingJobData)
 		{
 			if(farEyeOrderDetails.type_of_order == "Reverse")
-            {
+			{
 				existingJobData.JobShipFromCity = farEyeOrderDetails.deliver_to_city;
 				existingJobData.JobShipFromCountry = farEyeOrderDetails.deliver_to_country;
 				existingJobData.JobShipFromPostalCode = CheckPostalCode(farEyeOrderDetails.deliver_to_postal_code);
@@ -163,7 +163,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				existingJobData.JobShipFromSitePOC = farEyeOrderDetails.deliver_to_contact_name;
 			}
 			else
-            {
+			{
 				existingJobData.JobShipFromCity = farEyeOrderDetails.origin_city;
 				existingJobData.JobShipFromCountry = farEyeOrderDetails.origin_country;
 				existingJobData.JobShipFromPostalCode = CheckPostalCode(farEyeOrderDetails.origin_postal_code);

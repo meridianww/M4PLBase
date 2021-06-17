@@ -174,7 +174,7 @@ namespace M4PL.Business.XCBL
 
 						if (processingJobDetail?.Id > 0)
 						{
-							UpdateFarEyeRushOrHoldInstructions(processingJobDetail.Id, farEyeOrderDetails);
+							UpdateFarEyeSpecialDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);
 							UpdateFarEyeDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);							
 
 							InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
@@ -218,7 +218,7 @@ namespace M4PL.Business.XCBL
 
 					if (processingJobDetail?.Id > 0)
 					{
-						UpdateFarEyeRushOrHoldInstructions(processingJobDetail.Id, farEyeOrderDetails);
+						UpdateFarEyeSpecialDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);
 						UpdateFarEyeDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);						
 
 						InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
@@ -276,7 +276,7 @@ namespace M4PL.Business.XCBL
 
 								if (processingJobDetail?.Id > 0)
 								{
-									UpdateFarEyeRushOrHoldInstructions(processingJobDetail.Id, farEyeOrderDetails);
+									UpdateFarEyeSpecialDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);
 									UpdateFarEyeDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);									
 
 									InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
@@ -297,23 +297,24 @@ namespace M4PL.Business.XCBL
 							else if(existingJobDataInDB.Id > 0 && !existingJobDataInDB.JobCustomerSalesOrder.Contains("O-"))
                             {
 								jobDetails.Id = existingJobDataInDB.Id;
+								jobDetails.CustomerId = existingJobDataInDB.CustomerId;
 							}
 						}
 						
 						bool isJobCancelled = jobDetails?.Id > 0 ? DataAccess.Job.JobCommands.IsJobCancelled(jobDetails.Id) : true;
 
 
-						if (jobDetails?.Id <= 0 && processingJobDetail?.Id > 0)
-						{
-							response = new OrderResponse()
-							{
-								ClientMessageID = string.Empty,
-								SenderMessageID = farEyeOrderDetails.order_number,
-								StatusCode = "Failure",
-								Subject = "Can not proceed the ASN request to the system as requesed order is not present in the meridian system, please try again."
-							};
-						}
-						else if (jobDetails?.Id > 0 && !isJobCancelled)
+                        if (jobDetails?.Id <= 0 && processingJobDetail?.Id > 0)
+                        {
+                            response = new OrderResponse()
+                            {
+                                ClientMessageID = string.Empty,
+                                SenderMessageID = farEyeOrderDetails.order_number,
+                                StatusCode = "Failure",
+                                Subject = "Can not proceed the ASN request to the system as requesed order is not present in the meridian system, please try again."
+                            };
+                        }
+                        else if (jobDetails?.Id > 0 && !isJobCancelled)
 						{
 							jobDetails.JobIsDirtyDestination = true;
 							jobDetails.JobIsDirtyContact = true;
@@ -336,7 +337,7 @@ namespace M4PL.Business.XCBL
 							//processingJobDetail = DataAccess.Job.JobCommands.GetJobByCustomerSalesOrder(ActiveUser, farEyeOrderDetails.tracking_number, M4PLBusinessConfiguration.ElectroluxCustomerId.ToLong());
 							if (processingJobDetail?.Id > 0)
 							{
-								UpdateFarEyeRushOrHoldInstructions(processingJobDetail.Id, farEyeOrderDetails);
+								UpdateFarEyeSpecialDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);
 								UpdateFarEyeDeliveryInstructions(processingJobDetail.Id, farEyeOrderDetails);
 								
 								InsertFarEyeDetailsInTable(processingJobDetail.Id, farEyeOrderDetails, farEyeOrderDetails.type_of_service);
@@ -603,10 +604,10 @@ namespace M4PL.Business.XCBL
 						comments = deliveryUpdate.AdditionalComments,
 						epod = !string.IsNullOrEmpty(jobDetail.JobGatewayStatus) && (jobDetail.JobGatewayStatus.Equals("Delivered", StringComparison.OrdinalIgnoreCase)
 						|| (jobDetail.JobGatewayStatus.Equals("POD Completion", StringComparison.OrdinalIgnoreCase))) ? string.Format("{0}?jobId={1}&tabName=POD", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdate.ServiceProviderID) : string.Empty,
-						promised_delivery_date = jobDetail.JobDeliveryDateTimeBaseline.HasValue ? jobDetail.JobDeliveryDateTimeBaseline.Value.ToString("yyyyMMddHHmmss") : string.Empty,
-						expected_delivery_date = jobDetail.JobDeliveryDateTimePlanned.HasValue ? jobDetail.JobDeliveryDateTimePlanned.Value.ToString("yyyyMMddHHmmss") : string.Empty
-					};
-
+						promised_delivery_date = jobDetail.JobDeliveryDateTimePlanned.HasValue ? jobDetail.JobDeliveryDateTimePlanned.Value.ToString("yyyyMMddHHmmss") : jobDetail.JobDeliveryDateTimeBaseline.HasValue ? jobDetail.JobDeliveryDateTimeBaseline.Value.ToString("yyyyMMddHHmmss") : string.Empty, 
+						expected_delivery_date = jobDetail.JobDeliveryDateTimePlanned.HasValue ? jobDetail.JobDeliveryDateTimePlanned.Value.ToString("yyyyMMddHHmmss") : jobDetail.JobDeliveryDateTimeBaseline.HasValue ? jobDetail.JobDeliveryDateTimeBaseline.Value.ToString("yyyyMMddHHmmss") : string.Empty
+				};
+					
 					farEyeDeliveryStatusResponse.info = new DeliveryInfo();
 					farEyeDeliveryStatusResponse.info.reschedule_reason = deliveryUpdate.RescheduleReason;
 					farEyeDeliveryStatusResponse.info.reschedule_date = deliveryUpdate.RescheduledInstallDate;
@@ -786,23 +787,35 @@ namespace M4PL.Business.XCBL
 			return electroluxOrderDetail;
 		}
 
-		private void UpdateFarEyeRushOrHoldInstructions(long jobId, FarEyeOrderDetails farEyeOrderDetails)
+		private void UpdateFarEyeSpecialDeliveryInstructions(long jobId, FarEyeOrderDetails farEyeOrderDetails)
         {
 			string holdInstructions = !string.IsNullOrEmpty(farEyeOrderDetails.info.non_executable) ? farEyeOrderDetails.info.non_executable : string.Empty;
 			string rushInstructions = !string.IsNullOrEmpty(farEyeOrderDetails.info.rush_order) ? farEyeOrderDetails.info.rush_order : string.Empty;
-			string rushText = !string.IsNullOrEmpty(rushInstructions) ? string.Format("Rush Order: {0}", rushInstructions) : string.Empty;
+			string confirmationWindow = !string.IsNullOrEmpty(farEyeOrderDetails.info.edc_comm_date) ? farEyeOrderDetails.info.edc_comm_date : string.Empty;
 
+			string rushText = !string.IsNullOrEmpty(rushInstructions) ? string.Format("Rush Order: {0}", rushInstructions) : string.Empty;
 			string holdText = !string.IsNullOrEmpty(holdInstructions) ? string.Format("Hold Due To: {0}", holdInstructions) : string.Empty;
+			string confirmationWindowText = !string.IsNullOrEmpty(confirmationWindow) ? string.Format("Scheduling Confirmation Window: {0}", confirmationWindow) : string.Empty;
+
 			string deliveryCommentText = string.Empty;
-			if (!string.IsNullOrEmpty(rushText) && !string.IsNullOrEmpty(holdText))
+			
+			if (!string.IsNullOrEmpty(rushText))
             {
-				deliveryCommentText = rushText + System.Environment.NewLine + holdText;
-            }
-			else
-            {
-				deliveryCommentText = rushText + holdText;
+				deliveryCommentText += rushText + System.Environment.NewLine;
+
 			}
 
+			if (!string.IsNullOrEmpty(holdText))
+			{
+				deliveryCommentText += holdText + System.Environment.NewLine;
+
+			}
+
+			if (!string.IsNullOrEmpty(confirmationWindowText))
+			{
+				deliveryCommentText += confirmationWindowText + System.Environment.NewLine;
+
+			}
 			DataAccess.Job.JobCommands.UpdatedDeliveryCommentText(ActiveUser, jobId, deliveryCommentText);
 		}
 
