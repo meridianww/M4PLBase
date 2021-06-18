@@ -152,7 +152,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 			string farEyeUpdateURL = string.Empty;
 			string farEyeApiKey = string.Empty;
 			string responseData = string.Empty;
-			farEyeUpdateURL = string.Format("{0}/Connector/v1/meridian/trackingUpdates", farEyeAPIURL);
+			farEyeUpdateURL = string.Format("{0}/Connector/v1/meridian/webhook", farEyeAPIURL);
 			farEyeApiKey = string.Format("bearer {0}", farEyeAPIKey);
 
 			try
