@@ -603,7 +603,7 @@ namespace M4PL.Business.XCBL
 					{
 						comments = deliveryUpdate.AdditionalComments,
 						epod = !string.IsNullOrEmpty(jobDetail.JobGatewayStatus) && (jobDetail.JobGatewayStatus.Equals("Delivered", StringComparison.OrdinalIgnoreCase)
-						|| (jobDetail.JobGatewayStatus.Equals("POD Completion", StringComparison.OrdinalIgnoreCase))) ? string.Format("{0}?jobId={1}&tabName=POD", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdate.ServiceProviderID) : string.Empty,
+						|| (jobDetail.JobGatewayStatus.Equals("POD Completion", StringComparison.OrdinalIgnoreCase))) ? string.Format("{0}jobs/{1}", ConfigurationManager.AppSettings["M4PLApplicationURL"], deliveryUpdate.ServiceProviderID) : string.Empty,
 						promised_delivery_date = jobDetail.JobDeliveryDateTimePlanned.HasValue ? jobDetail.JobDeliveryDateTimePlanned.Value.ToString("yyyyMMddHHmmss") : jobDetail.JobDeliveryDateTimeBaseline.HasValue ? jobDetail.JobDeliveryDateTimeBaseline.Value.ToString("yyyyMMddHHmmss") : string.Empty, 
 						expected_delivery_date = jobDetail.JobDeliveryDateTimePlanned.HasValue ? jobDetail.JobDeliveryDateTimePlanned.Value.ToString("yyyyMMddHHmmss") : jobDetail.JobDeliveryDateTimeBaseline.HasValue ? jobDetail.JobDeliveryDateTimeBaseline.Value.ToString("yyyyMMddHHmmss") : string.Empty
 				};

@@ -133,7 +133,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				CgoLineItem = cargoitem.item_reference_number.ToInt(), //Nathan will ask to Electrolux,
 				CgoPartNumCode = cargoitem.edc_material_id,
 				CgoTitle = (!string.IsNullOrEmpty(cargoitem.item_material_descritpion) && cargoitem.item_material_descritpion.Contains(cargoitem.item_code)) ? cargoitem.item_material_descritpion.Replace(cargoitem.item_code, string.Empty) : cargoitem.item_material_descritpion,
-				CgoSerialNumber = cargoitem.serial_barcode,
+				CgoSerialNumber = cargoitem.item_serial_number,
 				CgoPackagingTypeIdName = cargoitem.item_material_type,
 				CgoWeight = cargoitem.item_weight.ToDecimal(),
 				CgoWeightUnitsId = cargoitem.item_weight_uom?.ToUpper() == "KGM" ? weightUnitKg : weightUnitLbs,
@@ -151,7 +151,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				: !string.IsNullOrEmpty(cargoitem.item_material_type) && (cargoitem.item_material_type.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || cargoitem.item_material_type.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))
 				? serviceId : applienceId,
 				StatusId = (int)Entities.StatusType.Active,
-				CgoSerialBarcode = cargoitem.serial_barcode,
+				CgoSerialBarcode = cargoitem.item_serial_number,
 				CgoLineNumber = cargoitem.item_reference_number
 			}));
 
