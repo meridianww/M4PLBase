@@ -151,7 +151,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				: !string.IsNullOrEmpty(cargoitem.item_material_type) && (cargoitem.item_material_type.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || cargoitem.item_material_type.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))
 				? serviceId : applienceId,
 				StatusId = (int)Entities.StatusType.Active,
-				CgoSerialBarcode = cargoitem.item_serial_number,
+				CgoSerialBarcode = cargoitem.serial_barcode,
 				CgoLineNumber = cargoitem.item_reference_number
 			}));
 
