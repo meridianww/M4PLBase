@@ -208,6 +208,7 @@ namespace M4PL.Business.XCBL
 						if(jobDetails.Id < 1 && existingJobDataInDB.Id > 0)
                         {
 							jobDetails.Id = existingJobDataInDB.Id;
+							jobDetails.CustomerId = existingJobDataInDB.CustomerId;
 							processingJobDetail = jobDetails != null ? DataAccess.Job.JobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : existingJobDataInDB;
 						}
 						else
